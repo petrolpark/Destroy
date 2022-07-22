@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:adiponitrile",
+            "amount": 100
+        },
+        {
+            "fluid": "destroy:hydrogen",
+            "amount": 800
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:hexanediamine",
+            "amount": 100
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:nickel_coated_silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "heated"
+}

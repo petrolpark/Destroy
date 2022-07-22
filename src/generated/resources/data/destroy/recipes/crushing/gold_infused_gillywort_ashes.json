@@ -1,0 +1,23 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "destroy:gold_infused_gillywort_ashes"
+      }
+    ],
+    "results": [
+      {
+        "item": "create:crushed_gold_ore",
+        "count": 1
+      },
+      {
+        "item": "create:crushed_gold_ore",
+        "chance": 0.75
+      },
+      {
+        "item": "destroy:crushed_palladium_ore",
+        "chance": 0.03
+      }
+    ],
+    "processingTime": 50
+  }

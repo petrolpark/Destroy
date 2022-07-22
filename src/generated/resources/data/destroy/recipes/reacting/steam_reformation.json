@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:steam",
+            "amount": 500
+        },
+        {
+            "fluid": "destroy:petroleum_gas",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:syngas",
+            "amount": 1000
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:nickel_coated_silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "superheated"
+}

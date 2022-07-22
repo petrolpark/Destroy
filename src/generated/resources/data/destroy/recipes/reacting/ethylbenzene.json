@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:ethene",
+            "amount": 500
+        },
+        {
+            "fluid": "destroy:benzene",
+            "amount": 250
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:ethylbenzene",
+            "amount": 250
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:sulfuric_acid_coated_silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "heated"
+}

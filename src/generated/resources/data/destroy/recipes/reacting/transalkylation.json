@@ -1,0 +1,22 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluidTag": "destroy:xylene_isomer",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:vaporised_mixed_xylenes",
+            "amount": 1000
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:zeolite"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_zeolite"
+    },
+    "heatRequirement": "heated"
+}

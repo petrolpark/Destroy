@@ -1,0 +1,18 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+      {
+        "item": "minecraft:dried_kelp"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:dark_green_dye"
+      },
+      {
+        "item": "destroy:iodine",
+        "chance": 0.001
+      }
+    ],
+    "processingTime": 50
+  }

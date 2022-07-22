@@ -1,0 +1,27 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "destroy:copper_infused_gillywort_ashes"
+      }
+    ],
+    "results": [
+      {
+        "item": "create:crushed_copper_ore",
+        "count": 1
+      },
+      {
+        "item": "create:crushed_copper_ore",
+        "chance": 0.75
+      },
+      {
+        "item": "destroy:crushed_platinum_ore",
+        "chance": 0.02
+      },
+      {
+        "item": "destroy:crushed_iridium_ore",
+        "chance": 0.01
+      }
+    ],
+    "processingTime": 50
+  }

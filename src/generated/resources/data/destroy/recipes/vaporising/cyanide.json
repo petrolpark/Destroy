@@ -1,0 +1,15 @@
+{
+    "type": "destroy:vaporisation",
+    "ingredients": [
+        {
+            "fluid": "destroy:prussic_acid",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:cyanide",
+            "amount": 1000
+        }
+    ]
+}

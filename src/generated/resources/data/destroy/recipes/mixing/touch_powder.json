@@ -1,0 +1,17 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:ammonia_solution",
+        "amount": 100
+      },
+      {
+        "item": "destroy:iodine"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:touch_powder"
+      }
+    ]
+  }

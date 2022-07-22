@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:ethene",
+            "amount": 500
+        },
+        {
+            "fluid": "destroy:butadiene",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:cyclohexene",
+            "amount": 500
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "heated"
+}

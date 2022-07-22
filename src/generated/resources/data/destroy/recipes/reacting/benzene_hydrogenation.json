@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:benzene",
+            "amount": 150
+        },
+        {
+            "fluid": "destroy:hydrogen",
+            "amount": 600
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:cyclohexene",
+            "amount": 150
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:sulfuric_acid_coated_silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "heated"
+}

@@ -1,0 +1,31 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:vaporised_fuel_oil",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:diesel",
+            "amount": 225
+        },
+        {
+            "fluid": "destroy:kerosene",
+            "amount": 125
+        },
+        {
+            "fluid": "destroy:naptha",
+            "amount": 75
+        },
+        {
+            "fluid": "destroy:gasoline",
+            "amount": 50
+        },
+        {
+            "fluid": "destroy:lpg",
+            "amount": 25
+        }
+    ]
+}

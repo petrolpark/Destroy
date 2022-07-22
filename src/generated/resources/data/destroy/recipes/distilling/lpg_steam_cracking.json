@@ -1,0 +1,23 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:dilute_petroleum_gas",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:butadiene",
+            "amount": 50
+        },
+        {
+            "fluid": "destroy:propene",
+            "amount": 550
+        },
+        {
+            "fluid": "destroy:ethene",
+            "amount": 400
+        }
+    ]
+}

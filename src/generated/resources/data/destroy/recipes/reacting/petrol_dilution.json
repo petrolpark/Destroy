@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:steam",
+            "amount": 100
+        },
+        {
+            "fluid": "destroy:vaporised_petrol",
+            "amount": 900
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:dilute_vaporised_petrol",
+            "amount": 1000
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:zeolite"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_zeolite"
+    },
+    "heatRequirement": "superheated"
+}
