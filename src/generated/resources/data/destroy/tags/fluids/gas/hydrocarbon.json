@@ -1,0 +1,18 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:butadiene",
+      "destroy:dilute_petroleum_gas",
+      "destroy:dilute_vaporised_naptha",
+      "destroy:dilute_vaporised_petrol",
+      "destroy:ethene",
+      "destroy:propene",
+      "destroy:vaporised_crude_void_oil",
+      "destroy:vaporised_diesel",
+      "destroy:vaporised_fuel_oil",
+      "destroy:vaporised_kerosene",
+      "destroy:vaporised_mixed_xylenes",
+      "destroy:vaporised_naptha",
+      "destroy:vaporised_petrol"
+    ]
+}

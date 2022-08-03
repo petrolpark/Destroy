@@ -1,0 +1,18 @@
+{
+    "replace": false,
+    "values": [
+        "destroy:abs_monomer",
+        "destroy:acrylonitrile_styrene",
+        "destroy:benzene",
+        "destroy:carbon_tetrachloride",
+        "destroy:chloroform",
+        "destroy:crude_void_oil",
+        "#forge:ethanol",
+        "destroy:haloform_mixture",
+        "destroy:hydrazine",
+        "#forge:molten_nickel",
+        "destroy:molten_tnt",
+        "destroy:tnt_solution",
+        "destroy:vinyl_acetate"
+    ]
+  }

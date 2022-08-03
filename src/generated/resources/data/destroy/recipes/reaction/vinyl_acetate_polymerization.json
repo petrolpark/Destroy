@@ -1,0 +1,22 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:vinyl_acetate_monomer",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:pva_glue",
+            "amount": 500
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:ziegler-natta"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_ziegler-natta"
+    },
+    "heatRequirement": "heated"
+}

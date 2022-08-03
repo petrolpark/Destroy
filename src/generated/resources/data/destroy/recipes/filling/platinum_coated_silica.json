@@ -1,0 +1,17 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "destroy:silica"
+      },
+      {
+        "fluidTag": "forge:molten_platinum",
+        "amount": 100
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:platinum_coated_silica"
+      }
+    ]
+  }

@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:abs_monomer",
+            "amount": 500
+        },
+        {
+            "fluidTag": "destroy:liquid/plasticizer",
+            "amount": 10
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:abs_slurry",
+            "amount": 500
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:ziegler-natta"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_ziegler-natta"
+    },
+    "heatRequirement": "heated"
+}

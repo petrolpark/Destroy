@@ -15,7 +15,7 @@
         "chance": 0.75
       },
       {
-        "item": "destroy:crushed_platinum_ore",
+        "item": "create:crushed_platinum_ore",
         "chance": 0.02
       },
       {

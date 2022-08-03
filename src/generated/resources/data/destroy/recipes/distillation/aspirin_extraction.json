@@ -1,0 +1,23 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:vaporised_aspirin_solution",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:sulfuric_acid",
+            "amount": 90
+        },
+        {
+            "fluid": "destroy:aspirin",
+            "amount": 200
+        },
+        {
+            "fluid": "destroy:acetic_acid",
+            "amount": 200
+        }
+    ]
+}

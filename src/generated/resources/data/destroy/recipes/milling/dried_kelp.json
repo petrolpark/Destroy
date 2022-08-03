@@ -11,7 +11,7 @@
       },
       {
         "item": "destroy:iodine",
-        "chance": 0.001
+        "chance": 0.005
       }
     ],
     "processingTime": 50

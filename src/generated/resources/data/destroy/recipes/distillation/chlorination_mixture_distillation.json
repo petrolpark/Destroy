@@ -1,0 +1,19 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:chloroform_chlorination_mixture",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:carbon_tetrachloride",
+            "amount": 250
+        },
+        {
+            "fluid": "destroy:hydrochloric_acid",
+            "amount": 250
+        }
+    ]
+}

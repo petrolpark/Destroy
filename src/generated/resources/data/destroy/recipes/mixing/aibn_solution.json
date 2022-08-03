@@ -1,0 +1,27 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:acetone",
+        "amount": 125
+      },
+      {
+        "fluid": "destroy:sodium_cyanide_solution",
+        "amount": 125
+      },
+      {
+        "fluid": "destroy:hydrazine",
+        "amount": 125
+      },
+      {
+        "fluidTag": "forge:hydrochloric_acid",
+        "amount": 125
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:aibn_solution",
+        "amount": 250
+      }
+    ]
+  }

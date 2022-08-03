@@ -1,0 +1,13 @@
+{
+    "type": "destroy:extrusion",
+    "ingredients": [
+      {
+        "block": "destroy:mashed_potato_block"
+      }
+    ],
+    "results": [
+      {
+        "block": "destroy:raw_fries_block"
+      }
+    ]
+  }

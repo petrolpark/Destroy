@@ -1,0 +1,7 @@
+{
+    "replace": false,
+    "values": [
+      "#destroy:destroy_ingots",
+      "destroy:zircon"
+    ]
+}

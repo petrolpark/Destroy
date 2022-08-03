@@ -1,0 +1,22 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:sulfuric_acid",
+        "amount": 250
+      },
+      {
+        "fluid": "destroy:distilled_water",
+        "amount": 250
+      },
+      {
+        "item": "destroy:fluorite"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:fluorite_in_sulfuric_acid",
+        "amount": 500
+      }
+    ]
+  }

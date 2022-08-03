@@ -1,0 +1,7 @@
+{
+    "replace": false,
+    "values": [
+      "#destroy:gas/carcinogen",
+      "#destroy:liquid/carcinogen"
+    ]
+  }

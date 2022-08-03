@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluidTag": "destroy:acid",
+        "amount": 250
+      },
+      {
+        "fluidTag": "destroy:base",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:rocksalt"
+      }
+    ],
+    "heatRequirement": "heated"
+  }

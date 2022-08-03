@@ -1,0 +1,19 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:vaporised_tetrafluoroethene_solution",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:hydrochloric_acid",
+            "amount": 250
+        },
+        {
+            "fluid": "destroy:tetrafluoroethene",
+            "amount": 250
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:acetone_peroxide",
+      "destroy:fulminated_mercury",
+      "destroy:touch_powder"
+    ]
+  }

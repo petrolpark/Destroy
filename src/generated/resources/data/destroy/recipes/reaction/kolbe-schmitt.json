@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:phenol",
+            "amount": 300
+        },
+        {
+            "fluid": "destroy:carbon_dioxide",
+            "amount": 600
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:salicylic_acid",
+            "amount": 300
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:sulfuric_acid_coated_silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "heated"
+}

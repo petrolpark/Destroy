@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+      "item": "destroy:zircon"
+    },
+    "result": "destroy:zirconium_ingot",
+    "experience": 1.0,
+    "cookingtime": 200
+  }

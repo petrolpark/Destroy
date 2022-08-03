@@ -1,0 +1,8 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:dibenzyl_ether",
+      "destroy:diethyl_phthalate",
+      "destroy:dimethyl_phthalate"
+    ]
+  }

@@ -1,0 +1,17 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "destroy:silica"
+      },
+      {
+        "fluidTag": "forge:sulfuric_acid",
+        "amount": 100
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:sulfuric_acid_coated_silica"
+      }
+    ]
+  }
