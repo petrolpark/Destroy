@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:ethylbenzene",
+        "amount": 500
+      },
+      {
+        "item": "forge:nuggets/iron"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:styrene",
+        "amount": 500
+      }
+    ],
+    "heatRequirement": "heated"
+  }

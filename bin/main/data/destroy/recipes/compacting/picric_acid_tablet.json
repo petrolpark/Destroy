@@ -1,0 +1,14 @@
+{
+    "type": "create:compacting",
+    "ingredients": [
+      {
+        "fluid": "destroy:picric_acid",
+        "amount": 500
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:picric_acid_tablet"
+      }
+    ]
+  }

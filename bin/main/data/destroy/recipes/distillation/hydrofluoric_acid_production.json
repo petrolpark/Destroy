@@ -1,0 +1,19 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:vaporised_fluorite_in_sulfuric_acid",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:gypsum_solution",
+            "amount": 250
+        },
+        {
+            "fluid": "destroy:hydrofluoric_acid",
+            "amount": 250
+        }
+    ]
+}

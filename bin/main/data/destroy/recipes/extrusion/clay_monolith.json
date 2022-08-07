@@ -1,0 +1,13 @@
+{
+    "type": "destroy:extrusion",
+    "ingredients": [
+      {
+        "block": "minecraft:clay"
+      }
+    ],
+    "results": [
+      {
+        "block": "destroy:clay_monolith"
+      }
+    ]
+  }

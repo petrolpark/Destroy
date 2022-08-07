@@ -1,0 +1,17 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "destroy:silica"
+      },
+      {
+        "fluid": "destroy:sodium_acetate_solution",
+        "amount": 100
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:sodium_acetate_coated_silica"
+      }
+    ]
+  }

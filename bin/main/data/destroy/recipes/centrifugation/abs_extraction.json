@@ -1,0 +1,18 @@
+{
+    "type": "destroy:centrifugation",
+    "ingredients": [
+        {
+            "fluid": "destroy:polyethene_slurry",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "item": "destroy:polyethene"
+        },
+        {
+            "fluid": "minecraft:water",
+            "amount": 400
+        }
+    ]
+}

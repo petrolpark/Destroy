@@ -1,0 +1,23 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:cream",
+        "amount": 400
+      },
+      {
+        "fluid": "destroy:glycerol",
+        "amount": 50
+      },
+      {
+        "item": "minecraft:honeycomb"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:honeycomb_ice_cream",
+        "amount": 500
+      }
+    ],
+    "heatRequirement": "cooled"
+  }

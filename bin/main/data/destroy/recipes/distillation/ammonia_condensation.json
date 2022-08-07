@@ -1,0 +1,23 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:haber_mixture",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:ammonia_solution",
+            "amount": 50
+        },
+        {
+            "fluid": "destroy:nitrogen",
+            "amount": 450
+        },
+        {
+            "fluid": "destroy:hydrogen",
+            "amount": 450
+        }
+    ]
+}

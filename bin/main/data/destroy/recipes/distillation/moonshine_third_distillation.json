@@ -1,0 +1,19 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:vaporised_twice_distilled_moonshine",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "minecraft:water",
+            "amount": 300
+        },
+        {
+            "fluid": "destroy:thrice_distilled_moonshine",
+            "amount": 200
+        }
+    ]
+}

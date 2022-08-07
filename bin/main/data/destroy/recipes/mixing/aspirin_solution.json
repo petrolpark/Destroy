@@ -1,0 +1,23 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:acetic_anhydride",
+        "amount": 200
+      },
+      {
+        "fluid": "destroy:salicylic_acid",
+        "amount": 200
+      },
+      {
+        "fluidTag": "forge:sulfuric_acid",
+        "amount": 100
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:aspirin_solution",
+        "amount": 500
+      }
+    ]
+  }

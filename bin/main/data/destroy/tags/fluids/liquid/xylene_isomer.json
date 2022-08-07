@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:ethylbenzene",
+      "destroy:p-xylene",
+      "destroy:m-xylene",
+      "destroy:o-xylene"
+    ]
+  }

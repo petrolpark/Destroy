@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:ethene",
+            "amount": 500
+        },
+        {
+            "fluid": "destroy:acetic_acid",
+            "amount": 250
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:vinyl_acetate",
+            "amount": 250
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:palladium_coated_silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "heated"
+}

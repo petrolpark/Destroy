@@ -1,0 +1,39 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:dilute_vaporised_naptha",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:petrol",
+            "amount": 65
+        },
+        {
+            "fluid": "destroy:benzene",
+            "amount": 170
+        },
+        {
+            "fluid": "destroy:cyclopentadiene",
+            "amount": 50
+        },
+        {
+            "fluid": "destroy:lpg",
+            "amount": 40
+        },
+        {
+            "fluid": "destroy:butadiene",
+            "amount": 50
+        },
+        {
+            "fluid": "destroy:propene",
+            "amount": 50
+        },
+        {
+            "fluid": "destroy:ethene",
+            "amount": 250
+        }
+    ]
+}

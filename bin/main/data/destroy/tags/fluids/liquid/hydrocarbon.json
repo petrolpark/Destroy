@@ -1,0 +1,20 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:benzene",
+      "destroy:bitumen",
+      "destroy:cyclohexene",
+      "destroy:cyclopentadiene",
+      "destroy:diesel",
+      "destroy:ethylbenzene",
+      "destroy:kerosene",
+      "destroy:lpg",
+      "destroy:m-xylene",
+      "destroy:naptha",
+      "destroy:o-xylene",
+      "destroy:petrol",
+      "destroy:p-xylene",
+      "destroy:styrene",
+      "destroy:toluene"
+    ]
+  }

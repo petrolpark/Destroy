@@ -1,0 +1,21 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:cyclopentadiene",
+        "amount": 250
+      },
+      {
+        "fluid": "destroy:aibn",
+        "amount": 25
+      },
+      {
+        "item": "destroy:zirconium_ingot"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:ziegler-natta"
+      }
+    ]
+  }

@@ -1,0 +1,15 @@
+{
+    "type": "destroy:vaporisation",
+    "ingredients": [
+        {
+            "fluid": "destroy:fuel_oil",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:vaporised_fuel_oil",
+            "amount": 1000
+        }
+    ]
+}

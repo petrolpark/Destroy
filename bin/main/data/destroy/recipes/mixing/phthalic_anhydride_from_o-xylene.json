@@ -1,0 +1,16 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:o-xylene",
+        "amount": 500
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:phthalic_anhydride",
+        "amount": 500
+      }
+    ],
+    "heatRequirement": "heated"
+  }

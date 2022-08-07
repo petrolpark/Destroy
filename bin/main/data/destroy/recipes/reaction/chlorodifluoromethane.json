@@ -1,0 +1,27 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:chloroform",
+            "amount": 300
+        },
+        {
+            "fluid": "destroy:hydrofluoric_acid",
+            "amount": 600
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:chlorodifluoromethane",
+            "amount": 300
+            
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "heated"
+}

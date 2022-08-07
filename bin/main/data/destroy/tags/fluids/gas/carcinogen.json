@@ -1,0 +1,14 @@
+{
+    "replace": false,
+    "values": [
+        "destroy:butadiene",
+        "destroy:chloroform_chlorination_mixture",
+        "destroy:dilute_petroleum_gas",
+        "destroy:dilute_vaporised_naptha",
+        "destroy:dilute_vaporised_petrol",
+        "destroy:vaporised_crude_void_oil",
+        "destroy:vaporised_carbon_tetrachloride_fluorination_mixture",
+        "destroy:vaporised_haloform_mixture",
+        "destroy:vaporised_tnt_solution"
+    ]
+  }

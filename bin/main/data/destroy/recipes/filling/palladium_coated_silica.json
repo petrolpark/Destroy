@@ -1,0 +1,17 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "destroy:silica"
+      },
+      {
+        "fluidTag": "forge:molten_palladium",
+        "amount": 100
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:palladium_coated_silica"
+      }
+    ]
+  }

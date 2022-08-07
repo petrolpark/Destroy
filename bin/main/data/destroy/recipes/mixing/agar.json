@@ -1,0 +1,21 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:glycerol",
+        "amount": 250
+      },
+      {
+        "fluid": "destroy:sodium_acetate_solution",
+        "amount": 250
+      },
+      {
+        "item": "minecraft:seaweed"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:agar"
+      }
+    ]
+  }

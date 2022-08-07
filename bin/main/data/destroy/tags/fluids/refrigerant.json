@@ -1,0 +1,7 @@
+{
+    "replace": false,
+    "values": [
+      "#destroy:gas/refrigerant",
+      "#destroy:liquid/refrigerant"
+    ]
+  }

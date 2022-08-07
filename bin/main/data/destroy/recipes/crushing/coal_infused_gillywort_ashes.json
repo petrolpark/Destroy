@@ -1,0 +1,19 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "destroy:coal_infused_gillywort_ashes"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:coal",
+        "count": 1
+      },
+      {
+        "item": "destroy:napthalene",
+        "chance": 0.1
+      }
+    ],
+    "processingTime": 50
+}

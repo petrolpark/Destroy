@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:benzene",
+            "amount": 500
+        },
+        {
+            "fluid": "destroy:propene",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:vaporised_cumene_mixture",
+            "amount": 1000
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:sulfuric_acid_coated_silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "superheated"
+}

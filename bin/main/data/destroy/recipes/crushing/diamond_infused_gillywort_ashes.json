@@ -1,0 +1,23 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "destroy:diamond_infused_gillywort_ashes"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:diamond",
+        "count": 1
+      },
+      {
+        "item": "minecraft:diamond",
+        "count": 0.75
+      },
+      {
+        "item": "destroy:zircon",
+        "chance": 0.5
+      }
+    ],
+    "processingTime": 50
+  }

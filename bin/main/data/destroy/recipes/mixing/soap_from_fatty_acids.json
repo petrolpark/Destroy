@@ -1,0 +1,18 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:fatty_acids",
+        "amount": 400
+      },
+      {
+        "fluid": "destroy:sodium_hydroxide_solution",
+        "amount": 100
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:soap"
+      }
+    ]
+  }

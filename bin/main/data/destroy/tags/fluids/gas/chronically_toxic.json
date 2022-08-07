@@ -1,0 +1,10 @@
+{
+    "replace": false,
+    "values": [
+        "destroy:carbon_dioxide",
+        "destroy:vaporised_anthraquinone",
+        "destroy:vaporised_cinnabar",
+        "destroy:vaporised_hydroanthraquinone",
+        "destroy:vaporised_methylated_ammonia_mixture"
+    ]
+  }

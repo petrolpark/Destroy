@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:vaporised_anthraquinone",
+            "amount": 500
+        },
+        {
+            "fluidTag": "forge:hydrogen",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:vaporised_hydroanthraquinone",
+            "amount": 500
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:palladium_coated_silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "heated"
+}

@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "destroy:chloroform_chlorination_mixture",
+    "destroy:dichlorodifluoromethane",
+    "destroy:tetrafluoroethene",
+    "destroy:trichlorofluoromethane",
+    "destroy:vaporised_carbon_tetrachloride_fluorination_mixture",
+    "destroy:vaporised_dibenzyl_ether_solution",
+    "destroy:vaporised_eau_de_javel",
+    "destroy:vaporised_haloform_mixture",
+    "destroy:vaporised_tetrafluoroethene_solution"
+  ]
+}

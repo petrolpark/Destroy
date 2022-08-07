@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+      "item": "destroy:crushed_rhodium_ore"
+    },
+    "result": "destroy:rhodium_ingot",
+    "experience": 1.0,
+    "cookingtime": 200
+  }

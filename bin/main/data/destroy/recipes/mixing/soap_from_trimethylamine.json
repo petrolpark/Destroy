@@ -1,0 +1,21 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:trimethylamine_solution",
+        "amount": 250
+      },
+      {
+        "fluid": "destroy:benzyl_chloride_solution",
+        "amount": 250
+      },
+      {
+        "item": "minecraft:clay"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:soap"
+      }
+    ]
+  }

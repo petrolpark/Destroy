@@ -1,0 +1,24 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:toluene",
+        "amount": 100
+      },
+      {
+        "fluid": "destroy:sulfuric_acid",
+        "amount": 100
+      },
+      {
+        "fluid": "destroy:nitric_acid",
+        "amount": 300
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:tnt_solution",
+        "amount": 500
+      }
+    ],
+    "heatRequirement": "cooled"
+  }

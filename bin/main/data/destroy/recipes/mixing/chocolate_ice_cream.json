@@ -1,0 +1,24 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:cream",
+        "amount": 400
+      },
+      {
+        "fluid": "destroy:glycerol",
+        "amount": 50
+      },
+      {
+        "fluidTag": "forge:chocolate",
+        "amount": 50
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:chocolate_ice_cream",
+        "amount": 500
+      }
+    ],
+    "heatRequirement": "cooled"
+  }

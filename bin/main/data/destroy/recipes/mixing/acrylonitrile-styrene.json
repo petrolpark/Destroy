@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:acrylonitrile",
+        "amount": 200
+      },
+      {
+        "fluid": "destroy:styrene",
+        "amount": 300
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:acrylonitrile-styrene",
+        "amount": 500
+      }
+    ]
+  }
