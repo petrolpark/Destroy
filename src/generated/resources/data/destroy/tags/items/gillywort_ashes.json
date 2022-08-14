@@ -1,0 +1,12 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:coal_infused_gillywort_ashes",
+      "destroy:copper_infused_gillywort_ashes",
+      "destroy:diamond_infused_gillywort_ashes",
+      "destroy:gillywort_ashes",
+      "destroy:gold_infused_gillywort_ashes",
+      "destroy:iron_infused_gillywort_ashes",
+      "destroy:nickel_infused_gillywort_ashes"
+    ]
+  }

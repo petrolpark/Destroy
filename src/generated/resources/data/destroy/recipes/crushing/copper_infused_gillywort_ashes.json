@@ -17,10 +17,6 @@
       {
         "item": "create:crushed_platinum_ore",
         "chance": 0.02
-      },
-      {
-        "item": "destroy:crushed_iridium_ore",
-        "chance": 0.01
       }
     ],
     "processingTime": 50

@@ -2,17 +2,17 @@
     "type": "destroy:reaction",
     "ingredients": [
         {
-            "fluid": "destroy:acrylonitrile-styrene",
-            "amount": 600
+            "fluid": "destroy:styrene_butadiene",
+            "amount": 400
         },
         {
-            "fluid": "destroy:butadiene",
-            "amount": 400
+            "fluid": "destroy:acrylonitrile",
+            "amount": 200
         }
     ],
     "results": [
         {
-            "fluid": "destroy:abs_monomer",
+            "fluid": "destroy:abs_monomers_mixture",
             "amount": 800
             
         }

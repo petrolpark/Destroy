@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:distilled_water",
+        "amount": 250
+      },
+      {
+        "item": "destroy:chalk_dust"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:chalky_water",
+        "amount": 250
+      }
+    ],
+    "heatRequirement": "heated"
+  }

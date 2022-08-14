@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:chalky_water",
+        "amount": 250
+      },
+      {
+        "tag": "forge:ingots/zinc"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:zinc_chalky_water",
+        "amount": 250
+      }
+    ],
+    "heatRequirement": "heated"
+  }

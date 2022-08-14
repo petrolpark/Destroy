@@ -6,7 +6,7 @@
             "amount": 500
         },
         {
-            "fluid": "destroy:petroleum_gas",
+            "fluidTag": "destroy:methane",
             "amount": 500
         }
     ],

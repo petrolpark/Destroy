@@ -1,0 +1,14 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:acetone_coated_silica",
+      "destroy:copper_coated_silica",
+      "destroy:dirty_silica",
+      "destroy:iron_coated_silica",
+      "destroy:nickel_coated_silica",
+      "destroy:palladium_coated_silica",
+      "destroy:rhodium_coated_silica",
+      "destroy:sodium_acetate_coated_silica",
+      "destroy:sulfuric_acid_coated_silica"
+    ]
+  }

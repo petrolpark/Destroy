@@ -2,10 +2,11 @@
     "replace": false,
     "values": [
       "#destroy:liquid/acid",
-      "destroy:abs_monomer",
+      "destroy:abs_monomers_mixture",
+      "destroy:acetamide",
+      "destroy:acetamide_solution",
       "destroy:acetic_anhydride",
       "destroy:acrylonitrile",
-      "destroy:acrylonitrile-styrene",
       "destroy:aibn_solution",
       "destroy:adiponitrile",
       "destroy:aspirin_solution",
@@ -29,7 +30,7 @@
       "destroy:molten_tnt",
       "destroy:phenol",
       "destroy:phenylacetone",
-      "destroy:sodium_cyanide",
+      "destroy:sodium_cyanide_solution",
       "destroy:sodium_hypochlorite_solution",
       "destroy:tnt_solution"
     ]

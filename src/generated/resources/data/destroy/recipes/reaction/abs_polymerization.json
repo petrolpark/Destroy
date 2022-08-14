@@ -2,7 +2,7 @@
     "type": "destroy:reaction",
     "ingredients": [
         {
-            "fluid": "destroy:abs_monomer",
+            "fluid": "destroy:abs_monomers_mixture",
             "amount": 500
         },
         {

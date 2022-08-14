@@ -1,0 +1,17 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "destroy:syringe"
+      },
+      {
+        "fluid": "destroy:methamphetamine_solution",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:impure_meth_syringe"
+      }
+    ]
+  }

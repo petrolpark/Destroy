@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:blasting",
+    "ingredient": {
+      "item": "destroy:24k_gold_dust"
+    },
+    "result": "destroy:24k_gold_ingot",
+    "cookingtime": 100
+  }

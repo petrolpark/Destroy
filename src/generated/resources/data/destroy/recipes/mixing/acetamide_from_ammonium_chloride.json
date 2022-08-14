@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:ammonium_chloride_solution",
+        "amount": 500
+      },
+      {
+        "fluid": "destroy:sodium_acetate_solution"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:acetamide_solution",
+        "amount": 500
+      }
+    ],
+    "heatRequirement": "heated"
+  }

@@ -1,0 +1,14 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+      {
+        "item": "minecraft:methamphetamine_crystal"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:methamphetamine_powder"
+      }
+    ],
+    "processingTime": 100
+  }

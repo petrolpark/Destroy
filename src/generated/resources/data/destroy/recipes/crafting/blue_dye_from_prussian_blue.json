@@ -2,7 +2,7 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
       {
-        "item": "forge:prussian_blue"
+        "item": "destroy:prussian_blue"
       }
     ],
     "result": {

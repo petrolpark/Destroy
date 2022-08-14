@@ -2,17 +2,20 @@
     "type": "create:mixing",
     "ingredients": [
       {
-        "fluid": "destroy:acrylonitrile",
+        "fluid": "destroy:diethyl_phthalate",
         "amount": 200
       },
       {
-        "fluid": "destroy:styrene",
+        "fluidTag": "destroy:fragrant",
         "amount": 300
+      },
+      {
+        "tag": "minecraft:flowers"
       }
     ],
     "results": [
       {
-        "fluid": "destroy:acrylonitrile-styrene",
+        "fluid": "destroy:perfume",
         "amount": 500
       }
     ]

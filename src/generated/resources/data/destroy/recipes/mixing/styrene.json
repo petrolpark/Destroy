@@ -13,6 +13,9 @@
       {
         "fluid": "destroy:styrene",
         "amount": 500
+      },
+      {
+        "item": "forge:nuggets/iron"
       }
     ],
     "heatRequirement": "heated"

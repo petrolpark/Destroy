@@ -1,0 +1,10 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:dimethyl_phthalate",
+      "destroy:fatty_acids",
+      "destroy:methyl_acetate",
+      "destroy:phenylacetic_acid_solution",
+      "destroy:vinyl_acetate"
+    ]
+  }

@@ -8,6 +8,9 @@
       {
         "fluid": "destroy:sodium_hydroxide_solution",
         "amount": 100
+      },
+      {
+        "tag": "forge:dyes/pink"
       }
     ],
     "results": [

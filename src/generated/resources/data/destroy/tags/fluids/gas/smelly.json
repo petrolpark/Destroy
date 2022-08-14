@@ -1,0 +1,21 @@
+{
+    "replace": false,
+    "values": [
+        "destroy:butadiene",
+        "destroy:chlorine",
+        "destroy:dilute_petroleum_gas",
+        "destroy:dilute_vaporised_naptha",
+        "destroy:dilute_vaporised_petrol",
+        "destroy:haber_mixture",
+        "destroy:methane",
+        "destroy:vaporised_cinnabar",
+        "destroy:vaporised_crude_void_oil",
+        "destroy:vaporised_cumene_mixture",
+        "destroy:vaporised_diesel",
+        "destroy:vaporised_eau_de_javel",
+        "destroy:vaporised_fuel_oil",
+        "destroy:vaporised_kerosene",
+        "destroy:vaporised_methylated_ammonia_mixture",
+        "destroy:vaporised_petrol"
+    ]
+  }

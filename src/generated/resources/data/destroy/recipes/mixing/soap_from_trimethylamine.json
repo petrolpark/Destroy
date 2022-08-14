@@ -11,6 +11,9 @@
       },
       {
         "item": "minecraft:clay"
+      },
+      {
+        "tag": "forge:dyes/pink"
       }
     ],
     "results": [

@@ -6,7 +6,7 @@
         "count": 2
       },
       {
-        "fluidTag": "destroy:liquid/fertiliser",
+        "fluidTag": "destroy:liquid/fertilizer",
         "amount": 100
       },
       {
@@ -15,7 +15,7 @@
     ],
     "results": [
       {
-        "item": "destroy:hyperaccumulating_fertiliser"
+        "item": "destroy:hyperaccumulating_fertilizer"
       }
     ]
   }

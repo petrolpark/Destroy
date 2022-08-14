@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+      "item": "destroy:copper_infused_gillywort"
+    },
+    "result": "destroy:copper_infused_gillywort_ashes",
+    "cookingtime": 200
+  }

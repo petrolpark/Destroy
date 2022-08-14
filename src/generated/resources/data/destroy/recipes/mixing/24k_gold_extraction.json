@@ -1,0 +1,18 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:wet_24k_gold",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "fluid": "minecraft:water",
+        "amount": 500
+      },
+      {
+        "item": "destroy:24k_gold_dust"
+      }
+    ]
+  }

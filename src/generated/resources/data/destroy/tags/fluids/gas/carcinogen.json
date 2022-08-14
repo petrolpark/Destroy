@@ -6,6 +6,8 @@
         "destroy:dilute_petroleum_gas",
         "destroy:dilute_vaporised_naptha",
         "destroy:dilute_vaporised_petrol",
+        "destroy:styrene_butadiene",
+        "destroy:vaporised_acetamide_solution",
         "destroy:vaporised_crude_void_oil",
         "destroy:vaporised_carbon_tetrachloride_fluorination_mixture",
         "destroy:vaporised_haloform_mixture",

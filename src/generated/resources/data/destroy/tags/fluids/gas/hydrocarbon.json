@@ -6,6 +6,7 @@
       "destroy:dilute_vaporised_naptha",
       "destroy:dilute_vaporised_petrol",
       "destroy:ethene",
+      "destroy:methane",
       "destroy:propene",
       "destroy:vaporised_crude_void_oil",
       "destroy:vaporised_diesel",

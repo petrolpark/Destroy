@@ -7,6 +7,7 @@
     "destroy:dilute_petroleum_gas",
     "destroy:dilute_vaporised_naptha",
     "destroy:dilute_vaporised_petrol",
+    "destroy:methane",
     "#forge:steam",
     "destroy:syngas",
     "destroy:tetrafluoroethene",
