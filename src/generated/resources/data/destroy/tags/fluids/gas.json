@@ -14,6 +14,7 @@
       "destroy:haber_mixture",
       "destroy:hydrogen",
       "destroy:hydrogen_cyanide",
+      "destroy:methane",
       "destroy:nitrogen",
       "destroy:propene",
       "destroy:steam",

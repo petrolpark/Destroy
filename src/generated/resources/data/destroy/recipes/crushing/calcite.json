@@ -1,0 +1,18 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "minecraft:calcite"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:chalk_dust"
+      },
+      {
+        "item": "destroy:chalk_dust",
+        "chance": 0.5
+      }
+    ],
+    "processingTime": 225
+}
