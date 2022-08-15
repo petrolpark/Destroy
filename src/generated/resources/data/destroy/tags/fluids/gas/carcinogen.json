@@ -3,6 +3,8 @@
     "values": [
         "destroy:butadiene",
         "destroy:chloroform_chlorination_mixture",
+        "destroy:clean_exhaust_fumes",
+        "destroy:dirty_exhaust_fumes",
         "destroy:dilute_petroleum_gas",
         "destroy:dilute_vaporised_naptha",
         "destroy:dilute_vaporised_petrol",

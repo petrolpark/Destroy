@@ -2,17 +2,16 @@
     "type": "create:mixing",
     "ingredients": [
       {
-        "fluid": "destroy:chalky_water",
+        "fluid": "destroy:distilled_water",
         "amount": 250
       },
       {
-        "tag": "forge:dusts/zinc"
+        "item": "destroy:iodine"
       }
     ],
     "results": [
       {
-        "fluid": "destroy:zinc_chalky_water",
-        "amount": 250
+        "item": "minecraft:orange_dye"
       }
     ],
     "heatRequirement": "heated"

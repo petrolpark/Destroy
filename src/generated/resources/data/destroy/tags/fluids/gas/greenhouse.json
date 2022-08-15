@@ -3,7 +3,9 @@
   "values": [
     "destroy:carbon_dioxide",
     "destroy:carbon_monoxide",
+    "destroy:clean_exhaust_fumes",
     "destroy:dichlorodifluoromethane",
+    "destroy:dirty_exhaust_fumes",
     "destroy:dilute_petroleum_gas",
     "destroy:dilute_vaporised_naptha",
     "destroy:dilute_vaporised_petrol",

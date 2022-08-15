@@ -1,0 +1,8 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:mashed_potato",
+      "destroy:sawdust",
+      "minecraft:sugar"
+    ]
+  }

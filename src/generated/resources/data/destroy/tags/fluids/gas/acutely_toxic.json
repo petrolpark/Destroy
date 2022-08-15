@@ -4,6 +4,7 @@
         "destroy:carbon_monoxide",
         "#forge:chlorine",
         "destroy:chloroform_chlorination_mixture",
+        "destroy:dirty_exhaust_fumes",
         "destroy:haber_mixture",
         "destroy:hydrogen_cyanide",
         "destroy:styrene_butadiene",

@@ -1,0 +1,11 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
+        "item": "destroy:nickel_hydrazine_nitrate"
+      }
+    ],
+    "result": {
+      "item": "minecraft:pink_dye"
+    }
+  }

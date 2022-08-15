@@ -3,14 +3,14 @@
     "ingredients": [
       {
         "fluid": "destroy:distilled_water",
-        "amount": 90
+        "amount": 100
       },
       {
         "fluidTag": "destroy:liquid/bleach",
-        "amount": 10
+        "amount": 50
       },
       {
-        "item": "destroy:sawdust"
+        "tag": "destroy:paper_pulpable"
       }
     ],
     "results": [

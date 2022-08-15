@@ -1,0 +1,16 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:acetone_peroxide",
+      "destroy:chalk_dust",
+      "destroy:fulminated_mercury",
+      "#destroy:gillywort_ashes",
+      "destroy:methamphetamine_powder",
+      "destroy:nickel_hydrazine_nitrate",
+      "destroy:prussian_blue",
+      "destroy:rock_salt",
+      "destroy:saltpeter",
+      "destroy:sawdust",
+      "destroy:zinc_dust"
+    ]
+}

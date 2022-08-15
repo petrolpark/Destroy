@@ -1,0 +1,68 @@
+{
+    "type": "create:sequenced_assembly",
+    "ingredient": {
+      "item": "destroy:silica"
+    },
+    "transitionalItem": {
+      "item": "destroy:unprocessed_conversion_catalyst"
+    },
+    "sequence": [
+      {
+        "type": "create:filling",
+        "ingredients": [
+          {
+            "item": "destroy:unprocessed_conversion_catalyst"
+          },
+          {
+            "fluidTag": "forge:molten_platinum",
+            "amount": 250
+          }
+        ],
+        "results": [
+          {
+            "item": "destroy:unprocessed_conversion_catalyst"
+          }
+        ]
+      },
+      {
+        "type": "create:filling",
+        "ingredients": [
+          {
+            "item": "destroy:unprocessed_conversion_catalyst"
+          },
+          {
+            "fluidTag": "forge:molten_palladium",
+            "amount": 250
+          }
+        ],
+        "results": [
+          {
+            "item": "destroy:unprocessed_conversion_catalyst"
+          }
+        ]
+      },
+      {
+        "type": "create:filling",
+        "ingredients": [
+          {
+            "item": "destroy:unprocessed_conversion_catalyst"
+          },
+          {
+            "fluidTag": "forge:molten_rhodium",
+            "amount": 250
+          }
+        ],
+        "results": [
+          {
+            "item": "destroy:conversion_catalyst"
+          }
+        ]
+      }
+    ],
+    "results": [
+      {
+        "item": "create:conversion_catalyst"
+      }
+    ],
+    "loops": 1
+  }

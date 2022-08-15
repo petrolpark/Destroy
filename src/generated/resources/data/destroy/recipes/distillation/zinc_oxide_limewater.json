@@ -1,0 +1,19 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:vaporised_zinc_chalky_water",
+            "amount": 600
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:zinc_oxide_limewater",
+            "amount": 300
+        },
+        {
+            "fluid": "destroy:carbon_monoxide",
+            "amount": 600
+        }
+    ]
+}
