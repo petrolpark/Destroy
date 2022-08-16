@@ -11,6 +11,7 @@
         "#forge:ethanol",
         "destroy:haloform_mixture",
         "destroy:hydrazine",
+        "destroy:lubricant",
         "#forge:molten_nickel",
         "destroy:molten_tnt",
         "destroy:tnt_solution",

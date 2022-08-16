@@ -1,0 +1,27 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "item": "create:crushed_iron_ore"
+      },
+      {
+        "tag": "forge:dusts/zinc"
+      },
+      {
+        "item": "minecraft:cocoa_beans"
+      },
+      {
+        "item": "destroy:butter"
+      },
+      {
+        "item": "create:cinder_flour"
+      }
+    ],
+    "results": [
+      {
+        "item": "thermite_brownie",
+        "count": 2
+      }
+    ],
+    "heatRequirement": "heated"
+  }

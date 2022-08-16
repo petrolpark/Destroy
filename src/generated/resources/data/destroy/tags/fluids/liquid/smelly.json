@@ -20,6 +20,7 @@
       "destroy:hydrazine",
       "destroy:kerosene",
       "destroy:lpg",
+      "destroy:lubricant",
       "destroy:methylamine_solution",
       "destroy:molten_cinnabar",
       "destroy:molten_sulfur",

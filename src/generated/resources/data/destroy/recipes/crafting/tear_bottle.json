@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "G",
+      "W"
+    ],
+    "key": {
+      "G": {
+        "item": "minecraft:ghast_tear"
+      },
+      "w": {
+        "tag": "destroy:silica"
+      }
+    },
+    "result": {
+      "item": "destroy:tear_bottle"
+    }
+  }

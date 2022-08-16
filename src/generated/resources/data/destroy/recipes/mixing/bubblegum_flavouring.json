@@ -3,11 +3,15 @@
     "ingredients": [
       {
         "fluid": "destroy:methanol",
-        "amount": 250
+        "amount": 200
       },
       {
-        "fluid": "destroy:acetic_acid",
-        "amount": 250
+        "fluid": "destroy:salicylic_acid",
+        "amount": 200
+      },
+      {
+        "fluid": "destroy:glycerol",
+        "amount": 100
       },
       {
         "item": "destroy:prussian_blue"

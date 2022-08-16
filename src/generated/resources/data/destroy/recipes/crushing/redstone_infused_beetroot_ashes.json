@@ -1,0 +1,30 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "destroy:diamond_infused_beetroot_ashes"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:redstone",
+        "count": 6
+      },
+      {
+        "item": "minecraft:redstone",
+        "count": 1,
+        "chance": 0.5
+      },
+      {
+        "item": "destroy:chalk_dust",
+        "count": 1,
+        "chance": 0.1
+      },
+      {
+        "item": "minecraft:quartz",
+        "count": 1,
+        "chance": 0.05
+      }
+    ],
+    "processingTime": 50
+  }

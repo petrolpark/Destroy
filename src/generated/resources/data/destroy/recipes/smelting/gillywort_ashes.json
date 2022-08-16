@@ -1,8 +1,0 @@
-{
-    "type": "minecraft:smelting",
-    "ingredient": {
-      "item": "destroy:gillywort"
-    },
-    "result": "destroy:gillywort_ashes",
-    "cookingtime": 200
-  }

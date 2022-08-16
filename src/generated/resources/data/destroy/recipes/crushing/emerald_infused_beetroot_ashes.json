@@ -1,0 +1,25 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "destroy:emerald_infused_beetroot_ashes"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:emerald",
+        "count": 2
+      },
+      {
+        "item": "minecraft:emerald",
+        "count": 1,
+        "chance": 0.75
+      },
+      {
+        "item": "destroy:quartz",
+        "count": 1,
+        "chance": 0.2
+      }
+    ],
+    "processingTime": 50
+  }

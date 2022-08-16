@@ -7,11 +7,8 @@
     ],
     "results": [
       {
-        "item": "destroy:chalk_dust"
-      },
-      {
         "item": "destroy:chalk_dust",
-        "chance": 0.25
+        "count": 5
       }
     ],
     "processingTime": 150

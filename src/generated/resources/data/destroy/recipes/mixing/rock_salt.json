@@ -8,11 +8,17 @@
       {
         "fluidTag": "destroy:liquid/base",
         "amount": 250
+      },
+      {
+        "item": "destroy:calcium_chloride"
       }
     ],
     "results": [
       {
         "item": "destroy:rock_salt"
+      },
+      {
+        "item": "wet_calcium_chloride"
       }
     ],
     "heatRequirement": "heated"

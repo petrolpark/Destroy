@@ -3,10 +3,11 @@
     "ingredients": [
       {
         "fluid": "destroy:ammonium_chloride_solution",
-        "amount": 500
+        "amount": 250
       },
       {
-        "fluid": "destroy:sodium_acetate_solution"
+        "fluid": "destroy:sodium_acetate_solution",
+        "amount": 250
       }
     ],
     "results": [

@@ -1,7 +1,7 @@
 {
     "replace": false,
     "values": [
-      "destroy:iridium_ingot",
+      "destroy:24k_gold_ingot",
       "destroy:palladium_ingot",
       "destroy:platinum_ingot",
       "destroy:rhodium_ingot",

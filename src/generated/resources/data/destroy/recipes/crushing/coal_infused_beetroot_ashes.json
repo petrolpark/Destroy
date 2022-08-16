@@ -1,0 +1,30 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "destroy:coal_infused_beetroot_ashes"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:coal",
+        "count": 2
+      },
+      {
+        "item": "minecraft:coal",
+        "count": 1,
+        "chance": 0.5
+      },
+      {
+        "item": "destroy:napthalene",
+        "count": 1,
+        "chance": 0.05
+      },
+      {
+        "item": "minecraft:diamond",
+        "count": 1,
+        "chance": 0.001
+      }
+    ],
+    "processingTime": 50
+}

@@ -24,6 +24,7 @@
       "destroy:hexanediamine",
       "destroy:hydrazine",
       "destroy:iodomethane",
+      "destroy:lubricant",
       "destroy:methyl_acetate",
       "destroy:methanol",
       "#forge:molten_rhodium",

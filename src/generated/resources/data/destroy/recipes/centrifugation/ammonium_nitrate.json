@@ -1,0 +1,18 @@
+{
+    "type": "destroy:centrifugation",
+    "ingredients": [
+        {
+            "fluid": "destroy:ammonium_nitrate_solution",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "item": "destroy:ammonium_nitrate_prill"
+        },
+        {
+            "fluid": "minecraft:water",
+            "amount": 500
+        }
+    ]
+}

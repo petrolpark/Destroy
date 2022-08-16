@@ -1,8 +1,0 @@
-{
-    "type": "minecraft:smelting",
-    "ingredient": {
-      "item": "destroy:diamond_infused_gillywort"
-    },
-    "result": "destroy:diamond_infused_gillywort_ashes",
-    "cookingtime": 200
-  }

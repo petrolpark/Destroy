@@ -1,0 +1,30 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "destroy:zinc_infused_beetroot_ashes"
+      }
+    ],
+    "results": [
+      {
+        "item": "create:crushed_zinc_ore",
+        "count": 2
+      },
+      {
+        "item": "create:crushed_zinc_ore",
+        "count": 1,
+        "chance": 0.75
+      },
+      {
+        "item": "destroy:zinc_oxide",
+        "count": 1,
+        "chance": 0.1
+      },
+      {
+        "item": "create:crushed_lead_ore",
+        "count": 1,
+        "chance": 0.01
+      }
+    ],
+    "processingTime": 50
+  }

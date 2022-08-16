@@ -8,8 +8,12 @@
     ],
     "results": [
         {
+            "fluid": "destroy:acetic_acid",
+            "amount": 25
+        },
+        {
             "fluid": "minecraft:water",
-            "amount": 300
+            "amount": 275
         },
         {
             "fluid": "destroy:once_distilled_moonshine",

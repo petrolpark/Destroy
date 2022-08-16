@@ -6,14 +6,16 @@
         "amount": 250
       },
       {
-        "fluid": "destroy:brine",
-        "amount": 250
+        "item": "destroy:calcium_chloride"
       }
     ],
     "results": [
       {
-        "fluid": "destroy:acetamide_solution",
-        "amount": 500
+        "fluid": "destroy:acetamide",
+        "amount": 250
+      },
+      {
+        "item": "destroy:wet_calcium_chloride"
       }
     ],
     "heatRequirement": "heated"
