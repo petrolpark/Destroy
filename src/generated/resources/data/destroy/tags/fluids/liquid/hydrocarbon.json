@@ -15,6 +15,7 @@
       "destroy:petrol",
       "destroy:p-xylene",
       "destroy:styrene",
+      "destroy:styrene_butadiene",
       "destroy:toluene"
     ]
   }

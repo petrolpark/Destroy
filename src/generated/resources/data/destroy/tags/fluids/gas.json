@@ -6,11 +6,14 @@
       "destroy:carbon_monoxide",
       "destroy:chlorine",
       "destroy:chloroform_chlorination_mixture",
+      "destroy:clean_exhaust_fumes",
       "destroy:dichlorodifluoromethane",
       "destroy:dilute_petroleum_gas",
       "destroy:dilute_vaporised_naptha",
       "destroy:dilute_vaporised_petrol",
+      "destroy:dirty_exhaust_fumes",
       "destroy:ethene",
+      "destroy:ethene_hydration_mixture",
       "destroy:haber_mixture",
       "destroy:hydrogen",
       "destroy:hydrogen_cyanide",
@@ -46,6 +49,7 @@
       "destroy:vaporised_thrice_distilled_moonshine",
       "destroy:vaporised_tnt_solution",
       "destroy:vaporised_twice_distilled_moonshine",
-      "destroy:vaporised_undistilled_moonshine"
+      "destroy:vaporised_undistilled_moonshine",
+      "destroy:vaporised_zinc_chalky_water"
     ]
 }

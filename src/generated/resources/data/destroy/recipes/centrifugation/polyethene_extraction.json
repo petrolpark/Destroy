@@ -14,5 +14,6 @@
             "fluid": "minecraft:water",
             "amount": 400
         }
-    ]
+    ],
+    "processingTime": 1000
 }

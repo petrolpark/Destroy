@@ -40,7 +40,20 @@
     ],
     "results": [
       {
-        "item": "destroy:zeolite"
+        "item": "destroy:zeolite",
+        "chance": 75.0
+      },
+      {
+        "item": "destroy:dirty_silica",
+        "chance": 10.0
+      },
+      {
+        "item": "minecraft:flint",
+        "chance": 5.0
+      },
+      {
+        "item": "minecraft:dirt",
+        "chance": 10.0
       }
     ],
     "loops": 1

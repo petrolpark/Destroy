@@ -9,6 +9,7 @@
     "destroy:dilute_petroleum_gas",
     "destroy:dilute_vaporised_naptha",
     "destroy:dilute_vaporised_petrol",
+    "destroy:ethene_hydration_mixture",
     "destroy:methane",
     "#forge:steam",
     "destroy:syngas",

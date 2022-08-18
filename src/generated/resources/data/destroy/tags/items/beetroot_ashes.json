@@ -1,12 +1,17 @@
 {
     "replace": false,
     "values": [
+      "destroy:beetroot_ashes",
       "destroy:coal_infused_beetroot_ashes",
       "destroy:copper_infused_beetroot_ashes",
       "destroy:diamond_infused_beetroot_ashes",
-      "destroy:beetroot_ashes",
+      "destroy:emerald_infused_beetroot_ashes",
+      "destroy:fluorite_infused_beetroot_ashes",
       "destroy:gold_infused_beetroot_ashes",
       "destroy:iron_infused_beetroot_ashes",
-      "destroy:nickel_infused_beetroot_ashes"
+      "destroy:lapis_infused_beetroot_ashes",
+      "destroy:nickel_infused_beetroot_ashes",
+      "destroy:redstone_infused_beetroot_ashes",
+      "destroy:zinc_infused_beetroot_ashes"
     ]
   }

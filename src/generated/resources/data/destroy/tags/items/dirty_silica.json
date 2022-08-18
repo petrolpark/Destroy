@@ -9,6 +9,7 @@
       "destroy:palladium_coated_silica",
       "destroy:rhodium_coated_silica",
       "destroy:sodium_acetate_coated_silica",
-      "destroy:sulfuric_acid_coated_silica"
+      "destroy:sulfuric_acid_coated_silica",
+      "destroy:ziegler-natta_coated_silica"
     ]
   }

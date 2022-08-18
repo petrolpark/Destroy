@@ -7,7 +7,7 @@
     ],
     "key": {
       "B": {
-        "item": "destroy:hefty_beetroot"
+        "tag": "destroy:hefty_beetroot"
       },
       "O": {
         "item": "minecraft:bowl"

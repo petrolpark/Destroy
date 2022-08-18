@@ -1,5 +1,5 @@
 {
-    "type": "create:mixing",
+    "type": "minecraft:crafting_shapeless",
     "ingredients": [
       {
         "tag": "minecraft:coals"
@@ -13,7 +13,7 @@
     ],
     "results": [
       {
-        "item": "gunpowder",
+        "item": "minecraft:gunpowder",
         "count": 2
       }
     ]

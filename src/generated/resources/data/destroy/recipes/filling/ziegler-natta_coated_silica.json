@@ -1,0 +1,17 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "destroy:silica"
+      },
+      {
+        "fluid": "destroy:ziegler-natta_catalyst_solution",
+        "amount": 100
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:ziegler-natta_coated_silica"
+      }
+    ]
+  }

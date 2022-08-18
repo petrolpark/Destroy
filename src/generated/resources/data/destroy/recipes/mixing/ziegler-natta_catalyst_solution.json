@@ -3,11 +3,11 @@
     "ingredients": [
       {
         "fluid": "destroy:cyclopentadiene",
-        "amount": 250
+        "amount": 200
       },
       {
         "fluid": "destroy:aibn",
-        "amount": 25
+        "amount": 50
       },
       {
         "item": "destroy:zirconium_ingot"
@@ -15,7 +15,9 @@
     ],
     "results": [
       {
-        "item": "destroy:ziegler-natta"
+        "fluid": "destroy:ziegler-natta_catalyst_solution",
+        "amount": 250
       }
-    ]
+    ],
+    "heatRequirement": "superheated"
   }

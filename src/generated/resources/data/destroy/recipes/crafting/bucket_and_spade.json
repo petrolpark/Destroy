@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "P P",
+      "PSP",
+      "PPP"
+    ],
+    "key": {
+      "P": {
+        "item": "destroy:polyethene"
+      },
+      "S": {
+        "item": "minecraft:wooden_shovel"
+      }
+    },
+    "result": {
+      "item": "destroy:bucket_and_spade"
+    }
+  }
