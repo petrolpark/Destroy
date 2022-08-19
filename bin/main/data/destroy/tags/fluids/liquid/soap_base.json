@@ -1,0 +1,7 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:limewater",
+      "destroy:sodium_hydroxide_solution"
+    ]
+  }

@@ -1,0 +1,18 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:distilled_water",
+        "amount": 250
+      },
+      {
+        "item": "destroy:iodine"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:orange_dye"
+      }
+    ],
+    "heatRequirement": "heated"
+  }

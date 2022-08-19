@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+      "item": "destroy:lapis_infused_beetroot"
+    },
+    "result": "destroy:lapis_infused_beetroot_ashes",
+    "cookingtime": 200
+  }

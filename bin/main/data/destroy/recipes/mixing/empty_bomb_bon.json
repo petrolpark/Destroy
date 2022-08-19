@@ -1,0 +1,25 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:glycerol",
+        "amount": 100
+      },
+      {
+        "fluidTag": "forge:chocolate",
+        "amount": 200
+      },
+      {
+        "tag": "destroy:explosive/primary"
+      },
+      {
+        "tag": "destroy:explosive/secondary"
+      }
+    ],
+    "results": [
+      {
+        "item": "empty_bomb_bon"
+      }
+    ],
+    "heatRequirement": "cooled"
+  }

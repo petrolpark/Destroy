@@ -6,8 +6,11 @@
         "amount": 400
       },
       {
-        "fluid": "destroy:sodium_hydroxide_solution",
+        "fluidTag": "destroy:liquids/soap_base",
         "amount": 100
+      },
+      {
+        "tag": "forge:dyes/pink"
       }
     ],
     "results": [

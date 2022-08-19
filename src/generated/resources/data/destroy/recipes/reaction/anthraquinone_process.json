@@ -17,10 +17,10 @@
         }
     ],
     "catalyst": {
-        "item": "destroy:palladium_coated_silica"
+        "item": "destroy:palladium_on_carbon"
     },
     "wasteCatalyst": {
-        "item": "destroy:dirty_silica"
+        "item": "minecraft:charcoal"
     },
     "heatRequirement": "heated"
 }

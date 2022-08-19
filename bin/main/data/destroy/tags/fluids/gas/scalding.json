@@ -2,9 +2,11 @@
   "replace": false,
   "values": [
     "destroy:chloroform_chlorination_mixture",
+    "destroy:clean_exhaust_fumes",
     "destroy:dilute_petroleum_gas",
     "destroy:dilute_vaporised_naptha",
     "destroy:dilute_vaporised_petrol",
+    "destroy:ethene_hydration_mixture",
     "destroy:haber_mixture",
     "#forge:steam",
     "destroy:syngas",

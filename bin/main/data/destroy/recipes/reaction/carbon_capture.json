@@ -1,0 +1,26 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:limewater",
+        "amount": 300
+      },
+      {
+        "fluid": "destroy:carbon_dioxide",
+        "amount": 600
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:chalky_water",
+        "amount": 300
+      }
+    ],
+    "catalyst": {
+      "item": "destroy:silica"
+    },
+    "dirtyCatalyst": {
+      "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "heated"
+  }

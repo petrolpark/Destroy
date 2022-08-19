@@ -1,0 +1,13 @@
+{
+    "type": "create:sandpaper_polishing",
+    "ingredients": [
+      {
+        "item": "minecraft:diamond"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:diamond_drill_bit"
+      }
+    ]
+  }

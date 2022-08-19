@@ -1,0 +1,21 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "item": "destroy:ammonium_nitrate_prill",
+        "count": 2
+      },
+      {
+        "fluidTag": "destroy:liquid/fertilizer",
+        "amount": 100
+      },
+      {
+        "item": "minecraft:bonemeal"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:hyperaccumulating_fertilizer"
+      }
+    ]
+  }

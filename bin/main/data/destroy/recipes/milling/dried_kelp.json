@@ -10,7 +10,7 @@
         "item": "minecraft:dark_green_dye"
       },
       {
-        "item": "destroy:iodine",
+        "item": "destroy:potassium_iodide",
         "chance": 0.005
       }
     ],

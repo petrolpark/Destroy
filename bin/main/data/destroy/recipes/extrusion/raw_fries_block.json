@@ -2,12 +2,12 @@
     "type": "destroy:extrusion",
     "ingredients": [
       {
-        "block": "destroy:mashed_potato_block"
+        "item": "destroy:mashed_potato_block"
       }
     ],
     "results": [
       {
-        "block": "destroy:raw_fries_block"
+        "item": "destroy:raw_fries_block"
       }
     ]
   }

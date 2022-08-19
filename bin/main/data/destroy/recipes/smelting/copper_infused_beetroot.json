@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+      "item": "destroy:copper_infused_beetroot"
+    },
+    "result": "destroy:copper_infused_beetroot_ashes",
+    "cookingtime": 200
+  }

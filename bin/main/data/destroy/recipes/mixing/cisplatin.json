@@ -16,7 +16,7 @@
     ],
     "results": [
       {
-        "item": "destroy:cisplatin"
+        "fluid": "destroy:cisplatin"
       }
     ],
     "heatRequirement": "heated"

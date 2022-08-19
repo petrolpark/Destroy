@@ -1,0 +1,23 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "minecraft:conversion_catalyst"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:dirty_silica"
+      },
+      {
+        "item": "create:crushed_platinum_ore"
+      },
+      {
+        "item": "destroy:crushed_palladium_ore"
+      },
+      {
+        "item": "destroy:crushed_rhodium_ore"
+      }
+    ],
+    "processingTime": 200
+}

@@ -1,0 +1,22 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:carbon_monoxide",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:carbon_dioxide",
+            "amount": 1000
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:platinum_coated_silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "heated"
+}

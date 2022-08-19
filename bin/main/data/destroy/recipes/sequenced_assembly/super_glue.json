@@ -31,6 +31,22 @@
             "item": "destroy:unprocessed_super_glue"
           },
           {
+            "item": "forge:dyes/lime"
+          }
+        ],
+        "results": [
+          {
+            "item": "create:unprocessed_super_glue"
+          }
+        ]
+      },
+      {
+        "type": "create:deploying",
+        "ingredients": [
+          {
+            "item": "destroy:unprocessed_super_glue"
+          },
+          {
             "item": "forge:nuggets/iron"
           }
         ],

@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
+        "tag": "forge:storage_blocks/palladium"
+      }
+    ],
+    "result": {
+      "item": "destroy:palladium_ingot",
+      "count": 9
+    }
+  }

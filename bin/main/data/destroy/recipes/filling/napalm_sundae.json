@@ -1,0 +1,17 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "minecraft:bowl"
+      },
+      {
+        "fluid": "destroy:napalm_sundae",
+        "amount": 500
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:napalm_sundae"
+      }
+    ]
+  }

@@ -1,0 +1,27 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:styrene_butadiene",
+            "amount": 400
+        },
+        {
+            "fluid": "destroy:acrylonitrile",
+            "amount": 200
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:abs_monomers_mixture",
+            "amount": 800
+            
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "heated"
+}

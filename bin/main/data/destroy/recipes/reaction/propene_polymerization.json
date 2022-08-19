@@ -7,7 +7,7 @@
         },
         {
             "fluidTag": "destroy:liquid/plasticizer",
-            "amount": 10
+            "amount": 100
         }
     ],
     "results": [
@@ -17,10 +17,10 @@
         }
     ],
     "catalyst": {
-        "item": "destroy:ziegler-natta"
+        "item": "destroy:ziegler-natta_coated_silica"
     },
     "wasteCatalyst": {
-        "item": "destroy:dirty_ziegler-natta"
+        "item": "destroy:dirty_silica"
     },
     "heatRequirement": "heated"
 }

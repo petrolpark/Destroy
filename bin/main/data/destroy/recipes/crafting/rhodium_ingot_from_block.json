@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
+        "tag": "forge:storage_blocks/rhodium"
+      }
+    ],
+    "result": {
+      "item": "destroy:rhodium_ingot",
+      "count": 9
+    }
+  }

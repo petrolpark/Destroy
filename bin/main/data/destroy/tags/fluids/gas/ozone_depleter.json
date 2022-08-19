@@ -2,7 +2,9 @@
   "replace": false,
   "values": [
     "destroy:chloroform_chlorination_mixture",
+    "destroy:clean_exhaust_fumes",
     "destroy:dichlorodifluoromethane",
+    "destroy:dirty_exhaust_fumes",
     "destroy:tetrafluoroethene",
     "destroy:trichlorofluoromethane",
     "destroy:vaporised_carbon_tetrachloride_fluorination_mixture",

@@ -1,0 +1,19 @@
+{
+    "type": "destroy:centrifugation",
+    "ingredients": [
+        {
+            "fluid": "destroy:polystyrene_butadiene_slurry",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "item": "destroy:polystyrene_butadiene"
+        },
+        {
+            "fluid": "minecraft:water",
+            "amount": 100
+        }
+    ],
+    "processingTime": 1000
+}

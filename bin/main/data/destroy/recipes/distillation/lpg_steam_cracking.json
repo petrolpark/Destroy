@@ -13,11 +13,15 @@
         },
         {
             "fluid": "destroy:propene",
-            "amount": 550
+            "amount": 400
         },
         {
             "fluid": "destroy:ethene",
-            "amount": 400
+            "amount": 300
+        },
+        {
+            "fluid": "destroy:methane",
+            "amount": 250
         }
     ]
 }

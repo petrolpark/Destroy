@@ -2,12 +2,12 @@
     "type": "destroy:reaction",
     "ingredients": [
         {
-            "fluid": "destroy:abs_monomer",
+            "fluid": "destroy:abs_monomers_mixture",
             "amount": 500
         },
         {
             "fluidTag": "destroy:liquid/plasticizer",
-            "amount": 10
+            "amount": 200
         }
     ],
     "results": [
@@ -17,10 +17,10 @@
         }
     ],
     "catalyst": {
-        "item": "destroy:ziegler-natta"
+        "item": "destroy:ziegler-natta_coated_silica"
     },
     "wasteCatalyst": {
-        "item": "destroy:dirty_ziegler-natta"
+        "item": "destroy:dirty_silica"
     },
     "heatRequirement": "heated"
 }

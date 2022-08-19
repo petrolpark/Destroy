@@ -1,0 +1,30 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "destroy:lapis_infused_beetroot_ashes"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:lapis",
+        "count": 15
+      },
+      {
+        "item": "minecraft:lapis",
+        "count": 1,
+        "chance": 0.5
+      },
+      {
+        "item": "destroy:chalk_dust",
+        "count": 1,
+        "chance": 0.1
+      },
+      {
+        "item": "create:crushed_gold_ore",
+        "count": 1,
+        "chance": 0.02
+      }
+    ],
+    "processingTime": 50
+  }

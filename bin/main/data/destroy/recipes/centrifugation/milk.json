@@ -15,5 +15,6 @@
             "fluid": "destroy:skimmed_milk",
             "amount": 500
         }
-    ]
+    ],
+    "processingTime": 500
 }

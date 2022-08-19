@@ -1,17 +1,17 @@
 Java Launcher: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home/bin/java
-Arguments: '--clean, /Users/hcwarburton/.gradle/caches/forge_gradle/mcp_repo/net/minecraft/joined/1.18.2-20220404.173914/joined-1.18.2-20220404.173914-srg.jar, --output, /Users/hcwarburton/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.1.0/forge-1.18.2-40.1.0-binpatched.jar, --apply, /Users/hcwarburton/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.1.0/forge-1.18.2-40.1.0-binpatches.lzma'
+Arguments: '--clean, /Users/thewarburtonfamily/.gradle/caches/forge_gradle/mcp_repo/net/minecraft/joined/1.18.2-20220404.173914/joined-1.18.2-20220404.173914-srg.jar, --output, /Users/thewarburtonfamily/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.1.0/forge-1.18.2-40.1.0-binpatched.jar, --apply, /Users/thewarburtonfamily/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.1.0/forge-1.18.2-40.1.0-binpatches.lzma'
 Classpath:
- - /Users/hcwarburton/.gradle/caches/forge_gradle/maven_downloader/net/minecraftforge/binarypatcher/1.0.12/binarypatcher-1.0.12-fatjar.jar
-Working directory: /Users/hcwarburton/Documents/Destroy Development/destroy/build/_applyBinpatches_2
+ - /Users/thewarburtonfamily/.gradle/caches/forge_gradle/maven_downloader/net/minecraftforge/binarypatcher/1.0.12/binarypatcher-1.0.12-fatjar.jar
+Working directory: /Users/thewarburtonfamily/Documents/Henry/Gaming/Minecraft/Destroy/build/_applyBinpatches_2
 Main class: net.minecraftforge.binarypatcher.ConsoleTool
 ====================================
 Applying: 
-  Clean:     /Users/hcwarburton/.gradle/caches/forge_gradle/mcp_repo/net/minecraft/joined/1.18.2-20220404.173914/joined-1.18.2-20220404.173914-srg.jar
-  Output:    /Users/hcwarburton/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.1.0/forge-1.18.2-40.1.0-binpatched.jar
+  Clean:     /Users/thewarburtonfamily/.gradle/caches/forge_gradle/mcp_repo/net/minecraft/joined/1.18.2-20220404.173914/joined-1.18.2-20220404.173914-srg.jar
+  Output:    /Users/thewarburtonfamily/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.1.0/forge-1.18.2-40.1.0-binpatched.jar
   KeepData:  false
   Unpatched: false
-  Patches:   /Users/hcwarburton/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.1.0/forge-1.18.2-40.1.0-binpatches.lzma
-Loading patches file: /Users/hcwarburton/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.1.0/forge-1.18.2-40.1.0-binpatches.lzma
+  Patches:   /Users/thewarburtonfamily/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.1.0/forge-1.18.2-40.1.0-binpatches.lzma
+Loading patches file: /Users/thewarburtonfamily/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.1.0/forge-1.18.2-40.1.0-binpatches.lzma
   Reading patch com.mojang.blaze3d.pipeline.RenderTarget.binpatch
     Checksum: c9bb7d14 Exists: true
   Reading patch com.mojang.blaze3d.platform.GlStateManager$BlendState.binpatch
@@ -2572,7 +2572,7 @@ Loading patches file: /Users/hcwarburton/.gradle/caches/forge_gradle/minecraft_u
     Checksum: a9525be7 Exists: true
   Reading patch net.minecraft.world.phys.Vec3.binpatch
     Checksum: 6ff64e5 Exists: true
-Processing: /Users/hcwarburton/.gradle/caches/forge_gradle/mcp_repo/net/minecraft/joined/1.18.2-20220404.173914/joined-1.18.2-20220404.173914-srg.jar
+Processing: /Users/thewarburtonfamily/.gradle/caches/forge_gradle/mcp_repo/net/minecraft/joined/1.18.2-20220404.173914/joined-1.18.2-20220404.173914-srg.jar
   Patching com/mojang/blaze3d/pipeline/RenderTarget 1/1
   Patching com/mojang/blaze3d/platform/GlStateManager$BlendState 1/1
   Patching com/mojang/blaze3d/platform/GlStateManager$BooleanState 1/1

@@ -1,0 +1,24 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:phenol",
+        "amount": 100
+      },
+      {
+        "fluid": "destroy:nitric_acid",
+        "amount": 300
+      },
+      {
+        "fluid": "destroy:sodium_hydroxide_solution",
+        "amount": 100
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:sodium_picrate_solution",
+        "amount": 100
+      }
+    ],
+    "heatRequirement": "cooled"
+  }
