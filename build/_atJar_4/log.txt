@@ -1,7 +1,0 @@
-Java Launcher: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home/bin/java
-Arguments: '--inJar, /Users/thewarburtonfamily/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.1.0/forge-1.18.2-40.1.0-injected.jar, --outJar, /Users/thewarburtonfamily/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.1.0_mapped_official_1.18.2/forge-1.18.2-40.1.0_mapped_official_1.18.2.jar, --logFile, accesstransform.log, --atFile, /Users/thewarburtonfamily/Documents/Henry/Gaming/Minecraft/Destroy/build/_atJar_4/parent_at.cfg'
-Classpath:
- - /Users/thewarburtonfamily/.gradle/caches/forge_gradle/maven_downloader/net/minecraftforge/accesstransformers/8.0.7/accesstransformers-8.0.7-fatjar.jar
-Working directory: /Users/thewarburtonfamily/Documents/Henry/Gaming/Minecraft/Destroy/build/_atJar_4
-Main class: net.minecraftforge.accesstransformer.TransformerProcessor
-====================================

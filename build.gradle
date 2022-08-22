@@ -3,9 +3,11 @@ buildscript {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public' }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+    	classpath "org.spongepowered:mixingradle:${mixingradle_version}"
     }
 }
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
@@ -14,9 +16,10 @@ plugins {
     id 'maven-publish'
 }
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
 
 
-version = '0.0'
+version = '1.18.2-0.0.0'
 group = 'com.petrolpark.destroy' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'destroy'
 
@@ -62,6 +65,9 @@ minecraft {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', 'destroy'
+            
+            arg '-mixin.config=create.mixins.json'
+            arg '-mixin.config=flywheel.mixins.json'
 
             mods {
                 destroy {
@@ -79,6 +85,9 @@ minecraft {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', 'destroy'
+            
+            arg '-mixin.config=create.mixins.json'
+            arg '-mixin.config=flywheel.mixins.json'
 
             mods {
                 destroy {
@@ -107,6 +116,9 @@ minecraft {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', 'destroy'
+            
+            arg '-mixin.config=create.mixins.json'
+            arg '-mixin.config=flywheel.mixins.json'
 
             mods {
                 destroy {
@@ -125,6 +137,9 @@ minecraft {
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             args '--mod', 'destroy', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
+            arg '-mixin.config=create.mixins.json'
+            arg '-mixin.config=flywheel.mixins.json'
+           
             mods {
                 destroy {
                     source sourceSets.main
@@ -140,18 +155,30 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
+	
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
     // flatDir {
     //     dir 'libs'
     // }
+    
+    maven {
+        // Location of the maven that hosts JEI files (and TiC)
+        name 'Progwml6 maven'
+        url 'https://dvs1.progwml6.com/files/maven'
+    }
+    
+    maven {
+        url 'https://www.cursemaven.com'
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -164,6 +191,14 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.60'
+    
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
+    
+    implementation fg.deobf("curse.maven:create-328085:3934676")
+    implementation fg.deobf("curse.maven:flywheel-486392:3934664")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
@@ -171,11 +206,11 @@ jar {
     manifest {
         attributes([
                 "Specification-Title"     : "destroy",
-                "Specification-Vendor"    : "destroysareus",
+                "Specification-Vendor"    : "petrolpark",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "destroysareus",
+                "Implementation-Vendor"   : "petrolpark",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
