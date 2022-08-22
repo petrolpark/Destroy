@@ -17,10 +17,10 @@
       }
     ],
     "catalyst": {
-      "item": "destroy:ziegler-natta_coated_silica"
+      "item": "destroy:ziegler-natta"
     },
     "dirtyCatalyst": {
-      "item": "destroy:dirty_silica"
+      "item": "destroy:dirty_ziegler-natta"
     },
     "heatRequirement": "heated"
   }

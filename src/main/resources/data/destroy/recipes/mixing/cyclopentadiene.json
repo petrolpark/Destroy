@@ -1,0 +1,31 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "tag": "forge:nuggets/iron",
+        "count": 1
+      },
+      {
+        "item": "destroy:calcium_chloride",
+        "count": 1
+      },
+      {
+        "fluid": "destroy:cyclopentanone",
+        "amount": 500
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:iron_nugget",
+        "count": 1
+      },
+      {
+        "item": "destroy:wet_calcium_chloride",
+        "count": 1
+      },
+      {
+        "fluid": "destroy:cyclopentadiene",
+        "amount": 500
+      }
+    ]
+  }

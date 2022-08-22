@@ -1,5 +1,5 @@
 {
-    "type": "create:mixing",
+    "type": "create:compacting",
     "ingredients": [
       {
         "fluid": "destroy:glycerol",

@@ -1,0 +1,24 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:pee",
+        "amount": 300
+      },
+      {
+        "fluid": "destroy:ammonium_acetate_solution",
+        "amount": 200
+      },
+      {
+        "item": "create:crushed_lead_ore",
+        "count": 2
+      }
+    ],
+    "results": [
+      {
+        "item": "create:crushed_gold_ore",
+        "count": 1
+      }
+    ],
+    "heatRequirement": "heated"
+  }

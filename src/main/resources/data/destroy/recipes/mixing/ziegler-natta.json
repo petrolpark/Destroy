@@ -1,0 +1,22 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "tag": "forge:ingots/zirconium",
+        "count": 1
+      },
+      {
+        "item": "destroy:silica",
+        "count": 1
+      },
+      {
+        "fluid": "destroy:cyclopentadiene",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:ziegler-natta"
+      }
+    ]
+  }

@@ -5,13 +5,13 @@
         "item": "destroy:silica"
       },
       {
-        "fluid": "destroy:ziegler-natta_catalyst_solution",
+        "fluid": "destroy:limewater",
         "amount": 100
       }
     ],
     "results": [
       {
-        "item": "destroy:ziegler-natta_coated_silica"
+        "item": "destroy:limewater_coated_silica"
       }
     ]
   }

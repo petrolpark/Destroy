@@ -2,22 +2,22 @@
     "type": "destroy:reaction",
     "ingredients": [
         {
-            "fluid": "destroy:carbon_monoxide",
-            "amount": 300
+            "fluid": "destroy:adipic_acid",
+            "amount": 900
         },
         {
-            "fluidTag": "forge:hydrogen",
-            "amount": 600
+            "fluid": "destroy:distilled_water",
+            "amount": 100
         }
     ],
     "results": [
         {
-            "fluid": "destroy:methanol",
-            "amount": 450
+            "fluid": "destroy:cyclopentanone",
+            "amount": 900
         }
     ],
     "catalyst": {
-        "item": "destroy:copper_coated_silica"
+        "item": "destroy:limewater_coated_silica"
     },
     "wasteCatalyst": {
         "item": "destroy:dirty_silica"
