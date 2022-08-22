@@ -1,0 +1,15 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "tag": "forge:dusts/redstone"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:molten_cinnabar",
+        "amount": 250
+      }
+    ],
+    "heatRequirement": "superheated"
+  }

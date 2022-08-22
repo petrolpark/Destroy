@@ -1,0 +1,15 @@
+{
+    "type": "create:compacting",
+    "ingredients": [
+      {
+        "fluid": "destroy:molten_sulfur",
+        "amount": 500
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:sulfur"
+      }
+    ],
+    "heatRequirement": "cooled"
+  }

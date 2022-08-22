@@ -1,0 +1,15 @@
+{
+    "type": "destroy:vaporisation",
+    "ingredients": [
+        {
+            "fluid": "destroy:zinc_chalky_water",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:vaporised_zinc_chalky_water",
+            "amount": 1000
+        }
+    ]
+}

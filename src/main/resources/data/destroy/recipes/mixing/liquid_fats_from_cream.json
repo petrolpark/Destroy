@@ -1,0 +1,16 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:cream",
+        "amount": 500
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:liquid_fats",
+        "amount": 500
+      }
+    ],
+    "heatRequirement": "heated"
+  }

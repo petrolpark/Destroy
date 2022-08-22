@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:casein_glue",
+      "destroy:nitrocellulose_glue",
+      "destroy:pva_glue",
+      "#forge:slime"
+    ]
+  }

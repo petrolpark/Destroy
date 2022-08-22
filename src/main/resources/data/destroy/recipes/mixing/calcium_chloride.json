@@ -1,0 +1,22 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:limewater",
+        "amount": 250
+      },
+      {
+        "fluidTag": "forge:hydrochloric_acid",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "fluid": "minecraft:water",
+        "amount": 500
+      },
+      {
+        "item": "destroy:wet_calcium_chloride"
+      }
+    ]
+  }

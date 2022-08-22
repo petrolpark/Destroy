@@ -1,0 +1,50 @@
+{
+    "type": "create:sequenced_assembly",
+    "ingredient": {
+      "item": "minecraft:bowl"
+    },
+    "transitionalItem": {
+      "item": "destroy:unprocessed_napalm_sundae"
+    },
+    "sequence": [
+      {
+        "type": "create:filling",
+        "ingredients": [
+          {
+            "item": "minecraft:bowl"
+          },
+          {
+            "fluid": "destroy:napalm_sundae",
+            "amount": 500
+          }
+        ],
+        "results": [
+          {
+            "item": "destroy:unprocessed_napalm_sundae"
+          }
+        ]
+      },
+      {
+        "type": "create:deploying",
+        "ingredients": [
+          {
+            "item": "destroy:unprocessed_napalm_sundae"
+          },
+          {
+            "item": "minecraft:flint"
+          }
+        ],
+        "results": [
+          {
+            "item": "destroy:napalm_sundae"
+          }
+        ]
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:napalm_sundae"
+      }
+    ],
+    "loops": 1
+  }

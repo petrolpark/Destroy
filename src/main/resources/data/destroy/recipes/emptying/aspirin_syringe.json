@@ -1,0 +1,17 @@
+{
+    "type": "create:emptying",
+    "ingredients": [
+      {
+        "item": "destroy:aspirin_syringe"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:syringe"
+      },
+      {
+        "fluid": "destroy:aspirin",
+        "amount": 250
+      }
+    ]
+  }

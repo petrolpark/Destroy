@@ -1,0 +1,22 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:diethyl_phthalate",
+        "amount": 200
+      },
+      {
+        "fluidTag": "destroy:fragrant",
+        "amount": 300
+      },
+      {
+        "tag": "minecraft:flowers"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:perfume",
+        "amount": 500
+      }
+    ]
+  }

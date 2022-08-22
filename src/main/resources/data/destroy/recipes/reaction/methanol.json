@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:carbon_monoxide",
+            "amount": 300
+        },
+        {
+            "fluidTag": "forge:hydrogen",
+            "amount": 600
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:methanol",
+            "amount": 450
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:copper_coated_alumina"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_alumina"
+    },
+    "heatRequirement": "heated"
+}

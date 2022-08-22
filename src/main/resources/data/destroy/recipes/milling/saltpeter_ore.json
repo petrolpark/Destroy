@@ -1,0 +1,18 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+      {
+        "item": "destroy:saltpeter_ore"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:saltpeter"
+      },
+      {
+        "item": "minecraft:sand",
+        "chance": 0.125
+      }
+    ],
+    "processingTime": 100
+  }

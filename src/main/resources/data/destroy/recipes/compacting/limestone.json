@@ -1,0 +1,14 @@
+{
+    "type": "create:compacting",
+    "ingredients": [
+      {
+        "item": "destroy:chalk_dust",
+        "count": 5
+      }
+    ],
+    "results": [
+      {
+        "item": "create:limestone"
+      }
+    ]
+  }

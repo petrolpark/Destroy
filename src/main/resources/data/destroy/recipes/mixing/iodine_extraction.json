@@ -1,0 +1,21 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:nitric_acid",
+        "amount": 250
+      },
+      {
+        "item": "destroy:potassium_iodide"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:saltpeter"
+      },
+      {
+        "item": "destroy:iodine"
+      }
+    ],
+    "heatRequirement": "heated"
+  }

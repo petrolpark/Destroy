@@ -1,0 +1,15 @@
+{
+    "type": "destroy:vaporisation",
+    "ingredients": [
+        {
+            "fluid": "destroy:anthraquinone",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:vaporised_anthraquinone",
+            "amount": 1000
+        }
+    ]
+}

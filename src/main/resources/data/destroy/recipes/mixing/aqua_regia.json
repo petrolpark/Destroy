@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:nitric_acid",
+        "amount": 125
+      },
+      {
+        "fluidTag": "forge:hydrochloric_acid",
+        "amount": 375
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:aqua_regia",
+        "amount": 500
+      }
+    ]
+  }

@@ -1,0 +1,32 @@
+{
+    "type": "create:mechanical_crafting",
+    "pattern": [
+      " PSP ",
+      "PTETP",
+      "PAEAP",
+      "PTATP",
+      " PPP"
+    ],
+    "key": {
+      "P":{
+        "tag": "destroy:plastic"
+      },
+      "S": {
+        "item": "minecraft:string"
+      },
+      "E": {
+        "tag": "destroy:explosive/primary"
+      },
+      "T": {
+        "item": "destroy:tnt_tablet"
+      },
+      "A": {
+        "item": "destroy:ammonium_nitrate_prill"
+      }
+    },
+    "result": {
+      "item": "minecraft:tnt",
+      "count": 3
+    },
+    "acceptMirrored": false
+  }

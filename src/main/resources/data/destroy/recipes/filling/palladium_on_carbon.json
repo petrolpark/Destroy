@@ -1,0 +1,17 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "minecraft:coal"
+      },
+      {
+        "fluidTag": "forge:molten_palladium",
+        "amount": 100
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:palladium_on_carbon"
+      }
+    ]
+  }

@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+      "item": "destroy:wet_calcium_chloride"
+    },
+    "result": "destroy:calcium_chloride",
+    "cookingtime": 200
+  }

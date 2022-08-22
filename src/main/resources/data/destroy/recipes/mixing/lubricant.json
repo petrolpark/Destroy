@@ -1,0 +1,23 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:fuel_oil",
+        "amount": 400
+      },
+      {
+        "fluid": "destroy:hydrazine",
+        "amount": 50
+      },
+      {
+        "fluid": "sodium_hydroxide_solution",
+        "amount": 50
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:lubricant",
+        "amount": 500
+      }
+    ]
+  }

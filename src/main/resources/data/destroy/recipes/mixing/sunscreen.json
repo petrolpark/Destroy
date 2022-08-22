@@ -1,0 +1,23 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:phenol",
+        "amount": 250
+      },
+      {
+        "fluid": "destroy:salicylic_acid",
+        "amount": 250
+      },
+      {
+        "item": "destroy:zinc_oxide"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:sunscreen",
+        "amount": 250
+      }
+    ],
+    "heatRequirement": "heated"
+  }

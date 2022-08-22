@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:distilled_water",
+        "amount": 500
+      },
+      {
+        "item": "destroy:prussian_blue"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:prussic_acid",
+        "amount": 500
+      }
+    ],
+    "heatRequirement": "heated"
+  }

@@ -1,0 +1,7 @@
+{
+    "replace": false,
+    "values": [
+      "#destroy:gas/smog_amplifier",
+      "#destroy:liquid/smog_amplifier"
+    ]
+  }

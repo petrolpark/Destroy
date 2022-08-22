@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:ammonia_solution",
+            "amount": 500
+        },
+        {
+            "fluidTag": "destroy:methane",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:prussic_acid",
+            "amount": 500
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:platinum_coated_silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "cooled"
+}

@@ -1,0 +1,22 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "item": "destroy:nitrocellulose"
+      },
+      {
+        "fluid": "destroy:nitroglycerine",
+        "amount": 300
+      },
+      {
+        "fluid": "destroy:acetone",
+        "amount": 200
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:cordite"
+      }
+    ],
+    "heatRequirement": "cooled"
+  }

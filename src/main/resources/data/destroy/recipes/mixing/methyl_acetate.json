@@ -1,0 +1,18 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:methanol",
+        "amount": 250
+      },
+      {
+        "fluid": "destroy:acetic_acid",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:methyl_acetate"
+      }
+    ]
+  }

@@ -1,0 +1,14 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "tag": "forge:ingots/zinc"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:zinc_dust"
+      }
+    ],
+    "processingTime": 150
+}

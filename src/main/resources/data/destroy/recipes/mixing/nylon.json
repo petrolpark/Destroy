@@ -1,0 +1,20 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:hexanediamine",
+        "amount": 250
+      },
+      {
+        "fluid": "destroy:adipic_acid",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:nylon_solution",
+        "amount": 500
+      }
+    ],
+    "heatRequirement": "heated"
+  }

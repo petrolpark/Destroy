@@ -1,0 +1,19 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:vaporised_cumene_mixture",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:phenol",
+            "amount": 250
+        },
+        {
+            "fluid": "destroy:acetone",
+            "amount": 250
+        }
+    ]
+}

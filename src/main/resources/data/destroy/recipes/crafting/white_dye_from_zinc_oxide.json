@@ -1,0 +1,11 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
+        "item": "destroy:zinc_oxide"
+      }
+    ],
+    "result": {
+      "item": "minecraft:white_dye"
+    }
+  }

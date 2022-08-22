@@ -1,0 +1,19 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:vaporised_hydroanthraquinone",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:anthraquinone",
+            "amount": 200
+        },
+        {
+            "fluid": "destroy:hydrogen_peroxide",
+            "amount": 300
+        }
+    ]
+}

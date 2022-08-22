@@ -1,0 +1,23 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:vaporised_tnt_solution",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:sulfuric_acid",
+            "amount": 75
+        },
+        {
+            "fluid": "destroy:water",
+            "amount": 325
+        },
+        {
+            "fluid": "destroy:molten_tnt",
+            "amount": 100
+        }
+    ]
+}

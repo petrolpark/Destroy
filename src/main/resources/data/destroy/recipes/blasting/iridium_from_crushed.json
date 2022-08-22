@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:blasting",
+    "ingredient": {
+      "item": "destroy:crushed_iridium_ore"
+    },
+    "result": "destroy:iridium_ingot",
+    "experience": 1.0,
+    "cookingtime": 100
+  }

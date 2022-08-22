@@ -1,0 +1,31 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:dilute_vaporised_petrol",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:benzene",
+            "amount": 100
+        },
+        {
+            "fluid": "destroy:lpg",
+            "amount": 75
+        },
+        {
+            "fluid": "destroy:butadiene",
+            "amount": 175
+        },
+        {
+            "fluid": "destroy:propene",
+            "amount": 175
+        },
+        {
+            "fluid": "destroy:ethene",
+            "amount": 300
+        }
+    ]
+}

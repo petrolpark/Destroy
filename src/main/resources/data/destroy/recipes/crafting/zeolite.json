@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "TA",
+      "AT"
+    ],
+    "key": {
+      "T": {
+        "item": "minecraft:tuff"
+      },
+      "A": {
+        "tag": "destroy:silica"
+      }
+    },
+    "result": {
+      "item": "destroy:zeolite"
+    }
+  }

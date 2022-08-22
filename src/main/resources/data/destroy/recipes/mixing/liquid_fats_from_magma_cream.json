@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:distilled_water",
+        "amount": 250
+      },
+      {
+        "item": "minecraft:magma_cream"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:liquid_fats",
+        "amount": 500
+      }
+    ],
+    "heatRequirement": "heated"
+  }

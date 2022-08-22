@@ -1,0 +1,18 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:hydrazine",
+        "amount": 500
+      },
+      {
+        "item": "destroy:iodine"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:hydroiodic_acid",
+        "amount": 500
+      }
+    ]
+  }

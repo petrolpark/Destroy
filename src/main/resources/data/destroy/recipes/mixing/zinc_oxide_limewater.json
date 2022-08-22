@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:limewater",
+        "amount": 250
+      },
+      {
+        "item": "destroy:zinc_oxide"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:zinc_oxide_limewater",
+        "amount": 250
+      }
+    ],
+    "heatRequirement": "heated"
+  }

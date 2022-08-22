@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "B",
+      "B",
+      "O"
+    ],
+    "key": {
+      "B": {
+        "tag": "destroy:hefty_beetroot"
+      },
+      "O": {
+        "item": "minecraft:bowl"
+      }
+    },
+    "result": {
+      "item": "minecraft:beetroot_soup"
+    }
+  }

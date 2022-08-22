@@ -1,0 +1,47 @@
+{
+    "type": "create:sequenced_assembly",
+    "ingredient": {
+      "tag": "destroy:dirty_silica"
+    },
+    "transitionalItem": {
+      "item": "destroy:dirty_silica"
+    },
+    "sequence": [
+      {
+        "type": "create:deploying",
+        "ingredients": [
+          {
+            "item": "destroy:soap"
+          }
+        ],
+        "results": [
+          {
+            "item": "destroy:dirty_silica"
+          }
+        ]
+      },
+      {
+        "type": "create:filling",
+        "ingredients": [
+          {
+            "item": "destroy:dirty_silica"
+          },
+          {
+            "fluidTag": "destroy:liquid/bleach",
+            "amount": 100
+          }
+        ],
+        "results": [
+          {
+            "item": "destroy:silica"
+          }
+        ]
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:silica"
+      }
+    ],
+    "loops": 1
+  }

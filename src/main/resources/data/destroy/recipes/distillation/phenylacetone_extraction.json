@@ -1,0 +1,27 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:vaporised_phenylacetone_solution",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:brine",
+            "amount": 125
+        },
+        {
+            "fluid": "destroy:phenylacetone",
+            "amount": 125
+        },
+        {
+            "fluid": "destroy:ammonium_chloride_solution",
+            "amount": 125
+        },
+        {
+            "fluid": "destroy:carbon_dioxide",
+            "amount": 250 
+        }
+    ]
+}

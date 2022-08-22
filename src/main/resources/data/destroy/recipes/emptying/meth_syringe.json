@@ -1,0 +1,17 @@
+{
+    "type": "create:emptying",
+    "ingredients": [
+      {
+        "item": "destroy:meth_syringe"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:syringe"
+      },
+      {
+        "fluid": "destroy:methamphetamine_hydrochloride",
+        "amount": 250
+      }
+    ]
+  }

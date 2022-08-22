@@ -1,0 +1,14 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "tag": "forge:sulfur"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:yellow_dye"
+      }
+    ],
+    "processingTime": 150
+}

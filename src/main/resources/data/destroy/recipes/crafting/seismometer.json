@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "AAA",
+      "A F",
+      "OOO"
+    ],
+    "key": {
+      "A": {
+        "item": "create:andesite_alloy"
+      },
+      "F": {
+        "item": "minecraft:feather"
+      },
+      "O": {
+        "item": "minecraft:obsidian"
+      }
+    },
+    "result": {
+      "item": "destroy:seismometer",
+      "count": 1
+    }
+  }

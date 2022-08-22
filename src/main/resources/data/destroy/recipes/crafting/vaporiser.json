@@ -1,0 +1,29 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "SMS",
+      "PTP",
+      "SBS"
+    ],
+    "key": {
+      "S": {
+        "item": "create:sturdy_sheet"
+      },
+      "M": {
+        "item": "destroy:ceramic_monolith"
+      },
+      "P": {
+        "item": "create:fluid_pipe"
+      },
+      "T": {
+        "item": "create:fluid_tank"
+      },
+      "B": {
+        "item": "create:blaze_burner"
+      }
+    },
+    "result": {
+      "item": "destroy:vaporiser",
+      "count": 1
+    }
+  }

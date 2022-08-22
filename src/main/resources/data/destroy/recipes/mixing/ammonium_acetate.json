@@ -1,0 +1,20 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:ammonia_solution",
+        "amount": 250
+      },
+      {
+        "fluid": "destroy:acetic_acid",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:ammonium_acetate_solution",
+        "amount": 250
+      }
+    ],
+    "heatRequirement": "heated"
+  }

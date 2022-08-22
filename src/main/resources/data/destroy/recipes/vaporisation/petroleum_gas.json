@@ -1,0 +1,16 @@
+{
+    "type": "destroy:vaporisation",
+    "ingredients": [
+        {
+            "fluid": "destroy:lpg",
+            "nbt": {},
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:petroleum_gas",
+            "amount": 1000
+        }
+    ]
+}

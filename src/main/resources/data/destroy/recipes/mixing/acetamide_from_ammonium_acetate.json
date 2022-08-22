@@ -1,0 +1,22 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:ammonium_acetate_solution",
+        "amount": 250
+      },
+      {
+        "item": "destroy:calcium_chloride"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:acetamide",
+        "amount": 250
+      },
+      {
+        "item": "destroy:wet_calcium_chloride"
+      }
+    ],
+    "heatRequirement": "heated"
+  }

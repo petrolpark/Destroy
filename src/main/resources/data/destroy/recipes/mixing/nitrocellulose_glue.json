@@ -1,0 +1,18 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:methyl_acetate",
+        "amount": 250
+      },
+      {
+        "item": "destroy:nitrocellulose"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:nitrocellulose_glue",
+        "amount": 250
+      }
+    ]
+  }

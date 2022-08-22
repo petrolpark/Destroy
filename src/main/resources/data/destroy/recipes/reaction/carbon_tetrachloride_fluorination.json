@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluid": "destroy:carbon_tetrachloride",
+            "amount": 250
+        },
+        {
+            "fluid": "destroy:hydrofluoric_acid",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:vaporised_carbon_tetrachloride_fluorination_mixture",
+            "amount": 500
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "superheated"
+}

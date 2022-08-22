@@ -1,0 +1,17 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "minecraft:glass_bottle"
+      },
+      {
+        "fluid": "destroy:undistilled_moonshine",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:undistilled_moonshine_bottle"
+      }
+    ]
+  }

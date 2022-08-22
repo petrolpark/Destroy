@@ -1,0 +1,7 @@
+{
+    "replace": false,
+    "values": [
+      "#forge:sulfur",
+      "destroy:zinc_oxide"
+    ]
+  }

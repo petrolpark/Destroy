@@ -1,0 +1,17 @@
+{
+    "type": "create:emptying",
+    "ingredients": [
+      {
+        "item": "destroy:cisplatin_syringe"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:syringe"
+      },
+      {
+        "fluid": "destroy:cisplatin",
+        "amount": 250
+      }
+    ]
+  }

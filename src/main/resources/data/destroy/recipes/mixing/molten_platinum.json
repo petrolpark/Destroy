@@ -1,0 +1,15 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "tag": "forge:ingots/platinum"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:molten_platinum",
+        "amount": 250
+      }
+    ],
+    "heatRequirement": "superheated"
+  }

@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:sodium_hydroxide_solution",
+        "amount": 300
+      },
+      {
+        "fluid": "destroy:chlorine_solution",
+        "amount": 150
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:eau_de_javel",
+        "amount": 450
+      }
+    ]
+  }

@@ -1,0 +1,26 @@
+{
+    "type": "destroy:reaction",
+    "ingredients": [
+        {
+            "fluidTag": "forge:ethanol",
+            "amount": 300
+        },
+        {
+            "fluid": "destroy:ethene",
+            "amount": 100
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:ethene_hydration_mixture",
+            "amount": 1000
+        }
+    ],
+    "catalyst": {
+        "item": "destroy:sulfuric_acid_coated_silica"
+    },
+    "wasteCatalyst": {
+        "item": "destroy:dirty_silica"
+    },
+    "heatRequirement": "superheated"
+}

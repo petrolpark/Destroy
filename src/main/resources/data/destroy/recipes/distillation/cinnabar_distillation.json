@@ -1,0 +1,19 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:vaporised_cinnabar",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:molten_sulfur",
+            "amount": 250
+        },
+        {
+            "fluid": "destroy:mercury",
+            "amount": 250
+        }
+    ]
+}

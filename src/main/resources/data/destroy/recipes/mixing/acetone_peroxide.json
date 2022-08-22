@@ -1,0 +1,18 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:acetone",
+        "amount": 250
+      },
+      {
+        "fluid": "destroy:hydrogen_peroxide",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:acetone_peroxide"
+      }
+    ]
+  }

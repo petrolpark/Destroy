@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "M ",
+      "TG"
+    ],
+    "key": {
+      "L": {
+        "item": "destroy:ceramic_monolith"
+      },
+      "C": {
+        "item": "create:fluid_tank"
+      },
+      "G": {
+        "item": "destroy:gas_filter"
+      }
+    },
+    "result": {
+      "item": "destroy:pressure_chamber",
+      "count": 1
+    }
+  }
