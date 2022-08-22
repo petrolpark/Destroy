@@ -1,8 +1,0 @@
-{
-    "replace": false,
-    "values": [
-      "destroy:fluorite",
-      "#destroy:destroy_ingots",
-      "destroy:zircon"
-    ]
-}

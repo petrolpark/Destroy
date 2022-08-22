@@ -1,7 +1,0 @@
-{
-    "replace": false,
-    "values": [
-      "destroy:bonemeal",
-      "#forge:dusts/saltpeter"
-    ]
-  }

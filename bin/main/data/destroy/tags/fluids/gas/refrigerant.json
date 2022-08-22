@@ -1,8 +1,0 @@
-{
-    "replace": false,
-    "values": [
-      "destroy:carbon_dioxide",
-      "destroy:dichlorodifluoromethane",
-      "destroy:trichlorofluoromethane"
-    ]
-  }

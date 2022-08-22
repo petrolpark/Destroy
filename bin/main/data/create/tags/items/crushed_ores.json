@@ -1,8 +1,0 @@
-{
-    "replace": false,
-    "values": [
-      "destroy:crushed_iridium_ore",
-      "destroy:crushed_palladium_ore",
-      "destroy:crushed_rhodium_ore"
-    ]
-  }
