@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+      "layer0": "destroy:item/hefty_beetroot",
+      "layer1": "destroy:item/diamond_infused_beetroot"
+    }
+  }

@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+      "layer0": "destroy:item/syringe_overlay",
+      "layer1": "destroy:item/syringe"
+    }
+  }
