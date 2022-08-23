@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:perfume_bottle"
+      "layer0": "destroy:item/perfume_bottle"
     }
   }

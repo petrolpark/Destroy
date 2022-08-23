@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:item/prussian_blue"
+      "layer0": "destroy:item/touch_powder"
     }
   }

@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:platinum_coated_silica"
+      "layer0": "destroy:item/platinum_coated_silica"
     }
   }

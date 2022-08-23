@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:potassium_iodide"
+      "layer0": "destroy:item/potassium_iodide"
     }
   }

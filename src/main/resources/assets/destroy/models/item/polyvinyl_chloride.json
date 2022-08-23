@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:polyvinyl_chloride"
+      "layer0": "destroy:item/polyvinyl_chloride"
     }
   }

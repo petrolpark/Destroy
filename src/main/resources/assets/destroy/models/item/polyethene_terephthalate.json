@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:polyethene_terephthalate"
+      "layer0": "destroy:item/polyethene_terephthalate"
     }
   }

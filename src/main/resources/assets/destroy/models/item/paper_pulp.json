@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:paper_pulp"
+      "layer0": "destroy:item/paper_pulp"
     }
   }

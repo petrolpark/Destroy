@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:palladium_on_carbon"
+      "layer0": "destroy:item/palladium_on_carbon"
     }
   }

@@ -1,6 +1,6 @@
 {
     "itemGroup.destroy_tab": "Destroy",
-    
+
     "item.destroy.abs": "ABS",
     "item.destroy.acetone_coated_silica": "Acetone-Coated Silica",
     "item.destroy.acetone_peroxide": "Acetone Peroxide Powder",
@@ -29,6 +29,7 @@
     "item.destroy.diamond_drill_bit": "Diamond Drill Bit",
     "item.destroy.diamond_infused_beetroot": "Diamond-Infused Beetroot",
     "item.destroy.diamond_infused_beetroot_ashes": "Diamond-Infused Beetroot Ashes",
+    "item.destroy.dirty_palladium_on_carbon": "Dirty Palladium on Carbon",
     "item.destroy.dirty_silica": "Dirty Silica",
     "item.destroy.dirty_zeolite": "Dirty Zeolite Catalyst",
     "item.destroy.dirty_ziegler-natta": "Dirty Ziegler-Natta Catalyst",
@@ -116,6 +117,7 @@
     "item.destroy.thermite_brownie": "Thermite Brownie",
     "item.destroy.thrice_distilled_moonshine_bottle": "Bottle of Triple-Distilled Moonshine",
     "item.destroy.tnt_tablet": "TNT Tablet",
+    "item.destroy.touch_powder": "Touch Powder",
     "item.destroy.twice_distilled_moonshine_bottle": "Bottle of Double-Distilled Moonshine",
     "item.destroy.unprocessed_conversion_catalyst": "Unfinished Conversion Catalyst",
     "item.destroy.unprocessed_mashed_potato": "Unfinished Mashed Potato",
