@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
+        "tag": "forge:storage_blocks/zirconium"
+      }
+    ],
+    "result": {
+      "item": "destroy:zirconium_ingot",
+      "count": 9
+    }
+  }

@@ -335,6 +335,10 @@ public class DestroyItems {
         () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
     );
 
+    public static final RegistryObject<Item> DIRTY_ZEOLITE = ITEMS.register("dirty_zeolite",
+        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
+    );
+
     public static final RegistryObject<Item> ZEIGLER_NATTA = ITEMS.register("ziegler-natta",
         () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
     );

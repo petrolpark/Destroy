@@ -1,0 +1,11 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
+        "item": "destroy:prussian_blue"
+      }
+    ],
+    "result": {
+      "item": "minecraft:blue_dye"
+    }
+  }
