@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "destroy:block/deepslate_nickel_ore"
+    }
+}

@@ -1,6 +1,9 @@
 package com.petrolpark.destroy;
 
 import com.mojang.logging.LogUtils;
+import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.item.DestroyItems;
+
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,7 +26,7 @@ import java.util.stream.Collectors;
 public class Destroy
 {
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public static final String MOD_ID = "destroy";
 
@@ -32,6 +35,7 @@ public class Destroy
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         DestroyItems.register(eventBus);
+        DestroyBlocks.register(eventBus);
 
         // Register the setup method for modloading
         eventBus.addListener(this::setup);

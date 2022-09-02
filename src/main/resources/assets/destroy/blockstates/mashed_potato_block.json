@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "": {
+            "model": "destroy:block/mashed_potato_block"
+        }
+    }
+}

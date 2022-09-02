@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "": {
+            "model": "destroy:block/yeast_covered_agar_block"
+        }
+    }
+}

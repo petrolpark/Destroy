@@ -1,0 +1,31 @@
+{   "parent": "block/block",
+    "textures": {
+        "particle": "destroy:block/yeast_covered_agar_block",
+        "plain": "destroy:block/agar_block",
+        "yeasty": "destroy:block/yeast_covered_agar_block"
+    },
+    "elements": [
+        {   "from": [ 3, 3, 3 ],
+            "to": [ 13, 13, 13 ],
+            "faces": {
+                "down":  { "uv": [ 3, 3, 13, 13 ], "texture": "#plain" },
+                "up":    { "uv": [ 3, 3, 13, 13 ], "texture": "#plain" },
+                "north": { "uv": [ 3, 3, 13, 13 ], "texture": "#plain" },
+                "south": { "uv": [ 3, 3, 13, 13 ], "texture": "#plain" },
+                "west":  { "uv": [ 3, 3, 13, 13 ], "texture": "#plain" },
+                "east":  { "uv": [ 3, 3, 13, 13 ], "texture": "#plain" }
+            }
+        },
+        {   "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#yeasty", "cullface": "down" },
+                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#yeasty", "cullface": "up" },
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#yeasty", "cullface": "north" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#yeasty", "cullface": "south" },
+                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#yeasty", "cullface": "west" },
+                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#yeasty", "cullface": "east" }
+            }
+        }
+    ]
+}

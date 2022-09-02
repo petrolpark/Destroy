@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "axis=x": {
+            "model": "destroy:block/raw_fries_block_horizontal",
+            "x": 90,
+            "y": 90
+        },
+        "axis=y": {
+            "model": "destroy:block/raw_fries_block"
+        },
+        "axis=z": {
+            "model": "destroy:block/raw_fries_block_horizontal",
+            "x": 90
+        }
+    }
+}

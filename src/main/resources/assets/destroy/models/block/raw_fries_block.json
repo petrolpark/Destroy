@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:block/cube_column",
+    "textures": {
+      "end": "destroy:block/raw_fries_block_end",
+      "side": "destroy:block/raw_fries_block_side"
+    }
+  }
