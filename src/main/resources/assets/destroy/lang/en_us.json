@@ -36,6 +36,20 @@
     "block.destroy.yeast_covered_agar_block": "Yeast-Covered Agar Block",
     "block.destroy.yeast_mushroom": "Yeast Mushroom",
     "block.destroy.zirconium_block": "Zirconium Block",
+
+    "commands.destroy.methaddiction.add.multiple": "Added Meth Addiction level of %s (or set to closest bound) to %s players",
+    "commands.destroy.methaddiction.add.single": "Added Meth Addiction level of %s (or set to closest bound) to %s",
+    "commands.destroy.methaddiction.set.multiple": "Set Meth Addiction level of %s (or closest bound) on %s players",
+    "commands.destroy.methaddiction.set.single": "Set Meth Addiction level of %s (or closest bound) on %s",
+    "commands.destroy.methaddiction.query": "%s has a Meth Addiction level of %s",
+
+    "effect.destroy.cancer": "Lumps",
+    "effect.destroy.fragrance": "Fragrance",
+    "effect.destroy.hangover": "Hangover",
+    "effect.destroy.inebriation": "Inebriation",
+    "effect.destroy.meth_high": "Meth High",
+    "effect.destroy.meth_withdrawal": "Meth Withdrawal",
+    "effect.destroy.sun_protection": "Sun Protection",
     
     "itemGroup.destroy_tab": "Destroy",
 
@@ -166,6 +180,7 @@
     "item.destroy.unprocessed_super_glue": "Unfinished Super Glue",
     "item.destroy.unseasoned_fries": "Unseasoned Cooked Fries",
     "item.destroy.urine_bottle": "Bottle of Urine",
+    "item.destroy.vegemite_sandwich": "Vegemite Sandwich",
     "item.destroy.wellington_boots": "Wellington Boots",
     "item.destroy.wet_calcium_chloride": "Wet Dessicant",
     "item.destroy.yeast": "Brick of Yeast",

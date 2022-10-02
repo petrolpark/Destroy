@@ -1,7 +1,9 @@
 package com.petrolpark.destroy.item;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.effect.DestroyMobEffects;
 
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -386,7 +388,7 @@ public class DestroyItems {
     );
 
     public static final RegistryObject<Item> METHAMPHETAMINE_POWDER = ITEMS.register("methamphetamine_powder",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
+        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY).food(DestroyFoods.CRUSHED_METHAMPHETAMINE))
     );
 
     public static final RegistryObject<Item> NAPTHALENE = ITEMS.register("napthalene",
@@ -413,38 +415,23 @@ public class DestroyItems {
     // FOOD AND DRINK
 
     public static final RegistryObject<Item> BUTTER = ITEMS.register("butter",
-        () -> new Item(new Item.Properties()
-            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
-            .food(new FoodProperties.Builder().nutrition(6).saturationMod(0.1f).build())
-        )
+        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY).food(DestroyFoods.BUTTER))
     );
 
     public static final RegistryObject<Item> RAW_FRIES = ITEMS.register("raw_fries",
-        () -> new Item(new Item.Properties()
-            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
-            .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.6f).build())
-        )
+        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY).food(DestroyFoods.RAW_FRIES))
     );
 
     public static final RegistryObject<Item> UNSEASONED_FRIES = ITEMS.register("unseasoned_fries",
-        () -> new Item(new Item.Properties()
-            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
-            .food(new FoodProperties.Builder().nutrition(6).saturationMod(1.0f).build())
-        )
+        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY).food(DestroyFoods.UNSEASONED_FRIES))
     );
 
     public static final RegistryObject<Item> FRIES = ITEMS.register("fries",
-        () -> new Item(new Item.Properties()
-            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
-            .food(new FoodProperties.Builder().nutrition(8).saturationMod(1.8f).build())
-        )
+        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY).food(DestroyFoods.FRIES))
     );
 
     public static final RegistryObject<Item> MASHED_POTATO = ITEMS.register("mashed_potato",
-        () -> new Item(new Item.Properties()
-            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
-            .food(new FoodProperties.Builder().nutrition(7).saturationMod(1.4f).build())
-        )
+        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY).food(DestroyFoods.MASHED_POTATO))
     );
 
     public static final RegistryObject<Item> UNDISTILLED_MOONSHINE_BOTTLE = ITEMS.register("undistilled_moonshine_bottle",

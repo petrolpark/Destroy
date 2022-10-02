@@ -2,8 +2,11 @@ package com.petrolpark.destroy;
 
 import com.mojang.logging.LogUtils;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.item.DestroyItems;
 
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -12,6 +15,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
@@ -34,15 +38,12 @@ public class Destroy
     {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        DestroyItems.register(eventBus);
         DestroyBlocks.register(eventBus);
+        DestroyMobEffects.register(eventBus);
+        DestroyItems.register(eventBus);
 
-        // Register the setup method for modloading
         eventBus.addListener(this::setup);
-        // Register the enqueueIMC method for modloading
-        eventBus.addListener(this::enqueueIMC);
-        // Register the processIMC method for modloading
-        eventBus.addListener(this::processIMC);
+        eventBus.addListener(this::clientSetup);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -50,25 +51,18 @@ public class Destroy
         //DestroyItems.register();
     }
 
+    private void clientSetup(final FMLClientSetupEvent event) {
+
+        ItemBlockRenderTypes.setRenderLayer(DestroyBlocks.AGAR_BLOCK.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(DestroyBlocks.YEAST_COVERED_AGAR_BLOCK.get(), RenderType.translucent());
+    
+    };
+
     private void setup(final FMLCommonSetupEvent event)
     {
         // some preinit code
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
-    }
-
-    private void enqueueIMC(final InterModEnqueueEvent event)
-    {
-        // Some example code to dispatch IMC to another mod
-        InterModComms.sendTo("examplemod", "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
-    }
-
-    private void processIMC(final InterModProcessEvent event)
-    {
-        // Some example code to receive and process InterModComms from other mods
-        LOGGER.info("Got IMC {}", event.getIMCStream().
-                map(m->m.messageSupplier().get()).
-                collect(Collectors.toList()));
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
