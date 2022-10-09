@@ -43,6 +43,13 @@
     "commands.destroy.methaddiction.set.single": "Set Meth Addiction level of %s (or closest bound) on %s",
     "commands.destroy.methaddiction.query": "%s has a Meth Addiction level of %s",
 
+    "death.attack.acidBurn": "%1$s died of corrosive burns",
+    "death.attack.alcohol": "%1$s died of alcohol poisoning",
+    "death.attack.baseBurn": "%1$s died of caustic burns",
+    "death.attack.cancer": "%1$s passed away due to Lumps",
+    "death.attack.headache": "%1$s died of a splitting migraine",
+    "death.attack.methOverdose": "%1$s overdosed on methamphetamine",
+
     "effect.destroy.cancer": "Lumps",
     "effect.destroy.fragrance": "Fragrance",
     "effect.destroy.hangover": "Hangover",

@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.methaddiction;
+package com.petrolpark.destroy.capability.methaddiction;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
+        "item": "destroy:yeast_mushroom"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:yeast",
+        "count": 1
+      }
+    ]
+  }

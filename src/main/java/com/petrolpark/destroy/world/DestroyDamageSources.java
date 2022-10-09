@@ -1,0 +1,12 @@
+package com.petrolpark.destroy.world;
+
+import net.minecraft.world.damagesource.DamageSource;
+
+public class DestroyDamageSources {
+    public static final DamageSource ACID_BURN = (new DamageSource("acidBurn"));
+    public static final DamageSource ALCOHOL = (new DamageSource("alcohol"));
+    public static final DamageSource BASE_BURN = (new DamageSource("baseBurn"));
+    public static final DamageSource CANCER = (new DamageSource("cancer")).bypassArmor();
+    public static final DamageSource HEADACHE = (new DamageSource("headache")).bypassArmor();
+    public static final DamageSource METH_OVERDOSE = (new DamageSource("methOverdose")).bypassArmor();
+}

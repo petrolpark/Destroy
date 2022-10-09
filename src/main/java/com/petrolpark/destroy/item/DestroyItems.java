@@ -435,19 +435,19 @@ public class DestroyItems {
     );
 
     public static final RegistryObject<Item> UNDISTILLED_MOONSHINE_BOTTLE = ITEMS.register("undistilled_moonshine_bottle",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
+        () -> new AlcoholicDrinkItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY), 1)
     );
 
     public static final RegistryObject<Item> ONCE_DISTILLED_MOONSHINE_BOTTLE = ITEMS.register("once_distilled_moonshine_bottle",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
+        () -> new AlcoholicDrinkItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY), 1)
     );
 
     public static final RegistryObject<Item> TWICE_DISTILLED_MOONSHINE_BOTTLE = ITEMS.register("twice_distilled_moonshine_bottle",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
+        () -> new AlcoholicDrinkItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY), 2)
     );
 
     public static final RegistryObject<Item> THRICE_DISTILLED_MOONSHINE_BOTTLE = ITEMS.register("thrice_distilled_moonshine_bottle",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
+        () -> new AlcoholicDrinkItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY), 3)
     );
 
 

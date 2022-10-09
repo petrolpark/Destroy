@@ -1,0 +1,7 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:24k_gold_dust",
+      "destroy:24k_gold_ingot"
+    ]
+}

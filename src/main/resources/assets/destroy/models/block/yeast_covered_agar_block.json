@@ -27,5 +27,6 @@
                 "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#yeasty", "cullface": "east" }
             }
         }
-    ]
+    ],
+    "render_type": "translucent"
 }

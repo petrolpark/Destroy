@@ -1,0 +1,16 @@
+{
+    "required": "true",
+    "package": "com.petrolpark.destroy.mixin",
+    "compatibilityLevel": "JAVA_16",
+    "mixins": [
+        "DestroyFrictionModifier"
+    ],
+    "client": [
+
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "refmap": "destroy.refmap.json",
+    "minVersion": "0.8"
+}

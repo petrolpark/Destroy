@@ -4,14 +4,12 @@ import java.util.Collection;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.petrolpark.destroy.methaddiction.PlayerMethAddiction;
-import com.petrolpark.destroy.methaddiction.PlayerMethAddictionProvider;
+import com.petrolpark.destroy.capability.methaddiction.PlayerMethAddictionProvider;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 public class MethAddictionCommand {
@@ -28,7 +26,7 @@ public class MethAddictionCommand {
 
     private int queryMethAddiction(CommandSourceStack source, ServerPlayer player) {
         player.getCapability(PlayerMethAddictionProvider.PLAYER_METH_ADDICTION).ifPresent(methAddiction -> {
-            source.sendSuccess(new TranslatableComponent("commands.destroy.methaddiction.query", player.getDisplayName(), methAddiction.getMethAddiction()), true);
+            source.sendSuccess(Component.translatable("commands.destroy.methaddiction.query", player.getDisplayName(), methAddiction.getMethAddiction()), true);
         });
         return 1;
     };
@@ -40,9 +38,9 @@ public class MethAddictionCommand {
             });
         };
         if (players.size() == 1) {
-            source.sendSuccess(new TranslatableComponent("commands.destroy.methaddiction.set.single", amount, players.iterator().next().getDisplayName()), true);
+            source.sendSuccess(Component.translatable("commands.destroy.methaddiction.set.single", amount, players.iterator().next().getDisplayName()), true);
         } else {
-            source.sendSuccess(new TranslatableComponent("commands.destroy.methaddiction.set.multiple", amount, players.size()), true);
+            source.sendSuccess(Component.translatable("commands.destroy.methaddiction.set.multiple", amount, players.size()), true);
         };
         return 1;
     };

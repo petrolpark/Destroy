@@ -15,9 +15,9 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'eclipse'
 
 mixin {
     add sourceSets.main, "destroy.refmap.json"
@@ -39,6 +39,7 @@ minecraft {
         client {
             workingDirectory project.file('run')
             arg '-mixin.config=create.mixins.json'
+            arg '-mixin.config=destroy.mixins.json'
             arg '-mixin.config=flywheel.mixins.json'
             property 'forge.logging.console.level', 'info'
             mods {
@@ -51,6 +52,7 @@ minecraft {
         server {
             workingDirectory project.file('run/server')
             arg '-mixin.config=create.mixins.json'
+            arg '-mixin.config=destroy.mixins.json'
             property 'forge.logging.console.level', 'info'
             mods {
                 destroy {
@@ -124,7 +126,8 @@ jar {
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "petrolpark",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs"            : 'destroy.mixins.json'
         ])
     }
 }

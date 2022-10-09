@@ -1,0 +1,26 @@
+{
+    "type": "create:mechanical_crafting",
+    "pattern": [
+      " N N ",
+      "NPYPN",
+      "NPPPN",
+      "NPPPN",
+      " NNN "
+    ],
+    "key": {
+      "N": {
+        "item": "destroy:nylon"
+      },
+      "P": {
+        "item": "destroy:polytetrafluoroethene"
+      },
+      "Y": {
+        "tag": "forge:dyes/yellow"
+      }
+    },
+    "result": {
+      "item": "destroy:hazmat_suit",
+      "count": 1
+    },
+    "acceptMirrored": false
+  }

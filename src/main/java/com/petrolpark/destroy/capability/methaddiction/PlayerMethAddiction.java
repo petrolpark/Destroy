@@ -1,11 +1,13 @@
-package com.petrolpark.destroy.methaddiction;
+package com.petrolpark.destroy.capability.methaddiction;
+
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 
 import net.minecraft.nbt.CompoundTag;
 
 public class PlayerMethAddiction {
     private int methAddiction;
     private final int MIN_METH_ADDICTION = 0;
-    private final int MAX_METH_ADDICTION = 590;
+    private final int MAX_METH_ADDICTION = DestroyAllConfigs.SERVER.substances.maxAddictionLevel.get(); //default is 590
 
     public void copyFrom(PlayerMethAddiction source) {
         this.methAddiction = source.methAddiction;

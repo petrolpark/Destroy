@@ -11,7 +11,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HalfTransparentBlock;
-import net.minecraft.world.level.block.OreBlock;
+import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -86,7 +86,7 @@ public class DestroyBlocks {
     // ORES
 
     public static final RegistryObject<Block> FLUORITE_ORE = registerBlock("fluorite_ore",
-        () -> new OreBlock(BlockBehaviour.Properties
+        () -> new DropExperienceBlock(BlockBehaviour.Properties
             .of(Material.STONE)
             .strength(3.0f)
             .requiresCorrectToolForDrops()
@@ -94,7 +94,7 @@ public class DestroyBlocks {
     );
 
     public static final RegistryObject<Block> DEEPSLATE_FLUORITE_ORE = registerBlock("deepslate_fluorite_ore",
-        () -> new OreBlock(BlockBehaviour.Properties
+        () -> new DropExperienceBlock(BlockBehaviour.Properties
             .of(Material.STONE, MaterialColor.DEEPSLATE)
             .strength(4.5f)
             .requiresCorrectToolForDrops()
@@ -103,7 +103,7 @@ public class DestroyBlocks {
     );
 
     public static final RegistryObject<Block> NICKEL_ORE = registerBlock("nickel_ore",
-        () -> new OreBlock(BlockBehaviour.Properties
+        () -> new DropExperienceBlock(BlockBehaviour.Properties
             .of(Material.STONE)
             .strength(3.0f)
             .requiresCorrectToolForDrops()
@@ -111,7 +111,7 @@ public class DestroyBlocks {
     );
 
     public static final RegistryObject<Block> DEEPSLATE_NICKEL_ORE = registerBlock("deepslate_nickel_ore",
-        () -> new OreBlock(BlockBehaviour.Properties
+        () -> new DropExperienceBlock(BlockBehaviour.Properties
             .of(Material.STONE, MaterialColor.DEEPSLATE)
             .strength(4.5f)
             .requiresCorrectToolForDrops()
@@ -143,6 +143,7 @@ public class DestroyBlocks {
         () -> new HalfTransparentBlock(BlockBehaviour.Properties
             .of(Material.CLAY, MaterialColor.COLOR_LIGHT_BLUE)
             .friction(0.9F)
+            .noOcclusion()
             .sound(SoundType.SLIME_BLOCK)
         ), DestroyCreativeModeTabs.TAB_DESTROY
     );
@@ -151,6 +152,7 @@ public class DestroyBlocks {
         () -> new HalfTransparentBlock(BlockBehaviour.Properties
             .of(Material.CLAY, MaterialColor.COLOR_LIGHT_BLUE)
             .friction(0.9F)
+            .noOcclusion()
             .sound(SoundType.SLIME_BLOCK)
         ), DestroyCreativeModeTabs.TAB_DESTROY
     );
