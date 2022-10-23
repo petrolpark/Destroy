@@ -21,4 +21,5 @@ public class DestroyFoods {
     public static final FoodProperties FRIES = new FoodProperties.Builder().nutrition(8).saturationMod(1.8f).build();
     public static final FoodProperties MASHED_POTATO = new FoodProperties.Builder().nutrition(7).saturationMod(1.4f).build();
     public static final FoodProperties CRUSHED_METHAMPHETAMINE = new FoodProperties.Builder().nutrition(0).saturationMod(0.0F).effect(methHighShort, 1.0f).build();
+    public static final FoodProperties MOONSHINE = new FoodProperties.Builder().nutrition(1).saturationMod(0.1f).build();
 }

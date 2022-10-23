@@ -1,0 +1,26 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "destroy:depleted_conversion_catalyst"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:dirty_silica"
+      },
+      {
+        "item": "create:crushed_platinum_ore",
+        "chance": 0.75
+      },
+      {
+        "item": "destroy:crushed_palladium_ore",
+        "chance": 0.75
+      },
+      {
+        "item": "destroy:crushed_rhodium_ore",
+        "chance": 0.75
+      }
+    ],
+    "processingTime": 200
+}

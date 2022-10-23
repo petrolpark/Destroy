@@ -6,6 +6,7 @@ import com.petrolpark.destroy.effect.DestroyMobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -435,19 +436,39 @@ public class DestroyItems {
     );
 
     public static final RegistryObject<Item> UNDISTILLED_MOONSHINE_BOTTLE = ITEMS.register("undistilled_moonshine_bottle",
-        () -> new AlcoholicDrinkItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY), 1)
+        () -> new AlcoholicDrinkItem(new Item.Properties()
+            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
+            .food(DestroyFoods.MOONSHINE)
+            .craftRemainder(Items.GLASS_BOTTLE)
+            .stacksTo(16)
+        , 1)
     );
 
     public static final RegistryObject<Item> ONCE_DISTILLED_MOONSHINE_BOTTLE = ITEMS.register("once_distilled_moonshine_bottle",
-        () -> new AlcoholicDrinkItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY), 1)
+        () -> new AlcoholicDrinkItem(new Item.Properties()
+            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
+            .food(DestroyFoods.MOONSHINE)
+            .craftRemainder(Items.GLASS_BOTTLE)
+            .stacksTo(16)
+        , 1)
     );
 
     public static final RegistryObject<Item> TWICE_DISTILLED_MOONSHINE_BOTTLE = ITEMS.register("twice_distilled_moonshine_bottle",
-        () -> new AlcoholicDrinkItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY), 2)
+        () -> new AlcoholicDrinkItem(new Item.Properties()
+            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
+            .food(DestroyFoods.MOONSHINE)
+            .craftRemainder(Items.GLASS_BOTTLE)
+            .stacksTo(16)
+        , 2)
     );
 
     public static final RegistryObject<Item> THRICE_DISTILLED_MOONSHINE_BOTTLE = ITEMS.register("thrice_distilled_moonshine_bottle",
-        () -> new AlcoholicDrinkItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY), 3)
+        () -> new AlcoholicDrinkItem(new Item.Properties()
+            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
+            .food(DestroyFoods.MOONSHINE)
+            .craftRemainder(Items.GLASS_BOTTLE)
+            .stacksTo(16)
+        , 3)
     );
 
 

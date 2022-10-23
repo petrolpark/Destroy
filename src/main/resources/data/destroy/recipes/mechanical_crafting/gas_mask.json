@@ -17,7 +17,7 @@
         "tag": "forge:dyes/yellow"
       },
       "G": {
-        "tag": "create:goggles"
+        "item": "create:goggles"
       },
       "F": {
         "item": "destroy:gas_filter"

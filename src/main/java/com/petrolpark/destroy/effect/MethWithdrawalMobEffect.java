@@ -24,7 +24,6 @@ public class MethWithdrawalMobEffect extends UncurableMobEffect {
 
             if (livingEntity instanceof Player) {
                 livingEntity.getCapability(PlayerMethAddictionProvider.PLAYER_METH_ADDICTION).ifPresent(methAddiction -> {
-                    Destroy.LOGGER.info("penisssss" + Math.log(methAddiction.getMethAddiction() + 1) + " " + (100 / (Math.log(methAddiction.getMethAddiction() + 1))));
                     if (pDuration % Math.round(100 / (Math.log(methAddiction.getMethAddiction() + 1))) == 0) { //Apply damage at a rate roughly equal to ln(meth addiction level)
                         livingEntity.hurt(DestroyDamageSources.METH_OVERDOSE, 1f);
                     }

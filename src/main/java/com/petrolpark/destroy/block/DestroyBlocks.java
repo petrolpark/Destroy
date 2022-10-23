@@ -2,9 +2,16 @@ package com.petrolpark.destroy.block;
 
 import java.util.function.Supplier;
 
+import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
+
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.item.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.item.DestroyItems;
+import com.simibubi.create.foundation.block.BlockStressDefaults;
+import com.simibubi.create.foundation.data.AssetLookup;
+import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.data.SharedProperties;
+import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -25,6 +32,22 @@ import net.minecraftforge.registries.RegistryObject;
 public class DestroyBlocks {
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(ForgeRegistries.BLOCKS, Destroy.MOD_ID);
+
+    private static final CreateRegistrate REGISTRATE = Destroy.registrate().creativeModeTab(() -> DestroyCreativeModeTabs.TAB_DESTROY);
+
+    // CONTRAPTIONS - this stuff is registered with Registrate
+
+    public static final BlockEntry<CentrifugeBlock> CENTRIFUGE = REGISTRATE.block("centrifuge", CentrifugeBlock::new)
+        .initialProperties(SharedProperties::stone)
+        .properties(p -> p.color(MaterialColor.COLOR_ORANGE))
+        .blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
+        .transform(BlockStressDefaults.setImpact(10.0))
+        .item()
+        .transform(customItemModel())
+        .register();
+
+    // Everything below is not registered with Registrate (yet)
+    //TODO register with registrate
 
     // STORAGE BLOCKS
 
