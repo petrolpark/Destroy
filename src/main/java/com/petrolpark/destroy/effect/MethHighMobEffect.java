@@ -1,7 +1,6 @@
 package com.petrolpark.destroy.effect;
 
 import com.petrolpark.destroy.capability.methaddiction.PlayerMethAddictionProvider;
-import com.petrolpark.destroy.world.DestroyDamageSources;
 
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;

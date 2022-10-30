@@ -1,0 +1,11 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:ammonia_solution",
+      "destroy:chalky_water",
+      "destroy:limewater",
+      "destroy:sodium_hydroxide_solution",
+      "destroy:zinc_chalky_water",
+      "destroy:zinc_oxide_limewater"
+    ]
+  }

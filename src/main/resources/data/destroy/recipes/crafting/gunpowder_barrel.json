@@ -17,10 +17,8 @@
         "item": "minecraft:barrel"
       }
     ],
-    "results": [
-      {
-        "item": "destroy:gunpowder_barrel",
-        "count": 1
-      }
-    ]
+    "result": {
+      "item": "destroy:gunpowder_barrel",
+      "count": 1
+    }
   }

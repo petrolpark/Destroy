@@ -9,7 +9,7 @@
         "item": "destroy:polystyrene_butadiene"
       },
       "B": {
-        "item": "forge:dyes/black"
+        "tag": "forge:dyes/black"
       }
     },
     "result": {

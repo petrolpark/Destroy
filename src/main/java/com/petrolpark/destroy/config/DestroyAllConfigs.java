@@ -8,7 +8,6 @@ import java.util.function.Supplier;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.simibubi.create.foundation.config.AllConfigs;
-import com.simibubi.create.foundation.config.ConfigBase;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,8 +17,8 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
-public class DestroyAllConfigs extends AllConfigs{
-    private static final Map<ModConfig.Type, ConfigBase> CONFIGS = new EnumMap<>(ModConfig.Type.class);
+public class DestroyAllConfigs extends AllConfigs {
+    private static final Map<ModConfig.Type, DestroyConfigBase> CONFIGS = new EnumMap<>(ModConfig.Type.class);
 
     //public static DestroyClientConfigs CLIENT;
     //public static DestroyCommonConfigs COMMON;
@@ -29,7 +28,7 @@ public class DestroyAllConfigs extends AllConfigs{
     private static <T extends DestroyConfigBase> T register(Supplier<T> factory, ModConfig.Type side) {
 		Pair<T, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(builder -> {
 			T config = factory.get();
-			config.callRegisterAll(builder);
+			config.registerAll(builder);
 			return config;
 	    });
 
@@ -44,14 +43,14 @@ public class DestroyAllConfigs extends AllConfigs{
 		//COMMON = register(DestroyCommonConfigs::new, ModConfig.Type.COMMON);
 		SERVER = register(DestroyServerConfigs::new, ModConfig.Type.SERVER);
 
-		for (Entry<ModConfig.Type, ConfigBase> pair : CONFIGS.entrySet()) {
+		for (Entry<ModConfig.Type, DestroyConfigBase> pair : CONFIGS.entrySet()) {
 			context.registerConfig(pair.getKey(), pair.getValue().specification);
         };
 	};
 
     @SubscribeEvent
 	public static void onLoad(ModConfigEvent.Loading event) {
-		for (ConfigBase config : CONFIGS.values()) {
+		for (DestroyConfigBase config : CONFIGS.values()) {
 			if (config.specification == event.getConfig().getSpec()) {
 				config.onLoad();
             };
@@ -60,7 +59,7 @@ public class DestroyAllConfigs extends AllConfigs{
 
 	@SubscribeEvent
 	public static void onReload(ModConfigEvent.Reloading event) {
-		for (ConfigBase config : CONFIGS.values()) {
+		for (DestroyConfigBase config : CONFIGS.values()) {
 			if (config.specification == event.getConfig().getSpec()) {
 				config.onReload();
             };

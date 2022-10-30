@@ -11,10 +11,8 @@
         "tag": "forge:dusts/saltpeter"
       }
     ],
-    "results": [
-      {
-        "item": "minecraft:gunpowder",
-        "count": 2
-      }
-    ]
+    "result": {
+      "item": "minecraft:gunpowder",
+      "count": 2
+    }
   }

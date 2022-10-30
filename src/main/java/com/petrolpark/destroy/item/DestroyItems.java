@@ -1,10 +1,8 @@
 package com.petrolpark.destroy.item;
 
 import com.petrolpark.destroy.Destroy;
-import com.petrolpark.destroy.effect.DestroyMobEffects;
+import com.simibubi.create.content.curiosities.CombustibleItem;
 
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -248,20 +246,24 @@ public class DestroyItems {
 
     // SYRINGES
 
-    public static final RegistryObject<Item> ASPIRIN_SYRINGE = ITEMS.register("aspirin_syringe",
+    public static final RegistryObject<Item> SYRINGE = ITEMS.register("syringe",
         () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
+    );
+
+    public static final RegistryObject<Item> ASPIRIN_SYRINGE = ITEMS.register("aspirin_syringe",
+        () -> new SyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
     );
 
     public static final RegistryObject<Item> CISPLATIN_SYRINGE = ITEMS.register("cisplatin_syringe",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
+        () -> new SyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
     );
 
     public static final RegistryObject<Item> IMPURE_METH_SYRINGE = ITEMS.register("impure_meth_syringe",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
+        () -> new SyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
     );
 
     public static final RegistryObject<Item> METH_SYRINGE = ITEMS.register("meth_syringe",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
+        () -> new SyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
     );
 
     

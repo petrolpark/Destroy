@@ -2,7 +2,7 @@
     "type": "create:crushing",
     "ingredients": [
       {
-        "item": "destroy:coal_infused_gillywort_ashes"
+        "item": "destroy:fluorite_infused_gillywort_ashes"
       }
     ],
     "results": [

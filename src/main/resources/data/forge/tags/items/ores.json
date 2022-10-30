@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:deepslate_fluorite_ore",
+      "destroy:deepslate_nickel_ore",
+      "destroy:fluorite_ore",
+      "destroy:nickel_ore"
+    ]
+}

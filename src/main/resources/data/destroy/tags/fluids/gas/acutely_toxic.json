@@ -1,0 +1,25 @@
+{
+    "replace": false,
+    "values": [
+        "destroy:carbon_monoxide",
+        "#forge:chlorine",
+        "destroy:chloroform_chlorination_mixture",
+        "destroy:dirty_exhaust_fumes",
+        "destroy:haber_mixture",
+        "destroy:hydrogen_cyanide",
+        "destroy:styrene_butadiene",
+        "destroy:syngas",
+        "destroy:tetrafluoroethene",
+        "destroy:vaporised_acetamide_solution",
+        "destroy:vaporised_anthraquinone",
+        "destroy:vaporised_aspirin_solution",
+        "destroy:vaporised_dibenzyl_ether_solution",
+        "destroy:vaporised_carbon_tetrachloride_fluorination_mixture",
+        "destroy:vaporised_cumene_mixture",
+        "destroy:eau_de_javel",
+        "destroy:vaporised_haloform_mixture",
+        "destroy:vaporised_phenylacetone_solution",
+        "destroy:vaporised_tetrafluoroethene_solution",
+        "destroy:vaporised_tnt_solution"
+    ]
+  }

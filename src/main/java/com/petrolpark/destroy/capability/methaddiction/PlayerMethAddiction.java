@@ -8,6 +8,7 @@ public class PlayerMethAddiction {
     private int methAddiction;
     private final int MIN_METH_ADDICTION = 0;
     private final int MAX_METH_ADDICTION = DestroyAllConfigs.SERVER.substances.maxAddictionLevel.get(); //default is 590
+    //private final int MAX_METH_ADDICTION = 590;
 
     public void copyFrom(PlayerMethAddiction source) {
         this.methAddiction = source.methAddiction;
@@ -28,6 +29,7 @@ public class PlayerMethAddiction {
     };
 
     public void addMethAddiction(int change) {
+        //TODO use clamp instead
         if (change >= 0) {
             this.methAddiction = Math.min(MAX_METH_ADDICTION, this.methAddiction + change);
         } else {

@@ -1,6 +1,8 @@
 package com.petrolpark.destroy.world;
 
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.entity.LivingEntity;
 
 public class DestroyDamageSources {
     public static final DamageSource ACID_BURN = (new DamageSource("acidBurn"));
@@ -9,4 +11,9 @@ public class DestroyDamageSources {
     public static final DamageSource CANCER = (new DamageSource("cancer")).bypassArmor();
     public static final DamageSource HEADACHE = (new DamageSource("headache")).bypassArmor();
     public static final DamageSource METH_OVERDOSE = (new DamageSource("methOverdose")).bypassArmor();
+    public static final DamageSource SELF_NEEDLE = (new DamageSource("selfNeedle"));
+
+    public static DamageSource needle(LivingEntity injectingEntity) {
+        return new EntityDamageSource("needle", injectingEntity);
+    };
 }

@@ -9,7 +9,7 @@
         "item": "minecraft:ghast_tear"
       },
       "w": {
-        "tag": "destroy:silica"
+        "tag": "minecraft:glass_bottle"
       }
     },
     "result": {

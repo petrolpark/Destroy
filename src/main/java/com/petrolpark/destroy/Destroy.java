@@ -2,18 +2,22 @@ package com.petrolpark.destroy;
 
 import com.mojang.logging.LogUtils;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
+import com.petrolpark.destroy.block.partial.DestroyBlockPartials;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.item.DestroyItems;
+import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
@@ -31,21 +35,28 @@ public class Destroy
     public Destroy()
     {
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
-        DestroyBlocks.register(eventBus);
-        DestroyMobEffects.register(eventBus);
-        DestroyItems.register(eventBus);
+        DestroyBlockEntities.register(); //no event bus as all are registered with Registrate
+        DestroyBlocks.register(modEventBus);
+        DestroyMobEffects.register(modEventBus);
+        DestroyItems.register(modEventBus);
+        DestroyRecipeTypes.register(modEventBus);
+
+        MinecraftForge.EVENT_BUS.register(this);
 
         DestroyAllConfigs.register(modLoadingContext);
 
-        // Register ourselves for server and other game events we are interested in
-        MinecraftForge.EVENT_BUS.register(this);
-
-    }
+        //do the clienty things
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DestroyBlockPartials::init);
+    };
 
     public static CreateRegistrate registrate() {
         return REGISTRATE.get();
-    }
+    };
 
+    public static ResourceLocation asResource(String path) {
+        return new ResourceLocation(MOD_ID, path);
+    };
 }

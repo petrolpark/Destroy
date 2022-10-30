@@ -3,20 +3,54 @@ package com.petrolpark.destroy.block;
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.simibubi.create.content.contraptions.base.KineticBlock;
+import com.simibubi.create.content.contraptions.relays.elementary.ICogWheel;
 import com.simibubi.create.foundation.block.ITE;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 
-public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlockEntity> {
+public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlockEntity>, ICogWheel {
+
+    public static final DirectionProperty DENSE_OUTPUT_FACE = DirectionProperty.create("direction");
 
     public CentrifugeBlock(Properties properties) {
         super(properties);
+        registerDefaultState(this.stateDefinition.any().setValue(DENSE_OUTPUT_FACE, Direction.WEST));
+    };
+
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        if (pState.hasBlockEntity() && (pState.getBlock() != pNewState.getBlock() || !pNewState.hasBlockEntity())) { //if the Block Entity is getting removed
+            BlockEntity be = pLevel.getBlockEntity(pPos);
+            if (!(be instanceof CentrifugeBlockEntity)) {
+                return;
+            }
+            pLevel.removeBlockEntity(pPos);
+        };
     }
+
+    @Override
+    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
+        getTileEntity(level, pos).updateDenseOutputFace(); //this also updates the Block State
+        super.onNeighborChange(state, level, pos, neighbor);
+    };
+
+    @Override
+    protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(DENSE_OUTPUT_FACE);
+        super.createBlockStateDefinition(pBuilder);
+    };
 
     @Override
     public Axis getRotationAxis(BlockState state) {
@@ -36,6 +70,6 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
     @Override
     public boolean isPathfindable(BlockState state, BlockGetter reader, BlockPos pos, PathComputationType type) {
         return false;
-    }
+    };
     
 }

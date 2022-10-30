@@ -1,0 +1,15 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:anthraquinone",
+      "#forge:mercury",
+      "destroy:methamphetamine_solution",
+      "destroy:methylamine_solution",
+      "destroy:molten_cinnabar",
+      "destroy:nitroglycerine",
+      "destroy:phthalic_anhydride",
+      "destroy:polytetrafluoroethene_slurry",
+      "destroy:toluene",
+      "destroy:trimethylamine_solution"
+    ]
+  }

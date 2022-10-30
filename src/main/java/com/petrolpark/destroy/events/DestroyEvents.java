@@ -1,6 +1,7 @@
 package com.petrolpark.destroy.events;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
@@ -11,6 +12,7 @@ import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.level.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -20,6 +22,7 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.capability.methaddiction.PlayerMethAddiction;
 import com.petrolpark.destroy.capability.methaddiction.PlayerMethAddictionProvider;
 import com.petrolpark.destroy.commands.MethAddictionCommand;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.world.DestroyDamageSources;
@@ -78,8 +81,8 @@ public class DestroyEvents {
             case AMBIENT:
             case PLAYERS:
             case MUSIC:
-            case NEUTRAL:
             case VOICE:
+            case NEUTRAL:
                 break; //ignore certain sounds
             // case BLOCKS:
             // case HOSTILE:
@@ -102,9 +105,20 @@ public class DestroyEvents {
     };
 
     @SubscribeEvent
-    public static void disableEatingWithMethwithdrawal(PlayerInteractEvent.RightClickItem event) {
+    public static void disableEatingWithMethWithdrawal(PlayerInteractEvent.RightClickItem event) {
         if (event.getItemStack().getItem().isEdible() && event.getItemStack().getItem() != DestroyItems.METHAMPHETAMINE_POWDER.get() && event.getEntity().hasEffect(DestroyMobEffects.METH_WITHDRAWAL.get())) {
             event.setCanceled(true);
+        };
+    };
+
+    @SubscribeEvent
+    public static void onPlayersWakeUp(SleepFinishedTimeEvent event) {
+        for (Player player : event.getLevel().players()) {
+            MobEffectInstance effect = player.getEffect(DestroyMobEffects.INEBRIATION.get());
+            if (effect != null) {
+                player.addEffect(new MobEffectInstance(DestroyMobEffects.HANGOVER.get(), DestroyAllConfigs.SERVER.substances.hangoverDuration.get() * (effect.getAmplifier() + 1)));
+                player.removeEffect(DestroyMobEffects.INEBRIATION.get());
+            };
         };
     };
 };

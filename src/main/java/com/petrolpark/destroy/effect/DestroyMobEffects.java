@@ -24,7 +24,7 @@ public class DestroyMobEffects {
     );
 
     public static final RegistryObject<MobEffect> INEBRIATION = MOB_EFFECTS.register("inebriation",
-        () -> new UncurableMobEffect(MobEffectCategory.HARMFUL, 0)
+        () -> new InebriationMobEffect(MobEffectCategory.HARMFUL, 0)
     );
 
     public static final RegistryObject<MobEffect> METH_HIGH = MOB_EFFECTS.register("meth_high",

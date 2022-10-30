@@ -7,6 +7,8 @@ import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.item.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.item.DestroyItems;
+import com.simibubi.create.Create;
+import com.simibubi.create.content.AllSections;
 import com.simibubi.create.foundation.block.BlockStressDefaults;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -41,13 +43,13 @@ public class DestroyBlocks {
         .initialProperties(SharedProperties::stone)
         .properties(p -> p.color(MaterialColor.COLOR_ORANGE))
         .blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
-        .transform(BlockStressDefaults.setImpact(10.0))
+        .transform(BlockStressDefaults.setImpact(8.0))
         .item()
         .transform(customItemModel())
         .register();
 
     // Everything below is not registered with Registrate (yet)
-    //TODO register with registrate
+    //TODO register with Registrate
 
     // STORAGE BLOCKS
 
@@ -190,9 +192,12 @@ public class DestroyBlocks {
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block, CreativeModeTab tab) {
         return DestroyItems.ITEMS.register(name, () -> new BlockItem(block.get(),
             new Item.Properties().tab(tab)));
-    }
+    };
 
     public static void register(IEventBus eventBus) {
+        //register the usual stuff
         BLOCKS.register(eventBus);
+        //register the Registrate stuff
+        Create.registrate().addToSection(CENTRIFUGE, AllSections.KINETICS);
     }
 }

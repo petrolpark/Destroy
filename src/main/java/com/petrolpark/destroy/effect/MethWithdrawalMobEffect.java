@@ -1,6 +1,5 @@
 package com.petrolpark.destroy.effect;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.capability.methaddiction.PlayerMethAddictionProvider;
 import com.petrolpark.destroy.world.DestroyDamageSources;
 

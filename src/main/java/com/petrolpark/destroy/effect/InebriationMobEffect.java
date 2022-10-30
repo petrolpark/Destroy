@@ -16,12 +16,12 @@ public class InebriationMobEffect extends UncurableMobEffect {
         int pDuration = livingEntity.getEffect(DestroyMobEffects.INEBRIATION.get()).getDuration();
         if (!livingEntity.level.isClientSide()) {
             if (amplifier >= 3) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20, (amplifier - 2), true, false, false));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, pDuration, (amplifier - 2), true, false, false));
             };
             if (amplifier >= 6) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 20, (amplifier - 6), true, false, false));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, pDuration, (amplifier - 6), true, false, false));
             };
-            if (amplifier >= 10) {
+            if (amplifier >= 9) {
                 if (pDuration % Math.round(250 / amplifier) == 0) {
                     livingEntity.hurt(DestroyDamageSources.ALCOHOL, 1f);
                 };
@@ -30,4 +30,8 @@ public class InebriationMobEffect extends UncurableMobEffect {
         super.applyEffectTick(livingEntity, amplifier);
     };
 
+    @Override
+    public boolean isDurationEffectTick(int duration, int amplifier) {
+        return true;
+    };
 }

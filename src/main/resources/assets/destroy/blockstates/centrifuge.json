@@ -1,0 +1,27 @@
+{
+    "variants": {
+        "direction=north": {
+            "model": "destroy:block/centrifuge/block",
+            "y": 90
+        },
+        "direction=east": {
+            "model": "destroy:block/centrifuge/block",
+            "y": 180
+        },
+        "direction=south": {
+            "model": "destroy:block/centrifuge/block",
+            "y": 270
+        },
+        "direction=west": {
+            "model": "destroy:block/centrifuge/block"
+        },
+        "direction=up": {
+            "model": "destroy:block/centrifuge/block",
+            "note": "This model should never exist"
+        },
+        "direction=down": {
+            "model": "destroy:block/centrifuge/block",
+            "note": "This model should never exist"
+        }
+    }
+}

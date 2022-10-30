@@ -49,6 +49,19 @@
     "death.attack.cancer": "%1$s passed away due to Lumps",
     "death.attack.headache": "%1$s died of a splitting migraine",
     "death.attack.methOverdose": "%1$s overdosed on methamphetamine",
+    "death.attack.selfNeedle": "%1$s felt a small pinch",
+    "death.attack.needle": "%1$s felt a small pinch from %2$s",
+
+    "destroy.tooltip.contraptions.of": "of",
+    "note_for_translators_1": "The above key is used in the displays of Fluid-handling contraptions, e.g. '100mB of Water'",
+
+    "destroy.tooltip.centrifuge.lubrication": "Lubrication:",
+    "destroy.tooltip.centrifuge.input_tank": "Unprocessed:",
+    "destroy.tooltip.centrifuge.contents": "Contents:",
+    "destroy.tooltip.centrifuge.dense_output_tank": "Dense Product:",
+    "destroy.tooltip.centrifuge.light_output_tank": "Light Product:",
+
+    "destroy.tooltip.syringe": "Use in Offhand with an empty Main Hand",
 
     "effect.destroy.cancer": "Lumps",
     "effect.destroy.fragrance": "Fragrance",

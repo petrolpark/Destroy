@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": [
+      "destroy:acetamide",
+      "destroy:dibenzyl_ether",
+      "destroy:diethyl_phthalate",
+      "destroy:dimethyl_phthalate"
+    ]
+  }
