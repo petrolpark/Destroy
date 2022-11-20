@@ -2,6 +2,7 @@ package com.petrolpark.destroy.block;
 
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
+import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.content.contraptions.base.KineticBlock;
 import com.simibubi.create.content.contraptions.relays.elementary.ICogWheel;
 import com.simibubi.create.foundation.block.ITE;
@@ -19,6 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlockEntity>, ICogWheel {
 
@@ -27,6 +30,11 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
     public CentrifugeBlock(Properties properties) {
         super(properties);
         registerDefaultState(this.stateDefinition.any().setValue(DENSE_OUTPUT_FACE, Direction.WEST));
+    };
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return DestroyShapes.CENTRIFUGE;
     };
 
     @Override

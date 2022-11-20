@@ -15,6 +15,7 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -44,6 +45,14 @@ public class DestroyBlocks {
         .properties(p -> p.color(MaterialColor.COLOR_ORANGE))
         .blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
         .transform(BlockStressDefaults.setImpact(8.0))
+        .item()
+        .transform(customItemModel())
+        .register();
+
+    public static final BlockEntry<BreezeBurnerBlock> BREEZE_BURNER = REGISTRATE.block("breeze_burner", BreezeBurnerBlock::new)
+        .initialProperties(SharedProperties::stone)
+        .properties(p -> p.color(MaterialColor.DEEPSLATE))
+        .addLayer(() -> RenderType::cutoutMipped)
         .item()
         .transform(customItemModel())
         .register();

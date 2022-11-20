@@ -3,12 +3,10 @@ package com.petrolpark.destroy.item;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.item.renderer.SyringeItemRenderer;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.world.DestroyDamageSources;
 import com.simibubi.create.foundation.item.CustomUseEffectsItem;
-import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 
 import net.minecraft.ChatFormatting;
@@ -33,6 +31,16 @@ public class SyringeItem extends Item implements CustomUseEffectsItem {
         super(properties.stacksTo(1));
     };
 
+    /**
+     * Called when a Player injects themselves, or an Entity is injected by another Entity. Should enact the result of the injection.
+     * @param itemStack The Item Stack used to inject
+     * @param level The Level in which the injection is taking place
+     * @param target The Entity being injected
+     */
+    public void onInject(ItemStack itemStack, Level level, LivingEntity target) {
+        return;
+    };
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
@@ -55,6 +63,7 @@ public class SyringeItem extends Item implements CustomUseEffectsItem {
 
     @Override
     public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity entity) {
+        onInject(itemStack, level, entity);
         if (!(entity instanceof Player)) return itemStack;
         itemStack.getOrCreateTag().remove("Injecting");
         return new ItemStack(DestroyItems.SYRINGE.get());
@@ -63,7 +72,6 @@ public class SyringeItem extends Item implements CustomUseEffectsItem {
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
         if (count == 8 && !player.getLevel().isClientSide()) {
-            Destroy.LOGGER.info("pee");
             player.hurt(DestroyDamageSources.SELF_NEEDLE, 1f);
         };
         super.onUsingTick(stack, player, count);

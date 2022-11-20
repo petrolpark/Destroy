@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.partial.DestroyBlockPartials;
+import com.petrolpark.destroy.chemistry.index.DestroyReactions;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.item.DestroyItems;
@@ -43,6 +44,8 @@ public class Destroy
         DestroyMobEffects.register(modEventBus);
         DestroyItems.register(modEventBus);
         DestroyRecipeTypes.register(modEventBus);
+
+        DestroyReactions.register();
 
         MinecraftForge.EVENT_BUS.register(this);
 

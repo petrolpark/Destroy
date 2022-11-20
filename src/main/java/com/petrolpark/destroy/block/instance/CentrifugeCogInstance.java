@@ -14,6 +14,12 @@ public class CentrifugeCogInstance extends SingleRotatingInstance {
     };
 
     @Override
+    public void updateLight() {
+        super.updateLight();
+        relight(pos);
+    }
+
+    @Override
     protected Instancer<RotatingData> getModel() {
         return getRotatingMaterial().getModel(DestroyBlockPartials.CENTRIFUGE_COG, blockEntity.getBlockState());
     }

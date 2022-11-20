@@ -251,7 +251,7 @@ public class DestroyItems {
     );
 
     public static final RegistryObject<Item> ASPIRIN_SYRINGE = ITEMS.register("aspirin_syringe",
-        () -> new SyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
+        () -> new AspirinSyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
     );
 
     public static final RegistryObject<Item> CISPLATIN_SYRINGE = ITEMS.register("cisplatin_syringe",
@@ -259,11 +259,11 @@ public class DestroyItems {
     );
 
     public static final RegistryObject<Item> IMPURE_METH_SYRINGE = ITEMS.register("impure_meth_syringe",
-        () -> new SyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
+        () -> new MethSyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY), 1200, 0)
     );
 
     public static final RegistryObject<Item> METH_SYRINGE = ITEMS.register("meth_syringe",
-        () -> new SyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
+        () -> new MethSyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY), 1200, 1)
     );
 
     

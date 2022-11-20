@@ -3,6 +3,7 @@ package com.petrolpark.destroy.item.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.simibubi.create.foundation.item.render.CreateCustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
@@ -33,24 +34,26 @@ public class SyringeItemRenderer extends CustomRenderedItemModelRenderer<Syringe
 
         int modifier = isLeftHandAnimation ? 1 : -1; //used to reverse direction of animation
 
+        float X = 0.1f;
+        float Y = 0.4f;
+        float Z = 0.9f;
+
         ms.pushPose();
 
         if (isFirstPersonAnimation && stack.getOrCreateTag().contains("Injecting")) {
 
             float time = (float) player.getUseItemRemainingTicks() - partialTicks + 1.0F;
             float progress = (stack.getUseDuration() - time) / stack.getUseDuration();
-
-            if (!isLeftHandAnimation) ms.translate(0f, 0f, 1.6f);
             
             if (progress < MOVE_TO_CENTRE_TIME) { //gradually move to centre of screen
 
-                ms.translate(0.2f * modifier * progress / MOVE_TO_CENTRE_TIME, 0.5f * progress / MOVE_TO_CENTRE_TIME, 0.7f * modifier * progress / MOVE_TO_CENTRE_TIME);
+                ms.translate(X * modifier * progress / MOVE_TO_CENTRE_TIME, Y * progress / MOVE_TO_CENTRE_TIME, Z * progress / MOVE_TO_CENTRE_TIME);
                 ms.mulPose(Vector3f.YP.rotationDegrees(120 * modifier * progress / MOVE_TO_CENTRE_TIME));
                 ms.mulPose(Vector3f.ZP.rotationDegrees(-70 * modifier * progress / MOVE_TO_CENTRE_TIME));
 
             } else { //hold at centre of screen
 
-                ms.translate(0.2f * modifier, 0.5f, 0.7f * modifier);
+                ms.translate(X * modifier, Y, Z);
                 ms.mulPose(Vector3f.YP.rotationDegrees(120 * modifier));
                 ms.mulPose(Vector3f.ZP.rotationDegrees(-70 * modifier));
 

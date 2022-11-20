@@ -1,15 +1,19 @@
 package com.petrolpark.destroy.events;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.SleepFinishedTimeEvent;
@@ -25,6 +29,7 @@ import com.petrolpark.destroy.commands.MethAddictionCommand;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.item.DestroyItems;
+import com.petrolpark.destroy.item.SyringeItem;
 import com.petrolpark.destroy.world.DestroyDamageSources;
 
 @Mod.EventBusSubscriber(modid = Destroy.MOD_ID)
@@ -120,5 +125,15 @@ public class DestroyEvents {
                 player.removeEffect(DestroyMobEffects.INEBRIATION.get());
             };
         };
+    };
+
+    @SubscribeEvent
+    public static void onSyringeAttack(LivingAttackEvent event) {
+        Entity attacker = event.getSource().getEntity();
+        if (!(attacker instanceof LivingEntity)) return;
+        ItemStack itemStack = ((LivingEntity) attacker).getMainHandItem();
+        if (!(itemStack.getItem() instanceof SyringeItem)) return;
+        ((SyringeItem) itemStack.getItem()).onInject(itemStack, attacker.getLevel(), event.getEntity());
+        ((LivingEntity) attacker).setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(DestroyItems.SYRINGE.get()));
     };
 };

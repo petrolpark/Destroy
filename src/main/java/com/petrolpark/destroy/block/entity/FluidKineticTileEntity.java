@@ -43,7 +43,7 @@ public class FluidKineticTileEntity extends KineticTileEntity {
         if (!level.isClientSide()) {
             setChanged();
             sendData();
-        }
+        };
     };
 
     /**

@@ -20,7 +20,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 public class DestroyAllConfigs extends AllConfigs {
     private static final Map<ModConfig.Type, DestroyConfigBase> CONFIGS = new EnumMap<>(ModConfig.Type.class);
 
-    //public static DestroyClientConfigs CLIENT;
+    public static DestroyClientConfigs CLIENT;
     //public static DestroyCommonConfigs COMMON;
     public static DestroyServerConfigs SERVER;
 
@@ -39,7 +39,7 @@ public class DestroyAllConfigs extends AllConfigs {
     };
 
     public static void register(ModLoadingContext context) {
-		//CLIENT = register(DestroyClientConfigs::new, ModConfig.Type.CLIENT);
+		CLIENT = register(DestroyClientConfigs::new, ModConfig.Type.CLIENT);
 		//COMMON = register(DestroyCommonConfigs::new, ModConfig.Type.COMMON);
 		SERVER = register(DestroyServerConfigs::new, ModConfig.Type.SERVER);
 

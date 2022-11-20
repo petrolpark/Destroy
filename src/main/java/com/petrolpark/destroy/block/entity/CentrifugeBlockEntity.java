@@ -12,7 +12,6 @@ import com.petrolpark.destroy.recipe.CentrifugationRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.content.contraptions.fluids.FluidFX;
-import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.utility.VecHelper;
 
@@ -27,7 +26,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -93,9 +91,6 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
         if (inputTank.isEmpty()) return; //don't do anything more if input tank is empty
         if (lastRecipe == null || lastRecipe.getRequiredFluid().test(inputTank.getFluid())) { //if the recipe has changed
             RecipeWrapper wrapper = new RecipeWrapper(new EmptyHandler()); //create dummy wrapper
-
-            Destroy.LOGGER.info(level.getRecipeManager().getRecipesFor(DestroyRecipeTypes.CENTRIFUGATION.getType(), wrapper, level).iterator().next().toString());
-
             for (Recipe<RecipeWrapper> recipe : level.getRecipeManager().getRecipesFor(DestroyRecipeTypes.CENTRIFUGATION.getType(), wrapper, level)) { //search all Centrifugation recipes...
                 if (((CentrifugationRecipe)recipe).getRequiredFluid().test(inputTank.getFluid())) { //...for Recipes with the right matching fluid
                     lastRecipe = (CentrifugationRecipe)recipe;
@@ -141,8 +136,9 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
         return Mth.clamp((int) Math.abs(getSpeed() * lubricationMultiplier / 16f), 1, 512);
     };
 
-    public void process() { //should only be called if the recipe is definitely valid
+    public void process() {
         if (lastRecipe == null) return;
+        if (!canFitFluidInTank(lastRecipe.getDenseOutputFluid(), denseOutputTank) || !canFitFluidInTank(lastRecipe.getLightOutputFluid(), lightOutputTank) || hasFluidInTank(lastRecipe.getRequiredFluid(), inputTank)) return; //ensure the Recipe can still be Processed
         FluidStack stackToDrain = new FluidStack(inputTank.getFluid().getFluid(), lastRecipe.getRequiredFluid().getRequiredAmount()); //Drain a Fluid Stack with the Fluid matching the Fluid already in the Tank (which should be valid), and the amount matching the recipe
         inputTank.drain(stackToDrain, FluidAction.EXECUTE);
         denseOutputTank.fill(lastRecipe.getDenseOutputFluid(), FluidAction.EXECUTE);
@@ -195,9 +191,6 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-
-        Component indent = Component.literal(IHaveGoggleInformation.spacing);
-
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
 
         //"Lubrication: <level>"
