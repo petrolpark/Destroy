@@ -3,6 +3,7 @@ package com.petrolpark.destroy.chemistry;
 public enum Element {
 
     //in the order they should appear in Empirical Formulae
+    R_GROUP("R", 0f, 1),
     CARBON("C", 12.01f, 4),
     HYDROGEN("H", 1.01f, 1),
     OXYGEN("O", 16.00f, 2),

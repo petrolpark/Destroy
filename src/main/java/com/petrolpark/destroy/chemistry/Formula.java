@@ -19,13 +19,18 @@ public class Formula {
     private Map<Atom, List<Bond>> structure;
     private Atom startingAtom;
     private Atom currentAtom;
+
+    private List<Group> groups; //all the functional Groups contained within this Structure
     
     private CycleType cycleType;
     private List<Atom> cyclicAtoms;
 
+    private String optimumFROWNSCode;
+
     private Formula() {
         structure = new HashMap<Atom, List<Bond>>();
         cycleType = CycleType.NONE;
+        optimumFROWNSCode = null;
     };
 
     public Formula(Atom startingAtom) {
@@ -161,7 +166,7 @@ public class Formula {
     };
 
     /**
-     * Adds a singly-bonded Group to the current Atom, staying on that Atom
+     * Adds a singly-bonded Group to the current Atom, staying on that Atom.
      * @param group
      * @return
      */
@@ -170,7 +175,7 @@ public class Formula {
     };
 
     /**
-     * Adds a singly-bonded Group to the current Atom
+     * Adds a singly-bonded Group to the current Atom.
      * @param group
      * @param isSideGroup Whether to stay on the Atom to which the Group is being added, or move to the end of the Group (defaults to false)
      * @return
@@ -180,7 +185,7 @@ public class Formula {
     };
 
     /**
-     * Adds a Group to the current Atom
+     * Adds a Group to the current Atom.
      * @param group
      * @param isSideGroup Whether to stay on the Atom to which the Group is being added, or move to the end of the Group (defaults to false)
      * @param bondType Defaults to SINGLE
@@ -193,9 +198,9 @@ public class Formula {
     };
 
     /**
-     * Adds a singly-bonded Group to an Atom in a Cyclic Molecule, and moves to the end of that Group
+     * Adds a singly-bonded Group to an Atom in a Cyclic Molecule, and moves to the end of that Group.
      * @param group
-     * @param position Which positions correspond to which Atoms can be found at //TODO make and link git wiki
+     * @param position Which positions correspond to which Atoms can be found <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">here</a>.
      * @return
      */
     public Formula addGroupToPosition(Formula group, int position) {
@@ -203,9 +208,9 @@ public class Formula {
     };
 
     /**
-     * Adds a Group to an Atom in a Cyclic Molecule, and moves to the end of that Group
+     * Adds a Group to an Atom in a Cyclic Molecule, and moves to the end of that Group.
      * @param group
-     * @param position Which positions correspond to which Atoms can be found at //TODO make and link git wiki
+     * @param position Which positions correspond to which Atoms can be found <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">here</a>.
      * @param bondType Defaults to SINGLE
      * @return
      */
@@ -216,7 +221,7 @@ public class Formula {
     };
 
     /**
-     * Adds a =O Group to the current Atom, staying on the Atom
+     * Adds a =O Group to the current Atom, staying on the Atom.
      * @return
      */
     public Formula addCarbonyl() {
@@ -225,8 +230,8 @@ public class Formula {
     };
 
     /**
-     * Adds Hydrogens to all Atoms which are missing Hydrogens in their lowest oxidation state
-     * @param throwError Whether this should throw an error if an invalid Valency is encountered
+     * Adds Hydrogens to all Atoms which are missing Hydrogens in their lowest oxidation state.
+     * @param throwError Whether this should throw an error if an invalid Valency is encountered.
      * @return
      */
     public Formula addAllHydrogens() {
@@ -246,17 +251,15 @@ public class Formula {
     };
 
     /**
-     * The Set of every Atom in the Formula
-     * @return
+     * The Set of every Atom in the Formula.
      */
     public Set<Atom> getAllAtoms() {
         return structure.keySet();
     };
 
     /**
-     * The total single-bond equivalent of a List of Bonds
+     * The total single-bond equivalent of a List of Bonds.
      * @param bonds
-     * @return
      */
     public int getTotalBonds(List<Bond> bonds) {
         float total = 0;
@@ -266,33 +269,64 @@ public class Formula {
         return (int)total;
     };
 
-    public String serialize() {
-        /*
-         * Here's the dealio
-         * 1. Visit all terminal nodes, starting a branch from each
-         * 2. If a node is connected to one visited node, and has two edges, visit it and add it to that branch
-         * 3. If a node is surrounded by visited nodes:
-         *      a. Join the end of the largest branch to the end of the second-largest branch. The start of this new branch is the start of the larger branch (so flip the smaller)
-         *      b. Add all other branches as side-branches, largest first
-         * 4. Repeat 2-3 until all nodes are visited
-         * 5. Flip the branch
-         */
+    /**
+     * Get the <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS Code</a> of this Formula or Group, with the given Atom as the first character.
+     * @param atom The Atom to start with
+     * @return FROWNS Code
+     */
+    public String serializeStartingWithAtom(Atom atom) {
 
         Map<Atom, List<Bond>> newStructure = stripHydrogens(structure);
 
         String body = "";
         String prefix = cycleType.getName();
         if (cycleType == CycleType.NONE) {
-            body = getMaximumBranch(startingAtom, newStructure).serialize();
+            body = getMaximumBranch(atom, newStructure).serialize();
         };
 
         return prefix+":"+body;
     };
 
     /**
+     * Get the <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS Code</a> of this Formula or Group.
+     */
+    public String serialize() {
+
+        if (optimumFROWNSCode != null) { //in case this has already been serialized, we don't want to calculate it again
+            return optimumFROWNSCode;
+        };
+
+        String body = "";
+        String prefix = cycleType.getName();
+
+        if (cycleType == CycleType.NONE) {
+
+            Map<Atom, List<Bond>> newStructure = stripHydrogens(structure);
+
+            List<Atom> terminalAtoms = new ArrayList<>();
+            for (Atom atom : newStructure.keySet()) {
+                if (newStructure.get(atom).size() == 1) {
+                    terminalAtoms.add(atom);
+                };
+            };
+            Collections.sort(terminalAtoms, (a1, a2) -> {
+                return getMaximumBranch(a2, structure).getMassOfLongestChain().compareTo(getMaximumBranch(a1, newStructure).getMassOfLongestChain()); //put in descending order of chain length
+            });
+
+            body = getMaximumBranch(terminalAtoms.get(0), newStructure).serialize();
+
+        } else {
+            //TODO serialize cyclic molecules
+            throw new IllegalStateException("Can't do this yet");
+        };
+
+        return prefix + ":" + body;
+
+    };
+
+    /**
      * See https://github.com/petrolpark/Destroy/wiki/FROWNS
      * @param string
-     * @return
      */
     public static Formula deserialize(String FROWNSstring) {
         try {
@@ -317,6 +351,46 @@ public class Formula {
     };
 
     //INTERNAL METHODS
+
+    private void checkGroups() {
+        for (Atom atom : structure.keySet()) {
+            if (atom.getElement() == Element.CARBON) {
+
+            };
+        };
+    };
+
+    /**
+     * Counts how many Bonds (of any Type) the given Atom has to Atoms of the given Element.
+     * (This counts total Bonds, not single-bond equivalents).
+     * @param atom
+     * @param element
+     */
+    public int bondsToElement(Atom atom, Element element) {
+        int count = 0;
+        for (Bond bond : structure.get(atom)) {
+            if (bond.getDestinationAtom().getElement() == element) {
+                count++;
+            };
+        };
+        return count;
+    };
+
+    /**
+     * Counts how many Bonds of the given Type the given Atom has to Atoms of the given Element.
+     * @param atom
+     * @param element
+     * @param bondType
+     */
+    public int bondsToElement(Atom atom, Element element, BondType bondType) {
+        int count = 0;
+        for (Bond bond : structure.get(atom)) {
+            if (bond.getDestinationAtom().getElement() == element && bond.getType() == bondType) {
+                count++;
+            }
+        };
+        return count;
+    };
 
     private Branch getMaximumBranch(Atom startAtom, Map<Atom, List<Bond>> structure) {
 
@@ -404,7 +478,7 @@ public class Formula {
     private Formula addGroupToStructure(Map<Atom, List<Bond>> structureToMutate, Atom rootAtom, Formula group, BondType bondType) {
         if (group.cycleType != CycleType.NONE) {
             //TODO replace with Warning & 'return this', not Error
-            throw new IllegalStateException("Cannot add Cycles as side-groups - to create a Cyclic Molecule, start with the Cycle and use addGroupAtPosition");
+            throw new IllegalStateException("Cannot add Cycles as side-groups - to create a Cyclic Molecule, start with the Cycle and use addGroupAtPosition()");
         };
         structureToMutate.putAll(group.structure);
         addBondBetweenAtoms(rootAtom, group.startingAtom, bondType);

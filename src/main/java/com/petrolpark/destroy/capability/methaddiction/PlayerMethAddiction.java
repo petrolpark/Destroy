@@ -3,6 +3,7 @@ package com.petrolpark.destroy.capability.methaddiction;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 
 public class PlayerMethAddiction {
     private int methAddiction;
@@ -29,12 +30,7 @@ public class PlayerMethAddiction {
     };
 
     public void addMethAddiction(int change) {
-        //TODO use clamp instead
-        if (change >= 0) {
-            this.methAddiction = Math.min(MAX_METH_ADDICTION, this.methAddiction + change);
-        } else {
-            this.methAddiction = Math.max(MIN_METH_ADDICTION, this.methAddiction - change);
-        };
+        this.methAddiction = Mth.clamp(this.methAddiction + change, MIN_METH_ADDICTION, MAX_METH_ADDICTION);
     };
 
     public void saveNBTData(CompoundTag nbt) {

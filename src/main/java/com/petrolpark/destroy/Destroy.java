@@ -4,9 +4,12 @@ import com.mojang.logging.LogUtils;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.partial.DestroyBlockPartials;
+import com.petrolpark.destroy.chemistry.index.DestroyGroupFinder;
+import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.DestroyReactions;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
+import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -24,12 +27,10 @@ import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Destroy.MOD_ID)
-public class Destroy
-{
-    // Directly reference a slf4j logger
-    public static final Logger LOGGER = LogUtils.getLogger();
-
+public class Destroy {
     public static final String MOD_ID = "destroy";
+
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     private static final NonNullSupplier<CreateRegistrate> REGISTRATE = CreateRegistrate.lazy(MOD_ID);
 
@@ -39,19 +40,26 @@ public class Destroy
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
-        DestroyBlockEntities.register(); //no event bus as all are registered with Registrate
+        // Mod objects
+        DestroyBlockEntities.register();
         DestroyBlocks.register(modEventBus);
         DestroyMobEffects.register(modEventBus);
         DestroyItems.register(modEventBus);
         DestroyRecipeTypes.register(modEventBus);
+        DestroyFluids.register();
 
+        // Chemistry
+        DestroyGroupFinder.register();
+        DestroyMolecules.register();
         DestroyReactions.register();
 
+        // Events
         MinecraftForge.EVENT_BUS.register(this);
 
+        // Config
         DestroyAllConfigs.register(modLoadingContext);
 
-        //do the clienty things
+        // Client
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DestroyBlockPartials::init);
     };
 

@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 public class MethAddictionCommand {
+    
     public MethAddictionCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("methaddiction")
             .then(Commands.literal("query").then(Commands.argument("targets", EntityArgument.player()).executes((command) -> {

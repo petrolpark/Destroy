@@ -17,20 +17,17 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.METHANOL)
         .addReactant(DestroyMolecules.CARBON_MONOXIDE)
         .addProduct(DestroyMolecules.ACETIC_ACID)
+        .rateConstant(0.01f)
         .name(Component.literal("Methyl Acetate Carboxylation"))
         .build();
 
-    // public static Reaction METHYL_ACETATE_HYDROLYSIS = Reaction.builder()
-    //     .addReactant(DestroyMolecules.METHYL_ACETATE)
-    //     .addReactant(DestroyMolecules.WATER)
-    //     .name(Component.literal("Methyl Acetate Hydrolysis"))
-    //     .build();
+    public static Reaction METHYL_ACETATE_ACID_HYDROLYSIS = Reaction.builder()
+        .addReactant(DestroyMolecules.METHYL_ACETATE)
+        .addReactant(DestroyMolecules.WATER)
+        .addProduct(DestroyMolecules.METHANOL)
+        .addProduct(DestroyMolecules.ACETIC_ACID)
+        .name(Component.literal("Methyl Acetate Acid Hydrolysis"))
+        .build();
 
     public static void register() {};
-
-    public static void main(String args[]) {
-        Mixture myMixture = new Mixture();
-        myMixture.addMolecule(DestroyMolecules.METHANOL, 1.0f).addMolecule(DestroyMolecules.CARBON_MONOXIDE, 1.0f);
-        myMixture.pee();
-    };
 }

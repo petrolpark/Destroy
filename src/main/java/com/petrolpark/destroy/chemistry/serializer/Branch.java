@@ -6,7 +6,7 @@ import java.util.List;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 
 public class Branch {
-    private List<Node> nodes = new ArrayList<>();
+    private List<Node> nodes = new ArrayList<>(); //list of Nodes in this Branch, not including Nodes in side Branches
     private Node startNode;
     private Node endNode;
 
@@ -43,7 +43,11 @@ public class Branch {
         return this;
     };
 
-    //Connects the START of the given Branch to the END of this Branch
+    /**
+     * Connects the <em>start</em> of the given Branch to the <em>end</em> of this Branch.
+     * Moves the end of this Branch to the end of the given Branch.
+     * @return The original Branch with the new Branch added.
+     */
     public Branch add(Branch branchToAdd, BondType bondType) {
         Edge newEdge = new Edge(endNode, branchToAdd.getStartNode(), bondType);
         nodes.addAll(branchToAdd.getNodes());
@@ -65,7 +69,7 @@ public class Branch {
                 };
             };
         };
-        for (Node node : nodes) {//unmark again afterwards
+        for (Node node : nodes) { //unmark again afterwards
             for (Edge edge : node.getEdges()) {
                 edge.marked = false;
             };
@@ -83,6 +87,14 @@ public class Branch {
             for (Branch branch : node.getSideBranches().keySet()) {
                 total += branch.getMass();
             };
+        };
+        return total;
+    };
+
+    public Float getMassOfLongestChain() {
+        float total = 0f;
+        for (Node node : nodes) {
+            total += node.getAtom().getElement().getMass();
         };
         return total;
     };

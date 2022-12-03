@@ -51,8 +51,7 @@ public class DestroyLang {
     /**
      * Returns a progress bar which changes color depending on how full it is
      * @param value
-     * @param maxValue Should not be < value
-     * @param bars How many total bars should be displayed (defaults to maxValue)
+     * @param maxValue Should not be greater than value
      * @return Pretty text component
      */
     public static MutableComponent barMeterComponent(int value, int maxValue) {
@@ -62,8 +61,8 @@ public class DestroyLang {
     /**
      * Returns a progress bar which changes color depending on how full it is
      * @param value
-     * @param maxValue Should not be < value
-     * @param bars How many total bars should be displayed
+     * @param maxValue Should not be greater than value
+     * @param totalBars How many total bars should be displayed
      * @return Pretty text component
      */
     public static MutableComponent barMeterComponent(int value, int maxValue, int totalBars) {

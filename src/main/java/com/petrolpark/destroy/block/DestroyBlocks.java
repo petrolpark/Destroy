@@ -33,6 +33,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class DestroyBlocks {
+    
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(ForgeRegistries.BLOCKS, Destroy.MOD_ID);
 
@@ -52,7 +53,7 @@ public class DestroyBlocks {
     public static final BlockEntry<BreezeBurnerBlock> BREEZE_BURNER = REGISTRATE.block("breeze_burner", BreezeBurnerBlock::new)
         .initialProperties(SharedProperties::stone)
         .properties(p -> p.color(MaterialColor.DEEPSLATE))
-        .addLayer(() -> RenderType::cutoutMipped)
+        //.addLayer(() -> RenderType::cutoutMipped)
         .item()
         .transform(customItemModel())
         .register();
