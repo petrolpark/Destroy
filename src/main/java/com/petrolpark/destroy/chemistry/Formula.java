@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Node;
@@ -270,6 +271,14 @@ public class Formula {
     };
 
     /**
+     * Get all the functional Groups in a Molecule.
+     * @return
+     */
+    public List<Group> getFunctionalGroups() {
+        return groups;
+    };
+
+    /**
      * Get the <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS Code</a> of this Formula or Group, with the given Atom as the first character.
      * @param atom The Atom to start with
      * @return FROWNS Code
@@ -329,6 +338,7 @@ public class Formula {
      * @param string
      */
     public static Formula deserialize(String FROWNSstring) {
+
         try {
             Formula formula;
 
@@ -343,54 +353,26 @@ public class Formula {
                 formula = cycleType.create();
             };
 
-            return formula.addAllHydrogens();
+            return formula.addAllHydrogens().refreshFunctionalGroups();
 
         } catch(Exception e) {
             throw new Error("Could not parse FROWNS String '" + FROWNSstring + "': " + e);
         }
     };
 
+    /**
+     * Checks this structure for any Groups it contains.
+     * @return This Formula.
+     */
+    public Formula refreshFunctionalGroups() {
+        this.groups = new ArrayList<>();
+        for (GroupFinder finder : GroupFinder.allGroupFinders()) {
+            groups.addAll(finder.findGroups(structure));
+        };
+        return this;
+    };
+
     //INTERNAL METHODS
-
-    private void checkGroups() {
-        for (Atom atom : structure.keySet()) {
-            if (atom.getElement() == Element.CARBON) {
-
-            };
-        };
-    };
-
-    /**
-     * Counts how many Bonds (of any Type) the given Atom has to Atoms of the given Element.
-     * (This counts total Bonds, not single-bond equivalents).
-     * @param atom
-     * @param element
-     */
-    public int bondsToElement(Atom atom, Element element) {
-        int count = 0;
-        for (Bond bond : structure.get(atom)) {
-            if (bond.getDestinationAtom().getElement() == element) {
-                count++;
-            };
-        };
-        return count;
-    };
-
-    /**
-     * Counts how many Bonds of the given Type the given Atom has to Atoms of the given Element.
-     * @param atom
-     * @param element
-     * @param bondType
-     */
-    public int bondsToElement(Atom atom, Element element, BondType bondType) {
-        int count = 0;
-        for (Bond bond : structure.get(atom)) {
-            if (bond.getDestinationAtom().getElement() == element && bond.getType() == bondType) {
-                count++;
-            }
-        };
-        return count;
-    };
 
     private Branch getMaximumBranch(Atom startAtom, Map<Atom, List<Bond>> structure) {
 
@@ -477,8 +459,8 @@ public class Formula {
 
     private Formula addGroupToStructure(Map<Atom, List<Bond>> structureToMutate, Atom rootAtom, Formula group, BondType bondType) {
         if (group.cycleType != CycleType.NONE) {
-            //TODO replace with Warning & 'return this', not Error
-            throw new IllegalStateException("Cannot add Cycles as side-groups - to create a Cyclic Molecule, start with the Cycle and use addGroupAtPosition()");
+            Destroy.LOGGER.warn("Cannot add Cycles as side-groups - to create a Cyclic Molecule, start with the Cycle and use addGroupAtPosition()");
+            return this;
         };
         structureToMutate.putAll(group.structure);
         addBondBetweenAtoms(rootAtom, group.startingAtom, bondType);

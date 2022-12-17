@@ -42,11 +42,18 @@ public class DestroyMolecules {
         .structure(Formula.deserialize("linear:CCO"))
         .build();
 
+    public static Molecule GENERIC_ACID_ANHYDRIDE = builder()
+        .id("generic_acid_anhydride")
+        .structure(Formula.deserialize("linear:RC(=O)OC(=O)R"))
+        .hypothetical()
+        .translationKey("acid_anhydride")
+        .build();
+
     public static Molecule GENERIC_ACYL_CHLORIDE = builder()
         .id("generic_acyl_chloride")
         .structure(Formula.deserialize("linear:RC(=O)Cl"))
         .hypothetical()
-        .translationKey("chloride")
+        .translationKey("acyl_chloride")
         .build();
 
     public static Molecule GENERIC_ALCOHOL = builder()
@@ -58,9 +65,16 @@ public class DestroyMolecules {
 
     public static Molecule GENERIC_ALKENE = builder()
         .id("generic_alkene")
-        .structure(Formula.deserialize("linear:RC(R)=C(R)R"))
+        .structure(Formula.deserialize("linear:RC=(R)C(R)R"))
         .hypothetical()
         .translationKey("alkene")
+        .build();
+
+    public static Molecule GENERIC_AMIDE = builder()
+        .id("generic_amide")
+        .structure(Formula.deserialize("linear:RC(=O)N(R)R"))
+        .hypothetical()
+        .translationKey("amide")
         .build();
     
     public static Molecule GENERIC_AMINE = builder()
@@ -72,9 +86,9 @@ public class DestroyMolecules {
 
     public static Molecule GENERIC_CARBONYL = builder()
         .id("generic_carbonyl")
-        .structure(Formula.deserialize("linear:RC(R)=O"))
+        .structure(Formula.deserialize("linear:RC=(R)O"))
         .hypothetical()
-        .translationKey("")
+        .translationKey("carbonyl")
         .build();
 
     public static Molecule GENERIC_CARBOXYLIC_ACID = builder()
@@ -89,6 +103,13 @@ public class DestroyMolecules {
         .structure(Formula.deserialize("linear:RCl"))
         .hypothetical()
         .translationKey("chloride")
+        .build();
+
+    public static Molecule GENERIC_ESTER = builder()
+        .id("generic_ester")
+        .structure(Formula.deserialize("linear:RC(=O)OR"))
+        .hypothetical()
+        .translationKey("ester")
         .build();
 
     public static Molecule GENERIC_NITRILE = builder()

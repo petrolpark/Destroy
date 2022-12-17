@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
-import com.simibubi.create.content.contraptions.processing.HeatCondition;
 import com.simibubi.create.foundation.utility.NBTHelper;
 
 import net.minecraft.nbt.CompoundTag;

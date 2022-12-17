@@ -25,28 +25,28 @@ public class Reaction {
     };
 
     /**
-     * Whether this Molecule gets consumed in this Reaction (does not include Catalysts)
+     * Whether this Molecule gets consumed in this Reaction (does not include Catalysts).
      */
     public Boolean containsReactant(Molecule molecule) {
         return this.reactants.keySet().contains(molecule);
     };
 
     /**
-     * Whether this Molecule is created in this Reaction
+     * Whether this Molecule is created in this Reaction.
      */
     public Boolean containsProduct(Molecule molecule) {
         return this.products.keySet().contains(molecule);
     };
 
     /**
-     * All Molecules which are consumed in this Reaction (but not their molar ratios)
+     * All Molecules which are consumed in this Reaction (but not their molar ratios).
      */
     public Set<Molecule> getReactants() {
         return this.reactants.keySet();
     };
 
     /**
-     * All Molecules which are created in this Reaction (but not their molar ratios)
+     * All Molecules which are created in this Reaction (but not their molar ratios).
      */
     public Set<Molecule> getProducts() {
         return this.products.keySet();
@@ -152,7 +152,6 @@ public class Reaction {
         };
 
         public Reaction build() {
-            System.out.println("therre are "+reactants.size()+" reactants");
             Reaction newReaction = new Reaction(
                 reactants,
                 products,

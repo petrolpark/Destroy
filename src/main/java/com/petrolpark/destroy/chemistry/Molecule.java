@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.util.DestroyLang;
 
 import net.minecraft.network.chat.Component;
@@ -162,6 +163,14 @@ public class Molecule {
         return this.displayName;
     };
 
+    /**
+     * Get all the functional Groups contained by this Molecule.
+     * @return
+     */
+    public List<Group> getFunctionalGroups() {
+        return this.structure.getFunctionalGroups();
+    };
+
     public static class MoleculeBuilder {
 
         private Molecule molecule;
@@ -179,7 +188,8 @@ public class Molecule {
         /**
          * The internal ID for this Molecule.
          * By default, the translation key for this Molecule will be set to its ID (change with {@link Molecule.MoleculeBuilder#translationKey translationKey()}).
-         * @param id
+         * If a Molecule is declared without an ID it will not be added to the Molecule register.
+         * @param id Must be unique.
          */
         public MoleculeBuilder id(String id) {
             molecule.id = id;
@@ -327,10 +337,6 @@ public class Molecule {
             molecule.mass = calculateMass();
             molecule.displayName = displayName;
 
-            if (molecule.id == null) {
-                throw new IllegalStateException("Molecule's ID has not been declared");
-            };
-
             if (molecule.structure == null) {
                 throw new IllegalStateException("Molecule's structure has not been declared");
             };
@@ -347,7 +353,13 @@ public class Molecule {
                 molecule.dipoleMoment = calculateDipoleMoment();
             };
 
-            MOLECULES.put(molecule.id, molecule);
+            molecule.refreshFunctionalGroups();
+
+            if (molecule.id == null) {
+                Destroy.LOGGER.warn("Molecule's ID has not been declared");
+            } else {
+                MOLECULES.put(molecule.id, molecule);
+            };
 
             return molecule;
         };
@@ -370,6 +382,10 @@ public class Molecule {
             //TODO calculate Dipole Moment
             return 0;
         };
+    };
+
+    private void refreshFunctionalGroups() {
+        structure.refreshFunctionalGroups();
     };
 
 };
