@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.content.contraptions.processing.HeatCondition;
 
@@ -11,18 +12,13 @@ import net.minecraft.network.chat.Component;
 
 public class Reaction {
     private Map<Molecule, Integer> reactants, products, orders;
-    private float rateConstant;
+    private Float preexponentialFactor;
+    private Float activationEnergy;
     private Component name;
-    private HeatCondition heatRequirement;
 
-    private Reaction(Map<Molecule, Integer> reactants, Map<Molecule, Integer> products, Map<Molecule, Integer> orders, float rateConstant, Component name, HeatCondition heatRequirement) {
-        this.reactants = reactants;
-        this.products = products;
-        this.orders = orders;
-        this.rateConstant = rateConstant;
-        this.name = name;
-        this.heatRequirement = heatRequirement;
-    };
+    private static final Float GAS_CONSTANT = 8.3145f;
+
+    private Reaction() {};
 
     /**
      * Whether this Molecule gets consumed in this Reaction (does not include Catalysts).
@@ -52,6 +48,14 @@ public class Reaction {
         return this.products.keySet();
     };
 
+    /**
+     * The rate constant of this Reaction at the given temperature.
+     * @param temperature (in Kelvins).
+     */
+    public Float getRateConstant(Float temperature) {
+        return (float)(preexponentialFactor * Math.exp(-((activationEnergy * 1000) / (GAS_CONSTANT * temperature))));
+    };
+
     public Integer getReactantMolarRatio(Molecule reactant) {
         if (!reactants.keySet().contains(reactant)) {
             return 0;
@@ -72,10 +76,6 @@ public class Reaction {
         return this.orders;
     };
 
-    public Float getRateConstant() {
-        return this.rateConstant;
-    };
-
     public Component getName() {
         return this.name;
     };
@@ -84,24 +84,16 @@ public class Reaction {
         return new ReactionBuilder();
     };
 
-    public Boolean willTakePlaceWithHeat(HeatCondition heatCondition) {
-        if (heatRequirement == HeatCondition.SUPERHEATED || heatRequirement == HeatCondition.valueOf("COOLED")) {
-            return heatCondition == heatRequirement;
-        } else if (heatRequirement == HeatCondition.NONE) {
-            return heatCondition != HeatCondition.valueOf("COOLED");
-        } else { //if Heat Requirement is "HEATED"
-            return heatCondition == HeatCondition.SUPERHEATED || heatCondition == HeatCondition.HEATED;
-        }
-    };
-
     public static class ReactionBuilder {
 
-        Map<Molecule, Integer> reactants = new HashMap<>();
-        Map<Molecule, Integer> products = new HashMap<>();
-        Map<Molecule, Integer> orders = new HashMap<>();
-        float rateConstant;
-        Component name = Component.empty();
-        HeatCondition heatRequirement = HeatCondition.NONE;
+        Reaction reaction;
+
+        public ReactionBuilder() {
+            reaction = new Reaction();
+            reaction.reactants = new HashMap<>();
+            reaction.products = new HashMap<>();
+            reaction.orders = new HashMap<>();
+        };
 
         public ReactionBuilder addReactant(Molecule molecule) {
             return addReactant(molecule, 1);
@@ -112,8 +104,8 @@ public class Reaction {
         };
 
         public ReactionBuilder addReactant(Molecule molecule, int ratio, int order) {
-            reactants.put(molecule, ratio);
-            orders.put(molecule, order);
+            reaction.reactants.put(molecule, ratio);
+            reaction.orders.put(molecule, order);
             return this;
         };
 
@@ -122,50 +114,63 @@ public class Reaction {
         };
 
         public ReactionBuilder addProduct(Molecule molecule, int ratio) {
-            products.put(molecule, ratio);
+            reaction.products.put(molecule, ratio);
             return this;
         };
 
         public ReactionBuilder addCatalyst(Molecule molecule, int order) {
-            orders.put(molecule, order);
+            reaction.orders.put(molecule, order);
             return this;
         };
 
-        public ReactionBuilder rateConstant(float rateConstant) {
-            this.rateConstant = rateConstant;
+        /**
+         * The pre-exponential factor in the Arrhenius equation for this Reaction.
+         * @param preexponentialFactor
+         */
+        public ReactionBuilder preexponentialFactor(Float preexponentialFactor) {
+            reaction.preexponentialFactor = preexponentialFactor;
+            return this;
+        };
+
+        /**
+         * The activation energy (in kJ/mol) for this Reaction.
+         * If no activation energy is given, defaults to 100kJ/mol.
+         * @param activationEnergy
+         */
+        public ReactionBuilder activationEnergy(Float activationEnergy) {
+            reaction.activationEnergy = activationEnergy;
             return this;
         };
 
         public ReactionBuilder translationKey(String translationKey) {
-            this.name = DestroyLang.translate(translationKey).component();
+            reaction.name = DestroyLang.translate(translationKey).component();
             return this;
         };
 
         public ReactionBuilder name(Component name) {
-            this.name = name;
-            return this;
-        };
-
-        public ReactionBuilder heatRequirement(HeatCondition heatRequirement) {
-            this.heatRequirement = heatRequirement;
+            reaction.name = name;
             return this;
         };
 
         public Reaction build() {
-            Reaction newReaction = new Reaction(
-                reactants,
-                products,
-                orders,
-                rateConstant,
-                name,
-                heatRequirement);
-            for (Molecule reactant : reactants.keySet()) {
-                reactant.addReactantReaction(newReaction);
+
+            if (reaction.activationEnergy == null) {
+                reaction.activationEnergy = 100f;
+                Destroy.LOGGER.warn("Activation energy of reaction was not supplied and had to be estimated.");
             };
-            for (Molecule product : products.keySet()) {
-                product.addProductReaction(newReaction);
+
+            if (reaction.activationEnergy == null) {
+                reaction.activationEnergy = 1e6f;
+                Destroy.LOGGER.warn("Pre-exponential factor of reaction was not supplied and had to be estimated.");
             };
-            return newReaction;
+
+            for (Molecule reactant : reaction.reactants.keySet()) {
+                reactant.addReactantReaction(reaction);
+            };
+            for (Molecule product : reaction.products.keySet()) {
+                product.addProductReaction(reaction);
+            };
+            return reaction;
         };
     };
 }

@@ -88,6 +88,11 @@ public class Molecule {
         return this.mass;
     };
 
+    public Formula copyStructure() {
+        Formula structureCopy = this.structure;
+        return structureCopy;
+    };
+
     public Set<Atom> getAtoms() {
         return structure.getAllAtoms();
     };
@@ -355,8 +360,8 @@ public class Molecule {
 
             molecule.refreshFunctionalGroups();
 
-            if (molecule.id == null) {
-                Destroy.LOGGER.warn("Molecule's ID has not been declared");
+            if (molecule.id == null && molecule.nameSpace != "novel") {
+                throw new IllegalStateException("Molecule's ID has not been declared.");
             } else {
                 MOLECULES.put(molecule.id, molecule);
             };

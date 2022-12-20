@@ -12,7 +12,12 @@ public class EsterGroup extends Group {
     private Atom carbonylOxygen;
     private Atom bridgeOxygen;
 
+    public EsterGroup() {
+        super();
+    };
+
     public EsterGroup(Atom carbonylCarbon, Atom alcoholCarbon, Atom carbonylOxygen, Atom bridgeOxygen) {
+        super();
         this.carbonylCarbon = carbonylCarbon;
         this.alcoholCarbon = alcoholCarbon;
         this.carbonylOxygen = carbonylOxygen;
@@ -38,6 +43,11 @@ public class EsterGroup extends Group {
     @Override
     public Molecule getExampleMolecule() {
         return DestroyMolecules.GENERIC_ESTER;
+    };
+
+    @Override
+    public String getID() {
+        return "ESTER";
     };
     
 };

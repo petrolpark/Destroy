@@ -49,18 +49,27 @@ public class Formula {
     };
 
     /**
-     * Generates an Atom of the Element as the starting point for a Molecule or Group
+     * Moves the currently selected Atom to the one given (if it exists in the structure).
+     * @param atom
+     */
+    public Formula moveTo(Atom atom) {
+        if (structure.containsKey(atom)) {
+            currentAtom = atom;
+        };
+        return this;
+    };
+
+    /**
+     * Generates an Atom of the Element as the starting point for a Molecule or Group.
      * @param element
-     * @return
      */
     public static Formula atom(Element element) {
         return new Formula(new Atom(element));
     };
 
     /**
-     * A Cn Group (without Hydrogens)
+     * A Cn Group (without Hydrogens).
      * @param length
-     * @return
      */
     public static Formula carbonChain(int length) {
         Formula carbonChain = Formula.atom(Element.CARBON);
@@ -71,26 +80,21 @@ public class Formula {
     };
 
     /**
-     * An -OH Group
-     * @return
+     * An -OH Group.
      */
     public static Formula alcohol() {
         return Formula.atom(Element.OXYGEN).addAtom(Element.HYDROGEN);
     };
 
     /**
-     * An acidic -OH Group
-     * @param pKa
-     * @return
+     * An acidic -OH Group.
      */
     public static Formula acidicAlcohol(float pKa) {
         return Formula.atom(Element.OXYGEN).addAcidicProton(pKa);
     };
 
     /**
-     * A -COOH Group
-     * @param pKa
-     * @return
+     * A -COOH Group.
      */
     public static Formula carboxylicAcid(float pKa) {
         return Formula.atom(Element.CARBON)
@@ -99,8 +103,7 @@ public class Formula {
     };
 
     /**
-     * A benzene ring (without Hydrogens)
-     * @return
+     * A benzene ring (without Hydrogens).
      */
     public static Formula benzene() {
         Atom firstAtom = new Atom(Element.CARBON);
@@ -121,8 +124,7 @@ public class Formula {
 
     /**
      * Adds a singly-bonded Atom of an Element onto the current Atom, staying on the current Atom
-     * @param element The Element of the Atom to generate to be added (in its default form)
-     * @return
+     * @param element The Element of the Atom to generate to be added (in its default form).
      */
     public Formula addAtom(Element element) {
         return addAtom(element, BondType.SINGLE);
@@ -218,6 +220,18 @@ public class Formula {
     public Formula addGroupToPosition(Formula group, int position, BondType bondType) {
         addGroupToStructure(structure, cyclicAtoms.get(position), group, bondType);
         currentAtom = group.currentAtom;
+        return this;
+    };
+
+    public Formula remove(Atom atom) {
+        if (atom == currentAtom) {
+            throw new IllegalStateException("Cannot remove the currently selected Atom from a structure being built.");
+        };
+        
+        for (Bond bond : structure.get(atom)) {
+            structure.get(bond.getSourceAtom()).remove(bond);
+        };
+        structure.remove(atom);
         return this;
     };
 

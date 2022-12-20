@@ -11,7 +11,12 @@ public class AmideGroup extends Group {
     private Atom oxygen;
     private Atom nitrogen;
 
+    public AmideGroup() {
+        super();
+    };
+
     public AmideGroup(Atom carbon, Atom oxygen, Atom nitrogen) {
+        super();
         this.carbon = carbon;
         this.oxygen = oxygen;
         this.nitrogen = nitrogen;
@@ -32,6 +37,11 @@ public class AmideGroup extends Group {
     @Override
     public Molecule getExampleMolecule() {
         return DestroyMolecules.GENERIC_AMIDE;
+    };
+
+    @Override
+    public String getID() {
+        return "AMIDE";
     };
     
 };

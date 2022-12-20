@@ -13,7 +13,12 @@ public class AlcoholGroup extends Group {
 
     private int degree;
 
+    public AlcoholGroup() {
+        super();
+    };
+
     public AlcoholGroup(Atom carbon, Atom oxygen, Atom hydrogen, int degree) {
+        super();
         this.carbon = carbon;
         this.oxygen = oxygen;
         this.hydrogen = hydrogen;
@@ -39,6 +44,11 @@ public class AlcoholGroup extends Group {
     @Override
     public Molecule getExampleMolecule() {
         return DestroyMolecules.GENERIC_ALCOHOL;
+    };
+
+    @Override
+    public String getID() {
+        return "ALCOHOL";
     };
     
 };

@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.partial.DestroyBlockPartials;
+import com.petrolpark.destroy.chemistry.index.DestroyGenericReactions;
 import com.petrolpark.destroy.chemistry.index.DestroyGroupFinder;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.DestroyReactions;
@@ -52,6 +53,7 @@ public class Destroy {
         DestroyGroupFinder.register();
         DestroyMolecules.register();
         DestroyReactions.register();
+        DestroyGenericReactions.register();
 
         // Events
         MinecraftForge.EVENT_BUS.register(this);

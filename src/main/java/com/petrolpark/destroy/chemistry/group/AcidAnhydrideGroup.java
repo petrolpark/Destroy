@@ -13,7 +13,12 @@ public class AcidAnhydrideGroup extends Group {
     private Atom secondOxygen;
     private Atom bridgingOxygen;
 
+    public AcidAnhydrideGroup() {
+        super();
+    };
+
     public AcidAnhydrideGroup(Atom firstCarbon, Atom firstOxygen, Atom secondCarbon, Atom secondOxygen, Atom bridgingOxygen) {
+        super();
         this.firstCarbon = firstCarbon;
         this.firstOxygen = firstOxygen;
         this.secondCarbon = secondCarbon;
@@ -44,6 +49,11 @@ public class AcidAnhydrideGroup extends Group {
     @Override
     public Molecule getExampleMolecule() {
         return DestroyMolecules.GENERIC_ACID_ANHYDRIDE;
+    };
+
+    @Override
+    public String getID() {
+        return "ACID_ANHYDRIDE";
     };
     
 };

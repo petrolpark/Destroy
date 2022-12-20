@@ -19,7 +19,7 @@ public class Mixture {
     private Map<Molecule, Float> contents;
     private List<Molecule> acids;
     private List<Reaction> possibleReactions;
-    private int temperature;
+    private float temperature;
 
     public Mixture() {
         contents = new HashMap<>();
@@ -29,7 +29,7 @@ public class Mixture {
 
     public CompoundTag writeNBT() {
         CompoundTag compound = new CompoundTag();
-        compound.putInt("Temperature", temperature);
+        compound.putFloat("Temperature", temperature);
         compound.put("Contents", NBTHelper.writeCompoundList(contents.keySet(), (molecule) -> {
             CompoundTag moleculeTag = new CompoundTag();
             moleculeTag.putString("Molecule", molecule.getFullID());
@@ -164,7 +164,7 @@ public class Mixture {
      * @param reaction
      */
     private float calculateReactionRate(Reaction reaction) {
-        float rate = reaction.getRateConstant();
+        float rate = reaction.getRateConstant(temperature);
         for (Molecule molecule : reaction.getOrders().keySet()) {
             rate = rate * (float)Math.pow(contents.get(molecule), reaction.getOrders().get(molecule));
         };
@@ -178,7 +178,6 @@ public class Mixture {
             newPossibleReactions.addAll(possibleReactant.getReactantReactions());
         };
         for (Reaction reaction : newPossibleReactions) {
-            //TODO add temperature check
             Boolean reactionHasAllReactants = true;
             for (Molecule necessaryReactantOrCatalyst : reaction.getOrders().keySet()) {
                 if (getConcentrationOf(necessaryReactantOrCatalyst) == 0) {

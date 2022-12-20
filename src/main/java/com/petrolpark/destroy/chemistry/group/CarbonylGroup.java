@@ -12,7 +12,12 @@ public class CarbonylGroup extends Group {
 
     private Boolean isKetone;
 
+    public CarbonylGroup() {
+        super();
+    };
+
     public CarbonylGroup(Atom carbon, Atom oxygen, Boolean isKetone) {
+        super();
         this.carbon = carbon;
         this.oxygen = oxygen;
         this.isKetone = isKetone;
@@ -36,6 +41,11 @@ public class CarbonylGroup extends Group {
     @Override
     public Molecule getExampleMolecule() {
         return DestroyMolecules.GENERIC_CARBONYL;
+    };
+
+    @Override
+    public String getID() {
+        return "CARBONYL";
     };
     
 };

@@ -12,6 +12,10 @@ public class ChlorideGroup extends Group {
 
     private int degree;
 
+    public ChlorideGroup() {
+        super();
+    };
+
     public ChlorideGroup(Atom carbon, Atom chlorine, int degree) {
         this.carbon = carbon;
         this.chlorine = chlorine;
@@ -33,6 +37,11 @@ public class ChlorideGroup extends Group {
     @Override
     public Molecule getExampleMolecule() {
         return DestroyMolecules.GENERIC_CHLORIDE;
+    };
+
+    @Override
+    public String getID() {
+        return "CHLORIDE";
     };
     
 };

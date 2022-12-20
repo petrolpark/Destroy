@@ -11,7 +11,12 @@ public class CarboxylicAcidGroup extends Group {
     private Atom alcoholOxygen;
     private Atom proton;
 
+    public CarboxylicAcidGroup() {
+        super();
+    };
+
     public CarboxylicAcidGroup(Atom carbon, Atom carbonylOxygen, Atom alcoholOxygen, Atom proton) {
+        super();
         this.carbon = carbon;
         this.carbonylOxygen = carbonylOxygen;
         this.alcoholOxygen = alcoholOxygen;
@@ -37,5 +42,10 @@ public class CarboxylicAcidGroup extends Group {
     @Override
     public Molecule getExampleMolecule() {
         return DestroyMolecules.GENERIC_CARBOXYLIC_ACID;
+    };
+
+    @Override
+    public String getID() {
+        return "CARBOXYLIC_ACID";
     };
 };

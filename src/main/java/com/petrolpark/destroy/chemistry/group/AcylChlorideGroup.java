@@ -12,6 +12,7 @@ public class AcylChlorideGroup extends Group {
     private Atom chlorine;
 
     public AcylChlorideGroup(Atom carbon, Atom oxygen, Atom chlorine) {
+        super();
         this.carbon = carbon;
         this.oxygen = oxygen;
         this.chlorine = chlorine;
@@ -32,6 +33,11 @@ public class AcylChlorideGroup extends Group {
     @Override
     public Molecule getExampleMolecule() {
         return DestroyMolecules.GENERIC_ACYL_CHLORIDE;
+    };
+    
+    @Override
+    public String getID() {
+        return "ACYL_CHLORIDE";
     };
     
 };
