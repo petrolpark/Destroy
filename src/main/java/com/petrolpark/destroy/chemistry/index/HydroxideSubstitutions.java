@@ -19,7 +19,7 @@ public class HydroxideSubstitutions extends SingleGroupGenericReaction<ChlorideG
     public Reaction generateReaction(GenericReactant<ChlorideGroup> reactant) {
         Molecule reactantMolecule = reactant.getMolecule();
         ChlorideGroup chlorideGroup = reactant.getGroup();
-        Molecule productMolecule = moleculeBuilder().structure(reactantMolecule.copyStructure()
+        Molecule productMolecule = moleculeBuilder().structure(reactantMolecule.shallowCopyStructure()
             .moveTo(chlorideGroup.getCarbon())
             .addGroup(Formula.alcohol())
             .remove(chlorideGroup.getChlorine())
@@ -29,7 +29,7 @@ public class HydroxideSubstitutions extends SingleGroupGenericReaction<ChlorideG
             .addReactant(DestroyMolecules.HYDROXIDE)
             .addProduct(productMolecule)
             .addProduct(DestroyMolecules.CHLORIDE)
-            .preexponentialFactor(1e6f)
+            .preexponentialFactor(1e15f)
             .activationEnergy(100f)
             .build();
     };

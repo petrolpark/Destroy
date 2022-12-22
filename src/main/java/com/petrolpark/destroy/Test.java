@@ -1,7 +1,7 @@
 package com.petrolpark.destroy;
 
 import com.petrolpark.destroy.chemistry.Formula;
-import com.petrolpark.destroy.chemistry.Group;
+import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Molecule.MoleculeBuilder;
 import com.petrolpark.destroy.chemistry.index.DestroyGenericReactions;
@@ -22,11 +22,14 @@ public class Test {
             .structure(Formula.deserialize("linear:CCl"))
             .id("test_molecule")
             .build();
-        System.out.println(myMolecule.getSerlializedChemicalFormula());
-        for (Group group : myMolecule.getFunctionalGroups()) {
-            System.out.println(group.getExampleMolecule().getName());
-            System.out.println(Group.getReactionsOf(group));
-        };
+
+        Mixture myMixture = new Mixture();
+        myMixture
+            .addMolecule(myMolecule, 1f)
+            .addMolecule(DestroyMolecules.HYDROXIDE, 1f)
+            .react()
+            ;
+        myMixture.pee();
         
     };
 

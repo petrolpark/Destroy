@@ -9,7 +9,7 @@ import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
 
 public abstract class Group {
 
-    public static Map<String, Set<Class<? extends GenericReaction>>> groupIDsAndReactions = new HashMap<>();
+    public static Map<String, Set<GenericReaction>> groupIDsAndReactions = new HashMap<>();
 
     public Group() {
         groupIDsAndReactions.putIfAbsent(getID(), new HashSet<>());
@@ -23,8 +23,16 @@ public abstract class Group {
      * Get the Generic Reactions which the given functional Group participates in.
      * @param group
      */
-    public static final Set<Class<? extends GenericReaction>> getReactionsOf(Group group) {
-        System.out.println("This is "+group.getID());
+    public static final Set<GenericReaction> getReactionsOf(Group group) {
+        //System.out.println("This is "+group.getID());
         return groupIDsAndReactions.get(group.getID());
+    };
+
+    /**
+     * Get the Generic Reactions which the functional Group identified by the given ID participates in.
+     * @param ID
+     */
+    public static final Set<GenericReaction> getReactionsOfGroupByID(String ID) {
+        return groupIDsAndReactions.get(ID);
     };
 };

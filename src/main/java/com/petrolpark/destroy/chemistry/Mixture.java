@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
+import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
+import com.petrolpark.destroy.chemistry.genericreaction.SingleGroupGenericReaction;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.simibubi.create.foundation.utility.NBTHelper;
 
@@ -17,14 +20,25 @@ import net.minecraft.nbt.CompoundTag;
 public class Mixture {
 
     private Map<Molecule, Float> contents;
+
     private List<Molecule> acids;
+    private List<Molecule> novelMolecules;
+
     private List<Reaction> possibleReactions;
+    private Map<String, List<GenericReactant<?>>> groupIDsAndMolecules;
+
     private float temperature;
 
     public Mixture() {
         contents = new HashMap<>();
+
+        acids = new ArrayList<>();
+        novelMolecules = new ArrayList<>();
+
         possibleReactions = new ArrayList<>();
-        temperature = 0;
+        groupIDsAndMolecules = new HashMap<>();
+        
+        temperature = 273f;
     };
 
     public CompoundTag writeNBT() {
@@ -94,6 +108,7 @@ public class Mixture {
                 for (Molecule reactant : reaction.getReactants()) {
                     if (contents.get(reactant) < reaction.getReactantMolarRatio(reactant) * molesOfReaction) { //determine the limiting reagent, if there is one
                         molesOfReaction = contents.get(reactant);
+                        System.out.println("We're refreshing reactions because we ran out of a reactant.");
                         shouldRefreshPossibleReactions = true;
                     };
                 };
@@ -103,21 +118,32 @@ public class Mixture {
                 };
 
                 for (Molecule product : reaction.getProducts()) {
-                    if (getConcentrationOf(product) == 0f) {
-                        shouldRefreshPossibleReactions = true;
-                        addMolecule(product, molesOfReaction * reaction.getProductMolarRatio(product), false);
-                    } else {
-                        changeConcentrationOf(product, molesOfReaction * reaction.getProductMolarRatio(product));
+
+                    //Check if a new novel Molecule already exists in solution
+                    if (product.isNovel() && getConcentrationOf(product) == 0f) {
+                        Boolean matchFound = false;
+                        for (Molecule novelMolecule : novelMolecules) {
+                            if (product.getFullID().equals(novelMolecule.getFullID())) {
+                                matchFound = true;
+                                product = novelMolecule;
+                                break;
+                            };
+                        };
+                        if (!matchFound) {
+                            novelMolecules.add(product);
+                            shouldRefreshPossibleReactions = true;
+                            addMolecule(product, molesOfReaction * reaction.getProductMolarRatio(product), false);
+                            continue;
+                        };
                     };
+
+                    changeConcentrationOf(product, molesOfReaction * reaction.getProductMolarRatio(product));
                 };
             };
 
             for (Molecule molecule : oldContents.keySet()) {
-                if (!areVeryClose(oldContents.get(molecule), contents.get(molecule))) {
+                if (!areVeryClose(oldContents.get(molecule), getConcentrationOf(molecule))) {
                     concentrationsChanged = true;
-                };
-                if (areVeryClose(oldContents.get(molecule), 0f)) {
-                    contents.remove(molecule);
                 };
             };
 
@@ -131,31 +157,82 @@ public class Mixture {
     };
 
     private Mixture addMolecule(Molecule molecule, float concentration, Boolean shouldRefreshReactions) {
+
         if (molecule.isHypothetical()) {
             throw new IllegalStateException("Cannot add hypothetical Molecule "+molecule.getFullID()+ " to a real Mixture.");
         };
+
         contents.put(molecule, concentration);
+
         // if (molecule.isAcidic()) { //TODO fiddle about with acids
         //     acids.add(molecule);
         // };
-        if (shouldRefreshReactions) refreshPossibleReactions();
+
+        List<Group> functionalGroups = molecule.getFunctionalGroups();
+        if (functionalGroups.size() != 0) {
+            for (Group group : functionalGroups) {
+                String groupID = group.getID();
+                if (!groupIDsAndMolecules.containsKey(groupID)) {
+                    groupIDsAndMolecules.put(groupID, new ArrayList<>());
+                };
+                groupIDsAndMolecules.get(groupID).add(new GenericReactant<>(molecule, group));
+            };
+        };
+
+        if (shouldRefreshReactions) {
+            System.out.println("We're refreshing reactions because the addy thing said we should");
+            refreshPossibleReactions();
+        };
+        return this;
+    };
+
+    private Mixture removeMolecule(Molecule molecule) {
+        if (acids.contains(molecule)) {
+            //TODO remove from acids
+        };
+
+        List<Group> functionalGroups = molecule.getFunctionalGroups();
+        if (functionalGroups.size() != 0) {
+            for (Group group : functionalGroups) {
+                groupIDsAndMolecules.get(group.getID()).removeIf((reactant) -> {
+                    return reactant.getMolecule() == molecule;
+                });
+            };
+        };
+
+        contents.remove(molecule);
+
         return this;
     };
 
     /**
      * Alters the concentration of a Molecule in a solution.
-     * @param molecule If not present in the Mixture, an error will be raised (use {@link Mixture#addMolecule addMolecule()} instead). If this is the Proton, the concentrations of the conjugate bases in this solution will also be altered.
+     * @param molecule If not present in the Mixture, this Molecule will be added to the Mixture and the possible Reactions will be altered.
      * @param change The <em>change</em> in concentration, not the new value (can be positive or negative).
      */
     private Mixture changeConcentrationOf(Molecule molecule, Float change) {
         Float currentConcentration = getConcentrationOf(molecule);
-        if (molecule == DestroyMolecules.PROTON) {
 
+        if (molecule == DestroyMolecules.PROTON) {
+            return this; //concentration of H+ should never be altered by changing H+ concentration directly - only by changing concentration of acids
         };
-        if (!contents.containsKey(molecule)) {
-            throw new IllegalStateException("Cannot change concentration of Molecule '"+molecule.getFullID() + "' if it is not in the Mixture");
+
+        if (currentConcentration == 0f) {
+            if (change > 0) {
+                addMolecule(molecule, change, true);
+            } else {
+                Destroy.LOGGER.warn("Attempted to change concentration of a Molecule which was not in the Mixture.");
+            };
+            
         };
-        contents.replace(molecule, Math.max(0, currentConcentration + change));
+
+        float newConcentration = currentConcentration + change;
+        if (newConcentration <= 0f) {
+            removeMolecule(molecule);
+        } else {
+            contents.replace(molecule, newConcentration);
+        };
+        
         return this;
     };
 
@@ -172,8 +249,22 @@ public class Mixture {
     };
 
     private void refreshPossibleReactions() {
+        System.out.println("refreshing reactions for some god forsaken reason");
         possibleReactions = new ArrayList<>();
-        Set<Reaction> newPossibleReactions = new LinkedHashSet<>();
+        Set<Reaction> newPossibleReactions = new HashSet<>();
+
+        //Generate specific Generic Reactions
+        for (String id : groupIDsAndMolecules.keySet()) {
+            for (GenericReaction genericReaction : Group.getReactionsOfGroupByID(id)) {
+                if (genericReaction.involvesSingleGroup()) { //Generic Reactions involving only one functional Group
+                    newPossibleReactions.addAll(specifySingleGroupGenericReactions(genericReaction, groupIDsAndMolecules.get(id)));
+                } else { //Generic Reactions involving two functional Groups
+                    //TODO
+                };
+            };
+        };
+
+        //All Reactions
         for (Molecule possibleReactant : contents.keySet()) {
             newPossibleReactions.addAll(possibleReactant.getReactantReactions());
         };
@@ -189,6 +280,17 @@ public class Mixture {
                 possibleReactions.add(reaction);
             };
         };
+
+    };
+
+    @SuppressWarnings("unchecked")
+    private <T extends Group> List<Reaction> specifySingleGroupGenericReactions(GenericReaction genericReaction, List<GenericReactant<?>> reactants) {
+        SingleGroupGenericReaction<T> singleGroupGenericReaction = (SingleGroupGenericReaction<T>) genericReaction;
+        List<Reaction> reactions = new ArrayList<>();
+        for (GenericReactant<?> reactant : reactants) {
+            reactions.add(singleGroupGenericReaction.generateReaction((GenericReactant<T>)reactant));
+        };
+        return reactions;
     };
 
     private Boolean areVeryClose(Float f1, Float f2) {

@@ -103,7 +103,7 @@ public class DestroyGroupFinder extends GroupFinder {
     };
 
     public static void register() {
-        DestroyGroupFinder finder = new DestroyGroupFinder();
+        new DestroyGroupFinder();
     };
     
 };

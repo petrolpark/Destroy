@@ -15,7 +15,7 @@ import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Node;
 
-public class Formula {
+public class Formula implements Cloneable {
 
     private Map<Atom, List<Bond>> structure;
     private Atom startingAtom;
@@ -215,7 +215,6 @@ public class Formula {
      * @param group
      * @param position Which positions correspond to which Atoms can be found <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">here</a>.
      * @param bondType Defaults to SINGLE
-     * @return
      */
     public Formula addGroupToPosition(Formula group, int position, BondType bondType) {
         addGroupToStructure(structure, cyclicAtoms.get(position), group, bondType);
@@ -223,13 +222,23 @@ public class Formula {
         return this;
     };
 
+    /**
+     * Removes the given Atom, without moving the currently selected Atom.
+     * @param atom If this is the currently selected Atom, an error will be raised.
+     */
     public Formula remove(Atom atom) {
+
+        if (!structure.containsKey(atom)) {
+            throw new IllegalStateException("Cannot remove "+atom.getElement().getSymbol()+" atom (does not exist).");
+        };
         if (atom == currentAtom) {
             throw new IllegalStateException("Cannot remove the currently selected Atom from a structure being built.");
         };
         
-        for (Bond bond : structure.get(atom)) {
-            structure.get(bond.getSourceAtom()).remove(bond);
+        for (Bond bondToOtherAtom : structure.get(atom)) {
+            structure.get(bondToOtherAtom.getDestinationAtom()).removeIf(bondToThisAtom -> {
+                return bondToThisAtom.getDestinationAtom() == atom;
+            });
         };
         structure.remove(atom);
         return this;
@@ -332,8 +341,9 @@ public class Formula {
                     terminalAtoms.add(atom);
                 };
             };
+
             Collections.sort(terminalAtoms, (a1, a2) -> {
-                return getMaximumBranch(a2, structure).getMassOfLongestChain().compareTo(getMaximumBranch(a1, newStructure).getMassOfLongestChain()); //put in descending order of chain length
+                return getMaximumBranch(a2, newStructure).getMassOfLongestChain().compareTo(getMaximumBranch(a1, newStructure).getMassOfLongestChain()); //put in descending order of chain length
             });
 
             body = getMaximumBranch(terminalAtoms.get(0), newStructure).serialize();
@@ -343,7 +353,9 @@ public class Formula {
             throw new IllegalStateException("Can't do this yet");
         };
 
-        return prefix + ":" + body;
+
+        optimumFROWNSCode = prefix + ":" + body;
+        return optimumFROWNSCode;
 
     };
 
@@ -376,7 +388,7 @@ public class Formula {
 
     /**
      * Checks this structure for any Groups it contains.
-     * @return This Formula.
+     * @return this Formula.
      */
     public Formula refreshFunctionalGroups() {
         this.groups = new ArrayList<>();
@@ -386,11 +398,37 @@ public class Formula {
         return this;
     };
 
+    /**
+     * Creates a shallow copy of this Formula, referencing all the same Atoms and Bonds.
+     * @throws CloneNotSupportedException
+     */
+    public Formula shallowCopy() {
+        try {
+
+            Formula newFormula = (Formula) super.clone();
+            newFormula.structure = new HashMap<>();
+
+            //shallow copy the structure
+            for (Atom atom : structure.keySet()) {
+                newFormula.structure.put(atom, new ArrayList<>(structure.get(atom)));
+            };
+
+            newFormula.groups = new ArrayList<>(groups); //shallow copy the Groups
+
+            newFormula.optimumFROWNSCode = null; //delete the FROWNS Code, as copies are typically going to be modified
+
+            return newFormula;
+
+        } catch(CloneNotSupportedException e) {
+            throw new Error(e);
+        }
+    };
+
     //INTERNAL METHODS
 
     private Branch getMaximumBranch(Atom startAtom, Map<Atom, List<Bond>> structure) {
 
-        Map<Atom, Node> allNodes = new HashMap<Atom, Node>();
+        Map<Atom, Node> allNodes = new HashMap<>();
 
         for (Atom atom : structure.keySet()) {
             allNodes.put(atom, new Node(atom));

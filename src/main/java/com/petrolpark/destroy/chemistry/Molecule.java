@@ -73,6 +73,10 @@ public class Molecule {
         }
     };
 
+    public void pee() {
+        System.out.println(structure.serialize());
+    };
+
     public Molecule getEquivalent() {
         for (Molecule molecule : MOLECULES.values()) {
             if (this.getMass() == molecule.getMass()) { //initially just check the masses match
@@ -88,9 +92,8 @@ public class Molecule {
         return this.mass;
     };
 
-    public Formula copyStructure() {
-        Formula structureCopy = this.structure;
-        return structureCopy;
+    public Formula shallowCopyStructure() {
+        return structure.shallowCopy();
     };
 
     public Set<Atom> getAtoms() {
@@ -99,6 +102,10 @@ public class Molecule {
 
     public Boolean isHypothetical() {
         return isHypothetical;
+    };
+
+    public Boolean isNovel() {
+        return this.nameSpace == "novel";
     };
 
     /**
@@ -344,6 +351,14 @@ public class Molecule {
 
             if (molecule.structure == null) {
                 throw new IllegalStateException("Molecule's structure has not been declared");
+            };
+
+            if (molecule.nameSpace == "novel") {
+                System.out.println("Getting equivalent of "+molecule.getSerlializedChemicalFormula());
+                Molecule equivalentMolecule = molecule.getEquivalent();
+                if (equivalentMolecule != molecule) {
+                    return equivalentMolecule;
+                };
             };
 
             if (molecule.getChemicalFormula().containsKey(Element.R_GROUP)) {

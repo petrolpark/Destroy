@@ -13,4 +13,6 @@ public abstract class GenericReaction {
         return new MoleculeBuilder("novel");
     };
 
+    public abstract Boolean involvesSingleGroup();
+
 };
