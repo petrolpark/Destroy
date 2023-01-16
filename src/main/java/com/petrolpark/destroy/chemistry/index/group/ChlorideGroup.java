@@ -1,27 +1,24 @@
-package com.petrolpark.destroy.chemistry.group;
+package com.petrolpark.destroy.chemistry.index.group;
 
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
-public class AlcoholGroup extends Group {
+public class ChlorideGroup extends Group {
 
     private Atom carbon;
-    private Atom oxygen;
-    private Atom hydrogen;
+    private Atom chlorine;
 
     private int degree;
 
-    public AlcoholGroup() {
+    public ChlorideGroup() {
         super();
     };
 
-    public AlcoholGroup(Atom carbon, Atom oxygen, Atom hydrogen, int degree) {
-        super();
+    public ChlorideGroup(Atom carbon, Atom chlorine, int degree) {
         this.carbon = carbon;
-        this.oxygen = oxygen;
-        this.hydrogen = hydrogen;
+        this.chlorine = chlorine;
         this.degree = degree;
     };
 
@@ -29,26 +26,22 @@ public class AlcoholGroup extends Group {
         return carbon;
     };
 
-    public Atom getOxygen() {
-        return oxygen;
-    };
-
-    public Atom getHydrogen() {
-        return hydrogen;
+    public Atom getChlorine() {
+        return chlorine;
     };
 
     public int getDegree() {
-        return this.degree;
+        return degree;
     };
 
     @Override
     public Molecule getExampleMolecule() {
-        return DestroyMolecules.GENERIC_ALCOHOL;
+        return DestroyMolecules.GENERIC_CHLORIDE;
     };
 
     @Override
     public String getID() {
-        return "ALCOHOL";
+        return "CHLORIDE";
     };
     
 };

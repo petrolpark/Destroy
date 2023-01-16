@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.chemistry.group;
+package com.petrolpark.destroy.chemistry.index.group;
 
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Group;

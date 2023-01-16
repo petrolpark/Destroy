@@ -27,6 +27,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public enum DestroyRecipeTypes implements IRecipeTypeInfo {
+    AGING(AgingRecipe::new),
     //CHARGING(ChargingRecipe::new);
     CENTRIFUGATION(CentrifugationRecipe::new);
     //DISTILLATION(DistillationRecipe::new);

@@ -1,47 +1,43 @@
-package com.petrolpark.destroy.chemistry.group;
+package com.petrolpark.destroy.chemistry.index.group;
 
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
-public class ChlorideGroup extends Group {
+public class AcylChlorideGroup extends Group {
 
     private Atom carbon;
+    private Atom oxygen;
     private Atom chlorine;
 
-    private int degree;
-
-    public ChlorideGroup() {
+    public AcylChlorideGroup(Atom carbon, Atom oxygen, Atom chlorine) {
         super();
-    };
-
-    public ChlorideGroup(Atom carbon, Atom chlorine, int degree) {
         this.carbon = carbon;
+        this.oxygen = oxygen;
         this.chlorine = chlorine;
-        this.degree = degree;
     };
 
     public Atom getCarbon() {
         return carbon;
     };
 
+    public Atom getOxygen() {
+        return oxygen;
+    };
+
     public Atom getChlorine() {
         return chlorine;
     };
 
-    public int getDegree() {
-        return degree;
-    };
-
     @Override
     public Molecule getExampleMolecule() {
-        return DestroyMolecules.GENERIC_CHLORIDE;
+        return DestroyMolecules.GENERIC_ACYL_CHLORIDE;
     };
-
+    
     @Override
     public String getID() {
-        return "CHLORIDE";
+        return "ACYL_CHLORIDE";
     };
     
 };

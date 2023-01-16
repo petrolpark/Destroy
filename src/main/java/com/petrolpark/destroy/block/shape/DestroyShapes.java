@@ -1,15 +1,43 @@
 package com.petrolpark.destroy.block.shape;
 
 import com.simibubi.create.AllShapes;
+import com.simibubi.create.AllShapes.Builder;
+import com.simibubi.create.foundation.utility.VoxelShaper;
 
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class DestroyShapes {
 
-    public static final VoxelShape CENTRIFUGE = shape(0, 0, 0, 16, 4, 16).add(2, 4, 2, 14, 12, 14)
-			.add(0, 12, 0, 16, 16, 16)
-			.build();
+    public static final VoxelShape CENTRIFUGE = shape(0, 0, 0, 16, 4, 16)
+        .add(2, 4, 2, 14, 12, 14)
+        .add(0, 12, 0, 16, 16, 16)
+        .build();
+
+    public static final VoxelShaper AGING_BARREL_OPEN = shape(0, 0, 0, 16, 2, 16)
+        .add(0, 2, 0, 16, 14, 2)
+        .add(0, 2, 14, 16, 14, 16)
+        .add(0, 2, 2, 2, 14, 14)
+        .add(14, 2, 2, 16, 14, 14)
+        .add(0, 14, 14, 16, 30, 16)
+        .forDirectional(Direction.NORTH);
+
+    public static final VoxelShape agingBarrelClosed(int progress) {
+        Builder agingBarrel = shape(0,0,0,16,16,16);
+        if (progress == 3) {
+            agingBarrel.add(7, 16, 7, 9, 18, 8);
+        } else if (progress == 4) {
+            agingBarrel.add(6, 16, 6, 10, 20, 10);
+        } else if (progress == 5) {
+            agingBarrel.add(5, 16, 5, 11, 22, 11);
+        } else if (progress == 6) {
+            agingBarrel.add(4, 16, 4, 12, 24, 12);
+        } else if (progress == 7) {
+            agingBarrel.add(3, 16, 3, 13, 26, 13);
+        };
+        return agingBarrel.build();
+    };
 
     private static AllShapes.Builder shape(VoxelShape shape) {
         return new AllShapes.Builder(shape);

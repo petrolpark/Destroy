@@ -1,6 +1,7 @@
 package com.petrolpark.destroy.chemistry.index;
 
-import com.petrolpark.destroy.chemistry.group.ChlorideGroup;
+import com.petrolpark.destroy.chemistry.index.genericreaction.HydroxideSubstitutions;
+import com.petrolpark.destroy.chemistry.index.group.ChlorideGroup;
 
 public class DestroyGenericReactions {
 

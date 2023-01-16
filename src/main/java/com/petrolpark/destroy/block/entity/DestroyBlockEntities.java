@@ -15,6 +15,12 @@ public class DestroyBlockEntities { //this is gonna be the only place I actually
         .renderer(() -> CentrifugeRenderer::new)
         .register();
 
+
+    public static final BlockEntityEntry<AgingBarrelBlockEntity> AGING_BARREL = Destroy.registrate()
+        .tileEntity("aging_barrel", AgingBarrelBlockEntity::new)
+        .validBlocks(DestroyBlocks.AGING_BARREL)
+        .register();
+
     public static void register() {};
     
 }

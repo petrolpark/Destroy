@@ -2,11 +2,11 @@ package com.petrolpark.destroy.chemistry;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.util.DestroyLang;
 
 import net.minecraft.network.chat.Component;
@@ -26,13 +26,7 @@ public class Molecule {
 
     private Boolean isHypothetical;
 
-    private Boolean isAcutelyToxic;
-    private Boolean isCarcinogen;
-    private Boolean isChronicallyToxic;
-    private Boolean isGreenhouse;
-    private Boolean isOzoneDepleter;
-    private Boolean isSmelly;
-    private Boolean isSmogAmplifier;
+    private Set<String> tags;
 
     private List<Reaction> reactantReactions; //reactions in which this Molecule is a reactant
     private List<Reaction> productReactions; //reactions in which this Molecule is a product
@@ -46,13 +40,7 @@ public class Molecule {
 
         isHypothetical = false;
 
-        isAcutelyToxic = false;
-        isCarcinogen = false;
-        isChronicallyToxic = false;
-        isGreenhouse = false;
-        isOzoneDepleter = false;
-        isSmelly = false;
-        isSmogAmplifier = false;
+        tags = new HashSet<>();
 
         reactantReactions = new ArrayList<>();
         productReactions = new ArrayList<>();
@@ -64,7 +52,6 @@ public class Molecule {
      * For novel Molecules, this will be their <a link href="https://github.com/petrolpark/Destroy/wiki/FROWNS"> FROWNS Code</a>.
      * @return ID or FROWNS Code
      */
-    //TODO calculate systematic FROWNS Code
     public String getFullID() {
         if (id == null) {
             return structure.serialize();
@@ -79,8 +66,8 @@ public class Molecule {
 
     public Molecule getEquivalent() {
         for (Molecule molecule : MOLECULES.values()) {
-            if (this.getMass() == molecule.getMass()) { //initially just check the masses match
-                if (this.structure.serialize() == molecule.structure.serialize()) { //check the structures match
+            if (Math.abs(this.getMass() - molecule.getMass()) < 0.001) { //initially just check the masses match
+                if (this.structure.serialize().equals(molecule.structure.serialize())) { //check the structures match
                     return molecule;
                 };
             };
@@ -142,6 +129,23 @@ public class Molecule {
             formula += element.getSymbol() + number;
         };
         return formula;
+    };
+
+    /**
+     * Gives the serialized form of this Molecule.
+     */
+    public String getStructuralFormula() {
+        return structure.serialize();
+    };
+
+    /**
+     * Get the stability (relative to a carbon bonded to four other carbons) of a carbon in this structure, according to <a href="https://www.desmos.com/calculator/ks82fh30xq">this formula</a>.
+     * @param carbon Works best when this is an Atom of the Element carbon.
+     * @param isCarbanion Whether this calculation should be inverted (to calculate the relative stability of a carbanion).
+     * @return A value typically from 0-216.
+     */
+    public Float getCarbocationStability(Atom carbon, boolean isCarbanion) {
+        return structure.getCarbocationStability(carbon, isCarbanion);
     };
 
     /**
@@ -271,7 +275,6 @@ public class Molecule {
 
         /**
          * Mark this Molecule as being hypothetical - if this Molecule appears in a solution, an error will be raised.
-         * @return
          */
         public MoleculeBuilder hypothetical() {
             molecule.isHypothetical = true;
@@ -279,59 +282,12 @@ public class Molecule {
         };
 
         /**
-         * Mark this Molecule as being acutely toxic (causes immediate damage to Players).
+         * Adds the given tags to this Molecule.
          */
-        public MoleculeBuilder acutelyToxic() {
-            molecule.isAcutelyToxic = true;
-            return this;
-        };
-
-        /**
-         * Mark this Molecule as being carcinogenic (gradually harms Players).
-         */
-        public MoleculeBuilder carcinogen() {
-            molecule.isCarcinogen = true;
-            return this;
-        };
-
-        /**
-         * Mark this Molecule as being chronically toxic (gradually weathers away Players' health).
-         */
-        public MoleculeBuilder chronicallyToxic() {
-            molecule.isChronicallyToxic = true;
-            return this;
-        };
-
-        /**
-         * Mark this Molecule as one which will increase the World's global warming level when released into the atmosphere.
-         * @return
-         */
-        public MoleculeBuilder greenhouse() {
-            molecule.isGreenhouse = true;
-            return this;
-        };
-
-        /**
-         * Mark this Molecule as one which will deplete the World's ozone level when released into the atmosphere.
-         */
-        public MoleculeBuilder ozoneDepleter() {
-            molecule.isOzoneDepleter = true;
-            return this;
-        };
-
-        /**
-         * Mark this Molecule as one which will make the Player nauseated if they are not wearing perfume.
-         */
-        public MoleculeBuilder smelly() {
-            molecule.isSmelly = true;
-            return this;
-        };
-
-        /**
-         * Mark this Molecule as one which will amplify the World's smog level when released into the atmosphere.
-         */
-        public MoleculeBuilder smogAmplifier() {
-            molecule.isSmogAmplifier = true;
+        public MoleculeBuilder tag(String ...tags) {
+            for (String tag : tags) {
+                molecule.tags.add(tag);
+            };
             return this;
         };
 
@@ -354,7 +310,6 @@ public class Molecule {
             };
 
             if (molecule.nameSpace == "novel") {
-                System.out.println("Getting equivalent of "+molecule.getSerlializedChemicalFormula());
                 Molecule equivalentMolecule = molecule.getEquivalent();
                 if (equivalentMolecule != molecule) {
                     return equivalentMolecule;
@@ -375,10 +330,12 @@ public class Molecule {
 
             molecule.refreshFunctionalGroups();
 
-            if (molecule.id == null && molecule.nameSpace != "novel") {
-                throw new IllegalStateException("Molecule's ID has not been declared.");
-            } else {
-                MOLECULES.put(molecule.id, molecule);
+            if (molecule.nameSpace != "novel") {
+                if (molecule.id == null) {
+                    throw new IllegalStateException("Molecule's ID has not been declared.");
+                } else {
+                    MOLECULES.put(molecule.id, molecule);
+                };
             };
 
             return molecule;

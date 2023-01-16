@@ -10,14 +10,14 @@ import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.GroupFinder;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
-import com.petrolpark.destroy.chemistry.group.AcidAnhydrideGroup;
-import com.petrolpark.destroy.chemistry.group.AcylChlorideGroup;
-import com.petrolpark.destroy.chemistry.group.AlcoholGroup;
-import com.petrolpark.destroy.chemistry.group.AmideGroup;
-import com.petrolpark.destroy.chemistry.group.CarbonylGroup;
-import com.petrolpark.destroy.chemistry.group.CarboxylicAcidGroup;
-import com.petrolpark.destroy.chemistry.group.ChlorideGroup;
-import com.petrolpark.destroy.chemistry.group.EsterGroup;
+import com.petrolpark.destroy.chemistry.index.group.AcidAnhydrideGroup;
+import com.petrolpark.destroy.chemistry.index.group.AcylChlorideGroup;
+import com.petrolpark.destroy.chemistry.index.group.AlcoholGroup;
+import com.petrolpark.destroy.chemistry.index.group.AmideGroup;
+import com.petrolpark.destroy.chemistry.index.group.CarbonylGroup;
+import com.petrolpark.destroy.chemistry.index.group.CarboxylicAcidGroup;
+import com.petrolpark.destroy.chemistry.index.group.ChlorideGroup;
+import com.petrolpark.destroy.chemistry.index.group.EsterGroup;
 
 public class DestroyGroupFinder extends GroupFinder {
 

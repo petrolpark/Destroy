@@ -1,26 +1,25 @@
-package com.petrolpark.destroy.chemistry.group;
+package com.petrolpark.destroy.chemistry.index.group;
 
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
-public class CarbonylGroup extends Group {
+public class AmideGroup extends Group {
 
     private Atom carbon;
     private Atom oxygen;
+    private Atom nitrogen;
 
-    private Boolean isKetone;
-
-    public CarbonylGroup() {
+    public AmideGroup() {
         super();
     };
 
-    public CarbonylGroup(Atom carbon, Atom oxygen, Boolean isKetone) {
+    public AmideGroup(Atom carbon, Atom oxygen, Atom nitrogen) {
         super();
         this.carbon = carbon;
         this.oxygen = oxygen;
-        this.isKetone = isKetone;
+        this.nitrogen = nitrogen;
     };
 
     public Atom getCarbon() {
@@ -31,21 +30,18 @@ public class CarbonylGroup extends Group {
         return this.oxygen;
     };
 
-    /**
-     * Whether this Carbonyl is a ketone - if it is not a ketone, it is either an aldehyde with one R group or formaldehye.
-     */
-    public Boolean isKetone() {
-        return isKetone;
+    public Atom getNitrogen() {
+        return this.nitrogen;
     };
 
     @Override
     public Molecule getExampleMolecule() {
-        return DestroyMolecules.GENERIC_CARBONYL;
+        return DestroyMolecules.GENERIC_AMIDE;
     };
 
     @Override
     public String getID() {
-        return "CARBONYL";
+        return "AMIDE";
     };
     
 };

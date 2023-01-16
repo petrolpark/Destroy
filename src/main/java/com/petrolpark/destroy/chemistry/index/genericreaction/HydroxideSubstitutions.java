@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.chemistry.index;
+package com.petrolpark.destroy.chemistry.index.genericreaction;
 
 import java.util.function.Supplier;
 
@@ -7,7 +7,8 @@ import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
 import com.petrolpark.destroy.chemistry.genericreaction.SingleGroupGenericReaction;
-import com.petrolpark.destroy.chemistry.group.ChlorideGroup;
+import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.petrolpark.destroy.chemistry.index.group.ChlorideGroup;
 
 public class HydroxideSubstitutions extends SingleGroupGenericReaction<ChlorideGroup> {
 
@@ -26,10 +27,10 @@ public class HydroxideSubstitutions extends SingleGroupGenericReaction<ChlorideG
         ).build();
         return Reaction.builder()
             .addReactant(reactantMolecule)
-            .addReactant(DestroyMolecules.HYDROXIDE)
+            .addReactant(DestroyMolecules.HYDROXIDE, 1, chlorideGroup.getDegree() == 3 ? 0 : 1) //if this is a tertiary chloride, the mechanism is SN1 so hydroxide does not appear in the rate equation
             .addProduct(productMolecule)
             .addProduct(DestroyMolecules.CHLORIDE)
-            .preexponentialFactor(1e15f)
+            .preexponentialFactor(1e6f * (float)Math.pow(10, chlorideGroup.getDegree()) * reactantMolecule.getCarbocationStability(chlorideGroup.getCarbon(), false))
             .activationEnergy(100f)
             .build();
     };

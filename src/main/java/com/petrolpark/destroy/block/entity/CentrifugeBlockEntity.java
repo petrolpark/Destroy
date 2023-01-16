@@ -5,7 +5,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.CentrifugeBlock;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
@@ -33,13 +32,12 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.wrapper.EmptyHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 public class CentrifugeBlockEntity extends FluidKineticTileEntity {
 
-    private FluidTank inputTank, denseOutputTank, lightOutputTank;
+    private SmartFluidTank inputTank, denseOutputTank, lightOutputTank;
     protected LazyOptional<IFluidHandler> inputFluidCapability, denseOutputFluidCapability, lightOutputFluidCapability;
 
     private Direction denseOutputTankFace;

@@ -1,7 +1,6 @@
 package com.petrolpark.destroy;
 
 import com.petrolpark.destroy.chemistry.Formula;
-import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Molecule.MoleculeBuilder;
 import com.petrolpark.destroy.chemistry.index.DestroyGenericReactions;
@@ -19,21 +18,15 @@ public class Test {
         DestroyGenericReactions.register();
 
         Molecule myMolecule = builder()
-            .structure(Formula.deserialize("linear:CCl"))
-            .id("test_molecule")
+            .structure(Formula.deserialize("linear:C(C)C"))
             .build();
 
-        Mixture myMixture = new Mixture();
-        myMixture
-            .addMolecule(myMolecule, 1f)
-            .addMolecule(DestroyMolecules.HYDROXIDE, 1f)
-            .react()
-            ;
-        myMixture.pee();
+        //System.out.println(DestroyMolecules.ASPIRIN.getStructuralFormula());
+        System.out.println(DestroyMolecules.ASPIRIN.getSerlializedChemicalFormula());
         
     };
 
     private static MoleculeBuilder builder() {
-        return new MoleculeBuilder("henry");
+        return new MoleculeBuilder("novel");
     };
 }

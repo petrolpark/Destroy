@@ -1,47 +1,54 @@
-package com.petrolpark.destroy.chemistry.group;
+package com.petrolpark.destroy.chemistry.index.group;
 
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
-public class AmideGroup extends Group {
+public class AlcoholGroup extends Group {
 
     private Atom carbon;
     private Atom oxygen;
-    private Atom nitrogen;
+    private Atom hydrogen;
 
-    public AmideGroup() {
+    private int degree;
+
+    public AlcoholGroup() {
         super();
     };
 
-    public AmideGroup(Atom carbon, Atom oxygen, Atom nitrogen) {
+    public AlcoholGroup(Atom carbon, Atom oxygen, Atom hydrogen, int degree) {
         super();
         this.carbon = carbon;
         this.oxygen = oxygen;
-        this.nitrogen = nitrogen;
+        this.hydrogen = hydrogen;
+        this.degree = degree;
     };
 
     public Atom getCarbon() {
-        return this.carbon;
+        return carbon;
     };
 
     public Atom getOxygen() {
-        return this.oxygen;
+        return oxygen;
     };
 
-    public Atom getNitrogen() {
-        return this.nitrogen;
+    public Atom getHydrogen() {
+        return hydrogen;
+    };
+
+    public int getDegree() {
+        return this.degree;
     };
 
     @Override
     public Molecule getExampleMolecule() {
-        return DestroyMolecules.GENERIC_AMIDE;
+        return DestroyMolecules.GENERIC_ALCOHOL;
     };
 
     @Override
     public String getID() {
-        return "AMIDE";
+        return "ALCOHOL";
     };
     
 };

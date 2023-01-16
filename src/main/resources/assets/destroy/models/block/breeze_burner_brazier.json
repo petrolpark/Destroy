@@ -381,5 +381,6 @@
 			"color": 0,
 			"children": [21, 22, 23, 24]
 		}
-	]
+	],
+	"render_type": "cutout"
 }

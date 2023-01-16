@@ -156,12 +156,12 @@ public class Reaction {
 
             if (reaction.activationEnergy == null) {
                 reaction.activationEnergy = 100f;
-                Destroy.LOGGER.warn("Activation energy of reaction was not supplied and had to be estimated.");
+                Destroy.LOGGER.warn("Activation energy of reaction '"+reactionString()+"' was not supplied and had to be estimated.");
             };
 
             if (reaction.activationEnergy == null) {
                 reaction.activationEnergy = 1e6f;
-                Destroy.LOGGER.warn("Pre-exponential factor of reaction was not supplied and had to be estimated.");
+                Destroy.LOGGER.warn("Pre-exponential factor of reaction '"+reactionString()+"' was not supplied and had to be estimated.");
             };
 
             for (Molecule reactant : reaction.reactants.keySet()) {
@@ -171,6 +171,21 @@ public class Reaction {
                 product.addProductReaction(reaction);
             };
             return reaction;
+        };
+
+        private String reactionString() {
+            String reactionString = "";
+            for (Molecule reactant : reaction.reactants.keySet()) {
+                reactionString += reactant.getSerlializedChemicalFormula();
+                reactionString += " + ";
+            };
+            reactionString = reactionString.substring(0, reactionString.length() - 3) + " => ";
+            for (Molecule product : reaction.products.keySet()) {
+                reactionString += product.getSerlializedChemicalFormula();
+                reactionString += " + ";
+            };
+            reactionString = reactionString.substring(0, reactionString.length() - 3);
+            return reactionString;
         };
     };
 }

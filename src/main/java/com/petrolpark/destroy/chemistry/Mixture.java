@@ -38,7 +38,7 @@ public class Mixture {
         possibleReactions = new ArrayList<>();
         groupIDsAndMolecules = new HashMap<>();
         
-        temperature = 273f;
+        temperature = 600f;
     };
 
     public CompoundTag writeNBT() {

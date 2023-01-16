@@ -1,7 +1,6 @@
 package com.petrolpark.destroy.item;
 
 import com.petrolpark.destroy.Destroy;
-import com.simibubi.create.content.curiosities.CombustibleItem;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;

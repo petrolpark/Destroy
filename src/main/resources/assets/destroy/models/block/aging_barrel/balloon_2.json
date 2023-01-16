@@ -1,0 +1,25 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "destroy:block/aging_barrel",
+		"1": "destroy:block/aging_barrel_balloon",
+		"particle": "destroy:block/aging_barrel"
+	},
+	"elements": [
+		{
+			"name": "balloon",
+			"from": [5, 16, 5],
+			"to": [11, 22, 11],
+			"faces": {
+				"north": {"uv": [5, 5, 8, 8], "texture": "#1"},
+				"east": {"uv": [5, 5, 8, 8], "texture": "#1"},
+				"south": {"uv": [5, 5, 8, 8], "texture": "#1"},
+				"west": {"uv": [5, 5, 8, 8], "texture": "#1"},
+				"up": {"uv": [5, 5, 8, 8], "texture": "#1"},
+				"down": {"uv": [5, 5, 8, 8], "texture": "#1"}
+			}
+		}
+	],
+	"render_type": "translucent"
+}

@@ -15,7 +15,6 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -41,19 +40,29 @@ public class DestroyBlocks {
 
     // CONTRAPTIONS - this stuff is registered with Registrate
 
-    public static final BlockEntry<CentrifugeBlock> CENTRIFUGE = REGISTRATE.block("centrifuge", CentrifugeBlock::new)
+    public static final BlockEntry<AgingBarrelBlock> AGING_BARREL = REGISTRATE.block("aging_barrel", AgingBarrelBlock::new)
         .initialProperties(SharedProperties::stone)
-        .properties(p -> p.color(MaterialColor.COLOR_ORANGE))
-        .blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
-        .transform(BlockStressDefaults.setImpact(8.0))
-        .item()
+        .properties(p -> p
+            .color(MaterialColor.COLOR_BROWN)
+            .noOcclusion()
+        ).item()
         .transform(customItemModel())
         .register();
 
     public static final BlockEntry<BreezeBurnerBlock> BREEZE_BURNER = REGISTRATE.block("breeze_burner", BreezeBurnerBlock::new)
         .initialProperties(SharedProperties::stone)
-        .properties(p -> p.color(MaterialColor.DEEPSLATE))
-        //.addLayer(() -> RenderType::cutoutMipped)
+        .properties(p -> p
+            .color(MaterialColor.DEEPSLATE)
+            .noOcclusion()
+        ).item()
+        .transform(customItemModel())
+        .register();
+
+    public static final BlockEntry<CentrifugeBlock> CENTRIFUGE = REGISTRATE.block("centrifuge", CentrifugeBlock::new)
+        .initialProperties(SharedProperties::stone)
+        .properties(p -> p.color(MaterialColor.COLOR_ORANGE))
+        .blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
+        .transform(BlockStressDefaults.setImpact(8.0))
         .item()
         .transform(customItemModel())
         .register();

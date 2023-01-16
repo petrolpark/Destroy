@@ -39,18 +39,14 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        if (pState.hasBlockEntity() && (pState.getBlock() != pNewState.getBlock() || !pNewState.hasBlockEntity())) { //if the Block Entity is getting removed
-            BlockEntity be = pLevel.getBlockEntity(pPos);
-            if (!(be instanceof CentrifugeBlockEntity)) {
-                return;
-            }
-            pLevel.removeBlockEntity(pPos);
-        };
+        pLevel.removeBlockEntity(pPos);
     }
 
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
-        getTileEntity(level, pos).updateDenseOutputFace(); //this also updates the Block State
+        withTileEntityDo(level, pos, te -> {
+            te.updateDenseOutputFace(); //this also updates the Block State
+        });
         super.onNeighborChange(state, level, pos, neighbor);
     };
 

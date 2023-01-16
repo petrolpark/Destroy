@@ -50,10 +50,10 @@ public class Destroy {
         DestroyFluids.register();
 
         // Chemistry
-        DestroyGroupFinder.register();
-        DestroyMolecules.register();
-        DestroyReactions.register();
-        DestroyGenericReactions.register();
+        // DestroyGroupFinder.register();
+        // DestroyMolecules.register();
+        // DestroyReactions.register();
+        // DestroyGenericReactions.register();
 
         // Events
         MinecraftForge.EVENT_BUS.register(this);
