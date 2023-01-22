@@ -22,18 +22,23 @@ public class DestroyShapes {
         .add(14, 2, 2, 16, 14, 14)
         .add(0, 14, 14, 16, 30, 16)
         .forDirectional(Direction.NORTH);
+    
+    public static final VoxelShape AGING_BARREL_INTERIOR = shape(0, 0, 0, 16, 9, 16).build(); //used for detecting when Items are thrown into the Aging Barrel
 
+    /**
+     * Changes the voxel shape of the Aging Barrel based on how far through the aging process the Barrel is.
+    */
     public static final VoxelShape agingBarrelClosed(int progress) {
         Builder agingBarrel = shape(0,0,0,16,16,16);
-        if (progress == 3) {
+        if (progress == 0) {
             agingBarrel.add(7, 16, 7, 9, 18, 8);
-        } else if (progress == 4) {
+        } else if (progress == 1) {
             agingBarrel.add(6, 16, 6, 10, 20, 10);
-        } else if (progress == 5) {
+        } else if (progress == 2) {
             agingBarrel.add(5, 16, 5, 11, 22, 11);
-        } else if (progress == 6) {
+        } else if (progress == 3) {
             agingBarrel.add(4, 16, 4, 12, 24, 12);
-        } else if (progress == 7) {
+        } else if (progress == 4) {
             agingBarrel.add(3, 16, 3, 13, 26, 13);
         };
         return agingBarrel.build();

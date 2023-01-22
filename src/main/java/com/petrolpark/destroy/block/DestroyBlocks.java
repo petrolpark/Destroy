@@ -60,8 +60,10 @@ public class DestroyBlocks {
 
     public static final BlockEntry<CentrifugeBlock> CENTRIFUGE = REGISTRATE.block("centrifuge", CentrifugeBlock::new)
         .initialProperties(SharedProperties::stone)
-        .properties(p -> p.color(MaterialColor.COLOR_ORANGE))
-        .blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
+        .properties(p -> p
+            .color(MaterialColor.COLOR_ORANGE)
+            .noOcclusion()
+        ).blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
         .transform(BlockStressDefaults.setImpact(8.0))
         .item()
         .transform(customItemModel())

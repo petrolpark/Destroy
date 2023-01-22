@@ -98,5 +98,6 @@
 				"down": {"uv": [14, 6, 15, 7], "texture": "#1"}
 			}
 		}
-	]
+	],
+	"render_type": "translucent"
 }

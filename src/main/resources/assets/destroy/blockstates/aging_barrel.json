@@ -1,7 +1,150 @@
 {
-    "variants": {
-        "": {
-            "model": "destroy:block/aging_barrel/open"
+    "multipart": [
+        {
+            "apply": {
+                "model": "destroy:block/aging_barrel/open"
+            },
+            "when": {
+                "AND": [
+                    {
+                        "open": "true"
+                    },
+                    {
+                        "direction": "north"
+                    }
+                ]
+            }
+        },
+        {
+            "apply": {
+                "model": "destroy:block/aging_barrel/open",
+                "y": 90
+            },
+            "when": {
+                "AND": [
+                    {
+                        "open": "true"
+                    },
+                    {
+                        "direction": "east"
+                    }
+                ]
+            }
+        },
+        {
+            "apply": {
+                "model": "destroy:block/aging_barrel/open",
+                "y": 180
+            },
+            "when": {
+                "AND": [
+                    {
+                        "open": "true"
+                    },
+                    {
+                        "direction": "south"
+                    }
+                ]
+            }
+        },
+        {
+            "apply": {
+                "model": "destroy:block/aging_barrel/open",
+                "y": 270
+            },
+            "when": {
+                "AND": [
+                    {
+                        "open": "true"
+                    },
+                    {
+                        "direction": "west"
+                    }
+                ]
+            }
+        },
+        {
+            "apply": {
+                "model": "destroy:block/aging_barrel/closed"
+            },
+            "when": {
+                "open": "false"
+            }
+        },
+        {
+            "apply": {
+                "model": "destroy:block/aging_barrel/balloon_0"
+            },
+            "when": {
+                "AND": [
+                    {
+                        "open": "false"
+                    },
+                    {
+                        "progress": 0
+                    }
+                ]
+            }
+        },
+        {
+            "apply": {
+                "model": "destroy:block/aging_barrel/balloon_1"
+            },
+            "when": {
+                "AND": [
+                    {
+                        "open": "false"
+                    },
+                    {
+                        "progress": 1
+                    }
+                ]
+            }
+        },
+        {
+            "apply": {
+                "model": "destroy:block/aging_barrel/balloon_2"
+            },
+            "when": {
+                "AND": [
+                    {
+                        "open": "false"
+                    },
+                    {
+                        "progress": 2
+                    }
+                ]
+            }
+        },
+        {
+            "apply": {
+                "model": "destroy:block/aging_barrel/balloon_3"
+            },
+            "when": {
+                "AND": [
+                    {
+                        "open": "false"
+                    },
+                    {
+                        "progress": 3
+                    }
+                ]
+            }
+        },
+        {
+            "apply": {
+                "model": "destroy:block/aging_barrel/balloon_4"
+            },
+            "when": {
+                "AND": [
+                    {
+                        "open": "false"
+                    },
+                    {
+                        "progress": 4
+                    }
+                ]
+            }
         }
-    }
+    ]
 }

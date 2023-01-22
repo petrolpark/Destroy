@@ -14,7 +14,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
@@ -29,7 +28,7 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
 
     public CentrifugeBlock(Properties properties) {
         super(properties);
-        registerDefaultState(this.stateDefinition.any().setValue(DENSE_OUTPUT_FACE, Direction.WEST));
+        registerDefaultState(defaultBlockState().setValue(DENSE_OUTPUT_FACE, Direction.WEST));
     };
 
     @Override
