@@ -27,7 +27,7 @@ public abstract class DestroyHeatConditionMixin {
     @Mutable
     private static HeatCondition[] $VALUES;
 
-    private static final HeatCondition COOLED = heatConditionModifier$addValue("COOLED", 0x0000ff);
+    private static final HeatCondition COOLED = heatConditionModifier$addValue("COOLED", 0xFFFFFF);
 
     @Invoker("<init>")
     public static HeatCondition heatConditionModifier$invokeInit(String internalName, int internalId, int color) {

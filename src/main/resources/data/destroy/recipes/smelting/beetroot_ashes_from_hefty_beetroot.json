@@ -1,8 +1,0 @@
-{
-    "type": "minecraft:smelting",
-    "ingredient": {
-      "item": "destroy:hefty_beetroot"
-    },
-    "result": "destroy:beetroot_ashes",
-    "cookingtime": 200
-  }

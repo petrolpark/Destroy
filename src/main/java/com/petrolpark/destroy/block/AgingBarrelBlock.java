@@ -3,16 +3,17 @@ package com.petrolpark.destroy.block;
 import com.petrolpark.destroy.block.entity.AgingBarrelBlockEntity;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
+import com.simibubi.create.Create;
 import com.simibubi.create.content.contraptions.fluids.actors.GenericItemFilling;
 import com.simibubi.create.content.contraptions.processing.EmptyingByBasin;
 import com.simibubi.create.foundation.block.ITE;
 import com.simibubi.create.foundation.fluid.FluidHelper;
+import com.simibubi.create.foundation.item.ItemHelper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -55,7 +56,6 @@ public class AgingBarrelBlock extends Block implements ITE<AgingBarrelBlockEntit
     @Override
     public InteractionResult use(BlockState blockstate, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack heldItem = player.getItemInHand(hand);
-        if (level.isClientSide()) return InteractionResult.PASS;
         return onTileEntityUse(level, pos, be -> {
             if (!heldItem.isEmpty()) {
 				if (FluidHelper.tryEmptyItemIntoTE(level, player, hand, heldItem, be)) { //try emptying the Fluid in the Item into the Barrel
@@ -64,20 +64,23 @@ public class AgingBarrelBlock extends Block implements ITE<AgingBarrelBlockEntit
 				if (FluidHelper.tryFillItemFromTE(level, player, hand, heldItem, be)) { //try filling up the Item with the Fluid in the Barrel
 					return InteractionResult.SUCCESS;
                 };
-                if (EmptyingByBasin.canItemBeEmptied(level, heldItem) || GenericItemFilling.canItemBeFilled(level, heldItem)) { //try emptying the Fluid in the Item into the Barrel (again)
+                if (EmptyingByBasin.canItemBeEmptied(level, heldItem) || GenericItemFilling.canItemBeFilled(level, heldItem)) { //try filling up the Item with the Fluid in the Barrel (again)
 					return InteractionResult.SUCCESS;
                 };
 			} else { //try picking up the item in the Barrel
                 IItemHandlerModifiable inv = be.itemCapability.orElse(new ItemStackHandler(1));
-                ItemStack stackInSlot = inv.getStackInSlot(0);
-                if (stackInSlot.isEmpty()) { //don't pick anything up if there's nothing in the barrel
-                    return InteractionResult.SUCCESS;
-                } else {
-                    player.getInventory().placeItemBackInInventory(stackInSlot);
-                    inv.setStackInSlot(0, ItemStack.EMPTY);
-                    level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, .2f, 1f + RandomSource.create().nextFloat());
-                    return InteractionResult.SUCCESS;
+                boolean success = false;
+                for (int slot = 0; slot < inv.getSlots(); slot++) {
+                    ItemStack stackInSlot = inv.getStackInSlot(slot);
+                    if (stackInSlot.isEmpty())
+                        continue;
+                    player.getInventory()
+                        .placeItemBackInInventory(stackInSlot);
+                    inv.setStackInSlot(slot, ItemStack.EMPTY);
+                    success = true;
                 }
+                if (success)
+                    level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, .2f, 1f + Create.RANDOM.nextFloat());
             };
             return InteractionResult.PASS;
         });
@@ -109,21 +112,34 @@ public class AgingBarrelBlock extends Block implements ITE<AgingBarrelBlockEntit
     @Override
     public VoxelShape getShape(BlockState blockstate, BlockGetter level, BlockPos pos, CollisionContext context) {
         if (blockstate.getValue(IS_OPEN)) {
-
-            //if the Entity is an Item and the Barrel is empty the collision box is higher so the Items actually register when they fall in
-            AgingBarrelBlockEntity be = (AgingBarrelBlockEntity)level.getBlockEntity(pos);
-            if (be != null && be.inventory.isEmpty() && context instanceof EntityCollisionContext) {
-                EntityCollisionContext entityContext = (EntityCollisionContext) context;
-                if (entityContext.getEntity() instanceof ItemEntity) {
-                    return DestroyShapes.AGING_BARREL_INTERIOR;
-                };
-            };
-            
             return DestroyShapes.AGING_BARREL_OPEN.get(blockstate.getValue(DIRECTION));
         } else {
             return DestroyShapes.agingBarrelClosed(blockstate.getValue(PROGRESS));
         }
     };
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState blockstate, BlockGetter level, BlockPos pos, CollisionContext context) {
+        //if the Entity is an Item and the Barrel is empty the collision box is higher so the Items actually register when they fall in
+        if (context instanceof EntityCollisionContext && ((EntityCollisionContext) context).getEntity() instanceof ItemEntity) {
+            return DestroyShapes.AGING_BARREL_INTERIOR;
+        };
+        return getShape(blockstate, level, pos, context);
+    };
+
+    @Override
+    public VoxelShape getInteractionShape(BlockState blockstate, BlockGetter level, BlockPos pos) {
+        return DestroyShapes.AGING_BARREL_OPEN_RAYTRACE.get(blockstate.getValue(DIRECTION));
+    };
+
+    @Override
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+		if (!state.hasBlockEntity() || state.getBlock() == newState.getBlock()) return;
+		withTileEntityDo(level, pos, be -> {
+			ItemHelper.dropContents(level, pos, be.inventory);
+		});
+		level.removeBlockEntity(pos);
+	};
 
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
         BlockState blockstate = this.defaultBlockState().setValue(DIRECTION, pContext.getHorizontalDirection().getOpposite());

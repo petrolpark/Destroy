@@ -1,9 +1,0 @@
-{
-    "type": "minecraft:blasting",
-    "ingredient": {
-      "tag": "forge:ores/nickel"
-    },
-    "result": "destroy:nickel_ingot",
-    "experience": 1.0,
-    "cookingtime": 100
-  }

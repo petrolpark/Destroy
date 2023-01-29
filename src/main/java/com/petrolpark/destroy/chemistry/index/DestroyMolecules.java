@@ -9,124 +9,126 @@ import com.petrolpark.destroy.chemistry.Molecule.MoleculeBuilder;
 
 public class DestroyMolecules {
 
-    public static final Molecule ACETAMIDE = builder()
+    public static final Molecule 
+    
+    ACETAMIDE = builder()
         .id("acetamide")
         .structure(Formula.deserialize("linear:CC(=O)N"))
         .boilingPoint(221)
         .tag("AcutelyToxic")
-        .build();
+        .build(),
 
-    public static final Molecule ACETIC_ACID = builder()
+    ACETIC_ACID = builder()
         .id("acetic_acid")
         .structure(Formula.deserialize("linear:CC(=O)H+4.756"))
         .boilingPoint(118)
-        .build();
+        .build(),
 
-    public static final Molecule ACETIC_ANHYDRIDE = builder()
+    ACETIC_ANHYDRIDE = builder()
         .id("acetic_anhydride")
         .structure(Formula.deserialize("linear:CC(=O)OC(=O)C"))
         .boilingPoint(140)
-        .build();
+        .build(),
 
-    public static final Molecule ACETONE = builder()
+    ACETONE = builder()
         .id("acetone")
         .structure(Formula.deserialize("linear:CC(=O)C"))
         .boilingPoint(56)
-        .build();
+        .build(),
 
-    public static final Molecule ACRYLONITRILE = builder()
+    ACRYLONITRILE = builder()
         .id("acrylonitrile")
         .structure(Formula.deserialize("linear:C=CC#N"))
         .boilingPoint(77)
-        .build();
+        .build(),
 
-    public static final Molecule ADIPIC_ACID = builder()
+    ADIPIC_ACID = builder()
         .id("adipic_acid")
         .structure(Formula.deserialize("linear:O=C(OH+4.43f)CCCCC(=O)OH+5.41f"))
         .boilingPoint(338)
-        .build();
+        .build(),
 
-    public static final Molecule ADIPONITRILE = builder()
+    ADIPONITRILE = builder()
         .id("adiponitrile")
         .structure(Formula.deserialize("linear:N#CCCCCC#N"))
         .boilingPoint(295)
-        .build();
+        .build(),
 
-    public static final Molecule AIBN = builder()
+    AIBN = builder()
         .id("aibn")
         .structure(Formula.deserialize("linear:CC(C)(C#N)N=NC(C)(C#N)C"))
         .boilingPoint(10000)
-        .build();
+        .build(),
 
-    public static final Molecule AMMONIA = builder()
+    AMMONIA = builder()
         .id("ammonia")
         .structure(Formula.deserialize("linear:N"))
         .boilingPoint(-33)
-        .build();
+        .build(),
 
-    public static final Molecule AMMONIUM = builder()
+    AMMONIUM = builder()
         .id("ammonium")
         .structure(Formula.atom(Element.NITROGEN).addAtom(Element.HYDROGEN).addAtom(Element.HYDROGEN).addAtom(Element.HYDROGEN).addAtom(Element.HYDROGEN))
         .charge(1)
-        .build();
+        .build(),
 
-    public static final Molecule ASPIRIN = builder()
+    ASPIRIN = builder()
         .id("aspirin")
         .structure(Formula.deserialize("benzene:OC(=O)C,C(=O)OH+3.5f,,,,"))
         .boilingPoint(140)
-        .build();
+        .build(),
 
-    public static final Molecule BENZYL_CHLORIDE = builder()
+    BENZYL_CHLORIDE = builder()
         .id("benzyl_chloride")
         .structure(Formula.deserialize("benzene:CCl,,,,,"))
         .boilingPoint(179)
-        .build();
+        .build(),
 
-    public static final Molecule CARBON_MONOXIDE = builder()
+    CARBON_MONOXIDE = builder()
         .id("carbon_monoxide")
         .structure(
             Formula.atom(Element.CARBON)
             .addAtom(Element.OXYGEN, BondType.TRIPLE)
         ).boilingPoint(-140)
-        .build();
+        .build(),
 
-    public static final Molecule CARBON_TETRACHLORIDE = builder()
+    CARBON_TETRACHLORIDE = builder()
         .id("carbon_tetrachloride")
         .structure(Formula.deserialize("linear:ClC(Cl)(Cl)Cl"))
         .boilingPoint(77)
-        .build();
+        .build(),
 
-    public static final Molecule CHLORIDE = builder()
+    CHLORIDE = builder()
         .id("chloride")
         .structure(Formula.atom(Element.CHLORINE))
         .charge(-1)
-        .build();
+        .build(),
 
-    public static final Molecule CHLORINE = builder()
+    CHLORINE = builder()
         .id("chlorine")
         .structure(Formula.deserialize("linear:ClCl"))
         .boilingPoint(-34)
-        .build();
+        .build(),
 
-    public static final Molecule CHLOROAURATE = builder()
+    CHLOROAURATE = builder()
         .id("chloroaurate")
         .structure(Formula.deserialize("linear:ClAu(Cl)(Cl)Cl"))
         .charge(-1)
-        .build();
+        .build(),
 
-    public static final Molecule CHLORODIFLUOROMETHANE = builder()
+    CHLORODIFLUOROMETHANE = builder()
         .id("chlorodifluoromethane")
         .structure(Formula.deserialize("linear:ClC(F)F"))
         .boilingPoint(-41)
-        .build();
+        .build(),
 
-    public static final Molecule CHLOROFORM = builder()
+    CHLOROFORM = builder()
         .id("chloroform")
         .structure(Formula.deserialize("linear:ClC(Cl)Cl"))
         .boilingPoint(61)
-        .build();
+        .build(),
 
-    public static final Molecule CISPLATIN = builder()
+    CISPLATIN = builder()
         .id("cisplatin")
         .structure(Formula.atom(
             Element.PLATINUM)
@@ -144,140 +146,140 @@ public class DestroyMolecules {
                 .addAtom(Element.HYDROGEN), true
             ))
         .boilingPoint(270)
-        .build();
+        .build(),
 
-    public static final Molecule CYCLOHEXENE = builder()
+    CYCLOHEXENE = builder()
         .id("cyclohexene")
         .structure(Formula.deserialize("cyclohexene:,,,,,"))
         .boilingPoint(83)
-        .build();
+        .build(),
 
-    public static final Molecule CYCLOPENTADIENYL = builder()
+    CYCLOPENTADIENYL = builder()
         .id("cyclopentadienyl")
         .structure(Formula.deserialize("cyclopentadienyl:,,,,"))
         .charge(-1)
-        .build();
+        .build(),
 
-    public static final Molecule ETHANOL = builder()
+    ETHANOL = builder()
         .id("ethanol")
         .structure(Formula.deserialize("linear:CCO"))
         .boilingPoint(78)
-        .build();
+        .build(),
 
-    public static final Molecule ETHYLANTHRAQUINONE = builder()
+    ETHYLANTHRAQUINONE = builder()
         .id("ethylanthraquinone")
         .structure(Formula.deserialize("dihydroanthracene:,CC,,,,,,,=O,=O"))
         .boilingPoint(415)
-        .build();
+        .build(),
 
-    public static final Molecule GENERIC_ACID_ANHYDRIDE = builder()
+    GENERIC_ACID_ANHYDRIDE = builder()
         .id("generic_acid_anhydride")
         .structure(Formula.deserialize("linear:RC(=O)OC(=O)R"))
         .hypothetical()
         .translationKey("acid_anhydride")
-        .build();
+        .build(),
 
-    public static final Molecule GENERIC_ACYL_CHLORIDE = builder()
+    GENERIC_ACYL_CHLORIDE = builder()
         .id("generic_acyl_chloride")
         .structure(Formula.deserialize("linear:RC(=O)Cl"))
         .hypothetical()
         .translationKey("acyl_chloride")
-        .build();
+        .build(),
 
-    public static final Molecule GENERIC_ALCOHOL = builder()
+    GENERIC_ALCOHOL = builder()
         .id("generic_alcohol")
         .structure(Formula.deserialize("linear:RO"))
         .hypothetical()
         .translationKey("alcohol")
-        .build();
+        .build(),
 
-    public static final Molecule GENERIC_ALKENE = builder()
+    GENERIC_ALKENE = builder()
         .id("generic_alkene")
         .structure(Formula.deserialize("linear:RC=(R)C(R)R"))
         .hypothetical()
         .translationKey("alkene")
-        .build();
+        .build(),
 
-    public static final Molecule GENERIC_AMIDE = builder()
+    GENERIC_AMIDE = builder()
         .id("generic_amide")
         .structure(Formula.deserialize("linear:RC(=O)N(R)R"))
         .hypothetical()
         .translationKey("amide")
-        .build();
+        .build(),
     
-    public static final Molecule GENERIC_AMINE = builder()
+    GENERIC_AMINE = builder()
         .id("generic_amine")
         .structure(Formula.deserialize("linear:RN"))
         .hypothetical()
         .translationKey("amine")
-        .build();
+        .build(),
 
-    public static final Molecule GENERIC_CARBONYL = builder()
+    GENERIC_CARBONYL = builder()
         .id("generic_carbonyl")
         .structure(Formula.deserialize("linear:RC=(R)O"))
         .hypothetical()
         .translationKey("carbonyl")
-        .build();
+        .build(),
 
-    public static final Molecule GENERIC_CARBOXYLIC_ACID = builder()
+    GENERIC_CARBOXYLIC_ACID = builder()
         .id("generic_carboxylic_acid")
         .structure(Formula.deserialize("linear:RC(=O)O"))
         .hypothetical()
         .translationKey("carboxylic_acid")
-        .build();
+        .build(),
     
-    public static final Molecule GENERIC_CHLORIDE = builder()
+    GENERIC_CHLORIDE = builder()
         .id("generic_chloride")
         .structure(Formula.deserialize("linear:RCl"))
         .hypothetical()
         .translationKey("chloride")
-        .build();
+        .build(),
 
-    public static final Molecule GENERIC_ESTER = builder()
+    GENERIC_ESTER = builder()
         .id("generic_ester")
         .structure(Formula.deserialize("linear:RC(=O)OR"))
         .hypothetical()
         .translationKey("ester")
-        .build();
+        .build(),
 
-    public static final Molecule GENERIC_NITRILE = builder()
+    GENERIC_NITRILE = builder()
         .id("generic_nitrile")
         .structure(Formula.deserialize("linear:R#N"))
         .hypothetical()
         .translationKey("nitrile")
-        .build();
+        .build(),
 
-    public static final Molecule HYDROXIDE = builder()
+    HYDROXIDE = builder()
         .id("hydroxide")
         .structure(Formula.atom(Element.OXYGEN).addAtom(Element.HYDROGEN))
         .charge(-1)
-        .build();
+        .build(),
 
-    public static final Molecule METHANOL = builder()
+    METHANOL = builder()
         .id("methanol")
         .structure(Formula.deserialize("linear:CO"))
         .boilingPoint(65)
-        .build();
+        .build(),
 
-    public static final Molecule METHYL_ACETATE = builder()
+    METHYL_ACETATE = builder()
         .id("methyl_acetate")
         .structure(Formula.deserialize("linear:CC(=O)OC"))
         .boilingPoint(57)
-        .build();
+        .build(),
 
-    public static final Molecule NITRATE = builder()
+    NITRATE = builder()
         .id("nitrate")
         .structure(Formula.atom(Element.NITROGEN).addAtom(Element.OXYGEN, BondType.DOUBLE).addAtom(Element.OXYGEN, BondType.AROMATIC).addAtom(Element.OXYGEN, BondType.AROMATIC))
         .charge(-1)
-        .build();
+        .build(),
 
-    public static final Molecule WATER = builder()
+    WATER = builder()
         .id("water")
         .structure(Formula.deserialize("linear:O"))
         .boilingPoint(100)
-        .build();
+        .build(),
 
-    public static final Molecule PROTON = builder()
+    PROTON = builder()
         .id("proton")
         .structure(Formula.atom(Element.HYDROGEN))
         .charge(1)

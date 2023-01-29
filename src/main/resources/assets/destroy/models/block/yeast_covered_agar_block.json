@@ -2,7 +2,7 @@
     "textures": {
         "particle": "destroy:block/yeast_covered_agar_block",
         "plain": "destroy:block/agar_block",
-        "yeasty": "destroy:block/yeast_covered_agar_block"
+        "yeast_overlay": "destroy:block/yeast_overlay"
     },
     "elements": [
         {   "from": [ 3, 3, 3 ],
@@ -19,12 +19,23 @@
         {   "from": [ 0, 0, 0 ],
             "to": [ 16, 16, 16 ],
             "faces": {
-                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#yeasty", "cullface": "down" },
-                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#yeasty", "cullface": "up" },
-                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#yeasty", "cullface": "north" },
-                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#yeasty", "cullface": "south" },
-                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#yeasty", "cullface": "west" },
-                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#yeasty", "cullface": "east" }
+                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#plain", "cullface": "down" },
+                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#plain", "cullface": "up" },
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#plain", "cullface": "north" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#plain", "cullface": "south" },
+                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#plain", "cullface": "west" },
+                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#plain", "cullface": "east" }
+            }
+        },
+        {   "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#yeast_overlay", "cullface": "down" },
+                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#yeast_overlay", "cullface": "up" },
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#yeast_overlay", "cullface": "north" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#yeast_overlay", "cullface": "south" },
+                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#yeast_overlay", "cullface": "west" },
+                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#yeast_overlay", "cullface": "east" }
             }
         }
     ],

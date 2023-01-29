@@ -15,6 +15,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -59,6 +60,16 @@ public class SyringeItem extends Item implements CustomUseEffectsItem {
 
 
         return new InteractionResultHolder<>(InteractionResult.FAIL, itemStack);
+    };
+
+    @Override
+    public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
+        if (entity instanceof LivingEntity && !entity.getLevel().isClientSide()) {
+            onInject(stack, entity.getLevel(), (LivingEntity) entity);
+            player.getInventory().removeItem(stack);
+            player.getInventory().add(new ItemStack(DestroyItems.SYRINGE.get()));
+        };
+        return super.onLeftClickEntity(stack, player, entity);
     };
 
     @Override

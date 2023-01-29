@@ -1,60 +1,51 @@
 package com.petrolpark.destroy.block;
 
-import java.util.function.Supplier;
-
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
+import static com.petrolpark.destroy.Destroy.REGISTRATE;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.item.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.item.DestroyItems;
+import com.simibubi.create.AllTags;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.AllSections;
 import com.simibubi.create.foundation.block.BlockStressDefaults;
+import com.simibubi.create.foundation.data.AllLangPartials;
 import com.simibubi.create.foundation.data.AssetLookup;
-import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
+import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HalfTransparentBlock;
-import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraftforge.common.Tags;
 
 public class DestroyBlocks {
-    
-    public static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, Destroy.MOD_ID);
 
-    private static final CreateRegistrate REGISTRATE = Destroy.registrate().creativeModeTab(() -> DestroyCreativeModeTabs.TAB_DESTROY);
+    static {
+        REGISTRATE.creativeModeTab(() -> DestroyCreativeModeTabs.TAB_DESTROY);
+    };
 
-    // CONTRAPTIONS - this stuff is registered with Registrate
+    static {
+        REGISTRATE.startSection(AllSections.KINETICS);
+    };
 
-    public static final BlockEntry<AgingBarrelBlock> AGING_BARREL = REGISTRATE.block("aging_barrel", AgingBarrelBlock::new)
-        .initialProperties(SharedProperties::stone)
-        .properties(p -> p
-            .color(MaterialColor.COLOR_BROWN)
-            .noOcclusion()
-        ).item()
-        .transform(customItemModel())
-        .register();
+    // CONTRAPTIONS
 
     public static final BlockEntry<BreezeBurnerBlock> BREEZE_BURNER = REGISTRATE.block("breeze_burner", BreezeBurnerBlock::new)
         .initialProperties(SharedProperties::stone)
         .properties(p -> p
             .color(MaterialColor.DEEPSLATE)
             .noOcclusion()
-        ).item()
+        ).transform(AllTags.pickaxeOnly())
+        .item()
         .transform(customItemModel())
         .register();
 
@@ -64,161 +55,261 @@ public class DestroyBlocks {
             .color(MaterialColor.COLOR_ORANGE)
             .noOcclusion()
         ).blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
+        .transform(AllTags.pickaxeOnly())
         .transform(BlockStressDefaults.setImpact(8.0))
         .item()
         .transform(customItemModel())
         .register();
 
-    // Everything below is not registered with Registrate (yet)
-    //TODO register with Registrate
+    static {
+        REGISTRATE.startSection(AllSections.CURIOSITIES);
+    };
+
+    public static final BlockEntry<AgingBarrelBlock> AGING_BARREL = REGISTRATE.block("aging_barrel", AgingBarrelBlock::new)
+        .initialProperties(SharedProperties::stone)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_BROWN)
+            .noOcclusion()
+        ).transform(AllTags.axeOnly())
+        .item()
+        .transform(customItemModel())
+        .register();
+
+    static {
+        REGISTRATE.startSection(AllSections.MATERIALS);
+    };
 
     // STORAGE BLOCKS
 
-    public static final RegistryObject<Block> FLUORITE_BLOCK = registerBlock("fluorite_block",
-        () -> new Block(BlockBehaviour.Properties
-            .of(Material.METAL, MaterialColor.COLOR_PURPLE)
-            .strength(4.0f)
-            .sound(SoundType.METAL)
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+    public static final BlockEntry<Block> FLUORITE_BLOCK = REGISTRATE.block("fluorite_block", Block::new)
+        .initialProperties(() -> Blocks.IRON_BLOCK)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_PURPLE)
+            .requiresCorrectToolForDrops()
+        ).transform(AllTags.pickaxeOnly())
+        .tag(BlockTags.NEEDS_IRON_TOOL)
+        .tag(Tags.Blocks.STORAGE_BLOCKS)
+        .tag(BlockTags.BEACON_BASE_BLOCKS)
+        .transform(AllTags.tagBlockAndItem("storage_blocks/fluorite"))
+        .tag(Tags.Items.STORAGE_BLOCKS)
+        .build()
+        .register();
 
-    public static final RegistryObject<Block> RAW_NICKEL_BLOCK = registerBlock("raw_nickel_block",
-        () -> new Block(BlockBehaviour.Properties
-            .of(Material.STONE, MaterialColor.SAND)
-            .strength(4.5f)
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+    public static final BlockEntry<Block> RAW_NICKEL_BLOCK = REGISTRATE.block("raw_nickel_block", Block::new)
+        .initialProperties(() -> Blocks.RAW_IRON_BLOCK)
+        .properties(p -> p
+            .color(MaterialColor.SAND)
+            .requiresCorrectToolForDrops()
+        ).transform(AllTags.pickaxeOnly())
+        .tag(BlockTags.NEEDS_STONE_TOOL)
+        .tag(Tags.Blocks.STORAGE_BLOCKS)
+        .tag(BlockTags.BEACON_BASE_BLOCKS)
+        .transform(AllTags.tagBlockAndItem("storage_blocks/raw_nickel"))
+        .tag(Tags.Items.STORAGE_BLOCKS)
+        .build()
+        .register();
 
-    public static final RegistryObject<Block> NICKEL_BLOCK = registerBlock("nickel_block",
-        () -> new Block(BlockBehaviour.Properties
-            .of(Material.METAL, MaterialColor.SAND)
-            .strength(5.0f)
-            .sound(SoundType.METAL)
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+    public static final BlockEntry<Block> NICKEL_BLOCK = REGISTRATE.block("nickel_block", Block::new)
+        .initialProperties(() -> Blocks.IRON_BLOCK)
+        .properties(p -> p
+            .color(MaterialColor.SAND)
+            .requiresCorrectToolForDrops()
+        ).transform(AllTags.pickaxeOnly())
+        .tag(BlockTags.NEEDS_STONE_TOOL)
+        .tag(Tags.Blocks.STORAGE_BLOCKS)
+        .tag(BlockTags.BEACON_BASE_BLOCKS)
+        .transform(AllTags.tagBlockAndItem("storage_blocks/nickel"))
+        .tag(Tags.Items.STORAGE_BLOCKS)
+        .build()
+        .register();
 
-    public static final RegistryObject<Block> PALLADIUM_BLOCK = registerBlock("palladium_block",
-        () -> new Block(BlockBehaviour.Properties
-            .of(Material.METAL, MaterialColor.METAL)
-            .strength(5.0f)
-            .sound(SoundType.METAL)
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+    public static final BlockEntry<Block> PALLADIUM_BLOCK = REGISTRATE.block("palladium_block", Block::new)
+        .initialProperties(() -> Blocks.NETHERITE_BLOCK)
+        .properties(p -> p
+            .color(MaterialColor.DIRT)
+            .requiresCorrectToolForDrops()
+        ).transform(AllTags.pickaxeOnly())
+        .tag(BlockTags.NEEDS_DIAMOND_TOOL)
+        .tag(Tags.Blocks.STORAGE_BLOCKS)
+        .tag(BlockTags.BEACON_BASE_BLOCKS)
+        .transform(AllTags.tagBlockAndItem("storage_blocks/palladium"))
+        .tag(Tags.Items.STORAGE_BLOCKS)
+        .build()
+        .register();
 
-    public static final RegistryObject<Block> PLATINUM_BLOCK = registerBlock("platinum_block",
-        () -> new Block(BlockBehaviour.Properties
-            .of(Material.METAL, MaterialColor.COLOR_LIGHT_BLUE)
-            .strength(5.0f)
-            .sound(SoundType.METAL)
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+    public static final BlockEntry<Block> PLATINUM_BLOCK = REGISTRATE.block("platinum_block", Block::new)
+        .initialProperties(() -> Blocks.DIAMOND_BLOCK)
+        .properties(p -> p
+            .requiresCorrectToolForDrops()
+        ).transform(AllTags.pickaxeOnly())
+        .tag(BlockTags.NEEDS_IRON_TOOL)
+        .tag(Tags.Blocks.STORAGE_BLOCKS)
+        .tag(BlockTags.BEACON_BASE_BLOCKS)
+        .transform(AllTags.tagBlockAndItem("storage_blocks/platinum"))
+        .tag(Tags.Items.STORAGE_BLOCKS)
+        .build()
+        .register();
 
-    public static final RegistryObject<Block> RHODIUM_BLOCK = registerBlock("rhodium_block",
-        () -> new Block(BlockBehaviour.Properties
-            .of(Material.METAL, MaterialColor.COLOR_PURPLE)
-            .strength(5.0f)
-            .sound(SoundType.METAL)
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+    public static final BlockEntry<Block> RHODIUM_BLOCK = REGISTRATE.block("rhodium_block", Block::new)
+        .initialProperties(() -> Blocks.NETHERITE_BLOCK)
+        .properties(p -> p
+            .color(MaterialColor.TERRACOTTA_LIGHT_BLUE)
+            .requiresCorrectToolForDrops()
+        ).transform(AllTags.pickaxeOnly())
+        .tag(BlockTags.NEEDS_DIAMOND_TOOL)
+        .tag(Tags.Blocks.STORAGE_BLOCKS)
+        .tag(BlockTags.BEACON_BASE_BLOCKS)
+        .transform(AllTags.tagBlockAndItem("storage_blocks/rhodium"))
+        .tag(Tags.Items.STORAGE_BLOCKS)
+        .build()
+        .register();
 
-    public static final RegistryObject<Block> ZIRCONIUM_BLOCK = registerBlock("zirconium_block",
-        () -> new Block(BlockBehaviour.Properties
-            .of(Material.METAL, MaterialColor.METAL)
-            .strength(5.0f)
-            .sound(SoundType.METAL)
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+    public static final BlockEntry<Block> ZIRCONIUM_BLOCK = REGISTRATE.block("zirconium_block", Block::new)
+        .initialProperties(() -> Blocks.NETHERITE_BLOCK)
+        .properties(p -> p
+            .color(MaterialColor.STONE)
+            .requiresCorrectToolForDrops()
+        ).transform(AllTags.pickaxeOnly())
+        .tag(BlockTags.NEEDS_DIAMOND_TOOL)
+        .tag(Tags.Blocks.STORAGE_BLOCKS)
+        .tag(BlockTags.BEACON_BASE_BLOCKS)
+        .transform(AllTags.tagBlockAndItem("storage_blocks/zirconium"))
+        .tag(Tags.Items.STORAGE_BLOCKS)
+        .build()
+        .register();
 
     // ORES
 
-    public static final RegistryObject<Block> FLUORITE_ORE = registerBlock("fluorite_ore",
-        () -> new DropExperienceBlock(BlockBehaviour.Properties
-            .of(Material.STONE)
-            .strength(3.0f)
+    public static final BlockEntry<Block> FLUORITE_ORE = REGISTRATE.block("fluorite_ore", Block::new)
+        .initialProperties(() -> Blocks.GOLD_ORE)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+        ).transform(AllTags.pickaxeOnly())
+        .loot((lt, b) -> lt.add(b,
+			RegistrateBlockLootTables.createSilkTouchDispatchTable(b,
+				RegistrateBlockLootTables.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.FLUORITE.get())
+				.apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE)))
+            )
+        )).tag(BlockTags.NEEDS_IRON_TOOL)
+        .tag(Tags.Blocks.ORES)
+        .transform(AllTags.tagBlockAndItem("ores/fluorite", "ores_in_ground/stone"))
+        .tag(Tags.Items.ORES)
+        .build()
+        .register();
 
-    public static final RegistryObject<Block> DEEPSLATE_FLUORITE_ORE = registerBlock("deepslate_fluorite_ore",
-        () -> new DropExperienceBlock(BlockBehaviour.Properties
-            .of(Material.STONE, MaterialColor.DEEPSLATE)
-            .strength(4.5f)
+    public static final BlockEntry<Block> DEEPSLATE_FLUORITE_ORE = REGISTRATE.block("deepslate_fluorite_ore", Block::new)
+        .initialProperties(() -> Blocks.DEEPSLATE_GOLD_ORE)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
             .sound(SoundType.DEEPSLATE)
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+        ).transform(AllTags.pickaxeOnly())
+        .loot((lt, b) -> lt.add(b,
+			RegistrateBlockLootTables.createSilkTouchDispatchTable(b,
+				RegistrateBlockLootTables.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.FLUORITE.get())
+				.apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE)))
+            )
+        )).tag(BlockTags.NEEDS_IRON_TOOL)
+        .tag(Tags.Blocks.ORES)
+        .transform(AllTags.tagBlockAndItem("ores/fluorite", "ores_in_ground/deepslate"))
+        .tag(Tags.Items.ORES)
+        .build()
+        .register();
 
-    public static final RegistryObject<Block> NICKEL_ORE = registerBlock("nickel_ore",
-        () -> new DropExperienceBlock(BlockBehaviour.Properties
-            .of(Material.STONE)
-            .strength(3.0f)
+    public static final BlockEntry<Block> END_FLUORITE_ORE = REGISTRATE.block("end_fluorite_ore", Block::new)
+        .initialProperties(() -> Blocks.END_STONE)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+        ).transform(AllTags.pickaxeOnly())
+        .loot((lt, b) -> lt.add(b,
+			RegistrateBlockLootTables.createSilkTouchDispatchTable(b,
+				RegistrateBlockLootTables.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.FLUORITE.get())
+				.apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE)))
+            )
+        )).tag(BlockTags.NEEDS_IRON_TOOL)
+        .tag(Tags.Blocks.ORES)
+        .transform(AllTags.tagBlockAndItem("ores/fluorite", "ores_in_ground/end_stone"))
+        .tag(Tags.Items.ORES)
+        .build()
+        .register();
 
-    public static final RegistryObject<Block> DEEPSLATE_NICKEL_ORE = registerBlock("deepslate_nickel_ore",
-        () -> new DropExperienceBlock(BlockBehaviour.Properties
-            .of(Material.STONE, MaterialColor.DEEPSLATE)
-            .strength(4.5f)
+    public static final BlockEntry<Block> NICKEL_ORE = REGISTRATE.block("nickel_ore", Block::new)
+        .initialProperties(() -> Blocks.GOLD_ORE)
+        .properties(p -> p
+            .color(MaterialColor.SAND)
+            .requiresCorrectToolForDrops()
+        ).transform(AllTags.pickaxeOnly())
+        .loot((lt, b) -> lt.add(b,
+			RegistrateBlockLootTables.createSilkTouchDispatchTable(b,
+				RegistrateBlockLootTables.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.RAW_NICKEL.get())
+				.apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE)))
+            )
+        )).tag(BlockTags.NEEDS_IRON_TOOL)
+        .tag(Tags.Blocks.ORES)
+        .transform(AllTags.tagBlockAndItem("ores/nickel", "ores_in_ground/stone"))
+        .tag(Tags.Items.ORES)
+        .build()
+        .register();
+
+    public static final BlockEntry<Block> DEEPSLATE_NICKEL_ORE = REGISTRATE.block("deepslate_nickel_ore", Block::new)
+        .initialProperties(() -> Blocks.DEEPSLATE_GOLD_ORE)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
             .sound(SoundType.DEEPSLATE)
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+        ).transform(AllTags.pickaxeOnly())
+        .loot((lt, b) -> lt.add(b,
+			RegistrateBlockLootTables.createSilkTouchDispatchTable(b,
+				RegistrateBlockLootTables.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.RAW_NICKEL.get())
+				.apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE)))
+            )
+        )).tag(BlockTags.NEEDS_IRON_TOOL)
+        .tag(Tags.Blocks.ORES)
+        .transform(AllTags.tagBlockAndItem("ores/fluorite", "ores_in_ground/deepslate"))
+        .tag(Tags.Items.ORES)
+        .build()
+        .register();
 
     // FOOD
 
-    public static final RegistryObject<Block> MASHED_POTATO_BLOCK = registerBlock("mashed_potato_block",
-        () -> new Block(BlockBehaviour.Properties
-            .of(Material.CLAY, MaterialColor.COLOR_YELLOW)
-            .strength(0.5f)
+    public static final BlockEntry<Block> MASHED_POTATO_BLOCK = REGISTRATE.block("mashed_potato_block", Block::new)
+        .initialProperties(() -> Blocks.CLAY)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_YELLOW)
             .sound(SoundType.SLIME_BLOCK)
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+        ).register();
 
-    public static final RegistryObject<Block> RAW_FRIES_BLOCK = registerBlock("raw_fries_block",
-        () -> new RotatedPillarBlock(BlockBehaviour.Properties
-            .of(Material.CLAY, MaterialColor.COLOR_YELLOW)
-            .strength(0.5f)
+    public static final BlockEntry<RotatedPillarBlock> RAW_FRIES_BLOCK = REGISTRATE.block("raw_fries_block", RotatedPillarBlock::new)
+        .initialProperties(() -> Blocks.CLAY)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_YELLOW)
             .sound(SoundType.SLIME_BLOCK)
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+        ).register();
+
+    static {
+        REGISTRATE.startSection(AllSections.UNASSIGNED);
+    };
 
     // UNCATEGORISED
 
-    public static final RegistryObject<Block> AGAR_BLOCK = registerBlock("agar_block",
-        () -> new HalfTransparentBlock(BlockBehaviour.Properties
-            .of(Material.CLAY, MaterialColor.COLOR_LIGHT_BLUE)
-            .friction(0.9F)
+    public static final BlockEntry<HalfTransparentBlock> AGAR_BLOCK = REGISTRATE.block("agar_block", HalfTransparentBlock::new)
+        .initialProperties(() -> Blocks.CLAY)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_LIGHT_BLUE)
+            .friction(1.1f)
             .noOcclusion()
             .sound(SoundType.SLIME_BLOCK)
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+        ).item()
+        .build()
+        .register();
 
-    public static final RegistryObject<Block> YEAST_COVERED_AGAR_BLOCK = registerBlock("yeast_covered_agar_block",
-        () -> new HalfTransparentBlock(BlockBehaviour.Properties
-            .of(Material.CLAY, MaterialColor.COLOR_LIGHT_BLUE)
-            .friction(0.9F)
-            .noOcclusion()
-            .sound(SoundType.SLIME_BLOCK)
-        ), DestroyCreativeModeTabs.TAB_DESTROY
-    );
+    public static final BlockEntry<HalfTransparentBlock> YEAST_COVERED_AGAR_BLOCK = REGISTRATE.block("yeast_covered_agar_block", HalfTransparentBlock::new)
+        .initialProperties(AGAR_BLOCK)
+        .item()
+        .build()
+        .register();
 
-
-    private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab) {
-        RegistryObject<T> toReturn = BLOCKS.register(name, block);
-        registerBlockItem(name, toReturn, tab);
-        return toReturn;
-    }
-
-    private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block, CreativeModeTab tab) {
-        return DestroyItems.ITEMS.register(name, () -> new BlockItem(block.get(),
-            new Item.Properties().tab(tab)));
-    };
-
-    public static void register(IEventBus eventBus) {
-        //register the usual stuff
-        BLOCKS.register(eventBus);
-        //register the Registrate stuff
-        Create.registrate().addToSection(CENTRIFUGE, AllSections.KINETICS);
-    }
+    public static void register() {};
 }

@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -33,15 +32,13 @@ public class AgingBarrelBlockEntity extends SmartTileEntity {
     public LazyOptional<IItemHandlerModifiable> itemCapability;
 
     private int timer;
-    public Boolean hasYeast;
 
     public AgingBarrelBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
-        inventory = new SmartInventory(1, this, 1, false).forbidExtraction();
+        inventory = new SmartInventory(2, this, 1, false).forbidExtraction();
         itemCapability = LazyOptional.of(() -> inventory);
 
         timer = 0;
-        hasYeast = false;
     };
 
     @Override
@@ -62,7 +59,6 @@ public class AgingBarrelBlockEntity extends SmartTileEntity {
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         inventory.deserializeNBT(compound.getCompound("Inventory"));
-        hasYeast = compound.getBoolean("HasYeast");
         timer = compound.getInt("Timer");
         //Storage of what's in the Tanks is automatically covered in SmartTileEntity
     };
@@ -71,14 +67,16 @@ public class AgingBarrelBlockEntity extends SmartTileEntity {
     protected void write(CompoundTag compound, boolean clientPacket) {
         super.write(compound, clientPacket);
         compound.put("Inventory", inventory.serializeNBT());
-        compound.putBoolean("HasYeast", hasYeast);
         compound.putInt("Timer", timer);
         //Retrieval of what's in the Tanks is automatically covered in SmartTileEntity
     };
 
-    private void process() {
-        
-    };
+    @Override
+	public void setRemoved() {
+		itemCapability.invalidate();
+		fluidCapability.invalidate();
+		super.setRemoved();
+	}
 
     @Nonnull
     @Override

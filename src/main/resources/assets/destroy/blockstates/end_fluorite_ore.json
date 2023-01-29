@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "": {
+            "model": "destroy:block/end_fluorite_ore"
+        }
+    }
+}

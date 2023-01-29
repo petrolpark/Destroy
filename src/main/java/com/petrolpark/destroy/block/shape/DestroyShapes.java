@@ -15,15 +15,18 @@ public class DestroyShapes {
         .add(0, 12, 0, 16, 16, 16)
         .build();
 
-    public static final VoxelShaper AGING_BARREL_OPEN = shape(0, 0, 0, 16, 2, 16)
-        .add(0, 2, 0, 16, 14, 2)
-        .add(0, 2, 14, 16, 14, 16)
-        .add(0, 2, 2, 2, 14, 14)
-        .add(14, 2, 2, 16, 14, 14)
+    public static final VoxelShaper AGING_BARREL_OPEN = shape(0, 0, 0, 16, 14, 16)
+        .erase(2, 2, 2, 14, 14, 14)
+        .add(0, 14, 14, 16, 30, 16)
+        .forDirectional(Direction.NORTH);
+
+    public static final VoxelShaper AGING_BARREL_OPEN_RAYTRACE = shape(0, 0, 0, 16, 14, 16)
         .add(0, 14, 14, 16, 30, 16)
         .forDirectional(Direction.NORTH);
     
-    public static final VoxelShape AGING_BARREL_INTERIOR = shape(0, 0, 0, 16, 9, 16).build(); //used for detecting when Items are thrown into the Aging Barrel
+    public static final VoxelShape AGING_BARREL_INTERIOR = shape(0, 0, 0, 16, 16, 16) //used for detecting when Items are thrown into the Aging Barrel
+        .erase(2, 7, 2, 14, 16, 14)
+        .build();
 
     /**
      * Changes the voxel shape of the Aging Barrel based on how far through the aging process the Barrel is.

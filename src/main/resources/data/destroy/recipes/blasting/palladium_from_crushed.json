@@ -1,9 +1,0 @@
-{
-    "type": "minecraft:blasting",
-    "ingredient": {
-      "item": "destroy:crushed_palladium_ore"
-    },
-    "result": "destroy:palladium_ingot",
-    "experience": 1.0,
-    "cookingtime": 100
-  }

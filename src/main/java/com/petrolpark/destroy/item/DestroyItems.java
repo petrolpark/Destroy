@@ -1,649 +1,542 @@
 package com.petrolpark.destroy.item;
 
-import com.petrolpark.destroy.Destroy;
+import static com.petrolpark.destroy.Destroy.REGISTRATE;
 
+import static com.simibubi.create.AllTags.forgeItemTag;
+
+import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.sound.DestroySoundEvents;
+import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
+import com.simibubi.create.AllTags.AllItemTags;
+
+import com.simibubi.create.content.AllSections;
+import com.simibubi.create.content.contraptions.itemAssembly.SequencedAssemblyItem;
+import com.tterrag.registrate.util.entry.ItemEntry;
+
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraft.world.item.RecordItem;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 public class DestroyItems {
     public static final DeferredRegister<Item> ITEMS =
         DeferredRegister.create(ForgeRegistries.ITEMS, Destroy.MOD_ID);
 
+    static {
+        REGISTRATE.creativeModeTab(() -> DestroyCreativeModeTabs.TAB_DESTROY);
+    };
+
+    static {
+        REGISTRATE.startSection(AllSections.MATERIALS);
+    };
+
+    public static final ItemEntry<Item>
 
     // PLASTICS
-
-    public static final RegistryObject<Item> POLYETHENE_TEREPHTHALATE = ITEMS.register("polyethene_terephthalate",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> POLYVINYL_CHLORIDE = ITEMS.register("polyvinyl_chloride",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> POLYETHENE = ITEMS.register("polyethene",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> POLYPROPENE = ITEMS.register("polypropene",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> POLYSTYRENE = ITEMS.register("polystyrene",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> ABS = ITEMS.register("abs",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> POLYTETRAFLUOROETHENE = ITEMS.register("polytetrafluoroethene",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> NYLON = ITEMS.register("nylon",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> POLYSTYRENE_BUTADIENE = ITEMS.register("polystyrene_butadiene",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> RUBBER = ITEMS.register("rubber",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
+    
+    POLYETHENE_TEREPHTHALATE = REGISTRATE.item("polyethene_terephthalate", Item::new)
+        .tag(DestroyItemTags.PLASTIC.tag)
+        .register(),
+    POLYVINYL_CHLORIDE = REGISTRATE.item("polyvinyl_chloride", Item::new)
+        .tag(DestroyItemTags.PLASTIC.tag)
+        .register(),
+    POLYETHENE = REGISTRATE.item("polyethene", Item::new)
+        .tag(DestroyItemTags.PLASTIC.tag)
+        .register(),
+    POLYPROPENE = REGISTRATE.item("polypropene", Item::new)
+        .tag(DestroyItemTags.PLASTIC.tag)
+        .register(),
+    POLYSTYRENE = REGISTRATE.item("polystyrene", Item::new)
+        .tag(DestroyItemTags.PLASTIC.tag)
+        .register(),
+    ABS = REGISTRATE.item("abs", Item::new)
+        .tag(DestroyItemTags.PLASTIC.tag)
+        .register(),
+    POLYTETRAFLUOROETHENE = REGISTRATE.item("polytetrafluoroethene", Item::new)
+        .tag(DestroyItemTags.PLASTIC.tag)
+        .register(),
+    NYLON = REGISTRATE.item("nylon", Item::new)
+        .tag(DestroyItemTags.PLASTIC.tag)
+        .register(),
+    POLYSTYRENE_BUTADIENE = REGISTRATE.item("polystyrene_butadiene", Item::new)
+        .tag(DestroyItemTags.PLASTIC.tag)
+        .register(),
+    RUBBER = REGISTRATE.item("rubber", Item::new)
+        .tag(DestroyItemTags.PLASTIC.tag)
+        .register(),
 
     // INGOTS ETC
 
-    public static final RegistryObject<Item> FLUORITE = ITEMS.register("fluorite",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> NICKEL_INGOT = ITEMS.register("nickel_ingot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> PALLADIUM_INGOT = ITEMS.register("palladium_ingot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> PLATINUM_INGOT = ITEMS.register("platinum_ingot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> RHODIUM_INGOT = ITEMS.register("rhodium_ingot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );  
-
-    public static final RegistryObject<Item> PURE_GOLD_INGOT = ITEMS.register("pure_gold_ingot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> ZIRCONIUM_INGOT = ITEMS.register("zirconium_ingot",
-    () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-);
-
-    public static final RegistryObject<Item> SALTPETER = ITEMS.register("saltpeter",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> SULFUR = ITEMS.register("sulfur",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-    
-    public static final RegistryObject<Item> ZINC_DUST = ITEMS.register("zinc_dust",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
+    FLUORITE = REGISTRATE.item("fluorite", Item::new)
+        .tag(DestroyItemTags.SALT.tag, forgeItemTag("raw_material/fluorite"), ItemTags.BEACON_PAYMENT_ITEMS)
+        .register(),
+    NICKEL_INGOT = REGISTRATE.item("nickel_ingot", Item::new)
+        .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/palladium"), Tags.Items.INGOTS)
+        .register(),
+    PALLADIUM_INGOT = REGISTRATE.item("palladium_ingot", Item::new)
+        .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/palladium"), Tags.Items.INGOTS)
+        .register(),
+    PLATINUM_INGOT = REGISTRATE.item("platinum_ingot", Item::new)
+        .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/platinum"), Tags.Items.INGOTS)
+        .register(),
+    RHODIUM_INGOT = REGISTRATE.item("rhodium_ingot", Item::new)
+        .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/rhodium"), Tags.Items.INGOTS)
+        .register(),
+    PURE_GOLD_INGOT = REGISTRATE.item("pure_gold_ingot", Item::new)
+        .tag(DestroyItemTags.DESTROY_INGOTS.tag, Tags.Items.INGOTS, ItemTags.PIGLIN_LOVED)
+        .register(),
+    ZIRCONIUM_INGOT = REGISTRATE.item("zirconium_ingot", Item::new)
+        .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/zirconium"), Tags.Items.INGOTS)
+        .register(),
+    SULFUR = REGISTRATE.item("sulfur", Item::new)
+        .tag(forgeItemTag("raw_materials/sulfur"))
+        .register(),
+    ZINC_DUST = REGISTRATE.item("zinc_dust", Item::new)
+        .tag(forgeItemTag("dusts/zinc"), Tags.Items.DUSTS)
+        .register(),
 
     // RAW MATERIALS
 
-    public static final RegistryObject<Item> RAW_NICKEL = ITEMS.register("raw_nickel",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> CRUSHED_NICKEL_ORE = ITEMS.register("crushed_nickel_ore",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> CRUSHED_PALLADIUM_ORE = ITEMS.register("crushed_palladium_ore",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> CRUSHED_PLATINUM_ORE = ITEMS.register("crushed_platinum_ore",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> CRUSHED_RHODIUM_ORE = ITEMS.register("crushed_rhodium_ore",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-    
-    public static final RegistryObject<Item> PURE_GOLD_DUST = ITEMS.register("pure_gold_dust",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> ZIRCON = ITEMS.register("zircon",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-
+    RAW_NICKEL = REGISTRATE.item("raw_nickel", Item::new)
+        .tag(forgeItemTag("raw_materials/nickel"), Tags.Items.RAW_MATERIALS)
+        .register(),
+    CRUSHED_NICKEL_ORE = REGISTRATE.item("crushed_nickel_ore", Item::new)
+        .tag(AllItemTags.CRUSHED_ORES.tag)
+        .register(),
+    CRUSHED_PALLADIUM_ORE = REGISTRATE.item("crushed_palladium_ore", Item::new)
+        .tag(AllItemTags.CRUSHED_ORES.tag)
+        .register(),
+    CRUSHED_PLATINUM_ORE = REGISTRATE.item("crushed_platinum_ore", Item::new)
+        .tag(AllItemTags.CRUSHED_ORES.tag)
+        .register(),
+    CRUSHED_RHODIUM_ORE = REGISTRATE.item("crushed_rhodium_ore", Item::new)
+        .tag(AllItemTags.CRUSHED_ORES.tag)
+        .register(),
+    PURE_GOLD_DUST = REGISTRATE.item("pure_gold_dust", Item::new)
+        .tag(Tags.Items.DUSTS, ItemTags.PIGLIN_LOVED)
+        .register(),
+    ZIRCON = REGISTRATE.item("zircon", Item::new)
+        .tag(forgeItemTag("raw_materials/zircon"))
+        .register(),
 
     // PRIMARY EXPLOSIVES
 
-    public static final RegistryObject<Item> ACETONE_PEROXIDE = ITEMS.register("acetone_peroxide",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> FULMINATED_MERCURY = ITEMS.register("fulminated_mercury",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> NICKEL_HYDRAZINE_NITRATE = ITEMS.register("nickel_hydrazine_nitrate",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> TOUCH_POWDER = ITEMS.register("touch_powder",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
+    ACETONE_PEROXIDE = REGISTRATE.item("acetone_peroxide", Item::new)
+        .tag(DestroyItemTags.PRIMARY_EXPLOSIVE.tag, Tags.Items.DUSTS)
+        .register(),
+    FULMINATED_MERCURY = REGISTRATE.item("fulminated_mercury", Item::new)
+        .tag(DestroyItemTags.PRIMARY_EXPLOSIVE.tag, DestroyItemTags.SALT.tag, Tags.Items.DUSTS)
+        .register(),
+    NICKEL_HYDRAZINE_NITRATE = REGISTRATE.item("nickel_hydrazine_nitrate", Item::new)
+        .tag(DestroyItemTags.PRIMARY_EXPLOSIVE.tag, Tags.Items.DUSTS)
+        .register(),
+    TOUCH_POWDER = REGISTRATE.item("touch_powder", Item::new)
+        .tag(DestroyItemTags.PRIMARY_EXPLOSIVE.tag, Tags.Items.DUSTS)
+        .register(),
 
     // SECONDARY EXPLOSIVES
 
-    public static final RegistryObject<Item> ANFO = ITEMS.register("anfo",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> CORDITE = ITEMS.register("cordite",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> DYNAMITE = ITEMS.register("dynamite",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> NITROCELLULOSE = ITEMS.register("nitrocellulose",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> SODIUM_PICRATE_TABLET = ITEMS.register("sodium_picrate_tablet",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> TNT_TABLET = ITEMS.register("tnt_tablet",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-
-    // TOOLS AND ARMOR
-
-    public static final RegistryObject<Item> CHALK = ITEMS.register("chalk",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> DIAMOND_DRILL_BIT = ITEMS.register("diamond_drill_bit",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> GAS_FLITER = ITEMS.register("gas_filter",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> GAS_MASK = ITEMS.register("gas_mask",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> HAZMAT_SUIT = ITEMS.register("hazmat_suit",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> HAZMAT_LEGGINGS = ITEMS.register("hazmat_leggings",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> WELLINGTON_BOOTS = ITEMS.register("wellington_boots",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> SOAP = ITEMS.register("soap",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-
-    // TOYS
-
-    public static final RegistryObject<Item> BUCKET_AND_SPADE = ITEMS.register("bucket_and_spade",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> PLAYWELL = ITEMS.register("playwell",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-
-    // SPRAY BOTTLES
-
-    public static final RegistryObject<Item> SPRAY_BOTTLE = ITEMS.register("spray_bottle",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> PERFUME_BOTTLE = ITEMS.register("perfume_bottle",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> SHAMPOO_BOTTLE = ITEMS.register("shampoo_bottle",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> SUNSCREEN_BOTTLE = ITEMS.register("sunscreen_bottle",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-
-    // SYRINGES
-
-    public static final RegistryObject<Item> SYRINGE = ITEMS.register("syringe",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> ASPIRIN_SYRINGE = ITEMS.register("aspirin_syringe",
-        () -> new AspirinSyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> CISPLATIN_SYRINGE = ITEMS.register("cisplatin_syringe",
-        () -> new SyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> IMPURE_METH_SYRINGE = ITEMS.register("impure_meth_syringe",
-        () -> new MethSyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY), 1200, 0)
-    );
-
-    public static final RegistryObject<Item> METH_SYRINGE = ITEMS.register("meth_syringe",
-        () -> new MethSyringeItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY), 1200, 1)
-    );
-
-    
-    // SEISMOGRAPHS
-
-    public static final RegistryObject<Item> SEISMOGRAPH_GOOD = ITEMS.register("seismograph_good",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> SEISMOGRAPH_MIDDLE = ITEMS.register("seismograph_middle",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> SEISMOGRAPH_BAD = ITEMS.register("seismograph_bad",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-
-    // SILICA
-
-    public static final RegistryObject<Item> SILICA = ITEMS.register("silica",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> DIRTY_SILICA = ITEMS.register("dirty_silica",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> ACETONE_COATED_SILICA = ITEMS.register("acetone_coated_silica",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> COPPER_COATED_SILICA = ITEMS.register("copper_coated_silica",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> IRON_COATED_SILICA = ITEMS.register("iron_coated_silica",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> LIMEWATER_COATED_SILICA = ITEMS.register("limewater_coated_silica",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> NICKEL_COATED_SILICA = ITEMS.register("nickel_coated_silica",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> PLATINUM_COATED_SILICA = ITEMS.register("platinum_coated_silica",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> RHODIUM_COATED_SILICA = ITEMS.register("rhodium_coated_silica",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> SODIUM_ACETATE_COATED_SILICA = ITEMS.register("sodium_acetate_coated_silica",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> SULFURIC_ACID_COATED_SILICA = ITEMS.register("sulfuric_acid_coated_silica",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-
-    // NON-SILICA CATALYSTS
-
-    public static final RegistryObject<Item> CONVERSION_CATALYST = ITEMS.register("conversion_catalyst",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> DIRTY_CONVERSION_CATALYST = ITEMS.register("dirty_conversion_catalyst",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> PALLADIUM_ON_CARBON = ITEMS.register("palladium_on_carbon",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> DIRTY_COAL = ITEMS.register("dirty_coal",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> ZEOLITE = ITEMS.register("zeolite",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> DIRTY_ZEOLITE = ITEMS.register("dirty_zeolite",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> ZEIGLER_NATTA = ITEMS.register("ziegler-natta",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> DIRTY_ZEIGLER_NATTA = ITEMS.register("dirty_ziegler-natta",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
+    ANFO = REGISTRATE.item("anfo", Item::new)
+        .tag(DestroyItemTags.SECONDARY_EXPLOSIVE.tag, Tags.Items.DUSTS)
+        .register(),
+    CORDITE = REGISTRATE.item("cordite", Item::new)
+        .tag(DestroyItemTags.SECONDARY_EXPLOSIVE.tag)
+        .register(),
+    DYNAMITE = REGISTRATE.item("dynamite", Item::new)
+        .tag(DestroyItemTags.SECONDARY_EXPLOSIVE.tag)
+        .register(),
+    NITROCELLULOSE = REGISTRATE.item("nitrocellulose", Item::new)
+        .tag(DestroyItemTags.SECONDARY_EXPLOSIVE.tag)
+        .register(),
+    SODIUM_PICRATE_TABLET = REGISTRATE.item("sodium_picrate_tablet", Item::new)
+        .tag(DestroyItemTags.SALT.tag, DestroyItemTags.SECONDARY_EXPLOSIVE.tag)
+        .register(),
+    TNT_TABLET = REGISTRATE.item("tnt_tablet", Item::new)
+        .tag(DestroyItemTags.SECONDARY_EXPLOSIVE.tag)
+        .register(),
 
     // COMPOUNDS
 
-    public static final RegistryObject<Item> AMMONIUM_NITRATE_PRILL = ITEMS.register("ammonium_nitrate_prill",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    AMMONIUM_NITRATE_PRILL = REGISTRATE.item("ammonium_nitrate_prill", Item::new)
+        .tag(DestroyItemTags.PRILL.tag)
+        .register(),
+    CALCIUM_CHLORIDE = REGISTRATE.item("calcium_chloride", Item::new)
+        .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS)
+        .register(),
+    WET_CALCIUM_CHLORIDE = REGISTRATE.item("wet_calcium_chloride", Item::new)
+        .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS)
+        .register(),
+    CHALK_DUST = REGISTRATE.item("chalk_dust", Item::new)
+        .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS)
+        .register(),
+    METHAMPHETAMINE_CRYSTAL = REGISTRATE.item("methamphetamine_crystal", Item::new)
+        .register(),
+    METHAMPHETAMINE_POWDER = REGISTRATE.item("methamphetamine_powder", Item::new)
+        .properties(p -> p
+            .food(DestroyFoods.CRUSHED_METHAMPHETAMINE)
+        ).tag(Tags.Items.DUSTS)
+        .register(),
+    SALTPETER = REGISTRATE.item("saltpeter", Item::new)
+        .tag(DestroyItemTags.SALT.tag, forgeItemTag("raw_materials/saltpeter"), Tags.Items.DUSTS)
+        .register(),
+    POTASSIUM_IODIDE = REGISTRATE.item("potassium_iodide", Item::new)
+        .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS)
+        .register(), 
+    PRUSSIAN_BLUE = REGISTRATE.item("prussian_blue", Item::new)
+        .tag(Tags.Items.DYES_BLUE, Tags.Items.DUSTS)
+        .register(), 
+    ROCK_SALT = REGISTRATE.item("rock_salt", Item::new)
+        .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS)
+        .register(), 
+    ZINC_OXIDE = REGISTRATE.item("zinc_oxide", Item::new)
+        .tag(DestroyItemTags.SALT.tag, DestroyItemTags.VULCANIZER.tag, Tags.Items.DUSTS)
+        .register();
+    
+    public static final ItemEntry<IodineItem> IODINE = REGISTRATE.item("iodine", IodineItem::new)
+        .tag(DestroyItemTags.PRILL.tag)
+        .register();
 
-    public static final RegistryObject<Item> CALCIUM_CHLORIDE = ITEMS.register("calcium_chloride",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    // TOOLS AND ARMOR
 
-    public static final RegistryObject<Item> WET_CALCIUM_CHLORIDE = ITEMS.register("wet_calcium_chloride",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    public static final ItemEntry<Item>
 
-    public static final RegistryObject<Item> CHALK_DUST = ITEMS.register("chalk_dust",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    DIAMOND_DRILL_BIT = REGISTRATE.item("diamond_drill_bit", Item::new)
+        .register(),
+    GAS_FLITER = REGISTRATE.item("gas_filter", Item::new)
+        .register(),
+    GAS_MASK = REGISTRATE.item("gas_mask", Item::new)
+        .properties(p -> p
+            .stacksTo(1)
+        ).tag(DestroyItemTags.CHEMICAL_PROTECTION_HEAD.tag)
+        .register(),
+    HAZMAT_SUIT = REGISTRATE.item("hazmat_suit", Item::new)
+        .properties(p -> p
+            .stacksTo(1)
+        ).tag(DestroyItemTags.CHEMICAL_PROTECTION_TORSO.tag)
+        .register(),
+    HAZMAT_LEGGINGS = REGISTRATE.item("hazmat_leggings", Item::new)
+        .properties(p -> p
+            .stacksTo(1)
+        ).tag(DestroyItemTags.CHEMICAL_PROTECTION_LEGS.tag)
+        .register(),
+    WELLINGTON_BOOTS = REGISTRATE.item("wellington_boots", Item::new)
+        .properties(p -> p
+            .stacksTo(1)
+        ).tag(DestroyItemTags.CHEMICAL_PROTECTION_FEET.tag)
+        .register(),
+    SOAP = REGISTRATE.item("soap", Item::new)
+        .register(),
 
-    public static final RegistryObject<Item> IODINE = ITEMS.register("iodine",
-        () -> new IodineItem(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    // TOYS
 
-    public static final RegistryObject<Item> METHAMPHETAMINE_CRYSTAL = ITEMS.register("methamphetamine_crystal",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    BUCKET_AND_SPADE = REGISTRATE.item("bucket_and_spade", Item::new)
+        .register(),
+    PLAYWELL = REGISTRATE.item("playwell", Item::new)
+        .register(),
 
-    public static final RegistryObject<Item> METHAMPHETAMINE_POWDER = ITEMS.register("methamphetamine_powder",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY).food(DestroyFoods.CRUSHED_METHAMPHETAMINE))
-    );
+    // SPRAY BOTTLES
 
-    public static final RegistryObject<Item> NAPTHALENE = ITEMS.register("napthalene",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    SPRAY_BOTTLE = REGISTRATE.item("spray_bottle", Item::new)
+        .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
+        .register(),
+    PERFUME_BOTTLE = REGISTRATE.item("perfume_bottle", Item::new)
+        .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
+        .register(),
+    SHAMPOO_BOTTLE = REGISTRATE.item("shampoo_bottle", Item::new)
+        .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
+        .register(),
+    SUNSCREEN_BOTTLE = REGISTRATE.item("sunscreen_bottle", Item::new)
+        .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
+        .register(),
+    
+    // SEISMOGRAPHS
 
-    public static final RegistryObject<Item> POTASSIUM_IODIDE = ITEMS.register("potassium_iodide",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    SEISMOGRAPH_GOOD = REGISTRATE.item("seismograph_good", Item::new)
+        .tag(DestroyItemTags.SEISMOGRAPH.tag)
+        .register(),
+    SEISMOGRAPH_MIDDLE = REGISTRATE.item("seismograph_middle", Item::new)
+        .tag(DestroyItemTags.SEISMOGRAPH.tag)
+        .register(),
+    SEISMOGRAPH_BAD = REGISTRATE.item("seismograph_bad", Item::new)
+        .tag(DestroyItemTags.SEISMOGRAPH.tag)
+        .register(),
 
-    public static final RegistryObject<Item> PRUSSIAN_BLUE = ITEMS.register("prussian_blue",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    // SILICA
 
-    public static final RegistryObject<Item> ROCK_SALT = ITEMS.register("rock_salt",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    SILICA = REGISTRATE.item("silica", Item::new)
+        .register(),
+    DIRTY_SILICA = REGISTRATE.item("dirty_silica", Item::new)
+        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
+        .register(),
+    ACETONE_COATED_SILICA = REGISTRATE.item("acetone_coated_silica", Item::new)
+        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
+        .register(),
+    COPPER_COATED_SILICA = REGISTRATE.item("copper_coated_silica", Item::new)
+        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
+        .register(),
+    IRON_COATED_SILICA = REGISTRATE.item("iron_coated_silica", Item::new)
+        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
+        .register(),
+    LIMEWATER_COATED_SILICA = REGISTRATE.item("limewater_coated_silica", Item::new)
+        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
+        .register(),
+    NICKEL_COATED_SILICA = REGISTRATE.item("nickel_coated_silica", Item::new)
+        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
+        .register(),
+    PLATINUM_COATED_SILICA = REGISTRATE.item("platinum_coated_silica", Item::new)
+        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
+        .register(),
+    RHODIUM_COATED_SILICA = REGISTRATE.item("rhodium_coated_silica", Item::new)
+        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
+        .register(),
+    SODIUM_ACETATE_COATED_SILICA = REGISTRATE.item("sodium_acetate_coated_silica", Item::new)
+        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
+        .register(),
+    SULFURIC_ACID_COATED_SILICA = REGISTRATE.item("sulfuric_acid_coated_silica", Item::new)
+        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
+        .register(),
+    
+    // NON-SILICA CATALYSTS
 
-    public static final RegistryObject<Item> ZINC_OXIDE = ITEMS.register("zinc_oxide",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
+    CONVERSION_CATALYST = REGISTRATE.item("conversion_catalyst", Item::new)
+        .register(),
+    DIRTY_CONVERSION_CATALYST = REGISTRATE.item("dirty_conversion_catalyst", Item::new)
+        .register(),
+    PALLADIUM_ON_CARBON = REGISTRATE.item("palladium_on_carbon", Item::new)
+        .register(),
+    DIRTY_COAL = REGISTRATE.item("dirty_coal", Item::new)
+        .register(),
+    ZEOLITE = REGISTRATE.item("zeolite", Item::new)
+        .register(),
+    DIRTY_ZEOLITE = REGISTRATE.item("dirty_zeolite", Item::new)
+        .register(),
+    ZEIGLER_NATTA = REGISTRATE.item("ziegler-natta", Item::new)
+        .register(),
+    DIRTY_ZEIGLER_NATTA = REGISTRATE.item("dirty_ziegler-natta", Item::new)
+        .register(),
 
     // FOOD AND DRINK
 
-    public static final RegistryObject<Item> BUTTER = ITEMS.register("butter",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY).food(DestroyFoods.BUTTER))
-    );
+    BUTTER = REGISTRATE.item("butter", Item::new)
+        .properties(p -> p
+            .food(DestroyFoods.BUTTER)
+        ).register(),
+    RAW_FRIES = REGISTRATE.item("raw_fries", Item::new)
+        .properties(p -> p
+            .food(DestroyFoods.RAW_FRIES)
+        ).register(),
+    UNSEASONED_FRIES = REGISTRATE.item("unseasoned_fries", Item::new)
+        .properties(p -> p
+            .food(DestroyFoods.UNSEASONED_FRIES)
+        ).register(),
+    FRIES = REGISTRATE.item("fries", Item::new)
+        .properties(p -> p
+            .food(DestroyFoods.FRIES)
+        ).register(),
+    MASHED_POTATO = REGISTRATE.item("mashed_potato", Item::new)
+        .properties(p -> p
+            .food(DestroyFoods.MASHED_POTATO)
+        ).register();
 
-    public static final RegistryObject<Item> RAW_FRIES = ITEMS.register("raw_fries",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY).food(DestroyFoods.RAW_FRIES))
-    );
+    public static final ItemEntry<AlcoholicDrinkItem>
 
-    public static final RegistryObject<Item> UNSEASONED_FRIES = ITEMS.register("unseasoned_fries",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY).food(DestroyFoods.UNSEASONED_FRIES))
-    );
-
-    public static final RegistryObject<Item> FRIES = ITEMS.register("fries",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY).food(DestroyFoods.FRIES))
-    );
-
-    public static final RegistryObject<Item> MASHED_POTATO = ITEMS.register("mashed_potato",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY).food(DestroyFoods.MASHED_POTATO))
-    );
-
-    public static final RegistryObject<Item> UNDISTILLED_MOONSHINE_BOTTLE = ITEMS.register("undistilled_moonshine_bottle",
-        () -> new AlcoholicDrinkItem(new Item.Properties()
+    UNDISTILLED_MOONSHINE_BOTTLE = REGISTRATE.item("undistilled_moonshine_bottle", p -> new AlcoholicDrinkItem(p, 1))
+        .properties(p -> p
             .tab(DestroyCreativeModeTabs.TAB_DESTROY)
             .food(DestroyFoods.MOONSHINE)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)
-        , 1)
-    );
-
-    public static final RegistryObject<Item> ONCE_DISTILLED_MOONSHINE_BOTTLE = ITEMS.register("once_distilled_moonshine_bottle",
-        () -> new AlcoholicDrinkItem(new Item.Properties()
+        ).register(),
+    ONCE_DISTILLED_MOONSHINE_BOTTLE = REGISTRATE.item("once_distilled_moonshine_bottle", p -> new AlcoholicDrinkItem(p, 1))
+        .properties(p -> p
             .tab(DestroyCreativeModeTabs.TAB_DESTROY)
             .food(DestroyFoods.MOONSHINE)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)
-        , 1)
-    );
-
-    public static final RegistryObject<Item> TWICE_DISTILLED_MOONSHINE_BOTTLE = ITEMS.register("twice_distilled_moonshine_bottle",
-        () -> new AlcoholicDrinkItem(new Item.Properties()
+        ).register(),
+    TWICE_DISTILLED_MOONSHINE_BOTTLE = REGISTRATE.item("twice_distilled_moonshine_bottle", p -> new AlcoholicDrinkItem(p, 2))
+        .properties(p -> p
             .tab(DestroyCreativeModeTabs.TAB_DESTROY)
             .food(DestroyFoods.MOONSHINE)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)
-        , 2)
-    );
-
-    public static final RegistryObject<Item> THRICE_DISTILLED_MOONSHINE_BOTTLE = ITEMS.register("thrice_distilled_moonshine_bottle",
-        () -> new AlcoholicDrinkItem(new Item.Properties()
+        ).register(),
+    THRICE_DISTILLED_MOONSHINE_BOTTLE = REGISTRATE.item("thrice_distilled_moonshine_bottle", p -> new AlcoholicDrinkItem(p, 3))
+        .properties(p -> p
             .tab(DestroyCreativeModeTabs.TAB_DESTROY)
             .food(DestroyFoods.MOONSHINE)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)
-        , 3)
-    );
-
-
-    // BLAZE BURNER TREATS
-
-    public static final RegistryObject<Item> EMPTY_BOMB_BON = ITEMS.register("empty_bomb_bon",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> BOMB_BON = ITEMS.register("bomb_bon",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> NAPALM_SUNDAE = ITEMS.register("napalm_sundae",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> THERMITE_BROWNIE = ITEMS.register("thermite_brownie",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-
-    // BEETROOT
-
-    public static final RegistryObject<Item> HEFTY_BEETROOT = ITEMS.register("hefty_beetroot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> COAL_INFUSED_BEETROOT = ITEMS.register("coal_infused_beetroot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> COPPER_INFUSED_BEETROOT = ITEMS.register("copper_infused_beetroot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> DIAMOND_INFUSED_BEETROOT = ITEMS.register("diamond_infused_beetroot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> EMERALD_INFUSED_BEETROOT = ITEMS.register("emerald_infused_beetroot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> FLUORITE_INFUSED_BEETROOT = ITEMS.register("fluorite_infused_beetroot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> GOLD_INFUSED_BEETROOT = ITEMS.register("gold_infused_beetroot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> IRON_INFUSED_BEETROOT = ITEMS.register("iron_infused_beetroot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> LAPIS_INFUSED_BEETROOT = ITEMS.register("lapis_infused_beetroot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> NICKEL_INFUSED_BEETROOT = ITEMS.register("nickel_infused_beetroot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> REDSTONE_INFUSED_BEETROOT = ITEMS.register("redstone_infused_beetroot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> ZINC_INFUSED_BEETROOT = ITEMS.register("zinc_infused_beetroot",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-
-    // BEETROOT ASHES
-
-    public static final RegistryObject<Item> BEETROOT_ASHES = ITEMS.register("beetroot_ashes",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> COAL_INFUSED_BEETROOT_ASHES = ITEMS.register("coal_infused_beetroot_ashes",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> COPPER_INFUSED_BEETROOT_ASHES = ITEMS.register("copper_infused_beetroot_ashes",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> DIAMOND_INFUSED_BEETROOT_ASHES = ITEMS.register("diamond_infused_beetroot_ashes",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> EMERALD_INFUSED_BEETROOT_ASHES = ITEMS.register("emerald_infused_beetroot_ashes",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> FLUORITE_INFUSED_BEETROOT_ASHES = ITEMS.register("fluorite_infused_beetroot_ashes",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> GOLD_INFUSED_BEETROOT_ASHES = ITEMS.register("gold_infused_beetroot_ashes",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> IRON_INFUSED_BEETROOT_ASHES = ITEMS.register("iron_infused_beetroot_ashes",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> LAPIS_INFUSED_BEETROOT_ASHES = ITEMS.register("lapis_infused_beetroot_ashes",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> NICKEL_INFUSED_BEETROOT_ASHES = ITEMS.register("nickel_infused_beetroot_ashes",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> REDSTONE_INFUSED_BEETROOT_ASHES = ITEMS.register("redstone_infused_beetroot_ashes",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> ZINC_INFUSED_BEETROOT_ASHES = ITEMS.register("zinc_infused_beetroot_ashes",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-
-    // UNCATEGORISED
-    
-    public static final RegistryObject<Item> AGAR = ITEMS.register("agar",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> HYPERACCUMULATING_FERTILIZER = ITEMS.register("hyperaccumulating_fertilizer",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> PAPER_PULP = ITEMS.register("paper_pulp",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> SAWDUST = ITEMS.register("sawdust",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> TEAR_BOTTLE = ITEMS.register("tear_bottle",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> URINE_BOTTLE = ITEMS.register("urine_bottle",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
-    public static final RegistryObject<Item> YEAST = ITEMS.register("yeast",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
-
+        ).register();
 
     // SEQUENCED ASSEMBLY INTERMEDIATES
 
-    public static final RegistryObject<Item> UNPROCESSED_CONVERSION_CATALYST = ITEMS.register("unprocessed_conversion_catalyst",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    public static final ItemEntry<SequencedAssemblyItem>
 
-    public static final RegistryObject<Item> UNPROCESSED_MASHED_POTATO = ITEMS.register("unprocessed_mashed_potato",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    UNPROCESSED_CONVERSION_CATALYST = REGISTRATE.item("unprocessed_conversion_catalyst", SequencedAssemblyItem::new)
+        .register(),
+    UNPROCESSED_MASHED_POTATO = REGISTRATE.item("unprocessed_mashed_potato", SequencedAssemblyItem::new)
+        .register(),
+    UNPROCESSED_napalm_sundae = REGISTRATE.item("unprocessed_napalm_sundae", SequencedAssemblyItem::new)
+        .tag(AllItemTags.UPRIGHT_ON_BELT.tag)
+        .register(),
+    UNPROCESSED_SUPER_GLUE = REGISTRATE.item("unprocessed_super_glue", SequencedAssemblyItem::new)
+        .register();
 
-    public static final RegistryObject<Item> UNPROCESSED_NAPALM_SUNDAE = ITEMS.register("unprocessed_napalm_sundae",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    // UNCATEGORISED
 
-    public static final RegistryObject<Item> UNPROCESSED_SUPER_GLUE = ITEMS.register("unprocessed_super_glue",
-        () -> new Item(new Item.Properties().tab(DestroyCreativeModeTabs.TAB_DESTROY))
-    );
+    public static final ItemEntry<Item>
 
-    public static void register(IEventBus eventBus) {
-        ITEMS.register(eventBus);
-    }
+    AGAR = REGISTRATE.item("agar", Item::new)
+        .register(),
+    PAPER_PULP = REGISTRATE.item("paper_pulp", Item::new)
+        .register(),
+    SAWDUST = REGISTRATE.item("sawdust", Item::new)
+        .register(),
+    TEAR_BOTTLE = REGISTRATE.item("tear_bottle", Item::new)
+        .register(),
+    URINE_BOTTLE = REGISTRATE.item("urine_bottle", Item::new)
+        .register(),
+    YEAST = REGISTRATE.item("yeast", Item::new)
+        .register(),
+
+    // BLAZE BURNER TREATS
+
+    EMPTY_BOMB_BON = REGISTRATE.item("empty_bomb_bon", Item::new)
+        .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag, AllItemTags.UPRIGHT_ON_BELT.tag)
+        .register(),
+    BOMB_BON = REGISTRATE.item("bomb_bon", Item::new)
+        .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag, AllItemTags.UPRIGHT_ON_BELT.tag)
+        .register(),
+    NAPALM_SUNDAE = REGISTRATE.item("napalm_sundae", Item::new)
+        .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag, AllItemTags.UPRIGHT_ON_BELT.tag)
+        .register(),
+    THERMITE_BROWNIE = REGISTRATE.item("thermite_brownie", Item::new)
+        .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag)
+        .register(),
+
+    // BEETROOT
+
+    HEFTY_BEETROOT = REGISTRATE.item("hefty_beetroot", Item::new)
+        .tag(DestroyItemTags.HEFTY_BEETROOT.tag)
+        .register(),
+    COAL_INFUSED_BEETROOT = REGISTRATE.item("coal_infused_beetroot", Item::new)
+        .tag(DestroyItemTags.HEFTY_BEETROOT.tag)
+        .register(),
+    COPPER_INFUSED_BEETROOT = REGISTRATE.item("copper_infused_beetroot", Item::new)
+        .tag(DestroyItemTags.HEFTY_BEETROOT.tag)
+        .register(),
+    DIAMOND_INFUSED_BEETROOT = REGISTRATE.item("diamond_infused_beetroot", Item::new)
+        .tag(DestroyItemTags.HEFTY_BEETROOT.tag)
+        .register(),
+    EMERALD_INFUSED_BEETROOT = REGISTRATE.item("emerald_infused_beetroot", Item::new)
+        .tag(DestroyItemTags.HEFTY_BEETROOT.tag)
+        .register(),
+    FLUORITE_INFUSED_BEETROOT = REGISTRATE.item("fluorite_infused_beetroot", Item::new)
+        .tag(DestroyItemTags.HEFTY_BEETROOT.tag)
+        .register(),
+    GOLD_INFUSED_BEETROOT = REGISTRATE.item("gold_infused_beetroot", Item::new)
+        .tag(DestroyItemTags.HEFTY_BEETROOT.tag)
+        .register(),
+    IRON_INFUSED_BEETROOT = REGISTRATE.item("iron_infused_beetroot", Item::new)
+        .tag(DestroyItemTags.HEFTY_BEETROOT.tag)
+        .register(),
+    LAPIS_INFUSED_BEETROOT = REGISTRATE.item("lapis_infused_beetroot", Item::new)
+        .tag(DestroyItemTags.HEFTY_BEETROOT.tag)
+        .register(),
+    NICKEL_INFUSED_BEETROOT = REGISTRATE.item("nickel_infused_beetroot", Item::new)
+        .tag(DestroyItemTags.HEFTY_BEETROOT.tag)
+        .register(),
+    REDSTONE_INFUSED_BEETROOT = REGISTRATE.item("redstone_infused_beetroot", Item::new)
+        .tag(DestroyItemTags.HEFTY_BEETROOT.tag)
+        .register(),
+    ZINC_INFUSED_BEETROOT = REGISTRATE.item("zinc_infused_beetroot", Item::new)
+        .tag(DestroyItemTags.HEFTY_BEETROOT.tag)
+        .register(),
+    
+    // BEETROOT ASHES
+
+    BEETROOT_ASHES = REGISTRATE.item("beetroot_ashes", Item::new)
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register(),
+    COAL_INFUSED_BEETROOT_ASHES = REGISTRATE.item("coal_infused_beetroot_ashes", Item::new)
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register(),
+    COPPER_INFUSED_BEETROOT_ASHES = REGISTRATE.item("copper_infused_beetroot_ashes", Item::new)
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register(),
+    DIAMOND_INFUSED_BEETROOT_ASHES = REGISTRATE.item("diamond_infused_beetroot_ashes", Item::new)
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register(),
+    EMERALD_INFUSED_BEETROOT_ASHES = REGISTRATE.item("emerald_infused_beetroot_ashes", Item::new)
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register(),
+    FLUORITE_INFUSED_BEETROOT_ASHES = REGISTRATE.item("fluorite_infused_beetroot_ashes", Item::new)
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register(),
+    GOLD_INFUSED_BEETROOT_ASHES = REGISTRATE.item("gold_infused_beetroot_ashes", Item::new)
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register(),
+    IRON_INFUSED_BEETROOT_ASHES = REGISTRATE.item("iron_infused_beetroot_ashes", Item::new)
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register(),
+    LAPIS_INFUSED_BEETROOT_ASHES = REGISTRATE.item("lapis_infused_beetroot_ashes", Item::new)
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register(),
+    NICKEL_INFUSED_BEETROOT_ASHES = REGISTRATE.item("nickel_infused_beetroot_ashes", Item::new)
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register(),
+    REDSTONE_INFUSED_BEETROOT_ASHES = REGISTRATE.item("redstone_infused_beetroot_ashes", Item::new)
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register(),
+    ZINC_INFUSED_BEETROOT_ASHES = REGISTRATE.item("zinc_infused_beetroot_ashes", Item::new)
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register();
+
+    static {
+        REGISTRATE.startSection(AllSections.CURIOSITIES);
+    };
+
+    // SYRINGES
+
+    public static final ItemEntry<Item> SYRINGE = REGISTRATE.item("syringe", Item::new)
+        .tag(DestroyItemTags.SYRINGE.tag)
+        .register();
+
+    public static final ItemEntry<AspirinSyringeItem> ASPIRIN_SYRINGE = REGISTRATE.item("aspirin_syringe", AspirinSyringeItem::new)
+        .tag(DestroyItemTags.SYRINGE.tag)
+        .register();
+
+    public static final ItemEntry<SyringeItem> CISPLATIN_SYRINGE = REGISTRATE.item("cisplatin_syringe", SyringeItem::new)
+        .tag(DestroyItemTags.SYRINGE.tag)
+        .register();
+
+    public static final ItemEntry<MethSyringeItem>
+    
+    IMPURE_METH_SYRINGE = REGISTRATE.item("impure_meth_syringe", p -> new MethSyringeItem(p, 1200, 0))
+        .tag(DestroyItemTags.SYRINGE.tag)
+        .register(),
+    METH_SYRINGE = REGISTRATE.item("meth_syringe", p -> new MethSyringeItem(p, 1200, 1))
+        .tag(DestroyItemTags.SYRINGE.tag)
+        .register();
+
+    // UNCATEGORISED
+
+    public static final ItemEntry<Item> HYPERACCUMULATING_FERTILIZER = REGISTRATE.item("hyperaccumulating_fertilizer", Item::new)
+        .tag(Tags.Items.DUSTS)
+        .register();
+
+    public static final ItemEntry<Item> CHALK = REGISTRATE.item("chalk", Item::new)
+        .register();
+
+    public static final ItemEntry<RecordItem> MUSIC_DISC_SPECTRUM = REGISTRATE.item("music_disc_spectrum", p -> new RecordItem(9, DestroySoundEvents.MUSIC_DISC_SPECTRUM, p, 3720))
+        .properties(p -> p
+            .stacksTo(1)
+        ).tag(ItemTags.MUSIC_DISCS)
+        .register();
+
+    public static void register() {};
 }

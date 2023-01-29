@@ -14,7 +14,7 @@ public class AgingRecipe extends ProcessingRecipe<RecipeWrapper> {
 
     @Override
     protected int getMaxInputCount() {
-        return 1;
+        return 2;
     };
 
     @Override
@@ -24,7 +24,7 @@ public class AgingRecipe extends ProcessingRecipe<RecipeWrapper> {
 
     @Override
     protected int getMaxFluidInputCount() {
-        return 0;
+        return 1;
     };
 
     @Override

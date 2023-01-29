@@ -1,0 +1,10 @@
+{
+    "music_disc_spectrum": {
+      "sounds": [
+        {
+          "name": "destroy:music_disc_spectrum",
+          "stream": true
+        }
+      ]
+    }
+}

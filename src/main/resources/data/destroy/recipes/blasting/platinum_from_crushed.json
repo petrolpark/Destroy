@@ -1,9 +1,0 @@
-{
-    "type": "minecraft:blasting",
-    "ingredient": {
-      "item": "create:crushed_platinum_ore"
-    },
-    "result": "destroy:platinum_ingot",
-    "experience": 1.0,
-    "cookingtime": 100
-  }
