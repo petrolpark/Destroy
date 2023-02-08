@@ -1,22 +1,23 @@
 package com.petrolpark.destroy.util;
 
-import static com.petrolpark.destroy.Destroy.REGISTRATE;
-
 import static com.simibubi.create.AllTags.forgeItemTag;
 
 import com.petrolpark.destroy.Destroy;
 import com.simibubi.create.AllTags.AllItemTags;
+import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.utility.Lang;
 import com.tterrag.registrate.providers.ProviderType;
+import com.tterrag.registrate.providers.RegistrateTagsProvider;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public class DestroyTags {
+
+    private static CreateRegistrate REGISTRATE = Destroy.registrate();
 
     // Mostly all copied from Create source code
 
@@ -56,34 +57,34 @@ public class DestroyTags {
 			REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, prov -> prov.tag(tag));
 		};
 
-        public TagKey<Item> get() {
-            return this.tag;
+        public static void init() {};
+    };
+
+    private static void generateItemTags(RegistrateTagsProvider<Item> provider) {
+
+        provider.tag(ItemTags.BEACON_PAYMENT_ITEMS)
+            .addTag(DestroyItemTags.DESTROY_INGOTS.tag);
+        provider.tag(DestroyItemTags.FERTILIZER.tag)
+            .add(Items.BONE_MEAL);
+        provider.tag(DestroyItemTags.PAPER_PULPABLE.tag)
+            .add(Items.PAPER, Items.SUGAR)
+            .addTag(DestroyItemTags.SEISMOGRAPH.tag);
+        provider.tag(AllItemTags.UPRIGHT_ON_BELT.tag)
+            .addTag(DestroyItemTags.SPRAY_BOTTLE.tag)
+            .addTag(DestroyItemTags.SYRINGE.tag);
+        provider.tag(DestroyItemTags.VULCANIZER.tag)
+            .addTag(forgeItemTag("raw_materials/sulfur"));
+
+        for (DestroyItemTags tagEnum : DestroyItemTags.values()) {
+            provider.getOrCreateRawBuilder(tagEnum.tag);
         };
-
-        public boolean matches(ItemStack stack) {
-            return stack.is(tag);
-        };
-
-        public void add(Item... items) {
-            REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, prov -> prov.tag(tag).add(items));
-        };
-
-        public void includeIn(TagKey<Item> superTag) {
-			REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, prov -> prov.tag(superTag).addTag(tag));
-		};
-
-        public void includeAll(TagKey<Item> subTag) {
-			REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, prov -> prov.tag(tag).addTag(subTag));
-		}
     };
 
     public static void register() {
-        DestroyItemTags.DESTROY_INGOTS.includeIn(ItemTags.BEACON_PAYMENT_ITEMS);
-        DestroyItemTags.FERTILIZER.add(Items.BONE_MEAL);
-        DestroyItemTags.PAPER_PULPABLE.add(Items.PAPER, Items.SUGAR);
-        DestroyItemTags.SEISMOGRAPH.includeIn(DestroyItemTags.PAPER_PULPABLE.tag);
-        DestroyItemTags.SPRAY_BOTTLE.includeIn(AllItemTags.UPRIGHT_ON_BELT.tag);
-        DestroyItemTags.SYRINGE.includeIn(AllItemTags.UPRIGHT_ON_BELT.tag);
-        DestroyItemTags.VULCANIZER.includeAll(forgeItemTag("raw_materials/sulfur"));
+        DestroyItemTags.init();
+    };
+
+    public static void datagen() {
+        REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, DestroyTags::generateItemTags);
     };
 }

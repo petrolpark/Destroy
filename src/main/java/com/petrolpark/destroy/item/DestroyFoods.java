@@ -10,8 +10,8 @@ import net.minecraft.world.food.FoodProperties;
 public class DestroyFoods {
 
     // Effect Suppliers
-    public static Supplier<MobEffectInstance> methHighShort = () -> {
-        return new MobEffectInstance(DestroyMobEffects.METH_HIGH.get(), 2400, 0);
+    public static Supplier<MobEffectInstance> babyBlueHigh = () -> {
+        return new MobEffectInstance(DestroyMobEffects.BABY_BLUE_HIGH.get(), 2400, 0);
     };
 
     // Foods
@@ -20,6 +20,6 @@ public class DestroyFoods {
     public static final FoodProperties UNSEASONED_FRIES = new FoodProperties.Builder().nutrition(6).saturationMod(1.0f).build();
     public static final FoodProperties FRIES = new FoodProperties.Builder().nutrition(8).saturationMod(1.8f).build();
     public static final FoodProperties MASHED_POTATO = new FoodProperties.Builder().nutrition(7).saturationMod(1.4f).build();
-    public static final FoodProperties CRUSHED_METHAMPHETAMINE = new FoodProperties.Builder().nutrition(0).saturationMod(0.0F).effect(methHighShort, 1.0f).build();
+    public static final FoodProperties BABY_BLUE_POWDER = new FoodProperties.Builder().nutrition(0).saturationMod(0.0F).effect(babyBlueHigh, 1.0f).build();
     public static final FoodProperties MOONSHINE = new FoodProperties.Builder().nutrition(1).saturationMod(0.1f).build();
 }

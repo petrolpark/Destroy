@@ -71,12 +71,13 @@ public class AgingBarrelBlockEntity extends SmartTileEntity {
         //Retrieval of what's in the Tanks is automatically covered in SmartTileEntity
     };
 
-    @Override
-	public void setRemoved() {
-		itemCapability.invalidate();
-		fluidCapability.invalidate();
-		super.setRemoved();
-	}
+    //TODO sort this nonsense out
+    // @Override
+	// public void setRemoved() {
+	// 	itemCapability.invalidate();
+	// 	fluidCapability.invalidate();
+	// 	super.setRemoved();
+	// };
 
     @Nonnull
     @Override

@@ -1,0 +1,14 @@
+{
+  "values": [
+    "destroy:polyethene_terephthalate",
+    "destroy:polyvinyl_chloride",
+    "destroy:polyethene",
+    "destroy:polypropene",
+    "destroy:polystyrene",
+    "destroy:abs",
+    "destroy:polytetrafluoroethene",
+    "destroy:nylon",
+    "destroy:polystyrene_butadiene",
+    "destroy:rubber"
+  ]
+}

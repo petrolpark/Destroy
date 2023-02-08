@@ -24,7 +24,7 @@ mixin {
 }
 
 //Mod Details
-version = '0.0.0'
+version = "${mod_version}"
 group = 'com.petrolpark.destroy'
 archivesBaseName = 'destroy'
 
@@ -65,7 +65,7 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'destroy', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'destroy', '--all', '--output', file('src/main/resources/'), '--existing', file('src/generated/resources/')
             mods {
                 destroy {
                     source sourceSets.main
@@ -98,7 +98,7 @@ repositories {
 
 dependencies {
     //MC
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    minecraft "net.minecraftforge:forge:1.19.2-43.2.0"
     
     //JEI
     compileOnly fg.deobf("mezz.jei:jei-${jei_minecraft_version}-common-api:${jei_version}")

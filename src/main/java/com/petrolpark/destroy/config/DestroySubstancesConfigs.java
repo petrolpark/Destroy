@@ -2,8 +2,8 @@ package com.petrolpark.destroy.config;
 
 public class DestroySubstancesConfigs extends DestroyConfigBase {
 
-    public final ConfigGroup methamphetamine = group(0, "methamphetamine", Comments.methamphetamine);
-    public final ConfigBool enableMethamphetamine = b(true, "enableMethamphetamine", Comments.enableMethamphetamine);
+    public final ConfigGroup babyBlue = group(0, "babyBlue", Comments.babyBlue);
+    public final ConfigBool enableBabyBlue = b(true, "enableBabyBlue", Comments.enableBabyBlue);
     public final ConfigInt maxAddictionLevel = i(590, 0, "maxAddictionLevel", Comments.toDisable, Comments.maxAddictionLevel);
 
     public final ConfigGroup alcohol = group(0, "alcohol", Comments.alcohol);
@@ -20,8 +20,8 @@ public class DestroySubstancesConfigs extends DestroyConfigBase {
         static String toDisable = "[0 to disable this feature]";
         static String inTicks = "[in ticks]";
 
-        static String methamphetamine = "Methamphetamine";
-        static String enableMethamphetamine = "Allow the production of Methamphetamine.";
+        static String babyBlue = "Baby Blue";
+        static String enableBabyBlue = "Allow the production of Baby Blue.";
         static String maxAddictionLevel = "Each level corresponds to an additional second of withdrawal.";
 
         static String alcohol = "Alcohol";

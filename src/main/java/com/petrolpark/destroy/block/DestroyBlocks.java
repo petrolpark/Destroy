@@ -1,17 +1,16 @@
 package com.petrolpark.destroy.block;
 
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
-import static com.petrolpark.destroy.Destroy.REGISTRATE;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.item.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.item.DestroyItems;
-import com.simibubi.create.AllTags;
-import com.simibubi.create.Create;
 import com.simibubi.create.content.AllSections;
 import com.simibubi.create.foundation.block.BlockStressDefaults;
-import com.simibubi.create.foundation.data.AllLangPartials;
 import com.simibubi.create.foundation.data.AssetLookup;
+import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
+import com.simibubi.create.foundation.data.TagGen;
 import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
@@ -29,6 +28,8 @@ import net.minecraftforge.common.Tags;
 
 public class DestroyBlocks {
 
+    private static CreateRegistrate REGISTRATE = Destroy.registrate();
+
     static {
         REGISTRATE.creativeModeTab(() -> DestroyCreativeModeTabs.TAB_DESTROY);
     };
@@ -39,15 +40,15 @@ public class DestroyBlocks {
 
     // CONTRAPTIONS
 
-    public static final BlockEntry<BreezeBurnerBlock> BREEZE_BURNER = REGISTRATE.block("breeze_burner", BreezeBurnerBlock::new)
-        .initialProperties(SharedProperties::stone)
-        .properties(p -> p
-            .color(MaterialColor.DEEPSLATE)
-            .noOcclusion()
-        ).transform(AllTags.pickaxeOnly())
-        .item()
-        .transform(customItemModel())
-        .register();
+    // public static final BlockEntry<BreezeBurnerBlock> BREEZE_BURNER = REGISTRATE.block("breeze_burner", BreezeBurnerBlock::new)
+    //     .initialProperties(SharedProperties::stone)
+    //     .properties(p -> p
+    //         .color(MaterialColor.DEEPSLATE)
+    //         .noOcclusion()
+    //     ).transform(TagGen.pickaxeOnly())
+    //     .item()
+    //     .transform(customItemModel())
+    //     .register();
 
     public static final BlockEntry<CentrifugeBlock> CENTRIFUGE = REGISTRATE.block("centrifuge", CentrifugeBlock::new)
         .initialProperties(SharedProperties::stone)
@@ -55,7 +56,7 @@ public class DestroyBlocks {
             .color(MaterialColor.COLOR_ORANGE)
             .noOcclusion()
         ).blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
-        .transform(AllTags.pickaxeOnly())
+        .transform(TagGen.pickaxeOnly())
         .transform(BlockStressDefaults.setImpact(8.0))
         .item()
         .transform(customItemModel())
@@ -70,7 +71,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.COLOR_BROWN)
             .noOcclusion()
-        ).transform(AllTags.axeOnly())
+        ).transform(TagGen.axeOnly())
         .item()
         .transform(customItemModel())
         .register();
@@ -86,11 +87,11 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
-        ).transform(AllTags.pickaxeOnly())
+        ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(AllTags.tagBlockAndItem("storage_blocks/fluorite"))
+        .transform(TagGen.tagBlockAndItem("storage_blocks/fluorite"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register();
@@ -100,11 +101,11 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.SAND)
             .requiresCorrectToolForDrops()
-        ).transform(AllTags.pickaxeOnly())
+        ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_STONE_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(AllTags.tagBlockAndItem("storage_blocks/raw_nickel"))
+        .transform(TagGen.tagBlockAndItem("storage_blocks/raw_nickel"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register();
@@ -114,11 +115,11 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.SAND)
             .requiresCorrectToolForDrops()
-        ).transform(AllTags.pickaxeOnly())
+        ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_STONE_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(AllTags.tagBlockAndItem("storage_blocks/nickel"))
+        .transform(TagGen.tagBlockAndItem("storage_blocks/nickel"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register();
@@ -128,11 +129,11 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.DIRT)
             .requiresCorrectToolForDrops()
-        ).transform(AllTags.pickaxeOnly())
+        ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_DIAMOND_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(AllTags.tagBlockAndItem("storage_blocks/palladium"))
+        .transform(TagGen.tagBlockAndItem("storage_blocks/palladium"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register();
@@ -141,11 +142,11 @@ public class DestroyBlocks {
         .initialProperties(() -> Blocks.DIAMOND_BLOCK)
         .properties(p -> p
             .requiresCorrectToolForDrops()
-        ).transform(AllTags.pickaxeOnly())
+        ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(AllTags.tagBlockAndItem("storage_blocks/platinum"))
+        .transform(TagGen.tagBlockAndItem("storage_blocks/platinum"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register();
@@ -155,11 +156,11 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.TERRACOTTA_LIGHT_BLUE)
             .requiresCorrectToolForDrops()
-        ).transform(AllTags.pickaxeOnly())
+        ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_DIAMOND_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(AllTags.tagBlockAndItem("storage_blocks/rhodium"))
+        .transform(TagGen.tagBlockAndItem("storage_blocks/rhodium"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register();
@@ -169,11 +170,11 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.STONE)
             .requiresCorrectToolForDrops()
-        ).transform(AllTags.pickaxeOnly())
+        ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_DIAMOND_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(AllTags.tagBlockAndItem("storage_blocks/zirconium"))
+        .transform(TagGen.tagBlockAndItem("storage_blocks/zirconium"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register();
@@ -185,7 +186,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
-        ).transform(AllTags.pickaxeOnly())
+        ).transform(TagGen.pickaxeOnly())
         .loot((lt, b) -> lt.add(b,
 			RegistrateBlockLootTables.createSilkTouchDispatchTable(b,
 				RegistrateBlockLootTables.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.FLUORITE.get())
@@ -193,7 +194,7 @@ public class DestroyBlocks {
             )
         )).tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
-        .transform(AllTags.tagBlockAndItem("ores/fluorite", "ores_in_ground/stone"))
+        .transform(TagGen.tagBlockAndItem("ores/fluorite", "ores_in_ground/stone"))
         .tag(Tags.Items.ORES)
         .build()
         .register();
@@ -204,7 +205,7 @@ public class DestroyBlocks {
             .color(MaterialColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
             .sound(SoundType.DEEPSLATE)
-        ).transform(AllTags.pickaxeOnly())
+        ).transform(TagGen.pickaxeOnly())
         .loot((lt, b) -> lt.add(b,
 			RegistrateBlockLootTables.createSilkTouchDispatchTable(b,
 				RegistrateBlockLootTables.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.FLUORITE.get())
@@ -212,7 +213,7 @@ public class DestroyBlocks {
             )
         )).tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
-        .transform(AllTags.tagBlockAndItem("ores/fluorite", "ores_in_ground/deepslate"))
+        .transform(TagGen.tagBlockAndItem("ores/fluorite", "ores_in_ground/deepslate"))
         .tag(Tags.Items.ORES)
         .build()
         .register();
@@ -222,7 +223,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
-        ).transform(AllTags.pickaxeOnly())
+        ).transform(TagGen.pickaxeOnly())
         .loot((lt, b) -> lt.add(b,
 			RegistrateBlockLootTables.createSilkTouchDispatchTable(b,
 				RegistrateBlockLootTables.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.FLUORITE.get())
@@ -230,7 +231,7 @@ public class DestroyBlocks {
             )
         )).tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
-        .transform(AllTags.tagBlockAndItem("ores/fluorite", "ores_in_ground/end_stone"))
+        .transform(TagGen.tagBlockAndItem("ores/fluorite", "ores_in_ground/end_stone"))
         .tag(Tags.Items.ORES)
         .build()
         .register();
@@ -240,7 +241,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.SAND)
             .requiresCorrectToolForDrops()
-        ).transform(AllTags.pickaxeOnly())
+        ).transform(TagGen.pickaxeOnly())
         .loot((lt, b) -> lt.add(b,
 			RegistrateBlockLootTables.createSilkTouchDispatchTable(b,
 				RegistrateBlockLootTables.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.RAW_NICKEL.get())
@@ -248,7 +249,7 @@ public class DestroyBlocks {
             )
         )).tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
-        .transform(AllTags.tagBlockAndItem("ores/nickel", "ores_in_ground/stone"))
+        .transform(TagGen.tagBlockAndItem("ores/nickel", "ores_in_ground/stone"))
         .tag(Tags.Items.ORES)
         .build()
         .register();
@@ -259,7 +260,7 @@ public class DestroyBlocks {
             .color(MaterialColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
             .sound(SoundType.DEEPSLATE)
-        ).transform(AllTags.pickaxeOnly())
+        ).transform(TagGen.pickaxeOnly())
         .loot((lt, b) -> lt.add(b,
 			RegistrateBlockLootTables.createSilkTouchDispatchTable(b,
 				RegistrateBlockLootTables.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.RAW_NICKEL.get())
@@ -267,7 +268,7 @@ public class DestroyBlocks {
             )
         )).tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
-        .transform(AllTags.tagBlockAndItem("ores/fluorite", "ores_in_ground/deepslate"))
+        .transform(TagGen.tagBlockAndItem("ores/fluorite", "ores_in_ground/deepslate"))
         .tag(Tags.Items.ORES)
         .build()
         .register();
@@ -286,7 +287,8 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.COLOR_YELLOW)
             .sound(SoundType.SLIME_BLOCK)
-        ).register();
+        ).blockstate((c, p) -> p.axisBlock(c.get(), p.modLoc("block/raw_fries_block_side"), p.modLoc("block/raw_fries_block_end")))
+        .register();
 
     static {
         REGISTRATE.startSection(AllSections.UNASSIGNED);

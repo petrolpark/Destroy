@@ -1,7 +1,5 @@
 package com.petrolpark.destroy.item;
 
-import static com.petrolpark.destroy.Destroy.REGISTRATE;
-
 import static com.simibubi.create.AllTags.forgeItemTag;
 
 import com.petrolpark.destroy.Destroy;
@@ -11,6 +9,8 @@ import com.simibubi.create.AllTags.AllItemTags;
 
 import com.simibubi.create.content.AllSections;
 import com.simibubi.create.content.contraptions.itemAssembly.SequencedAssemblyItem;
+import com.simibubi.create.foundation.data.AssetLookup;
+import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.tags.ItemTags;
@@ -18,12 +18,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.RecordItem;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class DestroyItems {
-    public static final DeferredRegister<Item> ITEMS =
-        DeferredRegister.create(ForgeRegistries.ITEMS, Destroy.MOD_ID);
+
+    private static CreateRegistrate REGISTRATE = Destroy.registrate();
 
     static {
         REGISTRATE.creativeModeTab(() -> DestroyCreativeModeTabs.TAB_DESTROY);
@@ -105,12 +103,14 @@ public class DestroyItems {
         .register(),
     CRUSHED_NICKEL_ORE = REGISTRATE.item("crushed_nickel_ore", Item::new)
         .tag(AllItemTags.CRUSHED_ORES.tag)
+        .model(AssetLookup.existingItemModel())
         .register(),
     CRUSHED_PALLADIUM_ORE = REGISTRATE.item("crushed_palladium_ore", Item::new)
         .tag(AllItemTags.CRUSHED_ORES.tag)
         .register(),
     CRUSHED_PLATINUM_ORE = REGISTRATE.item("crushed_platinum_ore", Item::new)
         .tag(AllItemTags.CRUSHED_ORES.tag)
+        .model(AssetLookup.existingItemModel())
         .register(),
     CRUSHED_RHODIUM_ORE = REGISTRATE.item("crushed_rhodium_ore", Item::new)
         .tag(AllItemTags.CRUSHED_ORES.tag)
@@ -172,11 +172,11 @@ public class DestroyItems {
     CHALK_DUST = REGISTRATE.item("chalk_dust", Item::new)
         .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS)
         .register(),
-    METHAMPHETAMINE_CRYSTAL = REGISTRATE.item("methamphetamine_crystal", Item::new)
+    BABY_BLUE_CRYSTAL = REGISTRATE.item("baby_blue_crystal", Item::new)
         .register(),
-    METHAMPHETAMINE_POWDER = REGISTRATE.item("methamphetamine_powder", Item::new)
+    BABY_BLUE_POWDER = REGISTRATE.item("baby_blue_powder", Item::new)
         .properties(p -> p
-            .food(DestroyFoods.CRUSHED_METHAMPHETAMINE)
+            .food(DestroyFoods.BABY_BLUE_POWDER)
         ).tag(Tags.Items.DUSTS)
         .register(),
     SALTPETER = REGISTRATE.item("saltpeter", Item::new)
@@ -514,18 +514,15 @@ public class DestroyItems {
         .tag(DestroyItemTags.SYRINGE.tag)
         .register();
 
-    public static final ItemEntry<MethSyringeItem>
+    public static final ItemEntry<BabyBlueSyringeItem>
     
-    IMPURE_METH_SYRINGE = REGISTRATE.item("impure_meth_syringe", p -> new MethSyringeItem(p, 1200, 0))
-        .tag(DestroyItemTags.SYRINGE.tag)
-        .register(),
-    METH_SYRINGE = REGISTRATE.item("meth_syringe", p -> new MethSyringeItem(p, 1200, 1))
+    BABY_BLUE_SYRINGE = REGISTRATE.item("baby_blue_syringe", p -> new BabyBlueSyringeItem(p, 1200, 1))
         .tag(DestroyItemTags.SYRINGE.tag)
         .register();
 
     // UNCATEGORISED
 
-    public static final ItemEntry<Item> HYPERACCUMULATING_FERTILIZER = REGISTRATE.item("hyperaccumulating_fertilizer", Item::new)
+    public static final ItemEntry<HyperaccumulatingFertilizerItem> HYPERACCUMULATING_FERTILIZER = REGISTRATE.item("hyperaccumulating_fertilizer", HyperaccumulatingFertilizerItem::new)
         .tag(Tags.Items.DUSTS)
         .register();
 

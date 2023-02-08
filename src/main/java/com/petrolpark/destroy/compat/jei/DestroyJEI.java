@@ -8,8 +8,11 @@ import java.util.function.Supplier;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.compat.jei.category.CentrifugationCategory;
+import com.petrolpark.destroy.compat.jei.category.MutationCategory;
+import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
+import com.petrolpark.destroy.recipe.MutationRecipe;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.compat.jei.CreateJEI;
 import com.simibubi.create.compat.jei.EmptyBackground;
@@ -36,18 +39,22 @@ public class DestroyJEI implements IModPlugin {
 
     private final List<CreateRecipeCategory<?>> allCategories = new ArrayList<>();
 
+    @SuppressWarnings("unused")
     private void loadCategories() {
         allCategories.clear();
 
         CreateRecipeCategory<?>
 
-        centrifugation = new CategoryBuilder<>(CentrifugationRecipe.class).create(
+        centrifugation = builder(CentrifugationRecipe.class).create(
             CentrifugationCategory::new,
             "centrifugation",
             new EmptyBackground(120, 115),
             DestroyBlocks.CENTRIFUGE.get(),
             DestroyRecipeTypes.CENTRIFUGATION
-        );
+        ),
+        
+        mutation = builder(MutationRecipe.class).createMutationCategory()
+        ;
     };
 
     @Override
@@ -70,6 +77,10 @@ public class DestroyJEI implements IModPlugin {
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
 		allCategories.forEach(c -> c.registerCatalysts(registration));
 	};
+
+    private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {
+        return new CategoryBuilder<>(recipeClass);
+    };
     
     private class CategoryBuilder<T extends Recipe<?>> {
 
@@ -103,6 +114,28 @@ public class DestroyJEI implements IModPlugin {
             Info<T> info = new Info<T>(new mezz.jei.api.recipe.RecipeType<>(Destroy.asResource(name), recipeClass), DestroyLang.translate("recipe."+name).component(), background, new ItemIcon(() -> new ItemStack(craftingItem)), recipeSupplier, List.of(() -> new ItemStack(craftingItem)));
             
             CreateRecipeCategory<T> category = factory.create(info);
+            allCategories.add(category);
+
+            return category;
+        };
+
+        public CreateRecipeCategory<MutationRecipe> createMutationCategory() {
+
+            String name = "mutation";
+            CreateRecipeCategory.Factory<MutationRecipe> factory = MutationCategory::new;
+
+            Destroy.LOGGER.info("Added JEI Category: " + name);
+
+            Info<MutationRecipe> info = new Info<MutationRecipe>(
+                new mezz.jei.api.recipe.RecipeType<>(Destroy.asResource(name), MutationRecipe.class),
+                DestroyLang.translate("recipe."+name).component(),
+                new EmptyBackground(120, 115),
+                new ItemIcon(() -> new ItemStack(DestroyItems.HYPERACCUMULATING_FERTILIZER.get())),
+                () -> MutationCategory.RECIPES,
+                List.of(() -> new ItemStack(DestroyItems.HYPERACCUMULATING_FERTILIZER.get()))
+            );
+
+            CreateRecipeCategory<MutationRecipe> category = factory.create(info);
             allCategories.add(category);
 
             return category;

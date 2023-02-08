@@ -1,15 +1,10 @@
 {
-    "replace": false,
-    "values": [
-      "destroy:aspirin_syringe",
-      "destroy:cisplatin_syringe",
-      "destroy:impure_meth_syringe",
-      "destroy:meth_syringe",
-      "destroy:once_distilled_moonshine_bottle",
-      "destroy:perfume_bottle",
-      "destroy:sunscreen_bottle",
-      "destroy:tear_bottle",
-      "destroy:thrice_distilled_moonshine_bottle",
-      "destroy:twice_distilled_moonshine_bottle"
-    ]
+  "values": [
+    "destroy:unprocessed_napalm_sundae",
+    "destroy:empty_bomb_bon",
+    "destroy:bomb_bon",
+    "destroy:napalm_sundae",
+    "#destroy:spray_bottle",
+    "#destroy:syringe"
+  ]
 }

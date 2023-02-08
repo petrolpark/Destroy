@@ -12,8 +12,9 @@ public class InebriationMobEffect extends UncurableMobEffect {
         super(mobEffectCategory, color);
     };
 
+    @SuppressWarnings("null") // It's not null; I checked
     public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
-        int pDuration = livingEntity.getEffect(DestroyMobEffects.INEBRIATION.get()).getDuration();
+        int pDuration = livingEntity.getEffect(DestroyMobEffects.INEBRIATION.get()).getDuration(); // This is the bit it says is null
         if (!livingEntity.level.isClientSide()) {
             if (amplifier >= 3) {
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, pDuration, (amplifier - 2), true, false, false));

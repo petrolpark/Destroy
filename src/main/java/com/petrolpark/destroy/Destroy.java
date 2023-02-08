@@ -13,7 +13,8 @@ import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.DestroyPotatoCannonProjectileTypes;
-import com.petrolpark.destroy.ponder.DestroyScenes;
+import com.petrolpark.destroy.ponder.DestroySceneIndex;
+import com.petrolpark.destroy.recipe.DestroyCropMutations;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.DestroyTags;
@@ -24,6 +25,8 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -33,17 +36,28 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(Destroy.MOD_ID)
 public class Destroy {
     public static final String MOD_ID = "destroy";
 
+    // Utility
+
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final CreateRegistrate REGISTRATE = CreateRegistrate.lazy(MOD_ID).get();
+    @SuppressWarnings("removal")
+    private static final NonNullSupplier<CreateRegistrate> REGISTRATE = CreateRegistrate.lazy(MOD_ID);
 
-    public Destroy()
-    {
+    public static final CreateRegistrate registrate() {
+        return REGISTRATE.get();  
+    };
+
+    public static ResourceLocation asResource(String path) {
+        return new ResourceLocation(MOD_ID, path);
+    };
+
+    // Initiation
+
+    public Destroy() {
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         //IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
@@ -58,6 +72,7 @@ public class Destroy {
         DestroyFluids.register();
         DestroyOreFeatureConfigEntries.init();
         DestroySoundEvents.register(modEventBus);
+        DestroyCropMutations.register();
 
         // Chemistry
         // DestroyGroupFinder.register();
@@ -71,23 +86,26 @@ public class Destroy {
         // Config
         DestroyAllConfigs.register(modLoadingContext);
 
-        // Listeners
+        // Initiation Events
         modEventBus.addListener(Destroy::init);
         modEventBus.addListener(Destroy::clientInit);
+        modEventBus.addListener(EventPriority.LOWEST, Destroy::gatherData);
 
         // Client
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DestroyBlockPartials::init);
     };
+
+    //Initiation Events
 
     public static void init(final FMLCommonSetupEvent event) {
         DestroyPotatoCannonProjectileTypes.register();
     };
 
     public static void clientInit(final FMLClientSetupEvent event) {
-        DestroyScenes.register();
+        DestroySceneIndex.register();
     };
 
-    public static ResourceLocation asResource(String path) {
-        return new ResourceLocation(MOD_ID, path);
+    public static void gatherData(GatherDataEvent event) {
+        DestroyTags.datagen();
     };
 }

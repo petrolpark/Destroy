@@ -3,7 +3,6 @@ package com.petrolpark.destroy.block;
 import com.petrolpark.destroy.block.entity.AgingBarrelBlockEntity;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
-import com.simibubi.create.Create;
 import com.simibubi.create.content.contraptions.fluids.actors.GenericItemFilling;
 import com.simibubi.create.content.contraptions.processing.EmptyingByBasin;
 import com.simibubi.create.foundation.block.ITE;
@@ -80,7 +79,7 @@ public class AgingBarrelBlock extends Block implements ITE<AgingBarrelBlockEntit
                     success = true;
                 }
                 if (success)
-                    level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, .2f, 1f + Create.RANDOM.nextFloat());
+                    level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, .2f, 1f + player.getRandom().nextFloat());
             };
             return InteractionResult.PASS;
         });

@@ -8,6 +8,9 @@ import com.petrolpark.destroy.chemistry.index.DestroyGroupFinder;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.DestroyReactions;
 
+/**
+ * Used during development for testing aspects of the Chemistry system without having to run the whole game.s
+ */
 public class Test {
 
     public static void main(String args[]) {

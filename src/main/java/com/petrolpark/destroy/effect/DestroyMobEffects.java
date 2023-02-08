@@ -9,8 +9,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-//TODO fix the gee dang colours!!
-
 public class DestroyMobEffects {
     public static final DeferredRegister<MobEffect> MOB_EFFECTS
         = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, Destroy.MOD_ID);
@@ -27,12 +25,12 @@ public class DestroyMobEffects {
         () -> new InebriationMobEffect(MobEffectCategory.HARMFUL, 0xE88010)
     );
 
-    public static final RegistryObject<MobEffect> METH_HIGH = MOB_EFFECTS.register("meth_high",
-        () -> new MethHighMobEffect(MobEffectCategory.BENEFICIAL, 0x8BDCEB)
+    public static final RegistryObject<MobEffect> BABY_BLUE_HIGH = MOB_EFFECTS.register("baby_blue_high",
+        () -> new BabyBlueHighMobEffect(MobEffectCategory.BENEFICIAL, 0x8BDCEB)
     );
 
-    public static final RegistryObject<MobEffect> METH_WITHDRAWAL = MOB_EFFECTS.register("meth_withdrawal",
-        () -> new MethWithdrawalMobEffect(MobEffectCategory.HARMFUL, 0x91B1B7)
+    public static final RegistryObject<MobEffect> BABY_BLUE_WITHDRAWAL = MOB_EFFECTS.register("baby_blue_withdrawal",
+        () -> new BabyBlueWithdrawalMobEffect(MobEffectCategory.HARMFUL, 0x91B1B7)
     );
 
     public static final RegistryObject<MobEffect> SUN_PROTECTION = MOB_EFFECTS.register("sun_protection",

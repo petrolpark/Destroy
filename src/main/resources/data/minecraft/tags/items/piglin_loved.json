@@ -1,7 +1,8 @@
 {
-    "replace": false,
-    "values": [
-      "destroy:24k_gold_dust",
-      "destroy:24k_gold_ingot"
-    ]
+  "values": [
+    "destroy:pure_gold_ingot",
+    "destroy:pure_gold_dust",
+    "destroy:gold_infused_beetroot",
+    "destroy:gold_infused_beetroot_ashes"
+  ]
 }

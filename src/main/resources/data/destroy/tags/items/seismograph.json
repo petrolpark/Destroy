@@ -1,0 +1,7 @@
+{
+  "values": [
+    "destroy:seismograph_good",
+    "destroy:seismograph_middle",
+    "destroy:seismograph_bad"
+  ]
+}

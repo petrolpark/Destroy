@@ -77,7 +77,7 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
         if (isTankFull(denseOutputTank) || isTankFull(lightOutputTank)) return; //don't do anything if output is full
         if (timer > 0) {
             timer -= getProcessingSpeed();
-            if (level.isClientSide) {
+            if (getLevel() != null && getLevel().isClientSide()) {
                 spawnParticles();
                 return;
             };
@@ -89,7 +89,7 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
         if (inputTank.isEmpty()) return; //don't do anything more if input tank is empty
         if (lastRecipe == null || lastRecipe.getRequiredFluid().test(inputTank.getFluid())) { //if the recipe has changed
             RecipeWrapper wrapper = new RecipeWrapper(new EmptyHandler()); //create dummy wrapper
-            for (Recipe<RecipeWrapper> recipe : level.getRecipeManager().getRecipesFor(DestroyRecipeTypes.CENTRIFUGATION.getType(), wrapper, level)) { //search all Centrifugation recipes...
+            for (Recipe<RecipeWrapper> recipe : getLevel().getRecipeManager().getRecipesFor(DestroyRecipeTypes.CENTRIFUGATION.getType(), wrapper, level)) { //search all Centrifugation recipes...
                 if (((CentrifugationRecipe)recipe).getRequiredFluid().test(inputTank.getFluid())) { //...for Recipes with the right matching fluid
                     lastRecipe = (CentrifugationRecipe)recipe;
                     if (canFitFluidInTank(lastRecipe.getDenseOutputFluid(), denseOutputTank) && canFitFluidInTank(lastRecipe.getLightOutputFluid(), lightOutputTank) && hasFluidInTank(lastRecipe.getRequiredFluid(), inputTank)) { //check recipe output can fit
@@ -132,6 +132,18 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
     public int getProcessingSpeed() {
         float lubricationMultiplier = MAX_LUBRICATION_LEVEL != 0 ? lubricationLevel / MAX_LUBRICATION_LEVEL : 1;
         return Mth.clamp((int) Math.abs(getSpeed() * lubricationMultiplier / 16f), 1, 512);
+    };
+
+    public SmartFluidTank getInputTank() {
+        return this.inputTank;
+    };
+
+    public SmartFluidTank getDenseOutputTank() {
+        return this.denseOutputTank;
+    };
+
+    public SmartFluidTank getLightOutputTank() {
+        return this.lightOutputTank;
     };
 
     public void process() {

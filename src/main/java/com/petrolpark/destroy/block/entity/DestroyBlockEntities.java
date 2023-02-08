@@ -1,14 +1,16 @@
 package com.petrolpark.destroy.block.entity;
 
-import static com.petrolpark.destroy.Destroy.REGISTRATE;
-
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.instance.CentrifugeCogInstance;
 import com.petrolpark.destroy.block.renderer.AgingBarrelRenderer;
 import com.petrolpark.destroy.block.renderer.CentrifugeRenderer;
+import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 public class DestroyBlockEntities {
+
+    private static CreateRegistrate REGISTRATE = Destroy.registrate();
 
     public static final BlockEntityEntry<CentrifugeBlockEntity> CENTRIFUGE = REGISTRATE
         .tileEntity("centrifuge", CentrifugeBlockEntity::new)
