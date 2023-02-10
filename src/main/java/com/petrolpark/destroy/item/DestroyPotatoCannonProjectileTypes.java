@@ -23,6 +23,15 @@ public class DestroyPotatoCannonProjectileTypes {
 
     public static final PotatoCannonProjectileType
 
+    BIFURICATED_CARROT = create("bifuricated_carrot")
+        .damage(7)
+        .reloadTicks(13)
+        .velocity(1.4f)
+        .knockback(0.3f)
+        .renderTowardMotion(140, 1)
+        .soundPitch(1.4f)
+        .registerAndAssign(DestroyItems.BIFURICATED_CARROT.get()),
+
     BOMB_BON = create("bomb_bon")
         .damage(10)
         .reloadTicks(100)
@@ -165,6 +174,13 @@ public class DestroyPotatoCannonProjectileTypes {
         .renderTowardMotion(140, 1)
         .onEntityHit(setEffect(MobEffects.HUNGER, 0, 100, false))
         .registerAndAssign(DestroyItems.NICKEL_INFUSED_BEETROOT.get()),
+
+    POTATE_O = create("potate_o")
+        .damage(7)
+        .reloadTicks(20)
+        .knockback(1.7f)
+        .renderTumbling()
+        .registerAndAssign(DestroyItems.POTATE_O.get()),
 
     RAW_FRIES = create("raw_fries")
         .damage(1)

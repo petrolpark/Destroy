@@ -13,7 +13,7 @@ public class AnimatedCentrifuge extends AnimatedKinetics {
         matrixStack.pushPose();
 		matrixStack.translate(xOffset, yOffset, 200);
 		matrixStack.mulPose(Vector3f.XP.rotationDegrees(-15.5f));
-		matrixStack.mulPose(Vector3f.YP.rotationDegrees(105f));
+		matrixStack.mulPose(Vector3f.YP.rotationDegrees(112.5f));
 		int scale = 23;
 
 		blockElement(DestroyBlockPartials.CENTRIFUGE_COG)

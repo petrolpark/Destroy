@@ -339,7 +339,20 @@ public class DestroyItems {
     MASHED_POTATO = REGISTRATE.item("mashed_potato", Item::new)
         .properties(p -> p
             .food(DestroyFoods.MASHED_POTATO)
-        ).register();
+        ).register(),
+    WHITE_WHEAT = REGISTRATE.item("white_wheat", Item::new)
+        .tag(Tags.Items.CROPS)
+        .register(),
+    BIFURICATED_CARROT = REGISTRATE.item("bifuricated_carrot", Item::new)
+        .properties(p -> p
+            .food(DestroyFoods.BIFURICATED_CARROT)
+        ).tag(Tags.Items.CROPS)
+        .register(),
+    POTATE_O = REGISTRATE.item("potate_o", Item::new)
+        .properties(p -> p
+            .food(DestroyFoods.POTATE_O)
+        ).tag(Tags.Items.CROPS)
+        .register();
 
     public static final ItemEntry<AlcoholicDrinkItem>
 

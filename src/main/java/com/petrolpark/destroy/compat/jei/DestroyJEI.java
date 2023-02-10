@@ -30,6 +30,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
@@ -91,7 +92,7 @@ public class DestroyJEI implements IModPlugin {
 		};
         
         /**
-         * Creates a Recipe Category
+         * Creates a Recipe Category.
          * @param factory "TypeOfRecipe"Category::new
          * @param name
          * @param background
@@ -104,14 +105,21 @@ public class DestroyJEI implements IModPlugin {
 
             Supplier<RecipeType<? extends T>> recipeType = recipeTypeEntry::getType;
 
-            Supplier<List<T>> recipeSupplier = () -> { //this all puts all the recipes in a big ol list
+            Supplier<List<T>> recipeSupplier = () -> { // This all puts all the recipes in a big ol' list
                 List<T> recipesList = new ArrayList<>();
                 Consumer<List<T>> consumer = (recipes -> CreateJEI.<T>consumeTypedRecipes(recipes::add, recipeType.get()));
                 consumer.accept(recipesList);
                 return recipesList;
             };
 
-            Info<T> info = new Info<T>(new mezz.jei.api.recipe.RecipeType<>(Destroy.asResource(name), recipeClass), DestroyLang.translate("recipe."+name).component(), background, new ItemIcon(() -> new ItemStack(craftingItem)), recipeSupplier, List.of(() -> new ItemStack(craftingItem)));
+            Info<T> info = new Info<T>(
+                new mezz.jei.api.recipe.RecipeType<>(Destroy.asResource(name), recipeClass),
+                DestroyLang.translate("recipe."+name).component(),
+                background,
+                new ItemIcon(() -> new ItemStack(craftingItem)),
+                recipeSupplier,
+                List.of(() -> new ItemStack(craftingItem))
+            );
             
             CreateRecipeCategory<T> category = factory.create(info);
             allCategories.add(category);
@@ -129,11 +137,19 @@ public class DestroyJEI implements IModPlugin {
             Info<MutationRecipe> info = new Info<MutationRecipe>(
                 new mezz.jei.api.recipe.RecipeType<>(Destroy.asResource(name), MutationRecipe.class),
                 DestroyLang.translate("recipe."+name).component(),
-                new EmptyBackground(120, 115),
+                new EmptyBackground(120, 125),
                 new ItemIcon(() -> new ItemStack(DestroyItems.HYPERACCUMULATING_FERTILIZER.get())),
                 () -> MutationCategory.RECIPES,
                 List.of(() -> new ItemStack(DestroyItems.HYPERACCUMULATING_FERTILIZER.get()))
             );
+
+            for (MutationRecipe recipe : info.recipes().get()) {
+                for (Ingredient ingredient : recipe.getIngredients()) {
+                    for (ItemStack stack : ingredient.getItems()) {
+                        Destroy.LOGGER.info("This mutation recipe includes "+stack.getItem().getName(stack).getString());
+                    };
+                };
+            };
 
             CreateRecipeCategory<MutationRecipe> category = factory.create(info);
             allCategories.add(category);

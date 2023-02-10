@@ -34,7 +34,7 @@ public class HyperaccumulatingFertilizerItem extends BoneMealItem {
                     BoneMealItem.addGrowthParticles(context.getLevel(), context.getClickedPos(), 100);
                     return InteractionResult.SUCCESS;
                 };
-                context.getLevel().setBlockAndUpdate(cropPos, mutation.getResultantCrop());
+                context.getLevel().setBlockAndUpdate(cropPos, mutation.getResultantCropSupplier().get());
                 if (mutation.isOreSpecific()) {
                     context.getLevel().setBlockAndUpdate(potentialOrePos, mutation.getResultantBlockUnder(potentialOreState));
                 };

@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:block/crop",
+    "textures": {
+      "crop": "destroy:block/golden_carrots"
+    },
+    "render_type": "cutout"
+  }

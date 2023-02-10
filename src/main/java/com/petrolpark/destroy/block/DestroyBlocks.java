@@ -15,6 +15,7 @@ import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -271,6 +272,22 @@ public class DestroyBlocks {
         .transform(TagGen.tagBlockAndItem("ores/fluorite", "ores_in_ground/deepslate"))
         .tag(Tags.Items.ORES)
         .build()
+        .register();
+
+    // CROPS
+
+    public static final BlockEntry<FullyGrownCropBlock>
+    
+    BIFURICATED_CARROTS = REGISTRATE.block("bifuricated_carrots", p -> new FullyGrownCropBlock(p, DestroyItems.BIFURICATED_CARROT))
+        .initialProperties(() -> Blocks.CARROTS)
+        .register(),
+
+    GOLDEN_CARROTS = REGISTRATE.block("golden_carrots", p -> new FullyGrownCropBlock(p, () -> Items.GOLDEN_CARROT))
+        .initialProperties(() -> Blocks.CARROTS)
+        .register(),
+
+    POTATE_OS = REGISTRATE.block("potate_os", p -> new FullyGrownCropBlock(p, DestroyItems.POTATE_O))
+        .initialProperties(() -> Blocks.CARROTS)
         .register();
 
     // FOOD

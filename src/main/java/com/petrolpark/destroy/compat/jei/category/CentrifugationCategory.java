@@ -17,10 +17,10 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class CentrifugationCategory extends CreateRecipeCategory<CentrifugationRecipe> {
 
-    private final AnimatedCentrifuge centrifuge = new AnimatedCentrifuge();
+    private static final AnimatedCentrifuge centrifuge = new AnimatedCentrifuge();
 
-    private final int CENTRIFUGE_X = 33;
-    private final int CENTRIFUGE_Y = 60;
+    private static final int CENTRIFUGE_X = 35;
+    private static final int CENTRIFUGE_Y = 60;
 
     public CentrifugationCategory(Info<CentrifugationRecipe> info) {
         super(info);
@@ -57,7 +57,7 @@ public class CentrifugationCategory extends CreateRecipeCategory<CentrifugationR
     public void draw(CentrifugationRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, matrixStack, mouseX, mouseY);
 
-        AllGuiTextures.JEI_SHADOW.render(matrixStack, CENTRIFUGE_X - 17, CENTRIFUGE_Y - 4);
+        AllGuiTextures.JEI_SHADOW.render(matrixStack, CENTRIFUGE_X - 19, CENTRIFUGE_Y - 5);
         centrifuge.draw(matrixStack, CENTRIFUGE_X, CENTRIFUGE_Y);
 
         AllGuiTextures.JEI_DOWN_ARROW.render(matrixStack, 29, 9);

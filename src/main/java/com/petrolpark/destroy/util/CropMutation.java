@@ -2,10 +2,12 @@ package com.petrolpark.destroy.util;
 
 import javax.annotation.Nullable;
 
+import com.petrolpark.destroy.Destroy;
 import com.simibubi.create.AllTags;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -15,10 +17,10 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class CropMutation {
 
-    public static final Map<Supplier<Block>, HashSet<CropMutation>> MUTATIONS = new HashMap<>();
+    public static final Map<Block, List<CropMutation>> MUTATIONS = new HashMap<>();
 
     private Supplier<Block> startCrop;
-    private BlockState endCrop;
+    private Supplier<BlockState> endCrop;
     private boolean oreSpecific;
     @Nullable private Supplier<Block> ore;
     private boolean successful;
@@ -28,7 +30,7 @@ public class CropMutation {
      * @param startCrop Supplies the Block which must be clicked with Hyperaccumulating Fertilizer
      * @param endCrop The Block State to be generated
      */
-    public CropMutation(Supplier<Block> startCrop, BlockState endCrop) {
+    public CropMutation(Supplier<Block> startCrop, Supplier<BlockState> endCrop) {
         this.startCrop = startCrop;
         this.endCrop = endCrop;
         this.oreSpecific = false;
@@ -44,7 +46,7 @@ public class CropMutation {
      * @param endCrop The Block State to be generated
      * @param ore The Ore Block which this Mutation requires
      */
-    public CropMutation(Supplier<Block> startCrop, BlockState endCrop, @Nullable Supplier<Block> ore) {
+    public CropMutation(Supplier<Block> startCrop, Supplier<BlockState> endCrop, Supplier<Block> ore) {
         this.startCrop = startCrop;
         this.endCrop = endCrop;
         this.oreSpecific = true;
@@ -57,7 +59,7 @@ public class CropMutation {
      * Used to generate a 'non-Mutation', when there are no possible Mutations for the given Crop and Ore combination.
      */
     private CropMutation(BlockState crop) { //used for when no Mutation occurs
-        this.endCrop = crop;
+        this.endCrop = () -> crop;
         this.oreSpecific = false;
         this.successful = false;
     };
@@ -66,25 +68,26 @@ public class CropMutation {
      * Let the system know that this Mutation exists.
      */
     private void register() {
-        if (!MUTATIONS.containsKey(this.startCrop)) {
-            MUTATIONS.put(this.startCrop, new HashSet<>());
+        if (!MUTATIONS.keySet().contains(startCrop.get())) {
+            MUTATIONS.put(startCrop.get(), new ArrayList<>());
         };
-        MUTATIONS.get(this.startCrop).add(this);
+        MUTATIONS.get(startCrop.get()).add(this);
     };
 
+    @SuppressWarnings("null") // It's not null; I checked
     public static CropMutation getMutation(BlockState cropBlockState, BlockState blockUnder) {
         Block cropBlock = cropBlockState.getBlock();
         CropMutation mutation = null;
-        checkAllEntries: for (Supplier<Block> cropSupplier : MUTATIONS.keySet()) {
-            if (cropSupplier.get() == cropBlock) {
-                for (CropMutation possibleMutation : MUTATIONS.get(cropSupplier)) {
-                    if (!possibleMutation.oreSpecific) {
-                        mutation = possibleMutation;
-                    } else {
-                        if (possibleMutation.ore == blockUnder.getBlock()) {
+        checkAllEntries: for (Block crop : MUTATIONS.keySet()) {
+            if (crop == cropBlock) {
+                for (CropMutation possibleMutation : MUTATIONS.get(crop)) {
+                    if (possibleMutation.oreSpecific) {
+                        if (blockUnder.is(possibleMutation.ore.get())) { // This is the bit it thinks is null
                             mutation = possibleMutation;
                             break checkAllEntries; // Prioritize Ore-specific Mutations
                         };
+                    } else {
+                        mutation = possibleMutation;
                     };
                 };
             };
@@ -95,9 +98,17 @@ public class CropMutation {
             return mutation;
         }
     };
+
+    public Supplier<Block> getStartCropSupplier() {
+        return startCrop;
+    };
     
-    public BlockState getResultantCrop() {
+    public Supplier<BlockState> getResultantCropSupplier() {
         return endCrop;
+    };
+
+    public Supplier<Block> getOreSupplier() {
+        return ore;
     };
 
     public boolean isOreSpecific() {

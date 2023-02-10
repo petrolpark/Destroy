@@ -20,6 +20,8 @@ public class DestroyFoods {
     public static final FoodProperties UNSEASONED_FRIES = new FoodProperties.Builder().nutrition(6).saturationMod(1.0f).build();
     public static final FoodProperties FRIES = new FoodProperties.Builder().nutrition(8).saturationMod(1.8f).build();
     public static final FoodProperties MASHED_POTATO = new FoodProperties.Builder().nutrition(7).saturationMod(1.4f).build();
+    public static final FoodProperties POTATE_O = new FoodProperties.Builder().nutrition(2).saturationMod(0.6f).build();
+    public static final FoodProperties BIFURICATED_CARROT = new FoodProperties.Builder().nutrition(6).saturationMod(1.2f).build();
     public static final FoodProperties BABY_BLUE_POWDER = new FoodProperties.Builder().nutrition(0).saturationMod(0.0F).effect(babyBlueHigh, 1.0f).build();
     public static final FoodProperties MOONSHINE = new FoodProperties.Builder().nutrition(1).saturationMod(0.1f).build();
 }

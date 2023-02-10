@@ -1,13 +1,17 @@
 package com.petrolpark.destroy.recipe;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.util.CropMutation;
+import com.simibubi.create.content.contraptions.processing.ProcessingOutput;
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipe;
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder;
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder.ProcessingRecipeParams;
 
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 public class MutationRecipe extends ProcessingRecipe<RecipeWrapper> {
@@ -17,9 +21,16 @@ public class MutationRecipe extends ProcessingRecipe<RecipeWrapper> {
     private CropMutation mutation;
 
     public static MutationRecipe create(CropMutation mutation) {
-        MutationRecipe recipe = new ProcessingRecipeBuilder<>(MutationRecipe::new, Destroy.asResource("mutation_" + counter++))
-            .require(Fluids.WATER, 1)
-            .build();
+        ProcessingRecipeBuilder<MutationRecipe> recipeBuilder = new ProcessingRecipeBuilder<>(MutationRecipe::new, Destroy.asResource("mutation_" + counter++))
+            .withItemIngredients(Ingredient.of(new ItemStack(mutation.getStartCropSupplier().get().asItem(), 1)), Ingredient.of(new ItemStack(DestroyItems.HYPERACCUMULATING_FERTILIZER.get(), 1)))
+            .withItemOutputs(new ProcessingOutput(new ItemStack(mutation.getResultantCropSupplier().get().getBlock().asItem(), 1), 1.0f));
+        if (mutation.isOreSpecific()) {
+            Block oreBlock = mutation.getOreSupplier().get();
+            recipeBuilder
+                .withItemIngredients(Ingredient.of(new ItemStack(oreBlock.asItem(), 1)))
+                .withItemOutputs(new ProcessingOutput(new ItemStack(mutation.getResultantBlockUnder(oreBlock.defaultBlockState()).getBlock().asItem(), 1), 1.0f));
+        };
+        MutationRecipe recipe = recipeBuilder.build();
         recipe.mutation = mutation;
         return recipe;
     };

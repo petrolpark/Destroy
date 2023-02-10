@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public final class AlcoholHandler {
 
+    @SuppressWarnings("null") // I promise I checked to make sure it's not null
     public static void increaseInebriation(LivingEntity entity, int level) {
 
         MobEffect INEBRIATION = DestroyMobEffects.INEBRIATION.get();
@@ -16,8 +17,8 @@ public final class AlcoholHandler {
         //int INEBRIATION_DURATION = 1200;
 
         if (entity.hasEffect(INEBRIATION)) {
-            int currentAmplifier = entity.getEffect(INEBRIATION).getAmplifier();
-            int currentDuration = entity.getEffect(INEBRIATION).getDuration();
+            int currentAmplifier = entity.getEffect(INEBRIATION).getAmplifier(); // This is warned as being null
+            int currentDuration = entity.getEffect(INEBRIATION).getDuration(); // So is this
             entity.removeEffect(INEBRIATION);
             entity.addEffect(new MobEffectInstance(INEBRIATION, Math.max(currentDuration + (INEBRIATION_DURATION * level), 0), Math.max(currentAmplifier + level, 0), false, false, true));
         } else if (level >= 1) { // If the Entity is not already inebriated and we are attempting to add levels
