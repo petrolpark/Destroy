@@ -2,7 +2,6 @@ package com.petrolpark.destroy.util;
 
 import javax.annotation.Nullable;
 
-import com.petrolpark.destroy.Destroy;
 import com.simibubi.create.AllTags;
 
 import java.util.ArrayList;

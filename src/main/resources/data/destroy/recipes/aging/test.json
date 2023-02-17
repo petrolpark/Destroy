@@ -1,0 +1,24 @@
+{
+    "type": "destroy:aging",
+    "ingredients": [
+        {
+            "fluid": "minecraft:water",
+            "amount": 1000
+        },
+        {
+            "item": "minecraft:apple",
+            "count": 1
+        },
+        {
+            "item": "destroy:yeast",
+            "count": 1
+        }
+    ],
+    "results": [
+        {
+            "fluid": "minecraft:lava",
+            "amount": 1000
+        }
+    ],
+    "processingTime": 500
+}

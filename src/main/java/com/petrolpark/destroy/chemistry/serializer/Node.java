@@ -22,6 +22,7 @@ public class Node {
         sideBranches = new HashMap<>();
     };
 
+    @SuppressWarnings("null") // It's not null I checked
     public String serialize() {
         String string = getAtom().getElement().getSymbol();
         Boolean isTerminal = true;
@@ -37,10 +38,10 @@ public class Node {
             string += "+"+atom.getpKa();
         };
         if (!isTerminal) {
-            string += nextEdge.bondType.getFROWNSCode();
+            string += nextEdge.bondType.getFROWNSCode(); // It thinks 'nextEdge' can be null
         };
         for (Branch branch : sideBranches.keySet()) {
-            string += "(" + sideBranches.get(branch).getFROWNSCode() + branch.serialize() + ")";
+            string += "(" + sideBranches.get(branch).getFROWNSCode() + branch.serialize() + ")"; // It thinks "nextEdge" is null
         };
         if (!isTerminal) {
             string += nextEdge.getDestinationNode().serialize();

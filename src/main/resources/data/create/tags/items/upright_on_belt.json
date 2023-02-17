@@ -4,6 +4,7 @@
     "destroy:empty_bomb_bon",
     "destroy:bomb_bon",
     "destroy:napalm_sundae",
+    "#destroy:alcoholic_drink",
     "#destroy:spray_bottle",
     "#destroy:syringe"
   ]

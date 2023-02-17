@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.PlantType;
 
 public class FullyGrownCropBlock extends BushBlock {
 
@@ -32,6 +33,11 @@ public class FullyGrownCropBlock extends BushBlock {
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         return (level.getRawBrightness(pos, 0) >= 8 || level.canSeeSky(pos)) && super.canSurvive(state, level, pos);
+    };
+
+    @Override
+    public PlantType getPlantType(BlockGetter level, BlockPos pos) {
+        return PlantType.CROP;
     };
 
     @Override

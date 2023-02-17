@@ -198,10 +198,16 @@
     "destroy.ponder.centrifuge.text_4": "The Centrifuge does not actively pump out Fluids - a Mechanical Pump must be used.",
     "destroy.ponder.centrifuge.text_5": "Lubrication can be applied to increase the processing speed.",
 
+    "destroy.ponder.phytomining.header": "Extracting minerals via Phytomining",
+    "destroy.ponder.phytomining.text_1": "Hyperaccumulating Fertilizer can be used like Bone Meal to Mutate certain Crops.",
+    "destroy.ponder.phytomining.text_2": "Some Mutations result in the uptake of Ores placed a block below the Farmland.",
+
     "destroy.recipe.centrifugation": "Centrifugation",
     "destroy.recipe.heat_requirement.cooled": "Cooled",
     "destroy.recipe.mutation": "Phytomining",
 
+    "destroy.tooltip.aging_barrel.aging_tank": "Aging:",
+    "destroy.tooltip.aging_barrel.progress": "Progress:",
     "destroy.tooltip.contraptions.of": "of",
     "note_for_translators_1": "The above key is used in the displays of Fluid-handling contraptions, e.g. '100mB of Water'",
     "destroy.tooltip.centrifuge.lubrication": "Lubrication:",
@@ -259,6 +265,11 @@
     "item.destroy.calcium_chloride": "Dessicant",
     "item.destroy.chalk": "Stick of Chalk",
     "item.destroy.chalk_dust": "Chalk Dust",
+    "item.destroy.chorus_wine": "Chorus Wine",
+    "item.destroy.chorus_wine.tooltip": "CHORUS_WINE",
+    "item.destroy.chorus_wine.tooltip.summary": "A delectable beverage of fermented _Chorus Fruit_, which is a _favourite_ of Endermen everywhere.",
+    "item.destroy.chorus_wine.tooltip.condition1": "When Drank",
+    "item.destroy.chorus_wine.tooltip.behaviour1": "Increases _Inebration_ and _teleports_ you to your position roughly _twenty seconds ago_, if it is _safe_ to do so.",
     "item.destroy.cisplatin_syringe": "Syringe of Cisplatin",
     "item.destroy.cisplatin_syringe.tooltip": "SYRINGE_OF_CISPLATIN",
     "item.destroy.cisplatin_syringe.tooltip.summary": "A real-life chemotherapeutic agent. Find out more and support developments of treatments at _cancerresearch.uk_.",

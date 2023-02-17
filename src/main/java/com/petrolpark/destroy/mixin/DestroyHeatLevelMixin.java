@@ -19,6 +19,7 @@ public abstract class DestroyHeatLevelMixin {
     @Mutable
     private static HeatLevel[] $VALUES;
 
+    @SuppressWarnings("unused")
     private static final HeatLevel FROSTING = heatLevelModifier$addValue("FROSTING");
 
     @Invoker("<init>")

@@ -11,6 +11,7 @@ import com.petrolpark.destroy.recipe.CentrifugationRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.content.contraptions.fluids.FluidFX;
+import com.simibubi.create.content.contraptions.wrench.IWrenchable;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.utility.VecHelper;
 
@@ -22,6 +23,8 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,7 +38,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.items.wrapper.EmptyHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
-public class CentrifugeBlockEntity extends FluidKineticTileEntity {
+public class CentrifugeBlockEntity extends FluidKineticTileEntity implements IWrenchable {
 
     private SmartFluidTank inputTank, denseOutputTank, lightOutputTank;
     protected LazyOptional<IFluidHandler> inputFluidCapability, denseOutputFluidCapability, lightOutputFluidCapability;
@@ -64,7 +67,13 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
     public void updateDenseOutputFace() {
         if (this.getLevel() == null) return;
         denseOutputTankFace = refreshDirection(denseOutputTankFace);
-        this.getLevel().setBlockAndUpdate(getBlockPos(), getBlockState().setValue(CentrifugeBlock.DENSE_OUTPUT_FACE, denseOutputTankFace));
+        getLevel().setBlockAndUpdate(getBlockPos(), getBlockState().setValue(CentrifugeBlock.DENSE_OUTPUT_FACE, denseOutputTankFace));
+    };
+
+    @Override
+    public InteractionResult onWrenched(BlockState state, UseOnContext context) {
+        denseOutputTankFace = refreshDirection(denseOutputTankFace.getClockWise());
+        return IWrenchable.super.onWrenched(state, context);
     };
 
     //TODO Sounds

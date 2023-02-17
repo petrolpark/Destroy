@@ -1,0 +1,6 @@
+{
+    "parent": "destroy:block/hefty_beetroot",
+    "textures": {
+        "overlay": "destroy:block/lapis_infused_beetroot"
+    }
+}

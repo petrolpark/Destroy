@@ -362,28 +362,43 @@ public class DestroyItems {
             .food(DestroyFoods.MOONSHINE)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)
-        ).register(),
+        ).tag(DestroyItemTags.ALCOHOLIC_DRINK.tag)
+        .register(),
     ONCE_DISTILLED_MOONSHINE_BOTTLE = REGISTRATE.item("once_distilled_moonshine_bottle", p -> new AlcoholicDrinkItem(p, 1))
         .properties(p -> p
             .tab(DestroyCreativeModeTabs.TAB_DESTROY)
             .food(DestroyFoods.MOONSHINE)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)
-        ).register(),
+        ).tag(DestroyItemTags.ALCOHOLIC_DRINK.tag)
+        .register(),
     TWICE_DISTILLED_MOONSHINE_BOTTLE = REGISTRATE.item("twice_distilled_moonshine_bottle", p -> new AlcoholicDrinkItem(p, 2))
         .properties(p -> p
             .tab(DestroyCreativeModeTabs.TAB_DESTROY)
             .food(DestroyFoods.MOONSHINE)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)
-        ).register(),
+        ).tag(DestroyItemTags.ALCOHOLIC_DRINK.tag)
+        .register(),
     THRICE_DISTILLED_MOONSHINE_BOTTLE = REGISTRATE.item("thrice_distilled_moonshine_bottle", p -> new AlcoholicDrinkItem(p, 3))
         .properties(p -> p
             .tab(DestroyCreativeModeTabs.TAB_DESTROY)
             .food(DestroyFoods.MOONSHINE)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)
-        ).register();
+        ).tag(DestroyItemTags.ALCOHOLIC_DRINK.tag)
+        .register();
+    
+    public static final ItemEntry<ChorusWineItem>
+    
+    CHORUS_WINE = REGISTRATE.item("chorus_wine", p -> new ChorusWineItem(p, 1))
+        .properties(p -> p
+            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
+            .food(DestroyFoods.MOONSHINE)
+            .craftRemainder(Items.GLASS_BOTTLE)
+            .stacksTo(16)
+        ).tag(DestroyItemTags.ALCOHOLIC_DRINK.tag)
+        .register();
 
     // SEQUENCED ASSEMBLY INTERMEDIATES
 

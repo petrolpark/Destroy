@@ -24,36 +24,35 @@ public class AlcoholicDrinkItem extends Item {
      * @param pProperties
      * @param strength How many levels of the Inebriation effect this item adds
      */
-    public AlcoholicDrinkItem(Properties pProperties, int strength) {
-        super(pProperties);
+    public AlcoholicDrinkItem(Properties properties, int strength) {
+        super(properties);
         this.strength = strength;
     };
 
-    public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving) {
-        super.finishUsingItem(pStack, pLevel, pEntityLiving);
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
+        super.finishUsingItem(stack, level, entityLiving);
 
-        if (pEntityLiving instanceof ServerPlayer serverplayer) {
-            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayer, pStack);
+        if (entityLiving instanceof ServerPlayer serverplayer) {
+            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayer, stack);
             serverplayer.awardStat(Stats.ITEM_USED.get(this));
-         }
+        };
    
-         if (!pLevel.isClientSide) {
-            AlcoholHandler.increaseInebriation(pEntityLiving, getStrength());
-         }
+         if (!level.isClientSide) {
+            AlcoholHandler.increaseInebriation(entityLiving, getStrength());
+        };
    
-         if (pStack.isEmpty()) {
+        if (stack.isEmpty()) {
             return new ItemStack(Items.GLASS_BOTTLE);
-         } else {
-            if (pEntityLiving instanceof Player && !((Player)pEntityLiving).getAbilities().instabuild) {
+        } else {
+            if (entityLiving instanceof Player player && !player.getAbilities().instabuild) {
                ItemStack itemstack = new ItemStack(Items.GLASS_BOTTLE);
-               Player player = (Player)pEntityLiving;
                if (!player.getInventory().add(itemstack)) {
                   player.drop(itemstack, false);
                }
             }
    
-            return pStack;
-         }
+            return stack;
+        }
     };
 
     /**

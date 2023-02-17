@@ -56,17 +56,23 @@ public class AgingBarrelBlock extends Block implements ITE<AgingBarrelBlockEntit
     public InteractionResult use(BlockState blockstate, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack heldItem = player.getItemInHand(hand);
         return onTileEntityUse(level, pos, be -> {
+
+            if (be.tryOpen()) {
+                return InteractionResult.SUCCESS;
+            };
+
             if (!heldItem.isEmpty()) {
-				if (FluidHelper.tryEmptyItemIntoTE(level, player, hand, heldItem, be)) { //try emptying the Fluid in the Item into the Barrel
+				if (FluidHelper.tryEmptyItemIntoTE(level, player, hand, heldItem, be)) { // Try emptying the Fluid in the Item into the Barrel
+                    be.checkRecipe();
 					return InteractionResult.SUCCESS;
                 };
-				if (FluidHelper.tryFillItemFromTE(level, player, hand, heldItem, be)) { //try filling up the Item with the Fluid in the Barrel
+				if (FluidHelper.tryFillItemFromTE(level, player, hand, heldItem, be)) { // Try filling up the Item with the Fluid in the Barrel
 					return InteractionResult.SUCCESS;
                 };
-                if (EmptyingByBasin.canItemBeEmptied(level, heldItem) || GenericItemFilling.canItemBeFilled(level, heldItem)) { //try filling up the Item with the Fluid in the Barrel (again)
-					return InteractionResult.SUCCESS;
+                if (EmptyingByBasin.canItemBeEmptied(level, heldItem) || GenericItemFilling.canItemBeFilled(level, heldItem)) { // Try filling up the Item with the Fluid in the Barrel (again)
+                    return InteractionResult.SUCCESS;
                 };
-			} else { //try picking up the item in the Barrel
+			} else { // Try picking up an Item from the Barrel
                 IItemHandlerModifiable inv = be.itemCapability.orElse(new ItemStackHandler(1));
                 boolean success = false;
                 for (int slot = 0; slot < inv.getSlots(); slot++) {
@@ -99,6 +105,8 @@ public class AgingBarrelBlock extends Block implements ITE<AgingBarrelBlockEntit
 
 			ItemStack insertItem = ItemHandlerHelper.insertItem(be.inventory, itemEntity.getItem().copy(), false);
 
+            be.checkRecipe();
+
 			if (insertItem.isEmpty()) {
 				itemEntity.discard();
 				return;
@@ -119,8 +127,8 @@ public class AgingBarrelBlock extends Block implements ITE<AgingBarrelBlockEntit
 
     @Override
     public VoxelShape getCollisionShape(BlockState blockstate, BlockGetter level, BlockPos pos, CollisionContext context) {
-        //if the Entity is an Item and the Barrel is empty the collision box is higher so the Items actually register when they fall in
-        if (context instanceof EntityCollisionContext && ((EntityCollisionContext) context).getEntity() instanceof ItemEntity) {
+        // If the Entity is an Item and the Barrel is empty the collision box is higher so the Items actually register when they fall in
+        if (context instanceof EntityCollisionContext entityCollisionContext && entityCollisionContext.getEntity() instanceof ItemEntity) {
             return DestroyShapes.AGING_BARREL_INTERIOR;
         };
         return getShape(blockstate, level, pos, context);

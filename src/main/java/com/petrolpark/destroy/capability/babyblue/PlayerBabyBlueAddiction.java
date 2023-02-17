@@ -33,10 +33,10 @@ public class PlayerBabyBlueAddiction {
     };
 
     public void saveNBTData(CompoundTag nbt) {
-        nbt.putInt("babyBlueAddiction", this.babyBlueAddiction);
+        nbt.putInt("BabyBlueAddiction", this.babyBlueAddiction);
     };
 
     public void loadNBTData(CompoundTag nbt) {
-        this.babyBlueAddiction = nbt.getInt("babyBlueAddiction");
+        this.babyBlueAddiction = nbt.getInt("BabyBlueAddiction");
     };
 }

@@ -2,8 +2,6 @@ package com.petrolpark.destroy.item.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import com.petrolpark.destroy.Destroy;
-import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.simibubi.create.foundation.item.render.CreateCustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
@@ -24,9 +22,11 @@ public class SyringeItemRenderer extends CustomRenderedItemModelRenderer<Syringe
     static float STAB_TIME = 0.75f;
 
     @Override
+    @SuppressWarnings("resource")
     protected void render(ItemStack stack, SyringeModel model, PartialItemModelRenderer renderer, TransformType transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        LocalPlayer player = Minecraft.getInstance().player;
+        LocalPlayer player = Minecraft.getInstance().player; // It thinks this is unclosed; IDK how to fix that
+        if (player == null) return;
         float partialTicks = AnimationTickHolder.getPartialTicks();
 
         boolean isLeftHandAnimation = (transformType == TransformType.FIRST_PERSON_LEFT_HAND);

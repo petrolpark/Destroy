@@ -2,19 +2,27 @@ package com.petrolpark.destroy.ponder;
 
 import java.util.List;
 
+import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
-import com.simibubi.create.AllFluids;
+import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.content.contraptions.fluids.potion.PotionFluid;
 import com.simibubi.create.content.contraptions.fluids.tank.FluidTankTileEntity;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.foundation.ponder.Selection;
+import com.simibubi.create.foundation.ponder.element.InputWindowElement;
+import com.simibubi.create.foundation.ponder.instruction.EmitParticlesInstruction.Emitter;
+import com.simibubi.create.foundation.utility.Pointing;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
@@ -70,6 +78,36 @@ public class DestroyScenes {
         scene.overlay.showText(100)
             .text("")
             .pointAt(util.vector.blockSurface(lightOutputPump, Direction.EAST));
+        scene.idle(120);
+        scene.markAsFinished();
+    };
+
+    public static void phytomining(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("phytomining", "");
+        scene.configureBasePlate(0, 0, 3);
+        scene.showBasePlate();
+
+        BlockPos ore = new BlockPos(1, 1, 1);
+        BlockPos farmland = new BlockPos(1, 2, 1);
+
+        scene.world.showSection(util.select.everywhere(), Direction.UP);
+        scene.idle(10);
+        scene.overlay.showText(100)
+            .text("")
+            .pointAt(util.vector.blockSurface(farmland, Direction.UP));
+        scene.idle(120);
+        scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(new BlockPos(1, 2, 1), Direction.UP), Pointing.DOWN)
+            .rightClick()
+            .withItem(new ItemStack(DestroyItems.HYPERACCUMULATING_FERTILIZER.get())),
+            30
+        );
+        scene.idle(60);
+        scene.effects.emitParticles(util.vector.topOf(farmland).add(0, 0.25f, 0), Emitter.withinBlockSpace(ParticleTypes.HAPPY_VILLAGER, Vec3.ZERO), 1.0f, 15);
+        scene.world.modifyBlock(ore, s -> Blocks.STONE.defaultBlockState(), false);
+        scene.world.modifyBlock(new BlockPos(1, 3, 1), s -> DestroyBlocks.GOLDEN_CARROTS.get().defaultBlockState(), false);
+        scene.overlay.showText(100)
+            .text("")
+            .pointAt(util.vector.blockSurface(ore, Direction.WEST));
         scene.idle(120);
         scene.markAsFinished();
     };

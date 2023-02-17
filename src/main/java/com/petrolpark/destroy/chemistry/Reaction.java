@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.util.DestroyLang;
-import com.simibubi.create.content.contraptions.processing.HeatCondition;
 
 import net.minecraft.network.chat.Component;
 

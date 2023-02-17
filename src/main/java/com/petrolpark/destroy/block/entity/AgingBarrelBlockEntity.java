@@ -1,29 +1,46 @@
 package com.petrolpark.destroy.block.entity;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.block.AgingBarrelBlock;
+import com.petrolpark.destroy.recipe.AgingRecipe;
+import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
+import com.petrolpark.destroy.util.DestroyLang;
+import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour.TankSegment;
+import com.simibubi.create.foundation.utility.recipe.RecipeFinder;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class AgingBarrelBlockEntity extends SmartTileEntity {
+public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGoggleInformation {
+
+    private static final Object agingRecipeKey = new Object();
+    private static final int TANK_CAPACITY = 1000;
 
     public SmartInventory inventory;
     protected SmartFluidTankBehaviour inputTank, outputTank;
@@ -31,20 +48,21 @@ public class AgingBarrelBlockEntity extends SmartTileEntity {
     protected LazyOptional<IFluidHandler> fluidCapability;
     public LazyOptional<IItemHandlerModifiable> itemCapability;
 
-    private int timer;
+    private int timer; // -1 = open, 0 = done processing but closed
+    private int totalTime;
 
     public AgingBarrelBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
         inventory = new SmartInventory(2, this, 1, false).forbidExtraction();
         itemCapability = LazyOptional.of(() -> inventory);
 
-        timer = 0;
+        timer = -1;
     };
 
     @Override
     public void addBehaviours(List<TileEntityBehaviour> behaviours) {
-        inputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, 1000, true);
-        outputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, 1000, true)
+        inputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, TANK_CAPACITY, true);
+        outputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, TANK_CAPACITY, true)
             .forbidInsertion();
         behaviours.add(inputTank);
         behaviours.add(outputTank);
@@ -53,6 +71,53 @@ public class AgingBarrelBlockEntity extends SmartTileEntity {
 			LazyOptional<? extends IFluidHandler> outputCap = outputTank.getCapability();
 			return new CombinedTankWrapper(outputCap.orElse(null), inputCap.orElse(null));
 		});
+    };
+
+    @SuppressWarnings("null")
+    public void checkRecipe() {
+        if (getLevel() == null || getLevel().isClientSide()) return;
+        List<Recipe<?>> allRecipes = RecipeFinder.get(agingRecipeKey, level, r -> r.getType() == DestroyRecipeTypes.AGING.getType());
+        List<Recipe<?>> possibleRecipes = allRecipes.stream().filter(r -> {
+            AgingRecipe recipe = (AgingRecipe) r;
+            if (!recipe.getFluidIngredients().get(0).test(inputTank.getPrimaryHandler().getFluid())) {
+                return false;
+            };
+            List<ItemStack> availableItems = new ArrayList<>(); // Check the Fluid Ingredient is present
+            availableItems.addAll(List.of(this.inventory.getItem(0), this.inventory.getItem(1)));
+            boolean[] ingredientsMatched = new boolean[recipe.getIngredients().size()];
+            for (int i = 0; i < recipe.getIngredients().size(); i++) { // Check that each Item Ingredient is present
+                Ingredient ingredient = recipe.getIngredients().get(i);
+                boolean ingredientMatched = false;
+                ItemStack extractedStack = ItemStack.EMPTY;
+                checkEachItemStack: for (ItemStack stack : availableItems) { // Check each Item Stack to see if it matches the Ingredient
+                    if (ingredient.test(stack)) {
+                        ingredientMatched = true;
+                        extractedStack = stack;
+                        break checkEachItemStack;
+                    };
+                };
+                ingredientsMatched[i] = ingredientMatched;
+                if (ingredientMatched) {
+                    availableItems.remove(extractedStack); // If an Item Stack matches an Ingredient, remove it as it cannot be used for another Ingredient
+                } else {
+                    return false; // This Ingredient was never found
+                };
+            };
+            return true;
+        }).collect(Collectors.toList());
+
+        if (possibleRecipes.size() >= 1) { // If a Recipe is found
+            AgingRecipe recipe = (AgingRecipe) possibleRecipes.get(0);
+            inputTank.getPrimaryHandler().drain(TANK_CAPACITY, FluidAction.EXECUTE); // Drain input
+            inventory.clearContent(); // Empty Inventory
+            outputTank.getPrimaryHandler().fill(recipe.getFluidResults().get(0), FluidAction.EXECUTE); // Fill output
+            Destroy.LOGGER.info("Output fluid is: "+outputTank.getPrimaryHandler().getFluid().getDisplayName());
+            totalTime = recipe.getProcessingDuration();
+            timer = recipe.getProcessingDuration();
+            onTimerChange();
+            Destroy.LOGGER.info("Output fluid is: "+outputTank.getPrimaryHandler().getFluid().getDisplayName());
+        };
+        Destroy.LOGGER.info("This many aging recipes are possible: " +possibleRecipes.size());
     };
 
     @Override
@@ -71,29 +136,72 @@ public class AgingBarrelBlockEntity extends SmartTileEntity {
         //Retrieval of what's in the Tanks is automatically covered in SmartTileEntity
     };
 
-    //TODO sort this nonsense out
-    // @Override
-	// public void setRemoved() {
-	// 	itemCapability.invalidate();
-	// 	fluidCapability.invalidate();
-	// 	super.setRemoved();
-	// };
-
     @Nonnull
     @Override
     @SuppressWarnings("null")
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.FLUID_HANDLER) {
-            return fluidCapability.cast();
-        } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return itemCapability.cast();
+        if (timer == -1) { // If the Barrel isn't currently processing
+            if (cap == ForgeCapabilities.FLUID_HANDLER) {
+                return fluidCapability.cast();
+            } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
+                return itemCapability.cast();
+            };
         };
         return super.getCapability(cap, side);
     };
 
     @Override
     public void tick() {
+        if (timer > 0) {
+            timer--;
+            onTimerChange();
+        };
         super.tick();
+    };
+
+    @SuppressWarnings("null") // It's not null I checked
+    public void onTimerChange() {
+        if (getLevel() == null) return;
+        BlockState oldState = getBlockState();
+        BlockState newState = getBlockState();
+        newState = oldState.setValue(AgingBarrelBlock.IS_OPEN, timer < 0);
+        if (timer == -1) {
+            newState = newState.setValue(AgingBarrelBlock.PROGRESS, 0);
+        };
+        newState = newState.setValue(AgingBarrelBlock.PROGRESS, 4 - (int)(timer / (float)totalTime * 4));
+        if (newState != oldState) {
+            getLevel().setBlockAndUpdate(getBlockPos(), newState); // This is the bit it thinks might be null
+            sendData();
+        };
+    };
+
+    /**
+     * Attempts to open the Aging Barrel.
+     * @return Whether opening the Barrel was successful
+     */
+    @SuppressWarnings("null")
+    public boolean tryOpen() {
+        if (getLevel() == null || getLevel().isClientSide()) return false;
+        if (timer == 0) {
+            timer = -1;
+            onTimerChange();
+            return true;
+        };
+        return false;
+    };
+
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        if (timer != -1) {
+            DestroyLang.tankContentsTooltip(tooltip, DestroyLang.translate("tooltip.aging_barrel.aging_tank"), outputTank.getPrimaryHandler());
+            DestroyLang.builder()
+                .add(DestroyLang.translate("tooltip.aging_barrel.progress"))
+                .space()
+                .add(Component.literal((int)((1 - (timer/(float)totalTime)) * 100)+"%"))
+                .forGoggles(tooltip);
+            return true;
+        };
+        return false;
     };
 
     /**

@@ -290,6 +290,56 @@ public class DestroyBlocks {
         .initialProperties(() -> Blocks.CARROTS)
         .register();
 
+    public static final BlockEntry<HeftyBeetrootBlock> 
+
+    HEFTY_BEETROOT = REGISTRATE.block("hefty_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.HEFTY_BEETROOT))
+        .initialProperties(() -> Blocks.BEETROOTS)
+        .register(),
+
+    COAL_INFUSED_BEETROOT = REGISTRATE.block("coal_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.COAL_INFUSED_BEETROOT))
+        .initialProperties(HEFTY_BEETROOT)
+        .register(),
+
+    COPPER_INFUSED_BEETROOT = REGISTRATE.block("copper_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.COPPER_INFUSED_BEETROOT))
+        .initialProperties(HEFTY_BEETROOT)
+        .register(),
+
+    DIAMOND_INFUSED_BEETROOT = REGISTRATE.block("diamond_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.DIAMOND_INFUSED_BEETROOT))
+        .initialProperties(HEFTY_BEETROOT)
+        .register(),
+
+    EMERALD_INFUSED_BEETROOT = REGISTRATE.block("emerald_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.EMERALD_INFUSED_BEETROOT))
+        .initialProperties(HEFTY_BEETROOT)
+        .register(),
+
+    FLUORITE_INFUSED_BEETROOT = REGISTRATE.block("fluorite_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.FLUORITE_INFUSED_BEETROOT))
+        .initialProperties(HEFTY_BEETROOT)
+        .register(),
+
+    GOLD_INFUSED_BEETROOT = REGISTRATE.block("gold_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.GOLD_INFUSED_BEETROOT))
+        .initialProperties(HEFTY_BEETROOT)
+        .register(),
+
+    IRON_INFUSED_BEETROOT = REGISTRATE.block("iron_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.IRON_INFUSED_BEETROOT))
+        .initialProperties(HEFTY_BEETROOT)
+        .register(),
+
+    LAPIS_INFUSED_BEETROOT = REGISTRATE.block("lapis_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.LAPIS_INFUSED_BEETROOT))
+        .initialProperties(HEFTY_BEETROOT)
+        .register(),
+
+    NICKEL_INFUSED_BEETROOT = REGISTRATE.block("nickel_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.NICKEL_INFUSED_BEETROOT))
+        .initialProperties(HEFTY_BEETROOT)
+        .register(),
+
+    REDSTONE_INFUSED_BEETROOT = REGISTRATE.block("redstone_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.REDSTONE_INFUSED_BEETROOT))
+        .initialProperties(HEFTY_BEETROOT)
+        .register(),
+
+    ZINC_INFUSED_BEETROOT = REGISTRATE.block("zinc_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.ZINC_INFUSED_BEETROOT))
+        .initialProperties(HEFTY_BEETROOT)
+        .register();
+
     // FOOD
 
     public static final BlockEntry<Block> MASHED_POTATO_BLOCK = REGISTRATE.block("mashed_potato_block", Block::new)

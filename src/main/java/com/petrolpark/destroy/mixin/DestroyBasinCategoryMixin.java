@@ -51,6 +51,7 @@ public class DestroyBasinCategoryMixin {
         ci.cancel(); //don't execute the rest of the method
     };
 
+    @SuppressWarnings("resource")
     @Inject(method = "draw", at = @At(value = "INVOKE", target = "getInstance"), cancellable = true) //injects when it is writing "Heated", "Superheated", etc at the bottom of the screen
     protected void drawInjection(BasinRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY, CallbackInfo ci) {
 

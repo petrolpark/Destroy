@@ -19,6 +19,7 @@ import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.DestroyTags;
 import com.petrolpark.destroy.world.DestroyOreFeatureConfigEntries;
+import com.petrolpark.destroy.world.DestroyWorldGen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
@@ -73,6 +74,7 @@ public class Destroy {
         DestroyOreFeatureConfigEntries.init();
         DestroySoundEvents.register(modEventBus);
         DestroyCropMutations.register();
+        DestroyWorldGen.register(modEventBus);
 
         // Chemistry
         // DestroyGroupFinder.register();

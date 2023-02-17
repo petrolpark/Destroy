@@ -18,6 +18,9 @@ public class DestroyShapes {
     public static final VoxelShape CROP = shape(0, 0, 0, 16, 8, 16)
         .build();
 
+    public static final VoxelShape HEFTY_BEETROOT = shape(4, -1, 4, 12, 5, 12)
+        .build();
+
     public static final VoxelShaper AGING_BARREL_OPEN = shape(0, 0, 0, 16, 14, 16)
         .erase(2, 2, 2, 14, 14, 14)
         .add(0, 14, 14, 16, 30, 16)

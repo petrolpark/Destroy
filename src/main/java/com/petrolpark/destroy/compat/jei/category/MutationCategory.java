@@ -1,7 +1,6 @@
 package com.petrolpark.destroy.compat.jei.category;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import com.mojang.blaze3d.vertex.PoseStack;

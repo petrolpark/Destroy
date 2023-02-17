@@ -23,6 +23,7 @@ public class DestroyTags {
 
     public enum DestroyItemTags {
 
+        ALCOHOLIC_DRINK,
         BEETROOT_ASHES,
         CHEMICAL_PROTECTION_HEAD,
         CHEMICAL_PROTECTION_TORSO,
@@ -70,6 +71,7 @@ public class DestroyTags {
             .add(Items.PAPER, Items.SUGAR)
             .addTag(DestroyItemTags.SEISMOGRAPH.tag);
         provider.tag(AllItemTags.UPRIGHT_ON_BELT.tag)
+            .addTag(DestroyItemTags.ALCOHOLIC_DRINK.tag)
             .addTag(DestroyItemTags.SPRAY_BOTTLE.tag)
             .addTag(DestroyItemTags.SYRINGE.tag);
         provider.tag(DestroyItemTags.VULCANIZER.tag)

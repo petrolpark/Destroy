@@ -47,19 +47,22 @@ public class FluidKineticTileEntity extends KineticTileEntity {
     };
 
     /**
-     * Used by the Centrifuge and Bubble Cap to determine which side they should output to
+     * Used by the Centrifuge and Bubble Cap to the side to which they should output.
      * @param currentDirection The current face which the output is on
      * @return The new face the output should point to
      */
+    @SuppressWarnings("null")
     public Direction refreshDirection(Direction currentDirection) {
-        if (level == null || currentDirection.getAxis() == Direction.Axis.Y) { //if the level doesn't exist (low-key no idea how this error even occured), or the side is UP or DOWN, fix this
+        if (getLevel() == null || currentDirection.getAxis() == Direction.Axis.Y) { // If the level doesn't exist (low-key no idea how this error even occured), or the side is UP or DOWN, fix this
             return Direction.NORTH;
         };
-        for (Direction direction : new ArrayList<>(List.of(currentDirection, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST))) { //loop through possible Directions, prioritising the current Direction
-            BlockEntity be = this.level.getBlockEntity(getBlockPos().relative(direction));
+        Direction direction = currentDirection;
+        for (int i = 0; i < 4; i++) { //loop through possible Directions, prioritising the current Direction
+            BlockEntity be = getLevel().getBlockEntity(getBlockPos().relative(direction)); // It thinks level can be null (it can't)
             if (be != null && be.getCapability(ForgeCapabilities.FLUID_HANDLER, direction.getOpposite()) != null ) {
                 return direction;
             };
+            direction = direction.getClockWise();
         };
         return currentDirection; //if no other Direction was found, keep it the way it was
     };
