@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.block;
 
+import javax.annotation.Nullable;
+
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
@@ -10,6 +12,9 @@ import com.simibubi.create.foundation.block.ITE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -17,6 +22,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -24,12 +30,19 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlockEntity>, ICogWheel {
 
-    public static final DirectionProperty DENSE_OUTPUT_FACE = DirectionProperty.create("direction");
+    public static final DirectionProperty DENSE_OUTPUT_FACE = BlockStateProperties.HORIZONTAL_FACING;;
 
     public CentrifugeBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(DENSE_OUTPUT_FACE, Direction.WEST));
     };
+
+    @Override
+    @Nullable
+    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        // TODO Auto-generated method stub
+        return super.getStateForPlacement(pContext);
+    }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
@@ -39,26 +52,41 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         pLevel.removeBlockEntity(pPos);
-    }
+    };
 
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
         withTileEntityDo(level, pos, te -> {
-            te.updateDenseOutputFace(); //this also updates the Block State
+            te.attemptRotation(false);
         });
         super.onNeighborChange(state, level, pos, neighbor);
     };
 
     @Override
-    protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(DENSE_OUTPUT_FACE);
-        super.createBlockStateDefinition(pBuilder);
+    protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+        builder.add(DENSE_OUTPUT_FACE);
+        super.createBlockStateDefinition(builder);
     };
 
     @Override
     public Axis getRotationAxis(BlockState state) {
         return Axis.Y;
-    }
+    };
+
+    @Override
+    @SuppressWarnings("resource")
+	public InteractionResult onWrenched(BlockState state, UseOnContext context) {
+		if (!context.getLevel().isClientSide) {
+            CentrifugeBlockEntity be = getTileEntity(context.getLevel(), context.getClickedPos());
+            if (be == null) return InteractionResult.PASS;
+            if (be.attemptRotation(true)) {
+                playRotateSound(context.getLevel(), context.getClickedPos());
+                updateAfterWrenched(state, context);
+                return InteractionResult.SUCCESS;
+            };
+        };
+		return InteractionResult.PASS;
+	};
 
     @Override
     public Class<CentrifugeBlockEntity> getTileEntityClass() {

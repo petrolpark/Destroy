@@ -1,17 +1,15 @@
 package com.petrolpark.destroy.block.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.simibubi.create.content.contraptions.base.KineticTileEntity;
+import com.simibubi.create.content.contraptions.fluids.FluidTransportBehaviour;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
+import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -38,9 +36,10 @@ public class FluidKineticTileEntity extends KineticTileEntity {
         return false;
     };
 
-    protected void onFluidStackChanged(FluidStack newFluidStack) {
+    @SuppressWarnings("null")
+    protected void onFluidStackChanged() {
         if (!hasLevel()) return;
-        if (!level.isClientSide()) {
+        if (!(getLevel() == null || getLevel().isClientSide())) {
             setChanged();
             sendData();
         };
@@ -49,22 +48,31 @@ public class FluidKineticTileEntity extends KineticTileEntity {
     /**
      * Used by the Centrifuge and Bubble Cap to the side to which they should output.
      * @param currentDirection The current face which the output is on
+     * @param tank The Tank from which the output would be outputting
      * @return The new face the output should point to
      */
     @SuppressWarnings("null")
-    public Direction refreshDirection(Direction currentDirection) {
+    public Direction refreshDirection(Direction currentDirection, FluidTank tank) {
         if (getLevel() == null || currentDirection.getAxis() == Direction.Axis.Y) { // If the level doesn't exist (low-key no idea how this error even occured), or the side is UP or DOWN, fix this
             return Direction.NORTH;
         };
         Direction direction = currentDirection;
-        for (int i = 0; i < 4; i++) { //loop through possible Directions, prioritising the current Direction
-            BlockEntity be = getLevel().getBlockEntity(getBlockPos().relative(direction)); // It thinks level can be null (it can't)
-            if (be != null && be.getCapability(ForgeCapabilities.FLUID_HANDLER, direction.getOpposite()) != null ) {
-                return direction;
+        int i = 0;
+        while (i < 4) { // Loop through possible Directions, prioritising the current Direction
+            BlockEntity be = getLevel().getBlockEntity(getBlockPos().relative(direction)); // It thinks 'level' can be null (it can't)
+            if (be != null) {
+                FluidTransportBehaviour transport = TileEntityBehaviour.get(be, FluidTransportBehaviour.TYPE);
+                if (transport != null && transport.canPullFluidFrom(tank.getFluid(), getBlockState(), direction)) {
+                    return direction;
+                } else {
+
+                }
             };
-            direction = direction.getClockWise();
+            direction = direction.getClockWise(); // Check the next Direction
+            i++;
         };
-        return currentDirection; //if no other Direction was found, keep it the way it was
+
+        return currentDirection; // If no other Direction was found, keep it the way it was
     };
     
 }

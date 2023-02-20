@@ -29,6 +29,7 @@ public class DestroyCropMutations {
     EMERALD_INFUSED_BEETROOT = new CropMutation(() -> Blocks.BEETROOTS, () -> DestroyBlocks.EMERALD_INFUSED_BEETROOT.getDefaultState(), () -> Blocks.EMERALD_ORE),
     EMERALD_INFUSED_BEETROOT_DEEPSLATE = new CropMutation(() -> Blocks.BEETROOTS, () -> DestroyBlocks.EMERALD_INFUSED_BEETROOT.getDefaultState(), () -> Blocks.DEEPSLATE_EMERALD_ORE),
     FLUORITE_INFUSED_BEETROOT = new CropMutation(() -> Blocks.BEETROOTS, () -> DestroyBlocks.FLUORITE_INFUSED_BEETROOT.getDefaultState(), DestroyBlocks.FLUORITE_ORE),
+    FLUORITE_INFUSED_BEETROOT_END = new CropMutation(() -> Blocks.BEETROOTS, () -> DestroyBlocks.FLUORITE_INFUSED_BEETROOT.getDefaultState(), DestroyBlocks.END_FLUORITE_ORE),
     FLUORITE_INFUSED_BEETROOT_DEEPSLATE = new CropMutation(() -> Blocks.BEETROOTS, () -> DestroyBlocks.FLUORITE_INFUSED_BEETROOT.getDefaultState(), DestroyBlocks.DEEPSLATE_FLUORITE_ORE),
     GOLD_INFUSED_BEETROOT = new CropMutation(() -> Blocks.BEETROOTS, () -> DestroyBlocks.GOLD_INFUSED_BEETROOT.getDefaultState(), () -> Blocks.GOLD_ORE),
     GOLD_INFUSED_BEETROOT_DEEPSLATE = new CropMutation(() -> Blocks.BEETROOTS, () -> DestroyBlocks.GOLD_INFUSED_BEETROOT.getDefaultState(), () -> Blocks.DEEPSLATE_GOLD_ORE),

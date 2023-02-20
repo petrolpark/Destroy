@@ -10,7 +10,7 @@
                         "open": "true"
                     },
                     {
-                        "direction": "north"
+                        "facing": "north"
                     }
                 ]
             }
@@ -26,7 +26,7 @@
                         "open": "true"
                     },
                     {
-                        "direction": "east"
+                        "facing": "east"
                     }
                 ]
             }
@@ -42,7 +42,7 @@
                         "open": "true"
                     },
                     {
-                        "direction": "south"
+                        "facing": "south"
                     }
                 ]
             }
@@ -58,7 +58,7 @@
                         "open": "true"
                     },
                     {
-                        "direction": "west"
+                        "facing": "west"
                     }
                 ]
             }
