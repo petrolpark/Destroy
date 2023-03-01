@@ -12,6 +12,7 @@ import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.util.DestroyLang;
+import com.simibubi.create.content.contraptions.base.KineticTileEntity;
 import com.simibubi.create.content.contraptions.fluids.FluidFX;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
@@ -40,7 +41,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
-public class CentrifugeBlockEntity extends FluidKineticTileEntity {
+public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBlockEntity {
 
     private static final Object centrifugationRecipeKey = new Object();
     private static final int TANK_CAPACITY = DestroyAllConfigs.SERVER.contraptions.centrifugeCapacity.get();
@@ -59,19 +60,18 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
     public CentrifugeBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
         denseOutputTankFace = state.getValue(CentrifugeBlock.DENSE_OUTPUT_FACE);
-        attemptRotation(false);
         lubricationLevel = 1;
     };
 
     @Override
     public void addBehaviours(List<TileEntityBehaviour> behaviours) {
         inputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, TANK_CAPACITY, true)
-            .whenFluidUpdates(() -> onFluidStackChanged());
+            .whenFluidUpdates(this::sendData);
         denseOutputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, TANK_CAPACITY, true)
-            .whenFluidUpdates(() -> onFluidStackChanged())
+            .whenFluidUpdates(this::sendData)
             .forbidInsertion();
         lightOutputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, TANK_CAPACITY, true)
-            .whenFluidUpdates(() -> onFluidStackChanged())
+            .whenFluidUpdates(this::sendData)
             .forbidInsertion();
         behaviours.addAll(List.of(inputTank, denseOutputTank, lightOutputTank));
         inputFluidCapability = LazyOptional.of(() -> {
@@ -95,7 +95,7 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
         if (getLevel() == null) {
             return false;
         };
-        if (getLevel().setBlockAndUpdate(getBlockPos(), getBlockState().setValue(CentrifugeBlock.DENSE_OUTPUT_FACE, refreshDirection(shouldSwitch ? denseOutputTankFace.getClockWise() : denseOutputTankFace, getDenseOutputTank())))) { // If the output Direction can be successfully changed
+        if (getLevel().setBlock(getBlockPos(), getBlockState().setValue(CentrifugeBlock.DENSE_OUTPUT_FACE, refreshDirection(this, shouldSwitch ? denseOutputTankFace.getClockWise() : denseOutputTankFace, getDenseOutputTank(), true)), 6)) { // If the output Direction can be successfully changed
             denseOutputTankFace = getBlockState().getValue(CentrifugeBlock.DENSE_OUTPUT_FACE);
             notifyUpdate(); // Block State has changed
             return true;
@@ -111,7 +111,7 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
         super.tick();
         if (getLevel() == null) return; // Don't do anything if we're not in a Level
         if (getSpeed() == 0) return; // Don't do anything without rotational power
-        if (isTankFull(denseOutputTank.getPrimaryHandler()) || isTankFull(lightOutputTank.getPrimaryHandler())) return; // Don't do anything if output is full
+        if (isTankFull(getDenseOutputTank()) || isTankFull(getLightOutputTank())) return; // Don't do anything if output is full
         if (timer > 0) {
             timer -= getProcessingSpeed();
             if (getLevel().isClientSide()) {
@@ -126,11 +126,7 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
         };
         if (inputTank.isEmpty()) return; // Don't do anything more if input Tank is empty
 
-        if (lastRecipe == null || lastRecipe.getRequiredFluid().test(getInputTank().getFluid())) { // If the Recipe has changed
-
-            Destroy.LOGGER.info("Looking for a new recipe");
-            Destroy.LOGGER.info("Found this many potential recipes: "+RecipeFinder.get(centrifugationRecipeKey, getLevel(), r -> r.getType() == DestroyRecipeTypes.CENTRIFUGATION.getType()).size());
-
+        if (lastRecipe == null || !lastRecipe.getRequiredFluid().test(getInputTank().getFluid())) { // If the Recipe has changed
             List<Recipe<?>> possibleRecipes = RecipeFinder.get(centrifugationRecipeKey, getLevel(), r -> r.getType() == DestroyRecipeTypes.CENTRIFUGATION.getType()).stream().filter(r -> {
                 CentrifugationRecipe recipe = (CentrifugationRecipe) r;
                 if (!recipe.getRequiredFluid().test(getInputTank().getFluid())) return false; // If there is insufficient input Fluid
@@ -138,7 +134,6 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
                 return true;
             }).collect(Collectors.toList());
             if (possibleRecipes.size() >= 1) {
-                Destroy.LOGGER.info("lets do a recipe");
                 lastRecipe = (CentrifugationRecipe)possibleRecipes.get(0);
                 timer = lastRecipe.getProcessingDuration();
                 sendData();
@@ -191,14 +186,11 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
 
     public void process() {
         if (lastRecipe == null) return;
-        Destroy.LOGGER.info("Well we've made it this far (1)");
-        if (!canFitFluidInTank(lastRecipe.getDenseOutputFluid(), getDenseOutputTank()) || !canFitFluidInTank(lastRecipe.getLightOutputFluid(), getLightOutputTank()) || hasFluidInTank(lastRecipe.getRequiredFluid(), getLightOutputTank())) return; //ensure the Recipe can still be Processed
-        Destroy.LOGGER.info("Well we've made it this far (2)");
+        if (!canFitFluidInTank(lastRecipe.getDenseOutputFluid(), getDenseOutputTank()) || !canFitFluidInTank(lastRecipe.getLightOutputFluid(), getLightOutputTank()) || hasFluidInTank(lastRecipe.getRequiredFluid(), getLightOutputTank())) return; // Ensure the Recipe can still be Processed
         getInputTank().drain(lastRecipe.getRequiredFluid().getRequiredAmount(), FluidAction.EXECUTE);
         getDenseOutputTank().fill(lastRecipe.getDenseOutputFluid(), FluidAction.EXECUTE);
         getLightOutputTank().fill(lastRecipe.getLightOutputFluid(), FluidAction.EXECUTE);
-        sendData();
-        setChanged();
+        notifyUpdate();
     };
 
     @SuppressWarnings("null") // It's not null; I checked
@@ -245,6 +237,15 @@ public class CentrifugeBlockEntity extends FluidKineticTileEntity {
 
     public int getEachTankCapacity() {
         return DestroyAllConfigs.SERVER.contraptions.centrifugeCapacity.get();
+    };
+
+    @SuppressWarnings("null")
+    protected void onFluidStackChanged() {
+        if (!hasLevel()) return;
+        if (!(getLevel() == null || getLevel().isClientSide())) {
+            setChanged();
+            sendData();
+        };
     };
 
     @Override

@@ -7,12 +7,14 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.recipe.AgingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
+import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
@@ -33,6 +35,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -61,7 +64,8 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
 
     @Override
     public void addBehaviours(List<TileEntityBehaviour> behaviours) {
-        tank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, TANK_CAPACITY, true);
+        tank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, TANK_CAPACITY, true)
+            .whenFluidUpdates(this::sendData);
         behaviours.add(tank);
         fluidCapability = LazyOptional.of(() -> {
 			return new CombinedTankWrapper(tank.getCapability().orElse(null));
@@ -77,7 +81,7 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
         List<Recipe<?>> allRecipes = RecipeFinder.get(agingRecipeKey, level, r -> r.getType() == DestroyRecipeTypes.AGING.getType());
         List<Recipe<?>> possibleRecipes = allRecipes.stream().filter(r -> {
             AgingRecipe recipe = (AgingRecipe) r;
-            if (!recipe.getFluidIngredients().get(0).test(tank.getPrimaryHandler().getFluid())) {
+            if (!recipe.getFluidIngredients().get(0).test(getTank().getFluid())) {
                 return false;
             };
             List<ItemStack> availableItems = new ArrayList<>(); // Check the Fluid Ingredient is present
@@ -107,12 +111,23 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
         if (possibleRecipes.size() >= 1) { // If a Recipe is found
             AgingRecipe recipe = (AgingRecipe) possibleRecipes.get(0);
             onTimerChange(); // Update how the Barrel looks before any Fluids are changed
-            tank.getPrimaryHandler().drain(TANK_CAPACITY, FluidAction.EXECUTE); // Drain input
+            getTank().drain(TANK_CAPACITY, FluidAction.EXECUTE); // Drain input
             inventory.clearContent(); // Empty Inventory
-            tank.getPrimaryHandler().fill(recipe.getFluidResults().get(0), FluidAction.EXECUTE); // Fill output
+            getTank().fill(recipe.getFluidResults().get(0), FluidAction.EXECUTE); // Fill output
             totalTime = recipe.getProcessingDuration();
             timer = recipe.getProcessingDuration();
+            tank.forbidExtraction();
+            tank.forbidInsertion();
         };
+    };
+
+    public int getLuminosity() {
+        if (timer == -1 && !getTank().isEmpty()) { // If Barrel is open
+            FluidStack fluidStack = getTank().getFluid();
+            return fluidStack.getRawFluid().getFluidType().getLightLevel(fluidStack);
+        } else {
+            return 0;
+        }
     };
 
     @Override
@@ -137,12 +152,10 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
     @Override
     @SuppressWarnings("null")
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (timer == -1) { // If the Barrel isn't currently processing
-            if (cap == ForgeCapabilities.FLUID_HANDLER) {
-                return fluidCapability.cast();
-            } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
-                return itemCapability.cast();
-            };
+        if (cap == ForgeCapabilities.FLUID_HANDLER) {
+            return fluidCapability.cast();
+        } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
+            return itemCapability.cast();
         };
         return super.getCapability(cap, side);
     };
@@ -164,8 +177,12 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
         newState = oldState.setValue(AgingBarrelBlock.IS_OPEN, timer < 0);
         if (timer == -1) {
             newState = newState.setValue(AgingBarrelBlock.PROGRESS, 0);
+            tank.allowExtraction();
+            tank.allowInsertion();
         };
-        newState = newState.setValue(AgingBarrelBlock.PROGRESS, 4 - (int)(timer / (float)totalTime * 4));
+        Destroy.LOGGER.info("Timer is "+timer+" and total time is "+totalTime);
+        newState = newState.setValue(AgingBarrelBlock.PROGRESS, 0);
+        //newState = newState.setValue(AgingBarrelBlock.PROGRESS, 4 - (int)(timer / (float)totalTime * 4));
         if (newState != oldState) {
             getLevel().setBlockAndUpdate(getBlockPos(), newState); // This is the bit it thinks might be null
             sendData();
@@ -193,9 +210,9 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
             DestroyLang.translate("tooltip.fluidcontraption.contents")
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
-            DestroyLang.tankContentsTooltip(tooltip, DestroyLang.translate("tooltip.aging_barrel.aging_tank"), tank.getPrimaryHandler());
-            DestroyLang.builder()
-                .add(DestroyLang.translate("tooltip.aging_barrel.progress"))
+            DestroyLang.tankContentsTooltip(tooltip, DestroyLang.translate("tooltip.aging_barrel.aging_tank"), getTank());
+            DestroyLang.translate("tooltip.aging_barrel.progress")
+                .style(ChatFormatting.GRAY)
                 .space()
                 .add(Component.literal((int)((1 - (timer/(float)totalTime)) * 100)+"%"))
                 .forGoggles(tooltip);
@@ -204,15 +221,15 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
         return false;
     };
 
+    public SmartFluidTank getTank(){
+        return tank.getPrimaryHandler();
+    };
+
     /**
      * Get the Fluid to render in the world when the Barrel is open.
      */
     public TankSegment getTankToRender() {
         return tank.getPrimaryTank();
     };
-
-    
-
-
     
 }

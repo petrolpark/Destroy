@@ -30,7 +30,6 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
@@ -142,14 +141,6 @@ public class DestroyJEI implements IModPlugin {
                 () -> MutationCategory.RECIPES,
                 List.of(() -> new ItemStack(DestroyItems.HYPERACCUMULATING_FERTILIZER.get()))
             );
-
-            for (MutationRecipe recipe : info.recipes().get()) {
-                for (Ingredient ingredient : recipe.getIngredients()) {
-                    for (ItemStack stack : ingredient.getItems()) {
-                        Destroy.LOGGER.info("This mutation recipe includes "+stack.getItem().getName(stack).getString());
-                    };
-                };
-            };
 
             CreateRecipeCategory<MutationRecipe> category = factory.create(info);
             allCategories.add(category);

@@ -21,9 +21,11 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
@@ -94,6 +96,17 @@ public class AgingBarrelBlock extends Block implements ITE<AgingBarrelBlockEntit
     };
 
     @Override
+    public InteractionResult onWrenched(BlockState state, UseOnContext context) {
+        BlockState newState = IWrenchable.super.getRotatedBlockState(state, Direction.UP); // Always rotate around Y axis
+        if (newState != state) {
+            playRotateSound(context.getLevel(), context.getClickedPos());
+            updateAfterWrenched(state, context);
+            return InteractionResult.SUCCESS;
+        };
+        return InteractionResult.PASS;
+    };
+
+    @Override
 	public void updateEntityAfterFallOn(BlockGetter worldIn, Entity entityIn) {
 		super.updateEntityAfterFallOn(worldIn, entityIn);
 		if (!DestroyBlocks.AGING_BARREL.has(worldIn.getBlockState(entityIn.blockPosition())))
@@ -117,6 +130,15 @@ public class AgingBarrelBlock extends Block implements ITE<AgingBarrelBlockEntit
 			itemEntity.setItem(insertItem);
 		});
 	};
+
+    @Override
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+        BlockEntity be = (BlockEntity)level.getBlockEntity(pos);
+        if (be != null && be instanceof AgingBarrelBlockEntity agingBarrelBE) {
+            return agingBarrelBE.getLuminosity();
+        };
+        return 0;
+    };
 
     @Override
     public VoxelShape getShape(BlockState blockstate, BlockGetter level, BlockPos pos, CollisionContext context) {

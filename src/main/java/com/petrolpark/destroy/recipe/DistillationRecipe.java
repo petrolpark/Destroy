@@ -1,0 +1,28 @@
+package com.petrolpark.destroy.recipe;
+
+import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder.ProcessingRecipeParams;
+
+public class DistillationRecipe extends SingleFluidRecipe {
+
+    public DistillationRecipe(ProcessingRecipeParams params) {
+        super(DestroyRecipeTypes.DISTILLATION, params);
+    };
+
+    /**
+     * The number of fractions this Recipe produces
+     */
+    public int getFractions() {
+        return getFluidResults().size();
+    };
+
+    @Override
+    protected int getMaxFluidOutputCount() {
+        return 8;
+    };
+
+    @Override
+    public String getRecipeTypeName() {
+        return "distillation";
+    };
+    
+}

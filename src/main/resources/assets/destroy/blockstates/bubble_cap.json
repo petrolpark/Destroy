@@ -1,0 +1,64 @@
+{
+    "variants": {
+        "facing=north,top=true,bottom=true": {
+            "model": "destroy:block/bubble_cap/both"
+        },
+        "facing=north,top=true,bottom=false": {
+            "model": "destroy:block/bubble_cap/top"
+        },
+        "facing=north,top=false,bottom=true": {
+            "model": "destroy:block/bubble_cap/bottom"
+        },
+        "facing=north,top=false,bottom=false": {
+            "model": "destroy:block/bubble_cap/neither"
+        },
+        "facing=east,top=true,bottom=true": {
+            "model": "destroy:block/bubble_cap/both",
+            "y": 90
+        },
+        "facing=east,top=true,bottom=false": {
+            "model": "destroy:block/bubble_cap/top",
+            "y": 90
+        },
+        "facing=east,top=false,bottom=true": {
+            "model": "destroy:block/bubble_cap/bottom",
+            "y": 90
+        },
+        "facing=east,top=false,bottom=false": {
+            "model": "destroy:block/bubble_cap/neither",
+            "y": 90
+        },
+        "facing=south,top=true,bottom=true": {
+            "model": "destroy:block/bubble_cap/both",
+            "y": 180
+        },
+        "facing=south,top=true,bottom=false": {
+            "model": "destroy:block/bubble_cap/top",
+            "y": 180
+        },
+        "facing=south,top=false,bottom=true": {
+            "model": "destroy:block/bubble_cap/bottom",
+            "y": 180
+        },
+        "facing=south,top=false,bottom=false": {
+            "model": "destroy:block/bubble_cap/neither",
+            "y": 180
+        },
+        "facing=west,top=true,bottom=true": {
+            "model": "destroy:block/bubble_cap/both",
+            "y": 270
+        },
+        "facing=west,top=true,bottom=false": {
+            "model": "destroy:block/bubble_cap/top",
+            "y": 270
+        },
+        "facing=west,top=false,bottom=true": {
+            "model": "destroy:block/bubble_cap/bottom",
+            "y": 270
+        },
+        "facing=west,top=false,bottom=false": {
+            "model": "destroy:block/bubble_cap/neither",
+            "y": 270
+        }
+    }
+}

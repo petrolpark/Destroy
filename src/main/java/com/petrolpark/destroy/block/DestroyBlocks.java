@@ -51,6 +51,16 @@ public class DestroyBlocks {
     //     .transform(customItemModel())
     //     .register();
 
+    public static final BlockEntry<BubbleCapBlock> BUBBLE_CAP = REGISTRATE.block("bubble_cap", BubbleCapBlock::new)
+        .initialProperties(SharedProperties::stone)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_ORANGE)
+            .noOcclusion()
+        ).transform(TagGen.pickaxeOnly())
+        .item()
+        .transform(customItemModel())
+        .register();
+
     public static final BlockEntry<CentrifugeBlock> CENTRIFUGE = REGISTRATE.block("centrifuge", CentrifugeBlock::new)
         .initialProperties(SharedProperties::stone)
         .properties(p -> p

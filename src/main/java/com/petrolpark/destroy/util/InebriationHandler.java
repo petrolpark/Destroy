@@ -7,14 +7,13 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 
-public final class AlcoholHandler {
+public final class InebriationHandler {
 
     @SuppressWarnings("null") // I promise I checked to make sure it's not null
     public static void increaseInebriation(LivingEntity entity, int level) {
 
-        MobEffect INEBRIATION = DestroyMobEffects.INEBRIATION.get();
-        int INEBRIATION_DURATION = DestroyAllConfigs.SERVER.substances.inebriationDuration.get();
-        //int INEBRIATION_DURATION = 1200;
+        final MobEffect INEBRIATION = DestroyMobEffects.INEBRIATION.get();
+        final int INEBRIATION_DURATION = DestroyAllConfigs.SERVER.substances.inebriationDuration.get();
 
         if (entity.hasEffect(INEBRIATION)) {
             int currentAmplifier = entity.getEffect(INEBRIATION).getAmplifier(); // This is warned as being null

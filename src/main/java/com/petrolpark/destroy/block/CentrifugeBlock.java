@@ -1,7 +1,5 @@
 package com.petrolpark.destroy.block;
 
-import javax.annotation.Nullable;
-
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
@@ -13,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -30,7 +27,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlockEntity>, ICogWheel {
 
-    public static final DirectionProperty DENSE_OUTPUT_FACE = BlockStateProperties.HORIZONTAL_FACING;;
+    public static final DirectionProperty DENSE_OUTPUT_FACE = BlockStateProperties.HORIZONTAL_FACING;
 
     public CentrifugeBlock(Properties properties) {
         super(properties);
@@ -38,11 +35,10 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
     };
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        // TODO Auto-generated method stub
-        return super.getStateForPlacement(pContext);
-    }
+    public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+        if (oldState.getBlock() == state.getBlock() || isMoving) return; // So we don't get in an infinite loop of noticing we've been placed, so setting the Block State, so noticing we've been placed, etc.
+        withTileEntityDo(worldIn, pos, be -> be.attemptRotation(false));
+    };
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
@@ -74,9 +70,8 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
     };
 
     @Override
-    @SuppressWarnings("resource")
 	public InteractionResult onWrenched(BlockState state, UseOnContext context) {
-		if (!context.getLevel().isClientSide) {
+		if (!context.getLevel().isClientSide()) {
             CentrifugeBlockEntity be = getTileEntity(context.getLevel(), context.getClickedPos());
             if (be == null) return InteractionResult.PASS;
             if (be.attemptRotation(true)) {

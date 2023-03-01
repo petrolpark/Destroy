@@ -10,15 +10,21 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class DestroyShapes {
 
-    public static final VoxelShape CENTRIFUGE = shape(0, 0, 0, 16, 4, 16)
+    public static final VoxelShape
+    
+    CENTRIFUGE = shape(0, 0, 0, 16, 4, 16)
         .add(2, 4, 2, 14, 12, 14)
         .add(0, 12, 0, 16, 16, 16)
-        .build();
+        .build(),
 
-    public static final VoxelShape CROP = shape(0, 0, 0, 16, 8, 16)
-        .build();
+    CROP = shape(0, 0, 0, 16, 8, 16)
+        .build(),
 
-    public static final VoxelShape HEFTY_BEETROOT = shape(4, -1, 4, 12, 5, 12)
+    HEFTY_BEETROOT = shape(4, -1, 4, 12, 5, 12)
+        .build(),
+
+    AGING_BARREL_INTERIOR = shape(0, 0, 0, 16, 16, 16) // Used for detecting when Items are thrown into the Aging Barrel
+        .erase(2, 7, 2, 14, 16, 14)
         .build();
 
     public static final VoxelShaper AGING_BARREL_OPEN = shape(0, 0, 0, 16, 14, 16)
@@ -29,10 +35,6 @@ public class DestroyShapes {
     public static final VoxelShaper AGING_BARREL_OPEN_RAYTRACE = shape(0, 0, 0, 16, 14, 16)
         .add(0, 14, 14, 16, 30, 16)
         .forDirectional(Direction.NORTH);
-    
-    public static final VoxelShape AGING_BARREL_INTERIOR = shape(0, 0, 0, 16, 16, 16) //used for detecting when Items are thrown into the Aging Barrel
-        .erase(2, 7, 2, 14, 16, 14)
-        .build();
 
     /**
      * Changes the voxel shape of the Aging Barrel based on how far through the aging process the Barrel is.
@@ -53,15 +55,28 @@ public class DestroyShapes {
         return agingBarrel.build();
     };
 
-    private static AllShapes.Builder shape(VoxelShape shape) {
-        return new AllShapes.Builder(shape);
+    public static final VoxelShaper bubbleCap(boolean bottom, boolean top) {
+        Builder bubbleCap = shape(2, 2, 2, 14, 14, 14)
+            .add(0, 0, 0, 2, 16, 2)
+            .add(0, 0, 14, 2, 16, 16)
+            .add(14, 0, 0, 16, 16, 2)
+            .add(14, 0, 14, 16, 16, 16)
+            .add(3, 3, 0, 13, 13, 2);
+        if (bottom) {
+            bubbleCap.add(0, 0, 0, 16, 2, 16);
+        } else {
+            bubbleCap.add(3, 0, 3, 13, 2, 13);
+        };
+        if (top) {
+            bubbleCap.add(0, 14, 0, 16, 16, 16);
+        } else {
+            bubbleCap.add(3, 14, 3, 13, 16, 13);
+        };
+        return bubbleCap.forDirectional(Direction.NORTH);
+        
     };
 
     private static AllShapes.Builder shape(double x1, double y1, double z1, double x2, double y2, double z2) {
-        return shape(cuboid(x1, y1, z1, x2, y2, z2));
-    };
-
-    private static VoxelShape cuboid(double x1, double y1, double z1, double x2, double y2, double z2) {
-        return Block.box(x1, y1, z1, x2, y2, z2);
+        return new AllShapes.Builder(Block.box(x1, y1, z1, x2, y2, z2));
     };
 }

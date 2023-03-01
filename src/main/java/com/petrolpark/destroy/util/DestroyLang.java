@@ -14,6 +14,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class DestroyLang {
+
     public static LangBuilder builder() {
         return new LangBuilder(Destroy.MOD_ID);
     }
@@ -26,21 +27,26 @@ public class DestroyLang {
         return builder().text(LangNumberFormat.format(d));
     }
 
+    /**
+     * Adds information about a Tank to the given tooltip.
+     * @param tankName What should be displayed before the contents of the Tank (e.g. '[tankName]: 1000mB of Water')
+     * @param tooltip
+     * @param tank
+     */
     public static void tankContentsTooltip(List<Component> tooltip, LangBuilder tankName, FluidTank tank) {
-
         if (tank.isEmpty()) return;
-
         Component indent = Component.literal(IHaveGoggleInformation.spacing);
-
         Lang.builder()
             .add(indent.plainCopy())
-            .add(tankName.style(ChatFormatting.DARK_GRAY))
+            .add(tankName
+                .add(Component.literal(":"))
+                .style(ChatFormatting.DARK_GRAY))
             .space()
             .add(Lang.number(tank.getFluidAmount())
                 .add(Lang.translate("generic.unit.millibuckets"))
                 .style(ChatFormatting.GOLD)
             ).space()
-            .add(DestroyLang.translate("tooltip.contraptions.of")
+            .add(DestroyLang.translate("tooltip.fluidcontraption.of")
                 .style(ChatFormatting.DARK_GRAY)
             ).space()
             .add(Lang.fluidName(tank.getFluid()))

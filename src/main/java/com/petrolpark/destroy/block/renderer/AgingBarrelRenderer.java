@@ -88,11 +88,9 @@ public class AgingBarrelRenderer extends SmartTileEntityRenderer<AgingBarrelBloc
         ms.pushPose();
         if (renderYeast) {
             //I know it says FluidRenderer but I'm just using it to render a generic texture
-            FluidRenderer.renderStillTiledFace(Direction.UP, 2 / 16f, 2 / 16f, 14 / 16f, 14 / 16f, fluidLevel + 0.01f, FluidRenderer.getFluidBuilder(buffer), ms, light, IClientFluidTypeExtensions.of(Fluids.LAVA).getTintColor(),
+            FluidRenderer.renderStillTiledFace(Direction.UP, 2 / 16f, 2 / 16f, 14 / 16f, 14 / 16f, fluidLevel + 0.01f, FluidRenderer.getFluidBuilder(buffer), ms, light, IClientFluidTypeExtensions.of(Fluids.LAVA).getTintColor(), //TODO replace lava with some other dummy fluid
                 Minecraft.getInstance()
 			    .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                //.apply(IClientFluidTypeExtensions.of(Fluids.LAVA).getStillTexture())
-			    //.apply(Destroy.asResource("block/yeast_overlay"))
                 .apply(Destroy.asResource("block/yeast_overlay"))
             );
         };
@@ -107,7 +105,7 @@ public class AgingBarrelRenderer extends SmartTileEntityRenderer<AgingBarrelBloc
     protected float renderFluid(AgingBarrelBlockEntity barrel, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         TankSegment tank = barrel.getTankToRender();
         float units = tank.getTotalUnits(partialTicks);
-        float maxY = minY + (Mth.clamp(units / 1000f, 0, 1) * 8 / 12f);
+        float maxY = minY + (Mth.clamp(units / barrel.getTank().getCapacity(), 0, 1) * 8 / 12f);
         if (units < 1) return minY;
         FluidRenderer.renderFluidBox(tank.getRenderedFluid(), 2 / 16f, minY, 2 / 16f, 14 / 16f, maxY, 14 / 16f, buffer, ms, light, false);
         return maxY;
