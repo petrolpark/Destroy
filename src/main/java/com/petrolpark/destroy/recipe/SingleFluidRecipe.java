@@ -40,7 +40,7 @@ public abstract class SingleFluidRecipe extends ProcessingRecipe<RecipeWrapper> 
     };
 
     @Override
-    protected int getMaxFluidInputCount() {
+    protected final int getMaxFluidInputCount() {
         return 1;
     }
 

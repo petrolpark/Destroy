@@ -28,11 +28,11 @@ import net.minecraftforge.registries.RegistryObject;
 
 public enum DestroyRecipeTypes implements IRecipeTypeInfo {
     AGING(AgingRecipe::new),
-    //CHARGING(ChargingRecipe::new);
+    CHARGING(ChargingRecipe::new),
     CENTRIFUGATION(CentrifugationRecipe::new),
     DISTILLATION(DistillationRecipe::new),
-    //ELECTROLYSIS(ElectrolysisRecipe::new);
-    //EXTRUSION(ExtrusionRecipe::new);
+    ELECTROLYSIS(ElectrolysisRecipe::new),
+    //EXTRUSION(ExtrusionRecipe::new),
     MUTATION(MutationRecipe::new);
     //VAPORIZATION(VaporizationRecipe::new);
 

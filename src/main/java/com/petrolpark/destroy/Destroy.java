@@ -13,6 +13,7 @@ import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.DestroyPotatoCannonProjectileTypes;
+import com.petrolpark.destroy.item.HyperaccumulatingFertilizerItem;
 import com.petrolpark.destroy.ponder.DestroySceneIndex;
 import com.petrolpark.destroy.recipe.DestroyCropMutations;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
@@ -101,11 +102,13 @@ public class Destroy {
 
     public static void init(final FMLCommonSetupEvent event) {
         DestroyPotatoCannonProjectileTypes.register();
+        HyperaccumulatingFertilizerItem.registerDispenserBehaviour();
     };
 
     public static void clientInit(final FMLClientSetupEvent event) {
         DestroySceneIndex.register();
     };
+
 
     public static void gatherData(GatherDataEvent event) {
         DestroyTags.datagen();

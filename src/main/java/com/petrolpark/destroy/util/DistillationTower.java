@@ -126,11 +126,16 @@ public class DistillationTower {
      */
     public boolean process() {
         if (lastRecipe == null) return false;
+        if (lastRecipe.getFractions() > getHeight() - 1) return false;
         for (boolean simulate : Iterate.trueAndFalse) { // First simulate to check if all the Fluids can actually fit, then execute if they do. 
+            int requiredFluidAmount = lastRecipe.getRequiredFluid().getRequiredAmount();
+            if (getControllerBubbleCap().getTank().drain(requiredFluidAmount, simulate ? FluidAction.SIMULATE : FluidAction.EXECUTE).getAmount() < requiredFluidAmount) { // If there is not enough Fluid in the controller Bubble Cap
+                return false;
+            };
             for (int i = 0; i < lastRecipe.getFractions(); i++) {
                 FluidStack distillate = lastRecipe.getFluidResults().get(i);
-                BubbleCapBlockEntity bubbleCap = fractions.get(i);
-                if (bubbleCap.getInternalTank().fill(distillate, simulate ? FluidAction.SIMULATE : FluidAction.EXECUTE) < distillate.getAmount() && simulate) { // If not all the Fluid can be added to this Bubble Cap
+                BubbleCapBlockEntity bubbleCap = fractions.get(i + 1);
+                if (bubbleCap.getInternalTank().fill(distillate, simulate ? FluidAction.SIMULATE : FluidAction.EXECUTE) < distillate.getAmount()) { // If not all the Fluid can be added to this Bubble Cap
                     return false;
                 };
                 if (!simulate) {

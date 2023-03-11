@@ -164,6 +164,22 @@ public class AgingBarrelBlock extends Block implements ITE<AgingBarrelBlockEntit
     };
 
     @Override
+    public boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    };
+
+    @Override
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        switch (state.getValue(PROGRESS)) {
+            case 1: return 3;
+            case 2: return 7;
+            case 3: return 11;
+            case 4: return 15;
+            default: return 0;
+        }
+    };
+
+    @Override
 	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
 		if (!state.hasBlockEntity() || state.getBlock() == newState.getBlock()) return;
 		withTileEntityDo(level, pos, be -> {

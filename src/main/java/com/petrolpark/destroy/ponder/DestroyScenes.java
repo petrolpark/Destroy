@@ -49,7 +49,14 @@ public class DestroyScenes {
         redFluid = new FluidStack(PotionFluid.withEffects(1000, new Potion(), List.of(new MobEffectInstance(MobEffects.DAMAGE_BOOST))), 1000);
 
         // Pre-fill the input Tank
-        scene.world.modifyTileEntity(new BlockPos(2, 5, 3), FluidTankTileEntity.class, te -> te.getTankInventory().fill(purpleFluid, FluidAction.EXECUTE));
+        scene.world.modifyTileEntity(new BlockPos(2, 5, 3), FluidTankTileEntity.class, te -> {
+            te.getTankInventory().fill(purpleFluid, FluidAction.EXECUTE);
+        });
+        // Ensure the Centrifuge faces the right way
+        scene.world.modifyTileEntity(centrifuge, CentrifugeBlockEntity.class, be -> {
+            be.setPondering();
+            be.attemptRotation(false);
+        });
 
         scene.world.showSection(util.select.fromTo(0, 0, 0, 4, 0, 4), Direction.UP);
         scene.world.showSection(pipework, Direction.DOWN);

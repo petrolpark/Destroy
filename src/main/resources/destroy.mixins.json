@@ -3,10 +3,12 @@
     "package": "com.petrolpark.destroy.mixin",
     "compatibilityLevel": "JAVA_16",
     "mixins": [
+        "DestroyBasinCategoryMixin",
+        "DestroyFluidIngredientMixin",
         "DestroyFrictionModifier",
         "DestroyHeatConditionMixin",
         "DestroyHeatLevelMixin",
-        "DestroyBasinCategoryMixin"
+        "FluidIngredientAccessor"
     ],
     "client": [
 

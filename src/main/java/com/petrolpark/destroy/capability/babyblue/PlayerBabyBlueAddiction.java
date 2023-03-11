@@ -8,7 +8,7 @@ import net.minecraft.util.Mth;
 public class PlayerBabyBlueAddiction {
     private int babyBlueAddiction;
     private final int MIN_BABY_BLUE_ADDICTION = 0;
-    private final int MAX_BABY_BLUE_ADDICTION = DestroyAllConfigs.SERVER.substances.maxAddictionLevel.get(); //default is 590
+    private final int MAX_BABY_BLUE_ADDICTION = DestroyAllConfigs.COMMON.substances.maxAddictionLevel.get(); //default is 590
 
     public void copyFrom(PlayerBabyBlueAddiction source) {
         this.babyBlueAddiction = source.babyBlueAddiction;

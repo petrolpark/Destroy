@@ -57,10 +57,13 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
     public int timer;
     private CentrifugationRecipe lastRecipe;
 
+    private boolean pondering;
+
     public CentrifugeBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
         denseOutputTankFace = state.getValue(CentrifugeBlock.DENSE_OUTPUT_FACE);
         lubricationLevel = 1;
+        pondering = false;
     };
 
     @Override
@@ -173,15 +176,15 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
     };
 
     public SmartFluidTank getInputTank() {
-        return this.inputTank.getPrimaryHandler();
+        return inputTank.getPrimaryHandler();
     };
 
     public SmartFluidTank getDenseOutputTank() {
-        return this.denseOutputTank.getPrimaryHandler();
+        return denseOutputTank.getPrimaryHandler();
     };
 
     public SmartFluidTank getLightOutputTank() {
-        return this.lightOutputTank.getPrimaryHandler();
+        return lightOutputTank.getPrimaryHandler();
     };
 
     public void process() {
@@ -220,7 +223,7 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
                 return inputFluidCapability.cast();
             } else if (side == Direction.DOWN) {
                 return lightOutputFluidCapability.cast();
-            } else if (side == denseOutputTankFace) {
+            } else if (side == denseOutputTankFace || pondering) {
                 return denseOutputFluidCapability.cast();
             };
         };
@@ -246,6 +249,14 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
             setChanged();
             sendData();
         };
+    };
+
+    /**
+     * Let this Centrifuge know we're in a Ponder.
+     * This makes it so the dense Fluid can be pulled from any side.
+     */
+    public void setPondering() {
+        pondering = true;
     };
 
     @Override

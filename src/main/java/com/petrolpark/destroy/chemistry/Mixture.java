@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.petrolpark.destroy.Destroy;
@@ -16,6 +17,7 @@ import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.simibubi.create.foundation.utility.NBTHelper;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 
 public class Mixture {
 
@@ -41,6 +43,9 @@ public class Mixture {
         temperature = 600f;
     };
 
+    /**
+     * Converts this Mixture into a storeable String that can be read by {@link #readNBT readNBT()}.
+     */
     public CompoundTag writeNBT() {
         CompoundTag compound = new CompoundTag();
         compound.putFloat("Temperature", temperature);
@@ -53,11 +58,34 @@ public class Mixture {
         return compound;
     };
 
+    /**
+     * Generates a Mixture from the given Compound Tag.
+     * @param compound
+     */
+    public static Mixture readNBT(CompoundTag compound) {
+        Mixture mixture = new Mixture();
+        mixture.temperature = compound.getFloat("Temperature");
+        ListTag contents = compound.getList("Contents", 10);
+        contents.forEach(tag -> {
+            CompoundTag moleculeTag = (CompoundTag) tag;
+            mixture.addMolecule(Molecule.getMolecule(moleculeTag.getString("Molecule")), moleculeTag.getFloat("Concentration"));
+        });
+        mixture.refreshPossibleReactions();
+        return mixture;
+    };
+
     public void pee() {
         System.out.println(writeNBT().toString());
         // for (Molecule molecule : contents.keySet()) {
         //     System.out.println(molecule.getName().getString() + contents.get(molecule));
         // };
+    };
+
+    /**
+     * Whether this Mixture has no Molecules in it.
+     */
+    public boolean isEmpty() {
+        return contents.isEmpty();
     };
 
     public Mixture addMolecule(Molecule molecule, float concentration) {
@@ -76,6 +104,24 @@ public class Mixture {
         } else {
             return 0f;
         }
+    };
+
+    /**
+     * Checks that this Mixture contains a suitable concentration of the given Molecule, and that all other substances present are solvents or low-concentration impurities.
+     * This is used in Recipes.
+     * @param molecule Only known (non-novel) Molecules (i.e. those with a name space) will be detected
+     * @param concentration
+     */
+    public boolean hasUsableMolecule(Molecule molecule, float concentration) {
+        if (!contents.containsKey(molecule)) return false;
+        if (!areVeryClose(concentration, getConcentrationOf(molecule))) return false; //TODO replace with a more lenient check
+        for (Entry<Molecule, Float> otherMolecule : contents.entrySet()) {
+            if (otherMolecule.getKey() == molecule) continue; // If this is the Molecule we want, ignore it.
+            if (otherMolecule.getKey().hasTag(DestroyMolecules.Tags.SOLVENT)) continue; // If this is a solvent, ignore it
+            if (otherMolecule.getValue() < 0.1f) continue; // If this impurity is in low-enough concentration, ignore it. //TODO replace with a better thought-through check
+            return false;
+        };
+        return true;
     };
 
     public Set<ReactionResult> react() {
@@ -256,9 +302,9 @@ public class Mixture {
         //Generate specific Generic Reactions
         for (String id : groupIDsAndMolecules.keySet()) {
             for (GenericReaction genericReaction : Group.getReactionsOfGroupByID(id)) {
-                if (genericReaction.involvesSingleGroup()) { //Generic Reactions involving only one functional Group
+                if (genericReaction.involvesSingleGroup()) { // Generic Reactions involving only one functional Group
                     newPossibleReactions.addAll(specifySingleGroupGenericReactions(genericReaction, groupIDsAndMolecules.get(id)));
-                } else { //Generic Reactions involving two functional Groups
+                } else { // Generic Reactions involving two functional Groups
                     //TODO
                 };
             };
@@ -285,15 +331,19 @@ public class Mixture {
 
     @SuppressWarnings("unchecked")
     private <T extends Group> List<Reaction> specifySingleGroupGenericReactions(GenericReaction genericReaction, List<GenericReactant<?>> reactants) {
-        SingleGroupGenericReaction<T> singleGroupGenericReaction = (SingleGroupGenericReaction<T>) genericReaction;
-        List<Reaction> reactions = new ArrayList<>();
-        for (GenericReactant<?> reactant : reactants) {
-            reactions.add(singleGroupGenericReaction.generateReaction((GenericReactant<T>)reactant));
-        };
-        return reactions;
+        try {
+            SingleGroupGenericReaction<T> singleGroupGenericReaction = (SingleGroupGenericReaction<T>) genericReaction;
+            List<Reaction> reactions = new ArrayList<>();
+            for (GenericReactant<?> reactant : reactants) {
+                reactions.add(singleGroupGenericReaction.generateReaction((GenericReactant<T>)reactant));
+            };
+            return reactions;
+        } catch(Error e) {
+            throw new IllegalStateException("Wasn't able to generate Single-Group Reaction: " + e);
+        }
     };
 
-    private Boolean areVeryClose(Float f1, Float f2) {
+    private boolean areVeryClose(Float f1, Float f2) {
         return Math.abs(f1 - f2) <= 0.00001f;
     };
 }

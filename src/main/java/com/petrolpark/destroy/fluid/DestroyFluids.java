@@ -13,5 +13,6 @@ public class DestroyFluids {
         .lang("Mixture")
         .register();
 
-    public static void register() {};
-}
+    public static void register() {}
+
+};

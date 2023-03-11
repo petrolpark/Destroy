@@ -20,10 +20,11 @@ public class PlayerPreviousPositionsProvider implements ICapabilityProvider, INB
     private final LazyOptional<PlayerPreviousPositions> optional = LazyOptional.of(this::createPlayerPreviousPositions);
 
     private PlayerPreviousPositions createPlayerPreviousPositions() {
-        if (this.previousPositions == null) {
-            this.previousPositions = new PlayerPreviousPositions();
-        }
-        return this.previousPositions;
+        PlayerPreviousPositions.updateQueueSize();
+        if (previousPositions == null) {
+            previousPositions = new PlayerPreviousPositions();
+        };
+        return previousPositions;
     };
 
     @Override

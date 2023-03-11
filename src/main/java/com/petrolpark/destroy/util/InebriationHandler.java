@@ -13,7 +13,7 @@ public final class InebriationHandler {
     public static void increaseInebriation(LivingEntity entity, int level) {
 
         final MobEffect INEBRIATION = DestroyMobEffects.INEBRIATION.get();
-        final int INEBRIATION_DURATION = DestroyAllConfigs.SERVER.substances.inebriationDuration.get();
+        final int INEBRIATION_DURATION = DestroyAllConfigs.COMMON.substances.inebriationDuration.get();
 
         if (entity.hasEffect(INEBRIATION)) {
             int currentAmplifier = entity.getEffect(INEBRIATION).getAmplifier(); // This is warned as being null

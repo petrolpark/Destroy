@@ -7,9 +7,9 @@ import com.simibubi.create.content.contraptions.base.KineticTileEntity;
 import com.simibubi.create.content.contraptions.base.SingleRotatingInstance;
 import com.simibubi.create.content.contraptions.base.flwdata.RotatingData;
 
-public class CentrifugeCogInstance extends SingleRotatingInstance {
+public class DynamoCogInstance extends SingleRotatingInstance {
 
-    public CentrifugeCogInstance(MaterialManager modelManager, KineticTileEntity tile) {
+    public DynamoCogInstance(MaterialManager modelManager, KineticTileEntity tile) {
         super(modelManager, tile);
     };
 
@@ -21,6 +21,6 @@ public class CentrifugeCogInstance extends SingleRotatingInstance {
 
     @Override
     protected Instancer<RotatingData> getModel() {
-        return getRotatingMaterial().getModel(DestroyBlockPartials.CENTRIFUGE_COG, blockEntity.getBlockState());
+        return getRotatingMaterial().getModel(DestroyBlockPartials.DYNAMO_COG, blockEntity.getBlockState());
     };
-}
+};

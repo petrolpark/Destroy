@@ -38,7 +38,7 @@ import com.petrolpark.destroy.world.DestroyDamageSources;
 public class DestroyServerEvents {
 
     @SubscribeEvent
-    public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event){
+    public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
             // Add Baby Blue Addiction Capability
             if (!event.getObject().getCapability(PlayerBabyBlueAddictionProvider.PLAYER_BABY_BLUE_ADDICTION).isPresent()) {
@@ -141,7 +141,7 @@ public class DestroyServerEvents {
         for (Player player : event.getLevel().players()) {
             MobEffectInstance effect = player.getEffect(DestroyMobEffects.INEBRIATION.get());
             if (effect != null) {
-                player.addEffect(new MobEffectInstance(DestroyMobEffects.HANGOVER.get(), DestroyAllConfigs.SERVER.substances.hangoverDuration.get() * (effect.getAmplifier() + 1)));
+                player.addEffect(new MobEffectInstance(DestroyMobEffects.HANGOVER.get(), DestroyAllConfigs.COMMON.substances.hangoverDuration.get() * (effect.getAmplifier() + 1)));
                 player.removeEffect(DestroyMobEffects.INEBRIATION.get());
             };
         };

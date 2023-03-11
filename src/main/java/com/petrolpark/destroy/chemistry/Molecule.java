@@ -7,13 +7,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.petrolpark.destroy.util.DestroyLang;
+import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public class Molecule {
 
-    public static Map<String, Molecule> MOLECULES = new HashMap<>(); //Map of Molecules stored by their IDs
+    public static final Set<String> NAMESPACES = new HashSet<>(); // Set of all Molecular namespaces
+    public static final Set<String> FORBIDDEN_NAMESPACES = new HashSet<>(); // Set of all forbidden namespaces
+    public static final Map<String, Molecule> MOLECULES = new HashMap<>(); // Map of Molecules stored by their IDs
 
     private String nameSpace;
     private String id;
@@ -24,26 +27,35 @@ public class Molecule {
     private int dipoleMoment;
     private Formula structure;
 
-    private Boolean isHypothetical;
+    private Set<MoleculeTag> tags;
 
-    private Set<String> tags;
+    private List<Reaction> reactantReactions; // Reactions in which this Molecule is a reactant
+    private List<Reaction> productReactions; // Reactions in which this Molecule is a product
 
-    private List<Reaction> reactantReactions; //reactions in which this Molecule is a reactant
-    private List<Reaction> productReactions; //reactions in which this Molecule is a product
-
-    private Component displayName;
+    private String translationKey;
 
     private Molecule(String nameSpace) {
         this.nameSpace = nameSpace;
         id = null;
         structure = null;
 
-        isHypothetical = false;
-
         tags = new HashSet<>();
 
         reactantReactions = new ArrayList<>();
         productReactions = new ArrayList<>();
+    };
+
+    /**
+     * Gets the known or novel Molecule from the given ID or FROWNS Code.
+     */
+    public static Molecule getMolecule(String id) {
+        if (NAMESPACES.contains(id.split(":")[0])) {
+            return MOLECULES.get(id);
+        } else {
+            return new MoleculeBuilder("novel")
+                .structure(Formula.deserialize(id))
+                .build();
+        }
     };
 
     /**
@@ -87,11 +99,15 @@ public class Molecule {
         return structure.getAllAtoms();
     };
 
-    public Boolean isHypothetical() {
-        return isHypothetical;
+    public boolean isHypothetical() {
+        return tags.contains(DestroyMolecules.Tags.HYPOTHETICAL);
     };
 
-    public Boolean isNovel() {
+    public boolean hasTag(MoleculeTag tag) {
+        return tags.contains(tag);
+    };
+
+    public boolean isNovel() {
         return this.nameSpace == "novel";
     };
 
@@ -140,9 +156,9 @@ public class Molecule {
 
     /**
      * Get the stability (relative to a carbon bonded to four other carbons) of a carbon in this structure, according to <a href="https://www.desmos.com/calculator/ks82fh30xq">this formula</a>.
-     * @param carbon Works best when this is an Atom of the Element carbon.
-     * @param isCarbanion Whether this calculation should be inverted (to calculate the relative stability of a carbanion).
-     * @return A value typically from 0-216.
+     * @param carbon Works best when this is an Atom of the Element carbon
+     * @param isCarbanion Whether this calculation should be inverted (to calculate the relative stability of a carbanion)
+     * @return A value typically from 0-216
      */
     public Float getCarbocationStability(Atom carbon, boolean isCarbanion) {
         return structure.getCarbocationStability(carbon, isCarbanion);
@@ -174,9 +190,10 @@ public class Molecule {
 
     /**
      * Get the display name of this Molecule.
+     * @param iupac Whether the IUPAC systematic name should be used
      */
-    public Component getName() {
-        return this.displayName;
+    public MutableComponent getName(boolean iupac) {
+        return Component.translatable(nameSpace + "." + translationKey + (iupac ? ".iupac" : ""));
     };
 
     /**
@@ -194,10 +211,14 @@ public class Molecule {
         private Boolean hasForcedBoilingPoint = false; //whether this molecule has a custom BP or it should be calculated
         private Boolean hasForcedDipoleMoment = false; //whether this molecule has a forced DM or it should be calculated
 
-        private Component displayName = Component.empty();
+        private String translationKey;
 
         public MoleculeBuilder(String nameSpace) {
             molecule = new Molecule(nameSpace);
+            if (FORBIDDEN_NAMESPACES.contains(nameSpace)) {
+                throw new IllegalStateException("Cannot use name space '"+nameSpace+"'.");
+            };
+            NAMESPACES.add(nameSpace);
             molecule.charge = 0; //default
         };
 
@@ -205,7 +226,7 @@ public class Molecule {
          * The internal ID for this Molecule.
          * By default, the translation key for this Molecule will be set to its ID (change with {@link Molecule.MoleculeBuilder#translationKey translationKey()}).
          * If a Molecule is declared without an ID it will not be added to the Molecule register.
-         * @param id Must be unique.
+         * @param id Must be unique
          */
         public MoleculeBuilder id(String id) {
             molecule.id = id;
@@ -269,7 +290,7 @@ public class Molecule {
          * @param translationKey
          */
         public MoleculeBuilder translationKey(String translationKey) {
-            this.displayName = DestroyLang.translate("chemical."+translationKey).component();
+            this.translationKey = translationKey;
             return this;
         };
 
@@ -277,33 +298,21 @@ public class Molecule {
          * Mark this Molecule as being hypothetical - if this Molecule appears in a solution, an error will be raised.
          */
         public MoleculeBuilder hypothetical() {
-            molecule.isHypothetical = true;
-            return this;
+            return tag(DestroyMolecules.Tags.HYPOTHETICAL);
         };
 
         /**
          * Adds the given tags to this Molecule.
          */
-        public MoleculeBuilder tag(String ...tags) {
-            for (String tag : tags) {
-                molecule.tags.add(tag);
-            };
-            return this;
-        };
-
-        /**
-         * Set the name shown to the player.
-         * @param displayName
-         */
-        public MoleculeBuilder displayName(Component displayName) {
-            this.displayName = displayName;
+        public MoleculeBuilder tag(MoleculeTag ...tags) {
+            molecule.tags.addAll(List.of(tags));
             return this;
         };
 
         public Molecule build() {
 
             molecule.mass = calculateMass();
-            molecule.displayName = displayName;
+            molecule.translationKey = translationKey;
 
             if (molecule.structure == null) {
                 throw new IllegalStateException("Molecule's structure has not been declared");
@@ -317,7 +326,7 @@ public class Molecule {
             };
 
             if (molecule.getChemicalFormula().containsKey(Element.R_GROUP)) {
-                molecule.isHypothetical = true;
+                tag(DestroyMolecules.Tags.HYPOTHETICAL);
             };
             
             if (!hasForcedBoilingPoint) {

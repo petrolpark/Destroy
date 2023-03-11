@@ -73,6 +73,18 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
+    public static final BlockEntry<DynamoBlock> DYNAMO = REGISTRATE.block("dynamo", DynamoBlock::new)
+        .initialProperties(SharedProperties::stone)
+        .properties(p -> p
+            .color(MaterialColor.GOLD)
+            .noOcclusion()
+        ).blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p)))
+        .transform(TagGen.pickaxeOnly())
+        .transform(BlockStressDefaults.setImpact(8.0))
+        .item()
+        .transform(customItemModel())
+        .register();
+
     static {
         REGISTRATE.startSection(AllSections.CURIOSITIES);
     };

@@ -815,6 +815,7 @@ public class Formula implements Cloneable {
             this.name = name;
             this.positions = positions;
             this.constructor = constructor;
+            Molecule.FORBIDDEN_NAMESPACES.add(name);
         };
 
         public static CycleType getByName(String name) {

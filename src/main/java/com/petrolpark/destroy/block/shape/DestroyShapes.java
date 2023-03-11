@@ -25,6 +25,13 @@ public class DestroyShapes {
 
     AGING_BARREL_INTERIOR = shape(0, 0, 0, 16, 16, 16) // Used for detecting when Items are thrown into the Aging Barrel
         .erase(2, 7, 2, 14, 16, 14)
+        .build(),
+
+    DYNAMO = shape(0, 0, 0, 16, 16, 16)
+        .erase(0, 2, 2, 16, 14, 14)
+        .erase(2, 0, 2, 14, 16, 14)
+        .erase(2, 2, 0, 14, 14, 16)
+        .add(2, 2, 2, 14, 14, 14)
         .build();
 
     public static final VoxelShaper AGING_BARREL_OPEN = shape(0, 0, 0, 16, 14, 16)
@@ -55,13 +62,12 @@ public class DestroyShapes {
         return agingBarrel.build();
     };
 
-    public static final VoxelShaper bubbleCap(boolean bottom, boolean top) {
+    public static final VoxelShape bubbleCap(boolean bottom, boolean top) {
         Builder bubbleCap = shape(2, 2, 2, 14, 14, 14)
             .add(0, 0, 0, 2, 16, 2)
             .add(0, 0, 14, 2, 16, 16)
             .add(14, 0, 0, 16, 16, 2)
-            .add(14, 0, 14, 16, 16, 16)
-            .add(3, 3, 0, 13, 13, 2);
+            .add(14, 0, 14, 16, 16, 16);
         if (bottom) {
             bubbleCap.add(0, 0, 0, 16, 2, 16);
         } else {
@@ -72,7 +78,7 @@ public class DestroyShapes {
         } else {
             bubbleCap.add(3, 14, 3, 13, 16, 13);
         };
-        return bubbleCap.forDirectional(Direction.NORTH);
+        return bubbleCap.build();
         
     };
 

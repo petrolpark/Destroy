@@ -56,7 +56,8 @@ public class BubbleCapBlock extends Block implements ITE<BubbleCapBlockEntity>, 
 
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
-        boolean isAbove = pos.getY() + 1 == neighbor.getY(); // If the Block changed is above
+        BlockPos posAbove = pos.above();
+        boolean isAbove = posAbove.getY() == neighbor.getY(); // If the Block changed is above
         boolean isBelow = pos.getY() - 1 == neighbor.getY(); // If the Block changed is below
         withTileEntityDo(level, pos, be -> {
             be.attemptRotation(false);
@@ -64,7 +65,6 @@ public class BubbleCapBlock extends Block implements ITE<BubbleCapBlockEntity>, 
                 be.createOrAddToTower(level);
             };
         });
-        BlockPos posAbove = pos.above();
         BlockState stateAbove = level.getBlockState(posAbove);
         if (isBelow && stateAbove.is(DestroyBlocks.BUBBLE_CAP.get())) { // If the Block below changed, update the Bubble Cap above
             stateAbove.onNeighborChange(level, posAbove, pos);
@@ -97,7 +97,7 @@ public class BubbleCapBlock extends Block implements ITE<BubbleCapBlockEntity>, 
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return DestroyShapes.bubbleCap(state.getValue(BOTTOM), state.getValue(TOP)).get(state.getValue(PIPE_FACE));
+        return DestroyShapes.bubbleCap(state.getValue(BOTTOM), state.getValue(TOP));
     };
 
     /**

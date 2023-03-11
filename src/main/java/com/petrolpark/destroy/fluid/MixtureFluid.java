@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.fluid;
 
+import com.petrolpark.destroy.chemistry.Mixture;
 import com.simibubi.create.AllFluids.TintedFluidType;
 import com.simibubi.create.content.contraptions.fluids.VirtualFluid;
 
@@ -15,6 +16,21 @@ public class MixtureFluid extends VirtualFluid {
         super(properties);
     };
 
+    public static FluidStack of(int amount, Mixture mixture) {
+        FluidStack fluidStack = new FluidStack(DestroyFluids.MIXTURE.get().getSource(), amount);
+        addMixtureToFluidStack(fluidStack, mixture);
+        return fluidStack;
+    };
+
+    public static FluidStack addMixtureToFluidStack(FluidStack fluidStack, Mixture mixture) {
+        if (mixture.isEmpty()) {
+            fluidStack.removeChildTag("Mixture");
+            return fluidStack;
+        };
+        fluidStack.getOrCreateTag().put("Mixture", mixture.writeNBT());
+        return fluidStack;
+    };
+
     public static class MixtureFluidType extends TintedFluidType {
 
         public MixtureFluidType(Properties properties, ResourceLocation stillTexture, ResourceLocation flowingTexture) {
@@ -25,15 +41,15 @@ public class MixtureFluid extends VirtualFluid {
         protected int getTintColor(FluidStack stack) {
             // TODO Auto-generated method stub
             return 0;
-        }
+        };
 
         @Override
         protected int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
             // TODO Auto-generated method stub
             return 0;
-        }
+        };
 
-    }
+    };
 
     
 }

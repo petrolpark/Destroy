@@ -4,10 +4,11 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Formula;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.MoleculeTag;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.Molecule.MoleculeBuilder;
 
-public class DestroyMolecules {
+public final class DestroyMolecules {
 
     public static final Molecule 
     
@@ -15,7 +16,7 @@ public class DestroyMolecules {
         .id("acetamide")
         .structure(Formula.deserialize("linear:CC(=O)N"))
         .boilingPoint(221)
-        .tag("AcutelyToxic")
+        .tag(Tags.ACUTELY_TOXIC)
         .build(),
 
     ACETIC_ACID = builder()
@@ -269,13 +270,17 @@ public class DestroyMolecules {
 
     NITRATE = builder()
         .id("nitrate")
-        .structure(Formula.atom(Element.NITROGEN).addAtom(Element.OXYGEN, BondType.DOUBLE).addAtom(Element.OXYGEN, BondType.AROMATIC).addAtom(Element.OXYGEN, BondType.AROMATIC))
-        .charge(-1)
+        .structure(Formula.atom(Element.NITROGEN)
+            .addAtom(Element.OXYGEN, BondType.DOUBLE)
+            .addAtom(Element.OXYGEN, BondType.AROMATIC)
+            .addAtom(Element.OXYGEN, BondType.AROMATIC)
+        ).charge(-1)
         .build(),
 
     WATER = builder()
         .id("water")
         .structure(Formula.deserialize("linear:O"))
+        .tag(Tags.SOLVENT)
         .boilingPoint(100)
         .build(),
 
@@ -287,6 +292,24 @@ public class DestroyMolecules {
 
     private static final MoleculeBuilder builder() {
         return new MoleculeBuilder(Destroy.MOD_ID);
+    };
+
+    public static class Tags {
+
+        /**
+         * This Molecule will cause damage to Players exposed to it.
+         */
+        public static final MoleculeTag ACUTELY_TOXIC = new MoleculeTag();
+
+        /**
+         * This Molecule cannot partake in Reactions.
+         */
+        public static final MoleculeTag HYPOTHETICAL = new MoleculeTag();
+
+        /**
+         * This Molecule is ignored when displaying the written contents of a Mixture, and ignored when used in Recipes.
+         */
+        public static final MoleculeTag SOLVENT = new MoleculeTag();
     };
 
     public static void register() {};

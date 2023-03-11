@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.recipe.AgingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
@@ -175,14 +174,15 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
         BlockState oldState = getBlockState();
         BlockState newState = getBlockState();
         newState = oldState.setValue(AgingBarrelBlock.IS_OPEN, timer < 0);
-        if (timer == -1) {
-            newState = newState.setValue(AgingBarrelBlock.PROGRESS, 0);
+        if (timer <= 0) {
             tank.allowExtraction();
             tank.allowInsertion();
         };
-        Destroy.LOGGER.info("Timer is "+timer+" and total time is "+totalTime);
+        if (timer == -1) {
+            newState = newState.setValue(AgingBarrelBlock.PROGRESS, 0);
+        };
         newState = newState.setValue(AgingBarrelBlock.PROGRESS, 0);
-        //newState = newState.setValue(AgingBarrelBlock.PROGRESS, 4 - (int)(timer / (float)totalTime * 4));
+        newState = newState.setValue(AgingBarrelBlock.PROGRESS, totalTime != 0 ? 4 - (int)(timer / (float)totalTime * 4) : 0);
         if (newState != oldState) {
             getLevel().setBlockAndUpdate(getBlockPos(), newState); // This is the bit it thinks might be null
             sendData();

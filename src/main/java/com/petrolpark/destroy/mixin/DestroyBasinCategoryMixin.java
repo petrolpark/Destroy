@@ -33,7 +33,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class DestroyBasinCategoryMixin {
     
     @Inject(method = "setRecipe", at = @At(value = "INVOKE", target = "getRequiredHeat"), cancellable = true)
-    protected void setRecipeInjection(IRecipeLayoutBuilder builder, BasinRecipe recipe, IFocusGroup focuses, CallbackInfo ci) { //used to render a Breeze Burner (rather than a Blaze Burner) in the recipe screen
+    protected void setRecipeInjection(IRecipeLayoutBuilder builder, BasinRecipe recipe, IFocusGroup focuses, CallbackInfo ci) { // Used to render a Breeze Burner (rather than a Blaze Burner) in the Recipe screen
         
         List<ItemStack> blazeTreatStacks = new ArrayList<>();
         ForgeRegistries.ITEMS.tags().getTag(AllTags.AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag).forEach(item -> {
@@ -42,29 +42,29 @@ public class DestroyBasinCategoryMixin {
         
         if (recipe.getRequiredHeat().testBlazeBurner(HeatLevel.valueOf("FROSTING"))) {
             builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 81).addItemStack(new ItemStack(Blocks.DIRT)); //TODO replace with Breeze Burner
-        } else if (!recipe.getRequiredHeat().testBlazeBurner(HeatLevel.NONE)) { //this one is copied right from Create, it renders the Blaze Burner
+        } else if (!recipe.getRequiredHeat().testBlazeBurner(HeatLevel.NONE)) { // This one is copied right from Create, it renders the Blaze Burner
             builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 81).addItemStack(AllBlocks.BLAZE_BURNER.asStack());
         };
-        if (!recipe.getRequiredHeat().testBlazeBurner(HeatLevel.KINDLED)) { //used to render all possible Blaze Treats rather than just the Blaze Cake
+        if (!recipe.getRequiredHeat().testBlazeBurner(HeatLevel.KINDLED)) { // Used to render all possible Blaze Treats rather than just the Blaze Cake
             builder.addSlot(RecipeIngredientRole.CATALYST, 153, 81).addItemStacks(blazeTreatStacks);
         };
-        ci.cancel(); //don't execute the rest of the method
+        ci.cancel(); // Don't execute the rest of the method
     };
 
     @SuppressWarnings("resource")
-    @Inject(method = "draw", at = @At(value = "INVOKE", target = "getInstance"), cancellable = true) //injects when it is writing "Heated", "Superheated", etc at the bottom of the screen
+    @Inject(method = "draw", at = @At(value = "INVOKE", target = "getInstance"), cancellable = true) // Injects when it is writing "Heated", "Superheated", etc at the bottom of the screen
     protected void drawInjection(BasinRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY, CallbackInfo ci) {
 
         HeatCondition requiredHeat = recipe.getRequiredHeat();
         MutableComponent name = Component.empty();
-        if (requiredHeat.name() == "COOLED") { //scuffed but okay keep your opinions to yourself
+        if (requiredHeat.name() == "COOLED") { // Scuffed but okay keep your opinions to yourself
             name = DestroyLang.translate(requiredHeat.getTranslationKey()).component();
         } else {
             name = Lang.translate(requiredHeat.getTranslationKey()).component();
         };
 
-        Minecraft.getInstance().font.draw(matrixStack, name, 9, 86, requiredHeat.getColor()); //this is equivalent of the line being overwritten
+        Minecraft.getInstance().font.draw(matrixStack, name, 9, 86, requiredHeat.getColor()); // This is equivalent of the line being overwritten
 
-        ci.cancel(); //don't execute the rest of the method
+        ci.cancel(); // Don't execute the rest of the method
     };
 }
