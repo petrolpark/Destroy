@@ -14,6 +14,7 @@ import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.DestroyPotatoCannonProjectileTypes;
 import com.petrolpark.destroy.item.HyperaccumulatingFertilizerItem;
+import com.petrolpark.destroy.networking.DestroyMessages;
 import com.petrolpark.destroy.ponder.DestroySceneIndex;
 import com.petrolpark.destroy.recipe.DestroyCropMutations;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
@@ -101,6 +102,9 @@ public class Destroy {
     //Initiation Events
 
     public static void init(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            DestroyMessages.register();
+        });
         DestroyPotatoCannonProjectileTypes.register();
         HyperaccumulatingFertilizerItem.registerDispenserBehaviour();
     };

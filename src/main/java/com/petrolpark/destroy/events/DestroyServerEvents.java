@@ -1,11 +1,13 @@
 package com.petrolpark.destroy.events;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -23,29 +25,42 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
-import com.petrolpark.destroy.capability.babyblue.PlayerBabyBlueAddiction;
-import com.petrolpark.destroy.capability.babyblue.PlayerBabyBlueAddictionProvider;
-import com.petrolpark.destroy.capability.previousposition.PlayerPreviousPositions;
-import com.petrolpark.destroy.capability.previousposition.PlayerPreviousPositionsProvider;
+import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
+import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
+import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddiction;
+import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
+import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositions;
+import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositionsProvider;
 import com.petrolpark.destroy.commands.BabyBlueAddictionCommand;
+import com.petrolpark.destroy.commands.PollutionCommand;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.SyringeItem;
+import com.petrolpark.destroy.networking.DestroyMessages;
+import com.petrolpark.destroy.networking.packet.LevelPollutionS2CPacket;
 import com.petrolpark.destroy.world.DestroyDamageSources;
 
 @Mod.EventBusSubscriber(modid = Destroy.MOD_ID)
 public class DestroyServerEvents {
 
     @SubscribeEvent
+    public static void onAttachCapabilitiesLevel(AttachCapabilitiesEvent<Level> event) {
+        Level level = event.getObject();
+        if (!level.getCapability(LevelPollutionProvider.LEVEL_POLLUTION).isPresent()) {
+            event.addCapability(Destroy.asResource("pollution"), new LevelPollutionProvider());
+        };
+    };
+
+    @SubscribeEvent
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof Player) {
+        if (event.getObject() instanceof Player player) {
             // Add Baby Blue Addiction Capability
-            if (!event.getObject().getCapability(PlayerBabyBlueAddictionProvider.PLAYER_BABY_BLUE_ADDICTION).isPresent()) {
+            if (!player.getCapability(PlayerBabyBlueAddictionProvider.PLAYER_BABY_BLUE_ADDICTION).isPresent()) {
                 event.addCapability(Destroy.asResource("baby_blue_addiction"), new PlayerBabyBlueAddictionProvider());
             };
             // Add Previous Positions Capability
-            if (!event.getObject().getCapability(PlayerPreviousPositionsProvider.PLAYER_PREVIOUS_POSITIONS).isPresent()) {
+            if (!player.getCapability(PlayerPreviousPositionsProvider.PLAYER_PREVIOUS_POSITIONS).isPresent()) {
                 event.addCapability(Destroy.asResource("previous_positions"), new PlayerPreviousPositionsProvider());
             };
         };
@@ -66,10 +81,12 @@ public class DestroyServerEvents {
     @SubscribeEvent
     public static void onCommandRegister(RegisterCommandsEvent event) {
         new BabyBlueAddictionCommand(event.getDispatcher());
+        new PollutionCommand(event.getDispatcher());
     };
 
     @SubscribeEvent
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
+        event.register(LevelPollution.class);
         event.register(PlayerBabyBlueAddiction.class);
         event.register(PlayerPreviousPositions.class);
     };
@@ -108,7 +125,7 @@ public class DestroyServerEvents {
             case MUSIC:
             case VOICE:
             case NEUTRAL:
-                break; //ignore certain sounds
+                break; // Ignore certain sounds
             // case BLOCKS:
             // case HOSTILE:
             // case MASTER:
@@ -127,6 +144,20 @@ public class DestroyServerEvents {
                 }; 
                 break;
         };
+    };
+
+    @SubscribeEvent
+    public static void onPlayerEntersWorld(PlayerEvent.PlayerLoggedInEvent event) {
+        Destroy.LOGGER.info("Hello lets send information now");
+        Player player = event.getEntity();
+        if (!(player instanceof ServerPlayer serverPlayer)) {
+            Destroy.LOGGER.info("Guy wasn't a server player so wahhh");
+            return;
+        };
+        Level level = player.getLevel();
+        level.getCapability(LevelPollutionProvider.LEVEL_POLLUTION).ifPresent(levelPollution -> {
+            DestroyMessages.sendToClient(new LevelPollutionS2CPacket(levelPollution), serverPlayer);
+        });
     };
 
     @SubscribeEvent
@@ -150,10 +181,10 @@ public class DestroyServerEvents {
     @SubscribeEvent
     public static void onSyringeAttack(LivingAttackEvent event) {
         Entity attacker = event.getSource().getEntity();
-        if (!(attacker instanceof LivingEntity)) return;
-        ItemStack itemStack = ((LivingEntity) attacker).getMainHandItem();
-        if (!(itemStack.getItem() instanceof SyringeItem)) return;
-        ((SyringeItem) itemStack.getItem()).onInject(itemStack, attacker.getLevel(), event.getEntity());
-        ((LivingEntity) attacker).setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(DestroyItems.SYRINGE.get()));
+        if (!(attacker instanceof LivingEntity livingAttacker)) return;
+        ItemStack itemStack = livingAttacker.getMainHandItem();
+        if (!(itemStack.getItem() instanceof SyringeItem syringeItem)) return;
+        syringeItem.onInject(itemStack, attacker.getLevel(), event.getEntity());
+        livingAttacker.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(DestroyItems.SYRINGE.get()));
     };
 };

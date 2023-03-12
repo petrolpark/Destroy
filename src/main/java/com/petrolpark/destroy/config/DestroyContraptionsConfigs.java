@@ -7,7 +7,7 @@ public class DestroyContraptionsConfigs extends DestroyConfigBase {
     public final ConfigInt centrifugeMaxLubricationLevel = i(10, 0, "centrifugeMaxLubricationLevel", Comments.toDisable, Comments.centrifugeMaxLubricationLevel);
 
     public final ConfigGroup dynamo = group(0, "dynamo", Comments.dynamo);
-    public final ConfigBool dynamoBulkCharging = b(true, Comments.dynamoBulkCharging);
+    public final ConfigBool dynamoBulkCharging = b(true, "dynamoBulkCharging", Comments.dynamoBulkCharging);
     
     
     @Override

@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.capability.babyblue;
+package com.petrolpark.destroy.capability.player.babyblue;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,12 +28,12 @@ public class PlayerBabyBlueAddictionProvider implements ICapabilityProvider, INB
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == PLAYER_BABY_BLUE_ADDICTION) {
+        if (cap == PLAYER_BABY_BLUE_ADDICTION) {
             return optional.cast();
         };
 
         return LazyOptional.empty();
-    }
+    };
     
     @Override
     public CompoundTag serializeNBT() {
@@ -44,6 +44,6 @@ public class PlayerBabyBlueAddictionProvider implements ICapabilityProvider, INB
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-         createPlayerBabyBlueAddiction().loadNBTData(nbt);
+        createPlayerBabyBlueAddiction().loadNBTData(nbt);
     };
 }

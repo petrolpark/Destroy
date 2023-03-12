@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.capability.babyblue;
+package com.petrolpark.destroy.capability.player.babyblue;
 
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 

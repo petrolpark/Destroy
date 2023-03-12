@@ -10,10 +10,13 @@ import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public class DestroyTags {
 
@@ -82,11 +85,43 @@ public class DestroyTags {
         };
     };
 
+    public enum DestroyBlockTags {
+
+        AFFECTED_BY_SMOG;
+
+        public final TagKey<Block> tag;
+
+        DestroyBlockTags() {
+            this(null);
+        };
+
+        DestroyBlockTags(String path) {
+			ResourceLocation id = Destroy.asResource(path == null ? Lang.asId(name()) : path);
+			tag = BlockTags.create(id);
+			REGISTRATE.addDataGenerator(ProviderType.BLOCK_TAGS, prov -> prov.tag(tag));
+		};
+
+        public static void init() {};
+
+    };
+
+    private static void generateBlockTags(RegistrateTagsProvider<Block> provider) {
+
+        provider.tag(DestroyBlockTags.AFFECTED_BY_SMOG.tag)
+            .addTag(BlockTags.LEAVES)
+            .add(Blocks.GRASS, Blocks.GRASS_BLOCK, Blocks.TALL_GRASS, Blocks.MELON_STEM, Blocks.PUMPKIN_STEM, Blocks.ATTACHED_MELON_STEM, Blocks.ATTACHED_PUMPKIN_STEM, Blocks.SUGAR_CANE);
+
+        for (DestroyBlockTags tagEnum : DestroyBlockTags.values()) {
+            provider.getOrCreateRawBuilder(tagEnum.tag);
+        };
+    };
+
     public static void register() {
         DestroyItemTags.init();
     };
 
     public static void datagen() {
         REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, DestroyTags::generateItemTags);
+        REGISTRATE.addDataGenerator(ProviderType.BLOCK_TAGS, DestroyTags::generateBlockTags);
     };
 }

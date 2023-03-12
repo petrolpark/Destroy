@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.capability.previousposition;
+package com.petrolpark.destroy.capability.player.previousposition;
 
 import java.util.List;
 import java.util.Queue;

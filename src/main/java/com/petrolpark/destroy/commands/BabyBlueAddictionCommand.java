@@ -4,7 +4,8 @@ import java.util.Collection;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.petrolpark.destroy.capability.babyblue.PlayerBabyBlueAddictionProvider;
+import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -16,20 +17,21 @@ public class BabyBlueAddictionCommand {
     
     public BabyBlueAddictionCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("babyblueaddiction")
-            .then(Commands.literal("query").then(Commands.argument("targets", EntityArgument.player()).executes((command) -> {
-                return queryBabyBlueAddiction(command.getSource(), EntityArgument.getPlayer(command, "targets"));
+            .then(Commands.literal("query").then(Commands.argument("targets", EntityArgument.player()).executes(context -> {
+                return queryBabyBlueAddiction(context.getSource(), EntityArgument.getPlayer(context, "targets"));
             })))
-            .then(Commands.literal("set").then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("amount", IntegerArgumentType.integer()).executes((command) -> {
-                return setBabyBlueAddiction(command.getSource(), EntityArgument.getPlayers(command, "targets"), IntegerArgumentType.getInteger(command, "amount"));
+            .then(Commands.literal("set").then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("amount", IntegerArgumentType.integer(0, DestroyAllConfigs.COMMON.substances.maxAddictionLevel.get())).executes(context -> {
+                return setBabyBlueAddiction(context.getSource(), EntityArgument.getPlayers(context, "targets"), IntegerArgumentType.getInteger(context, "amount"));
             }))))
         );
     }
 
     private int queryBabyBlueAddiction(CommandSourceStack source, ServerPlayer player) {
-        player.getCapability(PlayerBabyBlueAddictionProvider.PLAYER_BABY_BLUE_ADDICTION).ifPresent(babyblueAddiction -> {
-            source.sendSuccess(Component.translatable("commands.destroy.babyblueaddiction.query", player.getDisplayName(), babyblueAddiction.getBabyBlueAddiction()), true);
-        });
-        return 1;
+        return player.getCapability(PlayerBabyBlueAddictionProvider.PLAYER_BABY_BLUE_ADDICTION).map(babyblueAddiction -> {
+            int addictionLevel = babyblueAddiction.getBabyBlueAddiction();
+            source.sendSuccess(Component.translatable("commands.destroy.babyblueaddiction.query", player.getDisplayName(), addictionLevel), true);
+            return addictionLevel;
+        }).orElse(0);
     };
 
     private int setBabyBlueAddiction(CommandSourceStack source, Collection<? extends ServerPlayer> players, int amount) {

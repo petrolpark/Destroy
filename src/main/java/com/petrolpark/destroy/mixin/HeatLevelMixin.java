@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock.HeatLevel;
 
 @Mixin(HeatLevel.class)
-public abstract class DestroyHeatLevelMixin {
+public abstract class HeatLevelMixin {
     
     @Shadow
     @Final
@@ -28,10 +28,10 @@ public abstract class DestroyHeatLevelMixin {
     };
 
     private static HeatLevel heatLevelModifier$addValue(String internalName) {
-        ArrayList<HeatLevel> heatLevels = new ArrayList<HeatLevel>(Arrays.asList(DestroyHeatLevelMixin.$VALUES));
+        ArrayList<HeatLevel> heatLevels = new ArrayList<HeatLevel>(Arrays.asList(HeatLevelMixin.$VALUES));
         HeatLevel heatLevel = heatLevelModifier$invokeInit(internalName, heatLevels.get(heatLevels.size() - 1).ordinal() + 1);
         heatLevels.add(heatLevel);
-        DestroyHeatLevelMixin.$VALUES = heatLevels.toArray(new HeatLevel[0]);
+        HeatLevelMixin.$VALUES = heatLevels.toArray(new HeatLevel[0]);
         return heatLevel;
     };
 };

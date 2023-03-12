@@ -1,6 +1,6 @@
 {
-    "parent": "block/cube_all",
+    "parent": "block/grass_block",
     "textures": {
-        "all": "destroy:block/mashed_potato_block"
+        "overlay": "destroy:block/mashed_potato_block"
     }
 }

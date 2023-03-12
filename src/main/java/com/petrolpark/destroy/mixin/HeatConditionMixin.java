@@ -20,7 +20,7 @@ import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlo
 
 @Mixin(HeatCondition.class)
 @Unique
-public abstract class DestroyHeatConditionMixin {
+public abstract class HeatConditionMixin {
     
     @Shadow
     @Final
@@ -35,10 +35,10 @@ public abstract class DestroyHeatConditionMixin {
     };
 
     private static HeatCondition heatConditionModifier$addValue(String internalName, int color) {
-        ArrayList<HeatCondition> heatConditions = new ArrayList<HeatCondition>(Arrays.asList(DestroyHeatConditionMixin.$VALUES));
+        ArrayList<HeatCondition> heatConditions = new ArrayList<HeatCondition>(Arrays.asList(HeatConditionMixin.$VALUES));
         HeatCondition heatCondition = heatConditionModifier$invokeInit(internalName, heatConditions.get(heatConditions.size() - 1).ordinal() + 1, color);
         heatConditions.add(heatCondition);
-        DestroyHeatConditionMixin.$VALUES = heatConditions.toArray(new HeatCondition[0]);
+        HeatConditionMixin.$VALUES = heatConditions.toArray(new HeatCondition[0]);
         return heatCondition;
     };
 

@@ -21,11 +21,11 @@ public class DestroyWorldGenerationConfigs extends DestroyConfigBase {
 	protected void registerAll(Builder builder) {
 		super.registerAll(builder);
 		AllOreFeatureConfigEntries.fillConfig(builder, Destroy.MOD_ID);
-	}
+	};
 
 	@Override
 	public String getName() {
-		return "worldgen.v" + FORCED_UPDATE_VERSION;
+		return "worldGen";
 	};
 
 	private static class Comments {

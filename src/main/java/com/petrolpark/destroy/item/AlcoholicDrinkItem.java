@@ -1,6 +1,6 @@
 package com.petrolpark.destroy.item;
 
-import com.petrolpark.destroy.util.InebriationHandler;
+import com.petrolpark.destroy.util.InebriationHelper;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,7 +38,7 @@ public class AlcoholicDrinkItem extends Item {
         };
    
          if (!level.isClientSide) {
-            InebriationHandler.increaseInebriation(entityLiving, getStrength());
+            InebriationHelper.increaseInebriation(entityLiving, getStrength());
         };
    
         if (stack.isEmpty()) {

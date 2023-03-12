@@ -16,7 +16,7 @@ import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.minecraft.util.GsonHelper;
 
 @Mixin(FluidIngredient.class)
-public class DestroyFluidIngredientMixin {
+public class FluidIngredientMixin {
 
 	private static final String
 	fluidTagMemberName = "fluidTag",

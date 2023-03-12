@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.capability.previousposition;
+package com.petrolpark.destroy.capability.player.previousposition;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

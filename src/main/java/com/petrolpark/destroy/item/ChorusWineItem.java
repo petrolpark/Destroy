@@ -1,6 +1,6 @@
 package com.petrolpark.destroy.item;
 
-import com.petrolpark.destroy.capability.previousposition.PlayerPreviousPositionsProvider;
+import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositionsProvider;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;

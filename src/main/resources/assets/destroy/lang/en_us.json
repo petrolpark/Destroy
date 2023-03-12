@@ -41,11 +41,11 @@
     "block.destroy.yeast_mushroom": "Yeast Mushroom",
     "block.destroy.zirconium_block": "Zirconium Block",
 
-    "commands.destroy.babyblueaddiction.add.multiple": "Added Baby Blue Addiction level of %s (or set to closest bound) to %s players",
-    "commands.destroy.babyblueaddiction.add.single": "Added Baby Blue Addiction level of %s (or set to closest bound) to %s",
-    "commands.destroy.babyblueaddiction.set.multiple": "Set Baby Blue Addiction level of %s (or closest bound) on %s players",
-    "commands.destroy.babyblueaddiction.set.single": "Set Baby Blue Addiction level of %s (or closest bound) on %s",
+    "commands.destroy.babyblueaddiction.set.multiple": "Set Baby Blue Addiction level of %s on %s players",
+    "commands.destroy.babyblueaddiction.set.single": "Set Baby Blue Addiction level of %s on %s",
     "commands.destroy.babyblueaddiction.query": "%s has a Baby Blue Addiction level of %s",
+    "commands.destroy.pollution.query": "Pollution of type %s has a level of %s",
+    "commands.destroy.pollution.set": "Set level of Pollution of type %s to %s",
 
     "death.attack.acidBurn": "%1$s died of corrosive burns",
     "death.attack.alcohol": "%1$s died of alcohol poisoning",
