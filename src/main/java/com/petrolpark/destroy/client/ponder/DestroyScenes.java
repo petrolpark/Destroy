@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.ponder;
+package com.petrolpark.destroy.client.ponder;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 public class DestroyScenes {
 
     public static void centrifuge(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("centrifuge", "");
+        scene.title("centrifuge", "This text is defined in a language file.");
         scene.configureBasePlate(0, 0, 5);
         scene.showBasePlate();
 
@@ -66,7 +66,7 @@ public class DestroyScenes {
         scene.world.showSection(kinetics, Direction.NORTH);
         scene.idle(10);
         scene.overlay.showText(100)
-            .text("")
+            .text("This text is defined in a language file.")
             .pointAt(util.vector.blockSurface(centrifuge, Direction.EAST));
         scene.world.propagatePipeChange(new BlockPos(2, 4, 3));
         scene.idle(120);
@@ -77,20 +77,22 @@ public class DestroyScenes {
         scene.world.modifyTileEntity(centrifuge, CentrifugeBlockEntity.class, te -> te.getDenseOutputTank().fill(blueFluid, FluidAction.EXECUTE));
         scene.world.propagatePipeChange(denseOutputPump);
         scene.overlay.showText(100)
-            .text("")
+            .text("This text is defined in a language file.")
             .pointAt(util.vector.blockSurface(denseOutputPump, Direction.EAST));
         scene.idle(120);
         scene.world.modifyTileEntity(centrifuge, CentrifugeBlockEntity.class, te -> te.getLightOutputTank().fill(redFluid, FluidAction.EXECUTE));
         scene.world.propagatePipeChange(lightOutputPump);
         scene.overlay.showText(100)
-            .text("")
+            .text("This text is defined in a language file.")
             .pointAt(util.vector.blockSurface(lightOutputPump, Direction.EAST));
         scene.idle(120);
         scene.markAsFinished();
+
+        // TODO lubrication
     };
 
     public static void phytomining(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("phytomining", "");
+        scene.title("phytomining", "This text is defined in a language file.");
         scene.configureBasePlate(0, 0, 3);
         scene.showBasePlate();
 
@@ -100,7 +102,7 @@ public class DestroyScenes {
         scene.world.showSection(util.select.everywhere(), Direction.UP);
         scene.idle(10);
         scene.overlay.showText(100)
-            .text("")
+            .text("This text is defined in a language file.")
             .pointAt(util.vector.blockSurface(farmland, Direction.UP));
         scene.idle(120);
         scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(new BlockPos(1, 2, 1), Direction.UP), Pointing.DOWN)
@@ -113,7 +115,7 @@ public class DestroyScenes {
         scene.world.modifyBlock(ore, s -> Blocks.STONE.defaultBlockState(), false);
         scene.world.modifyBlock(new BlockPos(1, 3, 1), s -> DestroyBlocks.GOLDEN_CARROTS.get().defaultBlockState(), false);
         scene.overlay.showText(100)
-            .text("")
+            .text("This text is defined in a language file.")
             .pointAt(util.vector.blockSurface(ore, Direction.WEST));
         scene.idle(120);
         scene.markAsFinished();

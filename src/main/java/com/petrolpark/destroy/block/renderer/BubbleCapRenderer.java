@@ -48,8 +48,8 @@ public class BubbleCapRenderer extends SmartTileEntityRenderer<BubbleCapBlockEnt
                 centerLevel = Math.max(0, totalLevel - (3 / 13f)) * (13 / 10f);
             };
 
-            if (!bottom && bottomLevel > 0f) FluidRenderer.renderFluidBox(visualTank.getRenderedFluid(), 4 / 16f, 0 / 16f, 4 / 16f, 12 / 16f, 0 / 16f + (bottomLevel * 3 / 16f), 12 / 16f, buffer, ms, light, false);
-            if (centerLevel > 0f) FluidRenderer.renderFluidBox(visualTank.getRenderedFluid(), 3 / 16f, 3 / 16f, 3 / 16f, 13 / 16f, 3 / 16f + (centerLevel * 10 / 16f), 13 / 16f, buffer, ms, light, !bottom);
+            if (!bottom && bottomLevel > 0f) FluidRenderer.renderFluidBox(visualTank.getRenderedFluid(), 4 / 16f, 0 / 16f, 4 / 16f, 12 / 16f, 0 / 16f + (bottomLevel * 3 / 16f), 12 / 16f, buffer, ms, light, true);
+            if (centerLevel > 0f) FluidRenderer.renderFluidBox(visualTank.getRenderedFluid(), 3 / 16f, 3 / 16f, 3 / 16f, 13 / 16f, 3 / 16f + (centerLevel * 10 / 16f), 13 / 16f, buffer, ms, light, true);
             if (!top && topLevel > 0f) FluidRenderer.renderFluidBox(visualTank.getRenderedFluid(), 4 / 16f, 13 / 16f, 4 / 16f, 12 / 16f, 13 / 16f + (topLevel * 3 / 16f), 12 / 16f, buffer, ms, light, false);
         };
     };

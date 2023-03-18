@@ -34,6 +34,7 @@ public class BabyBlueAddictionCommand {
         }).orElse(0);
     };
 
+    // Returns the number of Players for whom the Baby Blue addiction was set
     private int setBabyBlueAddiction(CommandSourceStack source, Collection<? extends ServerPlayer> players, int amount) {
         for (ServerPlayer player : players) {
             player.getCapability(PlayerBabyBlueAddictionProvider.PLAYER_BABY_BLUE_ADDICTION).ifPresent(babyblueAddiction -> {
@@ -45,6 +46,6 @@ public class BabyBlueAddictionCommand {
         } else {
             source.sendSuccess(Component.translatable("commands.destroy.babyblueaddiction.set.multiple", amount, players.size()), true);
         };
-        return 1;
+        return players.size();
     };
 }

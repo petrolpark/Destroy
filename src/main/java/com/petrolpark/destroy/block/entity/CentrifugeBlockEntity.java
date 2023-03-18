@@ -95,7 +95,7 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
      */
     @SuppressWarnings("null")
     public boolean attemptRotation(boolean shouldSwitch) {
-        if (getLevel() == null) {
+        if (!hasLevel()) {
             return false;
         };
         if (getLevel().setBlock(getBlockPos(), getBlockState().setValue(CentrifugeBlock.DENSE_OUTPUT_FACE, refreshDirection(this, shouldSwitch ? denseOutputTankFace.getClockWise() : denseOutputTankFace, getDenseOutputTank(), true)), 6)) { // If the output Direction can be successfully changed
@@ -112,7 +112,7 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
     @SuppressWarnings("null")
     public void tick() {
         super.tick();
-        if (getLevel() == null) return; // Don't do anything if we're not in a Level
+        if (!hasLevel()) return; // Don't do anything if we're not in a Level
         if (getSpeed() == 0) return; // Don't do anything without rotational power
         if (isTankFull(getDenseOutputTank()) || isTankFull(getLightOutputTank())) return; // Don't do anything if output is full
         if (timer > 0) {
@@ -199,7 +199,7 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
     @SuppressWarnings("null") // It's not null; I checked
     public void spawnParticles() {
         FluidStack fluidStack = inputTank.getPrimaryHandler().getFluid();
-        if (fluidStack.isEmpty() || getLevel() == null) return;
+        if (fluidStack.isEmpty() || !hasLevel()) return;
 
         RandomSource random = getLevel().getRandom(); // It thinks getLevel() might be null
 
@@ -245,7 +245,7 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
     @SuppressWarnings("null")
     protected void onFluidStackChanged() {
         if (!hasLevel()) return;
-        if (!(getLevel() == null || getLevel().isClientSide())) {
+        if (hasLevel() && !getLevel().isClientSide()) {
             setChanged();
             sendData();
         };

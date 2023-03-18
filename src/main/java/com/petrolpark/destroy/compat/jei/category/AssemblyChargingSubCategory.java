@@ -11,7 +11,7 @@ public class AssemblyChargingSubCategory extends SequencedAssemblySubCategory {
 
     public AssemblyChargingSubCategory() {
         super(25);
-        dynamo = new AnimatedDynamo();
+        dynamo = new AnimatedDynamo(false);
     };
 
     @Override

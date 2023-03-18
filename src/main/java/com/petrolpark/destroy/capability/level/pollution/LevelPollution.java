@@ -30,7 +30,7 @@ public class LevelPollution {
      * Set the value of the given type of Pollution in this Level.
      * This does not broadcast the change to clients.
      * @param pollutionType
-     * @param value Will be set to the {@link PollutionType closest bound}
+     * @param value Will be set within the {@link PollutionType bounds}
      * @return The actual value to which the Pollution level was set
      */
     public int set(PollutionType pollutionType, int value) {

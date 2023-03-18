@@ -2,13 +2,13 @@ package com.petrolpark.destroy.block.entity;
 
 import java.util.List;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.behaviour.ChargingBehaviour;
 import com.petrolpark.destroy.behaviour.ChargingBehaviour.ChargingBehaviourSpecifics;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.simibubi.create.content.contraptions.processing.BasinOperatingTileEntity;
+import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
 import com.simibubi.create.content.contraptions.relays.belt.transport.TransportedItemStack;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 
@@ -42,16 +42,15 @@ public class DynamoBlockEntity extends BasinOperatingTileEntity implements Charg
     @SuppressWarnings("null")
     public void onSpeedChanged(float prevSpeed) {
         if (hasLevel()) {
-            Destroy.LOGGER.info("I've changed my speed yayyyyy");
-            getLevel().updateNeighborsAt(getBlockPos(), DestroyBlocks.DYNAMO.get());
+            getLevel().updateNeighborsAt(getBlockPos(), DestroyBlocks.DYNAMO.get()); // It thinks getLevel() can be null (it can't at this point)
         };
         super.onSpeedChanged(prevSpeed);
     };
 
     @Override
     public boolean tryProcessInBasin(boolean simulate) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'tryProcessInBasin'");
+        applyBasinRecipe();
+        return true;
     };
 
     @Override
@@ -73,8 +72,11 @@ public class DynamoBlockEntity extends BasinOperatingTileEntity implements Charg
 
     @Override
     public void onChargingCompleted() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onChargingCompleted'");
+        if (chargingBehaviour.mode == ChargingBehaviour.Mode.BASIN && matchBasinRecipe(currentRecipe) && getBasin().filter(BasinTileEntity::canContinueProcessing).isPresent()) {
+			startProcessingBasin();
+		} else {
+			basinChecker.scheduleUpdate();
+        }
     };
 
     @Override

@@ -18,16 +18,19 @@ import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour.TankSegment;
+import com.simibubi.create.foundation.utility.VecHelper;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -43,6 +46,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
     private Direction pipeFace;
     private int fraction; // Where in the Tower this Bubble Cap is (0 = base (controller), 1 = first fraction, etc)
     private int ticksToFill; // How long before this Bubble Cap should start transferring from its internal Tank to its actual Tank (allowing for the illusion of Fluid 'moving up' the Tower)
+    public boolean shouldCreateParticles;
 
     private boolean isController;
     private BlockPos towerControllerPos;
@@ -58,6 +62,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
         isController = false;
         towerControllerPos = pos; // Temporary assignment
         ticksToFill = 0;
+        shouldCreateParticles = false;
     };
 
     @Override
@@ -78,7 +83,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
     @Override
     @SuppressWarnings("null")
     public void remove() {
-        if (getLevel() == null || getLevel().isClientSide()) super.remove();
+        if (!hasLevel() || getLevel().isClientSide()) super.remove();
         removeFromDistillationTower();
         super.remove();
     };
@@ -87,7 +92,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
     @SuppressWarnings("null")
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
-        if (getLevel() == null) return;
+        if (!hasLevel()) return;
         fraction = compound.getInt("Fraction");
         int[] controllerPosArray = compound.getIntArray("DistillationTowerControllerPosition");
         towerControllerPos = new BlockPos(controllerPosArray[0], controllerPosArray[1], controllerPosArray[2]);
@@ -103,6 +108,10 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
             tower = controllerBubbleCap.getDistillationTower();
         };
 
+        if (clientPacket) { // If we need to tell the client to start rendering particles
+            shouldCreateParticles = compound.getBoolean("Particles");
+        };
+
         ticksToFill = compound.getInt("TicksToFill");
         pipeFace = getBlockState().getValue(BubbleCapBlock.PIPE_FACE);
     };
@@ -116,9 +125,13 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
             compound.put("DistillationTower", tower.serializeNBT());
         };
         compound.putInt("TicksToFill", ticksToFill);
+        if (clientPacket) {
+            compound.putBoolean("Particles", shouldCreateParticles);
+        };
     };
 
     @Override
+    @SuppressWarnings("null")
     public void tick() {
         super.tick();
         if (ticksToFill > 0) {
@@ -128,20 +141,27 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
             FluidStack transferredFluid = getInternalTank().drain(TRANSFER_SPEED, FluidAction.EXECUTE);
             getTank().fill(transferredFluid, FluidAction.EXECUTE);
         };
-        if (isController && getLevel() != null) {
+        if (!hasLevel()) return;
+        if (isController && hasLevel()) {
             tower.tick(getLevel());
         };
         sendData();
+        if (shouldCreateParticles) {
+            if (getLevel().isClientSide()) { // It thinks getLevel() might be null (it can't be).
+                spawnParticles();
+            };
+            shouldCreateParticles = false; // Reset this, we've made them now
+        };
     };
 
-    public int getTankCapacity() {
+    public static int getTankCapacity() {
         return TANK_CAPACITY;
     };
 
     /**
      * The rate (mB/tick) at which Fluid is transferred from this Bubble Cap's internal Tank to its actual Tank.
      */
-    public int getTransferRate() {
+    public static int getTransferRate() {
         return TRANSFER_SPEED;
     };
 
@@ -187,6 +207,13 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
         sendData();
     };
 
+    @SuppressWarnings("null")
+    private void spawnParticles() {
+        Vec3 center = VecHelper.getCenterOf(getBlockPos());
+        if (!(hasLevel() && getLevel().isClientSide())) return;
+        getLevel().addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, center.x, center.y, center.z, 0D, 0.07D, 0D); // It thinks 'getLevel()' might be null (it can't be at this point)
+    };
+
     public void removeFromDistillationTower() {
         if (tower == null) return;
         tower.removeBubbleCap(this);
@@ -209,7 +236,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
      * Get the Distillation Tower of which this Bubble Cap is a part, assigning the Tower if necessary.
      */
     public DistillationTower getDistillationTower() {
-        if (getLevel() == null) {
+        if (!hasLevel()) {
             Destroy.LOGGER.warn("Tried to access Distillation Tower of Bubble Cap at "+getBlockPos().toShortString()+" but it has no assigned Level.");
             return null;
         };
@@ -239,7 +266,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
      */
     @SuppressWarnings("null")
     public boolean attemptRotation(boolean shouldSwitch) {
-        if (getLevel() == null) {
+        if (!hasLevel()) {
             return false;
         };
         if (getLevel().setBlockAndUpdate(getBlockPos(), ((BubbleCapBlock)getBlockState().getBlock()).stateForPositionInTower(getLevel(), getBlockPos()) // Refresh the top/bottom
@@ -258,12 +285,12 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
             DistillationTower clientTower = getDistillationTower();
             if (isController) {
                 DestroyLang.translate("tooltip.bubble_cap.input_tank")
-                    .style(ChatFormatting.GRAY)
+                    .style(ChatFormatting.WHITE)
                     .forGoggles(tooltip);
             } else {
                 DestroyLang.builder()
                     .add(Component.translatable("block.destroy.bubble_cap"))
-                    .style(ChatFormatting.GRAY)
+                    .style(ChatFormatting.WHITE)
                     .space()
                     .add(Component.literal(""+fraction+"/"+(clientTower.getHeight() - 1)))
                     .forGoggles(tooltip);

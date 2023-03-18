@@ -148,12 +148,8 @@ public class DestroyServerEvents {
 
     @SubscribeEvent
     public static void onPlayerEntersWorld(PlayerEvent.PlayerLoggedInEvent event) {
-        Destroy.LOGGER.info("Hello lets send information now");
         Player player = event.getEntity();
-        if (!(player instanceof ServerPlayer serverPlayer)) {
-            Destroy.LOGGER.info("Guy wasn't a server player so wahhh");
-            return;
-        };
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
         Level level = player.getLevel();
         level.getCapability(LevelPollutionProvider.LEVEL_POLLUTION).ifPresent(levelPollution -> {
             DestroyMessages.sendToClient(new LevelPollutionS2CPacket(levelPollution), serverPlayer);

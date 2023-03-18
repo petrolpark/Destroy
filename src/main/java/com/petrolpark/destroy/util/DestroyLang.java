@@ -55,7 +55,7 @@ public class DestroyLang {
     };
 
     /**
-     * Returns a progress bar which changes color depending on how full it is
+     * Returns a progress bar which changes color depending on how full it is.
      * @param value
      * @param maxValue Should not be greater than value
      * @return Pretty text component
@@ -65,7 +65,7 @@ public class DestroyLang {
     };
 
     /**
-     * Returns a progress bar which changes color depending on how full it is
+     * Returns a progress bar which changes color depending on how full it is.
      * @param value
      * @param maxValue Should not be greater than value
      * @param totalBars How many total bars should be displayed

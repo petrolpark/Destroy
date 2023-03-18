@@ -2,9 +2,9 @@ package com.petrolpark.destroy.networking.packet;
 
 import java.util.function.Supplier;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.capability.level.pollution.ClientLevelPollutionData;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
+import com.petrolpark.destroy.events.DestroyColorHandler;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -32,8 +32,8 @@ public class LevelPollutionS2CPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            Destroy.LOGGER.info("Yipeeee I've recieved it!!!");
-            ClientLevelPollutionData.setLevelPollution(levelPollution);
+            ClientLevelPollutionData.setLevelPollution(levelPollution); // Update the Level Pollution information
+            DestroyColorHandler.refreshSmogLevel(); // Refresh the colors of foliage
         });
         return true;
     };

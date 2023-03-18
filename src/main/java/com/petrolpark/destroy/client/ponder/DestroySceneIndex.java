@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.ponder;
+package com.petrolpark.destroy.client.ponder;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
-import com.petrolpark.destroy.capability.level.pollution.ClientLevelPollutionData;
 import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositions;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.foundation.config.AllConfigs;
@@ -15,7 +14,6 @@ import com.simibubi.create.foundation.utility.Components;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;

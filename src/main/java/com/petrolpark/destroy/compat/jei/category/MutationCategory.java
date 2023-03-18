@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.petrolpark.destroy.client.gui.DestroyGuiTextures;
 import com.petrolpark.destroy.compat.jei.animation.GUIBlockRenderer;
-import com.petrolpark.destroy.gui.DestroyGuiTextures;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.recipe.MutationRecipe;
 import com.petrolpark.destroy.util.CropMutation;

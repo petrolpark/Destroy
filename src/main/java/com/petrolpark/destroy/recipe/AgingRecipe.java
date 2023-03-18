@@ -1,12 +1,11 @@
 package com.petrolpark.destroy.recipe;
 
-import com.simibubi.create.content.contraptions.processing.ProcessingRecipe;
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder.ProcessingRecipeParams;
 
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
-public class AgingRecipe extends ProcessingRecipe<RecipeWrapper> {
+public class AgingRecipe extends SingleFluidRecipe {
 
     public AgingRecipe(ProcessingRecipeParams params) {
         super(DestroyRecipeTypes.AGING, params);
@@ -23,11 +22,6 @@ public class AgingRecipe extends ProcessingRecipe<RecipeWrapper> {
     };
 
     @Override
-    protected int getMaxFluidInputCount() {
-        return 1;
-    };
-
-    @Override
     protected int getMaxFluidOutputCount() {
         return 1;
     };
@@ -35,6 +29,11 @@ public class AgingRecipe extends ProcessingRecipe<RecipeWrapper> {
     @Override
     public boolean matches(RecipeWrapper pContainer, Level pLevel) {
         return false;
+    }
+
+    @Override
+    public String getRecipeTypeName() {
+        return "aging";
     };
     
 }

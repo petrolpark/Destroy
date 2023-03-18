@@ -1,7 +1,6 @@
 package com.petrolpark.destroy.events;
 
 import com.petrolpark.destroy.Destroy;
-import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.capability.level.pollution.ClientLevelPollutionData;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
@@ -23,6 +22,7 @@ public class DestroyColorHandler {
 
     private static int cachedStartColor = 0;
     private static int cachedTransformedColor = 0;
+    private static boolean shouldRefresh = true;
 
     /**
      * Override all the color generators to account for the {@link com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType smog level}.
@@ -30,17 +30,21 @@ public class DestroyColorHandler {
      */
     @SubscribeEvent
     public static void changeBlockColors(RegisterColorHandlersEvent.Block event) {
-        Destroy.LOGGER.info("Look at me loading block colors");
         event.register((state, blockAndTintGetter, pos, tintIndex) -> {
-                return blockAndTintGetter != null && pos != null ? withSmogTint(BiomeColors.getAverageGrassColor(blockAndTintGetter, pos))  : GrassColor.get(0.5D, 1.0D);
-            }, DestroyBlocks.MASHED_POTATO_BLOCK.get(), Blocks.GRASS_BLOCK);
+            return blockAndTintGetter != null && pos != null ? withSmogTint(BiomeColors.getAverageGrassColor(blockAndTintGetter, pos))  : GrassColor.get(0.5D, 1.0D);
+        }, Blocks.GRASS_BLOCK);
     };
 
     private static int withSmogTint(int color) {
-        if (color == cachedStartColor) return cachedTransformedColor; // To avoid calculating the same color transformation over and over, store the last transformed color, and if the color to be transformed is the same as before, use the previous transformation result
-        Destroy.LOGGER.info("Switching thing now");
+        if (color == cachedStartColor && !shouldRefresh) return cachedTransformedColor; // To avoid calculating the same color transformation over and over, store the last transformed color, and if the color to be transformed is the same as before, use the previous transformation result
+        
+        // Refresh the Smog Level
+        LevelPollution levelPollution = ClientLevelPollutionData.getLevelPollution();
+        smogProportion = levelPollution == null ? 0f : (float) levelPollution.get(PollutionType.SMOG) / PollutionType.SMOG.max;
+        shouldRefresh = false; // Reset this nonsense
+
+        // Update the stored color
         cachedStartColor = color;
-        refreshSmogLevel();
         cachedTransformedColor = Color.mixColors(color, brown, smogProportion);
         return cachedTransformedColor;
     };
@@ -49,7 +53,6 @@ public class DestroyColorHandler {
      * Let the Client know that the level of Smog in the Level has changed.
      */
     public static void refreshSmogLevel() {
-        LevelPollution levelPollution = ClientLevelPollutionData.getLevelPollution();
-        smogProportion = levelPollution == null ? 0f : (float) levelPollution.get(PollutionType.SMOG) / PollutionType.SMOG.max;
+        shouldRefresh = true;
     };
 };

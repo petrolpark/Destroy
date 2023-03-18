@@ -38,4 +38,8 @@ public class DestroyMessages {
     public static <MSG> void sendToClient(MSG message, ServerPlayer player) {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
     };
+
+    public static <MSG> void sendToAllClients(MSG message) {
+        INSTANCE.send(PacketDistributor.ALL.noArg(), message);
+    };
 }

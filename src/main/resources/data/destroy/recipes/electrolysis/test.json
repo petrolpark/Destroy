@@ -1,0 +1,13 @@
+{
+    "type": "destroy:electrolysis",
+    "ingredients": [
+      {
+        "item": "minecraft:coal"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:diamond"
+      }
+    ]
+  }

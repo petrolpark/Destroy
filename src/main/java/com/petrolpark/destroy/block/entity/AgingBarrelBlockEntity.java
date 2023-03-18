@@ -76,7 +76,7 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
      */
     @SuppressWarnings("null")
     public void checkRecipe() {
-        if (getLevel() == null || getLevel().isClientSide()) return;
+        if (!hasLevel() || getLevel().isClientSide()) return;
         List<Recipe<?>> allRecipes = RecipeFinder.get(agingRecipeKey, level, r -> r.getType() == DestroyRecipeTypes.AGING.getType());
         List<Recipe<?>> possibleRecipes = allRecipes.stream().filter(r -> {
             AgingRecipe recipe = (AgingRecipe) r;
@@ -170,7 +170,7 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
 
     @SuppressWarnings("null") // It's not null I checked
     public void onTimerChange() {
-        if (getLevel() == null) return;
+        if (!hasLevel()) return;
         BlockState oldState = getBlockState();
         BlockState newState = getBlockState();
         newState = oldState.setValue(AgingBarrelBlock.IS_OPEN, timer < 0);
@@ -195,7 +195,7 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
      */
     @SuppressWarnings("null")
     public boolean tryOpen() {
-        if (getLevel() == null || getLevel().isClientSide()) return false;
+        if (!hasLevel() || getLevel().isClientSide()) return false;
         if (timer == 0) {
             timer = -1;
             onTimerChange();

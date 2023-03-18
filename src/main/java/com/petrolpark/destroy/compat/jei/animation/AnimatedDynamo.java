@@ -4,9 +4,16 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.partial.DestroyBlockPartials;
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 
 public class AnimatedDynamo extends AnimatedKinetics {
+
+	private boolean basin;
+
+	public AnimatedDynamo(boolean basin) {
+		this.basin = basin;
+	};
 
     @Override
     public void draw(PoseStack matrixStack, int xOffset, int yOffset) {
@@ -26,6 +33,13 @@ public class AnimatedDynamo extends AnimatedKinetics {
 			.atLocal(0, 0, 0)
 			.scale(scale)
 			.render(matrixStack);
+
+		if (basin) {
+			blockElement(AllBlocks.BASIN.getDefaultState())
+				.atLocal(0, 1.65, 0)
+				.scale(scale)
+				.render(matrixStack);
+		};
 
 		matrixStack.popPose();
     };

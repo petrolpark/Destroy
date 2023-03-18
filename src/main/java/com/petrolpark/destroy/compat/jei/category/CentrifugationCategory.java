@@ -1,8 +1,8 @@
 package com.petrolpark.destroy.compat.jei.category;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.petrolpark.destroy.client.gui.DestroyGuiTextures;
 import com.petrolpark.destroy.compat.jei.animation.AnimatedCentrifuge;
-import com.petrolpark.destroy.gui.DestroyGuiTextures;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.foundation.fluid.FluidIngredient;

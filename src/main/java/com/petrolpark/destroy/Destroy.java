@@ -8,6 +8,8 @@ import com.petrolpark.destroy.chemistry.index.DestroyGenericReactions;
 import com.petrolpark.destroy.chemistry.index.DestroyGroupFinder;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.DestroyReactions;
+import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
+import com.petrolpark.destroy.client.ponder.DestroySceneIndex;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.fluid.DestroyFluids;
@@ -15,7 +17,6 @@ import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.DestroyPotatoCannonProjectileTypes;
 import com.petrolpark.destroy.item.HyperaccumulatingFertilizerItem;
 import com.petrolpark.destroy.networking.DestroyMessages;
-import com.petrolpark.destroy.ponder.DestroySceneIndex;
 import com.petrolpark.destroy.recipe.DestroyCropMutations;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
@@ -72,6 +73,7 @@ public class Destroy {
         DestroyMobEffects.register(modEventBus);
         DestroyItems.register();
         DestroyRecipeTypes.register(modEventBus);
+        DestroyParticleTypes.register(modEventBus);
         DestroyFluids.register();
         DestroyOreFeatureConfigEntries.init();
         DestroySoundEvents.register(modEventBus);
@@ -93,6 +95,7 @@ public class Destroy {
         // Initiation Events
         modEventBus.addListener(Destroy::init);
         modEventBus.addListener(Destroy::clientInit);
+        modEventBus.addListener(DestroyParticleTypes::registerProviders);
         modEventBus.addListener(EventPriority.LOWEST, Destroy::gatherData);
 
         // Client

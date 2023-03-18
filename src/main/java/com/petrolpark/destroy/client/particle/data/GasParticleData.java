@@ -1,0 +1,117 @@
+package com.petrolpark.destroy.client.particle.data;
+
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
+import com.petrolpark.destroy.client.particle.GasParticle;
+import com.simibubi.create.content.contraptions.particle.ICustomParticleDataWithSprite;
+import com.simibubi.create.foundation.utility.RegisteredObjects;
+
+import net.minecraft.client.particle.ParticleEngine.SpriteParticleRegistration;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.fluids.FluidStack;
+
+
+public class GasParticleData implements ParticleOptions, ICustomParticleDataWithSprite<GasParticleData> {
+
+    private ParticleType<GasParticleData> type; // What type of particle this is (Distillation, etc.)
+	private FluidStack fluid; // The fluid stack this of which this Particle is meant to be a gas cloud
+    private int blockHeight; // How many blocks upwards this Particle should float (used if it is in a Distillation Tower)
+
+    /**
+     * Empty constructor to use in {@link com.petrolpark.destroy.client.particle.DestroyParticleTypes registration}.
+     */
+    public GasParticleData() {};
+
+    /**
+     * Get the Fluid stack which this gas Particle represents.
+     */
+    public FluidStack getFluid() {
+        return fluid;
+    };
+
+    /**
+     * How high this Particle should float before disappearing.
+     */
+    public int getBlockHeight() {
+        return blockHeight;
+    };
+
+	public GasParticleData(ParticleType<?> type, FluidStack fluid) {
+		this(type, fluid, 0);
+	};
+
+    /**
+     * A Particle with the apperance of a cloud of smoke and the color of a given Fluid.
+     * @param type See {@link com.petrolpark.destroy.client.particle.DestroyParticleTypes here}
+     * @param fluid The Fluid of which this Particle should take the appearance
+     * @param blocks How many blocks upward this Particle should float before disappearing (used for the {@link com.petrolpark.destroy.block.entity.BubbleCapBlockEntity#spawnParticles Distillation Tower})
+     */
+    @SuppressWarnings("unchecked")
+    public GasParticleData(ParticleType<?> type, FluidStack fluid, int blockHeight) {
+        this.type = (ParticleType<GasParticleData>) type;
+        this.fluid = fluid;
+        this.blockHeight = blockHeight;
+    };
+
+    public static final Codec<GasParticleData> DISTILLATION_CODEC = RecordCodecBuilder.create(i -> i
+		.group(
+            FluidStack.CODEC.fieldOf("fluid").forGetter(p -> p.fluid),
+            Codec.INT.fieldOf("blockHeight").forGetter(p -> p.blockHeight)
+        ).apply(i, (fluidStack, blockHeight) -> new GasParticleData(DestroyParticleTypes.DISTILLATION.get(), fluidStack, blockHeight))
+    );
+
+    @SuppressWarnings("deprecation") // Deserializer is deprecated
+    public static final ParticleOptions.Deserializer<GasParticleData> DESERIALIZER =
+		new ParticleOptions.Deserializer<GasParticleData>() {
+
+            // Currently no command capability exists for fluid-based particles, so just make it water
+            @Override
+			public GasParticleData fromCommand(ParticleType<GasParticleData> particleTypeIn, StringReader reader) throws CommandSyntaxException {
+				return new GasParticleData(particleTypeIn, new FluidStack(Fluids.WATER, 1), 5);
+			};
+
+            @Override
+			public GasParticleData fromNetwork(ParticleType<GasParticleData> particleTypeIn, FriendlyByteBuf buffer) {
+				return new GasParticleData(particleTypeIn, buffer.readFluidStack(), buffer.readInt());
+			};
+		};
+
+    @Override
+    public Codec<GasParticleData> getCodec(ParticleType<GasParticleData> type) {
+        return DISTILLATION_CODEC; //TODO properly check the type and add default codec
+    };
+
+    @Override
+    @SuppressWarnings("deprecation") // Deserializer is deprecated
+    public Deserializer<GasParticleData> getDeserializer() {
+        return DESERIALIZER;
+    };
+
+
+    @Override
+    public ParticleType<GasParticleData> getType() {
+        return type;
+    };
+
+    @Override
+    public void writeToNetwork(FriendlyByteBuf buffer) {
+        buffer.writeFluidStack(fluid);
+        buffer.writeInt(blockHeight);
+    };
+
+    @Override
+    public String writeToString() {
+        return RegisteredObjects.getKeyOrThrow(type) + " " + RegisteredObjects.getKeyOrThrow(fluid.getFluid());
+    };
+
+    @Override
+    public SpriteParticleRegistration<GasParticleData> getMetaFactory() {
+        return GasParticle.Provider::new;
+    };
+};

@@ -6,6 +6,7 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.item.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.content.AllSections;
+import com.simibubi.create.content.contraptions.components.AssemblyOperatorBlockItem;
 import com.simibubi.create.foundation.block.BlockStressDefaults;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -68,7 +69,7 @@ public class DestroyBlocks {
             .noOcclusion()
         ).blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
         .transform(TagGen.pickaxeOnly())
-        .transform(BlockStressDefaults.setImpact(8.0))
+        .transform(BlockStressDefaults.setImpact(5.0))
         .item()
         .transform(customItemModel())
         .register();
@@ -80,8 +81,8 @@ public class DestroyBlocks {
             .noOcclusion()
         ).blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p)))
         .transform(TagGen.pickaxeOnly())
-        .transform(BlockStressDefaults.setImpact(8.0))
-        .item()
+        .transform(BlockStressDefaults.setImpact(6.0))
+        .item(AssemblyOperatorBlockItem::new)
         .transform(customItemModel())
         .register();
 

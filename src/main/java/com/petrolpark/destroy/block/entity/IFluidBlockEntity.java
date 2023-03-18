@@ -39,7 +39,7 @@ public interface IFluidBlockEntity {
      */
     @SuppressWarnings("null")
     public default Direction refreshDirection(SmartTileEntity be, Direction currentDirection, FluidTank tank, boolean output) {
-        if (be.getLevel() == null || currentDirection.getAxis() == Direction.Axis.Y) { // If the level doesn't exist (low-key no idea how this error even occured), or the side is UP or DOWN, fix this
+        if (!be.hasLevel() || currentDirection.getAxis() == Direction.Axis.Y) { // If the level doesn't exist (low-key no idea how this error even occured), or the side is UP or DOWN, fix this
             return Direction.NORTH;
         };
         Direction direction = currentDirection;

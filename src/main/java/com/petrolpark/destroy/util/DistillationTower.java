@@ -23,14 +23,17 @@ import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 public class DistillationTower {
 
     private static final Object distillationRecipeKey = new Object();
+    private static final int PROCESS_TIME = 100; // How often (in ticks) to attempt processing
 
     private BlockPos position; // The bottom of the Distillation Tower
     private List<BubbleCapBlockEntity> fractions;
     private DistillationRecipe lastRecipe;
+    private int tick;
 
     public DistillationTower(Level level, BlockPos controllerPos) { // Create a new Distillation Tower from scratch
         position = controllerPos;
         fractions = new ArrayList<>();
+        tick = PROCESS_TIME;
         int i = 0;
         while (true) {
             BlockEntity be = level.getBlockEntity(controllerPos.above(i));
@@ -48,6 +51,7 @@ public class DistillationTower {
 
     public DistillationTower(CompoundTag compound, Level level, BlockPos pos) { // Create a new Distillation Tower from NBT
         position = pos;
+        tick = compound.getInt("Tick");
         int height = compound.getInt("Height");
         fractions = new ArrayList<>();
         for (int i = 0; i < height; i++) {
@@ -100,8 +104,14 @@ public class DistillationTower {
     };
 
     public void tick(Level level) {
-        findRecipe(level);
-        process();
+        tick--;
+        if (tick <= 0) {
+            findRecipe(level);
+            if (process()) { // Attempt to process the contents of the thing
+                getControllerBubbleCap().shouldCreateParticles = true; // Let the controller know it should make particles (has to be done on client side; we are currently on server)
+            };
+            tick = PROCESS_TIME; // Reset counter
+        };
     };
 
     public void findRecipe(Level level) {
@@ -139,7 +149,7 @@ public class DistillationTower {
                     return false;
                 };
                 if (!simulate) {
-                    bubbleCap.setTicksToFill(i * bubbleCap.getTankCapacity() / bubbleCap.getTransferRate());
+                    bubbleCap.setTicksToFill(i * BubbleCapBlockEntity.getTankCapacity() / BubbleCapBlockEntity.getTransferRate());
                 };
             };
         };
@@ -152,6 +162,7 @@ public class DistillationTower {
     public CompoundTag serializeNBT() {
         CompoundTag compound = new CompoundTag();
         compound.putInt("Height", getHeight());
+        compound.putInt("Tick", tick);
         return compound;
     };
 
