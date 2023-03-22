@@ -11,6 +11,7 @@ import com.petrolpark.destroy.chemistry.index.DestroyReactions;
 /**
  * Used during development for testing aspects of the Chemistry system without having to run the whole game.
  */
+@SuppressWarnings("unused")
 public class Test {
 
     public static void main(String args[]) {

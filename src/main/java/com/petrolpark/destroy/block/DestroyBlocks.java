@@ -104,6 +104,24 @@ public class DestroyBlocks {
         REGISTRATE.startSection(AllSections.MATERIALS);
     };
 
+    // EXPLOSIVES
+
+    public static final BlockEntry<Block> ANFO_BLOCK = REGISTRATE.block("anfo_block", Block::new)
+        .initialProperties(() -> Blocks.TNT)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_PINK)
+        ).item()
+        .build()
+        .register();
+
+    public static final BlockEntry<Block> CORDITE_BLOCK = REGISTRATE.block("cordite_block", Block::new)
+        .initialProperties(() -> Blocks.TNT)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_ORANGE)
+        ).item()
+        .build()
+        .register();
+
     // STORAGE BLOCKS
 
     public static final BlockEntry<Block> FLUORITE_BLOCK = REGISTRATE.block("fluorite_block", Block::new)
@@ -370,7 +388,9 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.COLOR_YELLOW)
             .sound(SoundType.SLIME_BLOCK)
-        ).register();
+        ).item()
+        .build()
+        .register();
 
     public static final BlockEntry<RotatedPillarBlock> RAW_FRIES_BLOCK = REGISTRATE.block("raw_fries_block", RotatedPillarBlock::new)
         .initialProperties(() -> Blocks.CLAY)
@@ -393,7 +413,7 @@ public class DestroyBlocks {
             .friction(1.1f)
             .noOcclusion()
             .sound(SoundType.SLIME_BLOCK)
-        ).item()
+        ).transform(TagGen.tagBlockAndItem("storage_blocks/fluorite"))
         .build()
         .register();
 

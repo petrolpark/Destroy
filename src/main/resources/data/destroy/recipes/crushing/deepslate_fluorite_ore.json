@@ -1,0 +1,26 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "destroy:deepslate_fluorite_ore"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:fluorite"
+      },
+      {
+        "item": "destroy:fluorite",
+        "chance": 0.75
+      },
+      {
+        "item": "create:experience_nugget",
+        "chance": 0.75
+      },
+      {
+        "item": "minecraft:cobbled_deepslate",
+        "chance": 0.125
+      }
+    ],
+    "processingTime": 250
+}

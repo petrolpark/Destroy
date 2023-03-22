@@ -1,0 +1,8 @@
+{
+    "parent": "minecraft:block/cube_bottom_top",
+    "textures": {
+        "bottom": "destroy:block/anfo_bottom",
+        "side": "destroy:block/anfo_side",
+        "top": "destroy:block/anfo_top"
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "type": "create:mechanical_crafting",
+    "pattern": [
+      " PSP ",
+      "PCECP",
+      "PCECP",
+      "PCCCP",
+      " PPP "
+    ],
+    "key": {
+      "P":{
+        "tag": "destroy:plastic"
+      },
+      "S": {
+        "item": "minecraft:string"
+      },
+      "E": {
+        "tag": "destroy:explosive/primary"
+      },
+      "C": {
+        "item": "destroy:cordite"
+      }
+    },
+    "result": {
+      "item": "destroy:cordite_block",
+      "count": 3
+    },
+    "acceptMirrored": false
+  }

@@ -1,0 +1,22 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "item": "minecraft:tuff"
+      },
+      {
+        "item": "minecraft:tuff"
+      },
+      {
+        "item": "destroy:silica"
+      },
+      {
+        "item": "destroy:silica"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:zeolite"
+      }
+    ]
+  }

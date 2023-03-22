@@ -1,0 +1,25 @@
+{
+    "type": "create:compacting",
+    "ingredients": [
+      {
+        "item": "destroy:chalk_dust"
+      },
+      {
+        "item": "destroy:chalk_dust"
+      },
+      {
+        "item": "destroy:chalk_dust"
+      },
+      {
+        "item": "destroy:chalk_dust"
+      },
+      {
+        "item": "destroy:chalk_dust"
+      }
+    ],
+    "results": [
+      {
+        "item": "create:limestone"
+      }
+    ]
+  }

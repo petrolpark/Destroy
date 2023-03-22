@@ -1,0 +1,14 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+      {
+        "tag": "forge:raw_materials/sulfur"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:yellow_dye"
+      }
+    ],
+    "processingTime": 150
+}

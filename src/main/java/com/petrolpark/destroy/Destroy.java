@@ -13,6 +13,7 @@ import com.petrolpark.destroy.client.ponder.DestroySceneIndex;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.fluid.DestroyFluids;
+import com.petrolpark.destroy.item.DestroyCompostables;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.DestroyPotatoCannonProjectileTypes;
 import com.petrolpark.destroy.item.HyperaccumulatingFertilizerItem;
@@ -21,6 +22,7 @@ import com.petrolpark.destroy.recipe.DestroyCropMutations;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.DestroyTags;
+import com.petrolpark.destroy.village.DestroyVillagers;
 import com.petrolpark.destroy.world.DestroyOreFeatureConfigEntries;
 import com.petrolpark.destroy.world.DestroyWorldGen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -79,6 +81,7 @@ public class Destroy {
         DestroySoundEvents.register(modEventBus);
         DestroyCropMutations.register();
         DestroyWorldGen.register(modEventBus);
+        DestroyVillagers.register(modEventBus);
 
         // Chemistry
         // DestroyGroupFinder.register();
@@ -107,6 +110,8 @@ public class Destroy {
     public static void init(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             DestroyMessages.register();
+            DestroyCompostables.register();
+            DestroyVillagers.registerPOIs();
         });
         DestroyPotatoCannonProjectileTypes.register();
         HyperaccumulatingFertilizerItem.registerDispenserBehaviour();

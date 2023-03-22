@@ -1,6 +1,5 @@
 package com.petrolpark.destroy.item;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.util.CropMutation;
 
 import net.minecraft.core.BlockPos;
@@ -87,7 +86,6 @@ public class HyperaccumulatingFertilizerItem extends BoneMealItem {
                 return stack;
             };
         });
-        Destroy.LOGGER.info("Registered Dispenser Behaviour for Hyperacummulating Fertilizer.");
     };
     
 };

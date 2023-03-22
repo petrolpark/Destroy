@@ -1,0 +1,8 @@
+{
+    "parent": "minecraft:block/cube_bottom_top",
+    "textures": {
+        "bottom": "destroy:block/cordite_bottom",
+        "side": "destroy:block/cordite_side",
+        "top": "destroy:block/cordite_top"
+    }
+}

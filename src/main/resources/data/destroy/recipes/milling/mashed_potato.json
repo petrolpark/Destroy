@@ -1,0 +1,15 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+      {
+        "item": "destroy:mashed_potato"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:crushed_rhodium_ore",
+        "chance": 0.005
+      }
+    ],
+    "processingTime": 50
+  }

@@ -1,0 +1,20 @@
+{
+    "type": "create:compacting",
+    "ingredients": [
+      {
+        "item": "destroy:polystyrene_butadiene"
+      },
+      {
+        "tag": "minecraft:coals"
+      },
+      {
+        "tag": "destroy:vulcanizer"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:rubber"
+      }
+    ],
+    "heatRequirement": "heated"
+  }

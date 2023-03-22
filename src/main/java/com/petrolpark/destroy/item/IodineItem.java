@@ -33,9 +33,10 @@ public class IodineItem extends Item {
 
             itemEntity.kill(); //remove thrown Iodine (otherwise for some reason it executes twice)
             dummyDragon.kill(); //remove the dummy Dragon
+            return true;
         };
 
-        return false; //continue to do all normal tick behaviour
-    }
+        return super.onEntityItemUpdate(itemStack, itemEntity);
+    };
     
 }

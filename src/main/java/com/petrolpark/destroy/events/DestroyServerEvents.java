@@ -1,13 +1,18 @@
 package com.petrolpark.destroy.events;
 
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -19,6 +24,8 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.SleepFinishedTimeEvent;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -39,7 +46,12 @@ import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.SyringeItem;
 import com.petrolpark.destroy.networking.DestroyMessages;
 import com.petrolpark.destroy.networking.packet.LevelPollutionS2CPacket;
+import com.petrolpark.destroy.village.DestroyTrades;
+import com.petrolpark.destroy.village.DestroyVillageAddition;
+import com.petrolpark.destroy.village.DestroyVillagers;
 import com.petrolpark.destroy.world.DestroyDamageSources;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 @Mod.EventBusSubscriber(modid = Destroy.MOD_ID)
 public class DestroyServerEvents {
@@ -120,12 +132,14 @@ public class DestroyServerEvents {
     @SubscribeEvent
     public static void playerHearsSound(PlayLevelSoundEvent.AtPosition event) {
         switch (event.getSource()) {
+            // Ignore these sounds:
             case AMBIENT:
             case PLAYERS:
             case MUSIC:
             case VOICE:
             case NEUTRAL:
-                break; // Ignore certain sounds
+                break;
+            // Don't ignore these sounds:
             // case BLOCKS:
             // case HOSTILE:
             // case MASTER:
@@ -182,5 +196,25 @@ public class DestroyServerEvents {
         if (!(itemStack.getItem() instanceof SyringeItem syringeItem)) return;
         syringeItem.onInject(itemStack, attacker.getLevel(), event.getEntity());
         livingAttacker.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(DestroyItems.SYRINGE.get()));
+    };
+
+    @SubscribeEvent
+    public static void addVillagerTrades(VillagerTradesEvent event) {
+        if (event.getType() == DestroyVillagers.INNKEEPER.get()) {
+            Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
+            trades.get(1).addAll(DestroyTrades.INNKEEPER_NOVICE_TRADES);
+            trades.get(2).addAll(DestroyTrades.INNKEEPER_APPRENTICE_TRADES);
+            trades.get(3).addAll(DestroyTrades.INNKEEPER_JOURNEYMAN_TRADES);
+            trades.get(4).addAll(DestroyTrades.INNKEEPER_EXPERT_TRADES);
+            trades.get(5).addAll(DestroyTrades.INNKEEPER_MASTER_TRADES);
+        };
+    };
+
+    @SubscribeEvent
+    public static void addVillagerBuildings(ServerAboutToStartEvent event) {
+        Registry<StructureTemplatePool> templatePoolRegistry = event.getServer().registryAccess().registry(Registry.TEMPLATE_POOL_REGISTRY).orElseThrow();
+        Registry<StructureProcessorList> processorListRegistry = event.getServer().registryAccess().registry(Registry.PROCESSOR_LIST_REGISTRY).orElseThrow();
+        
+        DestroyVillageAddition.addBuildingToPool(templatePoolRegistry, processorListRegistry, new ResourceLocation("minecraft:village/plains/houses"), "destroy:plains_inn", 250);
     };
 };

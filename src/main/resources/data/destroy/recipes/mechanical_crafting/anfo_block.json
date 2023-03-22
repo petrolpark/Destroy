@@ -1,0 +1,29 @@
+{
+    "type": "create:mechanical_crafting",
+    "pattern": [
+      " PSP ",
+      "PAEAP",
+      "PAEAP",
+      "PAAAP",
+      " PPP "
+    ],
+    "key": {
+      "P":{
+        "tag": "destroy:plastic"
+      },
+      "S": {
+        "item": "minecraft:string"
+      },
+      "E": {
+        "tag": "destroy:explosive/primary"
+      },
+      "A": {
+        "item": "destroy:anfo"
+      }
+    },
+    "result": {
+      "item": "destroy:anfo_block",
+      "count": 3
+    },
+    "acceptMirrored": false
+  }

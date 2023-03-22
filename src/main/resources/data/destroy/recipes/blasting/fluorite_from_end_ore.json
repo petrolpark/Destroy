@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:blasting",
+    "ingredient": {
+      "item": "destroy:end_fluorite_ore"
+    },
+    "result": "destroy:fluorite",
+    "experience": 1.0,
+    "cookingtime": 100
+  }

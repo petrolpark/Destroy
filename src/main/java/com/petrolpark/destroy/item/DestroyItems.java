@@ -14,6 +14,7 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.BowlFoodItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.RecordItem;
@@ -69,10 +70,10 @@ public class DestroyItems {
     // INGOTS ETC
 
     FLUORITE = REGISTRATE.item("fluorite", Item::new)
-        .tag(DestroyItemTags.SALT.tag, forgeItemTag("raw_material/fluorite"), ItemTags.BEACON_PAYMENT_ITEMS)
+        .tag(DestroyItemTags.SALT.tag, forgeItemTag("raw_materials/fluorite"), ItemTags.BEACON_PAYMENT_ITEMS)
         .register(),
     NICKEL_INGOT = REGISTRATE.item("nickel_ingot", Item::new)
-        .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/palladium"), Tags.Items.INGOTS)
+        .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/nickel"), Tags.Items.INGOTS)
         .register(),
     PALLADIUM_INGOT = REGISTRATE.item("palladium_ingot", Item::new)
         .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/palladium"), Tags.Items.INGOTS)
@@ -94,6 +95,9 @@ public class DestroyItems {
         .register(),
     ZINC_DUST = REGISTRATE.item("zinc_dust", Item::new)
         .tag(forgeItemTag("dusts/zinc"), Tags.Items.DUSTS)
+        .register(),
+    ZINC_SHEET = REGISTRATE.item("zinc_sheet", Item::new)
+        .tag(forgeItemTag("plates/zinc"))
         .register(),
 
     // RAW MATERIALS
@@ -132,12 +136,17 @@ public class DestroyItems {
         .register(),
     NICKEL_HYDRAZINE_NITRATE = REGISTRATE.item("nickel_hydrazine_nitrate", Item::new)
         .tag(DestroyItemTags.PRIMARY_EXPLOSIVE.tag, Tags.Items.DUSTS)
-        .register(),
-    TOUCH_POWDER = REGISTRATE.item("touch_powder", Item::new)
+        .register();
+
+    public static final ItemEntry<ContactExplosiveItem>
+
+    TOUCH_POWDER = REGISTRATE.item("touch_powder", ContactExplosiveItem::new)
         .tag(DestroyItemTags.PRIMARY_EXPLOSIVE.tag, Tags.Items.DUSTS)
-        .register(),
+        .register();
 
     // SECONDARY EXPLOSIVES
+
+    public static final ItemEntry<Item>
 
     ANFO = REGISTRATE.item("anfo", Item::new)
         .tag(DestroyItemTags.SECONDARY_EXPLOSIVE.tag, Tags.Items.DUSTS)
@@ -271,16 +280,10 @@ public class DestroyItems {
     DIRTY_SILICA = REGISTRATE.item("dirty_silica", Item::new)
         .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
         .register(),
-    ACETONE_COATED_SILICA = REGISTRATE.item("acetone_coated_silica", Item::new)
-        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
-        .register(),
     COPPER_COATED_SILICA = REGISTRATE.item("copper_coated_silica", Item::new)
         .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
         .register(),
     IRON_COATED_SILICA = REGISTRATE.item("iron_coated_silica", Item::new)
-        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
-        .register(),
-    LIMEWATER_COATED_SILICA = REGISTRATE.item("limewater_coated_silica", Item::new)
         .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
         .register(),
     NICKEL_COATED_SILICA = REGISTRATE.item("nickel_coated_silica", Item::new)
@@ -290,12 +293,6 @@ public class DestroyItems {
         .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
         .register(),
     RHODIUM_COATED_SILICA = REGISTRATE.item("rhodium_coated_silica", Item::new)
-        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
-        .register(),
-    SODIUM_ACETATE_COATED_SILICA = REGISTRATE.item("sodium_acetate_coated_silica", Item::new)
-        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
-        .register(),
-    SULFURIC_ACID_COATED_SILICA = REGISTRATE.item("sulfuric_acid_coated_silica", Item::new)
         .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
         .register(),
     
@@ -353,6 +350,13 @@ public class DestroyItems {
             .food(DestroyFoods.POTATE_O)
         ).tag(Tags.Items.CROPS)
         .register();
+
+    public static final ItemEntry<BowlFoodItem>
+    
+    BANGERS_AND_MASH = REGISTRATE.item("bangers_and_mash", BowlFoodItem::new)
+        .properties(p -> p
+            .food(DestroyFoods.BANGERS_AND_MASH)
+        ).register();
 
     public static final ItemEntry<AlcoholicDrinkItem>
 
@@ -536,16 +540,17 @@ public class DestroyItems {
 
     public static final ItemEntry<AspirinSyringeItem> ASPIRIN_SYRINGE = REGISTRATE.item("aspirin_syringe", AspirinSyringeItem::new)
         .tag(DestroyItemTags.SYRINGE.tag)
+        .color(() -> () -> (stack, tintIndex) -> tintIndex == 0 ? 16716136 : -1)
+        .register();
+
+    public static final ItemEntry<BabyBlueSyringeItem> BABY_BLUE_SYRINGE = REGISTRATE.item("baby_blue_syringe", p -> new BabyBlueSyringeItem(p, 1200, 1))
+        .tag(DestroyItemTags.SYRINGE.tag)
+        .color(() -> () -> (stack, tintIndex) -> tintIndex == 0 ? 8825802 : -1)
         .register();
 
     public static final ItemEntry<SyringeItem> CISPLATIN_SYRINGE = REGISTRATE.item("cisplatin_syringe", SyringeItem::new)
         .tag(DestroyItemTags.SYRINGE.tag)
-        .register();
-
-    public static final ItemEntry<BabyBlueSyringeItem>
-    
-    BABY_BLUE_SYRINGE = REGISTRATE.item("baby_blue_syringe", p -> new BabyBlueSyringeItem(p, 1200, 1))
-        .tag(DestroyItemTags.SYRINGE.tag)
+        .color(() -> () -> (stack, tintIndex) -> tintIndex == 0 ? 11459547 : -1)
         .register();
 
     // UNCATEGORISED

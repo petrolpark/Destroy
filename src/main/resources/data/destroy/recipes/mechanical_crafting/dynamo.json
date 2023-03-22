@@ -1,0 +1,34 @@
+{
+    "type": "create:mechanical_crafting",
+    "pattern": [
+      "TGT",
+      "PCP",
+      "PRP",
+      "B B"
+    ],
+    "key": {
+      "T":{
+        "item": "create:electron_tube"
+      },
+      "G": {
+        "item": "create:cogwheel"
+      },
+      "P": {
+        "tag": "forge:ingots/copper"
+      },
+      "C": {
+        "item": "create:brass_casing"
+      },
+      "R": {
+        "tag": "forge:raw_materials/iron"
+      },
+      "B": {
+        "tag": "forge:storage_blocks/coal"
+      }
+    },
+    "result": {
+      "item": "destroy:dynamo",
+      "count": 1
+    },
+    "acceptMirrored": false
+  }

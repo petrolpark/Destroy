@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
+        "tag": "destroy:hefty_beetroot"
+      },
+      {
+        "tag": "destroy:hefty_beetroot"
+      },
+      {
+        "item": "minecraft:bowl"
+      }
+    ],
+    "result": {
+      "item": "minecraft:beetroot_soup"
+    }
+  }

@@ -1,0 +1,13 @@
+{
+    "type": "create:pressing",
+    "ingredients": [
+      {
+        "item": "destroy:paper_pulp"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:paper"
+      }
+    ]
+  }

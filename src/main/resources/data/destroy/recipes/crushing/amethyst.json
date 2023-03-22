@@ -1,0 +1,15 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "item": "minecraft:amethyst_shard"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:silica",
+        "chance": 0.2
+      }
+    ],
+    "processingTime": 100
+  }

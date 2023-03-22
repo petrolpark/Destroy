@@ -211,6 +211,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
     private void spawnParticles() {
         Vec3 center = VecHelper.getCenterOf(getBlockPos());
         if (!(hasLevel() && getLevel().isClientSide())) return;
+        Destroy.LOGGER.info("Look at me im making a particle yippeee");
         getLevel().addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, center.x, center.y, center.z, 0D, 0.07D, 0D); // It thinks 'getLevel()' might be null (it can't be at this point)
     };
 

@@ -1,0 +1,14 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+      {
+        "item": "destroy:baby_blue_crystal"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:baby_blue_powder"
+      }
+    ],
+    "processingTime": 100
+  }
