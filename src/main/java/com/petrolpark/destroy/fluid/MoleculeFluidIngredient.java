@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gson.JsonObject;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 
 import net.minecraft.nbt.CompoundTag;
@@ -56,9 +57,13 @@ public class MoleculeFluidIngredient extends FluidIngredient {
     // As far as I can tell this is only used for displaying (e.g. in JEI) so a comprehensive list isn't required.
     @Override
     protected List<FluidStack> determineMatchingFluidStacks() {
-        Mixture mixture = new Mixture();
-        mixture.addMolecule(molecule, concentration);
-        return List.of(MixtureFluid.of(amountRequired, mixture));
+        FluidStack fluidStack = new FluidStack(DestroyFluids.MIXTURE.get(), amountRequired);
+        CompoundTag fluidTag = fluidStack.getOrCreateTag();
+        // To avoid having to regenerate the Mixture every tick, generate all the information we need here, stick it in the NBT and just read it off when needed.
+        fluidTag.putString("DisplayName", ReadOnlyMixture.readNBT(fluidTag.getCompound("Mixture")).getName().getString());
+        fluidTag.putString("IngredientMolecule", molecule.getFullID());
+        fluidTag.putFloat("IngredientConcentration", concentration);
+        return List.of(fluidStack);
     };
 
 };

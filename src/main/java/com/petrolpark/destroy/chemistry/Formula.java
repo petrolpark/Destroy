@@ -15,12 +15,11 @@ import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Node;
 
+/**
+ * A Formula is all the Atoms in a Molecule, and the Bonds that those Atoms have to other Atoms - its 'structure'.
+ * For convinience, the functional Groups present in the Molecule are also stored here.
+ */
 public class Formula implements Cloneable {
-
-    /**
-     * A Formula is all the Atoms in a Molecule, and the Bonds that those Atoms have to other Atoms - its 'structure'.
-     * For convinience, the functional Groups present in the Molecule are also stored here.
-     */
 
     private Map<Atom, List<Bond>> structure;
     private Atom startingAtom;
@@ -498,7 +497,7 @@ public class Formula implements Cloneable {
                             stripBond = false;
                     };
                     if (stripBond) group = group.substring(1);
-                    formula.addGroupToPosition(groupFromString(Arrays.stream(group.split("(?=\\p{Upper})")).toList()), i);
+                    formula.addGroupToPosition(groupFromString(Arrays.stream(group.split("(?=\\p{Upper})")).toList()), i, bond);
                     i++;
                     if (i >= formula.cyclicAtoms.size()) throw new IllegalStateException("Formula '" + FROWNSstring + "' has too many groups (" + i + ") for its Cycle Type (" + formula.cyclicAtoms.size() + ").");
                 };
@@ -766,19 +765,7 @@ public class Formula implements Cloneable {
     };
 
     private static BondType trailingBondType(String symbol) {
-        BondType bondType = BondType.SINGLE; //initially assume the Group will be singly bonded
-        switch (symbol.charAt(symbol.length() - 1)) { //get last character
-            case '=':
-                bondType = BondType.DOUBLE;
-                break;
-            case '#':
-                bondType = BondType.TRIPLE;
-                break;
-            case '~':
-                bondType = BondType.AROMATIC;
-                break;
-        };
-        return bondType;
+        return BondType.fromFROWNSCode(symbol.charAt(symbol.length() - 1)); // Get last character
     };
 
     private static Map<Atom, List<Bond>> stripHydrogens(Map<Atom, List<Bond>> structure) {
@@ -799,10 +786,10 @@ public class Formula implements Cloneable {
     
     private enum CycleType {
 
-        NONE("linear", 0, () -> nothing()),
+        NONE("linear", 0, Formula::nothing),
         ANTHRACENE("anthracene", 10, () -> anthracene(false)),
-        BENZENE("benzene", 6, () -> benzene()),
-        CYCLOHEXENE("cyclohexene", 10, () -> cyclohexene()),
+        BENZENE("benzene", 6, Formula::benzene),
+        CYCLOHEXENE("cyclohexene", 10, Formula::cyclohexene),
         CYCLOPENTADIENYL("cyclopentadienyl", 5, () -> cyclopentadienyl()),
         DIHYDROANTHRACENE("dihydroanthracene", 10, () -> anthracene(true))
         ;

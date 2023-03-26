@@ -85,7 +85,7 @@ public class Destroy {
 
         // Chemistry
         // DestroyGroupFinder.register();
-        // DestroyMolecules.register();
+        DestroyMolecules.register();
         // DestroyReactions.register();
         // DestroyGenericReactions.register();
 
@@ -120,7 +120,6 @@ public class Destroy {
     public static void clientInit(final FMLClientSetupEvent event) {
         DestroySceneIndex.register();
     };
-
 
     public static void gatherData(GatherDataEvent event) {
         DestroyTags.datagen();

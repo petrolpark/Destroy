@@ -21,7 +21,7 @@ public class UrineFluid extends VirtualFluid {
         private static final int PEE_TINT = 15391310;
 
         public UrineFluidType(Properties properties, ResourceLocation stillTexture, ResourceLocation flowingTexture) {
-            super(properties, stillTexture, flowingTexture);
+            super(properties, new ResourceLocation("minecraft", "water_still"), new ResourceLocation("minecraft", "water_flow"));
         };
     
         @Override

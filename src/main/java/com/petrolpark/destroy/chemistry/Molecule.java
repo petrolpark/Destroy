@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 
-public class Molecule {
+public class Molecule implements INameableProduct {
 
     public static final Set<String> NAMESPACES = new HashSet<>(); // Set of all Molecular namespaces
     public static final Set<String> FORBIDDEN_NAMESPACES = new HashSet<>(); // Set of all forbidden namespaces
@@ -24,7 +25,7 @@ public class Molecule {
     private int charge;
     private float mass;
     private int boilingPoint;
-    private int dipoleMoment;
+    private float dipoleMoment;
     private Formula structure;
 
     private Set<MoleculeTag> tags;
@@ -33,6 +34,7 @@ public class Molecule {
     private List<Reaction> productReactions; // Reactions in which this Molecule is a product
 
     private String translationKey;
+    private Component name;
 
     private Molecule(String nameSpace) {
         this.nameSpace = nameSpace;
@@ -49,18 +51,21 @@ public class Molecule {
      * Gets the known or novel Molecule from the given ID or FROWNS Code.
      */
     public static Molecule getMolecule(String id) {
-        if (NAMESPACES.contains(id.split(":")[0])) {
+        String nameSpace = id.split(":")[0];
+        if (NAMESPACES.contains(nameSpace)) {
             return MOLECULES.get(id);
-        } else {
+        } else if (FORBIDDEN_NAMESPACES.contains(nameSpace)) {
             return new MoleculeBuilder("novel")
                 .structure(Formula.deserialize(id))
                 .build();
-        }
+        };
+        Destroy.LOGGER.warn("Could not find Molecule '"+id+"'.");
+        return null;
     };
 
     /**
      * Get the name used for storing this Molecule in NBT.
-     * For known Molecules, this will be of the format [namespace]:[id].
+     * For known Molecules, this will be of the format {@code [namespace]:[id]}.
      * For novel Molecules, this will be their <a link href="https://github.com/petrolpark/Destroy/wiki/FROWNS"> FROWNS Code</a>.
      * @return ID or FROWNS Code
      */
@@ -78,8 +83,8 @@ public class Molecule {
 
     public Molecule getEquivalent() {
         for (Molecule molecule : MOLECULES.values()) {
-            if (Math.abs(this.getMass() - molecule.getMass()) < 0.001) { //initially just check the masses match
-                if (this.structure.serialize().equals(molecule.structure.serialize())) { //check the structures match
+            if (Math.abs(getMass() - molecule.getMass()) < 0.001) { //initially just check the masses match
+                if (structure.serialize().equals(molecule.structure.serialize())) { //check the structures match
                     return molecule;
                 };
             };
@@ -87,8 +92,20 @@ public class Molecule {
         return this;
     };
 
+    public int getCharge() {
+        return charge;
+    };
+
     public float getMass() {
-        return this.mass;
+        return mass;
+    };
+
+    public int getBoilingPoint() {
+        return boilingPoint;
+    };
+
+    public float getDipoleMoment() {
+        return dipoleMoment;
     };
 
     public Formula shallowCopyStructure() {
@@ -134,11 +151,9 @@ public class Molecule {
      * Elements are given in the order in which they are declared in {@link Element the Element Enum}.
      */
     public String getSerlializedChemicalFormula() {
-
         Map<Element, Integer> formulaMap = getChemicalFormula();
         List<Element> elements = new ArrayList<>(formulaMap.keySet());
         elements.sort(Comparator.naturalOrder()); //sort Elements based on their order of declaration
-
         String formula = "";
         for (Element element : elements) {
             String number = formulaMap.get(element) == 1 ? "" : formulaMap.get(element).toString(); //if there is only one then don't print the number
@@ -188,12 +203,17 @@ public class Molecule {
         return this.reactantReactions;
     };
 
-    /**
-     * Get the display name of this Molecule.
-     * @param iupac Whether the IUPAC systematic name should be used
-     */
-    public MutableComponent getName(boolean iupac) {
-        return Component.translatable(nameSpace + "." + translationKey + (iupac ? ".iupac" : ""));
+    @Override
+    public Component getName(boolean iupac) {
+        if (name == null) {
+            String key = nameSpace + ".chemical." + translationKey;
+            String iupacKey = key + ".iupac";
+            if (iupac && I18n.exists(iupacKey)) {
+                key = iupacKey;
+            };
+            name = Component.translatable(key);
+        };
+        return name;
     };
 
     /**
@@ -343,7 +363,7 @@ public class Molecule {
                 if (molecule.id == null) {
                     throw new IllegalStateException("Molecule's ID has not been declared.");
                 } else {
-                    MOLECULES.put(molecule.id, molecule);
+                    MOLECULES.put(molecule.nameSpace+":"+molecule.id, molecule);
                 };
             };
 

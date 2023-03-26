@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
+        "item": "destroy:iodine"
+      },
+      {
+        "item": "minecraft:water_bucket"
+      }
+    ],
+    "result": {
+      "item": "minecraft:yellow_dye"
+    }
+}

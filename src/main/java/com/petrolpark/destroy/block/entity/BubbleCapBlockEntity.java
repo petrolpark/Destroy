@@ -9,6 +9,8 @@ import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.BubbleCapBlock;
+import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
+import com.petrolpark.destroy.client.particle.data.GasParticleData;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DistillationTower;
 import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
@@ -23,13 +25,13 @@ import com.simibubi.create.foundation.utility.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -210,9 +212,12 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
     @SuppressWarnings("null")
     private void spawnParticles() {
         Vec3 center = VecHelper.getCenterOf(getBlockPos());
-        if (!(hasLevel() && getLevel().isClientSide())) return;
+        if (!(hasLevel() && getLevel().isClientSide() && isController)) return;
         Destroy.LOGGER.info("Look at me im making a particle yippeee");
-        getLevel().addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, center.x, center.y, center.z, 0D, 0.07D, 0D); // It thinks 'getLevel()' might be null (it can't be at this point)
+        GasParticleData particleData = new GasParticleData(DestroyParticleTypes.DISTILLATION.get(), new FluidStack(Fluids.WATER, 1), getDistillationTower().getHeight());
+        for (int i = 0; i < 100; i++) {
+            getLevel().addParticle(particleData, center.x, center.y, center.z, 0D, 0.07D, 0D); // It thinks 'getLevel()' might be null (it can't be at this point)
+        };
     };
 
     public void removeFromDistillationTower() {

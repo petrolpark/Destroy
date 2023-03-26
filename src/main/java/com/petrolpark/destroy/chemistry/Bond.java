@@ -51,8 +51,24 @@ public class Bond {
             return this.singleBondEquivalent;
         };
 
-        public  String getFROWNSCode() {
+        public String getFROWNSCode() {
             return this.FROWNSCode;
         };
+
+        public static BondType fromFROWNSCode(char c) {
+            BondType bondType = SINGLE;
+            switch (c) {
+                case '=':
+                    bondType = DOUBLE;
+                    break;
+                case '#':
+                    bondType = TRIPLE;
+                    break;
+                case '~':
+                    bondType = AROMATIC;
+                    break;
+            };
+            return bondType;
+        }
     };
 };

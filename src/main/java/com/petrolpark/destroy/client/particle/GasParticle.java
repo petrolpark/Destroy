@@ -17,22 +17,27 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class GasParticle extends FluidStackParticle {
 
-    private static final int TICKS_PER_BLOCK = BubbleCapBlockEntity.getTransferRate() / BubbleCapBlockEntity.getTankCapacity(); // How long this Particle should take to travel up the distance of one Block
-    private static final float VERTICAL_SPEED = 1f / TICKS_PER_BLOCK;
+    private static final int TICKS_PER_BLOCK = BubbleCapBlockEntity.getTankCapacity() / BubbleCapBlockEntity.getTransferRate() ; // How long this Particle should take to travel up the distance of one Block
+    private static final float VERTICAL_SPEED = 1f / (32 * TICKS_PER_BLOCK);
     private boolean isDistillation;
 
-    private int blockHeight;
+    private final int blockHeight;
 
     private GasParticle(ClientLevel level, FluidStack fluid, ParticleType<GasParticleData> type, int blockHeight, double x, double y, double z, double vx, double vy, double vz, SpriteSet sprites) {
         super(level, fluid, x, y, z, vx, vy, vz);
-        pickSprite(sprites); // Override the sprite (which is currently a Fluid Texture) with a random sprite from the file
+
+        pickSprite(sprites);
+        gravity = 0f;
+        quadSize *= 6.0f;
+        hasPhysics = false;
         isDistillation = false;
         this.blockHeight = blockHeight;
 
         if (type == DestroyParticleTypes.DISTILLATION.get() && blockHeight != 0) {
             isDistillation = true;
-            Destroy.LOGGER.info("Look at me I'm in a distillation tower. "+blockHeight);
             lifetime = this.blockHeight * TICKS_PER_BLOCK;
+            yd += VERTICAL_SPEED + (double)(random.nextFloat() / 500.0F);
+            Destroy.LOGGER.info("Look at me I'm in a distillation tower. "+blockHeight+". My lifetime is "+lifetime+", and I will be moving at "+TICKS_PER_BLOCK+" ticks per block. this is a speed of "+VERTICAL_SPEED);
         };
     };
 
@@ -40,7 +45,7 @@ public class GasParticle extends FluidStackParticle {
     public void tick() {
         super.tick();
         if (isDistillation) {
-            yd += VERTICAL_SPEED;
+            this.move(0d, VERTICAL_SPEED, 0d);
             if (lifetime - age < TICKS_PER_BLOCK && alpha > 0.010f) {
                 alpha -= 0.015f;
             };
@@ -48,8 +53,33 @@ public class GasParticle extends FluidStackParticle {
     };
 
     @Override
+    protected float getU0() {
+        return sprite.getU0();
+    };
+
+    @Override
+    protected float getU1() {
+        return sprite.getU1();
+    };
+
+    @Override
+    protected float getV0() {
+        return sprite.getV0();
+    };
+
+    @Override
+    protected float getV1() {
+        return sprite.getV1();
+    };
+
+    @Override
     public ParticleRenderType getRenderType() {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+    };
+
+    @Override
+    protected boolean canEvaporate() {
+        return false;
     };
 
     public static class Provider implements ParticleProvider<GasParticleData> {

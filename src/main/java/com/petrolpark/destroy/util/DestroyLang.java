@@ -1,14 +1,17 @@
 package com.petrolpark.destroy.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.chemistry.Molecule;
 import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.LangBuilder;
 import com.simibubi.create.foundation.utility.LangNumberFormat;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -85,5 +88,27 @@ public class DestroyLang {
         return Component.empty()
             .append(Component.literal("|".repeat(bars)).withStyle(color))
             .append(Component.literal("|".repeat(totalBars - bars)).withStyle(ChatFormatting.DARK_GRAY));
+    };
+
+    /**
+     * The required contents of a Mixture to be used as an Ingredient in a Recipe.
+     * @param fluidTag The NBT of the Fluid Stack
+     */
+    public static List<Component> mixtureIngredientTooltip(CompoundTag fluidTag) {
+        List<Component> tooltip = new ArrayList<>();
+        String moleculeID = fluidTag.getString("IngredientMolecule");
+        float concentration = fluidTag.getFloat("IngredientConcentration");
+        tooltip.add(DestroyLang.translate("tooltip.mixture_ingredient_1").style(ChatFormatting.GRAY)
+            .space()
+            .add(Molecule.getMolecule(moleculeID).getName(false).plainCopy().withStyle(ChatFormatting.WHITE))
+            .space()
+            .add(DestroyLang.translate("tooltip.mixture_ingredient_2").style(ChatFormatting.GRAY))
+            .space()
+            .add(Component.literal(Float.toString(concentration) + "M").withStyle(ChatFormatting.WHITE))
+            .add(Component.literal(".").withStyle(ChatFormatting.GRAY))
+            .component()
+        );
+        tooltip.add(DestroyLang.translate("tooltip.mixture_ingredient_3").component().withStyle(ChatFormatting.GRAY));
+        return tooltip;
     };
 }

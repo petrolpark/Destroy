@@ -14,14 +14,10 @@ import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
 import com.petrolpark.destroy.chemistry.genericreaction.SingleGroupGenericReaction;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
-import com.simibubi.create.foundation.utility.NBTHelper;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 
-public class Mixture {
-
-    private Map<Molecule, Float> contents;
+public class Mixture extends ReadOnlyMixture {
 
     private List<Molecule> acids;
     private List<Molecule> novelMolecules;
@@ -29,81 +25,37 @@ public class Mixture {
     private List<Reaction> possibleReactions;
     private Map<String, List<GenericReactant<?>>> groupIDsAndMolecules;
 
-    private float temperature;
-
     public Mixture() {
-        contents = new HashMap<>();
+        super();
 
         acids = new ArrayList<>();
         novelMolecules = new ArrayList<>();
 
         possibleReactions = new ArrayList<>();
         groupIDsAndMolecules = new HashMap<>();
-        
-        temperature = 600f;
     };
 
     /**
-     * Converts this Mixture into a storeable String that can be read by {@link #readNBT readNBT()}.
-     */
-    public CompoundTag writeNBT() {
-        CompoundTag compound = new CompoundTag();
-        compound.putFloat("Temperature", temperature);
-        compound.put("Contents", NBTHelper.writeCompoundList(contents.keySet(), (molecule) -> {
-            CompoundTag moleculeTag = new CompoundTag();
-            moleculeTag.putString("Molecule", molecule.getFullID());
-            moleculeTag.putFloat("Concentration", contents.get(molecule));
-            return moleculeTag;
-        }));
-        return compound;
-    };
-
-    /**
-     * Generates a Mixture from the given Compound Tag.
+     * Generates a Mixture from the given Compound Tag, and generates the Reactions for it.
      * @param compound
      */
     public static Mixture readNBT(CompoundTag compound) {
-        Mixture mixture = new Mixture();
-        mixture.temperature = compound.getFloat("Temperature");
-        ListTag contents = compound.getList("Contents", 10);
-        contents.forEach(tag -> {
-            CompoundTag moleculeTag = (CompoundTag) tag;
-            mixture.addMolecule(Molecule.getMolecule(moleculeTag.getString("Molecule")), moleculeTag.getFloat("Concentration"));
-        });
+        Mixture mixture = (Mixture)ReadOnlyMixture.readNBT(compound);
         mixture.refreshPossibleReactions();
         return mixture;
     };
 
-    public void pee() {
-        System.out.println(writeNBT().toString());
-        // for (Molecule molecule : contents.keySet()) {
-        //     System.out.println(molecule.getName().getString() + contents.get(molecule));
-        // };
-    };
-
-    /**
-     * Whether this Mixture has no Molecules in it.
-     */
-    public boolean isEmpty() {
-        return contents.isEmpty();
-    };
-
+    @Override
     public Mixture addMolecule(Molecule molecule, float concentration) {
-        return addMolecule(molecule, concentration, true);
+        return internalAddMolecule(molecule, concentration, true);
     };
 
+    @Override
     public float getConcentrationOf(Molecule molecule) {
-
         if (molecule == DestroyMolecules.PROTON) {
             return 0f; //TODO determine pH
         };
-
-        //if we're not dealing with a Proton
-        if (contents.containsKey(molecule)) {
-            return contents.get(molecule);
-        } else {
-            return 0f;
-        }
+        return super.getConcentrationOf(molecule);
     };
 
     /**
@@ -118,7 +70,7 @@ public class Mixture {
         for (Entry<Molecule, Float> otherMolecule : contents.entrySet()) {
             if (otherMolecule.getKey() == molecule) continue; // If this is the Molecule we want, ignore it.
             if (otherMolecule.getKey().hasTag(DestroyMolecules.Tags.SOLVENT)) continue; // If this is a solvent, ignore it
-            if (otherMolecule.getValue() < 0.1f) continue; // If this impurity is in low-enough concentration, ignore it. //TODO replace with a better thought-through check
+            if (otherMolecule.getValue() < IMPURITY_THRESHOLD) continue; // If this impurity is in low-enough concentration, ignore it.
             return false;
         };
         return true;
@@ -152,9 +104,8 @@ public class Mixture {
                 Float molesOfReaction = reactionRates.get(reaction);
 
                 for (Molecule reactant : reaction.getReactants()) {
-                    if (contents.get(reactant) < reaction.getReactantMolarRatio(reactant) * molesOfReaction) { //determine the limiting reagent, if there is one
+                    if (contents.get(reactant) < reaction.getReactantMolarRatio(reactant) * molesOfReaction) { // Determine the limiting reagent, if there is one
                         molesOfReaction = contents.get(reactant);
-                        System.out.println("We're refreshing reactions because we ran out of a reactant.");
                         shouldRefreshPossibleReactions = true;
                     };
                 };
@@ -178,7 +129,7 @@ public class Mixture {
                         if (!matchFound) {
                             novelMolecules.add(product);
                             shouldRefreshPossibleReactions = true;
-                            addMolecule(product, molesOfReaction * reaction.getProductMolarRatio(product), false);
+                            internalAddMolecule(product, molesOfReaction * reaction.getProductMolarRatio(product), false);
                             continue;
                         };
                     };
@@ -199,20 +150,14 @@ public class Mixture {
             
         };
 
+        updateName();
+
         return results;
     };
 
-    private Mixture addMolecule(Molecule molecule, float concentration, Boolean shouldRefreshReactions) {
+    private Mixture internalAddMolecule(Molecule molecule, float concentration, Boolean shouldRefreshReactions) {
 
-        if (molecule.isHypothetical()) {
-            throw new IllegalStateException("Cannot add hypothetical Molecule "+molecule.getFullID()+ " to a real Mixture.");
-        };
-
-        contents.put(molecule, concentration);
-
-        // if (molecule.isAcidic()) { //TODO fiddle about with acids
-        //     acids.add(molecule);
-        // };
+        super.addMolecule(molecule, concentration);
 
         List<Group> functionalGroups = molecule.getFunctionalGroups();
         if (functionalGroups.size() != 0) {
@@ -226,7 +171,6 @@ public class Mixture {
         };
 
         if (shouldRefreshReactions) {
-            System.out.println("We're refreshing reactions because the addy thing said we should");
             refreshPossibleReactions();
         };
         return this;
@@ -265,7 +209,7 @@ public class Mixture {
 
         if (currentConcentration == 0f) {
             if (change > 0) {
-                addMolecule(molecule, change, true);
+                addMolecule(molecule, change);
             } else {
                 Destroy.LOGGER.warn("Attempted to change concentration of a Molecule which was not in the Mixture.");
             };
@@ -279,6 +223,7 @@ public class Mixture {
             contents.replace(molecule, newConcentration);
         };
         
+        updateName();
         return this;
     };
 
@@ -332,10 +277,10 @@ public class Mixture {
     @SuppressWarnings("unchecked")
     private <T extends Group> List<Reaction> specifySingleGroupGenericReactions(GenericReaction genericReaction, List<GenericReactant<?>> reactants) {
         try {
-            SingleGroupGenericReaction<T> singleGroupGenericReaction = (SingleGroupGenericReaction<T>) genericReaction;
+            SingleGroupGenericReaction<T> singleGroupGenericReaction = (SingleGroupGenericReaction<T>) genericReaction; // Unchecked conversion
             List<Reaction> reactions = new ArrayList<>();
             for (GenericReactant<?> reactant : reactants) {
-                reactions.add(singleGroupGenericReaction.generateReaction((GenericReactant<T>)reactant));
+                reactions.add(singleGroupGenericReaction.generateReaction((GenericReactant<T>)reactant)); // Unchecked conversion
             };
             return reactions;
         } catch(Error e) {

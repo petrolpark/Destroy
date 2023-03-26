@@ -26,7 +26,7 @@ public class Test {
             .build();
 
         //System.out.println(DestroyMolecules.ASPIRIN.getStructuralFormula());
-        System.out.println(DestroyMolecules.ASPIRIN.getSerlializedChemicalFormula());
+        System.out.println(DestroyMolecules.CHLORIDE.getName(true).toString());
         
     };
 

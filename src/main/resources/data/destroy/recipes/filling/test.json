@@ -1,0 +1,19 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "minecraft:glass_bottle"
+      },
+      {
+        "moleculeFluid": "destroy:mixture",
+        "amount": 1000,
+        "molecule": "destroy:water",
+        "concentration": 55.5
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:gunpowder"
+      }
+    ]
+  }

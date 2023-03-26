@@ -1,0 +1,37 @@
+{
+    "type": "create:emptying",
+    "ingredients": [
+      {
+        "item": "destroy:tear_bottle"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:glass_bottle"
+      },
+      {
+        "fluid": "destroy:mixture",
+        "amount": 250,
+        "nbt": {
+            "Mixture": {
+                "TranslationKey": "destroy.chemical.brine",
+                "Temperature": 289,
+                "Contents": [
+                    {
+                        "Molecule": "destroy:water",
+                        "Concentration": 55.5
+                    },
+                    {
+                        "Molecule": "destroy:sodium_ion",
+                        "Concentration": 1.0
+                    },
+                    {
+                        "Molecule": "destroy:chloride",
+                        "Concentration": 1.0
+                    }
+                ]
+            } 
+        }
+      }
+    ]
+  }
