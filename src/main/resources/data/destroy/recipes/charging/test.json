@@ -1,12 +1,8 @@
 {
-    "type": "destroy:electrolysis",
+    "type": "destroy:charging",
     "ingredients": [
       {
         "item": "minecraft:coal"
-      },
-      {
-        "fluid": "minecraft:water",
-        "amount": 500
       }
     ],
     "results": [

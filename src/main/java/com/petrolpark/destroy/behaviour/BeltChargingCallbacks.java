@@ -18,7 +18,7 @@ public class BeltChargingCallbacks {
 		if (behaviour.running) return ProcessingResult.HOLD; // If the charger is charging an Item Stack so we want to charge this one afterwards
 		if (!behaviour.specifics.tryProcessOnBelt(transported, null, true)) return ProcessingResult.PASS; // If this Item Stack cannot be charged
 
-		behaviour.start(ChargingBehaviour.Mode.BELT);
+		behaviour.start(ChargingBehaviour.Mode.BELT, handler.getWorldPositionOf(transported));
 		return ProcessingResult.HOLD;
     };
 

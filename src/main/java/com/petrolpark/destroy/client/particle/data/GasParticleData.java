@@ -21,7 +21,7 @@ public class GasParticleData implements ParticleOptions, ICustomParticleDataWith
 
     private ParticleType<GasParticleData> type; // What type of particle this is (Distillation, etc.)
 	private FluidStack fluid; // The fluid stack this of which this Particle is meant to be a gas cloud
-    private int blockHeight; // How many blocks upwards this Particle should float (used if it is in a Distillation Tower)
+    private float blockHeight; // How many blocks upwards this Particle should float (used if it is in a Distillation Tower)
 
     /**
      * Empty constructor to use in {@link com.petrolpark.destroy.client.particle.DestroyParticleTypes registration}.
@@ -38,7 +38,7 @@ public class GasParticleData implements ParticleOptions, ICustomParticleDataWith
     /**
      * How high this Particle should float before disappearing.
      */
-    public int getBlockHeight() {
+    public float getBlockHeight() {
         return blockHeight;
     };
 
@@ -53,7 +53,7 @@ public class GasParticleData implements ParticleOptions, ICustomParticleDataWith
      * @param blocks How many blocks upward this Particle should float before disappearing (used for the {@link com.petrolpark.destroy.block.entity.BubbleCapBlockEntity#spawnParticles Distillation Tower})
      */
     @SuppressWarnings("unchecked")
-    public GasParticleData(ParticleType<?> type, FluidStack fluid, int blockHeight) {
+    public GasParticleData(ParticleType<?> type, FluidStack fluid, float blockHeight) {
         this.type = (ParticleType<GasParticleData>) type;
         this.fluid = fluid;
         this.blockHeight = blockHeight;
@@ -62,7 +62,7 @@ public class GasParticleData implements ParticleOptions, ICustomParticleDataWith
     public static final Codec<GasParticleData> DISTILLATION_CODEC = RecordCodecBuilder.create(i -> i
 		.group(
             FluidStack.CODEC.fieldOf("fluid").forGetter(p -> p.fluid),
-            Codec.INT.fieldOf("blockHeight").forGetter(p -> p.blockHeight)
+            Codec.FLOAT.fieldOf("blockHeight").forGetter(p -> p.blockHeight)
         ).apply(i, (fluidStack, blockHeight) -> new GasParticleData(DestroyParticleTypes.DISTILLATION.get(), fluidStack, blockHeight))
     );
 
@@ -102,7 +102,7 @@ public class GasParticleData implements ParticleOptions, ICustomParticleDataWith
     @Override
     public void writeToNetwork(FriendlyByteBuf buffer) {
         buffer.writeFluidStack(fluid);
-        buffer.writeInt(blockHeight);
+        buffer.writeFloat(blockHeight);
     };
 
     @Override

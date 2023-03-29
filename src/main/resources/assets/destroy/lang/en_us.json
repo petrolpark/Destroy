@@ -284,10 +284,10 @@
     "destroy.tooltip.centrifuge.light_output_tank": "Light Product",
     "destroy.tooltip.fluidcontraption.contents": "Contents:",
     "destroy.tooltip.fluidcontraption.of": "of",
+    "note_for_translators_1": "The above key is used in the displays of Fluid-handling contraptions, e.g. '100mB of Water'",
     "destroy.tooltip.mixture_ingredient_1": "Must contain",
     "destroy.tooltip.mixture_ingredient_2": "at a concentration of approximately",
     "destroy.tooltip.mixture_ingredient_3": "All other molecules must be solvents or low in concentration.",
-    "note_for_translators_1": "The above key is used in the displays of Fluid-handling contraptions, e.g. '100mB of Water'",
 
     "effect.destroy.cancer": "Cancer Awareness",
     "effect.destroy.cancer.description": "Has no effect in-game. Many things in the Destroy Mod are jokes, but cancer is not one of them. This is here to raise awareness of the increase in cancer risk associated with occupational exposure, and with harm to the ozone layer. Please see a professional source like 'cancerresearchuk.org'.",

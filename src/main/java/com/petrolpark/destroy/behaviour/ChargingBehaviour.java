@@ -8,15 +8,18 @@ import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.BeltProcessingBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.TransportedItemStackHandlerBehaviour;
+import com.simibubi.create.foundation.utility.VecHelper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 public class ChargingBehaviour extends BeltProcessingBehaviour {
 
@@ -28,6 +31,7 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
 	public boolean running; // Whether the charger is currently charging
 	public boolean finished; // Whether the charger has finished charging
 	public Mode mode; // Whether the charger is charging an Item Stack in a Basin, on a Belt or Depot, or in the world
+    public Vec3 targetPosition; // Where the Item/Fluid being processed is (in order to render the lightning)
 
     int entityScanCooldown; // How long to the next Item Entity scan
 
@@ -51,6 +55,7 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
         this.specifics = te;
         this.mode = Mode.WORLD;
         entityScanCooldown = ENTITY_SCAN_TIME;
+        targetPosition = Vec3.atBottomCenterOf(te.getBlockPos().below());
         whenItemEnters((s, i) -> BeltChargingCallbacks.onItemReceived(s, i, this)); // What to do with the Item Stack when it arrives beneath the charger
 		whileItemHeld((s, i) -> BeltChargingCallbacks.whenItemHeld(s, i, this)); // What to do with the Item Stack while we're keeping it underneath the charger
     };
@@ -61,6 +66,9 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
         mode = Mode.values()[tag.getInt("Mode")];
         finished = tag.getBoolean("Finished");
         runningTicks = tag.getInt("Ticks");
+        if (clientPacket) {
+            targetPosition = VecHelper.readNBT(tag.getList("Target", Tag.TAG_DOUBLE));
+        };
         super.read(tag, clientPacket);
     };
 
@@ -70,13 +78,17 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
         tag.putInt("Mode", mode.ordinal());
         tag.putBoolean("Finished", finished);
         tag.putInt("Ticks", runningTicks);
+        if (clientPacket) {
+            tag.put("Target", VecHelper.writeNBT(targetPosition));
+        };
         super.write(tag, clientPacket);
     }
 
-    public void start(Mode mode) {
+    public void start(Mode mode, Vec3 targetPosition) {
 		this.mode = mode;
 		running = true;
 		runningTicks = 0;
+        this.targetPosition = targetPosition;
 		tileEntity.sendData();
 	};
 
@@ -89,7 +101,7 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
 
         if (level == null) return;
         if (!running) {
-            if (level.isClientSide()) {
+            if (!level.isClientSide()) {
                 if (specifics.getKineticSpeed() == 0) return; // Don't do anything if the Charger isn't 'on'.
                 if (entityScanCooldown > 0) // Decrement Item Entity scanning
 					entityScanCooldown--;
@@ -104,13 +116,12 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
 					for (ItemEntity itemEntity : level.getEntitiesOfClass(ItemEntity.class, new AABB(pos.below()).deflate(.125f))) { // Check all Item Entities in the block below
 						if (!itemEntity.isAlive() || !itemEntity.isOnGround()) continue; // Ignore Item Entities marked for removal
 						if (!specifics.tryProcessInWorld(itemEntity, true)) continue; // Ignore if the Item Stack cannot be processed
-						start(Mode.WORLD); // At the first chargeable Item we get, stop looking for any more and start processing
+						start(Mode.WORLD, itemEntity.position().add(0f, 0.1f, 0f)); // At the first chargeable Item we get, stop looking for any more and start processing
 						return;
 					}
-				}
-            } else { // If the charger isn't running and this is the client side
-                return;
+				};
             };
+            return;
         };
 
         if (runningTicks == CHARGING_TIME && specifics.getKineticSpeed() != 0) { // If this is the tick where the charger should actually process
