@@ -255,12 +255,19 @@
 
     "destroy.ponder.tag.destroy": "Destroy Machines",
     "destroy.ponder.tag.destroy.description": "Components and Curiosities added by the mod Destroy",
+    "destroy.ponder.bubble_cap.header": "Distilling Fluids with the Bubble Cap",
+    "destroy.ponder.bubble_cap.text_1": "Vertically stacked Bubble Caps create a Distillation Tower.",
+    "destroy.ponder.bubble_cap.text_2": "Distillation Towers will automatically distill Fluids in the bottom-most chamber.",
+    "destroy.ponder.bubble_cap.text_3": "The higher the boiling point of the Fluid, the further up the Tower it will travel.",
     "destroy.ponder.centrifuge.header": "Separating Fluids with the Centrifuge",
     "destroy.ponder.centrifuge.text_1": "The Centrifuge will slowly separate any Fluid pumped into the top.",
     "destroy.ponder.centrifuge.text_2": "The denser resultant Fluid can be extracted from the side.",
     "destroy.ponder.centrifuge.text_3": "The lighter resultant Fluid can be extracted from the bottom.",
     "destroy.ponder.centrifuge.text_4": "The Centrifuge does not actively pump out Fluids - a Mechanical Pump must be used.",
     "destroy.ponder.centrifuge.text_5": "Lubrication can be applied to increase the processing speed.",
+    "destroy.ponder.dynamo_redstone.header": "Creating Redstone signals with the Dynamo",
+    "destroy.ponder.dynamo_redstone.text_1": "A Dynamo will confer a Redstone signal to the block directly beneath.",
+    "destroy.ponder.dynamo_redstone.text_2": "The strength of the signal is proportional to the rotational speed of the Dynamo.",
     "destroy.ponder.phytomining.header": "Extracting minerals via Phytomining",
     "destroy.ponder.phytomining.text_1": "Hyperaccumulating Fertilizer can be used like Bone Meal to Mutate certain Crops.",
     "destroy.ponder.phytomining.text_2": "Some Mutations result in the uptake of Ores placed a block below the Farmland.",
@@ -605,5 +612,8 @@
     "item.destroy.zinc_oxide": "Zinc Oxide",
     "item.destroy.zinc_sheet": "Zinc Sheet",
     "item.destroy.zircon": "Zircon",
-    "item.destroy.zirconium_ingot": "Zirconium Ingot"
+    "item.destroy.zirconium_ingot": "Zirconium Ingot",
+    "item.destroy.zirconium_pants": "Zirconium Pants",
+    "item.destroy.zirconium_pants.tooltip": "ZIRCONIUM_PANTS",
+    "item.destroy.zirconium_pants.tooltip.summary": "Even before we were _married_ you could never shut up about how _great_ you were."
 }

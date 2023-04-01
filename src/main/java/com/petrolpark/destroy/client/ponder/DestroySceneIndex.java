@@ -16,16 +16,44 @@ public class DestroySceneIndex {
     private static final PonderRegistrationHelper HELPER = new PonderRegistrationHelper(Destroy.MOD_ID);
 
     public static void register() {
-        HELPER.addStoryBoard(DestroyBlocks.CENTRIFUGE, "centrifuge", DestroyScenes::centrifuge, DESTROY, PonderTag.FLUIDS);
-        HELPER.addStoryBoard(DestroyItems.HYPERACCUMULATING_FERTILIZER, "phytomining", DestroyScenes::phytomining, DESTROY);
 
+        // Bubble Cap
+        HELPER.forComponents(DestroyBlocks.BUBBLE_CAP)
+            .addStoryBoard("bubble_cap", DestroyScenes::bubbleCap);
+
+        // Centrifuge
+        HELPER.forComponents(DestroyBlocks.CENTRIFUGE)
+            .addStoryBoard("centrifuge", DestroyScenes::centrifuge);
+        
+        // Dynamo
+        HELPER.forComponents(DestroyBlocks.DYNAMO)
+            .addStoryBoard("dynamo/redstone", DestroyScenes::dynamoRedstone);
+
+        // Hyperaccumulating Fertilizer
+        HELPER.forComponents(DestroyItems.HYPERACCUMULATING_FERTILIZER)
+            .addStoryBoard("phytomining", DestroyScenes::phytomining);
+
+        // Tags
+        
         PonderRegistry.TAGS.forTag(DESTROY)
+            .add(DestroyBlocks.BUBBLE_CAP)
             .add(DestroyBlocks.CENTRIFUGE)
+            .add(DestroyBlocks.DYNAMO)
             .add(DestroyItems.HYPERACCUMULATING_FERTILIZER)
         ;
 
         PonderRegistry.TAGS.forTag(PonderTag.FLUIDS)
+            .add(DestroyBlocks.BUBBLE_CAP)
             .add(DestroyBlocks.CENTRIFUGE)
+        ;
+
+        PonderRegistry.TAGS.forTag(PonderTag.KINETIC_APPLIANCES)
+            .add(DestroyBlocks.CENTRIFUGE)
+            .add(DestroyBlocks.DYNAMO)
+        ;
+
+        PonderRegistry.TAGS.forTag(PonderTag.REDSTONE)
+            .add(DestroyBlocks.DYNAMO)
         ;
     };
 };

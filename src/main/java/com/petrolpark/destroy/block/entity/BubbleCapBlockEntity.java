@@ -139,7 +139,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
         if (ticksToFill > 0) {
             ticksToFill--;
         };
-        if (ticksToFill == 0 && !internalTank.isEmpty()) {
+        if (ticksToFill <= 0 && !internalTank.isEmpty()) {
             FluidStack transferredFluid = getInternalTank().drain(TRANSFER_SPEED, FluidAction.EXECUTE);
             getTank().fill(transferredFluid, FluidAction.EXECUTE);
         };
@@ -210,10 +210,11 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
     };
 
     @SuppressWarnings("null")
-    private void spawnParticles() {
+    public void spawnParticles() {
         Vec3 center = VecHelper.getCenterOf(getBlockPos());
         if (!(hasLevel() && getLevel().isClientSide() && isController)) return;
         GasParticleData particleData = new GasParticleData(DestroyParticleTypes.DISTILLATION.get(), new FluidStack(Fluids.WATER, 1), getDistillationTower().getHeight() - 1.3f);
+        //TODO determine correct Fluid Stack
         for (int i = 0; i < 10; i++) {
             getLevel().addParticle(particleData, center.x, center.y - 0.3f, center.z, 0, 0, 0); // It thinks 'getLevel()' might be null (it can't be at this point)
         };

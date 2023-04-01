@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.world;
+package com.petrolpark.destroy.world.worldgen;
 
 import java.util.ArrayList;
 import java.util.List;

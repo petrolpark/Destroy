@@ -3,6 +3,7 @@ package com.petrolpark.destroy.item;
 import static com.simibubi.create.AllTags.forgeItemTag;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.item.renderer.GasMaskModel;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.simibubi.create.AllTags.AllItemTags;
@@ -14,6 +15,7 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BowlFoodItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -210,36 +212,63 @@ public class DestroyItems {
 
     // TOOLS AND ARMOR
 
+    static {
+        REGISTRATE.startSection(AllSections.KINETICS);
+    };
+
     public static final ItemEntry<Item>
 
     DIAMOND_DRILL_BIT = REGISTRATE.item("diamond_drill_bit", Item::new)
         .register(),
     GAS_FLITER = REGISTRATE.item("gas_filter", Item::new)
-        .register(),
-    GAS_MASK = REGISTRATE.item("gas_mask", Item::new)
+        .register();
+
+    public static final ItemEntry<GasMaskItem>
+
+    GAS_MASK = REGISTRATE.item("gas_mask", GasMaskItem::new)
         .properties(p -> p
             .stacksTo(1)
-        ).tag(DestroyItemTags.CHEMICAL_PROTECTION_HEAD.tag)
-        .register(),
-    HAZMAT_SUIT = REGISTRATE.item("hazmat_suit", Item::new)
+        ).onRegister(CreateRegistrate.itemModel(() -> GasMaskModel::new))
+        .tag(DestroyItemTags.CHEMICAL_PROTECTION_HEAD.tag)
+        .register();
+
+    public static final ItemEntry<? extends HazmatSuitArmorItem>
+
+    HAZMAT_SUIT = REGISTRATE.item("hazmat_suit", p -> new HazmatSuitArmorItem(EquipmentSlot.CHEST, p))
         .properties(p -> p
             .stacksTo(1)
         ).tag(DestroyItemTags.CHEMICAL_PROTECTION_TORSO.tag)
         .register(),
-    HAZMAT_LEGGINGS = REGISTRATE.item("hazmat_leggings", Item::new)
+    HAZMAT_LEGGINGS = REGISTRATE.item("hazmat_leggings", p -> new HazmatSuitArmorItem(EquipmentSlot.LEGS, p))
         .properties(p -> p
             .stacksTo(1)
         ).tag(DestroyItemTags.CHEMICAL_PROTECTION_LEGS.tag)
         .register(),
-    WELLINGTON_BOOTS = REGISTRATE.item("wellington_boots", Item::new)
+    WELLINGTON_BOOTS = REGISTRATE.item("wellington_boots", p -> new HazmatSuitArmorItem(EquipmentSlot.FEET, p))
         .properties(p -> p
             .stacksTo(1)
         ).tag(DestroyItemTags.CHEMICAL_PROTECTION_FEET.tag)
-        .register(),
+        .register();
+
+    public static final ItemEntry<ZirconiumPantsItem>
+
+    ZIRCONIUM_PANTS = REGISTRATE.item("zirconium_pants", ZirconiumPantsItem::new)
+        .properties(p -> p
+            .stacksTo(1)
+        ).register();
+
+    public static final ItemEntry<Item>
+
     SOAP = REGISTRATE.item("soap", Item::new)
-        .register(),
+        .register();
 
     // TOYS
+
+    static {
+        REGISTRATE.startSection(AllSections.MATERIALS);
+    };
+
+    public static final ItemEntry<Item>
 
     BUCKET_AND_SPADE = REGISTRATE.item("bucket_and_spade", Item::new)
         .register(),

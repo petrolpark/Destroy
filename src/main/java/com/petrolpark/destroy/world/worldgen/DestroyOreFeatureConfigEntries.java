@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.world;
+package com.petrolpark.destroy.world.worldgen;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;

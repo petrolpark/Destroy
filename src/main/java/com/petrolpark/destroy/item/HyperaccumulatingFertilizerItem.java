@@ -21,6 +21,7 @@ public class HyperaccumulatingFertilizerItem extends BoneMealItem {
 
     public HyperaccumulatingFertilizerItem(Properties properties) {
         super(properties);
+        registerDispenserBehaviour(this);
     };
 
     /**
@@ -66,8 +67,8 @@ public class HyperaccumulatingFertilizerItem extends BoneMealItem {
     };
 
     @SuppressWarnings("deprecation") // BoneMealItem.growCrop() is deprecated but it's used in the Bone Meal Dispenser Behaviour so I don't care
-    public static void registerDispenserBehaviour() {
-        DispenserBlock.registerBehavior(DestroyItems.HYPERACCUMULATING_FERTILIZER.get(), new OptionalDispenseItemBehavior() {
+    public static void registerDispenserBehaviour(HyperaccumulatingFertilizerItem item) {
+        DispenserBlock.registerBehavior(item, new OptionalDispenseItemBehavior() {
             protected ItemStack execute(BlockSource blockSource, ItemStack stack) {
                 Level level = blockSource.getLevel();
                 BlockPos blockPos = blockSource.getPos().relative(blockSource.getBlockState().getValue(DispenserBlock.FACING));

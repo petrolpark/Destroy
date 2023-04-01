@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.village;
+package com.petrolpark.destroy.world.village;
 
 import java.util.ArrayList;
 import java.util.List;

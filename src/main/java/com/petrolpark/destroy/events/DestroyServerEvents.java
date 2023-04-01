@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
@@ -21,6 +22,7 @@ import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.SleepFinishedTimeEvent;
@@ -46,9 +48,10 @@ import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.SyringeItem;
 import com.petrolpark.destroy.networking.DestroyMessages;
 import com.petrolpark.destroy.networking.packet.LevelPollutionS2CPacket;
-import com.petrolpark.destroy.village.DestroyTrades;
-import com.petrolpark.destroy.village.DestroyVillageAddition;
-import com.petrolpark.destroy.village.DestroyVillagers;
+import com.petrolpark.destroy.world.village.DestroyTrades;
+import com.petrolpark.destroy.world.village.DestroyVillageAddition;
+import com.petrolpark.destroy.world.village.DestroyVillagers;
+import com.simibubi.create.AllBlocks;
 import com.petrolpark.destroy.world.DestroyDamageSources;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -196,6 +199,15 @@ public class DestroyServerEvents {
         if (!(itemStack.getItem() instanceof SyringeItem syringeItem)) return;
         syringeItem.onInject(itemStack, attacker.getLevel(), event.getEntity());
         livingAttacker.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(DestroyItems.SYRINGE.get()));
+    };
+
+    @SubscribeEvent
+    public static void onMechanicalHandAttack(LivingDeathEvent event) {
+        if (!(event.getSource().getEntity() instanceof Player player)) return;
+        if (AllBlocks.MECHANICAL_ARM.isIn(player.getMainHandItem()) && DestroyItems.ZIRCONIUM_PANTS.isIn(player.getItemBySlot(EquipmentSlot.LEGS))) {
+            event.getEntity().spawnAtLocation(new ItemStack(DestroyItems.CHALK_DUST.get()));
+            //TODO achievement
+        };
     };
 
     @SubscribeEvent

@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.village;
+package com.petrolpark.destroy.world.village;
 
 import java.lang.reflect.InvocationTargetException;
 
