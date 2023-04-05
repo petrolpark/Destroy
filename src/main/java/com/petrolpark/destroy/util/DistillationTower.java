@@ -146,7 +146,7 @@ public class DistillationTower {
                 FluidStack distillate = lastRecipe.getFluidResults().get(i);
                 BubbleCapBlockEntity bubbleCap = fractions.get(i + 1);
                 if (bubbleCap.getInternalTank().fill(distillate, simulate ? FluidAction.SIMULATE : FluidAction.EXECUTE) < distillate.getAmount()) { // If not all the Fluid can be added to this Bubble Cap
-                    return false;
+                    return false; // TODO fix as this isn't being checked properly
                 };
                 if (!simulate) {
                     bubbleCap.setTicksToFill(i * BubbleCapBlockEntity.getTankCapacity() / BubbleCapBlockEntity.getTransferRate());
@@ -155,6 +155,7 @@ public class DistillationTower {
         };
         // If we've got to this point, the Recipe is being successfully processed
         getControllerBubbleCap().getTank().drain(lastRecipe.getRequiredFluid().getRequiredAmount(), FluidAction.EXECUTE);
+        getControllerBubbleCap().onDistill();
         return true;
     };
 

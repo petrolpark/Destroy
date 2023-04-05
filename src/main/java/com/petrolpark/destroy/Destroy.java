@@ -1,6 +1,7 @@
 package com.petrolpark.destroy;
 
 import com.mojang.logging.LogUtils;
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.partial.DestroyBlockPartials;
@@ -16,7 +17,6 @@ import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyCompostables;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.DestroyPotatoCannonProjectileTypes;
-import com.petrolpark.destroy.item.HyperaccumulatingFertilizerItem;
 import com.petrolpark.destroy.networking.DestroyMessages;
 import com.petrolpark.destroy.recipe.DestroyCropMutations;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
@@ -25,7 +25,6 @@ import com.petrolpark.destroy.util.DestroyTags;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
 import com.petrolpark.destroy.world.worldgen.DestroyOreFeatureConfigEntries;
 import com.petrolpark.destroy.world.worldgen.DestroyWorldGen;
-import com.simibubi.create.content.contraptions.goggles.GogglesItem;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
@@ -114,6 +113,7 @@ public class Destroy {
             DestroyCompostables.register();
             DestroyVillagers.registerPOIs();
         });
+        DestroyAdvancements.register();
         DestroyPotatoCannonProjectileTypes.register();
     };
 

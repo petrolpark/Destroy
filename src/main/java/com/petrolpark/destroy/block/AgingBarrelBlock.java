@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.block;
 
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.entity.AgingBarrelBlockEntity;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
@@ -62,6 +63,7 @@ public class AgingBarrelBlock extends Block implements ITE<AgingBarrelBlockEntit
         return onTileEntityUse(level, pos, be -> {
 
             if (be.tryOpen()) {
+                DestroyAdvancements.OPEN_AGING_BARREL.award(level, player);
                 return InteractionResult.SUCCESS;
             };
 

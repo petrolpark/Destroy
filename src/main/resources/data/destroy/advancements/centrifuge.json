@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:root",
+    "criteria": {
+      "centrifuge": {
+        "conditions": {},
+        "trigger": "destroy:use_centrifuge"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.centrifuge.description"
+      },
+      "icon": {
+        "item": "destroy:centrifuge"
+      },
+      "title": {
+        "translate": "advancement.destroy.centrifuge"
+      }
+    },
+    "requirements": [
+      [
+        "centrifuge"
+      ]
+    ]
+  }

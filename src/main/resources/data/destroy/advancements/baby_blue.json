@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:drunk",
+    "criteria": {
+      "take": {
+        "conditions": {},
+        "trigger": "destroy:take_baby_blue"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.baby_blue.description"
+      },
+      "icon": {
+        "item": "destroy:baby_blue_crystal"
+      },
+      "title": {
+        "translate": "advancement.destroy.baby_blue"
+      }
+    },
+    "requirements": [
+      [
+        "take"
+      ]
+    ]
+  }

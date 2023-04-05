@@ -1,5 +1,8 @@
 package com.petrolpark.destroy.block;
 
+import javax.annotation.Nullable;
+
+import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
@@ -11,6 +14,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -82,6 +87,13 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
         };
 		return InteractionResult.PASS;
 	};
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        DestroyAdvancementBehaviour.setPlacedBy(level, pos, placer);
+        super.setPlacedBy(level, pos, state, placer, stack);
+    };
+
 
     @Override
     public Class<CentrifugeBlockEntity> getTileEntityClass() {

@@ -1,0 +1,27 @@
+{
+    "parent": "destroy:drunk",
+    "criteria": {
+      "drunk": {
+        "conditions": {},
+        "trigger": "destroy:very_drunk"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.very_drunk.description"
+      },
+      "icon": {
+        "item": "destroy:thrice_distilled_moonshine_bottle"
+      },
+      "frame": "goal",
+      "title": {
+        "translate": "advancement.destroy.very_drunk"
+      }
+    },
+    "requirements": [
+      [
+        "drunk"
+      ]
+    ]
+  }

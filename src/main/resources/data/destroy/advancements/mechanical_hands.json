@@ -1,0 +1,28 @@
+{
+    "parent": "destroy:hyperaccumulate",
+    "criteria": {
+      "tally_hall": {
+        "conditions": {},
+        "trigger": "destroy:mechanical_hands"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.mechanical_hands.description"
+      },
+      "icon": {
+        "item": "create:mechanical_arm"
+      },
+      "frame": "challenge",
+      "hidden": true,
+      "title": {
+        "translate": "advancement.destroy.mechanical_hands"
+      }
+    },
+    "requirements": [
+      [
+        "tally_hall"
+      ]
+    ]
+  }

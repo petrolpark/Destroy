@@ -61,6 +61,11 @@ public class DestroyTags {
 			REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, prov -> prov.tag(tag));
 		};
 
+        @SuppressWarnings("deprecation") // Create does it therefore so can I
+        public boolean matches(Item item) {
+            return item.builtInRegistryHolder().containsTag(tag);
+        };
+
         public static void init() {};
     };
 

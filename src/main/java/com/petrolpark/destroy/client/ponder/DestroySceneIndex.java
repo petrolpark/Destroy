@@ -10,7 +10,7 @@ import com.simibubi.create.foundation.ponder.PonderTag;
 public class DestroySceneIndex {
 
     public static final PonderTag DESTROY = new PonderTag(Destroy.asResource("destroy"))
-        .item(DestroyBlocks.CENTRIFUGE.get())
+        .item(DestroyItems.LOGO.get())
         .addToIndex();
 
     private static final PonderRegistrationHelper HELPER = new PonderRegistrationHelper(Destroy.MOD_ID);

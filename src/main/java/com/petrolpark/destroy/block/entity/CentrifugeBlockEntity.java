@@ -7,6 +7,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
+import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.CentrifugeBlock;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
@@ -49,6 +51,8 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
     private SmartFluidTankBehaviour inputTank, denseOutputTank, lightOutputTank;
     protected LazyOptional<IFluidHandler> inputFluidCapability, denseOutputFluidCapability, lightOutputFluidCapability;
 
+    protected DestroyAdvancementBehaviour advancementBehaviour;
+
     private Direction denseOutputTankFace;
 
     private int lubricationLevel;
@@ -86,6 +90,9 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
         lightOutputFluidCapability = LazyOptional.of(() -> {
             return new CombinedTankWrapper(lightOutputTank.getCapability().orElse(null));
         });
+
+        advancementBehaviour = new DestroyAdvancementBehaviour(this);
+        behaviours.add(advancementBehaviour);
     };
 
     /**
@@ -193,6 +200,7 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
         getInputTank().drain(lastRecipe.getRequiredFluid().getRequiredAmount(), FluidAction.EXECUTE);
         getDenseOutputTank().fill(lastRecipe.getDenseOutputFluid(), FluidAction.EXECUTE);
         getLightOutputTank().fill(lastRecipe.getLightOutputFluid(), FluidAction.EXECUTE);
+        advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.USE_CENTRIFUGE); //TODO fix (this isn't working)
         notifyUpdate();
     };
 

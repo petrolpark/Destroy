@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:drunk",
+    "criteria": {
+      "pee": {
+        "conditions": {},
+        "trigger": "destroy:urinate"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.urinate.description"
+      },
+      "icon": {
+        "item": "minecraft:cauldron"
+      },
+      "title": {
+        "translate": "advancement.destroy.urinate"
+      }
+    },
+    "requirements": [
+      [
+        "pee"
+      ]
+    ]
+  }

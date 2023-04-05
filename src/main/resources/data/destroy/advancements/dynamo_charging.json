@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:root",
+    "criteria": {
+      "charge": {
+        "conditions": {},
+        "trigger": "destroy:charge_with_dynamo"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.dynamo_charging.description"
+      },
+      "icon": {
+        "item": "destroy:dynamo"
+      },
+      "title": {
+        "translate": "advancement.destroy.dynamo_charging"
+      }
+    },
+    "requirements": [
+      [
+        "charge"
+      ]
+    ]
+  }

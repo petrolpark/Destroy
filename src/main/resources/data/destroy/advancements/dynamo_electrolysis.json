@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:dynamo_charging",
+    "criteria": {
+      "electrolyze": {
+        "conditions": {},
+        "trigger": "destroy:electrolyze_with_dynamo"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.dynamo_electrolysis.description"
+      },
+      "icon": {
+        "item": "destroy:dynamo"
+      },
+      "title": {
+        "translate": "advancement.destroy.dynamo_electrolysis"
+      }
+    },
+    "requirements": [
+      [
+        "electrolyze"
+      ]
+    ]
+  }

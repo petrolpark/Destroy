@@ -1,0 +1,27 @@
+{
+    "parent": "destroy:baby_blue",
+    "criteria": {
+      "take": {
+        "conditions": {},
+        "trigger": "destroy:take_baby_blue_high"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.baby_blue_high.description"
+      },
+      "icon": {
+        "item": "destroy:baby_blue_crystal"
+      },
+      "frame": "challenge",
+      "title": {
+        "translate": "advancement.destroy.baby_blue_high"
+      }
+    },
+    "requirements": [
+      [
+        "take"
+      ]
+    ]
+  }

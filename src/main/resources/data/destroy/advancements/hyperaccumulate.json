@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:otswald_process",
+    "criteria": {
+      "hyperaccumulate": {
+        "conditions": {},
+        "trigger": "destroy:hyperaccumulate"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.hyperaccumulate.description"
+      },
+      "icon": {
+        "item": "destroy:hyperaccumulating_fertilizer"
+      },
+      "title": {
+        "translate": "advancement.destroy.hyperaccumulate"
+      }
+    },
+    "requirements": [
+      [
+        "hyperaccumulate"
+      ]
+    ]
+  }

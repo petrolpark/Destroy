@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.item;
 
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.util.CropMutation;
 
 import net.minecraft.core.BlockPos;
@@ -59,10 +60,13 @@ public class HyperaccumulatingFertilizerItem extends BoneMealItem {
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         boolean couldGrow = grow(level, context.getClickedPos()); // Try grow the Crop
-        if (couldGrow && !level.isClientSide() && context.getPlayer() != null && !context.getPlayer().isCreative()) { // If necessary, use up one Hyperaccumulating Fertilizer
-            context.getItemInHand().shrink(1);
+        if (couldGrow) { // If necessary, use up one Hyperaccumulating Fertilizer
+            if (!level.isClientSide() && context.getPlayer() != null && !context.getPlayer().isCreative()) {
+                context.getItemInHand().shrink(1);
+            };
+            DestroyAdvancements.HYPERACCUMULATE.award(level, context.getPlayer());
+            return InteractionResult.SUCCESS;
         };
-        if (couldGrow) return InteractionResult.SUCCESS;
         return super.useOn(context);
     };
 

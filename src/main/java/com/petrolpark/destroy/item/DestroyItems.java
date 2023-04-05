@@ -447,22 +447,7 @@ public class DestroyItems {
     UNPROCESSED_SUPER_GLUE = REGISTRATE.item("unprocessed_super_glue", SequencedAssemblyItem::new)
         .register();
 
-    // UNCATEGORISED
-
     public static final ItemEntry<Item>
-
-    AGAR = REGISTRATE.item("agar", Item::new)
-        .register(),
-    PAPER_PULP = REGISTRATE.item("paper_pulp", Item::new)
-        .register(),
-    SAWDUST = REGISTRATE.item("sawdust", Item::new)
-        .register(),
-    TEAR_BOTTLE = REGISTRATE.item("tear_bottle", Item::new)
-        .register(),
-    URINE_BOTTLE = REGISTRATE.item("urine_bottle", Item::new)
-        .register(),
-    YEAST = REGISTRATE.item("yeast", Item::new)
-        .register(),
 
     // BLAZE BURNER TREATS
 
@@ -567,28 +552,51 @@ public class DestroyItems {
         .tag(DestroyItemTags.SYRINGE.tag)
         .register();
 
-    public static final ItemEntry<AspirinSyringeItem> ASPIRIN_SYRINGE = REGISTRATE.item("aspirin_syringe", AspirinSyringeItem::new)
+    public static final ItemEntry<? extends SyringeItem>
+
+    ASPIRIN_SYRINGE = REGISTRATE.item("aspirin_syringe", AspirinSyringeItem::new)
         .tag(DestroyItemTags.SYRINGE.tag)
         .color(() -> () -> (stack, tintIndex) -> tintIndex == 0 ? 16716136 : -1)
-        .register();
+        .register(),
 
-    public static final ItemEntry<BabyBlueSyringeItem> BABY_BLUE_SYRINGE = REGISTRATE.item("baby_blue_syringe", p -> new BabyBlueSyringeItem(p, 1200, 1))
+    BABY_BLUE_SYRINGE = REGISTRATE.item("baby_blue_syringe", p -> new BabyBlueSyringeItem(p, 1200, 1))
         .tag(DestroyItemTags.SYRINGE.tag)
         .color(() -> () -> (stack, tintIndex) -> tintIndex == 0 ? 8825802 : -1)
-        .register();
+        .register(),
 
-    public static final ItemEntry<SyringeItem> CISPLATIN_SYRINGE = REGISTRATE.item("cisplatin_syringe", SyringeItem::new)
+    CISPLATIN_SYRINGE = REGISTRATE.item("cisplatin_syringe", SyringeItem::new)
         .tag(DestroyItemTags.SYRINGE.tag)
         .color(() -> () -> (stack, tintIndex) -> tintIndex == 0 ? 11459547 : -1)
         .register();
 
     // UNCATEGORISED
 
-    public static final ItemEntry<HyperaccumulatingFertilizerItem> HYPERACCUMULATING_FERTILIZER = REGISTRATE.item("hyperaccumulating_fertilizer", HyperaccumulatingFertilizerItem::new)
-        .tag(Tags.Items.DUSTS)
+    static {
+        REGISTRATE.startSection(AllSections.UNASSIGNED);
+    };
+
+    public static final ItemEntry<Item>
+
+    AGAR = REGISTRATE.item("agar", Item::new)
+        .register(),
+    PAPER_PULP = REGISTRATE.item("paper_pulp", Item::new)
+        .register(),
+    SAWDUST = REGISTRATE.item("sawdust", Item::new)
+        .register(),
+    TEAR_BOTTLE = REGISTRATE.item("tear_bottle", Item::new)
+        .register(),
+    URINE_BOTTLE = REGISTRATE.item("urine_bottle", Item::new)
+        .register(),
+    YEAST = REGISTRATE.item("yeast", Item::new)
+        .register(),
+    CHALK = REGISTRATE.item("chalk", Item::new)
+        .register(),
+    LOGO = REGISTRATE.item("logo", Item::new)
         .register();
 
-    public static final ItemEntry<Item> CHALK = REGISTRATE.item("chalk", Item::new)
+
+    public static final ItemEntry<HyperaccumulatingFertilizerItem> HYPERACCUMULATING_FERTILIZER = REGISTRATE.item("hyperaccumulating_fertilizer", HyperaccumulatingFertilizerItem::new)
+        .tag(Tags.Items.DUSTS)
         .register();
 
     public static final ItemEntry<RecordItem> MUSIC_DISC_SPECTRUM = REGISTRATE.item("music_disc_spectrum", p -> new RecordItem(9, DestroySoundEvents.MUSIC_DISC_SPECTRUM, p, 3720))

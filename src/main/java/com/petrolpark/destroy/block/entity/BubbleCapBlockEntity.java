@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
+import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.BubbleCapBlock;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
@@ -57,6 +59,8 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
     protected SmartFluidTankBehaviour internalTank, tank;
     protected LazyOptional<IFluidHandler> fluidCapability;
 
+    protected DestroyAdvancementBehaviour advancementBehaviour;
+
     public BubbleCapBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
         pipeFace = state.getValue(BubbleCapBlock.PIPE_FACE);
@@ -80,6 +84,9 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
         fluidCapability = LazyOptional.of(() -> {
 			return new CombinedTankWrapper(tank.getCapability().orElse(null));
 		});
+
+        advancementBehaviour = new DestroyAdvancementBehaviour(this);
+        behaviours.add(advancementBehaviour);
     };
 
     @Override
@@ -154,6 +161,10 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
             };
             shouldCreateParticles = false; // Reset this, we've made them now
         };
+    };
+
+    public void onDistill() {
+        advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.DISTILL);
     };
 
     public static int getTankCapacity() {

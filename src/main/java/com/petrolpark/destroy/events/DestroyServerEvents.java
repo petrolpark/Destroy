@@ -21,6 +21,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -34,6 +35,8 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
+import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddiction;
@@ -48,10 +51,14 @@ import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.SyringeItem;
 import com.petrolpark.destroy.networking.DestroyMessages;
 import com.petrolpark.destroy.networking.packet.LevelPollutionS2CPacket;
+import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.petrolpark.destroy.world.village.DestroyTrades;
 import com.petrolpark.destroy.world.village.DestroyVillageAddition;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.api.event.TileEntityBehaviourEvent;
+import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
+import com.simibubi.create.content.curiosities.weapons.PotatoProjectileEntity;
 import com.petrolpark.destroy.world.DestroyDamageSources;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -187,6 +194,7 @@ public class DestroyServerEvents {
             if (effect != null) {
                 player.addEffect(new MobEffectInstance(DestroyMobEffects.HANGOVER.get(), DestroyAllConfigs.COMMON.substances.hangoverDuration.get() * (effect.getAmplifier() + 1)));
                 player.removeEffect(DestroyMobEffects.INEBRIATION.get());
+                DestroyAdvancements.HANGOVER.award(player.getLevel(), player);
             };
         };
     };
@@ -206,7 +214,7 @@ public class DestroyServerEvents {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
         if (AllBlocks.MECHANICAL_ARM.isIn(player.getMainHandItem()) && DestroyItems.ZIRCONIUM_PANTS.isIn(player.getItemBySlot(EquipmentSlot.LEGS))) {
             event.getEntity().spawnAtLocation(new ItemStack(DestroyItems.CHALK_DUST.get()));
-            //TODO achievement
+            DestroyAdvancements.MECHANICAL_HANDS.award(player.getLevel(), player);
         };
     };
 
@@ -228,5 +236,20 @@ public class DestroyServerEvents {
         Registry<StructureProcessorList> processorListRegistry = event.getServer().registryAccess().registry(Registry.PROCESSOR_LIST_REGISTRY).orElseThrow();
         
         DestroyVillageAddition.addBuildingToPool(templatePoolRegistry, processorListRegistry, new ResourceLocation("minecraft:village/plains/houses"), "destroy:plains_inn", 250);
+    };
+
+    @SubscribeEvent
+    public static void onPotatoCannonProjectileCreation(EntityJoinLevelEvent event) { //TODO fix
+        if (event.getEntity() instanceof PotatoProjectileEntity entity) {
+            Destroy.LOGGER.info("Launched a "+entity.getItem());
+            if (entity.getOwner() instanceof ServerPlayer player && DestroyItemTags.HEFTY_BEETROOT.matches(entity.getItem().getItem())) {
+                DestroyAdvancements.SHOOT_HEFTY_BEETROOT.award(player.getLevel(), player);
+            };
+        };
+    };
+
+    @SubscribeEvent
+    public static void attachDestroyAdvancementBehaviourToBasin(TileEntityBehaviourEvent<BasinTileEntity> event) {
+        event.attach(new DestroyAdvancementBehaviour(event.getTileEntity()));
     };
 };

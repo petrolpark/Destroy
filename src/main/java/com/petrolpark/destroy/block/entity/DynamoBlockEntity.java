@@ -3,7 +3,9 @@ package com.petrolpark.destroy.block.entity;
 import java.util.List;
 import java.util.Optional;
 
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.behaviour.ChargingBehaviour;
+import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.behaviour.ChargingBehaviour.ChargingBehaviourSpecifics;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
@@ -37,6 +39,7 @@ public class DynamoBlockEntity extends BasinOperatingTileEntity implements Charg
     private static final Object electrolysisRecipeKey = new Object();
 
     public ChargingBehaviour chargingBehaviour;
+    protected DestroyAdvancementBehaviour advancementBehaviour;
 
     public DynamoBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
@@ -47,10 +50,13 @@ public class DynamoBlockEntity extends BasinOperatingTileEntity implements Charg
         super.addBehaviours(behaviours);
         chargingBehaviour = new ChargingBehaviour(this);
         behaviours.add(chargingBehaviour);
+
+        advancementBehaviour = new DestroyAdvancementBehaviour(this);
+        behaviours.add(advancementBehaviour);
     };
 
     public void onItemCharged(ItemStack stack) {
-        //TODO achievement
+        advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.CHARGE_WITH_DYNAMO);
     };
 
     @Override
@@ -134,6 +140,9 @@ public class DynamoBlockEntity extends BasinOperatingTileEntity implements Charg
 	public void startProcessingBasin() {
 		if (chargingBehaviour.running && chargingBehaviour.runningTicks <= ChargingBehaviour.CHARGING_TIME) return; // If this isn't the right time to process
 		super.startProcessingBasin();
+
+        advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.ELECTROLYZE_WITH_DYNAMO);
+
 		chargingBehaviour.start(ChargingBehaviour.Mode.BASIN, Vec3.atBottomCenterOf(getBlockPos().below(2)).add(0f, (2 / 16f) + getBasin().map(basin -> {
             IFluidHandler fluidHandler = basin.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
             if (fluidHandler == null) return 0f;
@@ -189,4 +198,4 @@ public class DynamoBlockEntity extends BasinOperatingTileEntity implements Charg
         return electrolysisRecipeKey;
     };
     
-}
+};

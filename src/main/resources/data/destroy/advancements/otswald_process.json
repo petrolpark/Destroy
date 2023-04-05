@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:urinate",
+    "criteria": {
+      "pee": {
+        "conditions": {},
+        "trigger": "destroy:urinate"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.otswald_process.description"
+      },
+      "icon": {
+        "item": "destroy:rhodium_ingot"
+      },
+      "title": {
+        "translate": "advancement.destroy.otswald_process"
+      }
+    },
+    "requirements": [
+      [
+        "pee"
+      ]
+    ]
+  }

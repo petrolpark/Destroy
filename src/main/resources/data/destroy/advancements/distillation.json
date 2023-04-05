@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:root",
+    "criteria": {
+      "distill": {
+        "conditions": {},
+        "trigger": "destroy:distill"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.distillation.description"
+      },
+      "icon": {
+        "item": "destroy:bubble_cap"
+      },
+      "title": {
+        "translate": "advancement.destroy.distillation"
+      }
+    },
+    "requirements": [
+      [
+        "distill"
+      ]
+    ]
+  }
