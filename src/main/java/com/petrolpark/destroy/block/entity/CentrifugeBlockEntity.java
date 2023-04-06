@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.CentrifugeBlock;
@@ -56,12 +55,12 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
     private Direction denseOutputTankFace;
 
     private int lubricationLevel;
-    private int MAX_LUBRICATION_LEVEL = DestroyAllConfigs.SERVER.contraptions.centrifugeMaxLubricationLevel.get();
+    private static final int MAX_LUBRICATION_LEVEL = DestroyAllConfigs.SERVER.contraptions.centrifugeMaxLubricationLevel.get();
 
     public int timer;
     private CentrifugationRecipe lastRecipe;
 
-    private boolean pondering;
+    private boolean pondering; // Whether this Centrifuge is in a Ponder Scene
 
     public CentrifugeBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
@@ -129,7 +128,6 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
                 return;
             };
             if (timer <= 0) {
-                Destroy.LOGGER.info("Let's try processing");
                 process();
             };
             return;
@@ -147,10 +145,12 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
                 lastRecipe = (CentrifugationRecipe)possibleRecipes.get(0);
                 timer = lastRecipe.getProcessingDuration();
                 sendData();
-                return;
             } else {
+                timer = 100; // Don't try checking for another Recipe for another 100 ticks
                 lastRecipe = null;
+                sendData();
             };
+            return;
         };
 
         sendData();
@@ -200,7 +200,7 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
         getInputTank().drain(lastRecipe.getRequiredFluid().getRequiredAmount(), FluidAction.EXECUTE);
         getDenseOutputTank().fill(lastRecipe.getDenseOutputFluid(), FluidAction.EXECUTE);
         getLightOutputTank().fill(lastRecipe.getLightOutputFluid(), FluidAction.EXECUTE);
-        advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.USE_CENTRIFUGE); //TODO fix (this isn't working)
+        advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.USE_CENTRIFUGE);
         notifyUpdate();
     };
 
@@ -213,7 +213,7 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
 
         ParticleOptions data = FluidFX.getFluidParticle(fluidStack);
         float angle = random.nextFloat() * 360;
-        Vec3 offset = new Vec3(0, 0, 0.5f);
+        Vec3 offset = new Vec3(0, 0, 0.7f);
         offset = VecHelper.rotate(offset, angle, Axis.Y);
         Vec3 target = VecHelper.rotate(offset, getSpeed() > 0 ? 25 : -25, Axis.Y);
 
@@ -248,15 +248,6 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
 
     public int getEachTankCapacity() {
         return DestroyAllConfigs.SERVER.contraptions.centrifugeCapacity.get();
-    };
-
-    @SuppressWarnings("null")
-    protected void onFluidStackChanged() {
-        if (!hasLevel()) return;
-        if (hasLevel() && !getLevel().isClientSide()) {
-            setChanged();
-            sendData();
-        };
     };
 
     /**

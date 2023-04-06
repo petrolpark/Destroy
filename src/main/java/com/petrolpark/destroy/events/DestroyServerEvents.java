@@ -239,12 +239,9 @@ public class DestroyServerEvents {
     };
 
     @SubscribeEvent
-    public static void onPotatoCannonProjectileCreation(EntityJoinLevelEvent event) { //TODO fix
-        if (event.getEntity() instanceof PotatoProjectileEntity entity) {
-            Destroy.LOGGER.info("Launched a "+entity.getItem());
-            if (entity.getOwner() instanceof ServerPlayer player && DestroyItemTags.HEFTY_BEETROOT.matches(entity.getItem().getItem())) {
-                DestroyAdvancements.SHOOT_HEFTY_BEETROOT.award(player.getLevel(), player);
-            };
+    public static void onPotatoCannonProjectileCreation(EntityJoinLevelEvent event) {
+        if (event.getEntity() instanceof PotatoProjectileEntity entity && entity.getOwner() instanceof ServerPlayer player && DestroyItemTags.HEFTY_BEETROOT.matches(entity.getItem().getItem())) {
+            DestroyAdvancements.SHOOT_HEFTY_BEETROOT.award(player.getLevel(), player);
         };
     };
 

@@ -1,39 +1,40 @@
 package com.petrolpark.destroy.block;
 
+
+import com.petrolpark.destroy.block.entity.CoolerBlockEntity;
+import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
+import com.petrolpark.destroy.block.entity.CoolerBlockEntity.ColdnessLevel;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
-import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock;
+import com.simibubi.create.foundation.block.ITE;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
 
-public class BreezeBurnerBlock extends BlazeBurnerBlock { //really this should implement ITE<BreezeBurnerBlockEntity>
+public class CoolerBlock extends Block implements ITE<CoolerBlockEntity> {
 
-    public static final EnumProperty<HeatLevel> COLD_LEVEL = EnumProperty.create("breeze", HeatLevel.class);
+    public static final EnumProperty<ColdnessLevel> COLD_LEVEL = EnumProperty.create("breeze", ColdnessLevel.class);
 
-    public BreezeBurnerBlock(Properties properties) {
+    public CoolerBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(COLD_LEVEL, HeatLevel.valueOf("FROSTING")));
+        registerDefaultState(defaultBlockState().setValue(COLD_LEVEL, ColdnessLevel.IDLE));
     };
 
     @Override
@@ -45,16 +46,10 @@ public class BreezeBurnerBlock extends BlazeBurnerBlock { //really this should i
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState p_220082_4_, boolean p_220082_5_) {
         if (level.isClientSide()) return;
-        BlockEntity blockEntity = level.getBlockEntity(pos.above()); //check for a basin
+        BlockEntity blockEntity = level.getBlockEntity(pos.above()); // Check for a Basin
         if (!(blockEntity instanceof BasinTileEntity)) return;
         BasinTileEntity basin = (BasinTileEntity) blockEntity;
-        basin.notifyChangeOfContents(); //let the Basin know there's now a Breeze burner
-        super.onPlace(state, level, pos, p_220082_4_, p_220082_5_);
-    };
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
-        list.add(new ItemStack(this)); //this is copied from Block source code (as calling the super method would add a Blaze Burner)
+        basin.notifyChangeOfContents(); // Let the Basin know there's now a Cooler
     };
 
     @Override
@@ -72,28 +67,33 @@ public class BreezeBurnerBlock extends BlazeBurnerBlock { //really this should i
     };
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter reader, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState blockState, BlockGetter level, BlockPos pos, CollisionContext context) {
         return AllShapes.HEATER_BLOCK_SHAPE;
     };
 
     @Override
-    public VoxelShape getCollisionShape(BlockState p_220071_1_, BlockGetter p_220071_2_, BlockPos p_220071_3_, CollisionContext p_220071_4_) {
-        return getShape(p_220071_1_, p_220071_2_, p_220071_3_, p_220071_4_);
+	public VoxelShape getCollisionShape(BlockState blockState, BlockGetter level, BlockPos pos, CollisionContext context) {
+		if (context == CollisionContext.empty()) return AllShapes.HEATER_BLOCK_SPECIAL_COLLISION_SHAPE;
+		return getShape(blockState, level, pos, context);
+	};
+
+    public static ColdnessLevel getColdnessLevelOf(BlockState blockState) {
+        return blockState.getValue(COLD_LEVEL);
     };
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, Level p_180641_2_, BlockPos p_180641_3_) {
-        return 1;
+    public Class<CoolerBlockEntity> getTileEntityClass() {
+        return CoolerBlockEntity.class;
     };
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
-        return;
+    public BlockEntityType<? extends CoolerBlockEntity> getTileEntityType() {
+        return DestroyBlockEntities.COOLER.get();
     };
 
-    public static HeatLevel getHeatLevelOf(BlockState blockState) {
-        return HeatLevel.valueOf("FROSTING");
-    };
+    @Override
+	public boolean isPathfindable(BlockState state, BlockGetter reader, BlockPos pos, PathComputationType type) {
+		return false;
+	};
     
-}
+};

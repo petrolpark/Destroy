@@ -7,6 +7,7 @@ import com.petrolpark.destroy.block.instance.DynamoCogInstance;
 import com.petrolpark.destroy.block.renderer.AgingBarrelRenderer;
 import com.petrolpark.destroy.block.renderer.BubbleCapRenderer;
 import com.petrolpark.destroy.block.renderer.CentrifugeRenderer;
+import com.petrolpark.destroy.block.renderer.CoolerRenderer;
 import com.petrolpark.destroy.block.renderer.DynamoRenderer;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
@@ -32,6 +33,12 @@ public class DestroyBlockEntities {
         .instance(() -> CentrifugeCogInstance::new)
         .validBlocks(DestroyBlocks.CENTRIFUGE)
         .renderer(() -> CentrifugeRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<CoolerBlockEntity> COOLER = REGISTRATE
+        .tileEntity("cooler", CoolerBlockEntity::new)
+        .validBlocks(DestroyBlocks.COOLER)
+        .renderer(() -> CoolerRenderer::new)
         .register();
 
     public static final BlockEntityEntry<DynamoBlockEntity> DYNAMO = REGISTRATE

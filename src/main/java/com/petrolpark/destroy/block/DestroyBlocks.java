@@ -42,16 +42,6 @@ public class DestroyBlocks {
 
     // CONTRAPTIONS
 
-    // public static final BlockEntry<BreezeBurnerBlock> BREEZE_BURNER = REGISTRATE.block("breeze_burner", BreezeBurnerBlock::new)
-    //     .initialProperties(SharedProperties::stone)
-    //     .properties(p -> p
-    //         .color(MaterialColor.DEEPSLATE)
-    //         .noOcclusion()
-    //     ).transform(TagGen.pickaxeOnly())
-    //     .item()
-    //     .transform(customItemModel())
-    //     .register();
-
     public static final BlockEntry<BubbleCapBlock> BUBBLE_CAP = REGISTRATE.block("bubble_cap", BubbleCapBlock::new)
         .initialProperties(SharedProperties::stone)
         .properties(p -> p
@@ -70,6 +60,16 @@ public class DestroyBlocks {
         ).blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
         .transform(TagGen.pickaxeOnly())
         .transform(BlockStressDefaults.setImpact(5.0))
+        .item()
+        .transform(customItemModel())
+        .register();
+
+    public static final BlockEntry<CoolerBlock> COOLER = REGISTRATE.block("cooler", CoolerBlock::new)
+        .initialProperties(SharedProperties::stone)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_GRAY)
+            .noOcclusion()
+        ).transform(TagGen.pickaxeOnly())
         .item()
         .transform(customItemModel())
         .register();
