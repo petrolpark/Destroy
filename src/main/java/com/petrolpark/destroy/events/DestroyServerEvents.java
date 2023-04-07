@@ -1,13 +1,17 @@
 package com.petrolpark.destroy.events;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Stray;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -30,6 +34,7 @@ import net.minecraftforge.event.level.SleepFinishedTimeEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
@@ -37,6 +42,7 @@ import java.util.List;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddiction;
@@ -56,8 +62,10 @@ import com.petrolpark.destroy.world.village.DestroyTrades;
 import com.petrolpark.destroy.world.village.DestroyVillageAddition;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllItems;
 import com.simibubi.create.api.event.TileEntityBehaviourEvent;
 import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
+import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlockItem;
 import com.simibubi.create.content.curiosities.weapons.PotatoProjectileEntity;
 import com.petrolpark.destroy.world.DestroyDamageSources;
 
@@ -248,5 +256,32 @@ public class DestroyServerEvents {
     @SubscribeEvent
     public static void attachDestroyAdvancementBehaviourToBasin(TileEntityBehaviourEvent<BasinTileEntity> event) {
         event.attach(new DestroyAdvancementBehaviour(event.getTileEntity()));
+    };
+
+    @SubscribeEvent
+    public static void captureStrayEvent(PlayerInteractEvent.EntityInteractSpecific event) {
+        Player player = event.getEntity();
+        ItemStack itemStack = player.getItemInHand(event.getHand());
+        if (AllItems.EMPTY_BLAZE_BURNER.isIn(itemStack) && event.getTarget() instanceof Stray stray) {
+            BlazeBurnerBlockItem item = (BlazeBurnerBlockItem) itemStack.getItem();
+            if (item.hasCapturedBlaze()) return;
+
+            event.getLevel().playSound(null, new BlockPos(stray.position()), SoundEvents.STRAY_HURT, SoundSource.HOSTILE, 0.25f, 0.75f);
+            stray.discard(); // Remove the Stray
+
+            // Give the Cooler to the Player
+            ItemStack filled = DestroyBlocks.COOLER.asStack();
+            if (!player.isCreative())
+                itemStack.shrink(1);
+            if (itemStack.isEmpty()) {
+                player.setItemInHand(event.getHand(), filled);
+            } else {
+                player.getInventory().placeItemBackInInventory(filled);
+            };
+
+            DestroyAdvancements.CAPTURE_STRAY.award(event.getLevel(), player);
+
+            event.setResult(Result.DENY);
+        };
     };
 };

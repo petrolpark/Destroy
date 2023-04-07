@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:root",
+    "criteria": {
+      "capture": {
+        "conditions": {},
+        "trigger": "destroy:capture_stray"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.capture_stray.description"
+      },
+      "icon": {
+        "item": "destroy:cooler"
+      },
+      "title": {
+        "translate": "advancement.destroy.capture_stray"
+      }
+    },
+    "requirements": [
+      [
+        "capture"
+      ]
+    ]
+  }

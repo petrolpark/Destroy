@@ -1,0 +1,32 @@
+{
+    "parent": "destroy:root",
+    "criteria": {
+      "hold": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+            "items": [
+                {
+                    "tag": "destroy:plastic"
+                }
+            ]
+        }
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.plastic.description"
+      },
+      "icon": {
+        "item": "destroy:abs"
+      },
+      "title": {
+        "translate": "advancement.destroy.plastic"
+      }
+    },
+    "requirements": [
+      [
+        "hold"
+      ]
+    ]
+  }

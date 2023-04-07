@@ -17,6 +17,7 @@ public enum DestroyAdvancements {
     TAKE_BABY_BLUE("take_baby_blue"),
     TAKE_BABY_BLUE_HIGH("take_baby_blue_high"),
     SHOOT_HEFTY_BEETROOT("shoot_hefty_beetroot"),
+    CAPTURE_STRAY("capture_stray"),
     USE_CENTRIFUGE("use_centrifuge"),
     LUBRICATE_CENTRIFUGE("lubricate_centrifuge"),
     DISTILL("distill"),

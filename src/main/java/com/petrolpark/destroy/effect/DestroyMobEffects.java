@@ -10,30 +10,20 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class DestroyMobEffects {
-    public static final DeferredRegister<MobEffect> MOB_EFFECTS
-        = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, Destroy.MOD_ID);
+    public static final DeferredRegister<MobEffect> MOB_EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, Destroy.MOD_ID);
 
-    public static final RegistryObject<MobEffect> FRAGRANCE = MOB_EFFECTS.register("fragrance",
+
+    public static final RegistryObject<MobEffect> 
+
+    CRYING = MOB_EFFECTS.register("crying", CryingMobEffect::new),
+    FRAGRANCE = MOB_EFFECTS.register("fragrance",
         () -> new DummyMobEffect(MobEffectCategory.BENEFICIAL, 0xF294D9)
-    );
-
-    public static final RegistryObject<MobEffect> HANGOVER = MOB_EFFECTS.register("hangover",
-        () -> new HangoverMobEffect(MobEffectCategory.HARMFUL, 0x59390B)
-    );
-
-    public static final RegistryObject<MobEffect> INEBRIATION = MOB_EFFECTS.register("inebriation",
-        () -> new InebriationMobEffect(MobEffectCategory.HARMFUL, 0xE88010)
-    );
-
-    public static final RegistryObject<MobEffect> BABY_BLUE_HIGH = MOB_EFFECTS.register("baby_blue_high",
-        () -> new BabyBlueHighMobEffect(MobEffectCategory.BENEFICIAL, 0x8BDCEB)
-    );
-
-    public static final RegistryObject<MobEffect> BABY_BLUE_WITHDRAWAL = MOB_EFFECTS.register("baby_blue_withdrawal",
-        () -> new BabyBlueWithdrawalMobEffect(MobEffectCategory.HARMFUL, 0x91B1B7)
-    );
-
-    public static final RegistryObject<MobEffect> SUN_PROTECTION = MOB_EFFECTS.register("sun_protection",
+    ),
+    HANGOVER = MOB_EFFECTS.register("hangover", HangoverMobEffect::new),
+    INEBRIATION = MOB_EFFECTS.register("inebriation", InebriationMobEffect::new),
+    BABY_BLUE_HIGH = MOB_EFFECTS.register("baby_blue_high", BabyBlueHighMobEffect::new),
+    BABY_BLUE_WITHDRAWAL = MOB_EFFECTS.register("baby_blue_withdrawal", BabyBlueWithdrawalMobEffect::new),
+    SUN_PROTECTION = MOB_EFFECTS.register("sun_protection",
         () -> new DummyMobEffect(MobEffectCategory.BENEFICIAL, 0xFFFFFF)
     );
 

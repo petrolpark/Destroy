@@ -9,8 +9,9 @@ import net.minecraft.world.entity.ai.attributes.*;
 import net.minecraft.world.entity.player.Player;
 
 public class BabyBlueWithdrawalMobEffect extends UncurableMobEffect {
-    public BabyBlueWithdrawalMobEffect(MobEffectCategory mobEffectCategory, int color) {
-        super(mobEffectCategory, color);
+
+    public BabyBlueWithdrawalMobEffect() {
+        super(MobEffectCategory.HARMFUL, 0x91B1B7);
         this.addAttributeModifier(Attributes.MOVEMENT_SPEED, "31875c8a-f500-477c-ac52-70355c6adc12", (double)-0.15F, AttributeModifier.Operation.MULTIPLY_TOTAL);
         this.addAttributeModifier(Attributes.ATTACK_SPEED, "0a7d851c-b38b-47c8-9131-348a492e3af8", (double)-0.45F, AttributeModifier.Operation.MULTIPLY_TOTAL);
         this.addAttributeModifier(Attributes.ATTACK_DAMAGE, "93bfb982-7e97-472f-b2f6-a0c51b4d916f", (double)-1.0F, AttributeModifier.Operation.ADDITION);

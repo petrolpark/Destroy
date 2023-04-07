@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:drunk",
+    "criteria": {
+      "hangover": {
+        "conditions": {},
+        "trigger": "destroy:hangover"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.hangover.description"
+      },
+      "icon": {
+        "item": "minecraft:red_bed"
+      },
+      "title": {
+        "translate": "advancement.destroy.hangover"
+      }
+    },
+    "requirements": [
+      [
+        "hangover"
+      ]
+    ]
+  }

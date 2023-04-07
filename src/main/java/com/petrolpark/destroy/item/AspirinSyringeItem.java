@@ -1,8 +1,10 @@
 package com.petrolpark.destroy.item;
 
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
 
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -15,6 +17,9 @@ public class AspirinSyringeItem extends SyringeItem {
     @Override
     public void onInject(ItemStack itemStack, Level level, LivingEntity target) {
         target.removeEffect(DestroyMobEffects.HANGOVER.get());
+        if (target instanceof Player player) {
+            DestroyAdvancements.CURE_HANGOVER.award(level, player);
+        };
     };
     
 };

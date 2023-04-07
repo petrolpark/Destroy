@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:plastic",
+    "criteria": {
+      "collect": {
+        "conditions": {},
+        "trigger": "destroy:collect_tears"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.tear_bottle.description"
+      },
+      "icon": {
+        "item": "destroy:tear_bottle"
+      },
+      "title": {
+        "translate": "advancement.destroy.tear_bottle"
+      }
+    },
+    "requirements": [
+      [
+        "collect"
+      ]
+    ]
+  }

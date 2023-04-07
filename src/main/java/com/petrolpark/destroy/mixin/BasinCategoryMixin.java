@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
@@ -26,7 +27,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @Mixin(BasinCategory.class)
@@ -41,7 +41,7 @@ public class BasinCategoryMixin {
         });
         
         if (recipe.getRequiredHeat().testBlazeBurner(HeatLevel.valueOf("FROSTING"))) {
-            builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 81).addItemStack(new ItemStack(Blocks.DIRT)); //TODO replace with Breeze Burner
+            builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 81).addItemStack(DestroyBlocks.COOLER.asStack());
         } else if (!recipe.getRequiredHeat().testBlazeBurner(HeatLevel.NONE)) { // This one is copied right from Create, it renders the Blaze Burner
             builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 81).addItemStack(AllBlocks.BLAZE_BURNER.asStack());
         };

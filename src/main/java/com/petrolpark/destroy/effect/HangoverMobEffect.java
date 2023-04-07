@@ -11,8 +11,8 @@ import net.minecraft.world.entity.ai.attributes.*;
 import net.minecraft.world.item.ItemStack;
 
 public class HangoverMobEffect extends MobEffect {
-    public HangoverMobEffect(MobEffectCategory mobEffectCategory, int color) {
-        super(mobEffectCategory, color);
+    public HangoverMobEffect() {
+        super(MobEffectCategory.HARMFUL, 0x59390B);
         this.addAttributeModifier(Attributes.MOVEMENT_SPEED, "31875c8a-f500-477c-ac52-70355c6adc12", (double)-0.10F, AttributeModifier.Operation.MULTIPLY_TOTAL);
     }
 
