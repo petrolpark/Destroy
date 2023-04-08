@@ -3,6 +3,8 @@
     "package": "com.petrolpark.destroy.mixin",
     "compatibilityLevel": "JAVA_16",
     "mixins": [
+        "AbstractVillagerAccessor",
+        "AgeableMobAccessor",
         "BasinCategoryMixin",
         "CreateRecipeCategoryMixin",
         "DestroyFrictionModifier",
@@ -10,7 +12,9 @@
         "FluidIngredientMixin",
         "HeatConditionMixin",
         "HeatLevelMixin",
-        "RenderChunkRegionAccessor"
+        "RenderChunkRegionAccessor",
+        "VillagerAccessor",
+        "VillagerMixin"
     ],
     "client": [
 

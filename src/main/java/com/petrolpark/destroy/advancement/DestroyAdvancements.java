@@ -28,6 +28,7 @@ public enum DestroyAdvancements {
     HYPERACCUMULATE("hyperaccumulate"),
     MECHANICAL_HANDS("mechanical_hands"),
     OTSWALD_PROCESS("otswald_process"),
+    JUMP_ON_SAND_CASTLE("jump_on_sand_castle"),
     COLLECT_TEARS("collect_tears"),
     URINATE("urinate"),
     VERY_DRUNK("very_drunk");

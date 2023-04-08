@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:plastic",
+    "criteria": {
+      "jump": {
+        "conditions": {},
+        "trigger": "destroy:jump_on_sand_castle"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.sand_castle.description"
+      },
+      "icon": {
+        "item": "destroy:bucket_and_spade"
+      },
+      "title": {
+        "translate": "advancement.destroy.sand_castle"
+      }
+    },
+    "requirements": [
+      [
+        "jump"
+      ]
+    ]
+  }

@@ -12,9 +12,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Stray;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
@@ -68,6 +70,7 @@ import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlockItem;
 import com.simibubi.create.content.curiosities.weapons.PotatoProjectileEntity;
 import com.petrolpark.destroy.world.DestroyDamageSources;
+import com.petrolpark.destroy.world.entity.goal.BuildSandCastleGoal;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
@@ -247,10 +250,18 @@ public class DestroyServerEvents {
     };
 
     @SubscribeEvent
-    public static void onPotatoCannonProjectileCreation(EntityJoinLevelEvent event) {
-        if (event.getEntity() instanceof PotatoProjectileEntity entity && entity.getOwner() instanceof ServerPlayer player && DestroyItemTags.HEFTY_BEETROOT.matches(entity.getItem().getItem())) {
+    public static void onJoinEntity(EntityJoinLevelEvent event) {
+
+        // Award achievement for shooting a Hefty Beetroot
+        if (event.getEntity() instanceof PotatoProjectileEntity projectile && projectile.getOwner() instanceof ServerPlayer player && DestroyItemTags.HEFTY_BEETROOT.matches(projectile.getItem().getItem())) {
             DestroyAdvancements.SHOOT_HEFTY_BEETROOT.award(player.getLevel(), player);
         };
+
+        // Attach new AI to Villagers
+        if (event.getEntity() instanceof Villager villager && villager.isBaby()) {
+            villager.goalSelector.addGoal(0, new BuildSandCastleGoal(villager, true)); // It would be cleaner to use a Behavior rather than a Goal here but what you have failed to consider with that option is that I am lazy
+        };
+    
     };
 
     @SubscribeEvent
@@ -259,9 +270,11 @@ public class DestroyServerEvents {
     };
 
     @SubscribeEvent
-    public static void captureStrayEvent(PlayerInteractEvent.EntityInteractSpecific event) {
+    public static void rightClickEntity(PlayerInteractEvent.EntityInteractSpecific event) {
         Player player = event.getEntity();
         ItemStack itemStack = player.getItemInHand(event.getHand());
+
+        // Capturing a Stray
         if (AllItems.EMPTY_BLAZE_BURNER.isIn(itemStack) && event.getTarget() instanceof Stray stray) {
             BlazeBurnerBlockItem item = (BlazeBurnerBlockItem) itemStack.getItem();
             if (item.hasCapturedBlaze()) return;
@@ -280,6 +293,26 @@ public class DestroyServerEvents {
             };
 
             DestroyAdvancements.CAPTURE_STRAY.award(event.getLevel(), player);
+
+            event.setResult(Result.DENY);
+        };
+
+        // Collecting Tears
+        if (itemStack.is(Items.GLASS_BOTTLE) && event.getTarget() instanceof LivingEntity livingEntity && livingEntity.hasEffect(DestroyMobEffects.CRYING.get())) {
+
+            livingEntity.removeEffect(DestroyMobEffects.CRYING.get()); // Stop the crying
+
+            // Give the Tear Bottle to the Plater
+            ItemStack filled = DestroyItems.TEAR_BOTTLE.asStack();
+            if (!player.isCreative())
+                itemStack.shrink(1);
+            if (itemStack.isEmpty()) {
+                player.setItemInHand(event.getHand(), filled);
+            } else {
+                player.getInventory().placeItemBackInInventory(filled);
+            };
+
+            DestroyAdvancements.COLLECT_TEARS.award(event.getLevel(), player);
 
             event.setResult(Result.DENY);
         };

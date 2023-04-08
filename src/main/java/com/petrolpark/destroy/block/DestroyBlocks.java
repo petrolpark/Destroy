@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
@@ -85,6 +86,16 @@ public class DestroyBlocks {
         .item(AssemblyOperatorBlockItem::new)
         .transform(customItemModel())
         .register();
+
+    public static final BlockEntry<SandCastleBlock> SAND_CASTLE = REGISTRATE.block("sand_castle", SandCastleBlock::new)
+        .initialProperties(Material.DECORATION)
+        .properties(p -> p
+            .color(MaterialColor.SAND)
+            .noOcclusion()
+            .noLootTable()
+            .instabreak()
+            .sound(SoundType.SAND)
+        ).register();
 
     static {
         REGISTRATE.startSection(AllSections.CURIOSITIES);

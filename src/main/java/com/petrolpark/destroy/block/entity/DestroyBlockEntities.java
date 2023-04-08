@@ -48,6 +48,11 @@ public class DestroyBlockEntities {
         .renderer(() -> DynamoRenderer::new)
         .register();
 
+    public static final BlockEntityEntry<SandCastleBlockEntity> SAND_CASTLE = REGISTRATE
+        .tileEntity("sand_castle", SandCastleBlockEntity::new)
+        .validBlocks(DestroyBlocks.SAND_CASTLE)
+        .register();
+
     public static void register() {};
     
 }

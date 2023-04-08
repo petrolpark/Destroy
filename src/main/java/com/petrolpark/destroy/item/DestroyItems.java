@@ -268,10 +268,13 @@ public class DestroyItems {
         REGISTRATE.startSection(AllSections.MATERIALS);
     };
 
+    public static final ItemEntry<BucketAndSpadeItem> BUCKET_AND_SPADE = REGISTRATE.item("bucket_and_spade", BucketAndSpadeItem::new)
+        .properties(p -> p
+            .durability(4)
+        ).register();
+
     public static final ItemEntry<Item>
 
-    BUCKET_AND_SPADE = REGISTRATE.item("bucket_and_spade", Item::new)
-        .register(),
     PLAYWELL = REGISTRATE.item("playwell", Item::new)
         .register(),
 
@@ -572,7 +575,7 @@ public class DestroyItems {
     // UNCATEGORISED
 
     static {
-        REGISTRATE.startSection(AllSections.UNASSIGNED);
+        REGISTRATE.startSection(AllSections.CURIOSITIES);
     };
 
     public static final ItemEntry<Item>

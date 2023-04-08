@@ -1,0 +1,7 @@
+{
+    "parent": "destroy:block/sand_castle",
+    "textures": {
+        "0": "minecraft:block/soul_sand",
+	"particle": "minecraft:block/soul_sand"
+    }
+}

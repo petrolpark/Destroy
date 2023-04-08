@@ -32,6 +32,12 @@ public class DestroyShapes {
         .erase(2, 0, 2, 14, 16, 14)
         .erase(2, 2, 0, 14, 14, 16)
         .add(2, 2, 2, 14, 14, 14)
+        .build(),
+
+    SAND_CASTLE = shape(3, 0, 3, 13, 14, 13)
+        .build(),
+        
+    COOLER = shape(1, -2, 1, 15, 14, 15)
         .build();
 
     public static final VoxelShaper AGING_BARREL_OPEN = shape(0, 0, 0, 16, 14, 16)

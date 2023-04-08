@@ -19,7 +19,8 @@ import net.minecraftforge.registries.RegistryObject;
 
 public enum DestroyParticleTypes {
 
-    DISTILLATION(GasParticleData::new);
+    DISTILLATION(GasParticleData::new),
+    TEAR(TearParticle.Data::new);
 
     private final ParticleEntry<?> particleEntry;
 

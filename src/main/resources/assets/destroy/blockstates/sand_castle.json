@@ -1,0 +1,13 @@
+{
+    "variants": {
+        "material=sand": {
+            "model": "destroy:block/sand_castle"
+        },
+        "material=red_sand": {
+            "model": "destroy:block/red_sand_castle"
+        },
+        "material=soul_sand": {
+            "model": "destroy:block/soul_sand_castle"
+        }
+    }
+}

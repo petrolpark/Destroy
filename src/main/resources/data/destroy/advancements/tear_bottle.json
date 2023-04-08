@@ -1,5 +1,5 @@
 {
-    "parent": "destroy:plastic",
+    "parent": "destroy:sand_castle",
     "criteria": {
       "collect": {
         "conditions": {},

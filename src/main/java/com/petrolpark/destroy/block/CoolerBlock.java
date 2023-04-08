@@ -4,6 +4,7 @@ package com.petrolpark.destroy.block;
 import com.petrolpark.destroy.block.entity.CoolerBlockEntity;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.entity.CoolerBlockEntity.ColdnessLevel;
+import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
 import com.simibubi.create.foundation.block.ITE;
@@ -68,7 +69,7 @@ public class CoolerBlock extends Block implements ITE<CoolerBlockEntity> {
 
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return AllShapes.HEATER_BLOCK_SHAPE;
+        return DestroyShapes.COOLER;
     };
 
     @Override
