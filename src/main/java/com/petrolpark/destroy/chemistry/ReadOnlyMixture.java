@@ -20,17 +20,36 @@ import net.minecraft.network.chat.Component;
 
 /**
  * A {@link com.petrolpark.destroy.chemistry.Mixture Mixture} which cannot react.
- * Instantiating or adding a Molecule to a Read-Only Mixture skips out on the processing-intensive generation of Reactions,
+ * Instantiating - or adding a {@link Molecule} to - a Read-Only Mixture skips out on the processing-intensive generation of {@link Reaction Reactions},
  * making them useful for GUI displays.
  */
 public class ReadOnlyMixture {
 
-    public static final float IMPURITY_THRESHOLD = 0.1f; // The minimum value below which a Molecule is considered an impurity and not a significant part of the Mixture
+    /**
+     * The minimum value below which a {@link Molecule} is considered an impurity and not a significant part of the Mixture.
+     */
+    public static final float IMPURITY_THRESHOLD = 0.1f;
 
+    /**
+     * The display name of this Mixture. This may be a custom name (if this Mixture comes from a Recipe), or {@link ReadOnlyMixture#getName generated}
+     * if this Mixture has been {@link Mixture#react reacted}.
+     * <p>It is recommemded that Mixtures obtained from Recipes are given custom names using the tag {@code TranslationKey} to avoid having to calculate a name.</p>
+     */
     private Component name;
+
+    /**
+     * The full translation key of this Mixture if it has a custom name, for example {@code destroy.mixture.brine}.
+     */
     private String translationKey;
     
+    /**
+     * How hot (in Kelvins) this Mixture is. Temperature affects the rate of {@link Reaction Reactions}.
+     */
     protected float temperature;
+
+    /**
+     * The {@link Molecule Molecules} contained by this Mixture, mapped to their concentrations (in moles per litre).
+     */
     protected Map<Molecule, Float> contents;
 
     public ReadOnlyMixture() {
@@ -42,7 +61,7 @@ public class ReadOnlyMixture {
     };
 
     /**
-     * Converts this Mixture into a storeable String that can be read by {@link #readNBT readNBT()}.
+     * Converts this Mixture into a storeable String that can be {@link ReadOnlyMixture#readNBT parsed back} into a Mixture.
      */
     public CompoundTag writeNBT() {
         CompoundTag compound = new CompoundTag();
@@ -62,6 +81,7 @@ public class ReadOnlyMixture {
     /**
      * Generates a Read-Only Mixture from the given Compound Tag.
      * @param compound
+     * @return A new Read-Only Mixture instance
      */
     public static ReadOnlyMixture readNBT(CompoundTag compound) {
         ReadOnlyMixture mixture = new ReadOnlyMixture();
@@ -76,22 +96,36 @@ public class ReadOnlyMixture {
         return mixture;
     };
 
+    /**
+     * The display name of this Mixture. This may be a custom name (if this Mixture comes from a Recipe), or {@link ReadOnlyMixture#getName generated}
+     * if this Mixture has been {@link Mixture#react reacted}.
+     * <p>It is recommemded that Mixtures obtained from Recipes are given custom names using the tag {@code TranslationKey} to avoid having to calculate a name.</p>
+     */
     public Component getName() {
         if (name == null) updateName();
         return name;
     };
 
+    /**
+     * Sets the display name of this Mixture to avoid having to calculate what the name should be based on the {@link ReadOnlyMixture#contents contents}. 
+     * @param translationKey The full translation key of this Mixture, for example {@code destroy.mixture.brine}.
+     */
     public void setTranslationKey(String translationKey) {
         this.translationKey = translationKey;
     };
 
     /**
-     * Whether this Mixture has no Molecules in it.
+     * Whether this Mixture has no {@link Molecule Molecules} in it.
      */
     public boolean isEmpty() {
         return contents.isEmpty();
     };
 
+    /**
+     * The concentration of the given {@link Molecule} in this Mixture.
+     * @param molecule
+     * @return 0 if the Mixture does not contain the given Molecule
+     */
     public float getConcentrationOf(Molecule molecule) {
         if (contents.containsKey(molecule)) {
             return contents.get(molecule);
@@ -100,6 +134,14 @@ public class ReadOnlyMixture {
         }
     };
 
+    /**
+     * Adds the given {@link Molecule} to this Read-Only Mixture with the given concentration.
+     * If the Read-Only Mixture already contained the Molecule its concentration will be replaced,
+     * thought this should not happen - to modify the contents of existing Mixtures, use a {@link Mixture} and not a Read-Only Mixture.
+     * @param molecule Will not be added if hypothetical (for example an {@link Group#getExampleMolecule example Molecule} of a {@link Group functional Group})
+     * @param concentration
+     * @return This Mixture
+     */
     public ReadOnlyMixture addMolecule(Molecule molecule, float concentration) {
 
         if (molecule == null) {
@@ -116,6 +158,10 @@ public class ReadOnlyMixture {
         return this;
     };
 
+    /**
+     * The tooltip listing the {@link ReadOnlyMixture#contents contents} of this Mixture.
+     * @param iupac Whether to use IUPAC names instead of common names
+     */
     public List<Component> getContentsTooltip(boolean iupac) {
         int i = 0;
         List<Component> tooltip = new ArrayList<>();
@@ -131,6 +177,9 @@ public class ReadOnlyMixture {
         return tooltip;
     };
 
+    /**
+     * Update the {@link ReadOnlyMixture#name name} of this Mixture to reflect what's in it.
+     */
     protected void updateName() {
 
         if (translationKey != "") {
@@ -170,8 +219,6 @@ public class ReadOnlyMixture {
                 products.add(b -> DestroyLang.translate("mixture.salts").component());
             };
         };
-
-        //Destroy.LOGGER.info("There are "+products.size()+" products, "+cations.size()+" cations, "+anions.size()+" anions, "+solvents.size()+" solvents, and "+impurities.size()+" impurities.");
         
         boolean thereAreSolvents = solvents.size() != 0;
         boolean thereAreImpurities = impurities.size() != 0;

@@ -6,12 +6,12 @@ import com.petrolpark.destroy.behaviour.SentimentalBehaviour;
 import com.petrolpark.destroy.item.BucketAndSpadeItem;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
-import com.simibubi.create.foundation.utility.VecHelper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -35,7 +35,7 @@ public class BuildSandCastleGoal extends MoveToBlockGoal {
     private boolean mustHaveBucketAndSpade;
 
     public BuildSandCastleGoal(PathfinderMob mob, boolean mustHaveBucketAndSpade) {
-        super(mob, 1.0f, 15, 15);
+        super(mob, 0.5f, 15);
         this.mustHaveBucketAndSpade = mustHaveBucketAndSpade;
     };
 
@@ -81,18 +81,16 @@ public class BuildSandCastleGoal extends MoveToBlockGoal {
             BlockState blockState = level.getBlockState(targetPos);
 
             // Add Particles
-            //TODO fix them they don't workkkkkk :(((
             BlockParticleOption particleData = new BlockParticleOption(ParticleTypes.BLOCK, blockState);
             RandomSource rand = mob.getRandom();
             Vec3 v = Vec3.atBottomCenterOf(targetPos.above());
-            for (int i = 0; i < 10; i++) {
-                Vec3 m = VecHelper.offsetRandomly(new Vec3(0, 0.25f, 0), rand, 0.125f);
-                level.addParticle(particleData, v.x, v.y, v.z, m.x, m.y, m.y);
+            if (!level.isClientSide()) {
+                ((ServerLevel)level).sendParticles(particleData, v.x, v.y, v.z, 3, (rand.nextFloat() - 0.5d) * 0.08D, (rand.nextFloat() - 0.5d) * 0.08d, (rand.nextFloat() - 0.5d) * 0.08d, 0.15d);
             };
 
             // Add Sound
             if (ticksSinceReachedGoal % 12 == 0) {
-                level.playSound(null, targetPos.above(), SoundEvents.SAND_BREAK, SoundSource.BLOCKS, 0.5F, 0.9F + rand.nextFloat() * 0.2F);
+                level.playSound(null, targetPos.above(), SoundEvents.SAND_BREAK, SoundSource.BLOCKS, 0.5f, 0.9f + rand.nextFloat() * 0.2f);
             };
 
             // Build Sand Castle
@@ -110,6 +108,7 @@ public class BuildSandCastleGoal extends MoveToBlockGoal {
                         };
                     };
                 };
+                ticksSinceReachedGoal = 0;
                 stop();
             };
         };

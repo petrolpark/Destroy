@@ -10,51 +10,94 @@ import java.util.Set;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
 
+import javax.annotation.Nullable;
+
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Node;
 
 /**
- * A Formula is all the Atoms in a Molecule, and the Bonds that those Atoms have to other Atoms - its 'structure'.
- * For convinience, the functional Groups present in the Molecule are also stored here.
+ * A Formula is all the {@link Atom Atoms} in a {@link Molecule}, and the {@link Bond Bonds} that those Atoms have to other Atoms - a Molecule's 'structure'.
+ * For convinience, the {@link Group functional Groups} present in the Molecule are also stored in its Formula.
+ * <p>Formulae are also referred to as "structures" throughout the Destroy JavaDocs.</p>
  */
 public class Formula implements Cloneable {
 
+    /**
+     * Every {@link Atom} in this Formula, mapped to the {@link Bond Bonds} that Atom has.
+     */
     private Map<Atom, List<Bond>> structure;
+
+    /**
+     * The starting {@link Atom} is used when constructing a Formula or sub-Formula.
+     * When a sub-Formula is added to a Formula, the starting Atom of that sub-Formula is what gets {@link Bond bonded} to the {@link Formula#currentAtom current Atom} of the main Formula.
+     * <p>For newly-created Formulae, the current Atom is also set to the starting Atom.
+     * @see Formula#addGroup Adding a sub-Formula to a Formula
+     */
     private Atom startingAtom;
+
+    /**
+     * The current {@link Atom} is used when constructing or modifying a Formula. It has no behavioural purpose.
+     * @see Formula#addAtom Adding an Atom to the current Atom
+     */
     private Atom currentAtom;
 
-    private List<Group> groups; //All the functional Groups contained within this structure
+    /**
+     * The {@link Group functional Groups} this Formula contains.
+     * Each Group is specific to a set of {@link Atom Atoms}, so for each instance of the same type of Group there is a separate entry.
+     */
+    private List<Group> groups;
     
+    /**
+     * @deprecated The Cycle Type enum will be replaced with a class.
+     */
+    @Deprecated
     private CycleType cycleType;
     private List<Atom> cyclicAtoms;
 
+    /**
+     * The <a href="https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS</a> code representing this Formula.
+     * This is used by novel {@link Molecule Molecules} as their {@link Molecule#getFullID ID}.
+     * <p>A given Formula should always {@link Formula#serialize serialize} to the same FROWNS code (hence the moniker "optimum"), so that FROWNS codes can be used to {@link Molecule#getEquivalent compare} Formulae.
+     * This is stored so Formulae only have to calculate their FROWNS code once (as this is a resource-intensive process), and can be referred to later.</p>
+     */
+    @Nullable
     private String optimumFROWNSCode;
 
     private Formula() {
         structure = new HashMap<Atom, List<Bond>>();
-        cycleType = CycleType.NONE;
+        cycleType = CycleType.NONE; //TODO replace
         optimumFROWNSCode = null;
     };
 
+    /**
+     * A set of {@link Atom Atoms} and the {@link Bond Bonds} that connect those Atoms.
+     * @param startingAtom The Atom from which to start constructing this Formula.
+     */
     public Formula(Atom startingAtom) {
         structure = new HashMap<Atom, List<Bond>>();
         structure.put(startingAtom, new ArrayList<Bond>());
         this.startingAtom = startingAtom;
         this.currentAtom = startingAtom;
 
+        // TODO replace
         this.cycleType = CycleType.NONE;
         this.cyclicAtoms = new ArrayList<Atom>();
     };
 
+    /**
+     * An empty Formula.
+     * @return A new Formula instance with no {@link Atom Atoms}
+     */
     private static Formula nothing() {
         return new Formula();
     };
 
     /**
-     * Moves the currently selected Atom to the one given (if it exists in the structure).
-     * @param atom
+     * Moves the {@link Formula#currentAtom currently selected} {@link Atom Atom} to the one given.
+     * @param atom If this does not exist in the Formula, the current Atom is not changed
+     * @return This Formula
      */
     public Formula moveTo(Atom atom) {
         if (structure.containsKey(atom)) {
@@ -64,16 +107,18 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * Generates an Atom of the Element as the starting point for a Molecule or Group.
+     * Generates an {@link Atom} of the {@link Element} as the starting point for a Formula.
      * @param element
+     * @return A new Formula instance
      */
     public static Formula atom(Element element) {
         return new Formula(new Atom(element));
     };
 
     /**
-     * A Cn group (without Hydrogens).
+     * A straight chain of carbon {@link Atom Atoms} with no hydrogens.
      * @param length
+     * @return A new Formula instance with the {@link Formula#startingAtom starting Atom} at one end.
      */
     public static Formula carbonChain(int length) {
         Formula carbonChain = Formula.atom(Element.CARBON);
@@ -85,6 +130,7 @@ public class Formula implements Cloneable {
 
     /**
      * An -OH group.
+     * @return A new Formula instance, with the oxygen as the {@link Formula#startingAtom starting} {@link Atom}.
      */
     public static Formula alcohol() {
         return Formula.atom(Element.OXYGEN).addAtom(Element.HYDROGEN);
@@ -92,6 +138,8 @@ public class Formula implements Cloneable {
 
     /**
      * An acidic -OH group.
+     * @param pKa The {@link Atom#getpKa pKa} of the proton
+     * @return A new Formula instance, with the oxygen as the {@link Formula#startingAtom starting} {@link Atom}.
      */
     public static Formula acidicAlcohol(float pKa) {
         return Formula.atom(Element.OXYGEN).addAcidicProton(pKa);
@@ -101,6 +149,7 @@ public class Formula implements Cloneable {
      * An anthracene molecule, without any hydrogens.
      * @param isDihydro Whether this is 9,10-dihyrdoanthracene rather than anthracene.
      */
+    @Deprecated
     public static Formula anthracene(boolean isDihydro) {
         //Atom 1
         Atom atom1 = new Atom(Element.CARBON);
@@ -168,6 +217,7 @@ public class Formula implements Cloneable {
     /**
      * A benzene ring (without hydrogens).
      */
+    @Deprecated
     public static Formula benzene() {
         Atom firstAtom = new Atom(Element.CARBON);
         Formula benzeneRing = new Formula(firstAtom);
@@ -188,6 +238,7 @@ public class Formula implements Cloneable {
     /**
      * A cyclohexene ring (without hydrogens).
      */
+    @Deprecated
     public static Formula cyclohexene() { //TODO account for the fact that some carbons can have more than one single bond on them
         Atom firstAtom = new Atom(Element.CARBON);
         Formula cyclohexene = new Formula(firstAtom);
@@ -223,17 +274,20 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * Adds a singly-bonded Atom of an Element onto the current Atom, staying on the current Atom.
-     * @param element The Element of the Atom to generate to be added (in its default form).
+     * Adds a singly-{@link Bond bonded} {@link Atom} of an {@link Element} onto the {@link Formula#currentAtom current Atom}, staying on the current Atom.
+     * @param element The Element of the Atom to be added
+     * @return This Formula
+     * @see Formula#addAtom(Element, BondType) Adding a non-single Bond
      */
     public Formula addAtom(Element element) {
         return addAtom(element, BondType.SINGLE);
     };
 
     /**
-     * Adds an Atom of an Element onto the current Atom, staying on the current Atom.
-     * @param element The Element of the Atom to generate to be added (in its default form).
-     * @param bondType Defaults to SINGLE.
+     * Adds an {@link Atom} of an {@link Element} onto the {@link Formula#currentAtom current Atom}, staying on the current Atom.
+     * @param element The Element of the Atom to generate to add
+     * @param bondType Defaults to a single {@link Bond} if not supplied
+     * @return This Formula
      */
     public Formula addAtom(Element element, BondType bondType) {
         addAtomToStructure(structure, currentAtom, new Atom(element), bondType);
@@ -241,17 +295,20 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * Adds a singly-bonded Atom onto the current Atom, staying on the current Atom
+     * Adds a singly-{@link Bond bonded} {@link Atom} onto the {@link Formula#currentAtom current Atom}, staying on the current Atom.
      * @param atom The Atom to be added.
+     * @return This Formula
+     * @see Formula#addAtom(Atom, BondType) Adding a non-single Bond
      */
     public Formula addAtom(Atom atom) {
         return addAtom(atom, BondType.SINGLE);
     };
 
     /**
-     * Adds an Atom onto the current Atom, staying on the current Atom.
-     * @param atom The Atom to be added.
-     * @param bondType Defaults to SINGLE.
+     * Adds an {@link Atom} onto the {@link Formula#currentAtom current Atom}, staying on the current Atom.
+     * @param atom The Atom to add
+     * @param bondType The {@link BondType type of Bond} the new Atom should have to the current Atom - defaults to a single {@link Bond} if not supplied
+     * @return This Formula
      */
     public Formula addAtom(Atom atom, BondType bondType) {
         addAtomToStructure(structure, currentAtom, atom, bondType);
@@ -259,33 +316,47 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * Adds an acidic proton (Hydrogen Atom) to the current Atom, staying on that Atom.
-     * @param pKa
+     * Adds an acidic proton to the {@link Formula#currentAtom current Atom}, staying on that {@link Atom}.
+     * @param pKa The {@link Atom#getpKa pKa} of the proton to add.
+     * @return This Formula
      */
     public Formula addAcidicProton(float pKa) {
         return addAtom((new Atom(Element.HYDROGEN)).setpKa(pKa));
     };
 
     /**
-     * Adds a singly-bonded group to the current Atom, staying on that Atom.
-     * @param group
+     * Adds a singly-{@link Bond bonded} sub-Formula to the {@link Formula#currentAtom current Atom}, staying on that {@link Atom}.
+     * @param group The sub-Formula to add
+     * @return This Formula
+     * @see Formula#startingAtom How sub-Formulae are added
+     * @see Formula#addGroup(Formula, Boolean) Moving to the sub-Formula
+     * @see Formula#addGroup(Formula, Boolean, BondType) Adding a non-single Bond
      */
     public Formula addGroup(Formula group) {
         return this.addGroup(group, false);
     };
 
     /**
-     * Adds a singly-bonded group to the current Atom.
-     * @param isSideGroup Whether to stay on the Atom to which the Group is being added, or move to the end of the Group (defaults to false).
+     * Adds a singly-{@link Bond bonded} sub-Formula to the {@link Formula#currentAtom current} {@link Atom}.
+     * @param group The sub-Formula to add
+     * @param isSideGroup Whether to stay on the current Atom to which the sub-Formula is being added,
+     * or move to the current Atom of the sub-Formula (defaults to false if not supplied)
+     * @return This Formula
+     * @see Formula#startingAtom How sub-Formulae are added
+     * @see Formula#addGroup(Formula, Boolean, BondType) Adding a non-single Bond
      */
     public Formula addGroup(Formula group, Boolean isSideGroup) {
         return this.addGroup(group, isSideGroup, BondType.SINGLE);
     };
 
     /**
-     * Adds a group to the current Atom.
-     * @param isSideGroup Whether to stay on the Atom to which the Group is being added, or move to the end of the Group (defaults to false).
-     * @param bondType Defaults to SINGLE.
+     * Adds a sub-Formula to the {@link Formula#currentAtom current} {@link Atom}.
+     * @param group The sub-Formula to add
+     * @param isSideGroup Whether to stay on the current Atom to which the sub-Formula is being added,
+     * or move to the current Atom of the sub-Formula (defaults to false if not supplied)
+     * @param bondType The {@link BondType type of Bond} the sub-Formula should have to the current Atom - defaults to a single {@link Bond} if not supplied
+     * @return This Formula
+     * @see Formula#startingAtom How sub-Formulae are added
      */
     public Formula addGroup(Formula group, Boolean isSideGroup, BondType bondType) {
         addGroupToStructure(structure, currentAtom, group, bondType);
@@ -298,6 +369,7 @@ public class Formula implements Cloneable {
      * @param group
      * @param position Which positions correspond to which Atoms can be found <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">here</a>.
      */
+    @Deprecated
     public Formula addGroupToPosition(Formula group, int position) {
         return addGroupToPosition(group, position, BondType.SINGLE);
     };
@@ -308,6 +380,7 @@ public class Formula implements Cloneable {
      * @param position Which positions correspond to which Atoms can be found <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">here</a>.
      * @param bondType Defaults to SINGLE.
      */
+    @Deprecated
     public Formula addGroupToPosition(Formula group, int position, BondType bondType) {
         addGroupToStructure(structure, cyclicAtoms.get(position), group, bondType);
         currentAtom = group.currentAtom;
@@ -337,7 +410,8 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * Adds a =O Group to the current Atom, staying on the Atom.
+     * Adds an =O Group to the {@link Formula#currentAtom current Atom}, staying on the {@link Atom}.
+     * @return This Formula
      */
     public Formula addCarbonyl() {
         addAtom(Element.OXYGEN, BondType.DOUBLE);
@@ -345,8 +419,12 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * Adds Hydrogens to all Atoms which are missing Hydrogens in their lowest oxidation state.
-     * @param throwError Whether this should throw an error if an invalid Valency is encountered.
+     * Adds hydrogen {@link Atom Atoms} to all Atoms which should have more if in a normal valency (as defined by their {@link Element}).
+     * If an Element has multiple normal valencies, the next-lowest-possible is used.
+     * <p>For example, this would turn {@code CO} into {@code CH₃OH}.
+     * For something like sulfur with many normal valencies, {@code S} would turn into {@code H₂S} but {@code SH₃} into {@code SH₄}.
+     * As you can see, this method does not produce chemically valid {@link Molecule Molecules}, so should generally be avoided for weird and inorganic species.</p>
+     * @return This Formula
      */
     public Formula addAllHydrogens() {
         Map<Atom, List<Bond>> newStructure = new HashMap<Atom, List<Bond>>(structure); //creates a shallow copy, as the original structure can't be modified while being iterated over
@@ -365,14 +443,17 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * The Set of every Atom in the Formula.
+     * The Set of every {@link Atom} in this Formula - essentially its chemical formula.
      */
     public Set<Atom> getAllAtoms() {
         return structure.keySet();
     };
 
     /**
-     * The total single-bond equivalent of a List of Bonds.
+     * The total {@link Bond.BondType#getEquivalent single-bond equivalents} of a List of {@link Bond Bonds}.
+     * <p>Note that this returns an integer - it would be possible for an {@link Atom} to have a non-integeric sum,
+     * but this method is used for automatically constructing organic {@link Molecule Molecules} and their
+     * {@link GenericReaction Reactions} so shouldn't be used for weirdly behaving inorganic things.
      * @param bonds
      */
     public int getTotalBonds(List<Bond> bonds) {
@@ -384,17 +465,16 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * Get all the functional Groups in a Molecule.
-     * @return
+     * Get all the {@link Group functional Groups} in this Formula.
+     * @see Formula#groups Groups stored in Formulae
      */
     public List<Group> getFunctionalGroups() {
         return groups;
     };
 
     /**
-     * Get the <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS Code</a> of this Formula or Group, with the given Atom as the first character.
-     * @param atom The Atom to start with
-     * @return FROWNS Code
+     * Get the <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS</a> code of this Formula or Group, with the given {@link Atom Atom} as the first character.
+     * @param atom
      */
     public String serializeStartingWithAtom(Atom atom) {
 
@@ -410,7 +490,7 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * Get the <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS Code</a> of this Formula or Group.
+     * Get the <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS</a> code of this Formula.
      */
     public String serialize() {
 
@@ -461,8 +541,9 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * See https://github.com/petrolpark/Destroy/wiki/FROWNS
-     * @param string
+     * Creates a Formula from a <a href="https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS</a> code.
+     * @param FROWNSstring
+     * @return A new Formula instance
      */
     public static Formula deserialize(String FROWNSstring) {
 
@@ -511,8 +592,8 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * Checks this structure for any Groups it contains.
-     * @return this Formula
+     * Checks this structure for any {@link Group functional Groups} it contains and updates the {@link Formula#groups stored Groups}.
+     * @return This Formula
      */
     public Formula refreshFunctionalGroups() {
         this.groups = new ArrayList<>();
@@ -523,8 +604,12 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * Creates a shallow copy of this Formula, referencing all the same Atoms and Bonds.
-     * @throws CloneNotSupportedException
+     * Creates a shallow copy of this Formula. The clone Formula contains the exact same {@link Atom Atom} and {@link Bond Bond} objects,
+     * meaning an Atom in this Formula can be referenced in the clone Formula in the following ways:<ul>
+     * <li>{@link Formula#moveTo Moving to an Atom}</li>
+     * <li>{@link Formula#remove Removing an Atom}</li>
+     * </ul>This is useful for generating specific {@link Reaction Reactions} from {@link GenericReaction Generic Reactions}.
+     * @return A new Formula instance
      */
     public Formula shallowCopy() {
         try {
@@ -546,9 +631,9 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * I'm not retyping {@link com.petrolpark.destroy.chemistry.Molecule#getCarbocationStability this}.
      * @param carbon
      * @param isCarbanion
+     * @see Molecule#getCarbocationStability The wrapper for this Method
      */
     public Float getCarbocationStability(Atom carbon, boolean isCarbanion) {
         Float totalElectronegativity = 0f;
@@ -563,8 +648,8 @@ public class Formula implements Cloneable {
     //INTERNAL METHODS
 
     /**
-     * Create a new Map of Atoms to Lists of Bonds, with the same Atoms and Bonds, but a different Map and different Lists.
      * @param structureToCopy
+     * @see Formula#shallowCopy The wrapper for this Method
      */
     private static Map<Atom, List<Bond>> shallowCopyStructure(Map<Atom, List<Bond>> structureToCopy) {
         Map<Atom, List<Bond>> newStructure = new HashMap<>();
@@ -575,9 +660,9 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * Get the biggest directed Branch of Nodes generated from the given structure.
-     * @param startAtom Should not be an acidic proton.
-     * @param structure
+     * Get the biggest directed {@link Branch} of {@link Node Nodes} generated from the given structure, starting from the given {@link Atom}.
+     * @param startAtom Should not be an {@link Atom#isAcidicProton() acidic proton}
+     * @param structure The {@link Formula#structure structure} for which to find the branch
      */
     private static Branch getMaximumBranch(Atom startAtom, Map<Atom, List<Bond>> structure) {
 
@@ -655,26 +740,56 @@ public class Formula implements Cloneable {
         
     };
 
+    /**
+     * The internal method for adding an {@link Atom} to a {@link Formula#structure structure}. This is mutative.
+     * @param structureToMutate The structure to which to add the Atom
+     * @param rootAtom The Atom to which the new Atom will be {@link Bond bonded}
+     * @param newAtom The Atom to add
+     * @param bondType The {@link Bond.BondType type of Bond} between the new and root Atoms
+     * @return The original structure, now with the new Atom
+     * @see Formula#addAtom(Atom, BondType) The wrapper for this method
+     */
     private static Map<Atom, List<Bond>> addAtomToStructure(Map<Atom, List<Bond>> structureToMutate, Atom rootAtom, Atom newAtom, BondType bondType) {
         structureToMutate.put(newAtom, new ArrayList<>());
         addBondBetweenAtoms(structureToMutate, rootAtom, newAtom, bondType);
         return structureToMutate;
     };
 
+    /**
+     * The internal method for adding an sub-Formula to a {@link Formula#structure structure}. This is mutative.
+     * @param structureToMutate The structure to which to add the {@link Atom}
+     * @param rootAtom The Atom to which the new sub-Formula will be {@link Bond bonded}
+     * @param group The sub-Formula to add
+     * @param bondType The {@link Bond.BondType type of Bond} between the {@link Formula#startingAtom starting Atom} of the sub-Formula and the root Atom
+     * @return The original structure, now with the new sub-Formula
+     * @see Formula#addGroup(Formula, Boolean, BondType) The wrapper for this method
+     */
     private static void addGroupToStructure(Map<Atom, List<Bond>> structureToMutate, Atom rootAtom, Formula group, BondType bondType) {
-        if (group.cycleType != CycleType.NONE) {
+        if (group.cycleType != CycleType.NONE) { //TODO replace
             Destroy.LOGGER.warn("Cannot add Cycles as side-groups - to create a Cyclic Molecule, start with the Cycle and use addGroupAtPosition()");
         };
         structureToMutate.putAll(group.structure);
         addBondBetweenAtoms(structureToMutate, rootAtom, group.startingAtom, bondType);
     };
 
+    /**
+     * Creates a {@link Bond} and its {@link Bond#getMirror mirror} between two {@link Atom Atoms}.
+     * @param structureToMutate The {@link Formula#structure structure in which} both these Atoms are
+     * @param atom1 If not in the structure, will cause a runtime error
+     * @param atom2 If not in the structure, will cause a runtime error
+     * @param type The {@link Bond.BondType type of Bond} between the two Atoms
+     */
     private static void addBondBetweenAtoms(Map<Atom, List<Bond>> structureToMutate, Atom atom1, Atom atom2, BondType type) {
         Bond bond = new Bond(atom1, atom2, type);
         structureToMutate.get(atom1).add(bond);
         structureToMutate.get(atom2).add(bond.getMirror());
     };
 
+    /**
+     * Recursively {@link Formula#serialize serializes} a <a href="https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS</a> code.
+     * @param symbols A FROWNS code split into individual Strings, each String containing a single {@link Atom}
+     * @return A new Formula instance represented by the given FROWNS code
+     */
     private static Formula groupFromString(List<String> symbols) {
 
         Formula formula = Formula.nothing();
@@ -764,10 +879,19 @@ public class Formula implements Cloneable {
         return formula;
     };
 
+    /**
+     * The {@link Bond.BondType type of Bond} after an {@link Element} symbol in a <a href="https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS</a> code.
+     * @param symbol A String which is part of a FROWNS Code, consisting of a single {@link Atom}
+     */
     private static BondType trailingBondType(String symbol) {
-        return BondType.fromFROWNSCode(symbol.charAt(symbol.length() - 1)); // Get last character
+        return BondType.fromFROWNSCode(symbol.charAt(symbol.length() - 1));
     };
 
+    /**
+     * Removes all non-{@link Atom#isAcidicProton acidic} hydrogen {@link Atom Atoms} from a {@link Formula#startingAtom structure}. This is mutative.
+     * @param structure The structure from which to remove the hydrogen Atoms
+     * @return The original structure, now with its non-acidic hydrogen Atoms removed
+     */
     private static Map<Atom, List<Bond>> stripHydrogens(Map<Atom, List<Bond>> structure) {
         Map<Atom, List<Bond>> newStructure = new HashMap<>();
         for (Atom atom : structure.keySet()) {
@@ -784,6 +908,7 @@ public class Formula implements Cloneable {
         return newStructure;
     };
     
+    @Deprecated
     private enum CycleType {
 
         NONE("linear", 0, Formula::nothing),

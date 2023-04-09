@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.SandCastleBlock;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
@@ -23,10 +26,13 @@ public class BucketAndSpadeItem extends Item {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         BlockState blockUnderneath = context.getLevel().getBlockState(context.getClickedPos());
-        if (context.getClickedFace() == Direction.UP && canSandCastleBeBuiltOn(blockUnderneath, context.getLevel().getBlockState(context.getClickedPos().above()))) {
-            context.getLevel().setBlockAndUpdate(context.getClickedPos().above(), getSandCastleForMaterial(blockUnderneath));
-            context.getItemInHand().hurtAndBreak(1, context.getPlayer(), p -> p.broadcastBreakEvent(context.getHand()));
-            return InteractionResult.SUCCESS;
+        BlockPos posAbove = context.getClickedPos().above();
+        if (context.getClickedFace() == Direction.UP && canSandCastleBeBuiltOn(blockUnderneath, context.getLevel().getBlockState(posAbove))) {
+            if (context.getLevel().setBlockAndUpdate(posAbove, getSandCastleForMaterial(blockUnderneath))) {
+                context.getLevel().playSound(null, posAbove, SoundEvents.SAND_BREAK, SoundSource.BLOCKS, 0.5f, 1f);
+                context.getItemInHand().hurtAndBreak(1, context.getPlayer(), p -> p.broadcastBreakEvent(context.getHand()));
+                return InteractionResult.SUCCESS;
+            };
         };
         return super.useOn(context);
     };

@@ -1,6 +1,12 @@
 package com.petrolpark.destroy.chemistry;
 
+/**
+ * Something inbetween an actual element and a nuclide.
+ * Different Elements (as this enum defines) have different properties - be those chemical or physical (in the case of the two commom Uranium isotopes).
+ */
 public enum Element {
+
+    //TODO replace 'valencies' with a BiPredicate of bonds and charge
 
     //in the order they should appear in Empirical Formulae
     R_GROUP("R", 0f, 2.5f, 1),

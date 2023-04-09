@@ -1,42 +1,53 @@
 package com.petrolpark.destroy.chemistry;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 
+/**
+ * A class whose purpose is to locate {@link Group functional Groups} in {@link Molecules}.
+ * Group Finders must be instantiated during Mod setup.
+ */
 public abstract class GroupFinder {
 
-    private static List<GroupFinder> FINDERS = new ArrayList<>();
+    /**
+     * All Group Finders known to Destroy.
+     */
+    private static Set<GroupFinder> FINDERS = new HashSet<>();
 
     public GroupFinder() {
         FINDERS.add(this);
     };
 
     /**
-     * Called by {@link Molecule Molecule} when identifying which Groups the Molecule contains. This should never be called otherwise.
+     * All Group Finders known to Destroy.
+     * <p>This is called by a {@link Molecule Molecule} when identifying which {@link Group} Groups a Molecule contains.
+     * This should be no need to call this otherwise.</p>
      */
-    public static List<GroupFinder> allGroupFinders() {
+    public static Set<GroupFinder> allGroupFinders() {
         return FINDERS;
     };
 
     /**
-     * Given a structure, this function should return all Groups that the structure contains.
-     * A 'Group' is a chemical functional group such as a carbonyl, alcohol, alkene, etc.
-     * For detailed information on how to use Group Finders, see the <a href="https://github.com/petrolpark/Destroy/wiki/">Wiki</a>.
-     * @param structure The Map of Atoms to all Bonds that Atom has - the {@link Formula Formula class} is essentially a wrapper for this Map.
-     * @return The list of Groups which this Group Finder has identified as being contained within the given structure.
+     * Given a structure, this function should return all {@link Group functional Groups} that the structure contains.
+     * For more information, see the <a href="https://github.com/petrolpark/Destroy/wiki/">Destroy Wiki</a>.
+     * @param structure A Map of {@link Atom Atoms} to all {@link Bond Bonds} that Atom has (see the {@code structure} property of {@link Formula})
+     * @return The list of Groups which this Group Finder has identified as being contained within the given structure
      */
     public abstract List<Group> findGroups(Map<Atom, List<Bond>> structure);
 
     /**
-     * Gives all Atoms of the given Element bonded (with any Type) to the given Atom in the given structure.
-     * @param structure Map of Atoms to List of Bonds.
-     * @param atom
-     * @param element
+     * A convenience method that gives all {@link Atom Atoms} of the given {@link Element} {@link Bonded bonded} (with any {@link Bond.BondType type}) to the given Atom in the given structure.
+     * @param structure A Map of Atoms in a {@link Molecule} to all Bonds that Atom has (see the {@code structure} property of {@link Formula})
+     * @param atom The Atom to which to check for Bonds
+     * @param element The Element to check for
+     * @see GroupFinder#bondedAtomsOfElementTo(Map, Atom, Element, BondType) Finding Atoms bonded with a specific type
      */
-    public List<Atom> bondedAtomsOfElementTo(Map<Atom, List<Bond>> structure, Atom atom, Element element) {
+    public static List<Atom> bondedAtomsOfElementTo(Map<Atom, List<Bond>> structure, Atom atom, Element element) {
         List<Atom> atoms = new ArrayList<>();
         for (Bond bond : structure.get(atom)) {
             if (bond.getDestinationAtom().getElement() == element) {
@@ -47,13 +58,14 @@ public abstract class GroupFinder {
     };
 
     /**
-     * Gives all Atoms of the given Element bonded (with the given Type) to the given Atom in the given structure.
-     * @param structure Map of Atoms to List of Bonds.
-     * @param atom
-     * @param element
-     * @param bondType
+     * A convenience method that gives all {@link Atom Atoms} of the given {@link Element} {@link Bonded bonded} (with the given {@link Bond.BondType type}) to the given Atom in the given structure.
+     * @param structure A Map of Atoms in a {@link Molecule} to all Bonds that Atom has (see the {@code structure} property of {@link Formula})
+     * @param atom The Atom to which to check for Bonds
+     * @param element The Element to check for
+     * @param bondType The type of Bond to check for
+     * @see GroupFinder#bondedAtomsOfElementTo(Map, Atom, Element) Finding Atoms bonded with any type
      */
-    public List<Atom> bondedAtomsOfElementTo(Map<Atom, List<Bond>> structure, Atom atom, Element element, BondType bondType) {
+    public static List<Atom> bondedAtomsOfElementTo(Map<Atom, List<Bond>> structure, Atom atom, Element element, BondType bondType) {
         List<Atom> atoms = new ArrayList<>();
         for (Bond bond : structure.get(atom)) {
             if (bond.getDestinationAtom().getElement() == element && bond.getType() == bondType) {
