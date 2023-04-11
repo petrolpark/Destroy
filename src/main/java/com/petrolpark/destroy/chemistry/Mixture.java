@@ -72,7 +72,8 @@ public class Mixture extends ReadOnlyMixture {
     };
 
     /**
-     * Adds a {@link Molecule} to this Mixture. If the Molecule is already in the Mixture, its concentration is increased by the given amount.
+     * Adds a {@link Molecule} to this Mixture.
+     * If the Molecule is already in the Mixture, its concentration is increased by the given amount.
      * @param molecule The Molecule to add
      * @param concentration The initial concentration of this Molecule, or the amount to add
      */
@@ -84,21 +85,10 @@ public class Mixture extends ReadOnlyMixture {
             updateName();
             return this;
         };
-        
-        // TODO check for acids
-
-        if (molecule.isNovel()) { // If this is a novel Molecule, it might already match to one of our existing novel Molecules
-            for (Molecule novelMolecule : novelMolecules) { // Check every novel Molecule
-                if (novelMolecule.getFullID() == molecule.getFullID()) {
-                    changeConcentrationOf(molecule, concentration, true);
-                    updateName();
-                    return this;
-                };
-            };
-        };
 
         // If we're not adding a pre-existing Molecule
-        return internalAddMolecule(molecule, concentration, true);
+        internalAddMolecule(molecule, concentration, true);
+        return this;
     };
 
     @Override
@@ -165,23 +155,13 @@ public class Mixture extends ReadOnlyMixture {
                 changeConcentrationOf(reactant, - (molesOfReaction * reaction.getReactantMolarRatio(reactant)), false); // Use up the right amount of all the reagents
             };
 
-            addEachProduct:
-            for (Molecule product : reaction.getProducts()) {
-
-                if (product.isNovel() && getConcentrationOf(product) == 0f) { // If we have a novel Molecule that we don't think currently exists in the Mixture
-                    Boolean matchFound = false; // Start by assuming it isn't already in the Mixture
-                    for (Molecule novelMolecule : novelMolecules) { // Search through every novel Molecule we already have
-                        if (product.getFullID().equals(novelMolecule.getFullID())) { // If it the novel Molecule is, in fact, already in the Mixture...
-                            matchFound = true; // ...flag that we found it...
-                            product = novelMolecule; // ...and set the product we're adding to the pre-existing novel Molecule
-                            break;
-                        };
-                    };
-                    if (!matchFound) { // If the assumption was correct and it's not already in the Mixture
-                        shouldRefreshPossibleReactions = true; // We've added a new Molecule so the possible reactions should change
-                        internalAddMolecule(product, molesOfReaction * reaction.getProductMolarRatio(product), false);
-                        continue addEachProduct; // Don't change the concentration of this product, as we have just added it
-                    };
+            addEachProduct: for (Molecule product : reaction.getProducts()) {
+                
+                if (product.isNovel() && getConcentrationOf(product) == 0f) { // If we have a novel Molecule that we don't think currently exists in the Mixture...
+                    if (internalAddMolecule(product, molesOfReaction * reaction.getProductMolarRatio(product), false)) { // ...add it with this method, as this automatically checks for pre-existing novel Molecules, and if it was actually a brand new Molecule...
+                        shouldRefreshPossibleReactions = true; // ...flag this
+                    }; 
+                    continue addEachProduct;
                 };
 
                 if (getConcentrationOf(product) == 0f) { // If we are adding a new product, the possible Reactions will change
@@ -208,20 +188,23 @@ public class Mixture extends ReadOnlyMixture {
     };
 
     /**
-     * Adds a {@link Molecule} to this Mixture. If a novel Molecule is being added, this does not get checked against pre-existing novel Molecules,
-     * meaning there may end up being duplicates if this is not checked beforehand.
+     * Adds a {@link Molecule} to this Mixture.
+     * If a novel Molecule is being added, it is checked against pre-existing novel Molecules
+     * and if a matching one already exists, the concentration of it is increased.
      * @param molecule The Molecule to add
      * @param concentration The starting concentration for the Molecule
      * @param shouldRefreshReactions Whether to {@link Mixture#refreshPossibleReactions refresh possible Reactions} -
-     * this should only be false when multiple Molecules are being added/removed at once (such as when {@link Mixture#reactForTick reacting})
+     * this should only be set to false when multiple Molecules are being added/removed at once (such as when {@link Mixture#reactForTick reacting})
      * and it makes sense to only refresh the Reactions once
-     * @return This Mixture
+     * @return {@code true} if a brand new Molecule that was not already in this Mixture was added; {@code false} otherwise
      * @see Mixture#addMolecule The wrapper for this method
      * @see Mixture#changeConcentrationOf Modifying the concentration of pre-existing Molecule
      */
-    private Mixture internalAddMolecule(Molecule molecule, float concentration, Boolean shouldRefreshReactions) {
+    private boolean internalAddMolecule(Molecule molecule, float concentration, Boolean shouldRefreshReactions) {
 
         super.addMolecule(molecule, concentration);
+
+        boolean newMoleculeAdded = true; // Start by assuming we're adding a brand new Molecule to this solution
 
         List<Group> functionalGroups = molecule.getFunctionalGroups();
         if (functionalGroups.size() != 0) {
@@ -236,16 +219,25 @@ public class Mixture extends ReadOnlyMixture {
 
         //TODO check for acids
 
-        if (molecule.isNovel()) {
-            novelMolecules.add(molecule);
+        if (molecule.isNovel()) { // If this is a novel Molecule, it might already match to one of our existing novel Molecules
+            boolean found = false; // Start by assuming it's not already in the Mixture
+            for (Molecule novelMolecule : novelMolecules) { // Check every novel Molecule
+                if (novelMolecule.getFullID().equals(molecule.getFullID())) {
+                    found = true;
+                    newMoleculeAdded = false; // We haven't actually added a brand new Molecule so flag this
+                    changeConcentrationOf(molecule, concentration, true);
+                };
+            };
+            if (!found) novelMolecules.add(molecule); // If it was actually a brand new Molecule, add it to the novel list
         };
 
-        if (shouldRefreshReactions) {
+        if (shouldRefreshReactions && newMoleculeAdded) {
             refreshPossibleReactions();
         };
 
         equilibrium = false; // Now that there's a new Molecule we cannot guarantee equilibrium
-        return this;
+
+        return newMoleculeAdded; // Return whether or not we actually added a brand new Molecule
     };
 
     /**
@@ -277,14 +269,15 @@ public class Mixture extends ReadOnlyMixture {
     /**
      * Alters the concentration of a {@link Molecule} in a Mixture.
      * This does not update the {@link ReadOnlyMixture#getName name} of the Mixture.
-     * @param molecule If not present in the Mixture, this Molecule will be added to the Mixture.
-     * @param change The <em>change</em> in concentration, not the new value (can be positive or negative).
-     * @param shouldRefreshReactions Whether to alter the possible {@link Reaction Reactions} in the case that Molecule is added to the Mixture
+     * @param molecule If not present in the Mixture, will be added to the Mixture
+     * @param change The <em>change</em> in concentration, not the new value (can be positive or negative)
+     * @param shouldRefreshReactions Whether to alter the possible {@link Reaction Reactions} in the case that a new Molecule is added to the Mixture
      */
     private Mixture changeConcentrationOf(Molecule molecule, Float change, boolean shouldRefreshReactions) {
         Float currentConcentration = getConcentrationOf(molecule);
 
         if (molecule == DestroyMolecules.PROTON) {
+            Destroy.LOGGER.warn("Attempted to change concentration of H+");
             return this; // Concentration of H+ should never be altered by changing H+ concentration directly - only by changing concentration of acids
         };
 

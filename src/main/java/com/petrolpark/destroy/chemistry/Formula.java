@@ -21,6 +21,7 @@ import com.petrolpark.destroy.chemistry.serializer.Node;
  * A Formula is all the {@link Atom Atoms} in a {@link Molecule}, and the {@link Bond Bonds} that those Atoms have to other Atoms - a Molecule's 'structure'.
  * For convinience, the {@link Group functional Groups} present in the Molecule are also stored in its Formula.
  * <p>Formulae are also referred to as "structures" throughout the Destroy JavaDocs.</p>
+ * <p><b>Formulae must always be {@link Formula#shallowCopy copied} before modifying.</b></p>
  */
 public class Formula implements Cloneable {
 
@@ -389,6 +390,7 @@ public class Formula implements Cloneable {
 
     /**
      * Removes the given Atom, without moving the currently selected Atom.
+     * <p><b>To modify existing Formulae, {@link Formula#shallowCopy copy} them first.</b></p>
      * @param atom If this is the currently selected Atom, an error will be raised.
      */
     public Formula remove(Atom atom) {
@@ -491,6 +493,8 @@ public class Formula implements Cloneable {
 
     /**
      * Get the <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS</a> code of this Formula.
+     * This does not fresly calculate the FROWNS code each time, meaning Formulae should not be modifed without
+     * first {@link Formula#shallowCopy copying} them.
      */
     public String serialize() {
 
@@ -542,6 +546,7 @@ public class Formula implements Cloneable {
 
     /**
      * Creates a Formula from a <a href="https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS</a> code.
+     * Hydrogens will be {@link Formula#addAllHydrogens added automatically}.
      * @param FROWNSstring
      * @return A new Formula instance
      */
