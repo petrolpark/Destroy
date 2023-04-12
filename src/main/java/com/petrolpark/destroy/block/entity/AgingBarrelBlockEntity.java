@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.petrolpark.destroy.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.recipe.AgingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
@@ -50,6 +51,8 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
     protected LazyOptional<IFluidHandler> fluidCapability;
     public LazyOptional<IItemHandlerModifiable> itemCapability;
 
+    protected PollutingBehaviour pollutingBehaviour;
+
     private int timer; // -1 = open, 0 = done processing but closed
     private int totalTime;
 
@@ -69,6 +72,9 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
         fluidCapability = LazyOptional.of(() -> {
 			return new CombinedTankWrapper(tank.getCapability().orElse(null));
 		});
+
+        pollutingBehaviour = new PollutingBehaviour(this);
+        behaviours.add(pollutingBehaviour);
     };
 
     /**

@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.networking.packet;
+package com.petrolpark.destroy.network.packet;
 
 import java.util.function.Supplier;
 

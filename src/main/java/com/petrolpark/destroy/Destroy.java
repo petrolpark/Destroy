@@ -17,7 +17,7 @@ import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyCompostables;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.DestroyPotatoCannonProjectileTypes;
-import com.petrolpark.destroy.networking.DestroyMessages;
+import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.recipe.DestroyCropMutations;
 import com.petrolpark.destroy.recipe.DestroyMysteriousItemConversions;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;

@@ -1,12 +1,14 @@
 package com.petrolpark.destroy.util;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
-import com.petrolpark.destroy.networking.DestroyMessages;
-import com.petrolpark.destroy.networking.packet.LevelPollutionS2CPacket;
+import com.petrolpark.destroy.network.DestroyMessages;
+import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fluids.FluidStack;
 
 public class PollutionHelper {
 
@@ -49,5 +51,15 @@ public class PollutionHelper {
      */
     public static int changePollution(Level level, PollutionType pollutionType, int change) {
         return setPollution(level, pollutionType, Mth.clamp(getPollution(level, pollutionType) + change, 0, pollutionType.max));
+    };
+
+    /**
+     * <p>To summon the evaporation Particles too, use {@link com.petrolpark.destroy.behaviour.PollutingBehaviour#pollute PollutingBehaviour.pollute}.</p>
+     * @param level
+     * @param fluidStack
+     */
+    public static void pollute(Level level, FluidStack fluidStack) {
+        Destroy.LOGGER.info("Whoops haven't implement this yet.");
+        //TODO
     };
 };

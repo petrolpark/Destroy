@@ -111,6 +111,11 @@ public class BubbleCapBlock extends Block implements ITE<BubbleCapBlockEntity>, 
         return DestroyShapes.bubbleCap(state.getValue(BOTTOM), state.getValue(TOP));
     };
 
+    @Override
+	public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		ITE.onRemove(state, worldIn, pos, newState);
+	};
+
     /**
      * Returns the appropriate Block State for the Blocks above and below this Bubble Cap.
      * @param level The Level in which this Bubble Cap is

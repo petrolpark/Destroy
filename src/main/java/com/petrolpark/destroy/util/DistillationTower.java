@@ -107,9 +107,7 @@ public class DistillationTower {
         tick--;
         if (tick <= 0) {
             findRecipe(level);
-            if (process()) { // Attempt to process the contents of the thing
-                getControllerBubbleCap().shouldCreateParticles = true; // Let the controller know it should make particles (has to be done on client side; we are currently on server)
-            };
+            process();
             tick = PROCESS_TIME; // Reset counter
         };
     };
@@ -137,9 +135,12 @@ public class DistillationTower {
     public boolean process() {
         if (lastRecipe == null) return false;
         if (lastRecipe.getFractions() > getHeight() - 1) return false;
+
+        FluidStack fluidDrained = FluidStack.EMPTY;
         for (boolean simulate : Iterate.trueAndFalse) { // First simulate to check if all the Fluids can actually fit, then execute if they do. 
             int requiredFluidAmount = lastRecipe.getRequiredFluid().getRequiredAmount();
-            if (getControllerBubbleCap().getTank().drain(requiredFluidAmount, simulate ? FluidAction.SIMULATE : FluidAction.EXECUTE).getAmount() < requiredFluidAmount) { // If there is not enough Fluid in the controller Bubble Cap
+            fluidDrained = getControllerBubbleCap().getTank().drain(requiredFluidAmount, simulate ? FluidAction.SIMULATE : FluidAction.EXECUTE);
+            if (fluidDrained.getAmount() < requiredFluidAmount) { // If there is not enough Fluid in the controller Bubble Cap
                 return false;
             };
             for (int i = 0; i < lastRecipe.getFractions(); i++) {
@@ -155,6 +156,7 @@ public class DistillationTower {
         };
         // If we've got to this point, the Recipe is being successfully processed
         getControllerBubbleCap().getTank().drain(lastRecipe.getRequiredFluid().getRequiredAmount(), FluidAction.EXECUTE);
+        getControllerBubbleCap().particleFluid = fluidDrained.copy();
         getControllerBubbleCap().onDistill();
         return true;
     };

@@ -2,7 +2,6 @@ package com.petrolpark.destroy.behaviour;
 
 import java.util.UUID;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
@@ -49,9 +48,7 @@ public class DestroyAdvancementBehaviour extends TileEntityBehaviour {
 
     public void awardDestroyAdvancement(DestroyAdvancements advancement) {
 		Player player = getPlayer();
-        Destroy.LOGGER.info("Yippoo "+playerUUID);
 		if (player == null) return;
-        Destroy.LOGGER.info("Yippee");
         advancement.award(getWorld(), getPlayer());
 	};
 

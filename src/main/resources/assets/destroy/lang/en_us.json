@@ -342,6 +342,7 @@
     "destroy.tooltip.mixture_ingredient_1": "Must contain",
     "destroy.tooltip.mixture_ingredient_2": "at a concentration of approximately",
     "destroy.tooltip.mixture_ingredient_3": "All other molecules must be solvents or low in concentration.",
+    "destroy.tooltip.unknown_molecule": "Unknown Molecule",
 
     "effect.destroy.cancer": "Cancer Awareness",
     "effect.destroy.cancer.description": "Has no effect in-game. Many things in the Destroy Mod are jokes, but cancer is not one of them. This is here to raise awareness of the increase in cancer risk associated with occupational exposure, and with harm to the ozone layer. Please see a professional source like 'cancerresearchuk.org'.",

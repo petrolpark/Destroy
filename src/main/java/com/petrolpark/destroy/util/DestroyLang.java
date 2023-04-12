@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.LangBuilder;
@@ -20,15 +21,15 @@ public class DestroyLang {
 
     public static LangBuilder builder() {
         return new LangBuilder(Destroy.MOD_ID);
-    }
+    };
 
     public static LangBuilder translate(String langKey, Object... args) {
         return builder().translate(langKey, args);
-    }
+    };
 
     public static LangBuilder number(double d) {
         return builder().text(LangNumberFormat.format(d));
-    }
+    };
 
     /**
      * Adds information about a Tank to the given tooltip.
@@ -98,9 +99,13 @@ public class DestroyLang {
         List<Component> tooltip = new ArrayList<>();
         String moleculeID = fluidTag.getString("IngredientMolecule");
         float concentration = fluidTag.getFloat("IngredientConcentration");
+
+        Molecule molecule = Molecule.getMolecule(moleculeID);
+        Component moleculeName = molecule == null ? DestroyLang.translate("tooltip.unknown_molecule").component() : molecule.getName(DestroyAllConfigs.CLIENT.chemistry.iupacNames.get());
+
         tooltip.add(DestroyLang.translate("tooltip.mixture_ingredient_1").style(ChatFormatting.GRAY)
             .space()
-            .add(Molecule.getMolecule(moleculeID).getName(false).plainCopy().withStyle(ChatFormatting.WHITE))
+            .add(moleculeName.plainCopy().withStyle(ChatFormatting.WHITE))
             .space()
             .add(DestroyLang.translate("tooltip.mixture_ingredient_2").style(ChatFormatting.GRAY))
             .space()

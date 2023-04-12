@@ -1,13 +1,12 @@
 package com.petrolpark.destroy.block;
 
-import java.util.Locale;
-
 import com.petrolpark.destroy.behaviour.SentimentalBehaviour;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.entity.SandCastleBlockEntity;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.foundation.block.ITE;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
+import com.simibubi.create.foundation.utility.Lang;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -82,7 +81,7 @@ public class SandCastleBlock extends Block implements ITE<SandCastleBlockEntity>
 
         @Override
         public String getSerializedName() {
-            return name().toLowerCase(Locale.ROOT);
+            return Lang.asId(name());
         };
     }
 

@@ -1,8 +1,8 @@
 package com.petrolpark.destroy.effect;
 
 import com.petrolpark.destroy.client.particle.TearParticle;
-import com.petrolpark.destroy.networking.DestroyMessages;
-import com.petrolpark.destroy.networking.packet.CryingS2CPacket;
+import com.petrolpark.destroy.network.DestroyMessages;
+import com.petrolpark.destroy.network.packet.CryingS2CPacket;
 
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;

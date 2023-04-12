@@ -41,8 +41,11 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
 
     @Override
     public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+        super.onPlace(state, worldIn, pos, oldState, isMoving);
         if (oldState.getBlock() == state.getBlock() || isMoving) return; // So we don't get in an infinite loop of noticing we've been placed, so setting the Block State, so noticing we've been placed, etc.
-        withTileEntityDo(worldIn, pos, be -> be.attemptRotation(false));
+        withTileEntityDo(worldIn, pos, be -> {
+            be.attemptRotation(false);
+        });
     };
 
     @Override
@@ -51,9 +54,9 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
     };
 
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        pLevel.removeBlockEntity(pPos);
-    };
+	public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		ITE.onRemove(state, worldIn, pos, newState);
+	};
 
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
@@ -93,7 +96,6 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
         DestroyAdvancementBehaviour.setPlacedBy(level, pos, placer);
         super.setPlacedBy(level, pos, state, placer, stack);
     };
-
 
     @Override
     public Class<CentrifugeBlockEntity> getTileEntityClass() {

@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.CentrifugeBlock;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
@@ -48,9 +49,10 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
     private static final int TANK_CAPACITY = DestroyAllConfigs.SERVER.contraptions.centrifugeCapacity.get();
 
     private SmartFluidTankBehaviour inputTank, denseOutputTank, lightOutputTank;
-    protected LazyOptional<IFluidHandler> inputFluidCapability, denseOutputFluidCapability, lightOutputFluidCapability;
+    protected LazyOptional<IFluidHandler> allFluidCapability;
 
     protected DestroyAdvancementBehaviour advancementBehaviour;
+    protected PollutingBehaviour pollutingBehaviour;
 
     private Direction denseOutputTankFace;
 
@@ -72,26 +74,24 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
     @Override
     public void addBehaviours(List<TileEntityBehaviour> behaviours) {
         inputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, TANK_CAPACITY, true)
-            .whenFluidUpdates(this::sendData);
+            .whenFluidUpdates(this::onFluidStackChanged);
         denseOutputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, TANK_CAPACITY, true)
-            .whenFluidUpdates(this::sendData)
+            .whenFluidUpdates(this::onFluidStackChanged)
             .forbidInsertion();
         lightOutputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, TANK_CAPACITY, true)
-            .whenFluidUpdates(this::sendData)
+            .whenFluidUpdates(this::onFluidStackChanged)
             .forbidInsertion();
         behaviours.addAll(List.of(inputTank, denseOutputTank, lightOutputTank));
-        inputFluidCapability = LazyOptional.of(() -> {
-            return new CombinedTankWrapper(inputTank.getCapability().orElse(null));
-        });
-        denseOutputFluidCapability = LazyOptional.of(() -> {
-            return new CombinedTankWrapper(denseOutputTank.getCapability().orElse(null));
-        });
-        lightOutputFluidCapability = LazyOptional.of(() -> {
-            return new CombinedTankWrapper(lightOutputTank.getCapability().orElse(null));
+
+        allFluidCapability = LazyOptional.of(() -> {
+            return new CombinedTankWrapper(inputTank.getCapability().orElse(null), denseOutputTank.getCapability().orElse(null), lightOutputTank.getCapability().orElse(null));
         });
 
         advancementBehaviour = new DestroyAdvancementBehaviour(this);
         behaviours.add(advancementBehaviour);
+
+        pollutingBehaviour = new PollutingBehaviour(this);
+        behaviours.add(pollutingBehaviour);
     };
 
     /**
@@ -101,9 +101,7 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
      */
     @SuppressWarnings("null")
     public boolean attemptRotation(boolean shouldSwitch) {
-        if (!hasLevel()) {
-            return false;
-        };
+        if (!hasLevel()) return false;
         if (getLevel().setBlock(getBlockPos(), getBlockState().setValue(CentrifugeBlock.DENSE_OUTPUT_FACE, refreshDirection(this, shouldSwitch ? denseOutputTankFace.getClockWise() : denseOutputTankFace, getDenseOutputTank(), true)), 6)) { // If the output Direction can be successfully changed
             denseOutputTankFace = getBlockState().getValue(CentrifugeBlock.DENSE_OUTPUT_FACE);
             notifyUpdate(); // Block State has changed
@@ -130,6 +128,7 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
             if (timer <= 0) {
                 process();
             };
+            sendData();
             return;
         };
         if (inputTank.isEmpty()) return; // Don't do anything more if input Tank is empty
@@ -143,14 +142,15 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
             }).collect(Collectors.toList());
             if (possibleRecipes.size() >= 1) {
                 lastRecipe = (CentrifugationRecipe)possibleRecipes.get(0);
-                timer = lastRecipe.getProcessingDuration();
-                sendData();
             } else {
-                timer = 100; // Don't try checking for another Recipe for another 100 ticks
                 lastRecipe = null;
-                sendData();
             };
-            return;
+        };
+
+        if (lastRecipe == null) {
+            timer = 100; // If we have no Recipe, don't try checking again for another 100 ticks
+        } else {
+            timer = lastRecipe.getProcessingDuration();
         };
 
         sendData();
@@ -228,11 +228,13 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.FLUID_HANDLER) {
             if (side == Direction.UP) {
-                return inputFluidCapability.cast();
+                return inputTank.getCapability().cast();
             } else if (side == Direction.DOWN) {
-                return lightOutputFluidCapability.cast();
+                return lightOutputTank.getCapability().cast();
             } else if (side == denseOutputTankFace || pondering) {
-                return denseOutputFluidCapability.cast();
+                return denseOutputTank.getCapability().cast();
+            } else if (side == null) { // For the PollutingBehaviour, it needs all tanks
+                return allFluidCapability.cast();
             };
         };
         return super.getCapability(cap, side);
@@ -241,13 +243,16 @@ public class CentrifugeBlockEntity extends KineticTileEntity implements IFluidBl
     @Override
     public void invalidate() {
         super.invalidate();
-        inputFluidCapability.invalidate();
-        denseOutputFluidCapability.invalidate();
-        lightOutputFluidCapability.invalidate();
+        allFluidCapability.invalidate();
     };
 
     public int getEachTankCapacity() {
         return DestroyAllConfigs.SERVER.contraptions.centrifugeCapacity.get();
+    };
+
+    private void onFluidStackChanged() {
+        setChanged();
+        sendData();
     };
 
     /**

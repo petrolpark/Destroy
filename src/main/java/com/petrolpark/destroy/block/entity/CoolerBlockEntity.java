@@ -1,7 +1,6 @@
 package com.petrolpark.destroy.block.entity;
 
 import java.util.List;
-import java.util.Locale;
 
 import com.petrolpark.destroy.block.CoolerBlock;
 import com.simibubi.create.AllBlocks;
@@ -13,6 +12,7 @@ import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.utility.AngleHelper;
+import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
@@ -150,7 +150,7 @@ public class CoolerBlockEntity extends SmartTileEntity implements IHaveGoggleInf
 
         @Override
         public String getSerializedName() {
-            return name().toLowerCase(Locale.ROOT);
+            return Lang.asId(name());
         };
     };
 

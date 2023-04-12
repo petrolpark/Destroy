@@ -6,6 +6,7 @@
         "AbstractVillagerAccessor",
         "AgeableMobAccessor",
         "BasinCategoryMixin",
+        "ConnectivityHandlerMixin",
         "CreateRecipeCategoryMixin",
         "DestroyFrictionModifier",
         "FluidIngredientAccessor",

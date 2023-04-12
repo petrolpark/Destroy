@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.BubbleCapBlock;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
@@ -33,7 +34,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -50,16 +50,17 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
     private Direction pipeFace;
     private int fraction; // Where in the Tower this Bubble Cap is (0 = base (controller), 1 = first fraction, etc)
     private int ticksToFill; // How long before this Bubble Cap should start transferring from its internal Tank to its actual Tank (allowing for the illusion of Fluid 'moving up' the Tower)
-    public boolean shouldCreateParticles;
+    public FluidStack particleFluid; // Which Fluid to use if we have to make particles
 
     private boolean isController;
     private BlockPos towerControllerPos;
     private DistillationTower tower;
 
     protected SmartFluidTankBehaviour internalTank, tank;
-    protected LazyOptional<IFluidHandler> fluidCapability;
+    protected LazyOptional<IFluidHandler> allFluidCapability;
 
     protected DestroyAdvancementBehaviour advancementBehaviour;
+    protected PollutingBehaviour pollutingBehaviour;
 
     public BubbleCapBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
@@ -68,7 +69,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
         isController = false;
         towerControllerPos = pos; // Temporary assignment
         ticksToFill = 0;
-        shouldCreateParticles = false;
+        particleFluid = FluidStack.EMPTY;
     };
 
     @Override
@@ -81,12 +82,15 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
             .whenFluidUpdates(this::notifyUpdate);
         behaviours.add(tank);
         behaviours.add(internalTank);
-        fluidCapability = LazyOptional.of(() -> {
-			return new CombinedTankWrapper(tank.getCapability().orElse(null));
+        allFluidCapability = LazyOptional.of(() -> { // For Polluting Behaviour, we need access to all tanks
+			return new CombinedTankWrapper(tank.getCapability().orElse(null), internalTank.getCapability().orElse(null));
 		});
 
         advancementBehaviour = new DestroyAdvancementBehaviour(this);
         behaviours.add(advancementBehaviour);
+
+        pollutingBehaviour = new PollutingBehaviour(this);
+        behaviours.add(pollutingBehaviour);
     };
 
     @Override
@@ -118,7 +122,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
         };
 
         if (clientPacket) { // If we need to tell the client to start rendering particles
-            shouldCreateParticles = compound.getBoolean("Particles");
+            particleFluid = FluidStack.loadFluidStackFromNBT(compound.getCompound("ParticleFluid"));
         };
 
         ticksToFill = compound.getInt("TicksToFill");
@@ -135,7 +139,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
         };
         compound.putInt("TicksToFill", ticksToFill);
         if (clientPacket) {
-            compound.putBoolean("Particles", shouldCreateParticles);
+            compound.put("ParticleFluid", particleFluid.writeToNBT(new CompoundTag()));
         };
     };
 
@@ -155,11 +159,11 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
             tower.tick(getLevel());
         };
         sendData();
-        if (shouldCreateParticles) {
+        if (!particleFluid.isEmpty()) {
             if (getLevel().isClientSide()) { // It thinks getLevel() might be null (it can't be).
-                spawnParticles();
+                spawnParticles(particleFluid);
             };
-            shouldCreateParticles = false; // Reset this, we've made them now
+            particleFluid = FluidStack.EMPTY; // Reset this, we've made them now
         };
     };
 
@@ -221,11 +225,10 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
     };
 
     @SuppressWarnings("null")
-    public void spawnParticles() {
+    public void spawnParticles(FluidStack fluidStack) {
         Vec3 center = VecHelper.getCenterOf(getBlockPos());
         if (!(hasLevel() && getLevel().isClientSide() && isController)) return;
-        GasParticleData particleData = new GasParticleData(DestroyParticleTypes.DISTILLATION.get(), new FluidStack(Fluids.WATER, 1), getDistillationTower().getHeight() - 1.3f);
-        //TODO determine correct Fluid Stack
+        GasParticleData particleData = new GasParticleData(DestroyParticleTypes.DISTILLATION.get(), fluidStack, getDistillationTower().getHeight() - 1.3f);
         for (int i = 0; i < 10; i++) {
             getLevel().addParticle(particleData, center.x, center.y - 0.3f, center.z, 0, 0, 0); // It thinks 'getLevel()' might be null (it can't be at this point)
         };
@@ -264,8 +267,13 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
     @Override
     @SuppressWarnings("null")
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.FLUID_HANDLER && side == pipeFace) {
-            return fluidCapability.cast();
+        if (cap == ForgeCapabilities.FLUID_HANDLER) {
+            if (side == pipeFace) {
+                return tank.getCapability().cast();
+            } else if (side == null) { // For Polluting Behaviour, we need access to all Fluid Tanks
+                return allFluidCapability.cast();
+            };
+
         };
         return super.getCapability(cap, side);
     };           
@@ -273,7 +281,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
     @Override
     public void invalidate() {
         super.invalidate();
-        fluidCapability.invalidate();
+        allFluidCapability.invalidate();
     };
 
     /**

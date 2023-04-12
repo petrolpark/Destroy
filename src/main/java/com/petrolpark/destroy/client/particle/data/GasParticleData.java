@@ -66,6 +66,12 @@ public class GasParticleData implements ParticleOptions, ICustomParticleDataWith
         ).apply(i, (fluidStack, blockHeight) -> new GasParticleData(DestroyParticleTypes.DISTILLATION.get(), fluidStack, blockHeight))
     );
 
+    public static final Codec<GasParticleData> EVAPORATION_CODEC = RecordCodecBuilder.create(i -> i
+        .group(
+            FluidStack.CODEC.fieldOf("fluid").forGetter(p -> p.fluid)
+        ).apply(i, (fluidStack) -> new GasParticleData(DestroyParticleTypes.EVAPORATION.get(), fluidStack, 0))
+    );
+
     @SuppressWarnings("deprecation") // Deserializer is deprecated
     public static final ParticleOptions.Deserializer<GasParticleData> DESERIALIZER =
 		new ParticleOptions.Deserializer<GasParticleData>() {
@@ -84,7 +90,8 @@ public class GasParticleData implements ParticleOptions, ICustomParticleDataWith
 
     @Override
     public Codec<GasParticleData> getCodec(ParticleType<GasParticleData> type) {
-        return DISTILLATION_CODEC; //TODO properly check the type and add default codec
+        if (type == DestroyParticleTypes.DISTILLATION.get()) return DISTILLATION_CODEC;
+        return EVAPORATION_CODEC;
     };
 
     @Override

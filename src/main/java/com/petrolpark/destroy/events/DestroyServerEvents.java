@@ -44,6 +44,7 @@ import java.util.List;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
@@ -57,8 +58,8 @@ import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.SyringeItem;
-import com.petrolpark.destroy.networking.DestroyMessages;
-import com.petrolpark.destroy.networking.packet.LevelPollutionS2CPacket;
+import com.petrolpark.destroy.network.DestroyMessages;
+import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.petrolpark.destroy.world.village.DestroyTrades;
 import com.petrolpark.destroy.world.village.DestroyVillageAddition;
@@ -265,8 +266,9 @@ public class DestroyServerEvents {
     };
 
     @SubscribeEvent
-    public static void attachDestroyAdvancementBehaviourToBasin(TileEntityBehaviourEvent<BasinTileEntity> event) {
+    public static void attachBasinBehaviours(TileEntityBehaviourEvent<BasinTileEntity> event) {
         event.attach(new DestroyAdvancementBehaviour(event.getTileEntity()));
+        event.attach(new PollutingBehaviour(event.getTileEntity()));
     };
 
     @SubscribeEvent
@@ -295,6 +297,7 @@ public class DestroyServerEvents {
             DestroyAdvancements.CAPTURE_STRAY.award(event.getLevel(), player);
 
             event.setResult(Result.DENY);
+            return;
         };
 
         // Collecting Tears
@@ -302,7 +305,7 @@ public class DestroyServerEvents {
 
             livingEntity.removeEffect(DestroyMobEffects.CRYING.get()); // Stop the crying
 
-            // Give the Tear Bottle to the Plater
+            // Give the Tear Bottle to the Player
             ItemStack filled = DestroyItems.TEAR_BOTTLE.asStack();
             if (!player.isCreative())
                 itemStack.shrink(1);
@@ -315,6 +318,7 @@ public class DestroyServerEvents {
             DestroyAdvancements.COLLECT_TEARS.award(event.getLevel(), player);
 
             event.setResult(Result.DENY);
+            return;
         };
     };
 };

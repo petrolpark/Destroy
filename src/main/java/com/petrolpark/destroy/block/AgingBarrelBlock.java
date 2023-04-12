@@ -183,11 +183,11 @@ public class AgingBarrelBlock extends Block implements ITE<AgingBarrelBlockEntit
 
     @Override
 	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        ITE.onRemove(state, level, pos, newState);
 		if (!state.hasBlockEntity() || state.getBlock() == newState.getBlock()) return;
 		withTileEntityDo(level, pos, be -> {
 			ItemHelper.dropContents(level, pos, be.inventory);
 		});
-		level.removeBlockEntity(pos);
 	};
 
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {

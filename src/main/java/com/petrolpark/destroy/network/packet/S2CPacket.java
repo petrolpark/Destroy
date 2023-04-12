@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.networking.packet;
+package com.petrolpark.destroy.network.packet;
 
 import java.util.function.Supplier;
 
@@ -6,8 +6,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
 public abstract class S2CPacket {
-
-    public S2CPacket(FriendlyByteBuf buffer) {};
 
     public abstract void toBytes(FriendlyByteBuf buffer);
 
