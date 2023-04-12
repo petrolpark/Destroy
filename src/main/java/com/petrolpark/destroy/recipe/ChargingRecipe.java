@@ -43,6 +43,11 @@ public class ChargingRecipe extends ProcessingRecipe<RecipeWrapper> implements I
     };
 
     @Override
+    protected boolean canSpecifyDuration() {
+        return false;
+    };
+
+    @Override
     @OnlyIn(Dist.CLIENT)
     public Component getDescriptionForAssembly() {
         return DestroyLang.translate("recipe.assembly.charging").component();

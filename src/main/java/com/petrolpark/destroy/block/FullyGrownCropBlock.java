@@ -18,9 +18,9 @@ import net.minecraftforge.common.PlantType;
 
 public class FullyGrownCropBlock extends BushBlock {
 
-    private Supplier<Item> seed;
+    private Supplier<? extends Item> seed;
 
-    public FullyGrownCropBlock(Properties properties, Supplier<Item> seed) {
+    public FullyGrownCropBlock(Properties properties, Supplier<? extends Item> seed) {
         super(properties);
         this.seed = seed;
     };

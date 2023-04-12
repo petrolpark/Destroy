@@ -3,7 +3,6 @@ package com.petrolpark.destroy.behaviour;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.network.packet.EvaporatingFluidS2CPacket;
 import com.petrolpark.destroy.util.PollutionHelper;
@@ -31,13 +30,10 @@ public class PollutingBehaviour extends TileEntityBehaviour {
     @Override
     public void destroy() {
         List<FluidStack> fluidsToRelease = new ArrayList<>();
-        Destroy.LOGGER.info("time to release stuff");
         IFluidHandler availableFluids = tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
         if (availableFluids == null) return;
-        Destroy.LOGGER.info("I have fluids yippee!");
         for (int tankNo = 0; tankNo < availableFluids.getTanks(); tankNo++) {
             FluidStack fluidStack = availableFluids.getFluidInTank(tankNo);
-            Destroy.LOGGER.info("lets; try and release "+fluidStack.getDisplayName().getString());
             if (fluidStack.isEmpty()) continue;
             fluidsToRelease.add(fluidStack);
         };

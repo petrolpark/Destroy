@@ -7,6 +7,7 @@ import com.petrolpark.destroy.block.entity.CoolerBlockEntity.ColdnessLevel;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
+import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.foundation.block.ITE;
 
 import net.minecraft.core.BlockPos;
@@ -32,20 +33,23 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class CoolerBlock extends Block implements ITE<CoolerBlockEntity> {
 
     public static final EnumProperty<ColdnessLevel> COLD_LEVEL = EnumProperty.create("breeze", ColdnessLevel.class);
+    public static final EnumProperty<HeatLevel> HEAT_LEVEL = EnumProperty.create("blaze", HeatLevel.class); // This is purely for ease of interaction with Basin Recipes - most values do nothing
 
     public CoolerBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(COLD_LEVEL, ColdnessLevel.IDLE));
+        registerDefaultState(defaultBlockState().setValue(COLD_LEVEL, ColdnessLevel.IDLE).setValue(HEAT_LEVEL, HeatLevel.NONE));
     };
 
     @Override
     protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(COLD_LEVEL);
+        builder.add(COLD_LEVEL, HEAT_LEVEL);
     };
 
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState p_220082_4_, boolean p_220082_5_) {
+        withTileEntityDo(level, pos, be -> be.updateHeatLevel(state.getValue(COLD_LEVEL)));
+        
         if (level.isClientSide()) return;
         BlockEntity blockEntity = level.getBlockEntity(pos.above()); // Check for a Basin
         if (!(blockEntity instanceof BasinTileEntity)) return;

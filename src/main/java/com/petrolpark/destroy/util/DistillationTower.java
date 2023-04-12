@@ -8,6 +8,7 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.recipe.DistillationRecipe;
+import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.recipe.RecipeFinder;
@@ -135,14 +136,25 @@ public class DistillationTower {
     public boolean process() {
         if (lastRecipe == null) return false;
         if (lastRecipe.getFractions() > getHeight() - 1) return false;
+        BubbleCapBlockEntity controller = getControllerBubbleCap();
+        if (controller == null) return false;
+        Level level = controller.getLevel();
+        if (level == null) return false;
 
         FluidStack fluidDrained = FluidStack.EMPTY;
         for (boolean simulate : Iterate.trueAndFalse) { // First simulate to check if all the Fluids can actually fit, then execute if they do. 
+
+            // Check if heat requirement is fulfilled
+            if (!lastRecipe.getRequiredHeat().testBlazeBurner(BasinTileEntity.getHeatLevelOf(level.getBlockState(getControllerPos().below())))) return false;
+
+            // Check if required Fluid is present
             int requiredFluidAmount = lastRecipe.getRequiredFluid().getRequiredAmount();
             fluidDrained = getControllerBubbleCap().getTank().drain(requiredFluidAmount, simulate ? FluidAction.SIMULATE : FluidAction.EXECUTE);
             if (fluidDrained.getAmount() < requiredFluidAmount) { // If there is not enough Fluid in the controller Bubble Cap
                 return false;
             };
+
+            // Check if resultant Fluids can fit
             for (int i = 0; i < lastRecipe.getFractions(); i++) {
                 FluidStack distillate = lastRecipe.getFluidResults().get(i);
                 BubbleCapBlockEntity bubbleCap = fractions.get(i + 1);
@@ -153,11 +165,12 @@ public class DistillationTower {
                     bubbleCap.setTicksToFill(i * BubbleCapBlockEntity.getTankCapacity() / BubbleCapBlockEntity.getTransferRate());
                 };
             };
+
         };
         // If we've got to this point, the Recipe is being successfully processed
-        getControllerBubbleCap().getTank().drain(lastRecipe.getRequiredFluid().getRequiredAmount(), FluidAction.EXECUTE);
-        getControllerBubbleCap().particleFluid = fluidDrained.copy();
-        getControllerBubbleCap().onDistill();
+        controller.getTank().drain(lastRecipe.getRequiredFluid().getRequiredAmount(), FluidAction.EXECUTE);
+        controller.particleFluid = fluidDrained.copy();
+        controller.onDistill();
         return true;
     };
 

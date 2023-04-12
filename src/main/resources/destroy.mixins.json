@@ -13,6 +13,8 @@
         "FluidIngredientMixin",
         "HeatConditionMixin",
         "HeatLevelMixin",
+        "MixingCategoryMixin",
+        "PackingCategoryMixin",
         "RenderChunkRegionAccessor",
         "VillagerAccessor",
         "VillagerMixin"

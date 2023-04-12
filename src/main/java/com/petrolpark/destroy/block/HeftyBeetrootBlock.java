@@ -13,7 +13,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class HeftyBeetrootBlock extends FullyGrownCropBlock {
 
-    public HeftyBeetrootBlock(Properties properties, Supplier<Item> seed) {
+    public HeftyBeetrootBlock(Properties properties, Supplier<? extends Item> seed) {
         super(properties, seed);
     };
 

@@ -515,7 +515,7 @@
     "item.destroy.iodine.tooltip": "IODINE",
     "item.destroy.iodine.tooltip.summary": "A dull grey solid which nevertheless produces _annoying_ yellow stains anywhere you leave it.",
     "item.destroy.iodine.tooltip.condition1": "When thrown in Fire",
-    "item.destroy.iodine.tooltip.behaviour1": "Releases purple fumes with remarkably similar properties to _Dragon Breath_.",
+    "item.destroy.iodine.tooltip.behaviour1": "Releases purple fumes which can be collected as if it were _Dragon Breath_.",
     "item.destroy.iron_coated_silica": "Iron-Coated Silica",
     "item.destroy.iron_infused_beetroot": "Iron-Infused Beetroot",
     "item.destroy.iron_infused_beetroot.tooltip": "IRON-INFUSED_BEETROOT",

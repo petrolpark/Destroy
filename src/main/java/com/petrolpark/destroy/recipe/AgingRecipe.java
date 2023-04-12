@@ -29,7 +29,7 @@ public class AgingRecipe extends SingleFluidRecipe {
     @Override
     public boolean matches(RecipeWrapper pContainer, Level pLevel) {
         return false;
-    }
+    };
 
     @Override
     public String getRecipeTypeName() {

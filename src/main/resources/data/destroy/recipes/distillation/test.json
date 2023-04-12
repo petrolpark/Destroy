@@ -15,5 +15,6 @@
             "fluid": "minecraft:lava",
             "amount": 1000
         }
-    ]
+    ],
+    "heatRequirement": "heated"
 }

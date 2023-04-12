@@ -21,6 +21,16 @@ public class DistillationRecipe extends SingleFluidRecipe {
     };
 
     @Override
+    protected boolean canRequireHeat() {
+        return true;
+    };
+
+    @Override
+    protected boolean canSpecifyDuration() {
+        return false;
+    };
+
+    @Override
     public String getRecipeTypeName() {
         return "distillation";
     };
