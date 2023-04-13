@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "IZI",
+      "I I",
+      "Z Z"
+    ],
+    "key": {
+      "I": {
+        "tag": "forge:ingots/zirconium"
+      },
+      "Z": {
+        "tag": "forge:raw_materials/zircon"
+      }
+    },
+    "result": {
+      "item": "destroy:zirconium_pants"
+    }
+  }

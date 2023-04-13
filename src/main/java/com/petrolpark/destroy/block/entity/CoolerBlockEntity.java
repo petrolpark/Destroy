@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.destroy.block.CoolerBlock;
+import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.PollutionHelper;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.fluids.tank.FluidTankBlock;
@@ -26,7 +27,9 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
@@ -113,14 +116,26 @@ public class CoolerBlockEntity extends SmartTileEntity implements IHaveGoggleInf
         
         if (coolingTicks > 0) {
             coolingTicks--;
+            if (coolingTicks < MAX_COOLING_TICKS) {
+                tank.allowInsertion();
+            };
+            if (coolingTicks <= 0) {
+                setColdnessOfBlock(ColdnessLevel.IDLE);
+            };
+            sendData();
         };
-        if (coolingTicks < MAX_COOLING_TICKS) {
-            tank.allowInsertion();
-        };
-        if (coolingTicks <= 0) {
-            setColdnessOfBlock(ColdnessLevel.IDLE);
-        };
-        setChanged();
+    };
+
+    @Override
+    protected void read(CompoundTag tag, boolean clientPacket) {
+        super.read(tag, clientPacket);
+        coolingTicks = tag.getInt("Timer");
+    };
+
+    @Override
+    protected void write(CompoundTag tag, boolean clientPacket) {
+        super.write(tag, clientPacket);
+        tag.putInt("Timer", coolingTicks);
     };
 
     public SmartFluidTank getInputTank() {
@@ -245,7 +260,16 @@ public class CoolerBlockEntity extends SmartTileEntity implements IHaveGoggleInf
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        return false;
+        if (coolingTicks <= 0) return false;
+        final MutableComponent timeRemaining;
+        int seconds = (coolingTicks % 1200) / 20;
+        if (coolingTicks < 72000) {
+            timeRemaining = Component.literal("" + coolingTicks / 1200 + ":" + (seconds < 10 ? "0" : "") + seconds);
+        } else {
+            timeRemaining = DestroyLang.translate("tooltip.cooler.long_time_remaining").component();
+        };
+        DestroyLang.translate("tooltip.cooler.time_remaining").space().add(timeRemaining).forGoggles(tooltip);
+        return true;
     };
     
 };
