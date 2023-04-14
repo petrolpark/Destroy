@@ -19,6 +19,8 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
 
+jarJar.enable()
+
 mixin {
     add sourceSets.main, "destroy.refmap.json"
 }
@@ -96,6 +98,22 @@ repositories {
     }
 }
 
+configurations {
+	// Create the library configuration, where our non-mod libraries will be added to
+	library
+	// Any dependency in the library configuration will also be added to the implementation configuration
+	implementation.extendsFrom library
+}
+
+// Configure all runs with the following
+minecraft.runs.all {
+	// Set the minecraft_classpath token to the paths of all jars in the library configuration
+	// This is added with the actual Minecraft classpath to get the real classpath information later on
+	lazyToken('minecraft_classpath') {
+		configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+	}
+}
+
 dependencies {
     //MC
     minecraft "net.minecraftforge:forge:1.19.2-43.2.0"
@@ -113,6 +131,12 @@ dependencies {
 
     //Registrate
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
+
+    //MongoDB
+    library 'org.mongodb:mongodb-driver-sync:4.9.0'
+    jarJar('org.mongodb:mongodb-driver-sync:4.9.0') {
+        jarJar.ranged(it, "[4.9.0]")
+    }
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
