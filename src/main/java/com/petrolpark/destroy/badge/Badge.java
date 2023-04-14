@@ -32,7 +32,6 @@ public class Badge {
                     DestroyBadges.getBadgeFromId(Destroy.asResource(badgeId)).ifPresent(badge -> badges.add(badge));
                 });
             };
-            database.
         } catch (Error e) {};
         Destroy.LOGGER.info("Ive got "+badges);
         return badges;
