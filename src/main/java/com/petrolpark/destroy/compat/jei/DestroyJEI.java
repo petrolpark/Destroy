@@ -8,17 +8,20 @@ import java.util.function.Supplier;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.compat.jei.category.AgingCategory;
 import com.petrolpark.destroy.compat.jei.category.CentrifugationCategory;
 import com.petrolpark.destroy.compat.jei.category.DistillationCategory;
 import com.petrolpark.destroy.compat.jei.category.ElectrolysisCategory;
 import com.petrolpark.destroy.compat.jei.category.MutationCategory;
+import com.petrolpark.destroy.compat.jei.category.ReactionCategory;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.recipe.AgingRecipe;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.recipe.DistillationRecipe;
 import com.petrolpark.destroy.recipe.MutationRecipe;
+import com.petrolpark.destroy.recipe.ReactionRecipe;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.CreateJEI;
@@ -34,6 +37,8 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.registration.IAdvancedRegistration;
+import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -87,7 +92,16 @@ public class DestroyJEI implements IModPlugin {
             .catalyst(DestroyItems.HYPERACCUMULATING_FERTILIZER::get)
             .itemIcon(DestroyItems.HYPERACCUMULATING_FERTILIZER.get())
             .emptyBackground(120, 125)
-            .build("mutation", MutationCategory::new);
+            .build("mutation", MutationCategory::new),
+
+        reaction = builder(ReactionRecipe.class)
+            .addRecipes(ReactionCategory.RECIPES::values)
+            .catalyst(AllBlocks.MECHANICAL_MIXER::get)
+            .catalyst(AllBlocks.BASIN::get)
+            .itemIcon(DestroyItems.ABS.get()) //TODO replace with an actual Icon
+            .emptyBackground(180, 125)
+            .build("reaction", ReactionCategory::new);
+
     };
 
     @Override
@@ -110,6 +124,16 @@ public class DestroyJEI implements IModPlugin {
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
 		allCategories.forEach(c -> c.registerCatalysts(registration));
 	};
+    
+    @Override
+    public void registerIngredients(IModIngredientRegistration registration) {
+        registration.register(MoleculeJEIIngredient.TYPE, Molecule.MOLECULES.values(), MoleculeJEIIngredient.HELPER, MoleculeJEIIngredient.RENDERER);
+    };
+
+    @Override
+    public void registerAdvanced(IAdvancedRegistration registration) {
+        registration.addRecipeManagerPlugin(DestroyRecipeManagerPlugins.MOLECULE_RECIPES_PLUGIN);
+    };
 
     private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {
         return new CategoryBuilder<>(recipeClass);
@@ -139,6 +163,7 @@ public class DestroyJEI implements IModPlugin {
          */
         public CategoryBuilder<T> addRecipes(Supplier<Collection<? extends T>> collection) {
 			recipeListConsumers.add(recipes -> recipes.addAll(collection.get()));
+            Destroy.LOGGER.info("Loaded " + collection.get().size()+ " recipes of type " + recipeClass.getSimpleName()+ ".");
             return this;
 		};
 

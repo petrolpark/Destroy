@@ -6,6 +6,7 @@
         "AbstractVillagerAccessor",
         "AgeableMobAccessor",
         "BasinCategoryMixin",
+        "ClientComponentTooltipMixin",
         "ConnectivityHandlerMixin",
         "CreateRecipeCategoryMixin",
         "DestroyFrictionModifier",
@@ -16,6 +17,8 @@
         "MixingCategoryMixin",
         "PackingCategoryMixin",
         "RenderChunkRegionAccessor",
+        "TooltipRendererAccessor",
+        "TooltipRendererMixin",
         "VillagerAccessor",
         "VillagerMixin"
     ],

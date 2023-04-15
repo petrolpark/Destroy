@@ -90,7 +90,7 @@ public class Destroy {
         // Chemistry
         // DestroyGroupFinder.register();
         DestroyMolecules.register();
-        // DestroyReactions.register();
+        DestroyReactions.register();
         // DestroyGenericReactions.register();
 
         // Events

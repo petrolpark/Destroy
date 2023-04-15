@@ -28,6 +28,16 @@ public class DestroyItems {
 
     private static CreateRegistrate REGISTRATE = Destroy.registrate();
 
+    public static final ItemEntry<Item> LOGO = REGISTRATE.item("logo", Item::new)
+        .properties(p -> p
+            .tab(null)
+        ).register();
+
+    public static final ItemEntry<MoleculeDisplayItem> MOLECULE_DISPLAY_ITEM = REGISTRATE.item("molecule_display_item", MoleculeDisplayItem::new)
+        .properties(p -> p
+            .tab(null)
+        ).register();
+
     static {
         REGISTRATE.creativeModeTab(() -> DestroyCreativeModeTabs.TAB_DESTROY);
     };
@@ -603,10 +613,7 @@ public class DestroyItems {
     YEAST = REGISTRATE.item("yeast", Item::new)
         .register(),
     CHALK = REGISTRATE.item("chalk", Item::new)
-        .register(),
-    LOGO = REGISTRATE.item("logo", Item::new)
         .register();
-
 
     public static final ItemEntry<HyperaccumulatingFertilizerItem> HYPERACCUMULATING_FERTILIZER = REGISTRATE.item("hyperaccumulating_fertilizer", HyperaccumulatingFertilizerItem::new)
         .tag(Tags.Items.DUSTS)

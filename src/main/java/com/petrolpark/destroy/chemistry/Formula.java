@@ -445,7 +445,7 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * The Set of every {@link Atom} in this Formula - essentially its chemical formula.
+     * The Set of every {@link Atom} in this Formula - essentially its molecular formula.
      */
     public Set<Atom> getAllAtoms() {
         return structure.keySet();

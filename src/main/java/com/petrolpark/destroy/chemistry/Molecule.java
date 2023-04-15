@@ -11,9 +11,11 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.petrolpark.destroy.item.MoleculeDisplayItem;
 
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * A Molecule is any species - that could be an actual chemical molecule or an inorganic ion.
@@ -95,7 +97,7 @@ public class Molecule implements INameableProduct {
     private String translationKey;
     /**
      * The display name of this Molecule. For non-novel Molecules this should be {@link Molecule#translationKey defined in a language file} -
-     * for novel Molecules this will be their {@link Molecule#getSerlializedChemicalFormula chemical formula}.
+     * for novel Molecules this will be their {@link Molecule#getSerlializedMolecularFormula molecular formula}.
      */
     private Component name;
 
@@ -219,7 +221,7 @@ public class Molecule implements INameableProduct {
     };
 
     /**
-     * The Set of every {@link Atom} in this Formula - essentially its chemical formula.
+     * The Set of every {@link Atom} in this Formula - essentially its molecular formula.
      */
     public Set<Atom> getAtoms() {
         return structure.getAllAtoms();
@@ -254,7 +256,7 @@ public class Molecule implements INameableProduct {
      * Gives all {@link Atom Atoms} in this Molecule, and how many of each there are.
      * @return Map of {@link Atom Atoms} to their quantities
      */
-    public Map<Element, Integer> getChemicalFormula() {
+    public Map<Element, Integer> getMolecularFormula() {
         Map<Element, Integer> empiricalFormula = new HashMap<Element, Integer>();
         for (Atom atom : structure.getAllAtoms()) {
             Element element = atom.getElement();
@@ -272,8 +274,8 @@ public class Molecule implements INameableProduct {
      * Gives all {@link Atom Atoms} in this Molecule, and their quantities, in the format {@code AaBbCc...}, where {@code a} = number of Atoms of A, etc.
      * Elements are given in the order in which they are declared in {@link Element the Element Enum}.
      */
-    public String getSerlializedChemicalFormula() {
-        Map<Element, Integer> formulaMap = getChemicalFormula();
+    public String getSerlializedMolecularFormula() {
+        Map<Element, Integer> formulaMap = getMolecularFormula();
         List<Element> elements = new ArrayList<>(formulaMap.keySet());
         elements.sort(Comparator.naturalOrder()); //sort Elements based on their order of declaration
         String formula = "";
@@ -328,6 +330,14 @@ public class Molecule implements INameableProduct {
      */
     public List<Reaction> getReactantReactions() {
         return this.reactantReactions;
+    };
+
+    /**
+     * Get the list of {@link Reaction Reactions} by which this Molecule is made.
+     * @return List of Reactions ordered by declaration
+     */
+    public List<Reaction> getProductReactions() {
+        return this.productReactions;
     };
 
     /**
@@ -509,7 +519,7 @@ public class Molecule implements INameableProduct {
                 };
             };
 
-            if (molecule.getChemicalFormula().containsKey(Element.R_GROUP)) {
+            if (molecule.getMolecularFormula().containsKey(Element.R_GROUP)) {
                 tag(DestroyMolecules.Tags.HYPOTHETICAL);
             };
             

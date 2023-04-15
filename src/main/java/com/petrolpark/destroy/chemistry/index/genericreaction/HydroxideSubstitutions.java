@@ -25,7 +25,7 @@ public class HydroxideSubstitutions extends SingleGroupGenericReaction<ChlorideG
             .addGroup(Formula.alcohol())
             .remove(chlorideGroup.getChlorine())
         ).build();
-        return Reaction.builder()
+        return reactionBuilder()
             .addReactant(reactantMolecule)
             .addReactant(DestroyMolecules.HYDROXIDE, 1, chlorideGroup.getDegree() == 3 ? 0 : 1) //if this is a tertiary chloride, the mechanism is SN1 so hydroxide does not appear in the rate equation
             .addProduct(productMolecule)

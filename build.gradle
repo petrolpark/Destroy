@@ -119,9 +119,9 @@ dependencies {
     minecraft "net.minecraftforge:forge:1.19.2-43.2.0"
     
     //JEI
-    compileOnly fg.deobf("mezz.jei:jei-${jei_minecraft_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${jei_minecraft_version}-forge-api:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${jei_minecraft_version}-forge:${jei_version}")
+    implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}-common-api:${jei_version}")
+    implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}-forge-api:${jei_version}")
+    implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}-forge:${jei_version}")
     
     //Create
     implementation fg.deobf("com.simibubi.create:create-${create_minecraft_version}:${create_version}:slim") { transitive = false }

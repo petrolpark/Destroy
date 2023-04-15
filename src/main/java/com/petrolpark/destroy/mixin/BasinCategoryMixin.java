@@ -16,7 +16,6 @@ import com.simibubi.create.AllTags;
 import com.simibubi.create.compat.jei.category.BasinCategory;
 import com.simibubi.create.content.contraptions.processing.BasinRecipe;
 import com.simibubi.create.content.contraptions.processing.HeatCondition;
-import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.foundation.utility.Lang;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -40,12 +39,12 @@ public class BasinCategoryMixin {
             blazeTreatStacks.add(new ItemStack(item));
         });
         
-        if (recipe.getRequiredHeat().testBlazeBurner(HeatLevel.valueOf("FROSTING"))) {
+        if (recipe.getRequiredHeat().name() == "COOLED") {
             builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 81).addItemStack(DestroyBlocks.COOLER.asStack());
-        } else if (!recipe.getRequiredHeat().testBlazeBurner(HeatLevel.NONE)) { // This one is copied right from Create, it renders the Blaze Burner
+        } else if (recipe.getRequiredHeat() != HeatCondition.NONE) { // This one is copied right from Create, it renders the Blaze Burner
             builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 81).addItemStack(AllBlocks.BLAZE_BURNER.asStack());
         };
-        if (!recipe.getRequiredHeat().testBlazeBurner(HeatLevel.KINDLED)) { // Used to render all possible Blaze Treats rather than just the Blaze Cake
+        if (recipe.getRequiredHeat() == HeatCondition.SUPERHEATED) { // Used to render all possible Blaze Treats rather than just the Blaze Cake
             builder.addSlot(RecipeIngredientRole.CATALYST, 153, 81).addItemStacks(blazeTreatStacks);
         };
         ci.cancel(); // Don't execute the rest of the method
