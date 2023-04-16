@@ -5,7 +5,7 @@ import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.petrolpark.destroy.block.entity.CoolerBlockEntity.ColdnessLevel;
-import com.petrolpark.destroy.block.partial.DestroyBlockPartials;
+import com.petrolpark.destroy.block.partial.DestroyPartials;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 
@@ -35,7 +35,7 @@ public class AnimatedCooler extends AnimatedKinetics {
 			.scale(scale)
 			.render(ms);
 
-        PartialModel head = DestroyBlockPartials.STRAY_SKULL;
+        PartialModel head = DestroyPartials.STRAY_SKULL;
 
         blockElement(head).atLocal(1, 1.8 + bobbing, 1)
 			.rotate(0, 180 + shivering, 0)

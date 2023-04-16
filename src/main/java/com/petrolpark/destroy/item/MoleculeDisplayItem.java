@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.client.gui.MoleculeRenderer;
 import com.petrolpark.destroy.item.renderer.DestroyTooltipComponent;
 
 import net.minecraft.client.gui.Font;
@@ -54,26 +55,28 @@ public class MoleculeDisplayItem extends Item {
 
     public static class ClientMoleculeTooltipComponent implements ClientTooltipComponent {
 
-        private final Molecule molecule;
+        private final MoleculeRenderer molecule;
 
         public ClientMoleculeTooltipComponent(MoleculeTooltip tooltipComponent) {
-            this.molecule = tooltipComponent.getMolecule();
+            molecule = new MoleculeRenderer(tooltipComponent.getMolecule());
         };
 
         @Override
         public int getHeight() {
-            return 30;
+            return 20;
         };
 
         @Override
         public int getWidth(Font pFont) {
-            return 30;
+            return 20;
         };
 
         @Override
-        public void renderImage(Font pFont, int mouseX, int mouseY, PoseStack pPoseStack, ItemRenderer itemRenderer, int pBlitOffset) {
-            //TODO render item
-            itemRenderer.renderAndDecorateItem(DestroyItems.ABS.asStack(), mouseX + 2, mouseY + 2);
+        public void renderImage(Font font, int mouseX, int mouseY, PoseStack poseStack, ItemRenderer itemRenderer, int blitOffset) {
+            poseStack.pushPose();
+            poseStack.translate(0, 0, 401);
+            molecule.draw(poseStack, mouseX + 10, mouseY + 10);
+            poseStack.popPose();
         };
     };
     

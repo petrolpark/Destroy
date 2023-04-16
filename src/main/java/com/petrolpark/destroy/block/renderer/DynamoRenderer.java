@@ -3,7 +3,7 @@ package com.petrolpark.destroy.block.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.block.DynamoBlock;
 import com.petrolpark.destroy.block.entity.DynamoBlockEntity;
-import com.petrolpark.destroy.block.partial.DestroyBlockPartials;
+import com.petrolpark.destroy.block.partial.DestroyPartials;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.contraptions.base.KineticTileEntity;
 import com.simibubi.create.content.contraptions.base.KineticTileEntityRenderer;
@@ -69,7 +69,7 @@ public class DynamoRenderer extends KineticTileEntityRenderer {
 
     @Override
     protected SuperByteBuffer getRotatedModel(KineticTileEntity be, BlockState state) {
-        return CachedBufferer.partial(DestroyBlockPartials.DYNAMO_COG, state);
+        return CachedBufferer.partial(DestroyPartials.DYNAMO_COG, state);
     };
 
 }

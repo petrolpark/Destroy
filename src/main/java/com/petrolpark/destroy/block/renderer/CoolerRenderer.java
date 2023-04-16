@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.block.entity.CoolerBlockEntity;
 import com.petrolpark.destroy.block.entity.CoolerBlockEntity.ColdnessLevel;
-import com.petrolpark.destroy.block.partial.DestroyBlockPartials;
+import com.petrolpark.destroy.block.partial.DestroyPartials;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
 import com.simibubi.create.foundation.tileEntity.renderer.SafeTileEntityRenderer;
@@ -54,7 +54,7 @@ public class CoolerRenderer extends SafeTileEntityRenderer<CoolerBlockEntity> {
 
         ms.pushPose();
 
-        SuperByteBuffer headBuffer = CachedBufferer.partial(DestroyBlockPartials.STRAY_SKULL, blockState);
+        SuperByteBuffer headBuffer = CachedBufferer.partial(DestroyPartials.STRAY_SKULL, blockState);
 		if (modelTransform != null)
 			headBuffer.transform(modelTransform);
 		headBuffer.translate(0, headY, 0);

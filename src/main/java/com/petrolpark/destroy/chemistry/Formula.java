@@ -650,6 +650,13 @@ public class Formula implements Cloneable {
         return isCarbanion ^ relativeElectronegativity < 0 ? 1f / (Float)relativeStability : (Float)relativeStability;
     };
 
+    /**
+     * Get the directed form of this structure, for use in {@link com.petrolpark.destroy.client.gui.MoleculeRenderer rendering}.
+     */
+    public Branch getRenderBranch() {
+        return getMaximumBranch(startingAtom, structure);
+    };
+
     //INTERNAL METHODS
 
     /**
@@ -688,7 +695,7 @@ public class Formula implements Cloneable {
             Map<Node, BondType> connectedUnvisitedNodesAndTheirBondTypes = new HashMap<>();
             for (Bond bond : structure.get(currentNode.getAtom())) {
                 Node connectedNode = allNodes.get(bond.getDestinationAtom());
-                if (!connectedNode.visited) {
+                if (connectedNode != null && !connectedNode.visited) {
                     connectedUnvisitedNodesAndTheirBondTypes.put(connectedNode, bond.getType());
                 };
             };

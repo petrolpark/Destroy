@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.item.MoleculeDisplayItem;
 
 import net.minecraft.client.resources.language.I18n;
@@ -359,10 +360,16 @@ public class Molecule implements INameableProduct {
 
     /**
      * Get all the {@link Group functional Groups} contained by this Molecule.
-     * @return
      */
     public List<Group> getFunctionalGroups() {
-        return this.structure.getFunctionalGroups();
+        return structure.getFunctionalGroups();
+    };
+
+    /**
+     * Get a directed structure of this Molecule for use in rendering.
+     */
+    public Branch getRenderBranch() {
+        return structure.getRenderBranch();
     };
 
     /**

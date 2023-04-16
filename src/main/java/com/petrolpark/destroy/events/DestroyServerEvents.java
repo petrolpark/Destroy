@@ -43,7 +43,6 @@ import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
-import com.petrolpark.destroy.badge.Badge;
 import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.DestroyBlocks;
@@ -192,11 +191,9 @@ public class DestroyServerEvents {
             DestroyMessages.sendToClient(new LevelPollutionS2CPacket(levelPollution), serverPlayer);
         });
 
-        Destroy.LOGGER.info(player.getGameProfile().getName());
-
-        try {
-            Badge.getBadgesOf(player.getGameProfile().getName());
-        } finally {};
+        // try {
+        //     Badge.getBadgesOf(player.getGameProfile().getName());
+        // } finally {};
     };
 
     @SubscribeEvent

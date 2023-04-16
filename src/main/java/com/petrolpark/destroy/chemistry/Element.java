@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.chemistry;
 
+import com.jozufozu.flywheel.core.PartialModel;
+
 /**
  * Something inbetween an actual element and a nuclide.
  * Different Elements (as this enum defines) have different properties - be those chemical or physical (in the case of the two commom Uranium isotopes).
@@ -8,7 +10,7 @@ public enum Element {
 
     //TODO replace 'valencies' with a BiPredicate of bonds and charge
 
-    //in the order they should appear in Empirical Formulae
+    // In the order they should appear in Empirical Formulae
     R_GROUP("R", 0f, 2.5f, 1),
     CARBON("C", 12.01f, 2.5f, 4),
     HYDROGEN("H", 1.01f, 2.1f, 1),
@@ -38,6 +40,7 @@ public enum Element {
     private Float electronegativity;
     private int[] valencies;
 
+    private PartialModel partial;
 
     private Element(String symbol, Float mass, Float electronegativity, int... valencies) {
         this.symbol = symbol;
@@ -84,6 +87,14 @@ public enum Element {
         for (Element element : values()) {
             if (element.symbol.equals(symbol)) return element;
         };
-        throw new Error("Unknown Element of symbol "+symbol);
+        throw new EnumConstantNotPresentException(Element.class, "Unknown Element of symbol "+symbol);
+    };
+
+    public PartialModel getPartial() {
+        return partial;
+    };
+
+    public void setPartial(PartialModel partial) {
+        this.partial = partial;
     };
 }

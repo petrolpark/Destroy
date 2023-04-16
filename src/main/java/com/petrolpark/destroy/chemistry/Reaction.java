@@ -24,7 +24,7 @@ public class Reaction {
     private Reaction() {};
 
     /**
-     * Whether this Molecule gets consumed in this Reaction (does not include Catalysts).
+     * Whether this Molecule gets consumed in this Reaction (does not include catalysts).
      */
     public Boolean containsReactant(Molecule molecule) {
         return this.reactants.keySet().contains(molecule);

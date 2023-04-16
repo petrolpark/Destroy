@@ -1,6 +1,6 @@
 package com.petrolpark.destroy.block.renderer;
 
-import com.petrolpark.destroy.block.partial.DestroyBlockPartials;
+import com.petrolpark.destroy.block.partial.DestroyPartials;
 import com.simibubi.create.content.contraptions.base.KineticTileEntity;
 import com.simibubi.create.content.contraptions.components.millstone.MillstoneRenderer;
 import com.simibubi.create.foundation.render.CachedBufferer;
@@ -17,7 +17,7 @@ public class CentrifugeRenderer extends MillstoneRenderer {
 
     @Override
     protected SuperByteBuffer getRotatedModel(KineticTileEntity be, BlockState state) {
-        return CachedBufferer.partial(DestroyBlockPartials.CENTRIFUGE_COG, state);
+        return CachedBufferer.partial(DestroyPartials.CENTRIFUGE_COG, state);
     };
 
 }
