@@ -67,6 +67,8 @@ import com.petrolpark.destroy.world.village.DestroyVillagers;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.api.event.TileEntityBehaviourEvent;
+import com.simibubi.create.content.contraptions.fluids.actors.ItemDrainTileEntity;
+import com.simibubi.create.content.contraptions.fluids.actors.SpoutTileEntity;
 import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlockItem;
 import com.simibubi.create.content.curiosities.weapons.PotatoProjectileEntity;
@@ -272,6 +274,16 @@ public class DestroyServerEvents {
     @SubscribeEvent
     public static void attachBasinBehaviours(TileEntityBehaviourEvent<BasinTileEntity> event) {
         event.attach(new DestroyAdvancementBehaviour(event.getTileEntity()));
+        event.attach(new PollutingBehaviour(event.getTileEntity()));
+    };
+
+    @SubscribeEvent
+    public static void attachDrainBehaviours(TileEntityBehaviourEvent<ItemDrainTileEntity> event) {
+        event.attach(new PollutingBehaviour(event.getTileEntity()));
+    };
+
+    @SubscribeEvent
+    public static void attachSpoutBehaviours(TileEntityBehaviourEvent<SpoutTileEntity> event) {
         event.attach(new PollutingBehaviour(event.getTileEntity()));
     };
 
