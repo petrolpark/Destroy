@@ -159,6 +159,14 @@ public class ReadOnlyMixture {
     };
 
     /**
+     * Get all the {@link Molecule Molecules} present in this Mixture.
+     * @param known Whether to exclude novel Molecules
+     */
+    public List<Molecule> getContents(boolean excludeNovel) {
+        return contents.keySet().stream().filter(molecule -> !molecule.isNovel() || !excludeNovel).toList();
+    };
+
+    /**
      * The tooltip listing the {@link ReadOnlyMixture#contents contents} of this Mixture.
      * @param iupac Whether to use IUPAC names instead of common names
      */

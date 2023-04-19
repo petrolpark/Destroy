@@ -33,7 +33,7 @@ public class DestroyItems {
             .tab(null)
         ).register();
 
-    public static final ItemEntry<MoleculeDisplayItem> MOLECULE_DISPLAY_ITEM = REGISTRATE.item("molecule_display_item", MoleculeDisplayItem::new)
+    public static final ItemEntry<MoleculeDisplayItem> MOLECULE_DISPLAY = REGISTRATE.item("molecule_display", MoleculeDisplayItem::new)
         .properties(p -> p
             .tab(null)
         ).register();

@@ -19,16 +19,13 @@ import net.minecraft.world.phys.Vec3;
 
 public class MoleculeRenderer implements IDrawable {
 
-    private static final double BOND_LENGTH = 5;
+    private static final double BOND_LENGTH = 10;
     private int originX; // X coordinate of this Molecule render on the screen
     private int originY; // Y coordinate of this Molecule render on the screen
 
     List<Pair<Vec3, Atom>> LOCATIONS_OF_ATOMS;
 
-    private Molecule molecule;
-
     public MoleculeRenderer(Molecule molecule) {
-        this.molecule = molecule;
         LOCATIONS_OF_ATOMS = new ArrayList<>(molecule.getAtoms().size());
         if (molecule.getAtoms().size() == 1) {
 
@@ -55,7 +52,9 @@ public class MoleculeRenderer implements IDrawable {
     public void draw(PoseStack poseStack, int xOffset, int yOffset) {
         originX = xOffset;
         originY = yOffset;
-        
+        for (Pair<Vec3, Atom> pair : LOCATIONS_OF_ATOMS) {
+            renderAtom(pair.second(), pair.first(), poseStack);
+        };
     };
 
     /**
@@ -82,12 +81,9 @@ public class MoleculeRenderer implements IDrawable {
     private void renderAtom(Atom atom, Vec3 location, PoseStack poseStack) {
         GuiGameElement.of(atom.getElement().getPartial()).lighting(AnimatedKinetics.DEFAULT_LIGHTING)
             .scale(23)
+            .rotate(-15.5f, 22.5f, 0f)
             .render(poseStack, originX + (int)location.x, originY + (int)location.y);
     };
-
-    private GuiGameElement.GuiRenderBuilder atomModel(Atom atom) {
-		return GuiGameElement.of(atom.getElement().getPartial()).lighting(AnimatedKinetics.DEFAULT_LIGHTING).scale(23);
-	};
 
     private Geometry getGeometry(Node node) {
         return Geometry.TETRAHEDRAL;

@@ -21,7 +21,7 @@ public class MoleculeDisplayItem extends Item {
     };
 
     public static ItemStack with(Molecule molecule) {
-        ItemStack stack = new ItemStack(DestroyItems.MOLECULE_DISPLAY_ITEM.get(), 1);
+        ItemStack stack = new ItemStack(DestroyItems.MOLECULE_DISPLAY.get(), 1);
         stack.getOrCreateTag().putString("Molecule", molecule.getFullID());
         return stack;
     };
@@ -34,7 +34,7 @@ public class MoleculeDisplayItem extends Item {
     };
 
     private Molecule getMolecule(ItemStack itemStack) {
-        if (!DestroyItems.MOLECULE_DISPLAY_ITEM.isIn(itemStack)) return null;
+        if (!DestroyItems.MOLECULE_DISPLAY.isIn(itemStack)) return null;
         return Molecule.getMolecule(itemStack.getOrCreateTag().getString("Molecule"));
     };
 

@@ -6,13 +6,18 @@ import java.util.Optional;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
+import com.petrolpark.destroy.compat.jei.DestroyJEI;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
+import com.simibubi.create.compat.jei.category.CreateRecipeCategory.Info;
 import com.simibubi.create.content.contraptions.fluids.potion.PotionFluidHandler;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Lang;
@@ -23,15 +28,27 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 @Mixin(CreateRecipeCategory.class)
-public class CreateRecipeCategoryMixin {
+public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
+
+    /**
+     * Injection into {@link com.simibubi.create.compat.jei.category.CreateRecipeCategory#CreateRecipeCategory CreateRecipeCategory}.
+     * As Create's {@link mezz.jei.api.recipe.RecipeType Recipe Types} are not exposed by default, we snipe them here and add them to the
+     * {@link com.petrolpark.destroy.compat.jei.DestroyJEI#RECIPE_TYPES list of Recipe Types} for which {@link com.petrolpark.destroy.chemistry.Mixture Mixtures}
+     * can be {@link com.petrolpark.destroy.fluid.MoleculeFluidIngredient ingredients} or results.
+     */
+    @Inject(method = "<init>", at = @At(value = "RETURN"))
+    public void inInit(Info<T> info, CallbackInfo ci) {
+        DestroyJEI.RECIPE_TYPES.add(info.recipeType());
+    };
     
     /**
-     * Copied from the {@link com.simibubi.create.compat.jei.category.CreateRecipeCategory Create source code} because I can't be bothered to deal with injection.
-     * @param mbAmount
+     * Copied from the {@link com.simibubi.create.compat.jei.category.CreateRecipeCategory#addFluidTooltip Create source code} because I can't be bothered to deal with Injection.
+     * Modifies the tooltip for Fluid Stacks which are {@link com.petrolpark.destroy.chemistry.Mixture Mixtures}.
      */
     @Overwrite
     public static IRecipeSlotTooltipCallback addFluidTooltip(int mbAmount) {
@@ -42,6 +59,7 @@ public class CreateRecipeCategoryMixin {
 			FluidStack fluidStack = displayed.get();
             Fluid fluid = fluidStack.getFluid();
 
+            // All this potion stuff is copied from the Create source code
 			if (fluid.isSame(AllFluids.POTION.get())) {
 				Component name = fluidStack.getDisplayName();
 				if (tooltip.isEmpty()) {
@@ -53,6 +71,7 @@ public class CreateRecipeCategoryMixin {
 				ArrayList<Component> potionTooltip = new ArrayList<>();
 				PotionFluidHandler.addPotionTooltip(fluidStack, potionTooltip, 1);
 				tooltip.addAll(1, potionTooltip.stream().toList());
+            //
 
 			} else if (fluid.isSame(DestroyFluids.MIXTURE.get())) {
                 Component name = DestroyLang.translate("mixture.mixture").component();
@@ -83,6 +102,7 @@ public class CreateRecipeCategoryMixin {
                 tooltip.addAll(1, mixtureTooltip);
             };
 
+            // Generic for all Fluids - here onwards is copied from the Create source code
 			int amount = mbAmount == -1 ? fluidStack.getAmount() : mbAmount;
 			Component text = Components.literal(String.valueOf(amount)).append(Lang.translateDirect("generic.unit.millibuckets")).withStyle(ChatFormatting.GOLD);
 			if (tooltip.isEmpty())

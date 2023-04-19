@@ -20,6 +20,10 @@ public class PackingCategoryMixin {
     private static final AnimatedPress newPress = new AnimatedPress(true);
     private static final AnimatedCooler cooler = new AnimatedCooler();
     
+    /**
+     * Injection into {@link com.simibubi.create.compat.jei.category.PackingCategory#draw PackingCategory}.
+     * This renders the Cooler instead of the Blaze Burner and sets the text, if required.
+     */
     @Inject(method = "draw", at = @At(value = "INVOKE", target = "getRequiredHeat"), cancellable = true)
     private void inDraw(BasinRecipe recipe, IRecipeSlotsView iRecipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY, CallbackInfo ci) {
         if (recipe.getRequiredHeat().name() == "COOLED") {

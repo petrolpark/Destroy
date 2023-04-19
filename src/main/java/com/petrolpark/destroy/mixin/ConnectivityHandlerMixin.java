@@ -20,8 +20,9 @@ import net.minecraftforge.fluids.FluidStack;
 public class ConnectivityHandlerMixin {
     
     /**
-     * This is called whenever a Fluid Tank is destroyed. It's purpose is to determine if any Fluid
-     * had to be voided because it wouldn't fit, and if so, pollute the Level accordingly.
+     * Injection into {@link com.simibubi.create.api.connectivity.ConnectivityHandler ConnectivityHandler}.
+     * This is called whenever part of a {@link com.simibubi.create.content.contraptions.base.fluids.tank.FluidTankTileEntity Fluid Tank} is destroyed. It's purpose is to determine if any Fluid
+     * had to be voided because it wouldn't fit, and if so, {@link com.petrolpark.destroy.behaviour.PollutingBehaviour#pollute pollute the Level} accordingly.
      * It's mostly all copied from {@link com.simibubi.create.api.connectivity.ConnectivityHandler this internal splitMulti method}.
      * @param <T> A type of Block Entity (typically Fluid Tank)
      * @param be The BE which was destroyed
@@ -30,7 +31,7 @@ public class ConnectivityHandlerMixin {
     @Inject(method = "splitMulti", at = @At(value="HEAD"))
     private static <T extends BlockEntity & IMultiTileContainer> void inSplitMulti(T be, CallbackInfo ci) {
 
-        BlockPos startPos = be.getBlockPos();
+        BlockPos startPos = be.getBlockPos(); // The position of the BE destroyed
 
         Level level = be.getLevel();
 		if (level == null) return; // Stop if this isn't in a Level
@@ -42,7 +43,7 @@ public class ConnectivityHandlerMixin {
 		int width = be.getWidth();
 		if (width == 1 && height == 1) return; // Stop if this was the only BE in the multi
 
-		BlockPos origin = be.getBlockPos(); // The BE which has been destroyed
+		BlockPos origin = be.getBlockPos(); // The controller BE's position
 		Direction.Axis axis = be.getMainConnectionAxis();
 
 		FluidStack toDistribute = FluidStack.EMPTY;
@@ -78,7 +79,7 @@ public class ConnectivityHandlerMixin {
                 };
             };
 
-            if (toDistribute.getAmount() > 0) PollutingBehaviour.pollute(level, startPos, toDistribute);
+            if (toDistribute.getAmount() > 0) PollutingBehaviour.pollute(level, startPos, toDistribute); // Actually do the pollution
         };
     };
 

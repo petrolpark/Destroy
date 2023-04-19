@@ -31,6 +31,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mixin(BasinCategory.class)
 public class BasinCategoryMixin {
     
+    /**
+     * Injection into {@link com.simibubi.create.compat.jei.category.BasinCategory#setRecipe BasinCategory}.
+     * Replaces the Blaze Burner icon with a Cooler if needs be, and replaces the Blaze Cake with the cycling {@link com.simibubi.create.AllTags.AllItemTags#BLAZE_BURNER_FUEL_SPECIAL Blaze Burner special fuel tag}.
+     */
     @Inject(method = "setRecipe", at = @At(value = "INVOKE", target = "getRequiredHeat"), cancellable = true)
     protected void setRecipeInjection(IRecipeLayoutBuilder builder, BasinRecipe recipe, IFocusGroup focuses, CallbackInfo ci) { // Used to render a Breeze Burner (rather than a Blaze Burner) in the Recipe screen
         
@@ -40,16 +44,20 @@ public class BasinCategoryMixin {
         });
         
         if (recipe.getRequiredHeat().name() == "COOLED") {
-            builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 81).addItemStack(DestroyBlocks.COOLER.asStack());
-        } else if (recipe.getRequiredHeat() != HeatCondition.NONE) { // This one is copied right from Create, it renders the Blaze Burner
+            builder.addSlot(RecipeIngredientRole.CATALYST, 134, 81).addItemStack(DestroyBlocks.COOLER.asStack());
+        } else if (recipe.getRequiredHeat() != HeatCondition.NONE) { // This one is copied right from Create; it renders the Blaze Burner
             builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 81).addItemStack(AllBlocks.BLAZE_BURNER.asStack());
         };
-        if (recipe.getRequiredHeat() == HeatCondition.SUPERHEATED) { // Used to render all possible Blaze Treats rather than just the Blaze Cake
+        if (recipe.getRequiredHeat() == HeatCondition.SUPERHEATED) { // Used to render all possible Blaze 'treats' rather than just the Blaze Cake
             builder.addSlot(RecipeIngredientRole.CATALYST, 153, 81).addItemStacks(blazeTreatStacks);
         };
         ci.cancel(); // Don't execute the rest of the method
     };
 
+    /**
+     * Injection into {@link com.simibubi.create.compat.jei.category.BasinCategory#draw BasinCategory}.
+     * Replaces the rendered Blaze Burner with a Cooler and sets the text to 'COOLED' if required.
+     */
     @SuppressWarnings("resource")
     @Inject(method = "draw", at = @At(value = "INVOKE", target = "getInstance"), cancellable = true) // Injects when it is writing "Heated", "Superheated", etc at the bottom of the screen
     protected void drawInjection(BasinRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY, CallbackInfo ci) {

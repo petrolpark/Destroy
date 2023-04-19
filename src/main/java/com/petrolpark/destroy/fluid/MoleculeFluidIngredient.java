@@ -66,4 +66,12 @@ public class MoleculeFluidIngredient extends FluidIngredient {
         return List.of(fluidStack);
     };
 
+    /**
+     * Get the Molecule associated with this Molecule ingredient
+     * @return
+     */
+    public Molecule getMolecule() {
+        return molecule;
+    };
+
 };

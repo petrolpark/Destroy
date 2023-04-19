@@ -41,6 +41,7 @@ public class DestroyTags {
         PRILL,
         PRIMARY_EXPLOSIVE("explosive/primary"),
         SALT,
+        SCHEMATICANNON_FUEL,
         SECONDARY_EXPLOSIVE("explosive/secondary"),
         SEISMOGRAPH,
         SPRAY_BOTTLE,
@@ -78,6 +79,10 @@ public class DestroyTags {
         provider.tag(DestroyItemTags.PAPER_PULPABLE.tag)
             .add(Items.PAPER, Items.SUGAR)
             .addTag(DestroyItemTags.SEISMOGRAPH.tag);
+        provider.tag(DestroyItemTags.SCHEMATICANNON_FUEL.tag)
+            .add(Items.GUNPOWDER)
+            .addTag(DestroyItemTags.PRIMARY_EXPLOSIVE.tag)
+            .addTag(DestroyItemTags.SECONDARY_EXPLOSIVE.tag);
         provider.tag(AllItemTags.UPRIGHT_ON_BELT.tag)
             .addTag(DestroyItemTags.ALCOHOLIC_DRINK.tag)
             .addTag(DestroyItemTags.SPRAY_BOTTLE.tag)

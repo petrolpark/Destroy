@@ -2,7 +2,11 @@ package com.petrolpark.destroy.compat.jei;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -36,6 +40,7 @@ import com.simibubi.create.foundation.utility.recipe.IRecipeTypeInfo;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IAdvancedRegistration;
 import mezz.jei.api.registration.IModIngredientRegistration;
@@ -49,6 +54,22 @@ import net.minecraft.world.level.ItemLike;
 
 @JeiPlugin
 public class DestroyJEI implements IModPlugin {
+
+    /**
+     * All Create and Destroy {@link mezz.jei.api.recipe.RecipeType Recipe Types}.
+     * Create's Recipe Types are not exposed by default, meaning we have to access them through a {@link com.petrolpark.destroy.mixin.CreateRecipeCategoryMixin mixin} store them here.
+     */ 
+    public static final Set<RecipeType<?>> RECIPE_TYPES = new HashSet<>();
+    /**
+     * A map of Molecules to the Recipes in which they are inputs.
+     * This does not include {@link com.petrolpark.destroy.chemistry.Reaction Reactions}.
+     */
+    public static final Map<Molecule, List<Recipe<?>>> MOLECULES_INPUT = new HashMap<>();
+    /**
+     * A map of Molecules to the Recipes in which they are outputs.
+     * This does not include {@link com.petrolpark.destroy.chemistry.Reaction Reactions}.
+     */
+    public static final Map<Molecule, List<Recipe<?>>> MOLECULES_OUTPUT = new HashMap<>();
 
     private final List<CreateRecipeCategory<?>> allCategories = new ArrayList<>();
 
@@ -98,7 +119,7 @@ public class DestroyJEI implements IModPlugin {
             .addRecipes(ReactionCategory.RECIPES::values)
             .catalyst(AllBlocks.MECHANICAL_MIXER::get)
             .catalyst(AllBlocks.BASIN::get)
-            .itemIcon(DestroyItems.ABS.get()) //TODO replace with an actual Icon
+            .itemIcon(DestroyItems.MOLECULE_DISPLAY.get())
             .emptyBackground(180, 125)
             .build("reaction", ReactionCategory::new);
 

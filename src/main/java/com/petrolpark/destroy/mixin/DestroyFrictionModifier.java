@@ -19,19 +19,29 @@ import net.minecraftforge.common.extensions.IForgeBlockState;
 @Mixin(IForgeBlockState.class)
 public interface DestroyFrictionModifier extends IForgeBlockState {
 
+    /**
+     * Duplicate of {@link net.minecraftforge.common.extensions.IForgeBlockState#self self()} to avoid having to use an Accessor.
+     */
     @Overwrite
-    public default BlockState self() { // Method is identical to that in IForgeBlockState cause I got frustrated trying to make @Invoke work so just reimplemented it
+    public default BlockState self() {
         return (BlockState)this;
     }
 
+    /**
+     * Overwritten but mostly copied from {@link net.minecraftforge.common.extensions.IForgeBlockState#getFriction Minecraft source code},
+     * as Injecting into interfaces doesn't appear to be possible.
+     * This decreases the friction Entities experience if they are under the {@link com.petrolpark.destroy.effect.InebriationMobEffect Inebriation Effect},
+     * according to the {@link com.petrolpark.destroy.config.DestroySubstancesConfigs#drunkenSlipping config file}.
+     */
     @Overwrite
     default float getFriction(LevelReader level, BlockPos pos, @Nullable Entity entity) {
 
-        // Spongepowered doesn't allow injecting into Interface methods, so I have to overwrite the method. This section should be identical to the getFriction() method in IForgeBlockState
+        // Copied from the Minecraft source code
         float originalFriction = self().getBlock().getFriction(self(), level, pos, entity);
         //
-        if (entity != null && entity instanceof LivingEntity) {
-            MobEffectInstance alcoholEffect = ((LivingEntity)entity).getEffect(DestroyMobEffects.INEBRIATION.get());
+
+        if (entity != null && entity instanceof LivingEntity livingEntity) {
+            MobEffectInstance alcoholEffect = livingEntity.getEffect(DestroyMobEffects.INEBRIATION.get());
             if (alcoholEffect != null) {
                 return (float)(originalFriction + ((1 - originalFriction)
                     * 0.2 * Math.min(5, alcoholEffect.getAmplifier() + 1) // Scale the extent of slipping with the amplifier of Inebriation (effects stop compounding after 4)

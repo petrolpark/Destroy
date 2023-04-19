@@ -27,6 +27,10 @@ public abstract class HeatLevelMixin {
         throw new AssertionError();
     };
 
+     /**
+     * Creates a new entry in the {@link com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock.HeatLevel HeatLevel enum}.
+     * The technique is copied from <a href="https://github.com/LudoCrypt/Noteblock-Expansion-Forge/blob/main/src/main/java/net/ludocrypt/nbexpand/mixin/NoteblockInstrumentMixin.java">here</a>.
+     */
     private static HeatLevel heatLevelModifier$addValue(String internalName) {
         ArrayList<HeatLevel> heatLevels = new ArrayList<HeatLevel>(Arrays.asList(HeatLevelMixin.$VALUES));
         HeatLevel heatLevel = heatLevelModifier$invokeInit(internalName, heatLevels.get(heatLevels.size() - 1).ordinal() + 1);

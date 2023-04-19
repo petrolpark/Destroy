@@ -24,6 +24,11 @@ public class FluidIngredientMixin {
 	moleculeFluidMemberName = "moleculeFluid",
 	moleculeTagFluidMemberName = "moleculeTagFluid";
     
+	/**
+	 * Overwriting of {@link com.simibubi.create.foundation.fluid.FluidIngredient#isFluidIngredient FluidIngredient} to
+	 * say {@link com.petrolpark.destroy.fluid.MoleculeFluidIngredient Molecule ingredients} and //TODO Molecule Tag ingredient
+	 * Molecule Tag ingredients are valid.
+	 */
     @Overwrite
     public static boolean isFluidIngredient(@Nullable JsonElement je) {
         if (je == null || je.isJsonNull())
@@ -37,10 +42,16 @@ public class FluidIngredientMixin {
 		return false;
     };
 
-	// This is mostly copied from Create source, with my own Fluid Ingredient subclasses added in
+	/**
+	 * Overwritten but mostly copied from {@link com.simibubi.create.foundation.fluid.FluidIngredient#deserialize FluidIngredient}.
+	 * This deserializes {@link com.petrolpark.destroy.fluid.MoleculeFluidIngredient Molecule ingredients} and //TODO Molecule Tag ingredient
+	 * Molecule Tag ingredients.
+	 */
     @Overwrite
 	@SuppressWarnings("null")
     public static FluidIngredient deserialize(@Nullable JsonElement je) {
+
+		// All copied from Create source code.
 		if (!isFluidIngredient(je))
 			throw new JsonSyntaxException("Invalid fluid ingredient: " + Objects.toString(je));
 
@@ -50,12 +61,16 @@ public class FluidIngredientMixin {
 			ingredient = new FluidIngredient.FluidStackIngredient();
 		} else if (json.has(fluidTagMemberName)) {
 			ingredient = new FluidIngredient.FluidTagIngredient();
+		//
+		
+		// Deserialize Molecule-involving ingredients
 		} else if (json.has(moleculeFluidMemberName)) {
 			ingredient = new MoleculeFluidIngredient();
 		} else { // If it's a Molecule Tag Fluid Ingredient
 			ingredient = new FluidIngredient.FluidStackIngredient(); // TODO change to right class
 		};
 
+		// The rest is all copied from the Create Source code
 		((FluidIngredientAccessor)ingredient).invokeReadInternal(json);
 
 		if (!json.has("amount"))
