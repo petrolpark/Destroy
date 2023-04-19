@@ -12,11 +12,9 @@ import javax.annotation.Nullable;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
-import com.petrolpark.destroy.item.MoleculeDisplayItem;
 
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
 
 /**
  * A Molecule is any species - that could be an actual chemical molecule or an inorganic ion.
