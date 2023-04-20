@@ -357,6 +357,18 @@ public class Molecule implements INameableProduct {
     };
 
     /**
+     * Get a String representing the {@link Molecule#charge charge} of this Molecule.
+     * For example, this will be {@code -} for the chloride ion, and {@code 2+} for the magnesium ion.
+     */
+    public String getSerializedCharge() {
+        String chargeString = "";
+        if (charge == 0) return chargeString;
+        if (charge != 1 && charge != -1) chargeString += Math.abs(charge);
+        chargeString += charge < 0 ? "-" : "+";
+        return chargeString;
+    };
+
+    /**
      * Get all the {@link Group functional Groups} contained by this Molecule.
      */
     public List<Group> getFunctionalGroups() {

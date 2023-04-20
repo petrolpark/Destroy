@@ -43,7 +43,18 @@ public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
      */
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     public void inInit(Info<T> info, CallbackInfo ci) {
-        DestroyJEI.RECIPE_TYPES.add(info.recipeType());
+        switch (info.recipeType().getUid().getPath()) {
+            // The following Categories are applicable to Mixtures:
+            case "mixing":
+            case "packing":
+            case "spout_filling":
+            case "draining":
+            case "sequenced_assembly":
+                DestroyJEI.RECIPE_TYPES.add(info.recipeType());
+                return;
+            default:
+        };
+        
     };
     
     /**

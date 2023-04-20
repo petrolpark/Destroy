@@ -40,7 +40,7 @@ public abstract class ProcessingRecipeMixin {
             //TODO Molecule Tag ingredients
         };
         for (FluidStack fluidResult : ((ProcessingRecipeParamsAccessor)params).getFluidResults()) {
-            if (fluidResult.getFluid() == DestroyFluids.MIXTURE.get()) {
+            if (DestroyFluids.MIXTURE.get().isSame(fluidResult.getFluid())) {
                 ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(fluidResult.getOrCreateTag().getCompound("Mixture"));
                 for (Molecule molecule : mixture.getContents(true)) {
                     DestroyJEI.MOLECULES_OUTPUT.putIfAbsent(molecule, new ArrayList<>()); // Create the List if it's not there

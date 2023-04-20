@@ -160,7 +160,7 @@ public class ReadOnlyMixture {
 
     /**
      * Get all the {@link Molecule Molecules} present in this Mixture.
-     * @param known Whether to exclude novel Molecules
+     * @param excludeNovel Whether to exclude novel Molecules
      */
     public List<Molecule> getContents(boolean excludeNovel) {
         return contents.keySet().stream().filter(molecule -> !molecule.isNovel() || !excludeNovel).toList();
@@ -176,7 +176,10 @@ public class ReadOnlyMixture {
         for (Entry<Molecule, Float> entry : contents.entrySet()) {
             tooltip.add(i, DestroyLang.builder()
                 .add(entry.getKey().getName(iupac).plainCopy())
-                .add(Component.literal(" ("+entry.getValue()+"M)"))
+                .add(Component.literal(
+                    entry.getKey().getCharge() == 0 ? "" : " [" + entry.getKey().getSerializedCharge() + "]" + // Show charge, if there is one
+                    " ("+entry.getValue()+"M)" // Show concentration
+                ))
                 .style(ChatFormatting.GRAY)
                 .component()
             );

@@ -81,7 +81,7 @@ public class MoleculeRenderer implements IDrawable {
     private void renderAtom(Atom atom, Vec3 location, PoseStack poseStack) {
         GuiGameElement.of(atom.getElement().getPartial()).lighting(AnimatedKinetics.DEFAULT_LIGHTING)
             .scale(23)
-            .rotate(-15.5f, 22.5f, 0f)
+            .rotate(15.5f, 22.5f, 0f)
             .render(poseStack, originX + (int)location.x, originY + (int)location.y);
     };
 
@@ -104,7 +104,7 @@ public class MoleculeRenderer implements IDrawable {
          * @param plane The normal to the plane in which this zig zag is
          */
         public Vec3 getStartDirection(Vec3 direction, Vec3 plane) {
-            return rotate(direction, plane, angle / 2).normalize();
+            return rotate(direction, plane, -angle / 2).normalize();
         };
 
         /**

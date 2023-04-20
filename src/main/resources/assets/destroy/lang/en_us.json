@@ -66,8 +66,6 @@
     "badge.destroy.translator": "Cunning Linguist",
     "badge.destroy.translator.description": "Make an significant contribution to the localizations of Destroy",
 
-    "block.create.schematicannon.tooltip.summary": "Shoots blocks to recreate a deployed _Schematic_ in the World. Uses items from adjacent Inventories, and _explosives_ as fuel.",
-
     "block.destroy.agar_block": "Agar Block",
     "block.destroy.agar_block.tooltip": "AGAR_BLOCK",
     "block.destroy.agar_block.tooltip.summary": "A _nutrient-rich_ substance, perfect for harboring all sorts of _moulds_, _bacteria_ and _fungi_.",
@@ -130,11 +128,6 @@
     "commands.destroy.babyblueaddiction.query": "%s has a Baby Blue Addiction level of %s",
     "commands.destroy.pollution.query": "Pollution of type %s has a level of %s",
     "commands.destroy.pollution.set": "Set level of Pollution of type %s to %s",
-
-    "create.gui.schematicannon.gunpowderLevel": "Explosives at %1$s%%",
-    "create.gui.schematicannon.slot.gunpowder": "Add explosives to fuel the cannon",
-
-    "create.schematicannon.status.noGunpowder": "Out of explosives",
 
     "death.attack.acidBurn": "%1$s died of corrosive burns",
     "death.attack.alcohol": "%1$s died of alcohol poisoning",

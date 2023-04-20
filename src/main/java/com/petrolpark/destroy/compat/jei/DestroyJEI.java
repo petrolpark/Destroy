@@ -81,6 +81,7 @@ public class DestroyJEI implements IModPlugin {
 
         aging = builder(AgingRecipe.class)
             .addTypedRecipes(DestroyRecipeTypes.AGING)
+            .acceptsMixtures()
             .catalyst(DestroyBlocks.AGING_BARREL::get)
             .itemIcon(DestroyBlocks.AGING_BARREL.get())
             .emptyBackground(177, 69)
@@ -88,6 +89,7 @@ public class DestroyJEI implements IModPlugin {
 
         centrifugation = builder(CentrifugationRecipe.class)
             .addTypedRecipes(DestroyRecipeTypes.CENTRIFUGATION)
+            .acceptsMixtures()
             .catalyst(DestroyBlocks.CENTRIFUGE::get)
             .itemIcon(DestroyBlocks.CENTRIFUGE.get())
             .emptyBackground(120, 115)
@@ -95,6 +97,7 @@ public class DestroyJEI implements IModPlugin {
 
         distillation = builder(DistillationRecipe.class)
             .addTypedRecipes(DestroyRecipeTypes.DISTILLATION)
+            .acceptsMixtures()
             .catalyst(DestroyBlocks.BUBBLE_CAP::get)
             .itemIcon(DestroyBlocks.BUBBLE_CAP.get())
             .emptyBackground(100, 100)
@@ -102,6 +105,7 @@ public class DestroyJEI implements IModPlugin {
 
         electrolysis = builder(BasinRecipe.class)
             .addTypedRecipes(DestroyRecipeTypes.ELECTROLYSIS)
+            .acceptsMixtures()
             .catalyst(DestroyBlocks.DYNAMO::get)
             .catalyst(AllBlocks.BASIN::get)
             .doubleItemIcon(DestroyBlocks.DYNAMO.get(), AllBlocks.BASIN.get())
@@ -117,6 +121,7 @@ public class DestroyJEI implements IModPlugin {
 
         reaction = builder(ReactionRecipe.class)
             .addRecipes(ReactionCategory.RECIPES::values)
+            // Doesn't accept Mixtures as Reactions involve Molecules, not Mixtures.
             .catalyst(AllBlocks.MECHANICAL_MIXER::get)
             .catalyst(AllBlocks.BASIN::get)
             .itemIcon(DestroyItems.MOLECULE_DISPLAY.get())
@@ -169,6 +174,7 @@ public class DestroyJEI implements IModPlugin {
 
         private IDrawable background;
 		private IDrawable icon;
+        private boolean acceptsMixtures;
 
         private final List<Consumer<List<T>>> recipeListConsumers = new ArrayList<>();
 		private final List<Supplier<? extends ItemStack>> catalysts = new ArrayList<>();
@@ -242,6 +248,18 @@ public class DestroyJEI implements IModPlugin {
 		};
 
         /**
+         * Marks this Category as being able to have <em>Mixtures</em> as in its outputs and/or inputs.
+         * This should essentially be all Categories for Fluid-accepting Recipes.
+         * If this is not flagged, Recipes can still include Mixtures, but they will not show up
+         * when searching Recipes for/including Molecules.
+         * @return This Category Builder
+         */
+        public CategoryBuilder<T> acceptsMixtures() {
+            this.acceptsMixtures = true;
+            return this;
+        };
+
+        /**
          * Builds this Category.
          * @param name The Resource Location (e.g. for use in language file)
          * @param factory Initializer of the Category class
@@ -255,14 +273,21 @@ public class DestroyJEI implements IModPlugin {
                 };
                 return recipes;
             };
+
+            mezz.jei.api.recipe.RecipeType<T> type = new mezz.jei.api.recipe.RecipeType<T>(Destroy.asResource(name), recipeClass);
+
             Info<T> info = new Info<T>(
-                new mezz.jei.api.recipe.RecipeType<>(Destroy.asResource(name), recipeClass),
+                type,
                 DestroyLang.translate("recipe."+name).component(),
                 background,
                 icon,
                 recipesSupplier,
                 catalysts
             );
+
+            if (acceptsMixtures) {
+                RECIPE_TYPES.add(type);
+            };
 
             CreateRecipeCategory<T> category = factory.create(info);
             allCategories.add(category);

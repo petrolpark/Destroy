@@ -4,6 +4,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -23,6 +26,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -37,7 +41,11 @@ import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.forgespi.language.IModFileInfo;
+import net.minecraftforge.forgespi.locating.IModFile;
 
 import java.util.List;
 
@@ -72,6 +80,7 @@ import com.simibubi.create.content.contraptions.fluids.actors.SpoutTileEntity;
 import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlockItem;
 import com.simibubi.create.content.curiosities.weapons.PotatoProjectileEntity;
+import com.simibubi.create.foundation.ModFilePackResources;
 import com.petrolpark.destroy.world.DestroyDamageSources;
 import com.petrolpark.destroy.world.entity.goal.BuildSandCastleGoal;
 
@@ -337,4 +346,29 @@ public class DestroyServerEvents {
             return;
         };
     };
+
+    @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+	public static class ModBusEvents {
+
+        /**
+         * Copied from the {@link com.simibubi.create.events.CommonEvents.ModBusEvents#addPackFinders Create source code}.
+         * Add the Schematicannon Tooltip resource pack, which replaces the text of tooltips in Schematicannons
+         * to reflect that they can accept any Destroy explosive, not just gunpowder.
+         */
+		@SubscribeEvent
+		public static void addPackFinders(AddPackFindersEvent event) {
+			if (event.getPackType() == PackType.CLIENT_RESOURCES) {
+				IModFileInfo modFileInfo = ModList.get().getModFileById(Destroy.MOD_ID);
+				if (modFileInfo == null) {
+					Destroy.LOGGER.error("Could not find Destroy mod file info; built-in resource packs will be missing!");
+					return;
+				}
+				IModFile modFile = modFileInfo.getFile();
+				event.addRepositorySource((consumer, constructor) -> {
+					consumer.accept(Pack.create(Destroy.asResource("schematicannon_tooltips").toString(), true, () -> new ModFilePackResources("Destroy Schematicannon Tooltips", modFile, "resourcepacks/schematicannon_tooltips"), constructor, Pack.Position.TOP, PackSource.BUILT_IN));
+				});
+			}
+		}
+
+	}
 };
