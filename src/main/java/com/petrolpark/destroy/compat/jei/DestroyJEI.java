@@ -158,7 +158,7 @@ public class DestroyJEI implements IModPlugin {
 
     @Override
     public void registerAdvanced(IAdvancedRegistration registration) {
-        registration.addRecipeManagerPlugin(DestroyRecipeManagerPlugins.MOLECULE_RECIPES_PLUGIN);
+        registration.addRecipeManagerPlugin(new DestroyRecipeManagerPlugin(registration.getJeiHelpers()));
     };
 
     private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {

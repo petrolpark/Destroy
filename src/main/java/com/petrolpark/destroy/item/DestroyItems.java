@@ -11,6 +11,7 @@ import com.simibubi.create.AllTags.AllItemTags;
 
 import com.simibubi.create.content.AllSections;
 import com.simibubi.create.content.contraptions.itemAssembly.SequencedAssemblyItem;
+import com.simibubi.create.content.curiosities.CombustibleItem;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -462,24 +463,30 @@ public class DestroyItems {
     UNPROCESSED_SUPER_GLUE = REGISTRATE.item("unprocessed_super_glue", SequencedAssemblyItem::new)
         .register();
 
-    public static final ItemEntry<Item>
+    public static final ItemEntry<CombustibleItem>
 
     // BLAZE BURNER TREATS
 
-    EMPTY_BOMB_BON = REGISTRATE.item("empty_bomb_bon", Item::new)
+    EMPTY_BOMB_BON = REGISTRATE.item("empty_bomb_bon", CombustibleItem::new)
         .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag, AllItemTags.UPRIGHT_ON_BELT.tag)
+        .onRegister(i -> i.setBurnTime(800))
         .register(),
-    BOMB_BON = REGISTRATE.item("bomb_bon", Item::new)
+    BOMB_BON = REGISTRATE.item("bomb_bon", CombustibleItem::new)
         .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag, AllItemTags.UPRIGHT_ON_BELT.tag)
+        .onRegister(i -> i.setBurnTime(6400))
         .register(),
-    NAPALM_SUNDAE = REGISTRATE.item("napalm_sundae", Item::new)
+    NAPALM_SUNDAE = REGISTRATE.item("napalm_sundae", CombustibleItem::new)
         .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag, AllItemTags.UPRIGHT_ON_BELT.tag)
+        .onRegister(i -> i.setBurnTime(6400))
         .register(),
-    THERMITE_BROWNIE = REGISTRATE.item("thermite_brownie", Item::new)
+    THERMITE_BROWNIE = REGISTRATE.item("thermite_brownie", CombustibleItem::new)
         .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag)
-        .register(),
+        .onRegister(i -> i.setBurnTime(6400))
+        .register();
 
     // BEETROOT
+
+    public static final ItemEntry<Item>
 
     HEFTY_BEETROOT = REGISTRATE.item("hefty_beetroot", Item::new)
         .tag(DestroyItemTags.HEFTY_BEETROOT.tag)

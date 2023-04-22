@@ -55,7 +55,7 @@ public class MoleculeJEIIngredient {
 
         @Override
         public Molecule copyIngredient(Molecule ingredient) {
-            return ingredient; // Molecules should not be copied
+            return ingredient; // There should be no need to copy Molecules as they cannot be modified
         };
 
         @Override

@@ -7,6 +7,10 @@ import com.petrolpark.destroy.chemistry.index.DestroyGenericReactions;
 import com.petrolpark.destroy.chemistry.index.DestroyGroupFinder;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.DestroyReactions;
+import com.petrolpark.destroy.client.gui.MoleculeRenderer;
+
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Used during development for testing aspects of the Chemistry system without having to run the whole game.
@@ -16,17 +20,20 @@ public class Test {
 
     public static void main(String args[]) {
 
-        DestroyGroupFinder.register();
-        DestroyMolecules.register();
-        DestroyReactions.register();
-        DestroyGenericReactions.register();
+        System.out.println(""+Mth.sin(30));
+        Destroy.LOGGER.info(""+MoleculeRenderer.rotate(new Vec3(1f, 1f, 0f), new Vec3(1f, 0f, 0f), 180));
 
-        Molecule myMolecule = builder()
-            .structure(Formula.deserialize("linear:C(C)C"))
-            .build();
+        // DestroyGroupFinder.register();
+        // DestroyMolecules.register();
+        // DestroyReactions.register();
+        // DestroyGenericReactions.register();
 
-        //System.out.println(DestroyMolecules.ASPIRIN.getStructuralFormula());
-        System.out.println(DestroyMolecules.CHLORIDE.getName(true).toString());
+        // Molecule myMolecule = builder()
+        //     .structure(Formula.deserialize("linear:C(C)C"))
+        //     .build();
+
+        // //System.out.println(DestroyMolecules.ASPIRIN.getStructuralFormula());
+        // System.out.println(DestroyMolecules.CHLORIDE.getName(true).toString());
         
     };
 
