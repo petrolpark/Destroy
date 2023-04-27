@@ -14,15 +14,14 @@ import com.petrolpark.destroy.chemistry.serializer.Node;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 
-import mezz.jei.api.gui.drawable.IDrawable;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
-public class MoleculeRenderer implements IDrawable {
+public class MoleculeRenderer {
 
-    private static final double BOND_LENGTH = 10;
-    private int originX; // X coordinate of this Molecule render on the screen
-    private int originY; // Y coordinate of this Molecule render on the screen
+    protected static final double BOND_LENGTH = 10;
+    protected int originX; // X coordinate of this Molecule render on the screen
+    protected int originY; // Y coordinate of this Molecule render on the screen
 
     List<Pair<Vec3, Atom>> LOCATIONS_OF_ATOMS;
 
@@ -31,33 +30,14 @@ public class MoleculeRenderer implements IDrawable {
         if (molecule.getAtoms().size() == 1) {
 
         } else {
-            Vec3 startLocation = new Vec3(0d, 0d, 0d);
-            Vec3 startDirection = new Vec3(1f, 0f, 0d).normalize();
-            Vec3 startPlane = new Vec3(0d, 0d, 1d);
-            generateBranch(molecule.getRenderBranch(), startLocation, startDirection, startPlane, rotate(startDirection, startPlane, //getGeometry(molecule.getRenderBranch().getNodes().get(1)).getAngle() / 2
-            54.5f
-            ));
+            Vec3 startLocation = new Vec3(0f, 0f, 0f);
+            Vec3 startDirection = new Vec3(1f, 0f, 0f);
+            Vec3 startPlane = new Vec3(0f, 0f, 1f);
+            generateBranch(molecule.getRenderBranch(), startLocation, startDirection, startPlane, rotate(startDirection, startPlane, 90f + (getGeometry(molecule.getRenderBranch().getNodes().get(1)).getAngle() * 0.5f))
+                
+            );
         };
         Collections.sort(LOCATIONS_OF_ATOMS, (pair1, pair2) -> Double.compare(pair1.first().z, pair2.first().z)); // Order the Atoms so the furthest back get Rendered first
-    };
-
-    @Override
-    public int getWidth() {
-        return 32;
-    };
-
-    @Override
-    public int getHeight() {
-        return 32;
-    };
-
-    @Override
-    public void draw(PoseStack poseStack, int xOffset, int yOffset) {
-        originX = xOffset;
-        originY = yOffset;
-        for (Pair<Vec3, Atom> pair : LOCATIONS_OF_ATOMS) {
-            renderAtom(pair.second(), pair.first(), poseStack);
-        };
     };
 
     /**
@@ -67,24 +47,28 @@ public class MoleculeRenderer implements IDrawable {
      * @param startLocation The location of the first Atom in this chain
      * @param direction The overall direction in which this chain should continue (as chains zig-zag, this is the direction of net movement)
      * @param plane The normal to the plane in which this chain should appear
-     * @param zig The vector representing the direction of the first zig in the chain
+     * @param zig The vector representing the direction of the imaginary first zig in the chain - the zig from some imaginary Atom to the first Atom in the Branch
      */
     public void generateBranch(Branch branch, Vec3 startLocation, Vec3 direction, Vec3 plane, Vec3 zig) {
         Vec3 location = new Vec3(startLocation.x, startLocation.y, startLocation.z); // The working location at which to render Atoms; this moves
         Vec3 zag = new Vec3(zig.x, zig.y, zig.z); // The direction of the next bond; this changes, hopefully in a zigzagular fashion
+
         for (Node node : branch.getNodes()) {
-            // Render the Atom at this location
+            // Mark the atom for rendering at this location
             LOCATIONS_OF_ATOMS.add(Pair.of(new Vec3(location.x, location.y, location.z), node.getAtom()));
 
-            // Determine the location of the next Atom in the chain
-            Geometry geometry = getGeometry(node);
+            // Determine the orientation of this Atom
+            ConfinedGeometry confinedGeometry = getGeometry(node).confine(zag, plane, direction);
 
-            zag = geometry.getBranchContinuation(zag, plane, direction); // Get the next zag
-            location = location.add(zag.scale(BOND_LENGTH)); // Get the position of the next Atom
+            // Get the zag from the zig
+            zag = confinedGeometry.getZag();
+
+            // Get the position of the next Atom
+            location = location.add(zag.scale(BOND_LENGTH));
         };
     };
 
-    private void renderAtom(Atom atom, Vec3 location, PoseStack poseStack) {
+    protected void renderAtom(Atom atom, Vec3 location, PoseStack poseStack) {
         GuiGameElement.of(atom.getElement().getPartial()).lighting(AnimatedKinetics.DEFAULT_LIGHTING)
             .scale(23)
             .rotate(15.5f, 22.5f, 0f)
@@ -95,16 +79,22 @@ public class MoleculeRenderer implements IDrawable {
         return Geometry.TETRAHEDRAL;
     };
 
-    private static enum Geometry {
+    public static enum Geometry {
+
         LINEAR(new Vec3(1f, 0f, 0f)),
         TRIGONAL_PLANAR(new Vec3(0.5f, Mth.sin(60), 0f).normalize(), new Vec3(0.5f, -Mth.sin(60), 0f).normalize()),
         TETRAHEDRAL(new Vec3(0.333333f, -0.942809f, 0f), new Vec3(0.333333f, 0.471405f, 0.816497f), new Vec3(0.333333f, 0.471405f, -0.816497f)),
         OCTAHEDRAL(new Vec3(1f, 0f, 0f), new Vec3(0f, 1f, 0f), new Vec3(0f, -1f, 0f), new Vec3(0f, 0f, 1f), new Vec3(0f, 0f, -1f));
 
         /**
-         * Each additional connection out of this Geometry
-         * relative to the inward Vector (1, 0, 0), with
-         * the first vector also in the XY plane.
+         * The default input direction for a Geometry, to which all the output directions are relative.
+         */
+        private static final Vec3 standardDirection = new Vec3(1f, 0f, 0f);
+
+        /**
+         * The normalized direction vector of each additional connection out of this Geometry
+         * relative to the {@link Geometry#standardDirection standard input direction vector},
+         * with the first output vector also in the XY plane.
          */
         final ImmutableList<Vec3> connections;
 
@@ -113,42 +103,67 @@ public class MoleculeRenderer implements IDrawable {
         };
 
         /**
-         * Get the angle between the connections around this Geometry -
-         * specifically, the angle between the input vector (1,0,0) and the XY coplanar output vector.
+         * Get the angle in degrees between the connections around this Geometry -
+         * specifically, the angle between the input vector (1,0,0) and the XY-coplanar output vector.
          */
         public float getAngle() {
-            return angleBetween(new Vec3(1f, 0f, 0f), connections.get(0));
+            float angle = angleBetween(standardDirection, connections.get(0), new Vec3(0f, 0f, 1f));
+            return angle < 90f ? 180f - angle : angle; // We always want the obtuse angle
         };
 
         /**
-         * Get the normalized vector of the next zag in the zig zag.
-         * @param branchIn The zig
-         * @param plane The normal to the plane in which this chain is being rendered
+         * Confine this Geometry to a specified plane, with the zag oriented optimally to continue the chain in the given direction.
+         * @param zig The zig ({@link Geometry#connections input direction vector})
+         * @param plane The normal to the plane in which this chain is being rendered (the plane in which the zig and the zag should lie)
          * @param direction The overall direction in which the chain should continue, which should be in the plane
          */
-        public Vec3 getBranchContinuation(Vec3 branchIn, Vec3 plane, Vec3 direction) {
+        public ConfinedGeometry confine(Vec3 zig, Vec3 plane, Vec3 direction) {
 
             // Check the direction vector is in the plane
-            if (plane.dot(direction) > 0.000001f) throw new IllegalStateException("Error rendering Molecule");
+            if (plane.dot(direction) > 0.000001f) throw new IllegalStateException("Chains of Molecules being rendered in a plane must continue in a direction in that plane.");
 
             // Determine how the zig was transformed from (1,0,0)
-            Vec3 rotationVec = branchIn.cross(new Vec3(1f, 0f, 0f));
-            float angle = angleBetween(branchIn, direction);
+            Vec3 rotationVec = zig.cross(standardDirection);
+            float angle = angleBetween(zig, standardDirection, rotationVec);
 
             // Calculate the adjusted zag vector by applying the same transformation to the XY-coplanar output vector for this geometry
-            Vec3 continuationVec = rotate(connections.get(0), rotationVec, angle);
+            Vec3 zag = rotate(connections.get(0), rotationVec, angle);
 
             // Determine whether the continuation vector flipped by 180 degrees is more faithful to the direction in which this branch should be going
-            boolean flip = distanceFromPointToLine(branchIn.add(rotate(continuationVec, direction, 180)), Vec3.ZERO, direction) > distanceFromPointToLine(branchIn.add(continuationVec), Vec3.ZERO, direction)
-                //&& rotate(continuationVec, plane, 180).dot(direction) > 0 // Ensure they are facing the same direction
-            ;
+            boolean flip = distanceFromPointToLine(zig.add(rotate(zag, zig, 180f)), Vec3.ZERO, direction) < distanceFromPointToLine(zig.add(zag), Vec3.ZERO, direction);
 
-            return flip ? rotate(continuationVec, direction, 180) : continuationVec;
+            return new ConfinedGeometry(this, rotationVec, angle, flip);
         };
     };
 
     private static class ConfinedGeometry {
-        Geometry geometry;
+        final Geometry geometry;
+        final Vec3 rotationAxis;
+        final float angle;
+        /**
+         * Whether to rotate this Geometry 180 degrees around the input connection.
+         */
+        final boolean flip;
+
+        private ConfinedGeometry(Geometry geometry, Vec3 rotationAxis, float angle, boolean flip) {
+            this.geometry = geometry;
+            this.rotationAxis = rotationAxis;
+            this.angle = angle;
+            this.flip = flip;
+        };
+
+        // private Vec3 getZig() {
+        //     return rotate(Geometry.standardDirection, rotationAxis, angle);
+        // };
+
+        private Vec3 getZag() {
+            Vec3 unflipped = rotate(geometry.connections.get(0), rotationAxis, angle);
+            if (!flip) {
+                return unflipped;
+            } else {
+                return rotate(unflipped, rotate(Geometry.standardDirection, rotationAxis, angle), 180);
+            }
+        };
     };
 
     /**
@@ -166,19 +181,22 @@ public class MoleculeRenderer implements IDrawable {
     };
 
     /**
-     * The angle in degrees between two vectors.
+     * The directional angle in degrees between two vectors, between 0 and 360.
      * @param vec1
      * @param vec2
+     * @param plane The approximate vector around which {@code vec1} was rotated to get {@code vec2}
      */
-    public static float angleBetween(Vec3 vec1, Vec3 vec2) {
-        return (float)Math.acos(vec1.dot(vec2) / (vec1.length() * vec2.length())) * 180f / Mth.PI;
+    public static float angleBetween(Vec3 vec1, Vec3 vec2, Vec3 plane) {
+        float angle = (float)Math.acos(vec1.dot(vec2) / (vec1.length() * vec2.length())) * 180f / Mth.PI;
+        if (vec1.dot(vec2.cross(plane)) < 0f) angle = 360 - angle;
+        return -angle;
     };
 
     /**
-     * The shortest (perpendicular) distance from a point to a line
+     * The shortest (perpendicular) distance from a point to a line.
+     * @param point The point to which to find the distance
      * @param linePoint Any point on the line
      * @param lineDirection The direction vector of the line
-     * @param point The point to which to find the distance
      */
     public static float distanceFromPointToLine(Vec3 point, Vec3 linePoint, Vec3 lineDirection) {
         return (float) ( (point.subtract(linePoint)).cross(lineDirection).length() / lineDirection.length() );

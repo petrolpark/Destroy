@@ -56,8 +56,8 @@ import net.minecraft.world.level.ItemLike;
 public class DestroyJEI implements IModPlugin {
 
     /**
-     * All Create and Destroy {@link mezz.jei.api.recipe.RecipeType Recipe Types}.
-     * Create's Recipe Types are not exposed by default, meaning we have to access them through a {@link com.petrolpark.destroy.mixin.CreateRecipeCategoryMixin mixin} store them here.
+     * All Create and Destroy {@link mezz.jei.api.recipe.RecipeType Recipe Types} which can produce or consume Mixtures.
+     * Create's Recipe Types are not exposed by default, meaning we have to access them through a {@link com.petrolpark.destroy.mixin.CreateRecipeCategoryMixin mixin} and store them here.
      */ 
     public static final Set<RecipeType<?>> RECIPE_TYPES = new HashSet<>();
     /**
@@ -143,6 +143,8 @@ public class DestroyJEI implements IModPlugin {
 
     @Override
 	public void registerRecipes(IRecipeRegistration registration) {
+        MOLECULES_INPUT.clear();
+        MOLECULES_OUTPUT.clear();
         allCategories.forEach(c -> c.registerRecipes(registration));
 	};
 
