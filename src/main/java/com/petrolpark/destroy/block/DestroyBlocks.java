@@ -111,6 +111,11 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
+    public static final BlockEntry<UrineCauldronBlock> URINE_CAULDRON = REGISTRATE.block("urine_cauldron", p -> new UrineCauldronBlock(p, DestroyCauldronInteractions.URINE))
+        .initialProperties(() -> Blocks.WATER_CAULDRON)
+        .tag(BlockTags.CAULDRONS)
+        .register();
+
     static {
         REGISTRATE.startSection(AllSections.MATERIALS);
     };

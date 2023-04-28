@@ -220,7 +220,7 @@ public class DestroyTrades {
             (trader, rand) -> new MerchantOffer(
                 new ItemStack(Items.EMERALD, 15),
                 new ItemStack(Items.CHORUS_FRUIT, 2),
-                new ItemStack(DestroyItems.CHORUS_WINE.get(), 1),
+                new ItemStack(DestroyItems.CHORUS_WINE_BOTTLE.get(), 1),
                 8,
                 20,
                 0.10f

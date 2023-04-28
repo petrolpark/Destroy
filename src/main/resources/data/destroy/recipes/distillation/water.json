@@ -1,0 +1,50 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "minecraft:water",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:mixture",
+            "amount": 500,
+            "nbt": {
+                "Mixture": {
+                    "TranslationKey": "fluid.destroy.brine",
+                    "Contents": [
+                        {
+                            "Molecule": "destroy:water",
+                            "Concentration": 55.6
+                        },
+                        {
+                            "Molecule": "destroy:sodium_ion",
+                            "Concentration": 1.0
+                        },
+                        {
+                            "Molecule": "destroy:chloride",
+                            "Concentration": 1.0
+                        }
+                    ]
+                } 
+            }
+        },
+        {
+            "fluid": "destroy:mixture",
+            "amount": 500,
+            "nbt": {
+                "Mixture": {
+                    "TranslationKey": "fluid.destroy.distilled_water",
+                    "Contents": [
+                        {
+                            "Molecule": "destroy:water",
+                            "Concentration": 55.6
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "heatRequirement": "heated"
+}

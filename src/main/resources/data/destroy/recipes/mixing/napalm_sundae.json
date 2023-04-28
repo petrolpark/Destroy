@@ -1,0 +1,23 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "item": "destroy:polystyrene"
+      },
+      {
+        "fluid": "destroy:petrol",
+        "amount": 250
+      },
+      {
+        "fluid": "destroy:cream",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:napalm_sundae",
+        "amount": 500
+      }
+    ],
+    "heatRequirement": "cooled"
+}

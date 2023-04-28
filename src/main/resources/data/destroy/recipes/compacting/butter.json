@@ -1,0 +1,19 @@
+{
+    "type": "create:compacting",
+    "ingredients": [
+      {
+        "fluid": "destroy:cream",
+        "amount": 250
+      },
+      {
+        "fluid": "destroy:skimmed_milk",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:butter"
+      }
+    ],
+    "heatRequirement": "cooled"
+  }

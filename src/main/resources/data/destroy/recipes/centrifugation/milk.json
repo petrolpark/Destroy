@@ -2,17 +2,17 @@
     "type": "destroy:centrifugation",
     "ingredients": [
         {
-            "fluid": "minecraft:water",
+            "fluidTag": "forge:milk",
             "amount": 1000
         }
     ],
     "results": [
         {
-            "fluid": "minecraft:water",
+            "fluid": "destroy:cream",
             "amount": 500
         },
         {
-            "fluid": "minecraft:lava",
+            "fluid": "destroy:skimmed_milk",
             "amount": 500
         }
     ],

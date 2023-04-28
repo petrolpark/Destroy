@@ -8,11 +8,11 @@
     "results": [
       {
         "item": "minecraft:redstone",
-        "count": 6
+        "count": 3
       },
       {
         "item": "minecraft:redstone",
-        "count": 1,
+        "count": 3,
         "chance": 0.5
       },
       {

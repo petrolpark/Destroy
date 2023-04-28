@@ -1,0 +1,14 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "item": "minecraft:redstone"
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:molten_cinnabar",
+        "amount": 100
+      }
+    ]
+  }

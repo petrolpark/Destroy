@@ -6,7 +6,7 @@
             "amount": 1000
         },
         {
-            "item": "minecraft:apple",
+            "item": "minecraft:wheat",
             "count": 1
         },
         {
@@ -16,9 +16,9 @@
     ],
     "results": [
         {
-            "fluid": "minecraft:lava",
+            "fluid": "destroy:undistilled_moonshine",
             "amount": 1000
         }
     ],
-    "processingTime": 500
+    "processingTime": 9600
 }

@@ -2,18 +2,18 @@
     "type": "create:filling",
     "ingredients": [
       {
-        "item": "minecraft:glass_bottle"
+        "item": "destroy:syringe"
       },
       {
         "moleculeFluid": "destroy:mixture",
-        "amount": 1000,
-        "molecule": "destroy:water",
-        "concentration": 55.5
+        "amount": 250,
+        "molecule": "destroy:cisplatin",
+        "concentration": 1.0
       }
     ],
     "results": [
       {
-        "item": "minecraft:gunpowder"
+        "item": "destroy:cisplatin_syringe"
       }
     ]
   }

@@ -1,0 +1,43 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:molten_cinnabar",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:mixture",
+            "amount": 543,
+            "nbt": {
+                "Mixture": {
+                    "TranslationKey": "destroy.chemical.mercury",
+                    "Contents": [
+                        {
+                            "Molecule": "destroy:mercury",
+                            "Concentration": 67.5
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "fluid": "destroy:mixture",
+            "amount": 457,
+            "nbt": {
+                "Mixture": {
+                    "TranslationKey": "fluid.destroy.molten_sulfur",
+                    "Temperature": "388",
+                    "Contents": [
+                        {
+                            "Molecule": "destroy:sulfur",
+                            "Concentration": 56.7
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "heatRequirement": "heated"
+}

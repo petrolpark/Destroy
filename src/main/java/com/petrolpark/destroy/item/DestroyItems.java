@@ -440,7 +440,7 @@ public class DestroyItems {
     
     public static final ItemEntry<ChorusWineItem>
     
-    CHORUS_WINE = REGISTRATE.item("chorus_wine", p -> new ChorusWineItem(p, 1))
+    CHORUS_WINE_BOTTLE = REGISTRATE.item("chorus_wine_bottle", p -> new ChorusWineItem(p, 1))
         .properties(p -> p
             .tab(DestroyCreativeModeTabs.TAB_DESTROY)
             .food(DestroyFoods.MOONSHINE)

@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:item/chorus_wine"
+      "layer0": "destroy:item/chorus_wine_bottle"
     }
   }

@@ -10,6 +10,7 @@ import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.compat.jei.animation.GUIBlockRenderer;
 import com.petrolpark.destroy.recipe.AgingRecipe;
+import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
@@ -21,6 +22,7 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -79,10 +81,12 @@ public class AgingCategory extends CreateRecipeCategory<AgingRecipe> {
     };
 
     @Override
+    @SuppressWarnings("resource")
     public void draw(AgingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
         AllGuiTextures.JEI_DOWN_ARROW.render(stack, 136, 16);
         AllGuiTextures.JEI_SHADOW.render(stack, 81, 52);
+
         // Render Aging Barrel
         stack.pushPose();
         stack.translate(getBackground().getWidth() / 2 + 4, 53, 0);
@@ -91,6 +95,12 @@ public class AgingCategory extends CreateRecipeCategory<AgingRecipe> {
             .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH),
         stack, 23);
         stack.popPose();
+
+        // Render duration text
+        int seconds = (recipe.getProcessingDuration() % 1200) / 20;
+        Minecraft.getInstance().font.draw(stack, DestroyLang.translate("tooltip.aging_barrel.aging_time", ""+ recipe.getProcessingDuration() / 1200 + ":" + (seconds < 10 ? "0" : "") + seconds).string(), 48,
+				69, 0xFFFFFF);
+
     };
     
 };

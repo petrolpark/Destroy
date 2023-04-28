@@ -32,7 +32,6 @@ public class PlayerPreviousPositionsProvider implements ICapabilityProvider, INB
         if(cap == PLAYER_PREVIOUS_POSITIONS) {
             return optional.cast();
         };
-
         return LazyOptional.empty();
     };
 

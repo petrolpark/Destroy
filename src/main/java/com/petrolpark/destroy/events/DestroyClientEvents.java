@@ -40,15 +40,15 @@ public class DestroyClientEvents {
 				toolTip.add(itemTooltip.remove(0));
 				ItemDescription itemDesc = TooltipHelper.getTooltip(stack); // Generate the Item description
 
-                if (DestroyItems.CHORUS_WINE.isIn(stack)) { // Chorus Wine has a dynamic description
+                if (DestroyItems.CHORUS_WINE_BOTTLE.isIn(stack)) { // Chorus Wine has a dynamic description
                     String tooltipTranslationKey = TooltipHelper.getTooltipTranslationKey(stack);
                     TooltipHelper.cachedTooltips.remove(tooltipTranslationKey); // Remove the existing Tooltip so we don't add an inifite number of paragraphs to it
                     TooltipHelper.hasTooltip(stack, event.getEntity()); // Re-add the Tooltip
                     itemDesc = TooltipHelper.getTooltip(stack); // Regenerate the Item Description
                     itemDesc.getLinesOnShift().add(Components.immutableEmpty()); // Add the spacer
                     itemDesc.withBehaviour(
-                        Component.translatable("item.destroy.chorus_wine.dynamic_tooltip.condition").getString(),
-                        Component.translatable("item.destroy.chorus_wine.dynamic_tooltip.behaviour", PlayerPreviousPositions.getQueueSize()).getString()
+                        Component.translatable("item.destroy.chorus_wine_bottle.dynamic_tooltip.condition").getString(),
+                        Component.translatable("item.destroy.chorus_wine_bottle.dynamic_tooltip.behaviour", PlayerPreviousPositions.getQueueSize()).getString()
                     );
                 };
 

@@ -250,6 +250,12 @@ public final class DestroyMolecules {
         .translationKey("nitrile")
         .build(),
 
+    GLYCEROL = builder()
+        .id("glycerol")
+        .structure(Formula.deserialize("linear:C(O)C(O)CO"))
+        .build()
+        ,
+
     HYDROXIDE = builder()
         .id("hydroxide")
         .structure(Formula.atom(Element.OXYGEN).addAtom(Element.HYDROGEN))
@@ -281,6 +287,12 @@ public final class DestroyMolecules {
         .id("sodium_ion")
         .translationKey("sodium")
         .structure(Formula.atom(Element.SODIUM))
+        .charge(1)
+        .build(),
+    
+    TRINITROTOLUENE = builder()
+        .id("tnt")
+        .structure(Formula.atom(Element.CARBON)) //TODO actual structure
         .charge(1)
         .build(),
 

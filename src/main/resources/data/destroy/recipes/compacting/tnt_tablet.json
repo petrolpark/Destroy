@@ -1,0 +1,20 @@
+{
+    "type": "create:compacting",
+    "ingredients": [
+      {
+        "moleculeFluid": "destroy:mixture",
+        "amount": 1000,
+        "molecule": "destroy:tnt",
+        "concentration": 1.0
+      },
+      {
+        "tag": "minecraft:sand"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:tnt_tablet"
+      }
+    ],
+    "heatRequirement": "cooled"
+  }

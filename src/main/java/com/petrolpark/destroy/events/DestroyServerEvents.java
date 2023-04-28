@@ -21,6 +21,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.phys.AABB;
@@ -56,6 +59,7 @@ import com.petrolpark.destroy.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
+import com.petrolpark.destroy.capability.player.PlayerCrouching;
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddiction;
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
 import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositions;
@@ -137,15 +141,26 @@ public class DestroyServerEvents {
     };
 
     @SubscribeEvent
-    public static void storePreviousPositions(TickEvent.PlayerTickEvent event) {
+    public static void playerTick(TickEvent.PlayerTickEvent event) {
         if (event.side.isClient()) return;
         Player player = event.player;
+
+        // Store the positions of this player for use with Chorus Wine
         player.getCapability(PlayerPreviousPositionsProvider.PLAYER_PREVIOUS_POSITIONS).ifPresent((playerPreviousPositions -> {
             playerPreviousPositions.incrementTickCounter();
             if (playerPreviousPositions.hasBeenSecond()) {
                 playerPreviousPositions.recordPosition(player.blockPosition());
             };
         }));
+
+        // Update the time this Player has been crouching
+        if (player.isCrouching()) {
+            player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> crouchingCap.ticksCrouching++);
+        } else {
+            player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> crouchingCap.ticksCrouching = 0);
+        };
+
+
     };
 
     @SubscribeEvent

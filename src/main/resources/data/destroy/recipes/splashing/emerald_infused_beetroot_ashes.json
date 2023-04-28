@@ -8,12 +8,12 @@
     "results": [
       {
         "item": "minecraft:emerald",
-        "count": 2
+        "count": 1
       },
       {
         "item": "minecraft:emerald",
         "count": 1,
-        "chance": 0.75
+        "chance": 0.25
       },
       {
         "item": "minecraft:quartz",

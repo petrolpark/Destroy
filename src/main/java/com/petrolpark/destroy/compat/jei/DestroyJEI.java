@@ -84,7 +84,7 @@ public class DestroyJEI implements IModPlugin {
             .acceptsMixtures()
             .catalyst(DestroyBlocks.AGING_BARREL::get)
             .itemIcon(DestroyBlocks.AGING_BARREL.get())
-            .emptyBackground(177, 69)
+            .emptyBackground(177, 81)
             .build("aging", AgingCategory::new),
 
         centrifugation = builder(CentrifugationRecipe.class)
@@ -143,8 +143,8 @@ public class DestroyJEI implements IModPlugin {
 
     @Override
 	public void registerRecipes(IRecipeRegistration registration) {
-        MOLECULES_INPUT.clear();
-        MOLECULES_OUTPUT.clear();
+        //MOLECULES_INPUT.clear();
+        //MOLECULES_OUTPUT.clear();
         allCategories.forEach(c -> c.registerRecipes(registration));
 	};
 

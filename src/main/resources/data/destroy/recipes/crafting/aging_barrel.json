@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      " N ",
+      "LSL",
+      "LSL"
+    ],
+    "key": {
+      "N": {
+        "item": "destroy:nylon"
+      },
+      "L": {
+        "tag": "minecraft:logs"
+      },
+      "S": {
+        "tag": "minecraft:wooden_slabs"
+      }
+    },
+    "result": {
+      "item": "destroy:aging_barrel"
+    }
+  }

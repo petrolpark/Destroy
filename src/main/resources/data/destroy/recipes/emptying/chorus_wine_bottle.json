@@ -1,0 +1,17 @@
+{
+    "type": "create:emptying",
+    "ingredients": [
+      {
+        "item": "destroy:chorus_wine_bottle"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:glass_bottle"
+      },
+      {
+        "fluid": "destroy:chorus_wine",
+        "amount": 250
+      }
+    ]
+  }

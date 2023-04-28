@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "PTP",
+      "P P",
+      " P "
+    ],
+    "key": {
+      "P": {
+        "item": "minecraft:glass_pane"
+      },
+      "T": {
+        "item": "destroy:polytetrafluoroethene"
+      }
+    },
+    "result": {
+      "item": "destroy:syringe"
+    }
+  }

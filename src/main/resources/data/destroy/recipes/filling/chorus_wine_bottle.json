@@ -1,0 +1,17 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "minecraft:glass_bottle"
+      },
+      {
+        "fluid": "destroy:chorus_wine",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:chorus_wine_bottle"
+      }
+    ]
+  }

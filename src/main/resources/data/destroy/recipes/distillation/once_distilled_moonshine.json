@@ -2,18 +2,18 @@
     "type": "destroy:distillation",
     "ingredients": [
         {
-            "fluid": "minecraft:water",
+            "fluid": "destroy:undistilled_moonshine",
             "amount": 1000
         }
     ],
     "results": [
         {
-            "fluid": "destroy:urine",
-            "amount": 1000
+            "fluid": "minecraft:water",
+            "amount": 200
         },
         {
-            "fluid": "minecraft:lava",
-            "amount": 1000
+            "fluid": "destroy:once_distilled_moonshine",
+            "amount": 800
         }
     ],
     "heatRequirement": "heated"

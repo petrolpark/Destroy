@@ -1,0 +1,17 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:fuel_oil",
+        "amount": 500
+      },
+      {
+        "item": "destroy:ammonium_nitrate_prill"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:anfo"
+      }
+    ]
+}

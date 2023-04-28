@@ -1,0 +1,34 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "fluid": "destroy:urine",
+        "amount": 250
+      },
+      {
+        "item": "create:crushed_lead_ore"
+      },
+      {
+        "item": "create:crushed_lead_ore"
+      },
+      {
+        "tag": "forge:dyes/black"
+      },
+      {
+        "tag": "forge:dyes/white"
+      },
+      {
+        "tag": "forge:dyes/yellow"
+      },
+      {
+        "tag": "forge:dyes/red"
+      }
+    ],
+    "results": [
+      {
+        "item": "create:crushed_gold_ore",
+        "count": 2
+      }
+    ],
+    "heatRequirement": "heated"
+}

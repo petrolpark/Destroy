@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "CPC",
+      "P P",
+      "CPC"
+    ],
+    "key": {
+      "C": {
+        "tag": "forge:ingots/copper"
+      },
+      "P": {
+        "item": "minecraft:glass_pane"
+      }
+    },
+    "result": {
+      "item": "destroy:bubble_cap"
+    }
+  }

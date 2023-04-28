@@ -14,12 +14,12 @@
         "amount": 250,
         "nbt": {
             "Mixture": {
-                "TranslationKey": "destroy.chemical.brine",
+                "TranslationKey": "fluid.destroy.brine",
                 "Temperature": 289,
                 "Contents": [
                     {
                         "Molecule": "destroy:water",
-                        "Concentration": 55.5
+                        "Concentration": 55.6
                     },
                     {
                         "Molecule": "destroy:sodium_ion",

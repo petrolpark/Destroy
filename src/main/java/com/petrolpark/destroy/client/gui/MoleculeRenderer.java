@@ -124,7 +124,7 @@ public class MoleculeRenderer {
 
             // Determine how the zig was transformed from (1,0,0)
             Vec3 rotationVec = zig.cross(standardDirection);
-            float angle = angleBetween(zig, standardDirection, rotationVec);
+            float angle = angleBetween(standardDirection, zig, rotationVec);
 
             // Calculate the adjusted zag vector by applying the same transformation to the XY-coplanar output vector for this geometry
             Vec3 zag = rotate(connections.get(0), rotationVec, angle);
@@ -189,7 +189,7 @@ public class MoleculeRenderer {
     public static float angleBetween(Vec3 vec1, Vec3 vec2, Vec3 plane) {
         float angle = (float)Math.acos(vec1.dot(vec2) / (vec1.length() * vec2.length())) * 180f / Mth.PI;
         if (vec1.dot(vec2.cross(plane)) < 0f) angle = 360 - angle;
-        return -angle;
+        return angle;
     };
 
     /**

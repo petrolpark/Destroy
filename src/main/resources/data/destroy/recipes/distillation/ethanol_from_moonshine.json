@@ -1,0 +1,39 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:thrice_distilled_moonshine",
+            "amount": 400
+        }
+    ],
+    "results": [
+        {
+            "fluid": "minecraft:water",
+            "amount": 200
+        },
+        {
+            "fluid": "destroy:mixture",
+            "amount": 200,
+            "nbt": {
+                "Mixture": {
+                    "TranslationKey": "fluid.destroy.ethanol_distillate",
+                    "Contents": [
+                        {
+                            "Molecule": "destroy:water",
+                            "Concentration": 50.0
+                        },
+                        {
+                            "Molecule": "destroy:ethanol",
+                            "Concentration": 5.0
+                        },
+                        {
+                            "Molecule": "destroy:acetic_acid",
+                            "Concentration": 0.5
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "heatRequirement": "heated"
+}

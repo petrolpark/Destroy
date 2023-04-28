@@ -8,12 +8,12 @@
     "results": [
       {
         "item": "destroy:fluorite",
-        "count": 2
+        "count": 1
       },
       {
         "item": "destroy:fluorite",
         "count": 1,
-        "chance": 0.75
+        "chance": 0.5
       },
       {
         "item": "destroy:chalk_dust",
