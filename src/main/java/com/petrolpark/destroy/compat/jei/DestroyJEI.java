@@ -3,10 +3,8 @@ package com.petrolpark.destroy.compat.jei;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -19,11 +17,13 @@ import com.petrolpark.destroy.compat.jei.category.DistillationCategory;
 import com.petrolpark.destroy.compat.jei.category.ElectrolysisCategory;
 import com.petrolpark.destroy.compat.jei.category.MutationCategory;
 import com.petrolpark.destroy.compat.jei.category.ReactionCategory;
+import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.recipe.AgingRecipe;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.recipe.DistillationRecipe;
+import com.petrolpark.destroy.recipe.ElectrolysisRecipe;
 import com.petrolpark.destroy.recipe.MutationRecipe;
 import com.petrolpark.destroy.recipe.ReactionRecipe;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -39,7 +39,9 @@ import com.simibubi.create.foundation.utility.recipe.IRecipeTypeInfo;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.helpers.IPlatformFluidHelper;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IAdvancedRegistration;
@@ -47,6 +49,7 @@ import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -56,10 +59,10 @@ import net.minecraft.world.level.ItemLike;
 public class DestroyJEI implements IModPlugin {
 
     /**
-     * All Create and Destroy {@link mezz.jei.api.recipe.RecipeType Recipe Types} which can produce or consume Mixtures.
+     * All Create and Destroy {@link mezz.jei.api.recipe.RecipeType Recipe Types} which can produce or consume Mixtures, mapped to the class of Recipe which those Recipe Types describe.
      * Create's Recipe Types are not exposed by default, meaning we have to access them through a {@link com.petrolpark.destroy.mixin.CreateRecipeCategoryMixin mixin} and store them here.
      */ 
-    public static final Set<RecipeType<?>> RECIPE_TYPES = new HashSet<>();
+    public static final Map<RecipeType<?>, Class<? extends Recipe<?>>> RECIPE_TYPES = new HashMap<>();
     /**
      * A map of Molecules to the Recipes in which they are inputs.
      * This does not include {@link com.petrolpark.destroy.chemistry.Reaction Reactions}.
@@ -84,7 +87,7 @@ public class DestroyJEI implements IModPlugin {
             .acceptsMixtures()
             .catalyst(DestroyBlocks.AGING_BARREL::get)
             .itemIcon(DestroyBlocks.AGING_BARREL.get())
-            .emptyBackground(177, 81)
+            .emptyBackground(177, 86)
             .build("aging", AgingCategory::new),
 
         centrifugation = builder(CentrifugationRecipe.class)
@@ -105,7 +108,7 @@ public class DestroyJEI implements IModPlugin {
 
         electrolysis = builder(BasinRecipe.class)
             .addTypedRecipes(DestroyRecipeTypes.ELECTROLYSIS)
-            .acceptsMixtures()
+            .acceptsMixtures(ElectrolysisRecipe.class)
             .catalyst(DestroyBlocks.DYNAMO::get)
             .catalyst(AllBlocks.BASIN::get)
             .doubleItemIcon(DestroyBlocks.DYNAMO.get(), AllBlocks.BASIN.get())
@@ -159,6 +162,11 @@ public class DestroyJEI implements IModPlugin {
     };
 
     @Override
+    public <T> void registerFluidSubtypes(ISubtypeRegistration registration, IPlatformFluidHelper<T> platformFluidHelper) {
+        registration.registerSubtypeInterpreter(ForgeTypes.FLUID_STACK, DestroyFluids.MIXTURE.get(), new MixtureFluidSubtypeInterpreter());
+    };
+
+    @Override
     public void registerAdvanced(IAdvancedRegistration registration) {
         registration.addRecipeManagerPlugin(new DestroyRecipeManagerPlugin(registration.getJeiHelpers()));
     };
@@ -176,7 +184,7 @@ public class DestroyJEI implements IModPlugin {
 
         private IDrawable background;
 		private IDrawable icon;
-        private boolean acceptsMixtures;
+        private Class<? extends T> recipeClassForMixtures;
 
         private final List<Consumer<List<T>>> recipeListConsumers = new ArrayList<>();
 		private final List<Supplier<? extends ItemStack>> catalysts = new ArrayList<>();
@@ -257,7 +265,22 @@ public class DestroyJEI implements IModPlugin {
          * @return This Category Builder
          */
         public CategoryBuilder<T> acceptsMixtures() {
-            this.acceptsMixtures = true;
+            this.recipeClassForMixtures = recipeClass;
+            return this;
+        };
+
+        /**
+         * Marks this Category as being able to have <em>Mixtures</em> as in its outputs and/or inputs.
+         * This should essentially be all Categories for Fluid-accepting Recipes.
+         * If this is not flagged, Recipes can still include Mixtures, but they will not show up
+         * when searching Recipes for/including Molecules.
+         * @param actualRecipeClass The class of Recipes which this Category actually describes (this is
+         * not necessarily the same as the given {@link CategoryBuilder#recipeClass Recipe Class}, for
+         * example if this Category extends {@link com.simibubi.create.compat.jei.category.BasinCategory BasinCategory})
+         * @return This Category Builder
+         */
+        public CategoryBuilder<T> acceptsMixtures(Class<? extends T> actualRecipeClass) {
+            this.recipeClassForMixtures = actualRecipeClass;
             return this;
         };
 
@@ -287,12 +310,12 @@ public class DestroyJEI implements IModPlugin {
                 catalysts
             );
 
-            if (acceptsMixtures) {
-                RECIPE_TYPES.add(type);
-            };
-
             CreateRecipeCategory<T> category = factory.create(info);
             allCategories.add(category);
+
+            if (recipeClassForMixtures != null) {
+                RECIPE_TYPES.put(type, recipeClassForMixtures);
+            };
 
             return category;
         };

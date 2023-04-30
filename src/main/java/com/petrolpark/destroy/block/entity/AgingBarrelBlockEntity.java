@@ -18,6 +18,7 @@ import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
+import com.simibubi.create.foundation.tileEntity.behaviour.belt.DirectBeltInputBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour.TankSegment;
 import com.simibubi.create.foundation.utility.recipe.RecipeFinder;
@@ -51,6 +52,7 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
     protected LazyOptional<IFluidHandler> fluidCapability;
     public LazyOptional<IItemHandlerModifiable> itemCapability;
 
+    protected DirectBeltInputBehaviour beltBehaviour;
     protected PollutingBehaviour pollutingBehaviour;
 
     private int timer; // -1 = open, 0 = done processing but closed
@@ -58,7 +60,9 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
 
     public AgingBarrelBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
-        inventory = new SmartInventory(2, this, 1, false).forbidExtraction();
+        inventory = new SmartInventory(2, this, 1, false)
+            .whenContentsChanged($ -> checkRecipe())
+            .forbidExtraction();
         itemCapability = LazyOptional.of(() -> inventory);
 
         timer = -1;
@@ -72,6 +76,9 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
         fluidCapability = LazyOptional.of(() -> {
 			return new CombinedTankWrapper(tank.getCapability().orElse(null));
 		});
+
+        beltBehaviour = new DirectBeltInputBehaviour(this);
+        behaviours.add(beltBehaviour);
 
         pollutingBehaviour = new PollutingBehaviour(this);
         behaviours.add(pollutingBehaviour);

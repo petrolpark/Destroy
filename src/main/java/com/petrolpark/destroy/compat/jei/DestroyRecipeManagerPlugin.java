@@ -36,7 +36,7 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
             || (focus.checkedCast(ForgeTypes.FLUID_STACK).map(fluidFocus -> DestroyFluids.MIXTURE.get().isSame(fluidFocus.getTypedValue().getIngredient().getFluid())).orElse(false) && (focus.getRole() == RecipeIngredientRole.INPUT || focus.getRole() == RecipeIngredientRole.CATALYST))
         ) {
             recipeTypes.add(ReactionCategory.TYPE); // Add the Reaction Recipe type
-            recipeTypes.addAll(DestroyJEI.RECIPE_TYPES); // Add all processing Recipes applicable to Mixtures
+            recipeTypes.addAll(DestroyJEI.RECIPE_TYPES.keySet()); // Add all processing Recipes applicable to Mixtures
         };
         return recipeTypes;
     };
@@ -66,14 +66,15 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
                     if (recipeCategory instanceof ReactionCategory) molecule.getReactantReactions().forEach(reaction -> recipes.add((T)(ReactionCategory.RECIPES.get(reaction)))); // This is an unchecked conversion but I think it's fine
                     
                     // Add non-Reaction Recipes
-                    Destroy.LOGGER.info("Searching for "+molecule.getName(false).getString());
                     List<Recipe<?>> recipeUses = DestroyJEI.MOLECULES_INPUT.get(molecule); // Recipes in which a Mixture containing this Molecule is required
                     if (recipeUses != null) Destroy.LOGGER.info("There are "+recipeUses.size()+" for this");
-                    if (recipeUses != null) recipes.addAll(recipeUses.stream()
-                        .filter(recipe -> recipe.getClass().equals(recipeCategory.getRecipeType().getRecipeClass())) // Check for Recipes that match this category
-                        .map(recipe -> (T) recipe) // Cast these Recipes (unchecked conversion, but should be okay as we just checked the class)
-                        .toList()
-                    );
+                    if (recipeUses != null) {
+                        recipes.addAll(recipeUses.stream()
+                            .filter(recipe -> recipe.getClass().equals(DestroyJEI.RECIPE_TYPES.get(recipeCategory.getRecipeType()))) // Check for Recipes that match this category
+                            .map(recipe -> (T) recipe) // Cast these Recipes (unchecked conversion, but should be okay as we just checked the class)
+                            .toList()
+                        );
+                    };
                 }
                 case OUTPUT: {
                     // Add Reaction Recipes
@@ -82,7 +83,7 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
                     // Add non-Reaction Recipes
                     List<Recipe<?>> recipeProductions = DestroyJEI.MOLECULES_OUTPUT.get(molecule); // Recipes in which a Mixture containing this Molecule is produced
                     if (recipeProductions != null) recipes.addAll(recipeProductions.stream()
-                        .filter(recipe -> recipe.getClass().equals(recipeCategory.getRecipeType().getRecipeClass())) // Check for Recipes that match this category
+                        .filter(recipe -> recipe.getClass().equals(DestroyJEI.RECIPE_TYPES.get(recipeCategory.getRecipeType()))) // Check for Recipes that match this category
                         .map(recipe -> (T) recipe) // Cast these Recipes (unchecked conversion, but should be okay as we just checked the class)
                         .toList()
                     );

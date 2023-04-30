@@ -2,12 +2,16 @@ package com.petrolpark.destroy.client.ponder;
 
 import java.util.List;
 
+import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.block.entity.AgingBarrelBlockEntity;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
+import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
+import com.petrolpark.destroy.world.village.DestroyVillagers;
 import com.simibubi.create.content.contraptions.fluids.potion.PotionFluid;
 import com.simibubi.create.content.contraptions.fluids.tank.FluidTankTileEntity;
 import com.simibubi.create.content.logistics.block.redstone.NixieTubeTileEntity;
@@ -24,10 +28,16 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
@@ -41,6 +51,91 @@ public class DestroyScenes {
         purpleFluid = new FluidStack(PotionFluid.withEffects(1000, new Potion(), List.of(new MobEffectInstance(MobEffects.REGENERATION))), 1000);
         blueFluid = new FluidStack(PotionFluid.withEffects(1000, new Potion(), List.of(new MobEffectInstance(MobEffects.NIGHT_VISION))), 1000);
         redFluid = new FluidStack(PotionFluid.withEffects(1000, new Potion(), List.of(new MobEffectInstance(MobEffects.DAMAGE_BOOST))), 1000);
+    };
+
+    @SuppressWarnings("null")
+    public static void agingBarrel(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("aging_barrel", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 3);
+        scene.showBasePlate();
+
+        BlockPos barrel = new BlockPos(1, 1, 1);
+
+        scene.world.showSection(util.select.layer(0), Direction.UP);
+        scene.idle(10);
+        scene.world.showSection(util.select.position(barrel), Direction.DOWN);
+        scene.idle(10);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(barrel, Direction.UP));
+        scene.idle(120);
+
+        scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(barrel, Direction.UP), Pointing.DOWN)
+            .rightClick()
+            .withItem(new ItemStack(Items.WATER_BUCKET)),
+            30
+        );
+        scene.world.modifyTileEntity(barrel, AgingBarrelBlockEntity.class, be -> {
+            be.getTank().fill(new FluidStack(Fluids.WATER, 1000), FluidAction.EXECUTE);
+        });
+        scene.idle(50);
+
+        ItemStack yeast = DestroyItems.YEAST.asStack();
+        scene.world.createItemEntity(util.vector.centerOf(barrel.above(2)), Vec3.ZERO, yeast);
+        scene.idle(10);
+        scene.world.modifyTileEntity(barrel, AgingBarrelBlockEntity.class, be -> {
+            be.inventory.insertItem(0, yeast, false);
+        });
+        scene.world.createItemEntity(util.vector.centerOf(barrel.above(2)), Vec3.ZERO, new ItemStack(Items.WHEAT));
+        scene.idle(10);
+
+        scene.world.setBlock(barrel, DestroyBlocks.AGING_BARREL.getDefaultState().setValue(AgingBarrelBlock.IS_OPEN, false), false);
+        scene.world.modifyTileEntity(barrel, AgingBarrelBlockEntity.class, be -> {
+            be.getTank().drain(1000, FluidAction.EXECUTE);
+            be.getTank().fill(new FluidStack(DestroyFluids.UNDISTILLED_MOONSHINE.get(), 1000), FluidAction.EXECUTE);
+        });
+        scene.idle(20);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(barrel, Direction.UP));
+        scene.idle(120);
+
+        for (int i = 1; i <= 4; i++) {
+            BlockState state = DestroyBlocks.AGING_BARREL.getDefaultState();
+            state.setValue(AgingBarrelBlock.IS_OPEN, false);
+            state.setValue(AgingBarrelBlock.PROGRESS, i);
+            scene.world.setBlock(barrel, state, false);
+            scene.idle(20);
+        };
+
+        scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(barrel, Direction.UP), Pointing.DOWN)
+            .rightClick(),
+            30
+        );
+        scene.idle(30);
+        scene.world.setBlock(barrel, DestroyBlocks.AGING_BARREL.getDefaultState().setValue(AgingBarrelBlock.IS_OPEN, true), false);
+        scene.idle(100);
+
+        scene.world.createEntity(w -> {
+			Villager villagerEntity = EntityType.VILLAGER.create(w);
+			Vec3 v = util.vector.topOf(new BlockPos(1, 0, 0));
+            villagerEntity.getVillagerData()
+                .setProfession(DestroyVillagers.INNKEEPER.get())
+                .setType(VillagerType.PLAINS)
+                .setLevel(0);
+			villagerEntity.setPosRaw(v.x, v.y, v.z);
+			return villagerEntity;
+		});
+        scene.idle(50);
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.topOf(new BlockPos(1, 2, 0)))
+            .attachKeyFrame();
+        scene.idle(120); 
+
+        scene.markAsFinished();
     };
 
     public static void centrifuge(SceneBuilder scene, SceneBuildingUtil util) {
@@ -133,7 +228,7 @@ public class DestroyScenes {
         scene.world.modifyTileEntity(bottomBubbleCap, BubbleCapBlockEntity.class, be -> {
             be.getTank().drain(2000, FluidAction.EXECUTE);
         });
-        scene.effects.emitParticles(VecHelper.getCenterOf(bottomBubbleCap), Emitter.simple(particleData, new Vec3(0f, 0.1f, 0f)), 1.0f, 10);
+        scene.effects.emitParticles(VecHelper.getCenterOf(bottomBubbleCap), Emitter.simple(particleData, new Vec3(0f, 0f, 0f)), 1.0f, 10);
         scene.world.modifyTileEntity(new BlockPos(2, 2, 1), BubbleCapBlockEntity.class, be -> {
             be.getInternalTank().fill(blueFluid, FluidAction.EXECUTE);
         });
@@ -164,8 +259,7 @@ public class DestroyScenes {
         scene.world.showSection(util.select.fromTo(0, 1, 0, 4, 2, 5).add(util.select.position(2, 0, 5)), Direction.UP);
         scene.overlay.showText(100)
             .text("This text is defined in a language file.")
-            .pointAt(util.vector.blockSurface(dynamo, Direction.WEST))
-            .attachKeyFrame();
+            .pointAt(util.vector.blockSurface(dynamo, Direction.WEST));
         scene.idle(120);
         scene.world.setKineticSpeed(util.select.everywhere(), 256);
         scene.world.setKineticSpeed(util.select.position(2, 4, 2), -256); // Set the one cog which should be going the other way to the correct speed

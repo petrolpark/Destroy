@@ -87,6 +87,19 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
+    public static final BlockEntry<PollutometerBlock> POLLUTOMETER = REGISTRATE.block("pollutometer", PollutometerBlock::new)
+        .initialProperties(SharedProperties::stone)
+        .properties(p -> p
+            .color(MaterialColor.NONE)
+        ).transform(TagGen.pickaxeOnly())
+        .item()
+        .transform(customItemModel())
+        .register();
+
+    static {
+        REGISTRATE.startSection(AllSections.CURIOSITIES);
+    };
+
     public static final BlockEntry<SandCastleBlock> SAND_CASTLE = REGISTRATE.block("sand_castle", SandCastleBlock::new)
         .initialProperties(Material.DECORATION)
         .properties(p -> p
@@ -96,10 +109,6 @@ public class DestroyBlocks {
             .instabreak()
             .sound(SoundType.SAND)
         ).register();
-
-    static {
-        REGISTRATE.startSection(AllSections.CURIOSITIES);
-    };
 
     public static final BlockEntry<AgingBarrelBlock> AGING_BARREL = REGISTRATE.block("aging_barrel", AgingBarrelBlock::new)
         .initialProperties(SharedProperties::stone)

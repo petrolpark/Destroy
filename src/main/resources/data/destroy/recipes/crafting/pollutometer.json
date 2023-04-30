@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "TPS",
+      "PMP",
+      " P "
+    ],
+    "key": {
+      "T": {
+        "item": "minecraft:string"
+      },
+      "P": {
+        "item": "destroy:polypropene"
+      },
+      "S": {
+        "item": "destroy:silica"
+      },
+      "M": {
+        "item": "create:precision_mechanism"
+      }
+    },
+    "result": {
+      "item": "destroy:pollutometer"
+    }
+  }

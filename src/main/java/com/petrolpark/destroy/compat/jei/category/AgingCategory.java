@@ -8,6 +8,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.client.gui.DestroyGuiTextures;
 import com.petrolpark.destroy.compat.jei.animation.GUIBlockRenderer;
 import com.petrolpark.destroy.recipe.AgingRecipe;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -50,7 +51,7 @@ public class AgingCategory extends CreateRecipeCategory<AgingRecipe> {
 
         // Add the Fluid Ingredient
         FluidIngredient fluidIngredient = recipe.getRequiredFluid();
-        builder.addSlot(RecipeIngredientRole.INPUT, xOffset, 35)
+        builder.addSlot(RecipeIngredientRole.INPUT, xOffset, 33)
             .setBackground(getRenderedSlot(), -1, -1)
             .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(fluidIngredient.getMatchingFluidStacks()))
             .addTooltipCallback(addFluidTooltip(fluidIngredient.getRequiredAmount()));
@@ -66,7 +67,7 @@ public class AgingCategory extends CreateRecipeCategory<AgingRecipe> {
             };
 
             // Add the Item Ingredient
-            builder.addSlot(RecipeIngredientRole.INPUT, xOffset + (i % 3) * 19, 35)
+            builder.addSlot(RecipeIngredientRole.INPUT, xOffset + (i % 3) * 19, 33)
                 .setBackground(getRenderedSlot(), -1, -1)
                 .addItemStacks(stacks);
             i++;
@@ -84,12 +85,12 @@ public class AgingCategory extends CreateRecipeCategory<AgingRecipe> {
     @SuppressWarnings("resource")
     public void draw(AgingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
-        AllGuiTextures.JEI_DOWN_ARROW.render(stack, 136, 16);
-        AllGuiTextures.JEI_SHADOW.render(stack, 81, 52);
+        AllGuiTextures.JEI_DOWN_ARROW.render(stack, 136, 14);
+        AllGuiTextures.JEI_SHADOW.render(stack, 81, 50);
 
         // Render Aging Barrel
         stack.pushPose();
-        stack.translate(getBackground().getWidth() / 2 + 4, 53, 0);
+        stack.translate(getBackground().getWidth() / 2 + 4, 51, 0);
         blockRenderer.renderBlock(DestroyBlocks.AGING_BARREL.getDefaultState()
             .setValue(AgingBarrelBlock.IS_OPEN, true)
             .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH),
@@ -97,8 +98,9 @@ public class AgingCategory extends CreateRecipeCategory<AgingRecipe> {
         stack.popPose();
 
         // Render duration text
+        DestroyGuiTextures.JEI_TEXT_BOX.render(stack, 4, 63);
         int seconds = (recipe.getProcessingDuration() % 1200) / 20;
-        Minecraft.getInstance().font.draw(stack, DestroyLang.translate("tooltip.aging_barrel.aging_time", ""+ recipe.getProcessingDuration() / 1200 + ":" + (seconds < 10 ? "0" : "") + seconds).string(), 48,
+        Minecraft.getInstance().font.draw(stack, DestroyLang.translate("tooltip.aging_barrel.aging_time", ""+ recipe.getProcessingDuration() / 1200 + ":" + (seconds < 10 ? "0" : "") + seconds).string(), 9,
 				69, 0xFFFFFF);
 
     };

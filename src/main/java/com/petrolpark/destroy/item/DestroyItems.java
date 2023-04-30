@@ -29,6 +29,10 @@ public class DestroyItems {
 
     private static CreateRegistrate REGISTRATE = Destroy.registrate();
 
+    static {
+        REGISTRATE.startSection(AllSections.MATERIALS);
+    };
+
     public static final ItemEntry<Item> LOGO = REGISTRATE.item("logo", Item::new)
         .properties(p -> p
             .tab(null)
@@ -41,10 +45,6 @@ public class DestroyItems {
 
     static {
         REGISTRATE.creativeModeTab(() -> DestroyCreativeModeTabs.TAB_DESTROY);
-    };
-
-    static {
-        REGISTRATE.startSection(AllSections.MATERIALS);
     };
 
     public static final ItemEntry<Item>

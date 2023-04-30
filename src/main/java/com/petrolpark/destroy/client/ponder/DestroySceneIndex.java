@@ -17,6 +17,10 @@ public class DestroySceneIndex {
 
     public static void register() {
 
+        // Aging Barrel
+        HELPER.forComponents(DestroyBlocks.AGING_BARREL)
+            .addStoryBoard("aging_barrel", DestroyScenes::agingBarrel);
+
         // Bubble Cap
         HELPER.forComponents(DestroyBlocks.BUBBLE_CAP)
             .addStoryBoard("bubble_cap", DestroyScenes::bubbleCap);
@@ -36,8 +40,10 @@ public class DestroySceneIndex {
         // Tags
         
         PonderRegistry.TAGS.forTag(DESTROY)
+            .add(DestroyBlocks.AGING_BARREL)
             .add(DestroyBlocks.BUBBLE_CAP)
             .add(DestroyBlocks.CENTRIFUGE)
+            .add(DestroyBlocks.COOLER)
             .add(DestroyBlocks.DYNAMO)
             .add(DestroyItems.HYPERACCUMULATING_FERTILIZER)
         ;
@@ -50,6 +56,10 @@ public class DestroySceneIndex {
         PonderRegistry.TAGS.forTag(PonderTag.KINETIC_APPLIANCES)
             .add(DestroyBlocks.CENTRIFUGE)
             .add(DestroyBlocks.DYNAMO)
+        ;
+
+        PonderRegistry.TAGS.forTag(PonderTag.ARM_TARGETS)
+            .add(DestroyBlocks.AGING_BARREL)
         ;
 
         PonderRegistry.TAGS.forTag(PonderTag.REDSTONE)

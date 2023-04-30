@@ -1,0 +1,19 @@
+{
+    "variants": {
+        "facing=north": {
+            "model": "destroy:block/pollutometer/block"
+        },
+        "facing=east": {
+            "model": "destroy:block/pollutometer/block",
+            "y": 90
+        },
+        "facing=south": {
+            "model": "destroy:block/pollutometer/block",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "destroy:block/pollutometer/block",
+            "y": 270
+        }
+    }
+}

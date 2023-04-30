@@ -1,7 +1,9 @@
 package com.petrolpark.destroy.mixin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,7 +20,12 @@ import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory.Info;
+import com.simibubi.create.content.contraptions.components.mixer.CompactingRecipe;
+import com.simibubi.create.content.contraptions.components.mixer.MixingRecipe;
+import com.simibubi.create.content.contraptions.fluids.actors.FillingRecipe;
 import com.simibubi.create.content.contraptions.fluids.potion.PotionFluidHandler;
+import com.simibubi.create.content.contraptions.itemAssembly.SequencedAssemblyRecipe;
+import com.simibubi.create.content.contraptions.processing.EmptyingRecipe;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Lang;
 
@@ -36,6 +43,19 @@ import net.minecraftforge.fluids.FluidStack;
 public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
 
     /**
+     * A map of the IDs of Create Categories to the classes of Recipe those Categories describe.
+     */
+    private static final Map<String, Class<? extends Recipe<?>>> CATEGORIES_AND_CLASSES = new HashMap<>();
+
+    static {
+        CATEGORIES_AND_CLASSES.put("mixing", MixingRecipe.class);
+        CATEGORIES_AND_CLASSES.put("packing", CompactingRecipe.class);
+        CATEGORIES_AND_CLASSES.put("spout_filling", FillingRecipe.class);
+        CATEGORIES_AND_CLASSES.put("draining", EmptyingRecipe.class);
+        CATEGORIES_AND_CLASSES.put("sequenced_assembly", SequencedAssemblyRecipe.class);
+    };
+
+    /**
      * Injection into {@link com.simibubi.create.compat.jei.category.CreateRecipeCategory#CreateRecipeCategory CreateRecipeCategory}.
      * As Create's {@link mezz.jei.api.recipe.RecipeType Recipe Types} are not exposed by default, we snipe them here and add them to the
      * {@link com.petrolpark.destroy.compat.jei.DestroyJEI#RECIPE_TYPES list of Recipe Types} for which {@link com.petrolpark.destroy.chemistry.Mixture Mixtures}
@@ -43,18 +63,11 @@ public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
      */
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     public void inInit(Info<T> info, CallbackInfo ci) {
-        switch (info.recipeType().getUid().getPath()) {
-            // The following Categories are applicable to Mixtures:
-            case "mixing":
-            case "packing":
-            case "spout_filling":
-            case "draining":
-            case "sequenced_assembly":
-                DestroyJEI.RECIPE_TYPES.add(info.recipeType());
-                return;
-            default:
+
+        String recipeTypeId = info.recipeType().getUid().getPath();
+        if (CATEGORIES_AND_CLASSES.containsKey(recipeTypeId)) {
+            DestroyJEI.RECIPE_TYPES.put(info.recipeType(), CATEGORIES_AND_CLASSES.get(recipeTypeId));
         };
-        
     };
     
     /**

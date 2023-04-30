@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.petrolpark.destroy.client.gui.DestroyIcons;
+import com.simibubi.create.foundation.gui.AllIcons;
+import com.simibubi.create.foundation.tileEntity.behaviour.scrollvalue.INamedIconOptions;
+import com.simibubi.create.foundation.utility.Lang;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 
@@ -64,23 +69,35 @@ public class LevelPollution {
         });
     };
 
-    public enum PollutionType {
+    public enum PollutionType implements INamedIconOptions {
 
-        GREENHOUSE(65536),
+        GREENHOUSE(DestroyIcons.GREENHOUSE, 65536),
 
-        OZONE_DEPLETION(65536),
+        OZONE_DEPLETION(DestroyIcons.OZONE_DEPLETION, 65536),
 
-        SMOG(65536),
+        SMOG(DestroyIcons.SMOG, 65536),
 
-        ACID_RAIN(65536),
+        ACID_RAIN(DestroyIcons.ACID_RAIN, 65536),
 
-        RADIOACTIVITY(65536);
+        RADIOACTIVITY(DestroyIcons.RADIOACTIVITY, 65536);
 
+        private AllIcons icon;
         // Min is always 0
         public int max;
 
-        PollutionType(int max) {
+        PollutionType(AllIcons icon, int max) {
+            this.icon = icon;
             this.max = max;
+        }
+
+        @Override
+        public AllIcons getIcon() {
+            return icon;
+        };
+
+        @Override
+        public String getTranslationKey() {
+            return "destroy.pollution."+Lang.asId(name());
         };
 
     };

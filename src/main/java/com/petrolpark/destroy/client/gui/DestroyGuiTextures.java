@@ -16,7 +16,8 @@ public enum DestroyGuiTextures implements ScreenElement {
 
     //JEI
     JEI_SHORT_DOWN_ARROW("jei/short_down_arrow", 18, 18),
-    JEI_SHORT_RIGHT_ARROW("jei/short_right_arrow", 18, 18);
+    JEI_SHORT_RIGHT_ARROW("jei/short_right_arrow", 18, 18),
+	JEI_TEXT_BOX("jei/text_box", 169, 19);
 
     public final ResourceLocation location;
 	public int width;

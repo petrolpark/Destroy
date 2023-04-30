@@ -9,6 +9,7 @@ import com.petrolpark.destroy.block.renderer.BubbleCapRenderer;
 import com.petrolpark.destroy.block.renderer.CentrifugeRenderer;
 import com.petrolpark.destroy.block.renderer.CoolerRenderer;
 import com.petrolpark.destroy.block.renderer.DynamoRenderer;
+import com.petrolpark.destroy.block.renderer.PollutometerRenderer;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
@@ -46,6 +47,12 @@ public class DestroyBlockEntities {
         .instance(() -> DynamoCogInstance::new)
         .validBlocks(DestroyBlocks.DYNAMO)
         .renderer(() -> DynamoRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<PollutometerBlockEntity> POLLUTOMETER = REGISTRATE
+        .tileEntity("pollutometer", PollutometerBlockEntity::new)
+        .validBlocks(DestroyBlocks.POLLUTOMETER)
+        .renderer(() -> PollutometerRenderer::new)
         .register();
 
     public static final BlockEntityEntry<SandCastleBlockEntity> SAND_CASTLE = REGISTRATE
