@@ -20,8 +20,8 @@ public class DestroyIcons extends AllIcons {
     public static final int DESTROY_ICON_ATLAS_SIZE = 256;
 
     // Duplicate fields as private in parent class
-    private final int iconX;
-    private final int iconY;
+    protected final int iconX;
+    protected final int iconY;
 
     public static final DestroyIcons
         RADIOACTIVITY = new DestroyIcons(0, 0),

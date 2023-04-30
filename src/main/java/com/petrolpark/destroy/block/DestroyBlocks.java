@@ -3,10 +3,13 @@ package com.petrolpark.destroy.block;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.block.display.PollutometerDisplaySource;
+import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.item.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.content.AllSections;
 import com.simibubi.create.content.contraptions.components.AssemblyOperatorBlockItem;
+import com.simibubi.create.content.logistics.block.display.AllDisplayBehaviours;
 import com.simibubi.create.foundation.block.BlockStressDefaults;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -48,7 +51,8 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.COLOR_ORANGE)
             .noOcclusion()
-        ).transform(TagGen.pickaxeOnly())
+        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(BubbleCapBlockEntity.BUBBLE_CAP_DISPLAY_SOURCE, "bubble_cap"))
+        .transform(TagGen.pickaxeOnly())
         .item()
         .transform(customItemModel())
         .register();
@@ -87,11 +91,17 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
+    static {
+        REGISTRATE.startSection(AllSections.LOGISTICS);
+    };
+
     public static final BlockEntry<PollutometerBlock> POLLUTOMETER = REGISTRATE.block("pollutometer", PollutometerBlock::new)
         .initialProperties(SharedProperties::stone)
         .properties(p -> p
             .color(MaterialColor.NONE)
-        ).transform(TagGen.pickaxeOnly())
+            .noOcclusion()
+        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(new PollutometerDisplaySource(), "pollutometer"))
+        .transform(TagGen.pickaxeOnly())
         .item()
         .transform(customItemModel())
         .register();

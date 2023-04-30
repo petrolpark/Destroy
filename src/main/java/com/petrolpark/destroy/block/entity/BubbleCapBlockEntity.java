@@ -12,11 +12,13 @@ import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.BubbleCapBlock;
+import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DistillationTower;
 import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.logistics.block.display.DisplayLinkContext;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
@@ -343,5 +345,28 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
             }
         }
     };
+
+    public static MixtureContentsDisplaySource BUBBLE_CAP_DISPLAY_SOURCE = new MixtureContentsDisplaySource() {
+
+        @Override
+        protected boolean allowsLabeling(DisplayLinkContext context) {
+            return true;
+        };
+
+        @Override
+        public FluidStack getFluidStack(DisplayLinkContext context) {
+            if (context.getSourceTE() instanceof BubbleCapBlockEntity bubbleCap) {
+                return bubbleCap.getTank().getFluid();
+            } else {
+                return null;
+            }
+        };
+
+        @Override
+        public Component getName() {
+            return DestroyLang.translate("display_source.bubble_cap").component();
+        };
+
+    };
  
-}
+};

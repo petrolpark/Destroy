@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.compat.jei.DestroyJEI;
@@ -35,7 +34,6 @@ public abstract class ProcessingRecipeMixin {
         for (FluidIngredient ingredient : ((ProcessingRecipeParamsAccessor)params).getFluidIngredients()) {
             if (ingredient instanceof MoleculeFluidIngredient moleculeIngredient) {
                 Molecule molecule = moleculeIngredient.getMolecule();
-                Destroy.LOGGER.info("Loaded a recipe which requires " + molecule.getName(false).getString());
                 DestroyJEI.MOLECULES_INPUT.putIfAbsent(molecule, new ArrayList<>()); // Create the List if it's not there
                 DestroyJEI.MOLECULES_INPUT.get(molecule).add((ProcessingRecipe<RecipeWrapper>)(Object)this); // Unchecked conversion (fine because this is a Mixin)
             };

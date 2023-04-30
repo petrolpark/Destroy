@@ -160,7 +160,9 @@ public class DestroyServerEvents {
             player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> crouchingCap.ticksCrouching = 0);
         };
 
-
+        BlockState stateOn = player.getBlockStateOn();
+        if (player.isCrouching() && stateOn.getBlock() == Blocks.WATER_CAULDRON && stateOn.getValue(BlockStateProperties.LEVEL_CAULDRON) == 1) {
+        };
     };
 
     @SubscribeEvent

@@ -11,7 +11,7 @@ public class DestroyPartials {
     
     CENTRIFUGE_COG = block("centrifuge/inner"),
     DYNAMO_COG = block("dynamo/inner"),
-    POLLUTOMETER_ANENOMETER = block("pollutometer/anenometer"),
+    POLLUTOMETER_ANEMOMETER = block("pollutometer/anemometer"),
     POLLUTOMETER_WEATHERVANE = block("pollutometer/weathervane"),
     GAS_MASK = block("gas_mask"),
     STRAY_SKULL = block("cooler/skull");

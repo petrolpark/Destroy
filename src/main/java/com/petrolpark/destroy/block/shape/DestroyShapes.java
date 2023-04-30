@@ -40,6 +40,10 @@ public class DestroyShapes {
     COOLER = shape(1, -2, 1, 15, 14, 15)
         .build();
 
+    public static final VoxelShaper POLLUTOMETER = shape(6, 0, 6, 10, 12, 10)
+        .add(5, 3, 3, 11, 9, 6)
+        .forDirectional(Direction.NORTH);
+
     public static final VoxelShaper AGING_BARREL_OPEN = shape(0, 0, 0, 16, 14, 16)
         .erase(2, 2, 2, 14, 14, 14)
         .add(0, 14, 14, 16, 30, 16)

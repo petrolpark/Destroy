@@ -46,6 +46,7 @@ public class DestroySceneIndex {
             .add(DestroyBlocks.COOLER)
             .add(DestroyBlocks.DYNAMO)
             .add(DestroyItems.HYPERACCUMULATING_FERTILIZER)
+            .add(DestroyBlocks.POLLUTOMETER)
         ;
 
         PonderRegistry.TAGS.forTag(PonderTag.FLUIDS)
@@ -64,6 +65,10 @@ public class DestroySceneIndex {
 
         PonderRegistry.TAGS.forTag(PonderTag.REDSTONE)
             .add(DestroyBlocks.DYNAMO)
+        ;
+
+        PonderRegistry.TAGS.forTag(PonderTag.DISPLAY_SOURCES)
+            .add(DestroyBlocks.POLLUTOMETER)
         ;
     };
 };

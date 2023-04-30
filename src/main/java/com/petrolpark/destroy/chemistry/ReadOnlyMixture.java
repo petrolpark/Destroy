@@ -115,6 +115,13 @@ public class ReadOnlyMixture {
     };
 
     /**
+     * How hot (in Kelvins) this Mixture is. Temperature affects the rate of {@link Reaction Reactions}.
+     */
+    public float getTemperature() {
+        return temperature;
+    };
+
+    /**
      * Whether this Mixture has no {@link Molecule Molecules} in it.
      */
     public boolean isEmpty() {
@@ -175,6 +182,7 @@ public class ReadOnlyMixture {
         List<Component> tooltip = new ArrayList<>();
         for (Entry<Molecule, Float> entry : contents.entrySet()) {
             tooltip.add(i, DestroyLang.builder()
+                .space().space()
                 .add(entry.getKey().getName(iupac).plainCopy())
                 .add(Component.literal(
                     entry.getKey().getCharge() == 0 ? "" : " [" + entry.getKey().getSerializedCharge() + "]" + // Show charge, if there is one
