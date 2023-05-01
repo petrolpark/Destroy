@@ -2,11 +2,13 @@ package com.petrolpark.destroy.client.ponder;
 
 import java.util.List;
 
+import com.petrolpark.destroy.behaviour.ChargingBehaviour;
 import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.AgingBarrelBlockEntity;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
+import com.petrolpark.destroy.block.entity.DynamoBlockEntity;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
 import com.petrolpark.destroy.fluid.DestroyFluids;
@@ -15,10 +17,12 @@ import com.petrolpark.destroy.world.village.DestroyVillagers;
 import com.simibubi.create.content.contraptions.fluids.potion.PotionFluid;
 import com.simibubi.create.content.contraptions.fluids.tank.FluidTankTileEntity;
 import com.simibubi.create.content.logistics.block.redstone.NixieTubeTileEntity;
+import com.simibubi.create.foundation.ponder.ElementLink;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.foundation.ponder.Selection;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;
+import com.simibubi.create.foundation.ponder.element.WorldSectionElement;
 import com.simibubi.create.foundation.ponder.instruction.EmitParticlesInstruction.Emitter;
 import com.simibubi.create.foundation.utility.Pointing;
 import com.simibubi.create.foundation.utility.VecHelper;
@@ -30,6 +34,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -66,10 +71,10 @@ public class DestroyScenes {
         scene.world.showSection(util.select.position(barrel), Direction.DOWN);
         scene.idle(10);
 
-        scene.overlay.showText(100)
+        scene.overlay.showText(80)
             .text("This text is defined in a language file.")
             .pointAt(util.vector.blockSurface(barrel, Direction.UP));
-        scene.idle(120);
+        scene.idle(100);
 
         scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(barrel, Direction.UP), Pointing.DOWN)
             .rightClick()
@@ -92,46 +97,48 @@ public class DestroyScenes {
 
         scene.world.setBlock(barrel, DestroyBlocks.AGING_BARREL.getDefaultState().setValue(AgingBarrelBlock.IS_OPEN, false), false);
         scene.world.modifyTileEntity(barrel, AgingBarrelBlockEntity.class, be -> {
+            be.inventory.clearContent();
             be.getTank().drain(1000, FluidAction.EXECUTE);
             be.getTank().fill(new FluidStack(DestroyFluids.UNDISTILLED_MOONSHINE.get(), 1000), FluidAction.EXECUTE);
         });
         scene.idle(20);
 
-        scene.overlay.showText(100)
+        scene.overlay.showText(80)
             .text("This text is defined in a language file.")
+            .attachKeyFrame()
             .pointAt(util.vector.blockSurface(barrel, Direction.UP));
-        scene.idle(120);
 
         for (int i = 1; i <= 4; i++) {
-            BlockState state = DestroyBlocks.AGING_BARREL.getDefaultState();
-            state.setValue(AgingBarrelBlock.IS_OPEN, false);
-            state.setValue(AgingBarrelBlock.PROGRESS, i);
+            BlockState state = DestroyBlocks.AGING_BARREL.getDefaultState()
+                .setValue(AgingBarrelBlock.IS_OPEN, false)
+                .setValue(AgingBarrelBlock.PROGRESS, i);
             scene.world.setBlock(barrel, state, false);
             scene.idle(20);
         };
+        scene.idle(20);
 
         scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(barrel, Direction.UP), Pointing.DOWN)
             .rightClick(),
             30
         );
-        scene.idle(30);
         scene.world.setBlock(barrel, DestroyBlocks.AGING_BARREL.getDefaultState().setValue(AgingBarrelBlock.IS_OPEN, true), false);
-        scene.idle(100);
+        scene.idle(50);
 
         scene.world.createEntity(w -> {
 			Villager villagerEntity = EntityType.VILLAGER.create(w);
 			Vec3 v = util.vector.topOf(new BlockPos(1, 0, 0));
-            villagerEntity.getVillagerData()
-                .setProfession(DestroyVillagers.INNKEEPER.get())
-                .setType(VillagerType.PLAINS)
-                .setLevel(0);
-			villagerEntity.setPosRaw(v.x, v.y, v.z);
+            villagerEntity.setVillagerData(new VillagerData(VillagerType.PLAINS, DestroyVillagers.INNKEEPER.get(), 0));
+            villagerEntity.animationPosition = 0;
+			villagerEntity.setPos(v.x, v.y, v.z);
+            villagerEntity.xo = v.x;
+            villagerEntity.yo = v.y;
+            villagerEntity.zo = v.z;
 			return villagerEntity;
 		});
-        scene.idle(50);
+        scene.idle(10);
         scene.overlay.showText(100)
             .text("This text is defined in a language file.")
-            .pointAt(util.vector.topOf(new BlockPos(1, 2, 0)))
+            .pointAt(util.vector.topOf(new BlockPos(1, 1, 0)))
             .attachKeyFrame();
         scene.idle(120); 
 
@@ -220,6 +227,7 @@ public class DestroyScenes {
         scene.idle(10);
         scene.overlay.showText(60)
             .text("This text is defined in a language file.")
+            .attachKeyFrame()
             .pointAt(util.vector.blockSurface(middleBubbleCap, Direction.WEST));
         scene.idle(80);
         scene.world.showSection(kinetics, Direction.NORTH);
@@ -238,6 +246,7 @@ public class DestroyScenes {
         });
         scene.overlay.showText(100)
             .text("This text is defined in a language file.")
+            .attachKeyFrame()
             .pointAt(util.vector.blockSurface(middleBubbleCap, Direction.WEST));
         scene.idle(120);
         scene.overlay.showText(100)
@@ -271,6 +280,63 @@ public class DestroyScenes {
             .pointAt(util.vector.blockSurface(dynamo, Direction.WEST))
             .attachKeyFrame();
         scene.idle(120);
+        scene.markAsFinished();
+    };
+
+    public static void dynamoCharging(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("dynamo_charging", "This text is defined in a language file.");
+		scene.configureBasePlate(0, 0, 5);
+		scene.world.showSection(util.select.layer(0), Direction.UP);
+		scene.idle(5);
+
+        BlockPos dynamo = new BlockPos(2, 3, 2);
+        BlockPos depot = new BlockPos(2, 1, 1);
+        Selection kinetics = util.select.fromTo(2, 3, 3, 2, 3, 5).add(util.select.fromTo(2, 0, 5, 2, 2, 5));
+
+		ElementLink<WorldSectionElement> depotElement = scene.world.showIndependentSection(util.select.position(depot), Direction.DOWN);
+		scene.world.moveSection(depotElement, util.vector.of(0, 0, 1), 0);
+		scene.idle(10);
+
+        scene.world.showSection(util.select.position(dynamo), Direction.DOWN);
+        scene.idle(5);
+        scene.world.showSection(kinetics, Direction.NORTH);
+        scene.idle(10);
+
+        Vec3 dynamoSide = util.vector.blockSurface(dynamo, Direction.WEST);
+		scene.overlay.showText(60)
+			.pointAt(dynamoSide)
+			.placeNearTarget()
+			.attachKeyFrame()
+			.text("This text is defined in a language file.");
+		scene.idle(70);
+		scene.overlay.showText(60)
+			.pointAt(dynamoSide.subtract(0, 2, 0))
+			.placeNearTarget()
+			.text("This text is defined in a language file.");
+		scene.idle(50);
+		ItemStack cell = DestroyItems.DISCHARGED_VOLTAIC_PILE.asStack();
+		scene.world.createItemOnBeltLike(depot, Direction.NORTH, cell);
+		Vec3 depotCenter = util.vector.centerOf(depot.south());
+		scene.overlay.showControls(new InputWindowElement(depotCenter, Pointing.UP).withItem(cell), 30);
+		scene.idle(10);
+
+        scene.world.modifyTileEntity(dynamo, DynamoBlockEntity.class, be -> 
+            be.chargingBehaviour.start(ChargingBehaviour.Mode.BELT, util.vector.blockSurface(depot, Direction.UP))
+        );
+        scene.idle(60);
+        //TODO make dynamo actually render in ponder
+
+        scene.world.modifyTileEntity(dynamo, DynamoBlockEntity.class, be -> 
+            be.chargingBehaviour.running = false
+        );
+        ItemStack chargedCell = DestroyItems.VOLTAIC_PILE.asStack();
+        scene.world.removeItemsFromBelt(depot);
+		scene.world.createItemOnBeltLike(depot, Direction.UP, chargedCell);
+		scene.idle(10);
+		scene.overlay.showControls(new InputWindowElement(depotCenter, Pointing.UP).withItem(chargedCell), 50);
+		scene.idle(60);
+
+
         scene.markAsFinished();
     };
 
