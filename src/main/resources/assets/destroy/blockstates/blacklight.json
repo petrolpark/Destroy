@@ -1,0 +1,53 @@
+{
+    "variants": {
+        "facing=north,flipped=false": {
+            "model": "destroy:block/blacklight",
+            "x": 270
+        },
+        "facing=south,flipped=false": {
+            "model": "destroy:block/blacklight",
+            "x": 90
+        },
+        "facing=east,flipped=false": {
+            "model": "destroy:block/blacklight",
+            "x": 90,
+            "y": 270
+        },
+        "facing=west,flipped=false": {
+            "model": "destroy:block/blacklight",
+            "x": 90,
+            "y": 90
+        },
+        "facing=up,flipped=false": {
+            "model": "destroy:block/blacklight",
+            "x": 180
+        },
+        "facing=down,flipped=false": {
+            "model": "destroy:block/blacklight"
+        },
+        "facing=north,flipped=true": {
+            "model": "destroy:block/blacklight_flipped"
+        },
+        "facing=south,flipped=true": {
+            "model": "destroy:block/blacklight_flipped",
+            "y": 180
+        },
+        "facing=east,flipped=true": {
+            "model": "destroy:block/blacklight_flipped",
+            "y": 90
+        },
+        "facing=west,flipped=true": {
+            "model": "destroy:block/blacklight_flipped",
+            "y": 270
+        },
+        "facing=up,flipped=true": {
+            "model": "destroy:block/blacklight",
+            "x": 180,
+            "y": 90
+        },
+        "facing=down,flipped=true": {
+            "model": "destroy:block/blacklight",
+            "y": 90
+        }
+    }
+}

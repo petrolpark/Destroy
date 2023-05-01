@@ -32,8 +32,11 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
         if (
             // Molecules
             focus.getTypedValue().getType() == MoleculeJEIIngredient.TYPE 
-            // Mixtures (which contain a single Molecule)
-            || (focus.checkedCast(ForgeTypes.FLUID_STACK).map(fluidFocus -> DestroyFluids.MIXTURE.get().isSame(fluidFocus.getTypedValue().getIngredient().getFluid())).orElse(false) && (focus.getRole() == RecipeIngredientRole.INPUT || focus.getRole() == RecipeIngredientRole.CATALYST))
+            // Mixture ingredients (which contain a single Molecule)
+            || (focus.checkedCast(ForgeTypes.FLUID_STACK).map(fluidFocus -> {
+                FluidStack fluidStack = fluidFocus.getTypedValue().getIngredient();
+                return DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid()) && fluidStack.getOrCreateTag().contains("IngredientMolecule");
+            }).orElse(false))
         ) {
             recipeTypes.add(ReactionCategory.TYPE); // Add the Reaction Recipe type
             recipeTypes.addAll(DestroyJEI.RECIPE_TYPES.keySet()); // Add all processing Recipes applicable to Mixtures

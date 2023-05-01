@@ -453,15 +453,31 @@ public class DestroyItems {
 
     public static final ItemEntry<SequencedAssemblyItem>
 
+    UNFINISHED_BLACKLIGHT = REGISTRATE.item("unfinished_blacklight", SequencedAssemblyItem::new)
+        .properties(p -> p
+            .tab(null)
+        ).register(),
+    UNFINISHED_VOLTAIC_PILE = REGISTRATE.item("unfinished_voltaic_pile", SequencedAssemblyItem::new)
+        .properties(p -> p
+            .tab(null)
+        ).register(),
     UNPROCESSED_CONVERSION_CATALYST = REGISTRATE.item("unprocessed_conversion_catalyst", SequencedAssemblyItem::new)
-        .register(),
+        .properties(p -> p
+            .tab(null)
+        ).register(),
     UNPROCESSED_MASHED_POTATO = REGISTRATE.item("unprocessed_mashed_potato", SequencedAssemblyItem::new)
-        .register(),
-    UNPROCESSED_napalm_sundae = REGISTRATE.item("unprocessed_napalm_sundae", SequencedAssemblyItem::new)
-        .tag(AllItemTags.UPRIGHT_ON_BELT.tag)
+        .properties(p -> p
+            .tab(null)
+        ).register(),
+    UNPROCESSED_NAPALM_SUNDAE = REGISTRATE.item("unprocessed_napalm_sundae", SequencedAssemblyItem::new)
+        .properties(p -> p
+            .tab(null)
+        ).tag(AllItemTags.UPRIGHT_ON_BELT.tag)
         .register(),
     UNPROCESSED_SUPER_GLUE = REGISTRATE.item("unprocessed_super_glue", SequencedAssemblyItem::new)
-        .register();
+        .properties(p -> p
+            .tab(null)
+        ).register();
 
     public static final ItemEntry<CombustibleItem>
 
@@ -609,6 +625,8 @@ public class DestroyItems {
 
     AGAR = REGISTRATE.item("agar", Item::new)
         .register(),
+    DISCHARGED_VOLTAIC_PILE = REGISTRATE.item("discharged_voltaic_pile", Item::new)
+        .register(),
     PAPER_PULP = REGISTRATE.item("paper_pulp", Item::new)
         .register(),
     SAWDUST = REGISTRATE.item("sawdust", Item::new)
@@ -616,6 +634,8 @@ public class DestroyItems {
     TEAR_BOTTLE = REGISTRATE.item("tear_bottle", Item::new)
         .register(),
     URINE_BOTTLE = REGISTRATE.item("urine_bottle", Item::new)
+        .register(),
+    VOLTAIC_PILE = REGISTRATE.item("voltaic_pile", Item::new)
         .register(),
     YEAST = REGISTRATE.item("yeast", Item::new)
         .register(),

@@ -41,12 +41,11 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
             ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(mixtureTag);
 
             name = mixture.getName().copy();
-            tooltip.add(mixture.getName().copy().append(" "+fluidStack.getAmount()).append(Lang.translateDirect("generic.unit.millibuckets")));
             tooltip.add(Component.literal(temperatureUnit.of(mixture.getTemperature())));
             tooltip.addAll(mixture.getContentsTooltip(iupac).stream().map(c -> c.copy()).toList());
         };
 
-        tooltip.add(0, name.append(""+fluidStack.getAmount()).append(Lang.translateDirect("generic.unit.millibuckets")));
+        tooltip.add(0, Component.literal(context.sourceConfig().getString("Label") + " ").append(name).append(" "+fluidStack.getAmount()).append(Lang.translateDirect("generic.unit.millibuckets")));
 
         return tooltip;
     };
@@ -62,14 +61,15 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
 
 	@Override
 	public void initConfigurationWidgets(DisplayLinkContext context, ModularGuiLineBuilder builder, boolean isFirstLine) {
-		if (isFirstLine && allowsLabeling(context)) {
-            addLabelingTextBox(builder);
+		if (allowsLabeling(context)) {
+            if (isFirstLine) {
+                addLabelingTextBox(builder);
+            } else {
+                addTemperatureUnitSelection(builder);
+            };
+        } else {
+            if (isFirstLine) addTemperatureUnitSelection(builder);
         };
-
-        builder.addSelectionScrollInput(0, 137, (si, l) -> {
-            si.forOptions(List.of(DestroyLang.translate("display_source.mixture.temperature_unit.kelvin").component(), DestroyLang.translate("display_source.mixture.temperature_unit.celcius").component(), DestroyLang.translate("display_source.mixture.temperature_unit.farenheit").component()))
-            .titled(DestroyLang.translate("display_source.mixture.temperature_unit").component());   
-        }, "TemperatureUnits");
 	};
 
     /**
@@ -85,6 +85,13 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
 					.withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)));
 		}, "Label");
 	};
+
+    private void addTemperatureUnitSelection(ModularGuiLineBuilder builder) {
+        builder.addSelectionScrollInput(0, 137, (si, l) -> {
+            si.forOptions(List.of(DestroyLang.translate("display_source.mixture.temperature_unit.kelvin").component(), DestroyLang.translate("display_source.mixture.temperature_unit.celcius").component(), DestroyLang.translate("display_source.mixture.temperature_unit.farenheit").component()))
+            .titled(DestroyLang.translate("display_source.mixture.temperature_unit").component());   
+        }, "TemperatureUnit");
+    };
     
     protected enum TemperatureUnit {
         KELVINS(t -> t, "K"),

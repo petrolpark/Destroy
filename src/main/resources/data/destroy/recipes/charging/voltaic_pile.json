@@ -2,12 +2,12 @@
     "type": "destroy:charging",
     "ingredients": [
       {
-        "item": "minecraft:coal"
+        "item": "destroy:discharged_voltaic_pile"
       }
     ],
     "results": [
       {
-        "item": "minecraft:diamond"
+        "item": "destroy:voltaic_pile"
       }
     ]
   }

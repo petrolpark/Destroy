@@ -16,7 +16,7 @@
         "item": "destroy:silica"
       },
       "M": {
-        "item": "create:precision_mechanism"
+        "item": "destroy:voltaic_pile"
       }
     },
     "result": {

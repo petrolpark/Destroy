@@ -262,6 +262,11 @@ public final class DestroyMolecules {
         .charge(-1)
         .build(),
 
+    MERCURY = builder()
+        .id("mercury")
+        .structure(Formula.atom(Element.MERCURY))
+        .build(),
+
     METHANOL = builder()
         .id("methanol")
         .structure(Formula.deserialize("linear:CO"))

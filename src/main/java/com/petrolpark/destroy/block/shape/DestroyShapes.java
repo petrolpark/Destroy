@@ -53,6 +53,12 @@ public class DestroyShapes {
         .add(0, 14, 14, 16, 30, 16)
         .forDirectional(Direction.NORTH);
 
+    public static final VoxelShaper BLACKLIGHT = shape(0, 0, 5, 16, 4, 11)
+        .forDirectional(Direction.DOWN);
+
+    public static final VoxelShaper BLACKLIGHT_FLIPPED = shape(5, 0, 0, 11, 4, 16)
+        .forDirectional(Direction.DOWN);
+
     /**
      * Changes the voxel shape of the Aging Barrel based on how far through the aging process the Barrel is.
     */

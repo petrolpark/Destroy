@@ -135,6 +135,15 @@ public class DestroyBlocks {
         .tag(BlockTags.CAULDRONS)
         .register();
 
+    public static final BlockEntry<BlacklightBlock> BLACKLIGHT = REGISTRATE.block("blacklight", BlacklightBlock::new)
+        .initialProperties(() -> Blocks.LANTERN)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_PURPLE)
+            .sound(SoundType.GLASS)
+        ).item()
+        .build()
+        .register();
+
     static {
         REGISTRATE.startSection(AllSections.MATERIALS);
     };

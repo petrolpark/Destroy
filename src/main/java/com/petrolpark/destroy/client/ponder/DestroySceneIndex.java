@@ -31,7 +31,8 @@ public class DestroySceneIndex {
         
         // Dynamo
         HELPER.forComponents(DestroyBlocks.DYNAMO)
-            .addStoryBoard("dynamo/redstone", DestroyScenes::dynamoRedstone);
+            .addStoryBoard("dynamo/redstone", DestroyScenes::dynamoRedstone)
+            .addStoryBoard("dynamo/charging", DestroyScenes::dynamoCharging);
 
         // Hyperaccumulating Fertilizer
         HELPER.forComponents(DestroyItems.HYPERACCUMULATING_FERTILIZER)
@@ -46,7 +47,6 @@ public class DestroySceneIndex {
             .add(DestroyBlocks.COOLER)
             .add(DestroyBlocks.DYNAMO)
             .add(DestroyItems.HYPERACCUMULATING_FERTILIZER)
-            .add(DestroyBlocks.POLLUTOMETER)
         ;
 
         PonderRegistry.TAGS.forTag(PonderTag.FLUIDS)

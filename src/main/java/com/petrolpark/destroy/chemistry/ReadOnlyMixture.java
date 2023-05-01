@@ -57,7 +57,7 @@ public class ReadOnlyMixture {
     
         contents = new HashMap<>();
         
-        temperature = 600f;
+        temperature = 298f;
     };
 
     /**
@@ -86,7 +86,7 @@ public class ReadOnlyMixture {
     public static ReadOnlyMixture readNBT(CompoundTag compound) {
         ReadOnlyMixture mixture = new ReadOnlyMixture();
         mixture.translationKey = compound.getString("TranslationKey"); // Set to "" if the key is not present
-        mixture.temperature = compound.getFloat("Temperature");
+        if (compound.contains("Temperature")) mixture.temperature = compound.getFloat("Temperature");
         ListTag contents = compound.getList("Contents", 10);
         contents.forEach(tag -> {
             CompoundTag moleculeTag = (CompoundTag) tag;

@@ -1,7 +1,18 @@
 {
     "variants": {
-        "": {
+        "facing=north": {
             "model": "destroy:block/dynamo/block"
+        },
+        "facing=south": {
+            "model": "destroy:block/dynamo/block"
+        },
+        "facing=east": {
+            "model": "destroy:block/dynamo/block",
+            "y": 90
+        },
+        "facing=west": {
+            "model": "destroy:block/dynamo/block",
+            "y": 90
         }
     }
 }
