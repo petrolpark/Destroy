@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CrudeOilGenerationTest",
+      "request": "launch",
+      "mainClass": "com.petrolpark.destroy.test.CrudeOilGenerationTest",
+      "projectName": "destroy"
+    },
+    {
+      "type": "java",
       "name": "Test",
       "request": "launch",
       "mainClass": "com.petrolpark.destroy.Test",

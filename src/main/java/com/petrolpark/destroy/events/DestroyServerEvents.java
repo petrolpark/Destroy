@@ -24,6 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.phys.AABB;
@@ -57,6 +58,7 @@ import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.capability.chunk.ChunkCrudeOil;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
 import com.petrolpark.destroy.capability.player.PlayerCrouching;
@@ -116,6 +118,14 @@ public class DestroyServerEvents {
     };
 
     @SubscribeEvent
+    public static void onAttachCapabilitiesChunk(AttachCapabilitiesEvent<LevelChunk> event) {
+        LevelChunk chunk = event.getObject();
+        if (!chunk.getCapability(ChunkCrudeOil.Provider.CHUNK_CRUDE_OIL).isPresent()) {
+            event.addCapability(Destroy.asResource("crude_oil"), new ChunkCrudeOil.Provider());
+        };
+    };
+
+    @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
         if (event.isWasDeath()) {
             // Copy Baby Blue Addiction Data
@@ -163,6 +173,9 @@ public class DestroyServerEvents {
         BlockState stateOn = player.getBlockStateOn();
         if (player.isCrouching() && stateOn.getBlock() == Blocks.WATER_CAULDRON && stateOn.getValue(BlockStateProperties.LEVEL_CAULDRON) == 1) {
         };
+
+        LevelChunk chunk= player.getLevel().getChunkAt(player.blockPosition());
+        chunk.getCapability(ChunkCrudeOil.Provider.CHUNK_CRUDE_OIL).ifPresent(crudeOil -> crudeOil.generate(chunk, player));
     };
 
     @SubscribeEvent
