@@ -10,5 +10,6 @@
         "fluid": "destroy:molten_cinnabar",
         "amount": 100
       }
-    ]
+    ],
+    "heatRequirement": "heated"
   }

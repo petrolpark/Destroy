@@ -14,6 +14,7 @@ import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
 import com.petrolpark.destroy.chemistry.genericreaction.SingleGroupGenericReaction;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.petrolpark.destroy.recipe.ReactionInBasinRecipe.ReactionInBasinResult;
 
 import net.minecraft.nbt.CompoundTag;
 
@@ -91,6 +92,37 @@ public class Mixture extends ReadOnlyMixture {
         return this;
     };
 
+    /**
+     * Creates a new Mixture by mixing together existing ones. This does not give the volume of the new Mixture.
+     * @param mixtures A Map of all Mixtures to their volumes (in Buckets)
+     * @return A new Mixture instance
+     */
+    public static Mixture mix(Map<Mixture, Double> mixtures) {
+        Mixture resultMixture = new Mixture();
+        Map<Molecule, Double> moleculesAndMoles = new HashMap<>(); // A Map of all Molecules to their quantity in moles (not their concentration)
+        double totalAmount = 0d;
+
+        for (Entry<Mixture, Double> mixtureAndAmount : mixtures.entrySet()) {
+            Mixture mixture = mixtureAndAmount.getKey();
+            double amount = mixtureAndAmount.getValue();
+            totalAmount += amount;
+
+            for (Entry<Molecule, Float> entry : mixture.contents.entrySet()) {
+                moleculesAndMoles.merge(entry.getKey(), (entry.getValue() * amount), (m1, m2) -> m1 + m2); // Add the Molecule to the map if it's a new one, or increase the existing molar quantity otherwise
+            };
+        };
+
+        for (Entry<Molecule, Double> moleculeAndMoles : moleculesAndMoles.entrySet()) {
+            resultMixture.internalAddMolecule(moleculeAndMoles.getKey(), (float)(moleculeAndMoles.getValue() / totalAmount), false); // Add all these Molecules to the new Mixture
+        };
+
+        resultMixture.refreshPossibleReactions();
+        resultMixture.updateName();
+        //TODO determine temperature
+
+        return resultMixture;
+    };
+
     @Override
     public float getConcentrationOf(Molecule molecule) {
         if (molecule == DestroyMolecules.PROTON) {
@@ -115,6 +147,13 @@ public class Mixture extends ReadOnlyMixture {
             return false;
         };
         return true;
+    };
+
+    /**
+     * Whether this Mixture will {@link Mixture#equilibrium react any further}.
+     */
+    public boolean isAtEquilibrium() {
+        return equilibrium;
     };
 
     /**
@@ -185,6 +224,21 @@ public class Mixture extends ReadOnlyMixture {
         updateName();
 
         return results;
+    };
+
+    /**
+     * {@link Mixture#reactForTick React} this Mixture until it reaches {@link Mixture#equilibrium equilibrium}. This is mutative.
+     * @return A {@link com.petrolpark.destroy.recipe.ReactionInBasinRecipe.ReactionInBasinResult ReactionInBasinResult} containing
+     * the number of ticks it took to reach equilibrium and the {@link ReactionResult Reaction Results}.
+     */
+    public ReactionInBasinResult reactInBasin() {
+        //TODO reaction results
+        int ticks = 0;
+        while (!equilibrium) {
+            reactForTick();
+            ticks++;
+        };
+        return new ReactionInBasinResult(ticks, Set.of());
     };
 
     /**
@@ -300,7 +354,7 @@ public class Mixture extends ReadOnlyMixture {
     };
 
     /**
-     * Get the rate - in moles of Reaction per liter <em>per tick</em> (not per second) - at which this {@link Reaction} will proceed in this Mixture.
+     * Get the rate - in moles of Reaction per Bucket <em>per tick</em> (not per second) - at which this {@link Reaction} will proceed in this Mixture.
      * @param reaction
      */
     private float calculateReactionRate(Reaction reaction) {

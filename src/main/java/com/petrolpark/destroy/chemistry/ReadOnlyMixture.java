@@ -48,7 +48,7 @@ public class ReadOnlyMixture {
     protected float temperature;
 
     /**
-     * The {@link Molecule Molecules} contained by this Mixture, mapped to their concentrations (in moles per litre).
+     * The {@link Molecule Molecules} contained by this Mixture, mapped to their concentrations (in moles per Bucket).
      */
     protected Map<Molecule, Float> contents;
 
