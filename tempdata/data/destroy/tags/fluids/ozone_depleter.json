@@ -1,7 +1,0 @@
-{
-    "replace": false,
-    "values": [
-      "#destroy:gas/ozone_depleter",
-      "#destroy:liquid/ozone_depleter"
-    ]
-  }

@@ -1,8 +1,0 @@
-{
-    "type": "minecraft:smelting",
-    "ingredient": {
-      "item": "destroy:clay_monolith"
-    },
-    "result": "destroy:ceramic_monolith",
-    "cookingtime": 300
-  }

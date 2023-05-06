@@ -1,7 +1,0 @@
-{
-    "replace": false,
-    "values": [
-      "destroy:ammonia_solution",
-      "destroy:chlorodifluoromethane"
-    ]
-  }

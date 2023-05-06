@@ -1,8 +1,0 @@
-{
-    "replace": false,
-    "values": [
-      "destroy:ammonium_nitrate_solution",
-      "destroy:gypsum_solution",
-      "destroy:ammonium_chloride_solution"
-    ]
-  }
