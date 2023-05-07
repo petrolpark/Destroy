@@ -1,0 +1,43 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "destroy:item/siesmometer",
+		"particle": "destroy:item/siesmometer"
+	},
+	"elements": [
+		{
+			"name": "weight",
+			"from": [7, 2, 7],
+			"to": [9, 4, 9],
+			"faces": {
+				"north": {"uv": [8.5, 1, 9.5, 2], "texture": "#0"},
+				"east": {"uv": [8.5, 1, 9.5, 2], "texture": "#0"},
+				"south": {"uv": [8.5, 1, 9.5, 2], "texture": "#0"},
+				"west": {"uv": [8.5, 1, 9.5, 2], "texture": "#0"},
+				"up": {"uv": [8.5, 0, 9.5, 1], "texture": "#0"},
+				"down": {"uv": [8.5, 0, 9.5, 1], "texture": "#0"}
+			}
+		},
+		{
+			"name": "needle",
+			"from": [7.5, 3, 9],
+			"to": [8.5, 4, 13],
+			"faces": {
+				"north": {"uv": [9.5, 0, 10, 0.5], "texture": "#0"},
+				"east": {"uv": [9.5, 0, 11.5, 0.5], "texture": "#0"},
+				"south": {"uv": [11, 0, 11.5, 0.5], "texture": "#0"},
+				"west": {"uv": [9.5, 0, 11.5, 0.5], "texture": "#0"},
+				"up": {"uv": [9.5, 0, 11.5, 0.5], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [9.5, 0, 11.5, 0.5], "rotation": 90, "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "needle",
+			"origin": [8, 0, 8],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

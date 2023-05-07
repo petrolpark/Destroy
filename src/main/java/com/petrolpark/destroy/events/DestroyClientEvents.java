@@ -6,6 +6,7 @@ import java.util.List;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositions;
 import com.petrolpark.destroy.item.DestroyItems;
+import com.petrolpark.destroy.item.renderer.SeismometerItemRenderer;
 import com.simibubi.create.foundation.config.AllConfigs;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.TooltipHelper;
@@ -14,6 +15,7 @@ import com.simibubi.create.foundation.utility.Components;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -56,5 +58,10 @@ public class DestroyClientEvents {
 				itemTooltip.addAll(0, toolTip);
 			};
         };
+    };
+
+    @SubscribeEvent
+    public static void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.START) SeismometerItemRenderer.tick();
     };
 };

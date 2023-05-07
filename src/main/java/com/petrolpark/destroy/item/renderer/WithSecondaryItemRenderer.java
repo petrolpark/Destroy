@@ -2,7 +2,6 @@ package com.petrolpark.destroy.item.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.item.WithSecondaryItem;
-import com.simibubi.create.foundation.item.render.CreateCustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 
@@ -38,7 +37,7 @@ public class WithSecondaryItemRenderer extends CustomRenderedItemModelRenderer<W
         return new WithSecondaryItemModel(originalModel);
     };
 
-    public static class WithSecondaryItemModel extends CreateCustomRenderedItemModel {
+    public static class WithSecondaryItemModel extends DestroyCustomRenderedItemModel {
         public WithSecondaryItemModel(BakedModel template){
             super(template, "");
         };

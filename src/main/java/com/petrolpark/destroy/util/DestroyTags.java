@@ -43,7 +43,6 @@ public class DestroyTags {
         SALT,
         SCHEMATICANNON_FUEL,
         SECONDARY_EXPLOSIVE("explosive/secondary"),
-        SEISMOGRAPH,
         SPRAY_BOTTLE,
         SYRINGE,
         VULCANIZER,
@@ -77,8 +76,7 @@ public class DestroyTags {
         provider.tag(DestroyItemTags.FERTILIZER.tag)
             .add(Items.BONE_MEAL);
         provider.tag(DestroyItemTags.PAPER_PULPABLE.tag)
-            .add(Items.PAPER, Items.SUGAR)
-            .addTag(DestroyItemTags.SEISMOGRAPH.tag);
+            .add(Items.PAPER, Items.SUGAR);
         provider.tag(DestroyItemTags.SCHEMATICANNON_FUEL.tag)
             .add(Items.GUNPOWDER)
             .addTag(DestroyItemTags.PRIMARY_EXPLOSIVE.tag)

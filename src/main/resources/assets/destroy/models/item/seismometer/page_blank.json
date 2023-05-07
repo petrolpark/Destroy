@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "destroy:item/seismometer_page_blank",
+		"particle": "destroy:item/siesmometer"
+	},
+	"elements": [
+		{
+			"name": "page",
+			"from": [5, 2.1, 5.5],
+			"to": [11, 2.1, 13.5],
+			"faces": {
+				"north": {"uv": [0, 0, 6, 0], "texture": "#1"},
+				"east": {"uv": [0, 0, 8, 0], "texture": "#1"},
+				"south": {"uv": [0, 0, 6, 0], "texture": "#1"},
+				"west": {"uv": [0, 0, 8, 0], "texture": "#1"},
+				"up": {"uv": [0, 0, 16, 12], "rotation": 90, "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 12], "rotation": 90, "texture": "#1"}
+			}
+		}
+	]
+}

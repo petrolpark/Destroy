@@ -4,6 +4,7 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.network.packet.CryingS2CPacket;
 import com.petrolpark.destroy.network.packet.EvaporatingFluidS2CPacket;
 import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
+import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -47,6 +48,12 @@ public class DestroyMessages {
             .decoder(EvaporatingFluidS2CPacket::new)
             .encoder(EvaporatingFluidS2CPacket::toBytes)
             .consumerMainThread(EvaporatingFluidS2CPacket::handle)
+            .add();
+
+        net.messageBuilder(SeismometerSpikeS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(SeismometerSpikeS2CPacket::new)
+            .encoder(SeismometerSpikeS2CPacket::toBytes)
+            .consumerMainThread(SeismometerSpikeS2CPacket::handle)
             .add();
 
         //TODO maybe make a convienience method for registering packets

@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "IFP",
+      "BBB"
+    ],
+    "key": {
+      "I": {
+        "item": "minecraft:iron_block"
+      },
+      "F": {
+        "item": "minecraft:feather"
+      },
+      "P": {
+        "item": "minecraft:paper"
+      },
+      "B": {
+        "item": "create:brass_casing"
+      }
+    },
+    "result": {
+      "item": "destroy:seismometer",
+      "count": 1
+    }
+  }

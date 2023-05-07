@@ -40,6 +40,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.event.level.SleepFinishedTimeEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
@@ -67,6 +68,7 @@ import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddiction
 import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositions;
 import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositionsProvider;
 import com.petrolpark.destroy.commands.BabyBlueAddictionCommand;
+import com.petrolpark.destroy.commands.CrudeOilCommand;
 import com.petrolpark.destroy.commands.PollutionCommand;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
@@ -74,6 +76,8 @@ import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.SyringeItem;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
+import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
+import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.petrolpark.destroy.world.village.DestroyTrades;
 import com.petrolpark.destroy.world.village.DestroyVillageAddition;
@@ -139,15 +143,18 @@ public class DestroyServerEvents {
 
     @SubscribeEvent
     public static void onCommandRegister(RegisterCommandsEvent event) {
+        new CrudeOilCommand(event.getDispatcher());
         new BabyBlueAddictionCommand(event.getDispatcher());
         new PollutionCommand(event.getDispatcher());
     };
 
     @SubscribeEvent
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
+        event.register(ChunkCrudeOil.class);
         event.register(LevelPollution.class);
         event.register(PlayerBabyBlueAddiction.class);
         event.register(PlayerPreviousPositions.class);
+        event.register(PlayerCrouching.class);
     };
 
     @SubscribeEvent
@@ -173,9 +180,6 @@ public class DestroyServerEvents {
         BlockState stateOn = player.getBlockStateOn();
         if (player.isCrouching() && stateOn.getBlock() == Blocks.WATER_CAULDRON && stateOn.getValue(BlockStateProperties.LEVEL_CAULDRON) == 1) {
         };
-
-        LevelChunk chunk= player.getLevel().getChunkAt(player.blockPosition());
-        chunk.getCapability(ChunkCrudeOil.Provider.CHUNK_CRUDE_OIL).ifPresent(crudeOil -> crudeOil.generate(chunk, player));
     };
 
     @SubscribeEvent
@@ -203,11 +207,11 @@ public class DestroyServerEvents {
             case NEUTRAL:
                 break;
             // Don't ignore these sounds:
-            // case BLOCKS:
-            // case HOSTILE:
-            // case MASTER:
-            // case RECORDS:
-            // case WEATHER:
+            case BLOCKS:
+            case HOSTILE:
+            case MASTER:
+            case RECORDS:
+            case WEATHER:
             default:
                 Vec3 pos = event.getPosition();
                 List<Entity> nearbyEntities = event.getLevel().getEntities(null, new AABB(pos.add(new Vec3(-5,-5,-5)), pos.add(new Vec3(5,5,5))));
@@ -377,6 +381,32 @@ public class DestroyServerEvents {
         };
     };
 
+    @SubscribeEvent
+    public static void onExplosion(ExplosionEvent event) {
+        Level level = event.getLevel();
+        level.getEntitiesOfClass(Player.class, AABB.ofSize(event.getExplosion().getPosition(), 16, 16, 16), player -> true).forEach(player -> {
+            boolean holdingSeismometer = false;
+            for (InteractionHand hand : InteractionHand.values()) {
+                ItemStack itemStack = player.getItemInHand(hand);
+                if (DestroyItems.SEISMOMETER.isIn(itemStack)) holdingSeismometer = true;
+            };
+            if (holdingSeismometer) {
+                // Generate the Oil
+                LevelChunk chunk = level.getChunkAt(player.getOnPos());
+                int bucketsOfOil = chunk.getCapability(ChunkCrudeOil.Provider.CHUNK_CRUDE_OIL).map(crudeOil -> {
+                    crudeOil.generate(chunk, player);
+                    return crudeOil.getAmount();
+                }).orElse(0) / 1000;
+                // Let the Player know how much Oil there is
+                player.displayClientMessage(DestroyLang.translate("tooltip.seismometer.crude_oil", bucketsOfOil).component(), true);
+                // Update the animation of the Seismometer(s)
+                if (player instanceof ServerPlayer serverPlayer) DestroyMessages.sendToClient(new SeismometerSpikeS2CPacket(), serverPlayer);
+                // Award Advancement if some oil was found
+                if (bucketsOfOil > 0) DestroyAdvancements.USE_SEISMOMETER.award(level, player);
+            };
+        });
+    };
+
     @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 	public static class ModBusEvents {
 
@@ -400,5 +430,5 @@ public class DestroyServerEvents {
 			}
 		}
 
-	}
+	};
 };

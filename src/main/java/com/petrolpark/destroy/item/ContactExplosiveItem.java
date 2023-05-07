@@ -14,7 +14,7 @@ public class ContactExplosiveItem extends Item {
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         if (entity.isOnGround()) {
-            entity.getLevel().explode(entity, entity.getX(), entity.getY(), entity.getZ(), 1, Explosion.BlockInteraction.NONE);
+            entity.getLevel().explode(entity, entity.getX(), entity.getY(), entity.getZ(), 0.5f, Explosion.BlockInteraction.NONE);
             entity.kill();
             return true;
         };

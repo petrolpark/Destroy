@@ -36,8 +36,13 @@ public class ChunkCrudeOil {
             // Don't generate any oil if the value is less than a threshold
             amount = value < 0.3d ? 0 : (int)(value * 100000d);
         
+            //TODO check for Player luck
             generated = true;
         };
+    };
+
+    public int getAmount() {
+        return amount;
     };
 
     public static class Provider implements ICapabilityProvider, INBTSerializable<CompoundTag> {

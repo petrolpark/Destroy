@@ -1,7 +1,6 @@
 {
   "values": [
     "minecraft:paper",
-    "minecraft:sugar",
-    "#destroy:seismograph"
+    "minecraft:sugar"
   ]
 }

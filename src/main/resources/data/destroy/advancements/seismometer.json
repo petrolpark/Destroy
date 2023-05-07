@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:root",
+    "criteria": {
+      "use": {
+        "conditions": {},
+        "trigger": "destroy:use_seismometer"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.seismometer.description"
+      },
+      "icon": {
+        "item": "destroy:seismometer"
+      },
+      "title": {
+        "translate": "advancement.destroy.seismometer"
+      }
+    },
+    "requirements": [
+      [
+        "use"
+      ]
+    ]
+  }

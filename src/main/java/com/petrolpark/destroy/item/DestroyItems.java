@@ -275,6 +275,17 @@ public class DestroyItems {
     SOAP = REGISTRATE.item("soap", Item::new)
         .register();
 
+    static {
+        REGISTRATE.startSection(AllSections.LOGISTICS);
+    };
+
+    public static final ItemEntry<SeismometerItem>
+
+    SEISMOMETER = REGISTRATE.item("seismometer", SeismometerItem::new)
+        .properties(p -> p
+            .stacksTo(1)
+        ).register();
+
     // TOYS
 
     static {
@@ -304,18 +315,6 @@ public class DestroyItems {
         .register(),
     SUNSCREEN_BOTTLE = REGISTRATE.item("sunscreen_bottle", Item::new)
         .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
-        .register(),
-    
-    // SEISMOGRAPHS
-
-    SEISMOGRAPH_GOOD = REGISTRATE.item("seismograph_good", Item::new)
-        .tag(DestroyItemTags.SEISMOGRAPH.tag)
-        .register(),
-    SEISMOGRAPH_MIDDLE = REGISTRATE.item("seismograph_middle", Item::new)
-        .tag(DestroyItemTags.SEISMOGRAPH.tag)
-        .register(),
-    SEISMOGRAPH_BAD = REGISTRATE.item("seismograph_bad", Item::new)
-        .tag(DestroyItemTags.SEISMOGRAPH.tag)
         .register(),
 
     // SILICA

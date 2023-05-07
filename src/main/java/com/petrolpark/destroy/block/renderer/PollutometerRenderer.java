@@ -9,7 +9,6 @@ import com.simibubi.create.foundation.render.SuperByteBuffer;
 import com.simibubi.create.foundation.tileEntity.renderer.SafeTileEntityRenderer;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -31,18 +30,18 @@ public class PollutometerRenderer extends SafeTileEntityRenderer<PollutometerBlo
 
         ms.pushPose();
         SuperByteBuffer anenometerBuffer = CachedBufferer.partial(DestroyPartials.POLLUTOMETER_ANEMOMETER, blockState);
-        draw(anenometerBuffer, -renderTick / 8f, ms, vc);
+        draw(anenometerBuffer, -renderTick / 8f, ms, vc, light);
         ms.popPose();
 
         ms.pushPose();
         SuperByteBuffer weathervaneBuffer = CachedBufferer.partial(DestroyPartials.POLLUTOMETER_WEATHERVANE, blockState);
-        draw(weathervaneBuffer, Mth.PI / 4 + Mth.sin((float) ((renderTick / 16) % (2 * Math.PI))) / 24f, ms, vc);
+        draw(weathervaneBuffer, Mth.PI / 4 + Mth.sin((float) ((renderTick / 16) % (2 * Math.PI))) / 24f, ms, vc, light);
         ms.popPose();
     };
 
-    private static void draw(SuperByteBuffer buffer, float horizontalAngle, PoseStack ms, VertexConsumer vc) {
+    private static void draw(SuperByteBuffer buffer, float horizontalAngle, PoseStack ms, VertexConsumer vc, int light) {
 		buffer.rotateCentered(Direction.UP, horizontalAngle)
-			.light(LightTexture.FULL_BRIGHT)
+			.light(light)
 			.renderInto(ms, vc);
 	};
 

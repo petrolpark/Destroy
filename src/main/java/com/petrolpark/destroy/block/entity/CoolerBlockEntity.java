@@ -203,7 +203,7 @@ public class CoolerBlockEntity extends SmartTileEntity implements IHaveGoggleInf
 		Vec3 v = c.add(VecHelper.offsetRandomly(Vec3.ZERO, r, .125f)
 			.multiply(1, 0, 1));
 		
-		if (r.nextInt(coldnessLevel == ColdnessLevel.IDLE ? 16 : 4) != 0) return; // Spawn more Particles if we're Frosting vs not doing anything
+		if (r.nextInt(coldnessLevel == ColdnessLevel.IDLE ? 32 : 8) != 0) return; // Spawn more Particles if we're Frosting vs not doing anything
 
 		boolean empty = level.getBlockState(getBlockPos().above()) // If the Block above is occupied we want to spawn fewer Particles
 			.getCollisionShape(getLevel(), getBlockPos().above())

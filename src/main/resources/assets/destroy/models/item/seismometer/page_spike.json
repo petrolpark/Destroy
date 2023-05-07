@@ -1,0 +1,6 @@
+{
+    "parent": "destroy:item/seismometer/page_blank",
+    "textures": {
+      "1": "destroy:item/seismometer_page_spike"
+    }
+  }
