@@ -2,7 +2,7 @@
 
 Destroy is a chemistry-themed add-on to the popular Create mod. Right now it's under development.
 
-Find out more at: https://www.curseforge.com/minecraft/mc-mods/create-destroy
+Find out more on the [CurseForge](https://www.curseforge.com/minecraft/mc-mods/create-destroy) and [Modrinth](https://modrinth.com/mod/destroy/) pages.
 
 # License
 
@@ -14,7 +14,7 @@ Henry Warburton reserves all right to the song 'Spectrum' and associated sound f
 
 ## Software
 
-The rest of Destroy is available under the MIT License (https://tldrlegal.com/license/mit-license).
+The rest of Destroy is available under the [MIT License](https://tldrlegal.com/license/mit-license).
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (excluding the sound files associated with the Music) (the "Software"), to deal
