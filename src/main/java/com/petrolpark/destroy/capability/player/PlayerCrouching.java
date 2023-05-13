@@ -15,6 +15,7 @@ import net.minecraftforge.common.util.LazyOptional;
 public class PlayerCrouching {
 
     public int ticksCrouching; // How long the Player has been crouching
+    public int ticksUrinating; // How long the Player has been urinating
 
     public static class Provider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
@@ -33,13 +34,17 @@ public class PlayerCrouching {
         @Override
         public CompoundTag serializeNBT() {
             CompoundTag tag = new CompoundTag();
-            tag.putInt("Crouching", createPlayerCrouching().ticksCrouching);
+            PlayerCrouching playerCrouching = createPlayerCrouching();
+            tag.putInt("Crouching", playerCrouching.ticksCrouching);
+            tag.putInt("Urinating", playerCrouching.ticksUrinating);
             return tag;
         };
 
         @Override
         public void deserializeNBT(CompoundTag tag) {
-            createPlayerCrouching().ticksCrouching = tag.getInt("Crouching");
+            PlayerCrouching playerCrouching = createPlayerCrouching();
+            playerCrouching.ticksCrouching = tag.getInt("Crouching");
+            playerCrouching.ticksUrinating = tag.getInt("Urinating");
         };
 
         @Override

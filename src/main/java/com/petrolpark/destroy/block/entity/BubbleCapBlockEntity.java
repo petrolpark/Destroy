@@ -349,11 +349,6 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
     public static MixtureContentsDisplaySource BUBBLE_CAP_DISPLAY_SOURCE = new MixtureContentsDisplaySource() {
 
         @Override
-        protected boolean allowsLabeling(DisplayLinkContext context) {
-            return true;
-        };
-
-        @Override
         public FluidStack getFluidStack(DisplayLinkContext context) {
             if (context.getSourceTE() instanceof BubbleCapBlockEntity bubbleCap) {
                 return bubbleCap.getTank().getFluid();

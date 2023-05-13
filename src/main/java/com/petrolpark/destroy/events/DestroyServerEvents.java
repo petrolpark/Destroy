@@ -3,6 +3,7 @@ package com.petrolpark.destroy.events;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
@@ -46,6 +47,7 @@ import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -72,12 +74,14 @@ import com.petrolpark.destroy.commands.CrudeOilCommand;
 import com.petrolpark.destroy.commands.PollutionCommand;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
+import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.SyringeItem;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
 import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
 import com.petrolpark.destroy.util.DestroyLang;
+import com.petrolpark.destroy.util.InebriationHelper;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.petrolpark.destroy.world.village.DestroyTrades;
 import com.petrolpark.destroy.world.village.DestroyVillageAddition;
@@ -85,6 +89,7 @@ import com.petrolpark.destroy.world.village.DestroyVillagers;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.api.event.TileEntityBehaviourEvent;
+import com.simibubi.create.content.contraptions.fluids.FluidFX;
 import com.simibubi.create.content.contraptions.fluids.actors.ItemDrainTileEntity;
 import com.simibubi.create.content.contraptions.fluids.actors.SpoutTileEntity;
 import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
@@ -117,6 +122,10 @@ public class DestroyServerEvents {
             // Add Previous Positions Capability
             if (!player.getCapability(PlayerPreviousPositionsProvider.PLAYER_PREVIOUS_POSITIONS).isPresent()) {
                 event.addCapability(Destroy.asResource("previous_positions"), new PlayerPreviousPositionsProvider());
+            };
+            // Add Crouching Capability
+            if (!player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).isPresent()) {
+                event.addCapability(Destroy.asResource("crouching"), new PlayerCrouching.Provider());
             };
         };
     };
@@ -161,6 +170,7 @@ public class DestroyServerEvents {
     public static void playerTick(TickEvent.PlayerTickEvent event) {
         if (event.side.isClient()) return;
         Player player = event.player;
+        Level level = player.getLevel();
 
         // Store the positions of this player for use with Chorus Wine
         player.getCapability(PlayerPreviousPositionsProvider.PLAYER_PREVIOUS_POSITIONS).ifPresent((playerPreviousPositions -> {
@@ -170,15 +180,33 @@ public class DestroyServerEvents {
             };
         }));
 
-        // Update the time this Player has been crouching
+        // Update the time this Player has been crouching/urinating
+        BlockPos posOn = player.getOnPos();
+        BlockState stateOn = level.getBlockState(posOn);
+        boolean urinating = stateOn.getBlock() == Blocks.WATER_CAULDRON && stateOn.getValue(BlockStateProperties.LEVEL_CAULDRON) == 1 && player.hasEffect(DestroyMobEffects.INEBRIATION.get());
         if (player.isCrouching()) {
-            player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> crouchingCap.ticksCrouching++);
+            player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> {
+                crouchingCap.ticksCrouching++;
+                if (urinating) {crouchingCap.ticksUrinating++;} else crouchingCap.ticksUrinating = 0;
+            });
         } else {
-            player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> crouchingCap.ticksCrouching = 0);
+            player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> {
+                crouchingCap.ticksCrouching = 0;
+                crouchingCap.ticksUrinating = 0;
+            });
         };
 
-        BlockState stateOn = player.getBlockStateOn();
-        if (player.isCrouching() && stateOn.getBlock() == Blocks.WATER_CAULDRON && stateOn.getValue(BlockStateProperties.LEVEL_CAULDRON) == 1) {
+        // Enact the effects of urinating
+        int ticksUrinating = player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).map(crouchingCap -> crouchingCap.ticksUrinating).orElse(0);
+        if (ticksUrinating > 0) {
+            Vec3 pos = player.position();
+            if (level instanceof ServerLevel serverLevel) serverLevel.sendParticles(FluidFX.getFluidParticle(new FluidStack(DestroyFluids.URINE.get(), 1000)), pos.x, pos.y + 0.5f, pos.z, 1, 0d, -0.07d, 0d, 0d);
+            //TODO sound
+            if (ticksUrinating == 100) {
+                InebriationHelper.increaseInebriation(player, -1);
+                DestroyAdvancements.URINATE.award(level, player);
+                level.setBlockAndUpdate(posOn, DestroyBlocks.URINE_CAULDRON.getDefaultState());
+            };
         };
     };
 

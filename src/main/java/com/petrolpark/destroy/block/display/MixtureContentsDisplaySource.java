@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import com.google.common.collect.ImmutableList;
 import com.mongodb.lang.Nullable;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -15,9 +14,7 @@ import com.simibubi.create.content.logistics.block.display.target.DisplayTargetS
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
 import com.simibubi.create.foundation.utility.Lang;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -28,6 +25,7 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
 
         List<MutableComponent> tooltip = new ArrayList<>();
         MutableComponent name;
+        String temperature = "";
 
         FluidStack fluidStack = getFluidStack(context);
         if (fluidStack == null || fluidStack.isEmpty()) return tooltip;
@@ -36,16 +34,16 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
         if (mixtureTag.isEmpty()) { // If this is not a Mixture
             name = fluidStack.getDisplayName().copy();
         } else { // If this is a Mixture
-            boolean iupac = false; //TODO change
+            boolean iupac = context.sourceConfig().getBoolean("MoleculeNameType");
             TemperatureUnit temperatureUnit = TemperatureUnit.values()[context.sourceConfig().getInt("TemperatureUnit")];
             ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(mixtureTag);
 
             name = mixture.getName().copy();
-            tooltip.add(Component.literal(temperatureUnit.of(mixture.getTemperature())));
+            temperature = temperatureUnit.of(mixture.getTemperature());
             tooltip.addAll(mixture.getContentsTooltip(iupac).stream().map(c -> c.copy()).toList());
         };
 
-        tooltip.add(0, Component.literal(context.sourceConfig().getString("Label") + " ").append(name).append(" "+fluidStack.getAmount()).append(Lang.translateDirect("generic.unit.millibuckets")));
+        tooltip.add(0, name.append(" "+fluidStack.getAmount()).append(Lang.translateDirect("generic.unit.millibuckets")).append(" "+temperature));
 
         return tooltip;
     };
@@ -57,33 +55,13 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
     @Nullable
     public abstract FluidStack getFluidStack(DisplayLinkContext context);
 
-    protected abstract boolean allowsLabeling(DisplayLinkContext context);
-
 	@Override
 	public void initConfigurationWidgets(DisplayLinkContext context, ModularGuiLineBuilder builder, boolean isFirstLine) {
-		if (allowsLabeling(context)) {
-            if (isFirstLine) {
-                addLabelingTextBox(builder);
-            } else {
-                addTemperatureUnitSelection(builder);
-            };
+		if (isFirstLine) {
+            addTemperatureUnitSelection(builder);
         } else {
-            if (isFirstLine) addTemperatureUnitSelection(builder);
+            addMoleculeNameTypeSelection(builder);
         };
-	};
-
-    /**
-     * Copied from the {@link com.simibubi.create.content.logistics.block.display.source.SingleLineDisplaySource Create source code}.
-     * @param builder
-     */
-	private void addLabelingTextBox(ModularGuiLineBuilder builder) {
-		builder.addTextInput(0, 137, (e, t) -> {
-			e.setValue("");
-			t.withTooltip(ImmutableList.of(Lang.translateDirect("display_source.label")
-				.withStyle(s -> s.withColor(0x5391E1)),
-				Lang.translateDirect("gui.schedule.lmb_edit")
-					.withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)));
-		}, "Label");
 	};
 
     private void addTemperatureUnitSelection(ModularGuiLineBuilder builder) {
@@ -91,6 +69,13 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
             si.forOptions(List.of(DestroyLang.translate("display_source.mixture.temperature_unit.kelvin").component(), DestroyLang.translate("display_source.mixture.temperature_unit.celcius").component(), DestroyLang.translate("display_source.mixture.temperature_unit.farenheit").component()))
             .titled(DestroyLang.translate("display_source.mixture.temperature_unit").component());   
         }, "TemperatureUnit");
+    };
+
+    private void addMoleculeNameTypeSelection(ModularGuiLineBuilder builder) {
+        builder.addSelectionScrollInput(0, 137, (si, l) -> {
+            si.forOptions(List.of(DestroyLang.translate("display_source.mixture.molecule_name_type.iupac").component(), DestroyLang.translate("display_source.mixture.molecule_name_type.common").component()))
+            .titled(DestroyLang.translate("display_source.mixture.molecule_name_type").component());
+        }, "MoleculeNameType");
     };
     
     protected enum TemperatureUnit {
