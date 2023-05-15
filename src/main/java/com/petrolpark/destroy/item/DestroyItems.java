@@ -286,6 +286,14 @@ public class DestroyItems {
             .stacksTo(1)
         ).register();
 
+    public static final ItemEntry<TestTubeItem>
+
+    TEST_TUBE = REGISTRATE.item("test_tube", TestTubeItem::new)
+        .properties(p -> p
+            .stacksTo(1)
+        ).color(() -> () -> TestTubeItem::getColor)
+        .register();
+
     // TOYS
 
     static {

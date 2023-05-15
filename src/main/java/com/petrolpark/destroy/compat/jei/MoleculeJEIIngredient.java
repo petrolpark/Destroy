@@ -5,10 +5,12 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
-import com.petrolpark.destroy.item.DestroyItems;
+import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.petrolpark.destroy.item.MoleculeDisplayItem;
+import com.petrolpark.destroy.item.TestTubeItem;
 
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientRenderer;
@@ -18,9 +20,16 @@ import mezz.jei.common.render.ItemStackRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 
 public class MoleculeJEIIngredient {
+
+    private static final ItemStack illegalFish;
+    static {
+        illegalFish = new ItemStack(Items.COD);
+        illegalFish.setHoverName(Component.literal("not allowed hypothetical molecules in solution"));
+    };
 
     public static final IIngredientType<Molecule> TYPE = new IIngredientType<Molecule>() {
 
@@ -65,7 +74,10 @@ public class MoleculeJEIIngredient {
 
         @Override
         public ItemStack getCheatItemStack(Molecule ingredient) {
-            return DestroyItems.ABS.asStack(); //TODO replace with test tube
+            if (ingredient.isHypothetical()) return illegalFish;
+            Mixture mixture = new Mixture();
+            mixture.addMolecule(ingredient, ingredient.getPureConcentration());
+            return TestTubeItem.of(MixtureFluid.of(TestTubeItem.CAPACITY, mixture, ""));
         };
     };
 

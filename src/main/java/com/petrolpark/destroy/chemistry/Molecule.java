@@ -57,6 +57,11 @@ public class Molecule implements INameableProduct {
      * The RAM of this Molecule, in grams per mole.
      */
     private float mass;
+
+    /**
+     * The density of this Molecule, in grams per Bucket
+     */
+    private float density;
     /**
      * The {@link ReadOnlyMixture#temperature temperature} (in Kelvins) at which this Molecule forms a gas.
      */
@@ -157,8 +162,10 @@ public class Molecule implements INameableProduct {
         }
     };
 
+    /**
+     * @deprecated
+     */
     @Deprecated
-    //TODO remove
     public void pee() {
         System.out.println(structure.serialize());
     };
@@ -194,6 +201,20 @@ public class Molecule implements INameableProduct {
      */
     public float getMass() {
         return mass;
+    };
+
+    /**
+     * The density of this Molecule when pure, in grams per Bucket.
+     */
+    public float getDensity() {
+        return density;
+    };
+
+    /**
+     * Get the 'concentration' (molar density) of this Molecule when it is the only Molecule in a solution.
+     */
+    public float getPureConcentration() {
+        return getMass() / getDensity();
     };
 
     /**
@@ -394,6 +415,7 @@ public class Molecule implements INameableProduct {
 
         private Molecule molecule;
 
+        private Boolean hasForcedDensity = false; // Whether this molecule has a custom density or it should be calculated
         private Boolean hasForcedBoilingPoint = false; // Whether this molecule has a custom boiling point or it should be calculated
         private Boolean hasForcedDipoleMoment = false; // Whether this molecule has a forced dipole moment or it should be calculated
 
@@ -437,6 +459,16 @@ public class Molecule implements INameableProduct {
          */
         public MoleculeBuilder structure(Formula structure) {
             molecule.structure = structure;
+            return this;
+        };
+
+        /**
+         * Set the {@link Molecule#density density} of this Molecule in grams per Bucket.
+         * @param density
+         * @return This Molecule Builder
+         */
+        public MoleculeBuilder density(float density) {
+            molecule.density = density;
             return this;
         };
 
@@ -538,6 +570,10 @@ public class Molecule implements INameableProduct {
 
             if (molecule.getMolecularFormula().containsKey(Element.R_GROUP)) {
                 tag(DestroyMolecules.Tags.HYPOTHETICAL);
+            };
+
+            if (!hasForcedDensity) {
+                molecule.density = 1000f;
             };
             
             if (!hasForcedBoilingPoint) {

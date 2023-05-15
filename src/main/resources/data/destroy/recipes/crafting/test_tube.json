@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "P P",
+      "P P",
+      " P "
+    ],
+    "key": {
+      "P": {
+        "item": "minecraft:glass_pane"
+      }
+    },
+    "result": {
+      "item": "destroy:test_tube"
+    }
+  }

@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
-import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.NBTHelper;
@@ -40,7 +39,7 @@ public class ReadOnlyMixture {
     /**
      * The full translation key of this Mixture if it has a custom name, for example {@code destroy.mixture.brine}.
      */
-    private String translationKey;
+    protected String translationKey;
     
     /**
      * How hot (in Kelvins) this Mixture is. Temperature affects the rate of {@link Reaction Reactions}.
@@ -174,6 +173,18 @@ public class ReadOnlyMixture {
     };
 
     /**
+     * Get the list of {@link Molecule Molecules} in this Mixture as a String.
+     * (Used for debugging).
+     */
+    public String getContentsString() {
+        String string = "";
+        for (Entry<Molecule, Float> entry : contents.entrySet()) {
+            string += entry.getKey().getFullID() + " (" + entry.getValue() + "M), ";
+        };
+        return string.substring(0, string.length() - 2);
+    };
+
+    /**
      * The tooltip listing the {@link ReadOnlyMixture#contents contents} of this Mixture.
      * @param iupac Whether to use IUPAC names instead of common names
      */
@@ -206,7 +217,8 @@ public class ReadOnlyMixture {
             return;
         };
 
-        boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
+        boolean iupac = false; //TODO change
+        //boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
 
         List<INameableProduct> products = new ArrayList<>();
         List<Molecule> cations = new ArrayList<>();

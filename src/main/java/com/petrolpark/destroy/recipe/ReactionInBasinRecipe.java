@@ -36,10 +36,11 @@ public class ReactionInBasinRecipe extends MixingRecipe {
 
         // Check all Fluids are Mixturess
         for (FluidStack fluidStack : availableFluids) {
-            if (DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid())) return null;
+            if (!DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid())) return null;
             int amount = fluidStack.getAmount();
             totalAmount += amount;
             Mixture mixture = Mixture.readNBT(fluidStack.getOrCreateTag().getCompound("Mixture"));
+            Destroy.LOGGER.info("Mixing in this sweet mixture "+mixture.getContentsString());
 
             if (mixture.isAtEquilibrium() && availableFluids.size() == 1) return null; // Don't do anything if there is only one Mixture and it is already at equilibrium
 
@@ -48,9 +49,10 @@ public class ReactionInBasinRecipe extends MixingRecipe {
 
         // TODO modify temp according to Heat Level
         Mixture mixture = Mixture.mix(mixtures);
+        Destroy.LOGGER.info("Im left with this Mixture: "+mixture.getContentsString()+" at temperature "+mixture.getTemperature());
         ReactionInBasinResult result = mixture.reactInBasin(); // Mutably react the Mixture
 
-        int duration = result.ticks > 40 ? result.ticks : 40; // Ensure this takes at least 2 seconds
+        int duration = result.ticks() > 40 ? result.ticks() : 40; // Ensure this takes at least 2 seconds
 
         // Set the duration of the Recipe to the time it took to React
         builder.duration(duration);
@@ -65,21 +67,9 @@ public class ReactionInBasinRecipe extends MixingRecipe {
 
     /**
      * The outcome of {@link com.petrolpark.destroy.chemistry.Reaction reacting} a {@link com.petrolpark.destroy.chemistry.Reaction Mixture} in a Basin.
+     * @param ticks The number of ticks it took for the Mixture to reach equilibrium.
+     * @param reactionResults The {@link com.petrolpark.destroy.chemistry.ReactionResult results} of Reacting this Mixture.
      */
-    public static class ReactionInBasinResult {
-        /**
-         * The number of ticks it took for the Mixture to reach equilibrium.
-         */
-        int ticks;
-        /**
-         * The {@link com.petrolpark.destroy.chemistry.ReactionResult results} of Reacting this Mixture.
-         */
-        Set<ReactionResult> reactionResults;
-
-        public ReactionInBasinResult(int ticks, Set<ReactionResult> reactionResults) {
-            this.ticks = ticks;
-            this.reactionResults = reactionResults;
-        };
-    };
+    public static record ReactionInBasinResult(int ticks, Set<ReactionResult> reactionResults) {};
     
 };

@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "T",
+      "P"
+    ],
+    "key": {
+      "P": {
+        "item": "destroy:test_tube"
+      },
+      "T": {
+        "item": "destroy:polytetrafluoroethene"
+      }
+    },
+    "result": {
+      "item": "destroy:syringe"
+    }
+  }

@@ -17,6 +17,7 @@ import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.recipe.ReactionInBasinRecipe.ReactionInBasinResult;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 
 public class Mixture extends ReadOnlyMixture {
 
@@ -67,9 +68,30 @@ public class Mixture extends ReadOnlyMixture {
     };
 
     public static Mixture readNBT(CompoundTag compound) {
-        Mixture mixture = (Mixture)ReadOnlyMixture.readNBT(compound);
-        mixture.refreshPossibleReactions();
+        Mixture mixture = new Mixture();
+
+        mixture.translationKey = compound.getString("TranslationKey"); // Set to "" if the key is not present
+
+        if (compound.contains("Temperature")) mixture.temperature = compound.getFloat("Temperature");
+
+        ListTag contents = compound.getList("Contents", 10);
+        contents.forEach(tag -> {
+            CompoundTag moleculeTag = (CompoundTag) tag;
+            mixture.addMolecule(Molecule.getMolecule(moleculeTag.getString("Molecule")), moleculeTag.getFloat("Concentration"));
+        });
+        mixture.equilibrium = compound.getBoolean("AtEquilibrium");
+
+        mixture.updateName();
+        if (!mixture.equilibrium) mixture.refreshPossibleReactions();
+
         return mixture;
+    };
+
+    @Override
+    public CompoundTag writeNBT() {
+        CompoundTag tag = super.writeNBT();
+        tag.putBoolean("AtEquilibrium", equilibrium);
+        return tag;
     };
 
     /**
@@ -157,7 +179,7 @@ public class Mixture extends ReadOnlyMixture {
     };
 
     /**
-     * Reacts the contents of this Mixture for one tick, if it is not already at equilibrium.
+     * Reacts the contents of this Mixture for one tick, if it is not already at {@link Mixture#equilibrium equilibrium}.
      */
     public Set<ReactionResult> reactForTick() {
 
@@ -178,9 +200,11 @@ public class Mixture extends ReadOnlyMixture {
 
         Collections.sort(orderedReactions, (r1, r2) -> reactionRates.get(r1).compareTo(reactionRates.get(r2))); // Sort the Reactions by rate
 
-        for (Reaction reaction : orderedReactions) { // Go through each Reaction, fastest first
+        doEachReaction: for (Reaction reaction : orderedReactions) { // Go through each Reaction, fastest first
 
             Float molesOfReaction = reactionRates.get(reaction); // We are reacting over one tick, so moles of Reaction that take place in this time = rate of Reaction in M per tick
+
+            Destroy.LOGGER.info("Initial moles of reaction before liminitg reagent stiff applied: "+molesOfReaction);
 
             for (Molecule reactant : reaction.getReactants()) {
                 int reactantMolarRatio = reaction.getReactantMolarRatio(reactant);
@@ -190,12 +214,15 @@ public class Mixture extends ReadOnlyMixture {
                 };
             };
 
+            if (molesOfReaction <= 0f) continue doEachReaction; // Don't bother going any further if this Reaction won't happen
+
             for (Molecule reactant : reaction.getReactants()) {
+                Destroy.LOGGER.info("changing conc. of reactant "+reactant.getFullID());
                 changeConcentrationOf(reactant, - (molesOfReaction * reaction.getReactantMolarRatio(reactant)), false); // Use up the right amount of all the reagents
             };
 
             addEachProduct: for (Molecule product : reaction.getProducts()) {
-                
+                Destroy.LOGGER.info("changing conc. of product "+product.getFullID());
                 if (product.isNovel() && getConcentrationOf(product) == 0f) { // If we have a novel Molecule that we don't think currently exists in the Mixture...
                     if (internalAddMolecule(product, molesOfReaction * reaction.getProductMolarRatio(product), false)) { // ...add it with this method, as this automatically checks for pre-existing novel Molecules, and if it was actually a brand new Molecule...
                         shouldRefreshPossibleReactions = true; // ...flag this
@@ -325,21 +352,21 @@ public class Mixture extends ReadOnlyMixture {
      * This does not update the {@link ReadOnlyMixture#getName name} of the Mixture.
      * @param molecule If not present in the Mixture, will be added to the Mixture
      * @param change The <em>change</em> in concentration, not the new value (can be positive or negative)
-     * @param shouldRefreshReactions Whether to alter the possible {@link Reaction Reactions} in the case that a new Molecule is added to the Mixture
+     * @param shouldRefreshReactions Whether to alter the possible {@link Reaction Reactions} in the case that a new Molecule is added to the Mixture (should almost always be {@code true})
      */
-    private Mixture changeConcentrationOf(Molecule molecule, Float change, boolean shouldRefreshReactions) {
+    private Mixture changeConcentrationOf(Molecule molecule, float change, boolean shouldRefreshReactions) {
         Float currentConcentration = getConcentrationOf(molecule);
 
         if (molecule == DestroyMolecules.PROTON) {
-            Destroy.LOGGER.warn("Attempted to change concentration of H+");
+            Destroy.LOGGER.warn("Attempted to directly change concentration of H+");
             return this; // Concentration of H+ should never be altered by changing H+ concentration directly - only by changing concentration of acids
         };
 
         if (currentConcentration == 0f) {
-            if (change > 0) {
+            if (change > 0f) {
                 internalAddMolecule(molecule, change, shouldRefreshReactions);
-            } else {
-                Destroy.LOGGER.warn("Attempted to change concentration of a Molecule which was not in the Mixture.");
+            } else if (change < 0f) {
+                throw new IllegalArgumentException("Attempted to decrease concentration of Molecule '" + molecule.getFullID()+"', which was not in a Mixture. The Mixture contains " + getContentsString());
             };
         };
 

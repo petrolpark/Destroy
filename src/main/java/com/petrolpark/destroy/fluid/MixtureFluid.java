@@ -50,13 +50,12 @@ public class MixtureFluid extends VirtualFluid {
 
         @Override
         protected int getTintColor(FluidStack stack) {
-            // TODO Auto-generated method stub
-            return 0;
+            return MixtureFluid.getTintColor(stack);
         };
 
         @Override
         protected int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
-            // TODO Auto-generated method stub
+            // As Mixture Fluids are virtual they should never exist in a Fluid State
             return 0;
         };
 
@@ -67,5 +66,9 @@ public class MixtureFluid extends VirtualFluid {
 
     };
 
+    public static int getTintColor(FluidStack stack) {
+        return 0; //TODO Auto-generated method stub
+    };
+
     
-}
+};
