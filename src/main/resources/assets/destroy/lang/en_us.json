@@ -338,7 +338,7 @@
     "destroy.display_source.mixture.temperature_unit.kelvin": "Kelvins",
     "destroy.display_source.mixture.temperature_unit.celcius": "Degrees Celcius",
     "destroy.display_source.mixture.temperature_unit.farenheit": "Degrees Farenheit",
-    "destroy.display_source.mixture.molecule_name_type": "Names of Molecules to Use",
+    "destroy.display_source.mixture.molecule_name_type": "Molecule Names",
     "destroy.display_source.mixture.molecule_name_type.iupac": "IUPAC Names",
     "destroy.display_source.mixture.molecule_name_type.common": "Common Names",
 

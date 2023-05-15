@@ -1,9 +1,9 @@
 {
     "parent": "destroy:urinate",
     "criteria": {
-      "pee": {
+      "otswald_process": {
         "conditions": {},
-        "trigger": "destroy:urinate"
+        "trigger": "destroy:otswald_process"
       }
     },
     "display": {
@@ -20,7 +20,7 @@
     },
     "requirements": [
       [
-        "pee"
+        "otswald_process"
       ]
     ]
   }

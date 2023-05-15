@@ -81,6 +81,7 @@ import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
 import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
 import com.petrolpark.destroy.util.DestroyLang;
+import com.petrolpark.destroy.util.ExplosionHelper;
 import com.petrolpark.destroy.util.InebriationHelper;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.petrolpark.destroy.world.village.DestroyTrades;
@@ -98,6 +99,7 @@ import com.simibubi.create.content.curiosities.weapons.PotatoProjectileEntity;
 import com.simibubi.create.foundation.ModFilePackResources;
 import com.petrolpark.destroy.world.DestroyDamageSources;
 import com.petrolpark.destroy.world.entity.goal.BuildSandCastleGoal;
+import com.petrolpark.destroy.world.explosion.SmartExplosion;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
@@ -188,6 +190,7 @@ public class DestroyServerEvents {
             player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> {
                 crouchingCap.ticksCrouching++;
                 if (urinating) {crouchingCap.ticksUrinating++;} else crouchingCap.ticksUrinating = 0;
+                if (crouchingCap.ticksCrouching > 50 && level instanceof ServerLevel serverLevel) ExplosionHelper.explode(serverLevel, new SmartExplosion(level, null, null, null, player.position(), 3, 0));
             });
         } else {
             player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> {
