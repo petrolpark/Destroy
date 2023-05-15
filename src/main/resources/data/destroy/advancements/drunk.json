@@ -16,7 +16,7 @@
         "translate": "advancement.destroy.drunk.description"
       },
       "icon": {
-        "item": "destroy:thrice_distilled_moonshine_bottle"
+        "item": "destroy:once_distilled_moonshine_bottle"
       },
       "title": {
         "translate": "advancement.destroy.drunk"

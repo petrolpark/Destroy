@@ -15,12 +15,16 @@ import net.minecraft.util.Mth;
 public class LevelPollution {
 
     private Map<PollutionType, Integer> levels;
+    private boolean hasPollutionEverBeenMaxed;
+    private boolean hasPollutionEverBeenFullyReduced;
 
     public LevelPollution() {
         levels = new HashMap<>();
         List.of(PollutionType.values()).forEach(p -> {
             levels.put(p, 0);
         });
+        hasPollutionEverBeenMaxed = false;
+        hasPollutionEverBeenFullyReduced = true;
     };
 
     /**
@@ -33,7 +37,7 @@ public class LevelPollution {
 
     /**
      * Set the value of the given type of Pollution in this Level.
-     * This does not broadcast the change to clients.
+     * This does not broadcast the change to clients or reward advancements.
      * @param pollutionType
      * @param value Will be set within the {@link PollutionType bounds}
      * @return The actual value to which the Pollution level was set
@@ -42,12 +46,32 @@ public class LevelPollution {
         if (pollutionType == null) return 0;
         value = Mth.clamp(value, 0, pollutionType.max);
         levels.replace(pollutionType, value);
+
+        if (
+            levels.get(PollutionType.ACID_RAIN) == PollutionType.ACID_RAIN.max
+            && levels.get(PollutionType.OZONE_DEPLETION) == PollutionType.OZONE_DEPLETION.max
+            && levels.get(PollutionType.SMOG) == PollutionType.SMOG.max
+            && levels.get(PollutionType.GREENHOUSE) == PollutionType.GREENHOUSE.max
+            //currently no radioactivity
+        ) {
+            hasPollutionEverBeenMaxed = true;
+        } else if (
+            hasPollutionEverBeenMaxed
+            && levels.get(PollutionType.ACID_RAIN) == 0
+            && levels.get(PollutionType.OZONE_DEPLETION) == 0
+            && levels.get(PollutionType.SMOG) == 0
+            && levels.get(PollutionType.GREENHOUSE) == 0
+            //currently no radioactivity
+        ) {
+            hasPollutionEverBeenFullyReduced = true;
+        }
+
         return value;
     };
 
     /**
      * Increase the value of the given type of Pollution in this level by the given amount, within the {@link PollutionType bounds} of that type of Pollution.
-     * This does not broadcast the change to clients.
+     * This does not broadcast the change to clients or reward advancements.
      * @param pollutionType
      * @param change Can be positive or negative
      * @return The actual value to which the Pollution level was set
@@ -61,12 +85,30 @@ public class LevelPollution {
         levels.forEach((pollutionType, value) -> {
             tag.putInt(pollutionType.name(), value);
         });
+        tag.putBoolean("EverMaxed", hasPollutionEverBeenMaxed);
+        tag.putBoolean("EverReduced", hasPollutionEverBeenFullyReduced);
     };
   
     public void loadNBTData(CompoundTag tag) {
         levels.keySet().forEach((pollutionType) -> {
             levels.replace(pollutionType, tag.getInt(pollutionType.name()));
         });
+        hasPollutionEverBeenMaxed = tag.getBoolean("EverMaxed");
+        hasPollutionEverBeenFullyReduced = tag.getBoolean("EverReduced");
+    };
+
+    /**
+     * Whether all Pollution Types have had their maximum value at any point in the past or present.
+     */
+    public boolean hasPollutionEverBeenMaxed() {
+        return hasPollutionEverBeenMaxed;
+    };
+
+    /**
+     * Whether every Pollution Type is at 0.
+     */
+    public boolean hasPollutionEverBeenFullyReduced() {
+        return hasPollutionEverBeenFullyReduced;
     };
 
     public enum PollutionType implements INamedIconOptions {
@@ -81,9 +123,9 @@ public class LevelPollution {
 
         RADIOACTIVITY(DestroyIcons.RADIOACTIVITY, 65536);
 
-        private AllIcons icon;
+        private final AllIcons icon;
         // Min is always 0
-        public int max;
+        public final int max;
 
         PollutionType(AllIcons icon, int max) {
             this.icon = icon;

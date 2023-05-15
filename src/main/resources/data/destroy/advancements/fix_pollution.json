@@ -1,0 +1,28 @@
+{
+    "parent": "destroy:pollution",
+    "criteria": {
+      "unpollute": {
+        "conditions": {},
+        "trigger": "destroy:unpollute"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.fix_pollution.description"
+      },
+      "icon": {
+        "item": "minecraft:cornflower"
+      },
+      "title": {
+        "translate": "advancement.destroy.fix_pollution"
+      },
+      "announce_to_chat": false,
+      "frame": "challenge"
+    },
+    "requirements": [
+      [
+        "unpollute"
+      ]
+    ]
+  }

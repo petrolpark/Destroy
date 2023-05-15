@@ -121,6 +121,7 @@ public class DestroyScenes {
             .rightClick(),
             30
         );
+        scene.idle(50);
         scene.world.setBlock(barrel, DestroyBlocks.AGING_BARREL.getDefaultState().setValue(AgingBarrelBlock.IS_OPEN, true), false);
         scene.idle(50);
 

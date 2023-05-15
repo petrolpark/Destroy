@@ -1,11 +1,13 @@
 package com.petrolpark.destroy.util;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
@@ -36,6 +38,13 @@ public class PollutionHelper {
             int newValue = levelPollution.set(pollutionType, value); // Actually set the Pollution level
             if (oldValue != newValue) { // If there has been a change (which needs to be broadcast to clients)
                 DestroyMessages.sendToAllClients(new LevelPollutionS2CPacket(levelPollution));
+            };
+            // Award Advancements for fully polluting/repairing the world
+            if (level instanceof ServerLevel serverLevel && levelPollution.hasPollutionEverBeenMaxed()) {
+                serverLevel.players().forEach(player -> DestroyAdvancements.FULLY_POLLUTE.award(serverLevel, player));
+                if (levelPollution.hasPollutionEverBeenFullyReduced()) {
+                    serverLevel.players().forEach(player -> DestroyAdvancements.UNPOLLUTE.award(serverLevel, player));
+                };
             };
             return newValue;
         }).orElse(0);

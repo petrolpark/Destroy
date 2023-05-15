@@ -1,0 +1,28 @@
+{
+    "parent": "destroy:seismometer",
+    "criteria": {
+      "pollute": {
+        "conditions": {},
+        "trigger": "destroy:fully_pollute"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.pollution.description"
+      },
+      "icon": {
+        "item": "minecraft:dead_bush"
+      },
+      "title": {
+        "translate": "advancement.destroy.pollution"
+      },
+      "announce_to_chat": false,
+      "frame": "challenge"
+    },
+    "requirements": [
+      [
+        "pollute"
+      ]
+    ]
+  }

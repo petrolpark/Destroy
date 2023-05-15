@@ -188,7 +188,7 @@ public class MoleculeRenderer {
      */
     public static float angleBetween(Vec3 vec1, Vec3 vec2, Vec3 plane) {
         float angle = (float)Math.acos(vec1.dot(vec2) / (vec1.length() * vec2.length())) * 180f / Mth.PI;
-        if (vec1.dot(vec2.cross(plane)) < 0f) angle = 360 - angle;
+        if (vec1.dot(vec2.cross(plane)) < 0f) angle = 360f - angle;
         return angle;
     };
 

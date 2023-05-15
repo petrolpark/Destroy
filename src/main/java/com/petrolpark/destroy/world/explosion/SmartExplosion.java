@@ -76,7 +76,7 @@ public class SmartExplosion extends Explosion {
 
     /**
      * {@link SmartExplosion#getBlocksToExplode Determine} the Block Positions affected by an Explosion (stored in {@link net.minecraft.world.level.Explosion#toBlow toBlow}),
-     * and {@link SmartExplosion#explodeEntity deal with Entities}.
+     * and {@link SmartExplosion#explodeEntity deal with Entities}. There should be little need to override this.
      */
     @Override
     public void explode() {
@@ -218,6 +218,7 @@ public class SmartExplosion extends Explosion {
                 .withOptionalParameter(LootContextParams.BLOCK_ENTITY, blockEntity)
                 .withOptionalParameter(LootContextParams.THIS_ENTITY, source)
                 .withOptionalParameter(DestroyLootContextParams.SMART_EXPLOSION, this);
+            if (getSourceMob() instanceof Player player) builder.withLuck(player.getLuck());
             modifyLoot(pos, builder);
             addBlockDrops(pos, state.getDrops(builder));
         };
