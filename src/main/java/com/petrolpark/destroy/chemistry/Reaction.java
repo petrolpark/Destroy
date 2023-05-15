@@ -152,13 +152,13 @@ public class Reaction {
 
         public Reaction build() {
 
-            if (!hasForcedActivationEnergy || reaction.activationEnergy < 0f) {
+            if (!hasForcedActivationEnergy || reaction.activationEnergy <= 0f) {
                 reaction.activationEnergy = 100f;
                 Destroy.LOGGER.warn("Activation energy of reaction '"+reactionString()+"' was missing or invalid, so estimated as 100kJ.");
             };
 
-            if (!hasForcedPreExponentialFactor || reaction.preexponentialFactor < 0f) {
-                reaction.activationEnergy = 1e6f;
+            if (!hasForcedPreExponentialFactor || reaction.preexponentialFactor <= 0f) {
+                reaction.preexponentialFactor = 1e6f;
                 Destroy.LOGGER.warn("Pre-exponential factor of reaction '"+reactionString()+"' was missing or invalid, so was estimated as 1e6.");
             };
 

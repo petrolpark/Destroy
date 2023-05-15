@@ -8,10 +8,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.recipe.ReactionInBasinRecipe;
 import com.simibubi.create.content.contraptions.components.mixer.MechanicalMixerTileEntity;
+import com.simibubi.create.content.contraptions.processing.BasinRecipe;
 import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
 
 import net.minecraft.world.item.ItemStack;
@@ -33,21 +33,13 @@ public class MechanicalMixerTileEntityMixin {
     @SuppressWarnings("null")
     public void inGetMatchingRecipes(CallbackInfoReturnable<List<Recipe<?>>> ci) {
 
-        Destroy.LOGGER.info("Hello im in the market for doing a recipe please");
-
         ((BasinOperatingTileEntityAccessor)this).invokeGetBasin().ifPresent(basin -> {
 
-            Destroy.LOGGER.info("well i sure do have a basin");
-
             if (!basin.hasLevel()) return;
-
-            Destroy.LOGGER.info("well i sure do have a level");
 
             IFluidHandler fluidHandler = basin.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
             IItemHandler itemHandler = basin.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
             if (fluidHandler == null || itemHandler == null) return;
-
-            Destroy.LOGGER.info("well i sure do have fluid and item capabilities");
 
             boolean containsOnlyMixtures = true;
             List<ItemStack> availableItemStacks = new ArrayList<>();
@@ -64,17 +56,14 @@ public class MechanicalMixerTileEntityMixin {
 
             if (!containsOnlyMixtures) return; // If there are Fluids other than Mixtures, don't bother Reacting
             if (availableFluidStacks.size() <= 0) return; // If there are no Mixtures, don't bother Reacting
-
-            Destroy.LOGGER.info("well i sure do have only mixtures");
                 
             for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
                 availableItemStacks.add(itemHandler.getStackInSlot(slot));
             };
               
             // Only return this if there is definitely a Reaction possible
-            Destroy.LOGGER.info("I will react a mixture");
             ReactionInBasinRecipe recipe = ReactionInBasinRecipe.create(availableFluidStacks, availableItemStacks, BasinTileEntity.getHeatLevelOf(basin.getLevel().getBlockState(basin.getBlockPos().below())));
-            if (!(recipe == null)) ci.setReturnValue(List.of(recipe)); // It thinks basin.getLevel() might be null
+            if (!(recipe == null) && BasinRecipe.match(basin, recipe)) ci.setReturnValue(List.of(recipe)); // It thinks basin.getLevel() might be null
         });
     };
     

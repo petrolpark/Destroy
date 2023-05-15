@@ -27,7 +27,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class TestTubeItem extends ItemFluidContainer {
 
-    public static final int CAPACITY = 1000;
+    public static final int CAPACITY = 200;
     private static final DecimalFormat df = new DecimalFormat();
 
     static {

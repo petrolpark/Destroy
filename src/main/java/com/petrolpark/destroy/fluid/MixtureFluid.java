@@ -27,7 +27,7 @@ public class MixtureFluid extends VirtualFluid {
      * @param translationKey The translation key of the custom name of this Mixture (which will override the normal naming algorithm). {@code null} or {@code ""} for no name
      */
     public static FluidStack of(int amount, Mixture mixture, @Nullable String translationKey) {
-        FluidStack fluidStack = new FluidStack(DestroyFluids.MIXTURE.get().getSource(), amount);
+        FluidStack fluidStack = new FluidStack(DestroyFluids.MIXTURE.get(), amount);
         mixture.setTranslationKey(translationKey);
         addMixtureToFluidStack(fluidStack, mixture);
         return fluidStack;

@@ -204,8 +204,6 @@ public class Mixture extends ReadOnlyMixture {
 
             Float molesOfReaction = reactionRates.get(reaction); // We are reacting over one tick, so moles of Reaction that take place in this time = rate of Reaction in M per tick
 
-            Destroy.LOGGER.info("Initial moles of reaction before liminitg reagent stiff applied: "+molesOfReaction);
-
             for (Molecule reactant : reaction.getReactants()) {
                 int reactantMolarRatio = reaction.getReactantMolarRatio(reactant);
                 if (contents.get(reactant) < reactantMolarRatio * molesOfReaction) { // Determine the limiting reagent, if there is one
@@ -217,12 +215,10 @@ public class Mixture extends ReadOnlyMixture {
             if (molesOfReaction <= 0f) continue doEachReaction; // Don't bother going any further if this Reaction won't happen
 
             for (Molecule reactant : reaction.getReactants()) {
-                Destroy.LOGGER.info("changing conc. of reactant "+reactant.getFullID());
                 changeConcentrationOf(reactant, - (molesOfReaction * reaction.getReactantMolarRatio(reactant)), false); // Use up the right amount of all the reagents
             };
 
             addEachProduct: for (Molecule product : reaction.getProducts()) {
-                Destroy.LOGGER.info("changing conc. of product "+product.getFullID());
                 if (product.isNovel() && getConcentrationOf(product) == 0f) { // If we have a novel Molecule that we don't think currently exists in the Mixture...
                     if (internalAddMolecule(product, molesOfReaction * reaction.getProductMolarRatio(product), false)) { // ...add it with this method, as this automatically checks for pre-existing novel Molecules, and if it was actually a brand new Molecule...
                         shouldRefreshPossibleReactions = true; // ...flag this

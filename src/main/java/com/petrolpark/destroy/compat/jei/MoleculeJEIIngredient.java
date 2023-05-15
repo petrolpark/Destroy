@@ -28,7 +28,7 @@ public class MoleculeJEIIngredient {
     private static final ItemStack illegalFish;
     static {
         illegalFish = new ItemStack(Items.COD);
-        illegalFish.setHoverName(Component.literal("not allowed hypothetical molecules in solution"));
+        illegalFish.setHoverName(Component.literal("Impossible Fish"));
     };
 
     public static final IIngredientType<Molecule> TYPE = new IIngredientType<Molecule>() {

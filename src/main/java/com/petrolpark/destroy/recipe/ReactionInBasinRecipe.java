@@ -12,6 +12,7 @@ import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReactionResult;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
+import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.content.contraptions.components.mixer.MixingRecipe;
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder;
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder.ProcessingRecipeParams;
@@ -29,18 +30,19 @@ public class ReactionInBasinRecipe extends MixingRecipe {
 
     @Nullable
     public static ReactionInBasinRecipe create(Collection<FluidStack> availableFluids, Collection<ItemStack> availableItems, HeatLevel heatLevel) {
-        ProcessingRecipeBuilder<ReactionInBasinRecipe> builder = new ProcessingRecipeBuilder<>(ReactionInBasinRecipe::new, Destroy.asResource("reaction_in_basin"));
+        ProcessingRecipeBuilder<ReactionInBasinRecipe> builder = new ProcessingRecipeBuilder<>(ReactionInBasinRecipe::new, Destroy.asResource("reaction_in_basin_"));
 
         Map<Mixture, Double> mixtures = new HashMap<>(availableFluids.size()); // A Map of all available Mixtures to the volume of them available (in Buckets)
         int totalAmount = 0; // How much Mixture there is
 
+        Destroy.LOGGER.info("Ive got these fluids:");
         // Check all Fluids are Mixturess
         for (FluidStack fluidStack : availableFluids) {
+            Destroy.LOGGER.info(fluidStack.getTranslationKey()+" with tag "+fluidStack.getTag().getAsString());
             if (!DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid())) return null;
             int amount = fluidStack.getAmount();
             totalAmount += amount;
             Mixture mixture = Mixture.readNBT(fluidStack.getOrCreateTag().getCompound("Mixture"));
-            Destroy.LOGGER.info("Mixing in this sweet mixture "+mixture.getContentsString());
 
             if (mixture.isAtEquilibrium() && availableFluids.size() == 1) return null; // Don't do anything if there is only one Mixture and it is already at equilibrium
 
@@ -49,10 +51,11 @@ public class ReactionInBasinRecipe extends MixingRecipe {
 
         // TODO modify temp according to Heat Level
         Mixture mixture = Mixture.mix(mixtures);
-        Destroy.LOGGER.info("Im left with this Mixture: "+mixture.getContentsString()+" at temperature "+mixture.getTemperature());
-        ReactionInBasinResult result = mixture.reactInBasin(); // Mutably react the Mixture
+        Destroy.LOGGER.info("Heres my result: "+mixture.getContentsString());
+        ReactionInBasinResult result = mixture.reactInBasin(); // Mutably react the Mixture 
 
-        int duration = result.ticks() > 40 ? result.ticks() : 40; // Ensure this takes at least 2 seconds
+        int duration = 40;
+        //int duration = result.ticks() > 40 ? result.ticks() : 40; // Ensure this takes at least 2 seconds 
 
         // Set the duration of the Recipe to the time it took to React
         builder.duration(duration);
@@ -61,8 +64,18 @@ public class ReactionInBasinRecipe extends MixingRecipe {
 
         // Add all the given Fluid Stacks as "required ingredients"
         availableFluids.stream().map(fluidStack -> FluidIngredient.fromFluidStack(fluidStack)).forEach(fluidIngredient -> builder.require(fluidIngredient));
+        builder.require(DestroyItems.ABS.get());
+
+        Destroy.LOGGER.info("I'm going to need thesefluids please: ");
+        //builder.build().fluidIngredients.forEach(ingredient -> ingredient.getMatchingFluidStacks().forEach(fluidStack -> Destroy.LOGGER.info("required ingredient: "+fluidStack.getTranslationKey()+" with tag "+fluidStack.getTag().getAsString())));
+        //builder.build().fluidResults.forEach(fluidStack -> Destroy.LOGGER.info("resultant fluid: "+fluidStack.getTranslationKey()+" with tag "+fluidStack.getTag().getAsString()));
 
         return builder.build();
+    };
+
+    @Override
+    protected int getMaxFluidInputCount() {
+        return 4;
     };
 
     /**
