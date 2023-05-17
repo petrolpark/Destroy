@@ -1,20 +1,34 @@
 package com.petrolpark.destroy.item;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import com.ibm.icu.text.DecimalFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.chemistry.Molecule;
-import com.petrolpark.destroy.client.gui.JEIMoleculeRenderer;
+import com.petrolpark.destroy.client.gui.MoleculeRenderer;
 import com.petrolpark.destroy.item.renderer.DestroyTooltipComponent;
+import com.petrolpark.destroy.util.DestroyLang;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class MoleculeDisplayItem extends Item {
+
+    private static final DecimalFormat df = new DecimalFormat();
+
+    static {
+        df.setMinimumFractionDigits(1);
+        df.setMinimumFractionDigits(1);
+    };
 
     public MoleculeDisplayItem(Properties properties) {
         super(properties);
@@ -33,16 +47,24 @@ public class MoleculeDisplayItem extends Item {
         return Optional.of(new MoleculeTooltip(molecule));
     };
 
-    private Molecule getMolecule(ItemStack itemStack) {
+    private static Molecule getMolecule(ItemStack itemStack) {
         if (!DestroyItems.MOLECULE_DISPLAY.isIn(itemStack)) return null;
         return Molecule.getMolecule(itemStack.getOrCreateTag().getString("Molecule"));
+    };
+
+    public static List<Component> getLore(Molecule molecule) {
+        List<Component> tooltip = new ArrayList<>();
+        if (molecule == null) return tooltip;
+        if (molecule.getCharge() != 0) tooltip.add(DestroyLang.translate("tooltip.molecule.charge", molecule.getSerializedCharge()).component().withStyle(ChatFormatting.GRAY));
+        tooltip.add(DestroyLang.translate("tooltip.molecule.mass", df.format(molecule.getMass())).component().withStyle(ChatFormatting.GRAY));
+        tooltip.add(DestroyLang.translate("tooltip.molecule.density", df.format(molecule.getDensity())).component().withStyle(ChatFormatting.GRAY));
+        return tooltip;
     };
 
     public static class MoleculeTooltip extends DestroyTooltipComponent<MoleculeTooltip, ClientMoleculeTooltipComponent> {
 
         private final Molecule molecule;
-
-
+    
         public MoleculeTooltip(Molecule molecule) {
             super(ClientMoleculeTooltipComponent::new);
             this.molecule = molecule;
@@ -55,27 +77,52 @@ public class MoleculeDisplayItem extends Item {
 
     public static class ClientMoleculeTooltipComponent implements ClientTooltipComponent {
 
-        private final JEIMoleculeRenderer molecule;
+        private final MoleculeRenderer renderer;
+        private final List<Component> lore;
 
+        private int height;
+        private int width;
+
+        @SuppressWarnings("resource")
         public ClientMoleculeTooltipComponent(MoleculeTooltip tooltipComponent) {
-            molecule = new JEIMoleculeRenderer(tooltipComponent.getMolecule());
+            renderer = new MoleculeRenderer(tooltipComponent.getMolecule());
+            lore = getLore(tooltipComponent.getMolecule());
+
+            Font font = Minecraft.getInstance().font; // Warning is here
+
+            height = renderer.getHeight() + (lore.size() * font.lineHeight) + 15;
+            width = renderer.getWidth() + 15;
+            // Ensure the box is wide enough to render all text
+            for (Component component : lore) {
+                width = Math.max(width, font.width(component));
+            };
         };
 
         @Override
         public int getHeight() {
-            return 20;
+            return height;
         };
 
         @Override
         public int getWidth(Font pFont) {
-            return 20;
+            return width;
         };
 
         @Override
         public void renderImage(Font font, int mouseX, int mouseY, PoseStack poseStack, ItemRenderer itemRenderer, int blitOffset) {
-            poseStack.pushPose();
+            poseStack.pushPose(); 
+
             poseStack.translate(0, 0, 401);
-            molecule.draw(poseStack, mouseX + 10, mouseY + 10);
+            poseStack.pushPose();
+            renderer.render(poseStack, mouseX + 10, mouseY + 10);
+        
+            int textY = renderer.getHeight() + 15;
+            for (Component line : lore) {
+                font.draw(poseStack, line, mouseX, mouseY + textY, 0);
+                textY += font.lineHeight;
+            };
+            poseStack.popPose();
+
             poseStack.popPose();
         };
     };
