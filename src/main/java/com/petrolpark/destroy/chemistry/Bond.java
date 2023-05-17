@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.chemistry;
 
+import com.jozufozu.flywheel.core.PartialModel;
+
 /**
  * A directional covalent Bond between two {@link Atom Atoms}.
  * Within a {@link Formula structure}, each 'bonded' Atom has its own Bond object associated with it.
@@ -91,6 +93,8 @@ public class Bond {
     
         private float singleBondEquivalent;
         private String FROWNSCode;
+
+        private PartialModel partial;
     
         private BondType(float singleBondEquivalent, String FROWNSCode) {
             this.singleBondEquivalent = singleBondEquivalent;
@@ -131,6 +135,14 @@ public class Bond {
                     break;
             };
             return bondType;
+        };
+
+        public PartialModel getPartial() {
+            return partial;
+        };
+    
+        public void setPartial(PartialModel partial) {
+            this.partial = partial;
         };
     };
 };

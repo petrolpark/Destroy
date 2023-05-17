@@ -75,7 +75,7 @@ public class TestTubeItem extends ItemFluidContainer {
 
     public static int getColor(ItemStack stack, int tintIndex) {
         if (tintIndex == 0) {
-            return getContents(stack).map(MixtureFluid::getTintColor).orElse(0);
+            return getContents(stack).map(MixtureFluid::getTintColor).orElse(-1);
         } else {
             return -1;
         }

@@ -19,6 +19,7 @@ import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuild
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -35,10 +36,8 @@ public class ReactionInBasinRecipe extends MixingRecipe {
         Map<Mixture, Double> mixtures = new HashMap<>(availableFluids.size()); // A Map of all available Mixtures to the volume of them available (in Buckets)
         int totalAmount = 0; // How much Mixture there is
 
-        Destroy.LOGGER.info("Ive got these fluids:");
         // Check all Fluids are Mixturess
         for (FluidStack fluidStack : availableFluids) {
-            Destroy.LOGGER.info(fluidStack.getTranslationKey()+" with tag "+fluidStack.getTag().getAsString());
             if (!DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid())) return null;
             int amount = fluidStack.getAmount();
             totalAmount += amount;
@@ -51,11 +50,9 @@ public class ReactionInBasinRecipe extends MixingRecipe {
 
         // TODO modify temp according to Heat Level
         Mixture mixture = Mixture.mix(mixtures);
-        Destroy.LOGGER.info("Heres my result: "+mixture.getContentsString());
         ReactionInBasinResult result = mixture.reactInBasin(); // Mutably react the Mixture 
 
-        int duration = 40;
-        //int duration = result.ticks() > 40 ? result.ticks() : 40; // Ensure this takes at least 2 seconds 
+        int duration = Mth.clamp(result.ticks(), 40, 600); // Ensure this takes at least 2 seconds and less than 30 seconds
 
         // Set the duration of the Recipe to the time it took to React
         builder.duration(duration);
@@ -66,9 +63,8 @@ public class ReactionInBasinRecipe extends MixingRecipe {
         availableFluids.stream().map(fluidStack -> FluidIngredient.fromFluidStack(fluidStack)).forEach(fluidIngredient -> builder.require(fluidIngredient));
         builder.require(DestroyItems.ABS.get());
 
-        Destroy.LOGGER.info("I'm going to need thesefluids please: ");
-        //builder.build().fluidIngredients.forEach(ingredient -> ingredient.getMatchingFluidStacks().forEach(fluidStack -> Destroy.LOGGER.info("required ingredient: "+fluidStack.getTranslationKey()+" with tag "+fluidStack.getTag().getAsString())));
-        //builder.build().fluidResults.forEach(fluidStack -> Destroy.LOGGER.info("resultant fluid: "+fluidStack.getTranslationKey()+" with tag "+fluidStack.getTag().getAsString()));
+        //TODO split result up over multiple tanks if the output is too large
+        //And also tell the Player if their Mixtures can't be mixed because they're in the output tank (not the input tank)
 
         return builder.build();
     };

@@ -3,12 +3,15 @@ package com.petrolpark.destroy.client.gui;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.google.common.collect.ImmutableList;
 import com.jozufozu.flywheel.util.Pair;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Node;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
@@ -24,16 +27,18 @@ public class MoleculeRenderer {
     protected int originY; // Y coordinate of this Molecule render on the screen
 
     List<Pair<Vec3, Atom>> LOCATIONS_OF_ATOMS;
+    List<BondRenderInstance> BONDS;
 
     public MoleculeRenderer(Molecule molecule) {
         LOCATIONS_OF_ATOMS = new ArrayList<>(molecule.getAtoms().size());
+        BONDS = new ArrayList<>();
         if (molecule.getAtoms().size() == 1) {
 
         } else {
             Vec3 startLocation = new Vec3(0f, 0f, 0f);
             Vec3 startDirection = new Vec3(1f, 0f, 0f);
             Vec3 startPlane = new Vec3(0f, 0f, 1f);
-            generateBranch(molecule.getRenderBranch(), startLocation, startDirection, startPlane, rotate(startDirection, startPlane, 90f + (getGeometry(molecule.getRenderBranch().getNodes().get(1)).getAngle() * 0.5f))
+            generateBranch(molecule.getRenderBranch(), startLocation, startDirection, startPlane, rotate(startDirection, startPlane, 180f + (getGeometry(molecule.getRenderBranch().getNodes().get(1)).getAngle() * 0.5f))
                 
             );
         };
@@ -53,26 +58,63 @@ public class MoleculeRenderer {
         Vec3 location = new Vec3(startLocation.x, startLocation.y, startLocation.z); // The working location at which to render Atoms; this moves
         Vec3 zag = new Vec3(zig.x, zig.y, zig.z); // The direction of the next bond; this changes, hopefully in a zigzagular fashion
 
+        boolean temp = false;
+
+        int i = 0; // Total number of nodes rendered
         for (Node node : branch.getNodes()) {
             // Mark the atom for rendering at this location
             LOCATIONS_OF_ATOMS.add(Pair.of(new Vec3(location.x, location.y, location.z), node.getAtom()));
 
+            // If that was the last Atom, there is no need to render the next bond or determine the position of the next Atom
+            if (i >= branch.getNodes().size()) break;
+
+            // Determine the Geometry of this node
+            Geometry geometry = getGeometry(node);
+
             // Determine the orientation of this Atom
-            ConfinedGeometry confinedGeometry = getGeometry(node).confine(zag, plane, direction);
+            ConfinedGeometry confinedGeometry = geometry.confine(zag, plane, direction);
 
             // Get the zag from the zig
             zag = confinedGeometry.getZag();
 
+            // Mark the bond for rendering at this location
+            BONDS.add(new BondRenderInstance(BondType.SINGLE, location.add(zag.scale(0.5f * BOND_LENGTH)), zag));
+
             // Get the position of the next Atom
             location = location.add(zag.scale(BOND_LENGTH));
+
+            // int i = 1;
+            // for (Entry<Branch, BondType> sideBranchAndBondType : node.getSideBranches().entrySet()) {
+            //     if (temp) break;
+            //     Branch sideBranch = sideBranchAndBondType.getKey();
+            //     Vec3 sideZag = confinedGeometry.getZag(i);
+            //     Vec3 newPlane = sideZag.cross(confinedGeometry.getZig());
+            //     generateBranch(sideBranch, location.add(sideZag.scale(BOND_LENGTH)), rotate(sideZag, newPlane, 90f), newPlane, sideZag);
+            //     temp = true;
+            //     i++;
+            // };
+
+            // Increment the number of Atoms rendered
+            i++;
         };
     };
 
     protected void renderAtom(Atom atom, Vec3 location, PoseStack poseStack) {
+        poseStack.pushPose();
         GuiGameElement.of(atom.getElement().getPartial()).lighting(AnimatedKinetics.DEFAULT_LIGHTING)
             .scale(23)
             .rotate(15.5f, 22.5f, 0f)
             .render(poseStack, originX + (int)location.x, originY + (int)location.y);
+        poseStack.popPose();
+    };
+
+    protected void renderBond(BondRenderInstance bond, PoseStack poseStack) {
+        poseStack.pushPose();
+        GuiGameElement.of(bond.type().getPartial()).lighting(AnimatedKinetics.DEFAULT_LIGHTING)
+            .scale(23)
+            .rotate(bond.xRot(), bond.yRot(), bond.zRot())
+            .render(poseStack, originX + (int)bond.position().x, originY + (int)bond.position().y);
+        poseStack.popPose();
     };
 
     private Geometry getGeometry(Node node) {
@@ -152,12 +194,16 @@ public class MoleculeRenderer {
             this.flip = flip;
         };
 
-        // private Vec3 getZig() {
-        //     return rotate(Geometry.standardDirection, rotationAxis, angle);
-        // };
+        private Vec3 getZig() {
+            return rotate(Geometry.standardDirection, rotationAxis, angle);
+        };
 
         private Vec3 getZag() {
-            Vec3 unflipped = rotate(geometry.connections.get(0), rotationAxis, angle);
+            return getZag(0);
+        };
+
+        private Vec3 getZag(int index) {
+            Vec3 unflipped = rotate(geometry.connections.get(index), rotationAxis, angle);
             if (!flip) {
                 return unflipped;
             } else {
@@ -200,5 +246,12 @@ public class MoleculeRenderer {
      */
     public static float distanceFromPointToLine(Vec3 point, Vec3 linePoint, Vec3 lineDirection) {
         return (float) ( (point.subtract(linePoint)).cross(lineDirection).length() / lineDirection.length() );
+    };
+
+    protected static record BondRenderInstance(BondType type, Vec3 position, float xRot, float yRot, float zRot) {
+
+        public BondRenderInstance(BondType type, Vec3 position, Vec3 zig) {
+            this(type, position, (float)Math.atan2(zig.y, zig.z) * 180f / Mth.PI, (float)Math.atan2(zig.z, zig.x) * 180f / Mth.PI, (float)Math.atan2(zig.x, zig.y) * 180f / Mth.PI);
+        };
     };
 };

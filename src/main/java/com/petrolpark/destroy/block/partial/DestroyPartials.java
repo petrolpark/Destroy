@@ -3,6 +3,7 @@ package com.petrolpark.destroy.block.partial;
 import com.jozufozu.flywheel.core.PartialModel;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Element;
+import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.simibubi.create.foundation.utility.Lang;
 
 public class DestroyPartials {
@@ -22,12 +23,22 @@ public class DestroyPartials {
         };
     };
 
+    static {
+        for (BondType bondType : BondType.values()) {
+            bondType.setPartial(bond(Lang.asId(bondType.name())));
+        };
+    }
+
     private static PartialModel block(String path) { //copied from Create source code
         return new PartialModel(Destroy.asResource("block/"+path));
     };
 
     private static PartialModel atom(String path) {
         return new PartialModel(Destroy.asResource("chemistry/atom/"+path));
+    };
+
+    private static PartialModel bond(String path) {
+        return new PartialModel(Destroy.asResource("chemistry/bond/"+path));
     };
 
     public static void init() {};

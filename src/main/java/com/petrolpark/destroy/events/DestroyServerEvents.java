@@ -30,7 +30,6 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -191,7 +190,6 @@ public class DestroyServerEvents {
             player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> {
                 crouchingCap.ticksCrouching++;
                 if (urinating) {crouchingCap.ticksUrinating++;} else crouchingCap.ticksUrinating = 0;
-                if (crouchingCap.ticksCrouching > 50 && level instanceof ServerLevel serverLevel) ExplosionHelper.explode(serverLevel, new SmartExplosion(level, null, null, null, player.position(), 3, 0));
             });
         } else {
             player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> {
