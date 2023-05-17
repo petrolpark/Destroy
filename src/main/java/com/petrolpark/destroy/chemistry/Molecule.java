@@ -231,6 +231,10 @@ public class Molecule implements INameableProduct {
         return dipoleMoment;
     };
 
+    public boolean isCyclic() {
+        return structure.isCyclic();
+    };
+
     /**
      * Generates a {@link Formula#shallowCopy copy} of the {@link Formula structure} of this Molecule.
      * @return A new Formula instance

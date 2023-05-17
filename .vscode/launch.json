@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "MoleculeRenderer",
+      "request": "launch",
+      "mainClass": "com.petrolpark.destroy.client.gui.MoleculeRenderer",
+      "projectName": "destroy"
+    },
+    {
+      "type": "java",
       "name": "ChemistryTest",
       "request": "launch",
       "mainClass": "com.petrolpark.destroy.test.ChemistryTest",

@@ -388,6 +388,11 @@ public class Formula implements Cloneable {
         return this;
     };
 
+    @Deprecated
+    public boolean isCyclic() {
+        return cycleType != CycleType.NONE;
+    };
+
     /**
      * Removes the given Atom, without moving the currently selected Atom.
      * <p><b>To modify existing Formulae, {@link Formula#shallowCopy copy} them first.</b></p>
