@@ -116,6 +116,7 @@ public class MoleculeDisplayItem extends Item {
             poseStack.pushPose();
             renderer.render(poseStack, mouseX + 10, mouseY + 10);
         
+            //TODO fix cause this aint working mothafucka
             int textY = renderer.getHeight() + 15;
             for (Component line : lore) {
                 font.draw(poseStack, line, mouseX, mouseY + textY, 0);
