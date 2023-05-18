@@ -384,11 +384,12 @@ public class Molecule implements INameableProduct {
     /**
      * Get a String representing the {@link Molecule#charge charge} of this Molecule.
      * For example, this will be {@code -} for the chloride ion, and {@code 2+} for the magnesium ion.
+     * @param alwaysShowNumber If true, a Molecule with charge -1 will return {@code 1-} instead of {@code -}, etc.
      */
-    public String getSerializedCharge() {
+    public String getSerializedCharge(boolean alwaysShowNumber) {
         String chargeString = "";
         if (charge == 0) return chargeString;
-        if (charge != 1 && charge != -1) chargeString += Math.abs(charge);
+        if (alwaysShowNumber || (charge != 1 && charge != -1)) chargeString += Math.abs(charge);
         chargeString += charge < 0 ? "-" : "+";
         return chargeString;
     };

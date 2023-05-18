@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.compat.jei;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -92,7 +93,10 @@ public class MoleculeJEIIngredient {
 
         @Override
         public List<Component> getTooltip(Molecule ingredient, TooltipFlag tooltipFlag) {
-            return List.of(ingredient.getName(iupac));
+            List<Component> tooltips = new ArrayList<>();
+            tooltips.add(ingredient.getName(iupac));
+            tooltips.addAll(MoleculeDisplayItem.getLore(ingredient));
+            return tooltips;
         };
 
     };

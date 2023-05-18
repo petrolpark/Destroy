@@ -4,29 +4,45 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.content.contraptions.wrench.IWrenchable;
+import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BlacklightBlock extends Block implements IWrenchable {
+public class BlacklightBlock extends Block implements IWrenchable, ProperWaterloggedBlock {
 
     public static final DirectionProperty SIDE = BlockStateProperties.FACING;
     public static final BooleanProperty FLIPPED = BooleanProperty.create("flipped");
 
     public BlacklightBlock(Properties properties) {
         super(properties);
+        registerDefaultState(defaultBlockState().setValue(WATERLOGGED, false));
+    };
+
+    @Override
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
+        updateWater(level, neighborState, neighborPos);
+        return state;
+    };
+
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        return fluidState(state);
     };
 
     @Override
@@ -43,15 +59,16 @@ public class BlacklightBlock extends Block implements IWrenchable {
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         boolean flipped = context.getClickedFace().getAxis() == Axis.Y && context.getHorizontalDirection().getAxis() == Axis.X;
-        return defaultBlockState()
+        return withWater(defaultBlockState()
             .setValue(SIDE, context.getClickedFace().getOpposite())
-            .setValue(FLIPPED, flipped);
+            .setValue(FLIPPED, flipped),
+            context);
     };
 
     @Override
     protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(SIDE, FLIPPED);
+        builder.add(SIDE, FLIPPED, WATERLOGGED);
     };
 
     @Override

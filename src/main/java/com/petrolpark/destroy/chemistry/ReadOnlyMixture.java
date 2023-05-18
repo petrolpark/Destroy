@@ -196,7 +196,7 @@ public class ReadOnlyMixture {
                 .space().space()
                 .add(entry.getKey().getName(iupac).plainCopy())
                 .add(Component.literal(
-                    entry.getKey().getCharge() == 0 ? "" : " [" + entry.getKey().getSerializedCharge() + "]" + // Show charge, if there is one
+                    entry.getKey().getCharge() == 0 ? "" : " [" + entry.getKey().getSerializedCharge(false) + "]" + // Show charge, if there is one
                     " ("+entry.getValue()+"M)" // Show concentration
                 ))
                 .style(ChatFormatting.GRAY)

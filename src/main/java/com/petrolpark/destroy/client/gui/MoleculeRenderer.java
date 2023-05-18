@@ -23,6 +23,7 @@ public class MoleculeRenderer {
 
     protected int x; // Width
     protected int y; // Height
+    protected int xOffset;
 
     public static void main(String ...args) {
         ConfinedGeometry confinedGeometry = Geometry.TRIGONAL_PLANAR.confine(new Vec3(0.8660254038f, 0.5f, 0f).normalize(), new Vec3(0f, 0f, 1f), new Vec3(1f, 0f, 0f));
@@ -38,7 +39,11 @@ public class MoleculeRenderer {
     List<Pair<Vec3, IRenderable>> RENDERED_OBJECTS;
 
     public MoleculeRenderer(Molecule molecule) {
+        x = 0;
+        y = 0;
+        xOffset = 0;
         RENDERED_OBJECTS = new ArrayList<>();
+
         if (molecule.getAtoms().size() == 1 || molecule.isCyclic()) {
 
         } else {
@@ -56,6 +61,7 @@ public class MoleculeRenderer {
         Collections.sort(RENDERED_OBJECTS, (pair1, pair2) -> Double.compare(pair1.first().z, pair2.first().z));
 
         for (Pair<Vec3, IRenderable> pair : RENDERED_OBJECTS) {
+            xOffset = -(int)Math.min(xOffset, pair.first().x);
             x = Math.max(x, (int)pair.first().x);
             y = Math.max(y, (int)pair.first().y);
         };
@@ -63,7 +69,7 @@ public class MoleculeRenderer {
     };
 
     public int getWidth() {
-        return x;
+        return x + xOffset;
     };
 
     public int getHeight() {
@@ -71,10 +77,10 @@ public class MoleculeRenderer {
     };
 
     /**
-     * Draw all Atoms and Bonds in this Molecule
+     * Draw all Atoms and Bonds in this Molecule.
      */
-    public void render(PoseStack poseStack, int xOffset, int yOffset) {
-        poseStack.translate(xOffset, yOffset, 0f);
+    public void render(PoseStack poseStack, int x, int y) {
+        poseStack.translate(x + xOffset, y, 0f);
         poseStack.pushPose();
         for (Pair<Vec3, IRenderable> pair : RENDERED_OBJECTS) {
             pair.second().render(poseStack, pair.first());
