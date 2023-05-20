@@ -82,7 +82,7 @@ public class MoleculeDisplayItem extends Item {
         private int width;
 
         public ClientMoleculeTooltipComponent(MoleculeTooltip tooltipComponent) {
-            renderer = new MoleculeRenderer(tooltipComponent.getMolecule());
+            renderer = tooltipComponent.getMolecule().getRenderer();
 
             height = renderer.getHeight() + 15;
             width = renderer.getWidth() + 15;

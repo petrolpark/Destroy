@@ -41,7 +41,6 @@ public class ConnectivityHandlerMixin {
 
 		int height = be.getHeight();
 		int width = be.getWidth();
-		if (width == 1 && height == 1) return; // Stop if this was the only BE in the multi
 
 		BlockPos origin = be.getBlockPos(); // The controller BE's position
 		Direction.Axis axis = be.getMainConnectionAxis();
@@ -51,6 +50,11 @@ public class ConnectivityHandlerMixin {
 		if (!(be instanceof IMultiTileContainer.Fluid ifluidBE && ifluidBE.hasTank())) return;
         toDistribute = ifluidBE.getFluid(0); // Get the Fluid which has to be redistributed
         maxCapacity = ifluidBE.getTankSize(0); // Get how much Fluid can fit in each Tank (I think?)
+
+        if (width == 1 && height == 1) { // If this was the only BE in the multi
+            if (toDistribute.getAmount() > 0) PollutingBehaviour.pollute(level, startPos, toDistribute); // Pollute with the contents of this one Fluid Tank
+            return;
+        };
 
         if (!toDistribute.isEmpty() && !be.isRemoved()) { // If there's Fluid to be doled out
             toDistribute.shrink(maxCapacity); // I have no clue why this needs to be done but the right numbers come out at the end so I don't want to know

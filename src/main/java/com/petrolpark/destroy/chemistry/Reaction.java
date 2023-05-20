@@ -59,6 +59,16 @@ public class Reaction {
         return preexponentialFactor * (float)Math.exp(-((activationEnergy * 1000) / (GAS_CONSTANT * temperature)));
     };
 
+    /**
+     * The translation key for this Reaction.
+     * {@code <namespace>.reaction.<translationKey>} should hold the name of this Reaction,
+     * and {@code <namespace>.reaction.<translationKey>.description} should hold the
+     * description of this Reaction.
+     */
+    public String getTranslationKey() {
+        return translationKey;
+    };
+
     public Integer getReactantMolarRatio(Molecule reactant) {
         if (!reactants.keySet().contains(reactant)) {
             return 0;
@@ -126,6 +136,11 @@ public class Reaction {
 
         public ReactionBuilder addCatalyst(Molecule molecule, int order) {
             reaction.orders.put(molecule, order);
+            return this;
+        };
+
+        public ReactionBuilder translationKey(String translationKey) {
+            reaction.translationKey = translationKey;
             return this;
         };
 

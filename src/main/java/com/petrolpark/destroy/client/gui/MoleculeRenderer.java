@@ -24,11 +24,7 @@ public class MoleculeRenderer {
     protected int x; // Width
     protected int y; // Height
     protected int xOffset;
-
-    public static void main(String ...args) {
-        ConfinedGeometry confinedGeometry = Geometry.TRIGONAL_PLANAR.confine(new Vec3(0.8660254038f, 0.5f, 0f).normalize(), new Vec3(0f, 0f, 1f), new Vec3(1f, 0f, 0f));
-        System.out.println(confinedGeometry.getZag(1));
-    };
+    protected int yOffset;
 
     protected static final double BOND_LENGTH = 12;
 
@@ -42,28 +38,27 @@ public class MoleculeRenderer {
         x = 0;
         y = 0;
         xOffset = 0;
+        yOffset = 0;
         RENDERED_OBJECTS = new ArrayList<>();
 
         if (molecule.getAtoms().size() == 1 || molecule.isCyclic()) {
 
         } else {
-            Vec3 startLocation = new Vec3(0f, 0f, 0f);
-            Vec3 startDirection = new Vec3(1f, 0f, -1f).normalize();
-            Vec3 startPlane = new Vec3(1f, 0f, 1f).normalize();
-            //Vec3 startDirection = new Vec3(1f, 0f, 0f);
-            //Vec3 startPlane = new Vec3(0f, 0f, 1f);
-            generateBranch(molecule.getRenderBranch(), startLocation, startDirection, startPlane, rotate(startDirection, startPlane, 180f + (getGeometry(molecule.getRenderBranch().getNodes().get(1)).getAngle() * 0.5f))
-                
-            );
+            Vec3 startLocation = new Vec3(0d, 0d, 0d);
+            Vec3 startDirection = new Vec3(1d, 0d, -1d).normalize();
+            Vec3 startPlane = new Vec3(1d, 0d, 1d).normalize();
+            generateBranch(molecule.getRenderBranch(), startLocation, startDirection, startPlane, rotate(startDirection, startPlane, 180d + (getGeometry(molecule.getRenderBranch().getNodes().get(1)).getAngle() * 0.5d)));
         };
 
-        // Order the Atoms amd Bonds so the furthest back get Rendered first
+        // Order the Atoms and Bonds so the furthest back get Rendered first
         Collections.sort(RENDERED_OBJECTS, (pair1, pair2) -> Double.compare(pair1.first().z, pair2.first().z));
 
+        // Rescale the Renderer to fit every Atom
         for (Pair<Vec3, IRenderable> pair : RENDERED_OBJECTS) {
-            xOffset = -(int)Math.min(xOffset, pair.first().x);
             x = Math.max(x, (int)pair.first().x);
             y = Math.max(y, (int)pair.first().y);
+            xOffset = -(int)Math.min(xOffset, pair.first().x);
+            yOffset = (int)Math.max(yOffset, pair.first().y); //TODO fix
         };
 
     };
@@ -73,14 +68,14 @@ public class MoleculeRenderer {
     };
 
     public int getHeight() {
-        return y;
+        return y + yOffset;
     };
 
     /**
      * Draw all Atoms and Bonds in this Molecule.
      */
     public void render(PoseStack poseStack, int x, int y) {
-        poseStack.translate(x + xOffset, y, 0f);
+        poseStack.translate(x + xOffset, y + yOffset, 0f);
         poseStack.pushPose();
         for (Pair<Vec3, IRenderable> pair : RENDERED_OBJECTS) {
             pair.second().render(poseStack, pair.first());
@@ -124,7 +119,7 @@ public class MoleculeRenderer {
             zag = confinedGeometry.getZag();
 
             // Mark the Bond for rendering at this location
-            RENDERED_OBJECTS.add(Pair.of(location.add(zag.scale(0.5f * BOND_LENGTH)), new BondRenderInstance(BondType.SINGLE, zag)));
+            RENDERED_OBJECTS.add(Pair.of(location.add(zag.scale(0.5d * BOND_LENGTH)), new BondRenderInstance(BondType.SINGLE, zag)));
 
             // Render side chains
             int j = 1;
@@ -133,8 +128,8 @@ public class MoleculeRenderer {
                 Branch sideBranch = sideBranchAndBondType.getKey();
                 Vec3 sideZag = confinedGeometry.getZag(j);
                 Vec3 newPlane = confinedGeometry.getZig().cross(sideZag);
-                RENDERED_OBJECTS.add(Pair.of(location.add(sideZag.scale(0.5f * BOND_LENGTH)), new BondRenderInstance(BondType.SINGLE,  sideZag)));
-                generateBranch(sideBranch, location.add(sideZag.scale(BOND_LENGTH)), rotate(sideZag, newPlane, 90f), newPlane, sideZag);
+                RENDERED_OBJECTS.add(Pair.of(location.add(sideZag.scale(0.5d * BOND_LENGTH)), new BondRenderInstance(BondType.SINGLE,  sideZag)));
+                generateBranch(sideBranch, location.add(sideZag.scale(BOND_LENGTH)), rotate(sideZag, newPlane, 90d), newPlane, sideZag);
                 j++;
             };
 
@@ -149,10 +144,10 @@ public class MoleculeRenderer {
 
     public static enum Geometry {
 
-        LINEAR(new Vec3(1f, 0f, 0f)),
-        TRIGONAL_PLANAR(new Vec3(0.5f, 0.86602540378f, 0f).normalize(), new Vec3(0.5f, -0.86602540378f, 0f).normalize()),
-        TETRAHEDRAL(new Vec3(0.333333f, -0.942809f, 0f).normalize(), new Vec3(0.333333f, 0.471405f, 0.816497f).normalize(), new Vec3(0.333333f, 0.471405f, -0.816497f).normalize()),
-        OCTAHEDRAL(new Vec3(1f, 0f, 0f), new Vec3(0f, 1f, 0f), new Vec3(0f, -1f, 0f), new Vec3(0f, 0f, 1f), new Vec3(0f, 0f, -1f));
+        LINEAR(new Vec3(1d, 0d, 0d)),
+        TRIGONAL_PLANAR(new Vec3(0.5d, 0.86602540378d, 0d).normalize(), new Vec3(0.5d, -0.86602540378d, 0d).normalize()),
+        TETRAHEDRAL(new Vec3(0.333333d, -0.942809d, 0d).normalize(), new Vec3(0.333333d, 0.471405d, 0.816497d).normalize(), new Vec3(0.333333d, 0.471405d, -0.816497d).normalize()),
+        OCTAHEDRAL(new Vec3(1d, 0d, 0d), new Vec3(0d, 1d, 0d), new Vec3(0d, -1d, 0d), new Vec3(0d, 0d, 1d), new Vec3(0d, 0d, -1d));
 
         /**
          * The default input direction for a Geometry, to which all the output directions are relative.
@@ -174,8 +169,8 @@ public class MoleculeRenderer {
          * Get the angle in degrees between the connections around this Geometry -
          * specifically, the angle between the input vector (1,0,0) and the XY-coplanar output vector.
          */
-        public float getAngle() {
-            float angle = angleBetween(standardDirection, connections.get(0), new Vec3(0f, 0f, 1f));
+        public double getAngle() {
+            double angle = angleBetween(standardDirection, connections.get(0), new Vec3(0f, 0f, 1f));
             return angle < 90f ? 180f - angle : angle; // We always want the obtuse angle
         };
 
@@ -188,17 +183,17 @@ public class MoleculeRenderer {
         public ConfinedGeometry confine(Vec3 zig, Vec3 plane, Vec3 direction) {
 
             // Check the direction vector is in the plane
-            if (plane.dot(direction) > 0.000001f) throw new IllegalStateException("Chains of Molecules being rendered in a plane must continue in a direction in that plane.");
+            if (plane.dot(direction) > 0.000001d) throw new IllegalStateException("Chains of Molecules being rendered in a plane must continue in a direction in that plane.");
 
             // Determine how the zig was transformed from (1,0,0)
             Vec3 rotationVec = zig.cross(standardDirection);
-            float angle = angleBetween(standardDirection, zig, rotationVec);
+            double angle = angleBetween(standardDirection, zig, rotationVec);
 
             // Calculate the adjusted zag vector by applying the same transformation to the XY-coplanar output vector for this geometry
             Vec3 zag = rotate(connections.get(0), rotationVec, angle);
 
             // Determine whether the continuation vector flipped by 180 degrees is more faithful to the direction in which this branch should be going
-            boolean flip = distanceFromPointToLine(zig.add(rotate(zag, zig, 180f)), Vec3.ZERO, direction) < distanceFromPointToLine(zig.add(zag), Vec3.ZERO, direction);
+            boolean flip = distanceFromPointToLine(zig.add(rotate(zag, zig, 180d)), Vec3.ZERO, direction) < distanceFromPointToLine(zig.add(zag), Vec3.ZERO, direction);
 
             return new ConfinedGeometry(this, rotationVec, angle, flip);
         };
@@ -207,13 +202,13 @@ public class MoleculeRenderer {
     private static class ConfinedGeometry {
         final Geometry geometry;
         final Vec3 rotationAxis;
-        final float angle;
+        final double angle;
         /**
          * Whether to rotate this Geometry 180 degrees around the input connection.
          */
         final boolean flip;
 
-        private ConfinedGeometry(Geometry geometry, Vec3 rotationAxis, float angle, boolean flip) {
+        private ConfinedGeometry(Geometry geometry, Vec3 rotationAxis, double angle, boolean flip) {
             this.geometry = geometry;
             this.rotationAxis = rotationAxis;
             this.angle = angle;
@@ -233,7 +228,7 @@ public class MoleculeRenderer {
             if (!flip) {
                 return unflipped;
             } else {
-                return rotate(unflipped, rotate(Geometry.standardDirection, rotationAxis, angle), 180);
+                return rotate(unflipped, rotate(Geometry.standardDirection, rotationAxis, angle), 180d);
             }
         };
     };
@@ -243,9 +238,9 @@ public class MoleculeRenderer {
      * @param rotationAxis The vector about which to rotate the first vector
      * @param angle The angle in degrees through which to rotate the first vector around the second
      */
-    public static Vec3 rotate(Vec3 vec, Vec3 rotationAxis, float angle) {
+    public static Vec3 rotate(Vec3 vec, Vec3 rotationAxis, double angle) {
         Vec3 k = rotationAxis.normalize();
-        float angleInRads = angle * Mth.PI / 180;
+        float angleInRads = (float)(angle * Mth.PI / 180d);
         // Rodrigues' formula
         return vec.scale(Mth.cos(angleInRads))
             .add(k.cross(vec).scale(Mth.sin(angleInRads)))
@@ -258,8 +253,8 @@ public class MoleculeRenderer {
      * @param vec2
      * @param plane The approximate vector around which {@code vec1} was rotated to get {@code vec2}
      */
-    public static float angleBetween(Vec3 vec1, Vec3 vec2, Vec3 plane) {
-        float angle = (float)Math.acos(vec1.dot(vec2) / (vec1.length() * vec2.length())) * 180f / Mth.PI;
+    public static double angleBetween(Vec3 vec1, Vec3 vec2, Vec3 plane) {
+        double angle = Math.acos(vec1.dot(vec2) / (vec1.length() * vec2.length())) * 180f / Mth.PI;
         if (vec1.dot(vec2.cross(plane)) < 0f) angle = 360f - angle;
         return angle;
     };
@@ -270,28 +265,29 @@ public class MoleculeRenderer {
      * @param linePoint Any point on the line
      * @param lineDirection The direction vector of the line
      */
-    public static float distanceFromPointToLine(Vec3 point, Vec3 linePoint, Vec3 lineDirection) {
-        return (float) ( (point.subtract(linePoint)).cross(lineDirection).length() / lineDirection.length() );
+    public static double distanceFromPointToLine(Vec3 point, Vec3 linePoint, Vec3 lineDirection) {
+        return (point.subtract(linePoint)).cross(lineDirection).length() / lineDirection.length();
     };
 
     protected static interface IRenderable {
         public void render(PoseStack poseStack, Vec3 location);
     };
 
-    protected static record BondRenderInstance(BondType type, float xRot, float yRot, float zRot) implements IRenderable {
+    protected static record BondRenderInstance(BondType type, double xRot, double yRot, double zRot) implements IRenderable {
 
         public BondRenderInstance(BondType type, Vec3 zig) {
-            this(type, 0f, (float)Math.atan2(zig.z, zig.x) * 180f / Mth.PI, 90f + (float)Math.atan2(zig.x, zig.y) * 180f / Mth.PI);
+            this(type, 0d, Math.atan2(zig.z, zig.x) * 180d / Mth.PI, 90d + Math.atan2(zig.x, zig.y) * 180d / Mth.PI);
         };
 
         @Override
         public void render(PoseStack poseStack, Vec3 location) {
             poseStack.pushPose();
+            poseStack.translate(location.x, location.y, 0d);
             GuiGameElement.of(type().getPartial())
                 .lighting(AnimatedKinetics.DEFAULT_LIGHTING)
                 .scale(23)
                 .rotate(xRot(), yRot(), zRot())
-                .render(poseStack, (int)location.x,(int)location.y);
+                .render(poseStack, 0, 0);
             poseStack.popPose();
         };
     };
@@ -301,10 +297,11 @@ public class MoleculeRenderer {
         @Override
         public void render(PoseStack poseStack, Vec3 location) {
             poseStack.pushPose();
+            poseStack.translate(location.x, location.y, 0d);
             GuiGameElement.of(element.getPartial())
                 .scale(23)
                 .rotate(15.5f, 22.5f, 0f)
-                .render(poseStack, (int)location.x, (int)location.y);
+                .render(poseStack, 0, 0);
             poseStack.popPose();
         };
     };

@@ -9,11 +9,11 @@ import com.petrolpark.destroy.compat.jei.animation.GUIBlockRenderer;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.recipe.MutationRecipe;
 import com.petrolpark.destroy.util.CropMutation;
-import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-public class MutationCategory extends CreateRecipeCategory<MutationRecipe> {
+public class MutationCategory extends DestroyRecipeCategory<MutationRecipe> {
 
     public static final List<MutationRecipe> RECIPES = new ArrayList<>();
 
@@ -43,8 +43,8 @@ public class MutationCategory extends CreateRecipeCategory<MutationRecipe> {
         };
     };
 
-    public MutationCategory(Info<MutationRecipe> info) {
-        super(info);
+    public MutationCategory(Info<MutationRecipe> info, IJeiHelpers helpers) {
+        super(info, helpers);
     };
 
     @Override

@@ -2,16 +2,16 @@ package com.petrolpark.destroy.compat.jei.category;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.recipe.DistillationRecipe;
-import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 
-public class DistillationCategory extends CreateRecipeCategory<DistillationRecipe> {
+public class DistillationCategory extends DestroyRecipeCategory<DistillationRecipe> {
 
-    public DistillationCategory(Info<DistillationRecipe> info) {
-        super(info);
+    public DistillationCategory(Info<DistillationRecipe> info, IJeiHelpers helpers) {
+        super(info, helpers);
     };
 
     @Override

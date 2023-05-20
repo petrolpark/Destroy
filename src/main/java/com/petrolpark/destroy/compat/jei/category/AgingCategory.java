@@ -12,7 +12,6 @@ import com.petrolpark.destroy.client.gui.DestroyGuiTextures;
 import com.petrolpark.destroy.compat.jei.animation.GUIBlockRenderer;
 import com.petrolpark.destroy.recipe.AgingRecipe;
 import com.petrolpark.destroy.util.DestroyLang;
-import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.ItemHelper;
@@ -21,6 +20,7 @@ import com.simibubi.create.foundation.utility.Pair;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.Minecraft;
@@ -30,12 +30,12 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.fluids.FluidStack;
 
-public class AgingCategory extends CreateRecipeCategory<AgingRecipe> {
+public class AgingCategory extends DestroyRecipeCategory<AgingRecipe> {
 
     private static final GUIBlockRenderer blockRenderer = new GUIBlockRenderer();
 
-    public AgingCategory(Info<AgingRecipe> info) {
-        super(info);
+    public AgingCategory(Info<AgingRecipe> info, IJeiHelpers helpers) {
+        super(info, helpers);
     };
 
     /**

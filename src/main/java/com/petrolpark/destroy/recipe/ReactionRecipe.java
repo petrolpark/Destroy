@@ -21,6 +21,7 @@ public class ReactionRecipe extends ProcessingRecipe<RecipeWrapper> {
 
     public static ReactionRecipe create(Reaction reaction) {
         ReactionRecipe recipe = new ProcessingRecipeBuilder<>(ReactionRecipe::new, Destroy.asResource("reaction_"+counter++)).build();
+        recipe.reaction = reaction;
         return recipe;
     };
 

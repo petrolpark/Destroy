@@ -4,26 +4,26 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.client.gui.DestroyGuiTextures;
 import com.petrolpark.destroy.compat.jei.animation.AnimatedCentrifuge;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
-import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraftforge.fluids.FluidStack;
 
-public class CentrifugationCategory extends CreateRecipeCategory<CentrifugationRecipe> {
+public class CentrifugationCategory extends DestroyRecipeCategory<CentrifugationRecipe> {
 
     private static final AnimatedCentrifuge centrifuge = new AnimatedCentrifuge();
 
     private static final int CENTRIFUGE_X = 35;
     private static final int CENTRIFUGE_Y = 60;
 
-    public CentrifugationCategory(Info<CentrifugationRecipe> info) {
-        super(info);
+    public CentrifugationCategory(Info<CentrifugationRecipe> info, IJeiHelpers helpers) {
+        super(info, helpers);
     };
 
     @Override

@@ -12,6 +12,7 @@ public class DestroyReactions {
         .build();
 
     public static final Reaction METHYL_ACETATE_CARBONYLATION = builder()
+        .translationKey("methyl_acetate_carbonylation")
         .addReactant(DestroyMolecules.METHANOL)
         .addReactant(DestroyMolecules.CARBON_MONOXIDE)
         .addProduct(DestroyMolecules.ACETIC_ACID)
@@ -25,6 +26,7 @@ public class DestroyReactions {
         .build();
 
     public static final Reaction HYDROXIDE_NEUTRALIZATION = builder()
+        .translationKey("hydroxide_neutralization")
         .addReactant(DestroyMolecules.HYDROXIDE)
         .addReactant(DestroyMolecules.PROTON)
         .addProduct(DestroyMolecules.WATER)

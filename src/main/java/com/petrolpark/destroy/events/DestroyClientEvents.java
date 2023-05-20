@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositions;
+import com.petrolpark.destroy.compat.jei.DestroyJEI;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.renderer.SeismometerItemRenderer;
 import com.simibubi.create.foundation.config.AllConfigs;
@@ -62,6 +63,10 @@ public class DestroyClientEvents {
 
     @SubscribeEvent
     public static void onTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.START) SeismometerItemRenderer.tick();
+        if (event.phase == TickEvent.Phase.START) {
+            SeismometerItemRenderer.tick();
+        } else {
+            DestroyJEI.tick();
+        };
     };
 };

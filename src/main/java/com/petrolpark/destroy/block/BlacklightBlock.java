@@ -36,7 +36,7 @@ public class BlacklightBlock extends Block implements IWrenchable, ProperWaterlo
 
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
-        updateWater(level, neighborState, neighborPos);
+        updateWater(level, state, currentPos);
         return state;
     };
 

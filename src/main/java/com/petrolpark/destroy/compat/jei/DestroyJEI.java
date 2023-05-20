@@ -13,8 +13,10 @@ import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.compat.jei.category.AgingCategory;
 import com.petrolpark.destroy.compat.jei.category.CentrifugationCategory;
+import com.petrolpark.destroy.compat.jei.category.DestroyRecipeCategory;
 import com.petrolpark.destroy.compat.jei.category.DistillationCategory;
 import com.petrolpark.destroy.compat.jei.category.ElectrolysisCategory;
+import com.petrolpark.destroy.compat.jei.category.ITickableCategory;
 import com.petrolpark.destroy.compat.jei.category.MutationCategory;
 import com.petrolpark.destroy.compat.jei.category.ReactionCategory;
 import com.petrolpark.destroy.fluid.DestroyFluids;
@@ -41,6 +43,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.helpers.IPlatformFluidHelper;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
@@ -75,6 +78,7 @@ public class DestroyJEI implements IModPlugin {
     public static final Map<Molecule, List<Recipe<?>>> MOLECULES_OUTPUT = new HashMap<>();
 
     private final List<CreateRecipeCategory<?>> allCategories = new ArrayList<>();
+    private static final List<ITickableCategory> tickingCategories = new ArrayList<>();
 
     @SuppressWarnings("unused")
     private void loadCategories() {
@@ -105,15 +109,6 @@ public class DestroyJEI implements IModPlugin {
             .itemIcon(DestroyBlocks.BUBBLE_CAP.get())
             .emptyBackground(100, 100)
             .build("distillation", DistillationCategory::new),
-
-        electrolysis = builder(BasinRecipe.class)
-            .addTypedRecipes(DestroyRecipeTypes.ELECTROLYSIS)
-            .acceptsMixtures(ElectrolysisRecipe.class)
-            .catalyst(DestroyBlocks.DYNAMO::get)
-            .catalyst(AllBlocks.BASIN::get)
-            .doubleItemIcon(DestroyBlocks.DYNAMO.get(), AllBlocks.BASIN.get())
-            .emptyBackground(177, 85)
-            .build("electrolysis", ElectrolysisCategory::new),
         
         mutation = builder(MutationRecipe.class)
             .addRecipes(() -> MutationCategory.RECIPES)
@@ -131,6 +126,17 @@ public class DestroyJEI implements IModPlugin {
             .emptyBackground(180, 125)
             .build("reaction", ReactionCategory::new);
 
+        CreateRecipeCategory<?>
+
+        electrolysis = builder(BasinRecipe.class)
+            .addTypedRecipes(DestroyRecipeTypes.ELECTROLYSIS)
+            .acceptsMixtures(ElectrolysisRecipe.class)
+            .catalyst(DestroyBlocks.DYNAMO::get)
+            .catalyst(AllBlocks.BASIN::get)
+            .doubleItemIcon(DestroyBlocks.DYNAMO.get(), AllBlocks.BASIN.get())
+            .emptyBackground(177, 85)
+            .build("electrolysis", (info, helpers) -> new ElectrolysisCategory(info));
+
     };
 
     @Override
@@ -141,6 +147,7 @@ public class DestroyJEI implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         loadCategories();
+        CategoryBuilder.helpers = registration.getJeiHelpers();
         registration.addRecipeCategories(allCategories.toArray(IRecipeCategory[]::new));
     };
 
@@ -171,6 +178,10 @@ public class DestroyJEI implements IModPlugin {
         registration.addRecipeManagerPlugin(new DestroyRecipeManagerPlugin(registration.getJeiHelpers()));
     };
 
+    public static void tick() {
+        tickingCategories.forEach(ITickableCategory::tick);
+    };
+
     private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {
         return new CategoryBuilder<>(recipeClass);
     };
@@ -180,6 +191,8 @@ public class DestroyJEI implements IModPlugin {
      * Basically all copied from the {@link com.simibubi.create.compat.jei.CreateJEI.CategoryBuilder Create source code}.
      */
     private class CategoryBuilder<T extends Recipe<?>> {
+        private static IJeiHelpers helpers;
+
         private Class<? extends T> recipeClass;
 
         private IDrawable background;
@@ -290,7 +303,7 @@ public class DestroyJEI implements IModPlugin {
          * @param factory Initializer of the Category class
          * @return This Category
          */
-        public CreateRecipeCategory<T> build(String name, CreateRecipeCategory.Factory<T> factory) {
+        public CreateRecipeCategory<T> build(String name, DestroyRecipeCategory.Factory<T> factory) {
             Supplier<List<T>> recipesSupplier = () -> {
                 List<T> recipes = new ArrayList<>();
                 for (Consumer<List<T>> consumer : recipeListConsumers) {
@@ -310,8 +323,10 @@ public class DestroyJEI implements IModPlugin {
                 catalysts
             );
 
-            CreateRecipeCategory<T> category = factory.create(info);
+            CreateRecipeCategory<T> category = factory.create(info, helpers);
             allCategories.add(category);
+
+            if (category instanceof ITickableCategory tickableCategory) tickingCategories.add(tickableCategory);
 
             if (recipeClassForMixtures != null) {
                 RECIPE_TYPES.put(type, recipeClassForMixtures);
