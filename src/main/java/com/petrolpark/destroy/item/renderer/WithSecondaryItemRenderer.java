@@ -2,6 +2,7 @@ package com.petrolpark.destroy.item.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.item.WithSecondaryItem;
+import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 
@@ -11,13 +12,12 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.ItemStack;
 
-public class WithSecondaryItemRenderer extends CustomRenderedItemModelRenderer<WithSecondaryItemRenderer.WithSecondaryItemModel> {
+public class WithSecondaryItemRenderer extends CustomRenderedItemModelRenderer {
 
     @Override
-    protected void render(ItemStack stack, WithSecondaryItemRenderer.WithSecondaryItemModel model, PartialItemModelRenderer renderer, TransformType transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+    protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer, TransformType transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         if (transformType == TransformType.GUI && Screen.hasShiftDown()) {
             ItemStack secondaryStack = WithSecondaryItem.getSecondaryItem(stack);
@@ -31,17 +31,4 @@ public class WithSecondaryItemRenderer extends CustomRenderedItemModelRenderer<W
 
         itemRenderer.render(stack, TransformType.NONE, false, ms, buffer, light, overlay, model.getOriginalModel()); // Render the Item normally
     };
-
-    @Override
-    public WithSecondaryItemModel createModel(BakedModel originalModel) {
-        return new WithSecondaryItemModel(originalModel);
-    };
-
-    public static class WithSecondaryItemModel extends DestroyCustomRenderedItemModel {
-        public WithSecondaryItemModel(BakedModel template){
-            super(template, "");
-        };
-    };
-
-
 };

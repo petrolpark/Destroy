@@ -1,7 +1,7 @@
 package com.petrolpark.destroy.fluid;
 
 import com.simibubi.create.AllFluids.TintedFluidType;
-import com.simibubi.create.content.contraptions.fluids.VirtualFluid;
+import com.simibubi.create.content.fluids.VirtualFluid;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;

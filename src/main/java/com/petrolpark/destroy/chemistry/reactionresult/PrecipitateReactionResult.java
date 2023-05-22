@@ -1,10 +1,10 @@
-package com.petrolpark.destroy.chemistry.reactionresult;
+package com.petrolpark.destroy.chemistry.reactionResult;
 
 import java.util.List;
 
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReactionResult;
-import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -19,7 +19,7 @@ public class PrecipitateReactionResult extends ReactionResult {
     };
 
     @Override
-    public void onBasinReaction(Level level, BasinTileEntity basin, Mixture mixture) {
+    public void onBasinReaction(Level level, BasinBlockEntity basin, Mixture mixture) {
         basin.acceptOutputs(List.of(precipitate), List.of(), false);
     };
 

@@ -3,7 +3,7 @@ package com.petrolpark.destroy.compat.jei.category;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.compat.jei.animation.AnimatedDynamo;
 import com.simibubi.create.compat.jei.category.BasinCategory;
-import com.simibubi.create.content.contraptions.processing.BasinRecipe;
+import com.simibubi.create.content.processing.basin.BasinRecipe;
 
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 

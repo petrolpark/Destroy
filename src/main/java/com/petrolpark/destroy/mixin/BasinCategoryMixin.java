@@ -14,8 +14,8 @@ import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.compat.jei.category.BasinCategory;
-import com.simibubi.create.content.contraptions.processing.BasinRecipe;
-import com.simibubi.create.content.contraptions.processing.HeatCondition;
+import com.simibubi.create.content.processing.basin.BasinRecipe;
+import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.foundation.utility.Lang;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;

@@ -5,10 +5,10 @@ import java.util.List;
 import com.petrolpark.destroy.block.PollutometerBlock;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
 import com.petrolpark.destroy.util.DestroyLang;
-import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
-import com.simibubi.create.foundation.tileEntity.behaviour.ValueBoxTransform;
-import com.simibubi.create.foundation.tileEntity.behaviour.scrollvalue.ScrollOptionBehaviour;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
+import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.VecHelper;
 
@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-public class PollutometerBlockEntity extends SmartTileEntity {
+public class PollutometerBlockEntity extends SmartBlockEntity {
 
     private PollutionType pollutionType;
 
@@ -32,7 +32,7 @@ public class PollutometerBlockEntity extends SmartTileEntity {
     };
 
     @Override
-    public void addBehaviours(List<TileEntityBehaviour> behaviours) {
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         pollutionTypeDisplay = new ScrollOptionBehaviour<PollutionType>(PollutionType.class, DestroyLang.translate("tooltip.pollutometer.pollution_type").component(), this, slot);
         pollutionTypeDisplay.withCallback(this::setPollutionType);
         behaviours.add(pollutionTypeDisplay);
@@ -63,7 +63,7 @@ public class PollutometerBlockEntity extends SmartTileEntity {
     private static final ValueBoxTransform.Sided slot = new ValueBoxTransform.Sided() {
 
         @Override
-        protected Vec3 getLocalOffset(BlockState state) {
+        public Vec3 getLocalOffset(BlockState state) {
             return VecHelper.rotateCentered(VecHelper.voxelSpace(8, 6, 13f), AngleHelper.horizontalAngle(getSide()), Axis.Y);
         };
 
@@ -78,7 +78,7 @@ public class PollutometerBlockEntity extends SmartTileEntity {
         };
 
         @Override
-        protected float getScale() {
+        public float getScale() {
             return 0.35f;
         };
     };

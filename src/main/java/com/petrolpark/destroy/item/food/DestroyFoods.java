@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.item;
+package com.petrolpark.destroy.item.food;
 
 import java.util.function.Supplier;
 

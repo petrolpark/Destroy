@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
-import com.simibubi.create.content.contraptions.fluids.particle.FluidStackParticle;
+import com.simibubi.create.content.fluids.particle.FluidStackParticle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;

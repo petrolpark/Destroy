@@ -9,7 +9,7 @@ import com.petrolpark.destroy.block.entity.CoolerBlockEntity.ColdnessLevel;
 import com.petrolpark.destroy.block.partial.DestroyPartials;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.tileEntity.renderer.SafeTileEntityRenderer;
+import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
@@ -22,7 +22,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class CoolerRenderer extends SafeTileEntityRenderer<CoolerBlockEntity> {
+public class CoolerRenderer extends SafeBlockEntityRenderer<CoolerBlockEntity> {
 
     public CoolerRenderer(BlockEntityRendererProvider.Context context) {};
 

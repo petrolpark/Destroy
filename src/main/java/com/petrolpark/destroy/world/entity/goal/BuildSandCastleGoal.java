@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import com.petrolpark.destroy.behaviour.SentimentalBehaviour;
 import com.petrolpark.destroy.item.BucketAndSpadeItem;
 import com.petrolpark.destroy.item.DestroyItems;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -96,7 +96,7 @@ public class BuildSandCastleGoal extends MoveToBlockGoal {
             // Build Sand Castle
             if (ticksSinceReachedGoal > 60) {
                 if (level.setBlockAndUpdate(targetPos.above(), BucketAndSpadeItem.getSandCastleForMaterial(blockState))) { // Place the Sand Castle in the Level
-                    SentimentalBehaviour ownerBehaviour = TileEntityBehaviour.get(level, targetPos.above(), SentimentalBehaviour.TYPE);
+                    SentimentalBehaviour ownerBehaviour = BlockEntityBehaviour.get(level, targetPos.above(), SentimentalBehaviour.TYPE);
                     if (ownerBehaviour != null) ownerBehaviour.setOwner(mob); // Mark this Entity as the owner of it
                     
                     // Damage the Bucket and Spade if necessary

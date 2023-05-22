@@ -3,7 +3,7 @@ package com.petrolpark.destroy.world.worldgen;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.worldgen.OreFeatureConfigEntry;
+import com.simibubi.create.infrastructure.worldgen.OreFeatureConfigEntry;
 
 import net.minecraft.tags.BiomeTags;
 

@@ -14,9 +14,9 @@ import com.petrolpark.destroy.client.particle.data.GasParticleData;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
-import com.simibubi.create.content.contraptions.fluids.potion.PotionFluid;
-import com.simibubi.create.content.contraptions.fluids.tank.FluidTankTileEntity;
-import com.simibubi.create.content.logistics.block.redstone.NixieTubeTileEntity;
+import com.simibubi.create.content.fluids.potion.PotionFluid;
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
+import com.simibubi.create.content.redstone.nixieTube.NixieTubeBlockEntity;
 import com.simibubi.create.foundation.ponder.ElementLink;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
@@ -81,7 +81,7 @@ public class DestroyScenes {
             .withItem(new ItemStack(Items.WATER_BUCKET)),
             30
         );
-        scene.world.modifyTileEntity(barrel, AgingBarrelBlockEntity.class, be -> {
+        scene.world.modifyBlockEntity(barrel, AgingBarrelBlockEntity.class, be -> {
             be.getTank().fill(new FluidStack(Fluids.WATER, 1000), FluidAction.EXECUTE);
         });
         scene.idle(50);
@@ -89,14 +89,14 @@ public class DestroyScenes {
         ItemStack yeast = DestroyItems.YEAST.asStack();
         scene.world.createItemEntity(util.vector.centerOf(barrel.above(2)), Vec3.ZERO, yeast);
         scene.idle(10);
-        scene.world.modifyTileEntity(barrel, AgingBarrelBlockEntity.class, be -> {
+        scene.world.modifyBlockEntity(barrel, AgingBarrelBlockEntity.class, be -> {
             be.inventory.insertItem(0, yeast, false);
         });
         scene.world.createItemEntity(util.vector.centerOf(barrel.above(2)), Vec3.ZERO, new ItemStack(Items.WHEAT));
         scene.idle(10);
 
         scene.world.setBlock(barrel, DestroyBlocks.AGING_BARREL.getDefaultState().setValue(AgingBarrelBlock.IS_OPEN, false), false);
-        scene.world.modifyTileEntity(barrel, AgingBarrelBlockEntity.class, be -> {
+        scene.world.modifyBlockEntity(barrel, AgingBarrelBlockEntity.class, be -> {
             be.inventory.clearContent();
             be.getTank().drain(1000, FluidAction.EXECUTE);
             be.getTank().fill(new FluidStack(DestroyFluids.UNDISTILLED_MOONSHINE.get(), 1000), FluidAction.EXECUTE);
@@ -161,11 +161,11 @@ public class DestroyScenes {
         BlockPos lightOutputPump = new BlockPos(2, 2, 3);
 
         // Pre-fill the input Tank
-        scene.world.modifyTileEntity(new BlockPos(2, 5, 3), FluidTankTileEntity.class, te -> {
-            te.getTankInventory().fill(purpleFluid, FluidAction.EXECUTE);
+        scene.world.modifyBlockEntity(new BlockPos(2, 5, 3), FluidTankBlockEntity.class, be -> {
+            be.getTankInventory().fill(purpleFluid, FluidAction.EXECUTE);
         });
         // Ensure the Centrifuge faces the right way
-        scene.world.modifyTileEntity(centrifuge, CentrifugeBlockEntity.class, be -> {
+        scene.world.modifyBlockEntity(centrifuge, CentrifugeBlockEntity.class, be -> {
             be.setPondering();
             be.attemptRotation(false);
         });
@@ -183,18 +183,18 @@ public class DestroyScenes {
             .attachKeyFrame();
         scene.world.propagatePipeChange(new BlockPos(2, 4, 3));
         scene.idle(120);
-        scene.world.modifyTileEntity(centrifuge, CentrifugeBlockEntity.class, te -> {
-            te.getInputTank().drain(4000, FluidAction.EXECUTE);
-            te.sendData();
+        scene.world.modifyBlockEntity(centrifuge, CentrifugeBlockEntity.class, be -> {
+            be.getInputTank().drain(4000, FluidAction.EXECUTE);
+            be.sendData();
         });
-        scene.world.modifyTileEntity(centrifuge, CentrifugeBlockEntity.class, te -> te.getDenseOutputTank().fill(blueFluid, FluidAction.EXECUTE));
+        scene.world.modifyBlockEntity(centrifuge, CentrifugeBlockEntity.class, be -> be.getDenseOutputTank().fill(blueFluid, FluidAction.EXECUTE));
         scene.world.propagatePipeChange(denseOutputPump);
         scene.overlay.showText(100)
             .text("This text is defined in a language file.")
             .pointAt(util.vector.blockSurface(denseOutputPump, Direction.EAST))
             .attachKeyFrame();
         scene.idle(120);
-        scene.world.modifyTileEntity(centrifuge, CentrifugeBlockEntity.class, te -> te.getLightOutputTank().fill(redFluid, FluidAction.EXECUTE));
+        scene.world.modifyBlockEntity(centrifuge, CentrifugeBlockEntity.class, be -> be.getLightOutputTank().fill(redFluid, FluidAction.EXECUTE));
         scene.world.propagatePipeChange(lightOutputPump);
         scene.overlay.showText(100)
             .text("This text is defined in a language file.")
@@ -219,8 +219,8 @@ public class DestroyScenes {
         GasParticleData particleData = new GasParticleData(DestroyParticleTypes.DISTILLATION.get(), purpleFluid, 1.7f);
 
         // Pre-fill the input Tank
-        scene.world.modifyTileEntity(new BlockPos(2, 1, 3), FluidTankTileEntity.class, te -> {
-            te.getTankInventory().fill(purpleFluid, FluidAction.EXECUTE);
+        scene.world.modifyBlockEntity(new BlockPos(2, 1, 3), FluidTankBlockEntity.class, be -> {
+            be.getTankInventory().fill(purpleFluid, FluidAction.EXECUTE);
         });
 
         scene.world.showSection(util.select.fromTo(0, 0, 0, 4, 0, 4), Direction.UP);
@@ -234,14 +234,14 @@ public class DestroyScenes {
         scene.world.showSection(kinetics, Direction.NORTH);
         scene.world.propagatePipeChange(new BlockPos(2, 1, 2));
         scene.idle(100);
-        scene.world.modifyTileEntity(bottomBubbleCap, BubbleCapBlockEntity.class, be -> {
+        scene.world.modifyBlockEntity(bottomBubbleCap, BubbleCapBlockEntity.class, be -> {
             be.getTank().drain(2000, FluidAction.EXECUTE);
         });
         scene.effects.emitParticles(VecHelper.getCenterOf(bottomBubbleCap), Emitter.simple(particleData, new Vec3(0f, 0f, 0f)), 1.0f, 10);
-        scene.world.modifyTileEntity(new BlockPos(2, 2, 1), BubbleCapBlockEntity.class, be -> {
+        scene.world.modifyBlockEntity(new BlockPos(2, 2, 1), BubbleCapBlockEntity.class, be -> {
             be.getInternalTank().fill(blueFluid, FluidAction.EXECUTE);
         });
-        scene.world.modifyTileEntity(new BlockPos(2, 3, 1), BubbleCapBlockEntity.class, be -> {
+        scene.world.modifyBlockEntity(new BlockPos(2, 3, 1), BubbleCapBlockEntity.class, be -> {
             be.getInternalTank().fill(redFluid, FluidAction.EXECUTE);
             be.setTicksToFill(BubbleCapBlockEntity.getTankCapacity() / BubbleCapBlockEntity.getTransferRate());
         });
@@ -275,7 +275,7 @@ public class DestroyScenes {
         scene.world.setKineticSpeed(util.select.position(2, 4, 2), -256); // Set the one cog which should be going the other way to the correct speed
         scene.effects.indicateRedstone(redStoneDust);
         scene.world.modifyBlock(redStoneDust, state -> state.setValue(BlockStateProperties.POWER, 7), false);
-        scene.world.modifyTileNBT(util.select.position(2, 1, 1), NixieTubeTileEntity.class, nbt -> nbt.putInt("RedstoneStrength", 7));
+        scene.world.modifyBlockEntityNBT(util.select.position(2, 1, 1), NixieTubeBlockEntity.class, nbt -> nbt.putInt("RedstoneStrength", 7));
         scene.overlay.showText(100)
             .text("This text is defined in a language file.")
             .pointAt(util.vector.blockSurface(dynamo, Direction.WEST))
@@ -321,13 +321,13 @@ public class DestroyScenes {
 		scene.overlay.showControls(new InputWindowElement(depotCenter, Pointing.UP).withItem(cell), 30);
 		scene.idle(10);
 
-        scene.world.modifyTileEntity(dynamo, DynamoBlockEntity.class, be -> 
+        scene.world.modifyBlockEntity(dynamo, DynamoBlockEntity.class, be -> 
             be.chargingBehaviour.start(ChargingBehaviour.Mode.BELT, util.vector.blockSurface(depot, Direction.UP))
         );
         scene.idle(60);
         //TODO make dynamo actually render in ponder
 
-        scene.world.modifyTileEntity(dynamo, DynamoBlockEntity.class, be -> 
+        scene.world.modifyBlockEntity(dynamo, DynamoBlockEntity.class, be -> 
             be.chargingBehaviour.running = false
         );
         ItemStack chargedCell = DestroyItems.VOLTAIC_PILE.asStack();

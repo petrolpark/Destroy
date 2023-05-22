@@ -6,9 +6,9 @@ import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.entity.DynamoBlockEntity;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
-import com.simibubi.create.content.contraptions.base.KineticBlock;
-import com.simibubi.create.content.contraptions.relays.elementary.ICogWheel;
-import com.simibubi.create.foundation.block.ITE;
+import com.simibubi.create.content.kinetics.base.KineticBlock;
+import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
+import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class DynamoBlock extends KineticBlock implements ITE<DynamoBlockEntity>, ICogWheel {
+public class DynamoBlock extends KineticBlock implements IBE<DynamoBlockEntity>, ICogWheel {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -50,7 +50,7 @@ public class DynamoBlock extends KineticBlock implements ITE<DynamoBlockEntity>,
     @Override
     public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         if (direction != Direction.UP) return 0;
-        return getTileEntityOptional(level, pos).map(DynamoBlockEntity::getRedstoneSignal).orElse(0);
+        return getBlockEntityOptional(level, pos).map(DynamoBlockEntity::getRedstoneSignal).orElse(0);
     };
 
     @Override
@@ -71,12 +71,12 @@ public class DynamoBlock extends KineticBlock implements ITE<DynamoBlockEntity>,
     };
 
     @Override
-    public Class<DynamoBlockEntity> getTileEntityClass() {
+    public Class<DynamoBlockEntity> getBlockEntityClass() {
         return DynamoBlockEntity.class;
     };
 
     @Override
-    public BlockEntityType<? extends DynamoBlockEntity> getTileEntityType() {
+    public BlockEntityType<? extends DynamoBlockEntity> getBlockEntityType() {
         return DestroyBlockEntities.DYNAMO.get();
     };
     

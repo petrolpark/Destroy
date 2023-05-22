@@ -8,10 +8,10 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.recipe.DistillationRecipe;
-import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
+import com.simibubi.create.foundation.recipe.RecipeFinder;
 import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.recipe.RecipeFinder;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -146,7 +146,7 @@ public class DistillationTower {
         for (boolean simulate : Iterate.trueAndFalse) { // First simulate to check if all the Fluids can actually fit, then execute if they do. 
 
             // Check if heat requirement is fulfilled
-            if (!lastRecipe.getRequiredHeat().testBlazeBurner(BasinTileEntity.getHeatLevelOf(level.getBlockState(getControllerPos().below())))) return false;
+            if (!lastRecipe.getRequiredHeat().testBlazeBurner(BasinBlockEntity.getHeatLevelOf(level.getBlockState(getControllerPos().below())))) return false;
 
             // Check if required Fluid is present
             int requiredFluidAmount = lastRecipe.getRequiredFluid().getRequiredAmount();

@@ -1,9 +1,9 @@
 package com.petrolpark.destroy.block.entity;
 
-import com.simibubi.create.content.contraptions.fluids.FluidTransportBehaviour;
+import com.simibubi.create.content.fluids.FluidTransportBehaviour;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
-import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -38,7 +38,7 @@ public interface IFluidBlockEntity {
      * @return The new face the output should point to
      */
     @SuppressWarnings("null")
-    public default Direction refreshDirection(SmartTileEntity be, Direction currentDirection, FluidTank tank, boolean output) {
+    public default Direction refreshDirection(SmartBlockEntity be, Direction currentDirection, FluidTank tank, boolean output) {
         if (!be.hasLevel() || currentDirection.getAxis() == Direction.Axis.Y) { // If the level doesn't exist (low-key no idea how this error even occured), or the side is UP or DOWN, fix this
             return Direction.NORTH;
         };
@@ -47,7 +47,7 @@ public interface IFluidBlockEntity {
         while (i < 4) { // Loop through possible Directions, prioritising the current Direction
             BlockEntity adjacentBE = be.getLevel().getBlockEntity(be.getBlockPos().relative(direction)); // It thinks 'level' can be null (it can't)
             if (adjacentBE != null) {
-                FluidTransportBehaviour transport = TileEntityBehaviour.get(adjacentBE, FluidTransportBehaviour.TYPE);
+                FluidTransportBehaviour transport = BlockEntityBehaviour.get(adjacentBE, FluidTransportBehaviour.TYPE);
                 if (transport != null) {
                     if (output && transport.canPullFluidFrom(tank.getFluid(), be.getBlockState(), direction)) { // If Fluid can be outputted in this Direction
                         return direction;

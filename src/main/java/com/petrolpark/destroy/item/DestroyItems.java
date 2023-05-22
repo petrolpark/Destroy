@@ -3,17 +3,17 @@ package com.petrolpark.destroy.item;
 import static com.simibubi.create.AllTags.forgeItemTag;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
+import com.petrolpark.destroy.item.food.DestroyFoods;
 import com.petrolpark.destroy.item.renderer.GasMaskModel;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags.AllItemTags;
-
-import com.simibubi.create.content.AllSections;
-import com.simibubi.create.content.contraptions.itemAssembly.SequencedAssemblyItem;
-import com.simibubi.create.content.curiosities.CombustibleItem;
+import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.item.CombustibleItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.tags.ItemTags;
@@ -29,9 +29,9 @@ public class DestroyItems {
 
     private static CreateRegistrate REGISTRATE = Destroy.registrate();
 
-    static {
-        REGISTRATE.startSection(AllSections.MATERIALS);
-    };
+    // static {
+    //     REGISTRATE.startSection(AllSections.MATERIALS);
+    // };
 
     public static final ItemEntry<Item> LOGO = REGISTRATE.item("logo", Item::new)
         .properties(p -> p
@@ -43,9 +43,9 @@ public class DestroyItems {
             .tab(null)
         ).register();
 
-    static {
-        REGISTRATE.creativeModeTab(() -> DestroyCreativeModeTabs.TAB_DESTROY);
-    };
+    // static {
+    //     REGISTRATE.creativeModeTab(() -> DestroyCreativeModeTabs.TAB_DESTROY);
+    // };
 
     public static final ItemEntry<Item>
 
@@ -120,19 +120,15 @@ public class DestroyItems {
     RAW_NICKEL = REGISTRATE.item("raw_nickel", Item::new)
         .tag(forgeItemTag("raw_materials/nickel"), Tags.Items.RAW_MATERIALS)
         .register(),
-    CRUSHED_NICKEL_ORE = REGISTRATE.item("crushed_nickel_ore", Item::new)
-        .tag(AllItemTags.CRUSHED_ORES.tag)
-        .model(AssetLookup.existingItemModel())
-        .register(),
     CRUSHED_PALLADIUM_ORE = REGISTRATE.item("crushed_palladium_ore", Item::new)
-        .tag(AllItemTags.CRUSHED_ORES.tag)
+        .tag(AllItemTags.CRUSHED_RAW_MATERIALS.tag)
         .register(),
     CRUSHED_PLATINUM_ORE = REGISTRATE.item("crushed_platinum_ore", Item::new)
-        .tag(AllItemTags.CRUSHED_ORES.tag)
+        .tag(AllItemTags.CRUSHED_RAW_MATERIALS.tag)
         .model(AssetLookup.existingItemModel())
         .register(),
     CRUSHED_RHODIUM_ORE = REGISTRATE.item("crushed_rhodium_ore", Item::new)
-        .tag(AllItemTags.CRUSHED_ORES.tag)
+        .tag(AllItemTags.CRUSHED_RAW_MATERIALS.tag)
         .register(),
     PURE_GOLD_DUST = REGISTRATE.item("pure_gold_dust", Item::new)
         .tag(Tags.Items.DUSTS, ItemTags.PIGLIN_LOVED)
@@ -225,9 +221,9 @@ public class DestroyItems {
 
     // TOOLS AND ARMOR
 
-    static {
-        REGISTRATE.startSection(AllSections.KINETICS);
-    };
+    // static {
+    //     REGISTRATE.startSection(AllSections.KINETICS);
+    // };
 
     public static final ItemEntry<Item>
 
@@ -275,9 +271,9 @@ public class DestroyItems {
     SOAP = REGISTRATE.item("soap", Item::new)
         .register();
 
-    static {
-        REGISTRATE.startSection(AllSections.LOGISTICS);
-    };
+    // static {
+    //     REGISTRATE.startSection(AllSections.LOGISTICS);
+    // };
 
     public static final ItemEntry<SeismometerItem>
 
@@ -296,9 +292,9 @@ public class DestroyItems {
 
     // TOYS
 
-    static {
-        REGISTRATE.startSection(AllSections.MATERIALS);
-    };
+    // static {
+    //     REGISTRATE.startSection(AllSections.MATERIALS);
+    // };
 
     public static final ItemEntry<BucketAndSpadeItem> BUCKET_AND_SPADE = REGISTRATE.item("bucket_and_spade", BucketAndSpadeItem::new)
         .properties(p -> p
@@ -595,9 +591,9 @@ public class DestroyItems {
         .tag(DestroyItemTags.BEETROOT_ASHES.tag)
         .register();
 
-    static {
-        REGISTRATE.startSection(AllSections.CURIOSITIES);
-    };
+    // static {
+    //     REGISTRATE.startSection(AllSections.CURIOSITIES);
+    // };
 
     // SYRINGES
 
@@ -624,9 +620,9 @@ public class DestroyItems {
 
     // UNCATEGORISED
 
-    static {
-        REGISTRATE.startSection(AllSections.CURIOSITIES);
-    };
+    // static {
+    //     REGISTRATE.startSection(AllSections.CURIOSITIES);
+    // };
 
     public static final ItemEntry<Item>
 

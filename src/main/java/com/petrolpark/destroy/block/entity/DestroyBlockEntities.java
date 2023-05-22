@@ -18,45 +18,45 @@ public class DestroyBlockEntities {
     private static CreateRegistrate REGISTRATE = Destroy.registrate();
 
     public static final BlockEntityEntry<AgingBarrelBlockEntity> AGING_BARREL = REGISTRATE
-        .tileEntity("aging_barrel", AgingBarrelBlockEntity::new)
+        .blockEntity("aging_barrel", AgingBarrelBlockEntity::new)
         .validBlocks(DestroyBlocks.AGING_BARREL)
         .renderer(() -> AgingBarrelRenderer::new)
         .register();
 
     public static final BlockEntityEntry<BubbleCapBlockEntity> BUBBLE_CAP = REGISTRATE
-        .tileEntity("bubble_cap", BubbleCapBlockEntity::new)
+        .blockEntity("bubble_cap", BubbleCapBlockEntity::new)
         .validBlocks(DestroyBlocks.BUBBLE_CAP)
         .renderer(() -> BubbleCapRenderer::new)
         .register();
 
     public static final BlockEntityEntry<CentrifugeBlockEntity> CENTRIFUGE = REGISTRATE
-        .tileEntity("centrifuge", CentrifugeBlockEntity::new)
+        .blockEntity("centrifuge", CentrifugeBlockEntity::new)
         .instance(() -> CentrifugeCogInstance::new)
         .validBlocks(DestroyBlocks.CENTRIFUGE)
         .renderer(() -> CentrifugeRenderer::new)
         .register();
 
     public static final BlockEntityEntry<CoolerBlockEntity> COOLER = REGISTRATE
-        .tileEntity("cooler", CoolerBlockEntity::new)
+        .blockEntity("cooler", CoolerBlockEntity::new)
         .validBlocks(DestroyBlocks.COOLER)
         .renderer(() -> CoolerRenderer::new)
         .register();
 
     public static final BlockEntityEntry<DynamoBlockEntity> DYNAMO = REGISTRATE
-        .tileEntity("dynamo", DynamoBlockEntity::new)
+        .blockEntity("dynamo", DynamoBlockEntity::new)
         .instance(() -> DynamoCogInstance::new)
         .validBlocks(DestroyBlocks.DYNAMO)
         .renderer(() -> DynamoRenderer::new)
         .register();
 
     public static final BlockEntityEntry<PollutometerBlockEntity> POLLUTOMETER = REGISTRATE
-        .tileEntity("pollutometer", PollutometerBlockEntity::new)
+        .blockEntity("pollutometer", PollutometerBlockEntity::new)
         .validBlocks(DestroyBlocks.POLLUTOMETER)
         .renderer(() -> PollutometerRenderer::new)
         .register();
 
     public static final BlockEntityEntry<SandCastleBlockEntity> SAND_CASTLE = REGISTRATE
-        .tileEntity("sand_castle", SandCastleBlockEntity::new)
+        .blockEntity("sand_castle", SandCastleBlockEntity::new)
         .validBlocks(DestroyBlocks.SAND_CASTLE)
         .register();
 

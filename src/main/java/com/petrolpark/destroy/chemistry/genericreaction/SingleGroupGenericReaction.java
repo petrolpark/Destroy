@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.chemistry.genericreaction;
+package com.petrolpark.destroy.chemistry.genericReaction;
 
 import java.util.function.Supplier;
 

@@ -12,16 +12,16 @@ import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.recipe.AgingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.util.DestroyLang;
-import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour.TankSegment;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.item.SmartInventory;
-import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
-import com.simibubi.create.foundation.tileEntity.behaviour.belt.DirectBeltInputBehaviour;
-import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour.TankSegment;
-import com.simibubi.create.foundation.utility.recipe.RecipeFinder;
+import com.simibubi.create.foundation.recipe.RecipeFinder;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -41,7 +41,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGoggleInformation {
+public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 
     private static final Object agingRecipeKey = new Object();
     private static final int TANK_CAPACITY = 1000;
@@ -69,7 +69,7 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
     };
 
     @Override
-    public void addBehaviours(List<TileEntityBehaviour> behaviours) {
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         tank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, TANK_CAPACITY, true)
             .whenFluidUpdates(this::sendData);
         behaviours.add(tank);
@@ -148,7 +148,7 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
         inventory.deserializeNBT(compound.getCompound("Inventory"));
         timer = compound.getInt("Timer");
         totalTime = compound.getInt("TotalTime");
-        // Storage of what's in the Tank is automatically covered in SmartTileEntity
+        // Storage of what's in the Tank is automatically covered in SmartBlockEntity
     };
 
     @Override
@@ -157,7 +157,7 @@ public class AgingBarrelBlockEntity extends SmartTileEntity implements IHaveGogg
         compound.put("Inventory", inventory.serializeNBT());
         compound.putInt("Timer", timer);
         compound.putInt("TotalTime", totalTime);
-        // Retrieval of what's in the Tank is automatically covered in SmartTileEntity
+        // Retrieval of what's in the Tank is automatically covered in SmartBlockEntity
     };
 
     @Nonnull

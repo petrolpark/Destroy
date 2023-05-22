@@ -2,7 +2,7 @@ package com.petrolpark.destroy.item.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import com.simibubi.create.foundation.item.render.CreateCustomRenderedItemModel;
+import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
@@ -12,10 +12,9 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.ItemStack;
 
-public class SyringeItemRenderer extends CustomRenderedItemModelRenderer<SyringeItemRenderer.SyringeModel> {
+public class SyringeItemRenderer extends CustomRenderedItemModelRenderer {
 
     static float MOVE_TO_CENTRE_TIME = 0.25f;
     static float PAUSE_TIME = 0.6f;
@@ -23,7 +22,7 @@ public class SyringeItemRenderer extends CustomRenderedItemModelRenderer<Syringe
 
     @Override
     @SuppressWarnings("resource")
-    protected void render(ItemStack stack, SyringeModel model, PartialItemModelRenderer renderer, TransformType transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+    protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer, TransformType transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         LocalPlayer player = Minecraft.getInstance().player; // It thinks this is unclosed; IDK how to fix that
         if (player == null) return;
@@ -75,15 +74,4 @@ public class SyringeItemRenderer extends CustomRenderedItemModelRenderer<Syringe
 
         ms.popPose();
     };
-
-    @Override
-    public SyringeModel createModel(BakedModel originalModel) {
-        return new SyringeModel(originalModel);
-    };
-
-    public static class SyringeModel extends CreateCustomRenderedItemModel {
-        public SyringeModel(BakedModel template){
-            super(template, "");
-        };
-    };
-}
+};

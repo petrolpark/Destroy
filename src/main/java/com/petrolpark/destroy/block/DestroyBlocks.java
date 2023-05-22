@@ -5,12 +5,11 @@ import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.display.PollutometerDisplaySource;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
-import com.petrolpark.destroy.item.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.item.DestroyItems;
-import com.simibubi.create.content.AllSections;
-import com.simibubi.create.content.contraptions.components.AssemblyOperatorBlockItem;
-import com.simibubi.create.content.logistics.block.display.AllDisplayBehaviours;
-import com.simibubi.create.foundation.block.BlockStressDefaults;
+import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
+import com.simibubi.create.content.kinetics.BlockStressDefaults;
+import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
+import com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
@@ -40,9 +39,9 @@ public class DestroyBlocks {
         REGISTRATE.creativeModeTab(() -> DestroyCreativeModeTabs.TAB_DESTROY);
     };
 
-    static {
-        REGISTRATE.startSection(AllSections.KINETICS);
-    };
+    // static {
+    //     REGISTRATE.startSection(AllSections.KINETICS);
+    // };
 
     // CONTRAPTIONS
 
@@ -91,9 +90,9 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
-    static {
-        REGISTRATE.startSection(AllSections.LOGISTICS);
-    };
+    // static {
+    //     REGISTRATE.startSection(AllSections.LOGISTICS);
+    // };
 
     public static final BlockEntry<PollutometerBlock> POLLUTOMETER = REGISTRATE.block("pollutometer", PollutometerBlock::new)
         .initialProperties(SharedProperties::stone)
@@ -106,9 +105,9 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
-    static {
-        REGISTRATE.startSection(AllSections.CURIOSITIES);
-    };
+    // static {
+    //     REGISTRATE.startSection(AllSections.CURIOSITIES);
+    // };
 
     public static final BlockEntry<SandCastleBlock> SAND_CASTLE = REGISTRATE.block("sand_castle", SandCastleBlock::new)
         .initialProperties(Material.DECORATION)
@@ -144,9 +143,9 @@ public class DestroyBlocks {
         .build()
         .register();
 
-    static {
-        REGISTRATE.startSection(AllSections.MATERIALS);
-    };
+    // static {
+    //     REGISTRATE.startSection(AllSections.MATERIALS);
+    // };
 
     // EXPLOSIVES
 
@@ -444,9 +443,9 @@ public class DestroyBlocks {
         ).blockstate((c, p) -> p.axisBlock(c.get(), p.modLoc("block/raw_fries_block_side"), p.modLoc("block/raw_fries_block_end")))
         .register();
 
-    static {
-        REGISTRATE.startSection(AllSections.UNASSIGNED);
-    };
+    // static {
+    //     REGISTRATE.startSection(AllSections.UNASSIGNED);
+    // };
 
     // UNCATEGORISED
 

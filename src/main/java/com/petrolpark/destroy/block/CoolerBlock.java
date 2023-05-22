@@ -2,13 +2,13 @@ package com.petrolpark.destroy.block;
 
 
 import com.petrolpark.destroy.block.entity.CoolerBlockEntity;
-import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.entity.CoolerBlockEntity.ColdnessLevel;
+import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.AllShapes;
-import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
-import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock.HeatLevel;
-import com.simibubi.create.foundation.block.ITE;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
+import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -30,7 +30,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class CoolerBlock extends Block implements ITE<CoolerBlockEntity> {
+public class CoolerBlock extends Block implements IBE<CoolerBlockEntity> {
 
     public static final EnumProperty<ColdnessLevel> COLD_LEVEL = EnumProperty.create("breeze", ColdnessLevel.class);
     public static final EnumProperty<HeatLevel> HEAT_LEVEL = EnumProperty.create("blaze", HeatLevel.class); // This is purely for ease of interaction with Basin Recipes - most values do nothing
@@ -48,12 +48,12 @@ public class CoolerBlock extends Block implements ITE<CoolerBlockEntity> {
 
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState p_220082_4_, boolean p_220082_5_) {
-        withTileEntityDo(level, pos, be -> be.updateHeatLevel(state.getValue(COLD_LEVEL)));
+        withBlockEntityDo(level, pos, be -> be.updateHeatLevel(state.getValue(COLD_LEVEL)));
         
         if (level.isClientSide()) return;
         BlockEntity blockEntity = level.getBlockEntity(pos.above()); // Check for a Basin
-        if (!(blockEntity instanceof BasinTileEntity)) return;
-        BasinTileEntity basin = (BasinTileEntity) blockEntity;
+        if (!(blockEntity instanceof BasinBlockEntity)) return;
+        BasinBlockEntity basin = (BasinBlockEntity) blockEntity;
         basin.notifyChangeOfContents(); // Let the Basin know there's now a Cooler
     };
 
@@ -87,12 +87,12 @@ public class CoolerBlock extends Block implements ITE<CoolerBlockEntity> {
     };
 
     @Override
-    public Class<CoolerBlockEntity> getTileEntityClass() {
+    public Class<CoolerBlockEntity> getBlockEntityClass() {
         return CoolerBlockEntity.class;
     };
 
     @Override
-    public BlockEntityType<? extends CoolerBlockEntity> getTileEntityType() {
+    public BlockEntityType<? extends CoolerBlockEntity> getBlockEntityType() {
         return DestroyBlockEntities.COOLER.get();
     };
 

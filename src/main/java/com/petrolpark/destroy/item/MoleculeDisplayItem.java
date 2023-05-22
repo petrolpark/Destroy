@@ -8,7 +8,7 @@ import com.ibm.icu.text.DecimalFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.client.gui.MoleculeRenderer;
-import com.petrolpark.destroy.item.renderer.DestroyTooltipComponent;
+import com.petrolpark.destroy.item.tooltip.DestroyTooltipComponent;
 import com.petrolpark.destroy.util.DestroyLang;
 
 import net.minecraft.ChatFormatting;

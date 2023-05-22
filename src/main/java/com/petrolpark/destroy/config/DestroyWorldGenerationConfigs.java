@@ -1,7 +1,7 @@
 package com.petrolpark.destroy.config;
 
 import com.petrolpark.destroy.Destroy;
-import com.simibubi.create.foundation.worldgen.AllOreFeatureConfigEntries;
+import com.simibubi.create.infrastructure.worldgen.AllOreFeatureConfigEntries;
 
 import net.minecraftforge.common.ForgeConfigSpec.Builder;
 
@@ -18,7 +18,7 @@ public class DestroyWorldGenerationConfigs extends DestroyConfigBase {
 	public final ConfigBool disable = b(false, "disableWorldGen", Comments.disable);
 
 	@Override
-	protected void registerAll(Builder builder) {
+	public void registerAll(Builder builder) {
 		super.registerAll(builder);
 		AllOreFeatureConfigEntries.fillConfig(builder, Destroy.MOD_ID);
 	};

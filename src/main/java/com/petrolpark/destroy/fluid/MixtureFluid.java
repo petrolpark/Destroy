@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.simibubi.create.AllFluids.TintedFluidType;
-import com.simibubi.create.content.contraptions.fluids.VirtualFluid;
+import com.simibubi.create.content.fluids.VirtualFluid;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

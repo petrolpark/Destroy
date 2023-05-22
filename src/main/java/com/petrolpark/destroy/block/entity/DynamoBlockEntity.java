@@ -5,18 +5,18 @@ import java.util.Optional;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.behaviour.ChargingBehaviour;
-import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.behaviour.ChargingBehaviour.ChargingBehaviourSpecifics;
+import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.recipe.ChargingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
-import com.simibubi.create.content.contraptions.itemAssembly.SequencedAssemblyRecipe;
-import com.simibubi.create.content.contraptions.processing.BasinOperatingTileEntity;
-import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
-import com.simibubi.create.content.contraptions.processing.InWorldProcessing;
-import com.simibubi.create.content.contraptions.relays.belt.transport.TransportedItemStack;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
+import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
+import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
+import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.recipe.RecipeApplier;
 import com.simibubi.create.foundation.utility.VecHelper;
 
 import net.minecraft.core.BlockPos;
@@ -34,7 +34,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
-public class DynamoBlockEntity extends BasinOperatingTileEntity implements ChargingBehaviourSpecifics {
+public class DynamoBlockEntity extends BasinOperatingBlockEntity implements ChargingBehaviourSpecifics {
 
     private static final Object electrolysisRecipeKey = new Object();
 
@@ -46,7 +46,7 @@ public class DynamoBlockEntity extends BasinOperatingTileEntity implements Charg
     };
 
     @Override
-    public void addBehaviours(List<TileEntityBehaviour> behaviours) {
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         super.addBehaviours(behaviours);
         chargingBehaviour = new ChargingBehaviour(this);
         behaviours.add(chargingBehaviour);
@@ -79,7 +79,7 @@ public class DynamoBlockEntity extends BasinOperatingTileEntity implements Charg
         Optional<ChargingRecipe> recipe = getChargingRecipe(input.stack);
 		if (!recipe.isPresent()) return false;
 		if (simulate) return true;
-		List<ItemStack> outputs = InWorldProcessing.applyRecipeOn(canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), recipe.get());
+		List<ItemStack> outputs = RecipeApplier.applyRecipeOn(canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), recipe.get());
 
 		for (ItemStack createdItemStack : outputs) {
 			if (!createdItemStack.isEmpty()) {
@@ -103,10 +103,10 @@ public class DynamoBlockEntity extends BasinOperatingTileEntity implements Charg
         
         ItemStack itemStackCreated = ItemStack.EMPTY;
 		if (canProcessInBulk() || itemStack.getCount() == 1) { // If this is the last or all Items in the Stack
-			InWorldProcessing.applyRecipeOn(itemEntity, recipe.get()); // Apply the charging Recipe
+			RecipeApplier.applyRecipeOn(itemEntity, recipe.get()); // Apply the charging Recipe
 			itemStackCreated = itemEntity.getItem().copy();
 		} else {
-			for (ItemStack result : InWorldProcessing.applyRecipeOn(ItemHandlerHelper.copyStackWithSize(itemStack, 1), recipe.get())) { // Apply the Charging Recipe
+			for (ItemStack result : RecipeApplier.applyRecipeOn(ItemHandlerHelper.copyStackWithSize(itemStack, 1), recipe.get())) { // Apply the Charging Recipe
 				if (itemStackCreated.isEmpty()) {
 					itemStackCreated = result.copy();
                 };
@@ -129,7 +129,7 @@ public class DynamoBlockEntity extends BasinOperatingTileEntity implements Charg
 
     @Override
     public void onChargingCompleted() {
-        if (chargingBehaviour.mode == ChargingBehaviour.Mode.BASIN && matchBasinRecipe(currentRecipe) && getBasin().filter(BasinTileEntity::canContinueProcessing).isPresent()) {
+        if (chargingBehaviour.mode == ChargingBehaviour.Mode.BASIN && matchBasinRecipe(currentRecipe) && getBasin().filter(BasinBlockEntity::canContinueProcessing).isPresent()) {
 			startProcessingBasin();
 		} else {
 			basinChecker.scheduleUpdate();

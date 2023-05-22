@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.petrolpark.destroy.client.gui.DestroyIcons;
+import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIconOptions;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.tileEntity.behaviour.scrollvalue.INamedIconOptions;
 import com.simibubi.create.foundation.utility.Lang;
 
 import net.minecraft.nbt.CompoundTag;

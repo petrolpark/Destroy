@@ -3,8 +3,8 @@ package com.petrolpark.destroy.world.worldgen;
 import java.util.Map;
 
 import com.petrolpark.destroy.Destroy;
-import com.simibubi.create.foundation.worldgen.OreFeatureConfigEntry;
-import com.simibubi.create.foundation.worldgen.OreFeatureConfigEntry.DatagenExtension;
+import com.simibubi.create.infrastructure.worldgen.OreFeatureConfigEntry;
+import com.simibubi.create.infrastructure.worldgen.OreFeatureConfigEntry.DatagenExtension;
 
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;

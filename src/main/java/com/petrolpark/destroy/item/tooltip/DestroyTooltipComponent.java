@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.item.renderer;
+package com.petrolpark.destroy.item.tooltip;
 
 import java.util.function.Function;
 

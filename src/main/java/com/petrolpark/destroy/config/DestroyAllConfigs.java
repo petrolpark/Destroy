@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.simibubi.create.foundation.config.AllConfigs;
+import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

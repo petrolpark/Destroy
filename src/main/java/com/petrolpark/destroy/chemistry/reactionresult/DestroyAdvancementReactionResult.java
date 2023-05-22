@@ -1,10 +1,10 @@
-package com.petrolpark.destroy.chemistry.reactionresult;
+package com.petrolpark.destroy.chemistry.reactionResult;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReactionResult;
-import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 
 import net.minecraft.world.level.Level;
 
@@ -22,7 +22,7 @@ public class DestroyAdvancementReactionResult extends ReactionResult {
     };
 
     @Override
-    public void onBasinReaction(Level level, BasinTileEntity basin, Mixture mixture) {
+    public void onBasinReaction(Level level, BasinBlockEntity basin, Mixture mixture) {
         basin.getBehaviour(DestroyAdvancementBehaviour.TYPE).awardDestroyAdvancement(advancement);
     };
 

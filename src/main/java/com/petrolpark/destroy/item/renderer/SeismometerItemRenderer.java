@@ -1,8 +1,11 @@
 package com.petrolpark.destroy.item.renderer;
 
+import com.jozufozu.flywheel.core.PartialModel;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.item.DestroyItems;
+import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
@@ -16,7 +19,14 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 
-public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer<SeismometerItemRenderer.SeismometerModel> {
+public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer {
+
+    protected static final PartialModel UNANIMATED = new PartialModel(Destroy.asResource("item/seismometer/item"));
+    protected static final PartialModel BASE = new PartialModel(Destroy.asResource("item/seismometer/base"));
+    protected static final PartialModel NEEDLE = new PartialModel(Destroy.asResource("item/seismometer/needle"));
+    protected static final PartialModel PAGE_BLANK = new PartialModel(Destroy.asResource("item/seismometer/page_blank"));
+    protected static final PartialModel PAGE_LEVEL = new PartialModel(Destroy.asResource("item/seismometer/page_level"));
+    protected static final PartialModel PAGE_SPIKE = new PartialModel(Destroy.asResource("item/seismometer/page_spike"));
 
     private Boolean spike;
     private static int spikeNextPage; // Whether the next page to be shown should have a spike on it
@@ -38,7 +48,7 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer<Sei
 
     @Override
     @SuppressWarnings("null")
-    protected void render(ItemStack stack, SeismometerModel model, PartialItemModelRenderer renderer, TransformType transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+    protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer, TransformType transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         float partialTicks = AnimationTickHolder.getPartialTicks();
         int ticksThroughAnimation = AnimationTickHolder.getTicks(true) % 32;
         TransformStack msr = TransformStack.cast(ms);
@@ -62,7 +72,7 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer<Sei
             animate = true;
         };
         
-        renderer.render(animate ? model.getPartial("base") : model.getOriginalModel(), light);
+        renderer.render(animate ? BASE.get() : model.getOriginalModel(), light);
 
         if (!animate) {
             ms.popPose();
@@ -74,7 +84,7 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer<Sei
             spike = spikeNextPage > 0;
         };
 
-        BakedModel pageModel = model.getPartial(spike ? "page_spike" : "page_level");
+        BakedModel pageModel = spike ? PAGE_SPIKE.get() : PAGE_LEVEL.get();
 
         ms.pushPose();
         renderer.render(pageModel, light);
@@ -100,23 +110,10 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer<Sei
         ms.translate(0f, 0f, -5/16f);
         ms.pushPose();
         msr.rotateY(angle.getValue(partialTicks));
-        renderer.render(model.getPartial("needle"), light);
+        renderer.render(NEEDLE.get(), light);
         ms.popPose();
         ms.popPose();
 
         ms.popPose();
     };
-
-    @Override
-    public SeismometerModel createModel(BakedModel originalModel) {
-        return new SeismometerModel(originalModel);
-    };
-    
-    public static class SeismometerModel extends DestroyCustomRenderedItemModel {
-        
-        public SeismometerModel(BakedModel template){
-            super(template, "seismometer");
-            addPartials("base", "needle", "page_blank", "page_level", "page_spike");
-        };
-    }
 };

@@ -3,9 +3,9 @@ package com.petrolpark.destroy.behaviour;
 import java.util.UUID;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
-import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
-import com.simibubi.create.foundation.tileEntity.behaviour.BehaviourType;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -15,14 +15,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.FakePlayer;
 
-public class DestroyAdvancementBehaviour extends TileEntityBehaviour {
+public class DestroyAdvancementBehaviour extends BlockEntityBehaviour {
 
     public static final BehaviourType<DestroyAdvancementBehaviour> TYPE = new BehaviourType<>();
 
     private UUID playerUUID;
 
-    public DestroyAdvancementBehaviour(SmartTileEntity te) {
-        super(te);
+    public DestroyAdvancementBehaviour(SmartBlockEntity be) {
+        super(be);
     };
 
     public Player getPlayer() {
@@ -35,11 +35,11 @@ public class DestroyAdvancementBehaviour extends TileEntityBehaviour {
 		if (player == null)
 			return;
 		playerUUID = uuid;
-		tileEntity.setChanged();
+		blockEntity.setChanged();
 	};
 
     public static void setPlacedBy(Level level, BlockPos pos, LivingEntity placer) {
-		DestroyAdvancementBehaviour behaviour = TileEntityBehaviour.get(level, pos, TYPE);
+		DestroyAdvancementBehaviour behaviour = BlockEntityBehaviour.get(level, pos, TYPE);
 		if (behaviour == null || placer instanceof FakePlayer) return;
 		if (placer instanceof ServerPlayer) {
             behaviour.setPlayer(placer.getUUID());

@@ -1,6 +1,6 @@
 package com.petrolpark.destroy.chemistry;
 
-import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 
 import net.minecraft.world.level.Level;
 
@@ -28,7 +28,7 @@ public abstract class ReactionResult {
      * @param basin The Block Entity associated with the Basin
      * @param mixture The Mixture at the time when this Reaction Result occurs
      */
-    public abstract void onBasinReaction(Level level, BasinTileEntity basin, Mixture mixture);
+    public abstract void onBasinReaction(Level level, BasinBlockEntity basin, Mixture mixture);
 
     /**
      * Do something when the Reaction finishes in a Vat.

@@ -3,7 +3,7 @@ package com.petrolpark.destroy.fluid;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.fluid.MixtureFluid.MixtureFluidType;
 import com.petrolpark.destroy.fluid.UrineFluid.UrineFluidType;
-import com.simibubi.create.content.contraptions.fluids.VirtualFluid;
+import com.simibubi.create.content.fluids.VirtualFluid;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.FluidEntry;
 

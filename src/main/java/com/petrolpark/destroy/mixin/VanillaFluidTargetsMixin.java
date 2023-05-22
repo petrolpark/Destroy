@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.fluid.DestroyFluids;
-import com.simibubi.create.content.contraptions.fluids.pipes.VanillaFluidTargets;
+import com.simibubi.create.content.fluids.pipes.VanillaFluidTargets;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;

@@ -1,10 +1,10 @@
-package com.petrolpark.destroy.chemistry.index.genericreaction;
+package com.petrolpark.destroy.chemistry.index.genericReaction;
 
 import java.util.function.Supplier;
 
 import com.petrolpark.destroy.chemistry.Reaction;
-import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
-import com.petrolpark.destroy.chemistry.genericreaction.SingleGroupGenericReaction;
+import com.petrolpark.destroy.chemistry.genericReaction.GenericReactant;
+import com.petrolpark.destroy.chemistry.genericReaction.SingleGroupGenericReaction;
 import com.petrolpark.destroy.chemistry.index.group.AlkeneGroup;
 
 public class AlkeneHydration extends SingleGroupGenericReaction<AlkeneGroup> {

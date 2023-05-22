@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.client.gui.stackedtextbox;
+package com.petrolpark.destroy.client.gui.stackedTextBox;
 
 import com.simibubi.create.foundation.gui.widget.ElementWidget;
 

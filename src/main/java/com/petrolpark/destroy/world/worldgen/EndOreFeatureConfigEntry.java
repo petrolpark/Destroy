@@ -3,9 +3,9 @@ package com.petrolpark.destroy.world.worldgen;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.simibubi.create.foundation.worldgen.AllFeatures;
-import com.simibubi.create.foundation.worldgen.ConfigDrivenOreFeatureConfiguration;
-import com.simibubi.create.foundation.worldgen.OreFeatureConfigEntry;
+import com.simibubi.create.infrastructure.worldgen.AllFeatures;
+import com.simibubi.create.infrastructure.worldgen.ConfigDrivenOreFeatureConfiguration;
+import com.simibubi.create.infrastructure.worldgen.OreFeatureConfigEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import net.minecraft.core.RegistryAccess;

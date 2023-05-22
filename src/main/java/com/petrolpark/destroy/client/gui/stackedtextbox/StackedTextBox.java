@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.client.gui.stackedtextbox;
+package com.petrolpark.destroy.client.gui.stackedTextBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import com.google.common.base.Strings;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.item.TooltipHelper;
+import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 import com.simibubi.create.foundation.utility.Components;
 
 import net.minecraft.ChatFormatting;
@@ -44,7 +45,7 @@ public class StackedTextBox extends AbstractStackedTextBox {
 
     public StackedTextBox withLines(Component text) {
         this.lines.clear();
-        this.lines.addAll(TooltipHelper.cutTextComponent(text, ChatFormatting.GRAY, ChatFormatting.GRAY));
+        this.lines.addAll(TooltipHelper.cutTextComponent(text, Palette.GRAY));
 
         // Determine the height and width of this info box
         int width = 0;

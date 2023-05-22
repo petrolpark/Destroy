@@ -1,8 +1,13 @@
 package com.petrolpark.destroy.item;
 
 import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositionsProvider;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
+import com.petrolpark.destroy.item.tooltip.IDynamicItemDescription;
+import com.simibubi.create.foundation.item.ItemDescription;
+import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -12,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-public class ChorusWineItem extends AlcoholicDrinkItem {
+public class ChorusWineItem extends AlcoholicDrinkItem implements IDynamicItemDescription {
 
     public ChorusWineItem(Properties properties, int strength) {
         super(properties, strength);
@@ -36,6 +41,19 @@ public class ChorusWineItem extends AlcoholicDrinkItem {
             });
         };
         return stack;
+    }
+
+    @Override
+    public ItemDescription getItemDescription() {
+        return new ItemDescription.Builder(getPalette())
+            .addSummary(Component.translatable("item.destroy.chorus_wine.dynamic_tooltip.summary").getString())
+            .addAction(Component.translatable("item.destroy.tooltip.chorus_wine.dynamic_tooltip.condition1").getString(), Component.translatable("item.destroy.tooltip.chorus_wine.dynamic_tooltip.behaviour1", DestroyAllConfigs.COMMON.substances.teleportTime.get()).getString())
+            .build();
+    };
+
+    @Override
+    public Palette getPalette() {
+        return Palette.STANDARD_CREATE;
     };
     
 }

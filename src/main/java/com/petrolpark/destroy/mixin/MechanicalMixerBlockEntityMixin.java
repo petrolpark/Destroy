@@ -10,9 +10,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.recipe.ReactionInBasinRecipe;
-import com.simibubi.create.content.contraptions.components.mixer.MechanicalMixerTileEntity;
-import com.simibubi.create.content.contraptions.processing.BasinRecipe;
-import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
+import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
+import com.simibubi.create.content.processing.basin.BasinRecipe;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -21,11 +21,11 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 
-@Mixin(MechanicalMixerTileEntity.class)
-public class MechanicalMixerTileEntityMixin {
+@Mixin(MechanicalMixerBlockEntity.class)
+public class MechanicalMixerBlockEntityMixin {
     
     /**
-     * Injection into {@link com.simibubi.create.content.contraptions.components.mixer.MechanicalMixerTileEntity Mechanical Mixers}
+     * Injection into {@link com.simibubi.create.content.contraptions.components.mixer.MechanicalMixerBlockEntity Mechanical Mixers}
      * to allow them to recognise Mixtures that are able to React. A lot is copied from the {@link }
      * @see com.petrolpark.destroy.recipe.ReactionInBasinRecipe Reactions in Basins
      */
@@ -33,7 +33,7 @@ public class MechanicalMixerTileEntityMixin {
     @SuppressWarnings("null")
     public void inGetMatchingRecipes(CallbackInfoReturnable<List<Recipe<?>>> ci) {
 
-        ((BasinOperatingTileEntityAccessor)this).invokeGetBasin().ifPresent(basin -> {
+        ((BasinOperatingBlockEntityAccessor)this).invokeGetBasin().ifPresent(basin -> {
 
             if (!basin.hasLevel()) return;
 
@@ -62,7 +62,7 @@ public class MechanicalMixerTileEntityMixin {
             };
               
             // Only return this if there is definitely a Reaction possible
-            ReactionInBasinRecipe recipe = ReactionInBasinRecipe.create(availableFluidStacks, availableItemStacks, BasinTileEntity.getHeatLevelOf(basin.getLevel().getBlockState(basin.getBlockPos().below())));
+            ReactionInBasinRecipe recipe = ReactionInBasinRecipe.create(availableFluidStacks, availableItemStacks, BasinBlockEntity.getHeatLevelOf(basin.getLevel().getBlockState(basin.getBlockPos().below())));
             if (!(recipe == null) && BasinRecipe.match(basin, recipe)) ci.setReturnValue(List.of(recipe)); // It thinks basin.getLevel() might be null
         });
     };

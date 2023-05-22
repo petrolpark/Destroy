@@ -3,11 +3,11 @@ package com.petrolpark.destroy.behaviour;
 import java.util.List;
 
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.contraptions.relays.belt.transport.TransportedItemStack;
-import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
-import com.simibubi.create.foundation.tileEntity.behaviour.belt.BeltProcessingBehaviour;
-import com.simibubi.create.foundation.tileEntity.behaviour.belt.TransportedItemStackHandlerBehaviour;
+import com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour;
+import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour;
+import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.utility.VecHelper;
 
 import net.minecraft.core.BlockPos;
@@ -50,12 +50,12 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
 		public float getKineticSpeed();
     };
 
-    public <T extends SmartTileEntity & ChargingBehaviourSpecifics> ChargingBehaviour(T te) {
-        super(te);
-        this.specifics = te;
+    public <T extends SmartBlockEntity & ChargingBehaviourSpecifics> ChargingBehaviour(T be) {
+        super(be);
+        this.specifics = be;
         this.mode = Mode.WORLD;
         entityScanCooldown = ENTITY_SCAN_TIME;
-        targetPosition = Vec3.atBottomCenterOf(te.getBlockPos().below());
+        targetPosition = Vec3.atBottomCenterOf(be.getBlockPos().below());
         whenItemEnters((s, i) -> BeltChargingCallbacks.onItemReceived(s, i, this)); // What to do with the Item Stack when it arrives beneath the charger
 		whileItemHeld((s, i) -> BeltChargingCallbacks.whenItemHeld(s, i, this)); // What to do with the Item Stack while we're keeping it underneath the charger
     };
@@ -89,7 +89,7 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
 		running = true;
 		runningTicks = 0;
         this.targetPosition = targetPosition;
-		tileEntity.sendData();
+		blockEntity.sendData();
 	};
 
     @Override
@@ -108,10 +108,10 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
 				if (entityScanCooldown <= 0) { // If this is the tick to search for Entities
 					entityScanCooldown = ENTITY_SCAN_TIME;
 
-					if (TileEntityBehaviour.get(level, pos.below(2), TransportedItemStackHandlerBehaviour.TYPE) != null) // If the charger is above a Belt or Depot...
+					if (BlockEntityBehaviour.get(level, pos.below(2), TransportedItemStackHandlerBehaviour.TYPE) != null) // If the charger is above a Belt or Depot...
 						return; // ...don't start anything, as this is already handled in BeltChargingCallbacks
 					if (AllBlocks.BASIN.has(level.getBlockState(pos.below(2)))) // If the charger is above a Basin...
-						return; // ...don't start anything, as this is already handled in DynamoTileEntity
+						return; // ...don't start anything, as this is already handled in DynamoBlockEntity
 
 					for (ItemEntity itemEntity : level.getEntitiesOfClass(ItemEntity.class, new AABB(pos.below()).deflate(.125f))) { // Check all Item Entities in the block below
 						if (!itemEntity.isAlive() || !itemEntity.isOnGround()) continue; // Ignore Item Entities marked for removal
@@ -135,7 +135,7 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
                 };
                 //TODO sounds
                 if (!level.isClientSide()) {
-                    tileEntity.sendData();
+                    blockEntity.sendData();
                 };
             }
         };
@@ -144,7 +144,7 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
 			finished = true;
 			running = false;
 			specifics.onChargingCompleted();
-			tileEntity.sendData();
+			blockEntity.sendData();
 			return;
 		};
 
@@ -161,7 +161,7 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
 		Level level = getWorld();
 		if (level.isClientSide()) return;
 		if (specifics.tryProcessInBasin(false)) { // If we successfully charged the Item Stack
-			tileEntity.sendData();
+			blockEntity.sendData();
         };
 	};
 
@@ -181,7 +181,7 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
 			if (!entity.isAlive() || !entity.isOnGround()) continue; // Ignore Item Entities marked for removal
 
 			entityScanCooldown = 0; // Reset the Item Entity scanner
-			if (specifics.tryProcessInWorld(itemEntity, false)) tileEntity.sendData(); // If successfully charged the Item Stack
+			if (specifics.tryProcessInWorld(itemEntity, false)) blockEntity.sendData(); // If successfully charged the Item Stack
 			if (!bulk) break; // If we can only charge one Item Stack Entity, give up now
 		}
 	};

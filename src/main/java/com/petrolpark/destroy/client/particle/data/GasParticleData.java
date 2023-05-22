@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.GasParticle;
-import com.simibubi.create.content.contraptions.particle.ICustomParticleDataWithSprite;
+import com.simibubi.create.foundation.particle.ICustomParticleDataWithSprite;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
 
 import net.minecraft.client.particle.ParticleEngine.SpriteParticleRegistration;

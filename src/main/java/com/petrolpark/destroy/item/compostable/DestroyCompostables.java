@@ -1,9 +1,10 @@
-package com.petrolpark.destroy.item;
+package com.petrolpark.destroy.item.compostable;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.item.DestroyItems;
 
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.ComposterBlock;

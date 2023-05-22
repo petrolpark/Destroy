@@ -1,11 +1,12 @@
-package com.petrolpark.destroy.item;
+package com.petrolpark.destroy.item.potatoCannonProjectileType;
 
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;
-import com.simibubi.create.content.curiosities.weapons.PotatoCannonProjectileType;
+import com.petrolpark.destroy.item.DestroyItems;
+import com.simibubi.create.content.equipment.potatoCannon.PotatoCannonProjectileType;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffect;

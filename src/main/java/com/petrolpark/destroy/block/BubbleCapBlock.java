@@ -6,8 +6,8 @@ import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
-import com.simibubi.create.content.contraptions.wrench.IWrenchable;
-import com.simibubi.create.foundation.block.ITE;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BubbleCapBlock extends Block implements ITE<BubbleCapBlockEntity>, IWrenchable {
+public class BubbleCapBlock extends Block implements IBE<BubbleCapBlockEntity>, IWrenchable {
 
     public static final DirectionProperty PIPE_FACE = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty TOP = BooleanProperty.create("top"); // Whether this Bubble Cap is at the top of a Distillation Tower
@@ -47,7 +47,7 @@ public class BubbleCapBlock extends Block implements ITE<BubbleCapBlockEntity>, 
     @Override
     public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (oldState.getBlock() == state.getBlock() || isMoving) return; // So we don't get in an infinite loop of noticing we've been placed, so setting the Block State, so noticing we've been 'placed', etc.
-        withTileEntityDo(worldIn, pos, be -> {
+        withBlockEntityDo(worldIn, pos, be -> {
             be.attemptRotation(false);
             be.createOrAddToTower(worldIn);
         });
@@ -64,7 +64,7 @@ public class BubbleCapBlock extends Block implements ITE<BubbleCapBlockEntity>, 
         BlockPos posAbove = pos.above();
         boolean isAbove = posAbove.getY() == neighbor.getY(); // If the Block changed is above
         boolean isBelow = pos.getY() - 1 == neighbor.getY(); // If the Block changed is below
-        withTileEntityDo(level, pos, be -> {
+        withBlockEntityDo(level, pos, be -> {
             be.attemptRotation(false);
             if (isAbove || isBelow) {
                 be.createOrAddToTower(level);
@@ -80,7 +80,7 @@ public class BubbleCapBlock extends Block implements ITE<BubbleCapBlockEntity>, 
     @Override
 	public InteractionResult onWrenched(BlockState state, UseOnContext context) {
 		if (!context.getLevel().isClientSide()) {
-            BubbleCapBlockEntity be = getTileEntity(context.getLevel(), context.getClickedPos());
+            BubbleCapBlockEntity be = getBlockEntity(context.getLevel(), context.getClickedPos());
             if (be == null) return InteractionResult.PASS;
             if (be.attemptRotation(true)) {
                 playRotateSound(context.getLevel(), context.getClickedPos());
@@ -113,7 +113,7 @@ public class BubbleCapBlock extends Block implements ITE<BubbleCapBlockEntity>, 
 
     @Override
 	public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		ITE.onRemove(state, worldIn, pos, newState);
+		IBE.onRemove(state, worldIn, pos, newState);
 	};
 
     /**
@@ -128,12 +128,12 @@ public class BubbleCapBlock extends Block implements ITE<BubbleCapBlockEntity>, 
     };
 
     @Override
-    public Class<BubbleCapBlockEntity> getTileEntityClass() {
+    public Class<BubbleCapBlockEntity> getBlockEntityClass() {
         return BubbleCapBlockEntity.class;
     }
 
     @Override
-    public BlockEntityType<? extends BubbleCapBlockEntity> getTileEntityType() {
+    public BlockEntityType<? extends BubbleCapBlockEntity> getBlockEntityType() {
         return DestroyBlockEntities.BUBBLE_CAP.get();
     }
     

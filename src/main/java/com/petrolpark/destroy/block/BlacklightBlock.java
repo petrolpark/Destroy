@@ -3,7 +3,7 @@ package com.petrolpark.destroy.block;
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.block.shape.DestroyShapes;
-import com.simibubi.create.content.contraptions.wrench.IWrenchable;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
 
 import net.minecraft.core.BlockPos;

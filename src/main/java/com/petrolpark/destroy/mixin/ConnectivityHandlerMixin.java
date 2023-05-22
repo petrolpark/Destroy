@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.petrolpark.destroy.behaviour.PollutingBehaviour;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
-import com.simibubi.create.foundation.tileEntity.IMultiTileContainer;
+import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,7 +21,7 @@ public class ConnectivityHandlerMixin {
     
     /**
      * Injection into {@link com.simibubi.create.api.connectivity.ConnectivityHandler ConnectivityHandler}.
-     * This is called whenever part of a {@link com.simibubi.create.content.contraptions.base.fluids.tank.FluidTankTileEntity Fluid Tank} is destroyed. It's purpose is to determine if any Fluid
+     * This is called whenever part of a {@link com.simibubi.create.content.contraptions.base.fluids.tank.FluidTankBlockEntity Fluid Tank} is destroyed. It's purpose is to determine if any Fluid
      * had to be voided because it wouldn't fit, and if so, {@link com.petrolpark.destroy.behaviour.PollutingBehaviour#pollute pollute the Level} accordingly.
      * It's mostly all copied from {@link com.simibubi.create.api.connectivity.ConnectivityHandler this internal splitMulti method}.
      * @param <T> A type of Block Entity (typically Fluid Tank)
@@ -29,14 +29,14 @@ public class ConnectivityHandlerMixin {
      * @param ci The callback
      */
     @Inject(method = "splitMulti", at = @At(value="HEAD"))
-    private static <T extends BlockEntity & IMultiTileContainer> void inSplitMulti(T be, CallbackInfo ci) {
+    private static <T extends BlockEntity & IMultiBlockEntityContainer> void inSplitMulti(T be, CallbackInfo ci) {
 
         BlockPos startPos = be.getBlockPos(); // The position of the BE destroyed
 
         Level level = be.getLevel();
 		if (level == null) return; // Stop if this isn't in a Level
 
-		be = be.getControllerTE();
+		be = be.getControllerBE();
 		if (be == null) return; // Stop if there's no controller
 
 		int height = be.getHeight();
@@ -47,7 +47,7 @@ public class ConnectivityHandlerMixin {
 
 		FluidStack toDistribute = FluidStack.EMPTY;
 		int maxCapacity = 0;
-		if (!(be instanceof IMultiTileContainer.Fluid ifluidBE && ifluidBE.hasTank())) return;
+		if (!(be instanceof IMultiBlockEntityContainer.Fluid ifluidBE && ifluidBE.hasTank())) return;
         toDistribute = ifluidBE.getFluid(0); // Get the Fluid which has to be redistributed
         maxCapacity = ifluidBE.getTankSize(0); // Get how much Fluid can fit in each Tank (I think?)
 

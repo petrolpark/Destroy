@@ -1,8 +1,9 @@
-package com.petrolpark.destroy.item;
+package com.petrolpark.destroy.item.armorMaterial;
 
 import java.util.function.Supplier;
 
 import com.google.common.base.Suppliers;
+import com.petrolpark.destroy.item.DestroyItems;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;

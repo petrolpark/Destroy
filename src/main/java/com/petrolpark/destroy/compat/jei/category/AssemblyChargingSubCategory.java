@@ -3,7 +3,7 @@ package com.petrolpark.destroy.compat.jei.category;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.compat.jei.animation.AnimatedDynamo;
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory;
-import com.simibubi.create.content.contraptions.itemAssembly.SequencedRecipe;
+import com.simibubi.create.content.processing.sequenced.SequencedRecipe;
 
 public class AssemblyChargingSubCategory extends SequencedAssemblySubCategory {
 

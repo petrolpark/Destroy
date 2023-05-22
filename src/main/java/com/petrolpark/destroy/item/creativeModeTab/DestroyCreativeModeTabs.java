@@ -1,4 +1,6 @@
-package com.petrolpark.destroy.item;
+package com.petrolpark.destroy.item.creativeModeTab;
+
+import com.petrolpark.destroy.item.DestroyItems;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;

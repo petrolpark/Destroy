@@ -1,6 +1,6 @@
 package com.petrolpark.destroy.client.particle;
 
-import com.simibubi.create.content.curiosities.bell.BasicParticleData;
+import com.simibubi.create.content.equipment.bell.BasicParticleData;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;

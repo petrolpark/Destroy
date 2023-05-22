@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:item/crushed_palladium_ore"
+      "layer0": "create:item/crushed_raw_palladium"
     }
   }

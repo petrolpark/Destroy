@@ -12,13 +12,15 @@ import com.petrolpark.destroy.chemistry.index.DestroyGroupFinder;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.DestroyReactions;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
-import com.petrolpark.destroy.client.ponder.DestroySceneIndex;
+import com.petrolpark.destroy.client.ponder.DestroyPonderIndex;
+import com.petrolpark.destroy.client.ponder.DestroyPonderTags;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.fluid.DestroyFluids;
-import com.petrolpark.destroy.item.DestroyCompostables;
 import com.petrolpark.destroy.item.DestroyItems;
-import com.petrolpark.destroy.item.DestroyPotatoCannonProjectileTypes;
+import com.petrolpark.destroy.item.compostable.DestroyCompostables;
+import com.petrolpark.destroy.item.potatoCannonProjectileType.DestroyPotatoCannonProjectileTypes;
+import com.petrolpark.destroy.item.tooltip.IDynamicItemDescription;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.recipe.DestroyCropMutations;
 import com.petrolpark.destroy.recipe.DestroyMysteriousItemConversions;
@@ -30,7 +32,10 @@ import com.petrolpark.destroy.world.village.DestroyVillagers;
 import com.petrolpark.destroy.world.worldgen.DestroyOreFeatureConfigEntries;
 import com.petrolpark.destroy.world.worldgen.DestroyWorldGen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.tterrag.registrate.util.nullness.NonNullSupplier;
+import com.simibubi.create.foundation.item.ItemDescription;
+import com.simibubi.create.foundation.item.KineticStats;
+import com.simibubi.create.foundation.item.TooltipModifier;
+import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -54,16 +59,23 @@ public class Destroy {
 
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    @SuppressWarnings("removal")
-    private static final NonNullSupplier<CreateRegistrate> REGISTRATE = CreateRegistrate.lazy(MOD_ID);
+    private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MOD_ID);
 
     public static final CreateRegistrate registrate() {
-        return REGISTRATE.get();  
+        return REGISTRATE;  
     };
 
     public static ResourceLocation asResource(String path) {
         return new ResourceLocation(MOD_ID, path);
     };
+
+    static {
+		REGISTRATE.setTooltipModifierFactory(item -> {
+			return new ItemDescription.Modifier(item, Palette.STANDARD_CREATE)
+				.andThen(TooltipModifier.mapNull(KineticStats.create(item)))
+                .andThen(TooltipModifier.mapNull(IDynamicItemDescription.create(item)));
+		});
+	}
 
     // Initiation
 
@@ -71,6 +83,8 @@ public class Destroy {
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         //IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
+
+        REGISTRATE.registerEventListeners(modEventBus);
 
         // Mod objects
         DestroyTags.register();
@@ -125,7 +139,8 @@ public class Destroy {
     };
 
     public static void clientInit(final FMLClientSetupEvent event) {
-        DestroySceneIndex.register();
+        DestroyPonderTags.register();
+        DestroyPonderIndex.register();
     };
 
     public static void gatherData(GatherDataEvent event) {

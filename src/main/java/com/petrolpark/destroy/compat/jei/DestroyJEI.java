@@ -36,8 +36,8 @@ import com.simibubi.create.compat.jei.EmptyBackground;
 import com.simibubi.create.compat.jei.ItemIcon;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory.Info;
-import com.simibubi.create.content.contraptions.processing.BasinRecipe;
-import com.simibubi.create.foundation.utility.recipe.IRecipeTypeInfo;
+import com.simibubi.create.content.processing.basin.BasinRecipe;
+import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;

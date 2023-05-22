@@ -4,9 +4,9 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
-import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
-import com.simibubi.create.foundation.tileEntity.behaviour.BehaviourType;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -20,14 +20,14 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * A Behaviour for Tile Entities which have an 'owner' and which should make that owner cry if destroyed.
  */
-public class SentimentalBehaviour extends TileEntityBehaviour {
+public class SentimentalBehaviour extends BlockEntityBehaviour {
 
     public static BehaviourType<SentimentalBehaviour> TYPE = new BehaviourType<>();
 
     public LivingEntity owner;
 
-    public SentimentalBehaviour(SmartTileEntity te) {
-        super(te);
+    public SentimentalBehaviour(SmartBlockEntity be) {
+        super(be);
     };
 
     @Override
@@ -37,7 +37,7 @@ public class SentimentalBehaviour extends TileEntityBehaviour {
 
     public void setOwner(LivingEntity owner) {
         this.owner = owner;
-        tileEntity.sendData();
+        blockEntity.sendData();
     };
 
     /**

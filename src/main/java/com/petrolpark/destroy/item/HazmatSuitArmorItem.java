@@ -1,6 +1,7 @@
 package com.petrolpark.destroy.item;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.item.armorMaterial.DestroyArmorMaterials;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;

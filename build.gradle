@@ -62,36 +62,24 @@ minecraft {
                 }
             }
         }
-
-        data {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-            args '--mod', 'destroy', '--all', '--output', file('src/main/resources/'), '--existing', file('src/generated/resources/')
-            mods {
-                destroy {
-                    source sourceSets.main
-                }
-            }
-        }
     }
 }
 
 repositories {
-    maven { //JEI
-        name "Progwml6 maven"
-        url "https://dvs1.progwml6.com/files/maven/"
+    maven { // JEI
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
     }
-    maven { //JEI mirror
-        name "ModMaven"
-        url "https://modmaven.dev"
+    maven { // JEI mirror
+        name = "ModMaven"
+        url = "https://modmaven.dev"
     }
-    maven { //Create, Flywheel and Registrate
+    maven { // Create, Flywheel and Registrate
         name = 'tterag maven'
         url = 'https://www.cursemaven.com'
     }
-    maven { //Curse Maven
-        url "https://cursemaven.com"
+    maven { // Curse Maven
+        url = "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
@@ -116,7 +104,7 @@ minecraft.runs.all {
 
 dependencies {
     //MC
-    minecraft "net.minecraftforge:forge:1.19.2-43.2.0"
+    minecraft "net.minecraftforge:forge:1.19.2-43.2.3"
     
     //JEI
     implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}-common-api:${jei_version}")
@@ -138,8 +126,6 @@ dependencies {
         jarJar.ranged(it, "[4.9.0]")
     }
 }
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 jar {
     manifest {

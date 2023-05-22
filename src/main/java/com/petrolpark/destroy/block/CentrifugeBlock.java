@@ -6,9 +6,9 @@ import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
-import com.simibubi.create.content.contraptions.base.KineticBlock;
-import com.simibubi.create.content.contraptions.relays.elementary.ICogWheel;
-import com.simibubi.create.foundation.block.ITE;
+import com.simibubi.create.content.kinetics.base.KineticBlock;
+import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
+import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,7 +30,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlockEntity>, ICogWheel {
+public class CentrifugeBlock extends KineticBlock implements IBE<CentrifugeBlockEntity>, ICogWheel {
 
     public static final DirectionProperty DENSE_OUTPUT_FACE = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -43,7 +43,7 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
     public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         super.onPlace(state, worldIn, pos, oldState, isMoving);
         if (oldState.getBlock() == state.getBlock() || isMoving) return; // So we don't get in an infinite loop of noticing we've been placed, so setting the Block State, so noticing we've been placed, etc.
-        withTileEntityDo(worldIn, pos, be -> {
+        withBlockEntityDo(worldIn, pos, be -> {
             be.attemptRotation(false);
         });
     };
@@ -55,13 +55,13 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
 
     @Override
 	public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		ITE.onRemove(state, worldIn, pos, newState);
+		IBE.onRemove(state, worldIn, pos, newState);
 	};
 
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
-        withTileEntityDo(level, pos, te -> {
-            te.attemptRotation(false);
+        withBlockEntityDo(level, pos, be -> {
+            be.attemptRotation(false);
         });
         super.onNeighborChange(state, level, pos, neighbor);
     };
@@ -80,7 +80,7 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
     @Override
 	public InteractionResult onWrenched(BlockState state, UseOnContext context) {
 		if (!context.getLevel().isClientSide()) {
-            CentrifugeBlockEntity be = getTileEntity(context.getLevel(), context.getClickedPos());
+            CentrifugeBlockEntity be = getBlockEntity(context.getLevel(), context.getClickedPos());
             if (be == null) return InteractionResult.PASS;
             if (be.attemptRotation(true)) {
                 playRotateSound(context.getLevel(), context.getClickedPos());
@@ -98,12 +98,12 @@ public class CentrifugeBlock extends KineticBlock implements ITE<CentrifugeBlock
     };
 
     @Override
-    public Class<CentrifugeBlockEntity> getTileEntityClass() {
+    public Class<CentrifugeBlockEntity> getBlockEntityClass() {
         return CentrifugeBlockEntity.class;
     };
 
     @Override
-    public BlockEntityType<? extends CentrifugeBlockEntity> getTileEntityType() {
+    public BlockEntityType<? extends CentrifugeBlockEntity> getBlockEntityType() {
         return DestroyBlockEntities.CENTRIFUGE.get();
     };
 

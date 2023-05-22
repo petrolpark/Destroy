@@ -10,7 +10,7 @@ import com.petrolpark.destroy.block.entity.CoolerBlockEntity.ColdnessLevel;
 import com.petrolpark.destroy.compat.jei.animation.AnimatedCooler;
 import com.simibubi.create.compat.jei.category.PackingCategory;
 import com.simibubi.create.compat.jei.category.animations.AnimatedPress;
-import com.simibubi.create.content.contraptions.processing.BasinRecipe;
+import com.simibubi.create.content.processing.basin.BasinRecipe;
 
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 

@@ -6,7 +6,7 @@ import com.petrolpark.destroy.block.entity.PollutometerBlockEntity;
 import com.petrolpark.destroy.block.partial.DestroyPartials;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.tileEntity.renderer.SafeTileEntityRenderer;
+import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -16,7 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class PollutometerRenderer extends SafeTileEntityRenderer<PollutometerBlockEntity> {
+public class PollutometerRenderer extends SafeBlockEntityRenderer<PollutometerBlockEntity> {
 
     public PollutometerRenderer(BlockEntityRendererProvider.Context context) {}
 

@@ -4,8 +4,8 @@ import com.petrolpark.destroy.behaviour.SentimentalBehaviour;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.entity.SandCastleBlockEntity;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
-import com.simibubi.create.foundation.block.ITE;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
+import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.utility.Lang;
 
 import net.minecraft.core.BlockPos;
@@ -27,7 +27,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class SandCastleBlock extends Block implements ITE<SandCastleBlockEntity> {
+public class SandCastleBlock extends Block implements IBE<SandCastleBlockEntity> {
 
     public static final EnumProperty<Material> MATERIAL = EnumProperty.create("material", Material.class);
 
@@ -48,13 +48,13 @@ public class SandCastleBlock extends Block implements ITE<SandCastleBlockEntity>
     };
 
     public static void setOwner(Level level, BlockPos pos, LivingEntity owner) {
-        TileEntityBehaviour.get(level, pos, SentimentalBehaviour.TYPE).setOwner(owner);
+        BlockEntityBehaviour.get(level, pos, SentimentalBehaviour.TYPE).setOwner(owner);
     };
 
     @Override
     public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
         if (!level.isClientSide() && entity.canTrample(state, pos, fallDistance)) {
-            withTileEntityDo(level, pos, be -> be.sentimentalBehaviour.onRemove(state, entity instanceof Player player ? player : null));
+            withBlockEntityDo(level, pos, be -> be.sentimentalBehaviour.onRemove(state, entity instanceof Player player ? player : null));
             level.destroyBlock(pos, false);
         };
         super.fallOn(level, state, pos, entity, fallDistance);
@@ -62,13 +62,13 @@ public class SandCastleBlock extends Block implements ITE<SandCastleBlockEntity>
 
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-        withTileEntityDo(level, pos, be -> be.sentimentalBehaviour.onRemove(state, player));
+        withBlockEntityDo(level, pos, be -> be.sentimentalBehaviour.onRemove(state, player));
         return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
     };
 
     @Override
     public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
-        withTileEntityDo(level, pos, be -> be.sentimentalBehaviour.onRemove(state, explosion.getSourceMob() instanceof Player player ? player : null));
+        withBlockEntityDo(level, pos, be -> be.sentimentalBehaviour.onRemove(state, explosion.getSourceMob() instanceof Player player ? player : null));
     };
 
     @Override
@@ -86,12 +86,12 @@ public class SandCastleBlock extends Block implements ITE<SandCastleBlockEntity>
     }
 
     @Override
-    public Class<SandCastleBlockEntity> getTileEntityClass() {
+    public Class<SandCastleBlockEntity> getBlockEntityClass() {
         return SandCastleBlockEntity.class;
     };
 
     @Override
-    public BlockEntityType<? extends SandCastleBlockEntity> getTileEntityType() {
+    public BlockEntityType<? extends SandCastleBlockEntity> getBlockEntityType() {
         return DestroyBlockEntities.SAND_CASTLE.get();
     };
     

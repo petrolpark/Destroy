@@ -10,9 +10,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.petrolpark.destroy.Destroy;
-import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
-import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
-import com.petrolpark.destroy.chemistry.genericreaction.SingleGroupGenericReaction;
+import com.petrolpark.destroy.chemistry.genericReaction.GenericReactant;
+import com.petrolpark.destroy.chemistry.genericReaction.GenericReaction;
+import com.petrolpark.destroy.chemistry.genericReaction.SingleGroupGenericReaction;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.recipe.ReactionInBasinRecipe.ReactionInBasinResult;
 
@@ -41,7 +41,7 @@ public class Mixture extends ReadOnlyMixture {
 
     /**
      * Every {@link Molecule} in this Mixture that has a {@link Group functional Group}, indexed by the {@link Group#getID ID} of that Group.
-     * Molecules are stored as {@link com.petrolpark.destroy.chemistry.genericreaction.GenericReactant Generic Reactants}.
+     * Molecules are stored as {@link com.petrolpark.destroy.chemistry.genericReaction.GenericReactant Generic Reactants}.
      * Molecules which have multiple of the same Group are indexed for each occurence of the Group.
      */
     private Map<String, List<GenericReactant<?>>> groupIDsAndMolecules;
@@ -432,9 +432,9 @@ public class Mixture extends ReadOnlyMixture {
      * Given a {@link SingleGroupGenericReaction Generic Reaction} involving only one {@link Group functional Group},
      * generates the specified {@link Reaction Reactions} that apply to this Mixture.
      * 
-     * <p>For example, if the Generic Reaction supplied is the {@link com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydration hydration of an alkene},
+     * <p>For example, if the Generic Reaction supplied is the {@link com.petrolpark.destroy.chemistry.index.genericReaction.AlkeneHydration hydration of an alkene},
      * and <b>reactants</b> includes {@code destroy:ethene}, the returned collection will include a Reaction with {@code destroy:ethene} and {@code destroy:water} as reactants,
-     * {@code destroy:ethanol} as a product, and all the appropriate rate constants and catalysts as defined in the {@link com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydration#generateReaction generator}.</p>
+     * {@code destroy:ethanol} as a product, and all the appropriate rate constants and catalysts as defined in the {@link com.petrolpark.destroy.chemistry.index.genericReaction.AlkeneHydration#generateReaction generator}.</p>
      * 
      * @param <G> <b>G</b> The Group to which this Generic Reaction applies
      * @param genericReaction

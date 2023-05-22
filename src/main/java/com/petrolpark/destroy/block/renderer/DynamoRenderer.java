@@ -5,8 +5,7 @@ import com.petrolpark.destroy.block.DynamoBlock;
 import com.petrolpark.destroy.block.entity.DynamoBlockEntity;
 import com.petrolpark.destroy.block.partial.DestroyPartials;
 import com.simibubi.create.CreateClient;
-import com.simibubi.create.content.contraptions.base.KineticTileEntity;
-import com.simibubi.create.content.contraptions.base.KineticTileEntityRenderer;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -18,7 +17,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-public class DynamoRenderer extends KineticTileEntityRenderer {
+public class DynamoRenderer extends KineticBlockEntityRenderer<DynamoBlockEntity> {
 
     public DynamoRenderer(Context context) {
         super(context);
@@ -26,9 +25,8 @@ public class DynamoRenderer extends KineticTileEntityRenderer {
 
     @Override
     @SuppressWarnings("null")
-    protected void renderSafe(KineticTileEntity blockEntity, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
-        super.renderSafe(blockEntity, partialTicks, ms, buffer, light, overlay);
-        DynamoBlockEntity dynamo = (DynamoBlockEntity) blockEntity;
+    protected void renderSafe(DynamoBlockEntity dynamo, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+        super.renderSafe(dynamo, partialTicks, ms, buffer, light, overlay);
         if (!dynamo.isRunning() || !dynamo.hasLevel()) return;
         RandomSource rand = dynamo.getLevel().getRandom();
         if (rand.nextFloat() > 0.1f) return;
@@ -68,7 +66,7 @@ public class DynamoRenderer extends KineticTileEntityRenderer {
     };
 
     @Override
-    protected SuperByteBuffer getRotatedModel(KineticTileEntity be, BlockState state) {
+    protected SuperByteBuffer getRotatedModel(DynamoBlockEntity be, BlockState state) {
         return CachedBufferer.partial(DestroyPartials.DYNAMO_COG, state);
     };
 

@@ -2,15 +2,15 @@ package com.petrolpark.destroy.block.instance;
 
 import com.jozufozu.flywheel.api.Instancer;
 import com.jozufozu.flywheel.api.MaterialManager;
+import com.petrolpark.destroy.block.entity.DynamoBlockEntity;
 import com.petrolpark.destroy.block.partial.DestroyPartials;
-import com.simibubi.create.content.contraptions.base.KineticTileEntity;
-import com.simibubi.create.content.contraptions.base.SingleRotatingInstance;
-import com.simibubi.create.content.contraptions.base.flwdata.RotatingData;
+import com.simibubi.create.content.kinetics.base.SingleRotatingInstance;
+import com.simibubi.create.content.kinetics.base.flwdata.RotatingData;
 
-public class DynamoCogInstance extends SingleRotatingInstance {
+public class DynamoCogInstance extends SingleRotatingInstance<DynamoBlockEntity> {
 
-    public DynamoCogInstance(MaterialManager modelManager, KineticTileEntity tile) {
-        super(modelManager, tile);
+    public DynamoCogInstance(MaterialManager modelManager, DynamoBlockEntity blockEntity) {
+        super(modelManager, blockEntity);
     };
 
     @Override

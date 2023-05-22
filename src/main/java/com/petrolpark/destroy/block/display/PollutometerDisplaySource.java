@@ -6,8 +6,8 @@ import com.petrolpark.destroy.block.entity.PollutometerBlockEntity;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.PollutionHelper;
-import com.simibubi.create.content.logistics.block.display.DisplayLinkContext;
-import com.simibubi.create.content.logistics.block.display.source.PercentOrProgressBarDisplaySource;
+import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
+import com.simibubi.create.content.redstone.displayLink.source.PercentOrProgressBarDisplaySource;
 
 import net.minecraft.network.chat.Component;
 
@@ -16,7 +16,7 @@ public class PollutometerDisplaySource extends PercentOrProgressBarDisplaySource
     @Override
     @Nullable
     protected Float getProgress(DisplayLinkContext context) {
-        if (!(context.getSourceTE() instanceof PollutometerBlockEntity pollutometer)) return null;
+        if (!(context.getSourceBlockEntity() instanceof PollutometerBlockEntity pollutometer)) return null;
         PollutionType pollutionType = pollutometer.getPollutionType();
         return (float)PollutionHelper.getPollution(context.level(), pollutionType) / pollutionType.max;
     };

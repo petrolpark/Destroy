@@ -17,14 +17,14 @@ import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DistillationTower;
-import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
-import com.simibubi.create.content.logistics.block.display.DisplayLinkContext;
+import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour.TankSegment;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
-import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
-import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour.TankSegment;
 import com.simibubi.create.foundation.utility.VecHelper;
 
 import net.minecraft.ChatFormatting;
@@ -44,7 +44,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
-public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggleInformation, IFluidBlockEntity {
+public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, IFluidBlockEntity {
 
     private static final int TANK_CAPACITY = 1000;
     private static final int TRANSFER_SPEED = 20; // The rate (mB/tick) at which Fluid is transferred from the internal Tank to the actual Tank
@@ -75,7 +75,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
     };
 
     @Override
-    public void addBehaviours(List<TileEntityBehaviour> behaviours) {
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         tank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, TANK_CAPACITY, true)
             .whenFluidUpdates(this::notifyUpdate);
         internalTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, TANK_CAPACITY, true)
@@ -350,7 +350,7 @@ public class BubbleCapBlockEntity extends SmartTileEntity implements IHaveGoggle
 
         @Override
         public FluidStack getFluidStack(DisplayLinkContext context) {
-            if (context.getSourceTE() instanceof BubbleCapBlockEntity bubbleCap) {
+            if (context.getSourceBlockEntity() instanceof BubbleCapBlockEntity bubbleCap) {
                 return bubbleCap.getTank().getFluid();
             } else {
                 return null;

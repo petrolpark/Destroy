@@ -1,5 +1,51 @@
 package com.petrolpark.destroy.events;
 
+import java.util.List;
+
+import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
+import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.behaviour.PollutingBehaviour;
+import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.capability.chunk.ChunkCrudeOil;
+import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
+import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
+import com.petrolpark.destroy.capability.player.PlayerCrouching;
+import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddiction;
+import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
+import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositions;
+import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositionsProvider;
+import com.petrolpark.destroy.commands.BabyBlueAddictionCommand;
+import com.petrolpark.destroy.commands.CrudeOilCommand;
+import com.petrolpark.destroy.commands.PollutionCommand;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
+import com.petrolpark.destroy.effect.DestroyMobEffects;
+import com.petrolpark.destroy.fluid.DestroyFluids;
+import com.petrolpark.destroy.item.DestroyItems;
+import com.petrolpark.destroy.item.SyringeItem;
+import com.petrolpark.destroy.network.DestroyMessages;
+import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
+import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
+import com.petrolpark.destroy.util.DestroyLang;
+import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
+import com.petrolpark.destroy.util.InebriationHelper;
+import com.petrolpark.destroy.world.DestroyDamageSources;
+import com.petrolpark.destroy.world.entity.goal.BuildSandCastleGoal;
+import com.petrolpark.destroy.world.village.DestroyTrades;
+import com.petrolpark.destroy.world.village.DestroyVillageAddition;
+import com.petrolpark.destroy.world.village.DestroyVillagers;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllItems;
+import com.simibubi.create.api.event.BlockEntityBehaviourEvent;
+import com.simibubi.create.content.equipment.potatoCannon.PotatoProjectileEntity;
+import com.simibubi.create.content.fluids.FluidFX;
+import com.simibubi.create.content.fluids.drain.ItemDrainBlockEntity;
+import com.simibubi.create.content.fluids.spout.SpoutBlockEntity;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlockItem;
+import com.simibubi.create.foundation.ModFilePackResources;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -45,61 +91,14 @@ import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.event.level.SleepFinishedTimeEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.forgespi.language.IModFileInfo;
 import net.minecraftforge.forgespi.locating.IModFile;
-
-import java.util.List;
-
-import com.petrolpark.destroy.Destroy;
-import com.petrolpark.destroy.advancement.DestroyAdvancements;
-import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
-import com.petrolpark.destroy.behaviour.PollutingBehaviour;
-import com.petrolpark.destroy.block.DestroyBlocks;
-import com.petrolpark.destroy.capability.chunk.ChunkCrudeOil;
-import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
-import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
-import com.petrolpark.destroy.capability.player.PlayerCrouching;
-import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddiction;
-import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
-import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositions;
-import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositionsProvider;
-import com.petrolpark.destroy.commands.BabyBlueAddictionCommand;
-import com.petrolpark.destroy.commands.CrudeOilCommand;
-import com.petrolpark.destroy.commands.PollutionCommand;
-import com.petrolpark.destroy.config.DestroyAllConfigs;
-import com.petrolpark.destroy.effect.DestroyMobEffects;
-import com.petrolpark.destroy.fluid.DestroyFluids;
-import com.petrolpark.destroy.item.DestroyItems;
-import com.petrolpark.destroy.item.SyringeItem;
-import com.petrolpark.destroy.network.DestroyMessages;
-import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
-import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
-import com.petrolpark.destroy.util.DestroyLang;
-import com.petrolpark.destroy.util.InebriationHelper;
-import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
-import com.petrolpark.destroy.world.village.DestroyTrades;
-import com.petrolpark.destroy.world.village.DestroyVillageAddition;
-import com.petrolpark.destroy.world.village.DestroyVillagers;
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllItems;
-import com.simibubi.create.api.event.TileEntityBehaviourEvent;
-import com.simibubi.create.content.contraptions.fluids.FluidFX;
-import com.simibubi.create.content.contraptions.fluids.actors.ItemDrainTileEntity;
-import com.simibubi.create.content.contraptions.fluids.actors.SpoutTileEntity;
-import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
-import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlockItem;
-import com.simibubi.create.content.curiosities.weapons.PotatoProjectileEntity;
-import com.simibubi.create.foundation.ModFilePackResources;
-import com.petrolpark.destroy.world.DestroyDamageSources;
-import com.petrolpark.destroy.world.entity.goal.BuildSandCastleGoal;
-
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 @Mod.EventBusSubscriber(modid = Destroy.MOD_ID)
 public class DestroyServerEvents {
@@ -343,19 +342,19 @@ public class DestroyServerEvents {
     };
 
     @SubscribeEvent
-    public static void attachBasinBehaviours(TileEntityBehaviourEvent<BasinTileEntity> event) {
-        event.attach(new DestroyAdvancementBehaviour(event.getTileEntity()));
-        event.attach(new PollutingBehaviour(event.getTileEntity()));
+    public static void attachBasinBehaviours(BlockEntityBehaviourEvent<BasinBlockEntity> event) {
+        event.attach(new DestroyAdvancementBehaviour(event.getBlockEntity()));
+        event.attach(new PollutingBehaviour(event.getBlockEntity()));
     };
 
     @SubscribeEvent
-    public static void attachDrainBehaviours(TileEntityBehaviourEvent<ItemDrainTileEntity> event) {
-        event.attach(new PollutingBehaviour(event.getTileEntity()));
+    public static void attachDrainBehaviours(BlockEntityBehaviourEvent<ItemDrainBlockEntity> event) {
+        event.attach(new PollutingBehaviour(event.getBlockEntity()));
     };
 
     @SubscribeEvent
-    public static void attachSpoutBehaviours(TileEntityBehaviourEvent<SpoutTileEntity> event) {
-        event.attach(new PollutingBehaviour(event.getTileEntity()));
+    public static void attachSpoutBehaviours(BlockEntityBehaviourEvent<SpoutBlockEntity> event) {
+        event.attach(new PollutingBehaviour(event.getBlockEntity()));
     };
 
     @SubscribeEvent
