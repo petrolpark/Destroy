@@ -452,7 +452,7 @@ public class DestroyServerEvents {
 				}
 				IModFile modFile = modFileInfo.getFile();
 				event.addRepositorySource((consumer, constructor) -> {
-					consumer.accept(Pack.create(Destroy.asResource("schematicannon_tooltips").toString(), true, () -> new ModFilePackResources("Destroy Schematicannon Tooltips", modFile, "resourcepacks/schematicannon_tooltips"), constructor, Pack.Position.TOP, PackSource.BUILT_IN));
+					consumer.accept(Pack.create(Destroy.asResource("destroy_create_patches").toString(), true, () -> new ModFilePackResources("Destroy Patches For Create", modFile, "resourcepacks/destroy_create_patches"), constructor, Pack.Position.TOP, PackSource.BUILT_IN));
 				});
 			}
 		}

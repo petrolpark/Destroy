@@ -1,15 +1,15 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net' } //Maven
-        mavenCentral() //Also Maven
-        jcenter() //Dunno
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public' } //Mixins
-        maven { url = 'https://maven.parchmentmc.org' } //Parchment
+        maven { url = 'https://maven.minecraftforge.net' } // Maven
+        mavenCentral() // Also Maven
+        jcenter() // Dunno
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public' } // Mixins
+        maven { url = 'https://maven.parchmentmc.org' } // Parchment
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: "${forgegradle_version}", changing: false //Forge
-        classpath "org.spongepowered:mixingradle:${mixingradle_version}" //Mixins
-        classpath "org.parchmentmc:librarian:${librarian_version}" //Parchment
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: "${forgegradle_version}", changing: false // Forge
+        classpath "org.spongepowered:mixingradle:${mixingradle_version}" // Mixins
+        classpath "org.parchmentmc:librarian:${librarian_version}" // Parchment
     }
 }
 
@@ -104,18 +104,18 @@ minecraft.runs.all {
 
 dependencies {
     //MC
-    minecraft "net.minecraftforge:forge:1.19.2-43.2.3"
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     
     //JEI
-    implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}-common-api:${jei_version}")
-    implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}-forge-api:${jei_version}")
-    implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}-forge:${jei_version}")
+    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
+    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
     
     //Create
-    implementation fg.deobf("com.simibubi.create:create-${create_minecraft_version}:${create_version}:slim") { transitive = false }
+    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
 
     //Flywheel
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
+    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
 
     //Registrate
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
