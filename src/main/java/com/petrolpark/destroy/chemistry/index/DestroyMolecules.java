@@ -14,56 +14,56 @@ public final class DestroyMolecules {
     
     ACETAMIDE = builder()
         .id("acetamide")
-        .structure(Formula.deserialize("linear:CC(=O)N"))
+        .structure(Formula.deserialize("destroy:linear:CC(=O)N"))
         .boilingPoint(221)
         .tag(Tags.ACUTELY_TOXIC)
         .build(),
 
     ACETIC_ACID = builder()
         .id("acetic_acid")
-        .structure(Formula.deserialize("linear:CC(=O)H+4.756"))
+        .structure(Formula.deserialize("destroy:linear:CC(=O)H+4.756"))
         .boilingPoint(118)
         .build(),
 
     ACETIC_ANHYDRIDE = builder()
         .id("acetic_anhydride")
-        .structure(Formula.deserialize("linear:CC(=O)OC(=O)C"))
+        .structure(Formula.deserialize("destroy:linear:CC(=O)OC(=O)C"))
         .boilingPoint(140)
         .build(),
 
     ACETONE = builder()
         .id("acetone")
-        .structure(Formula.deserialize("linear:CC(=O)C"))
+        .structure(Formula.deserialize("destroy:linear:CC(=O)C"))
         .boilingPoint(56)
         .build(),
 
     ACRYLONITRILE = builder()
         .id("acrylonitrile")
-        .structure(Formula.deserialize("linear:C=CC#N"))
+        .structure(Formula.deserialize("destroy:linear:C=CC#N"))
         .boilingPoint(77)
         .build(),
 
     ADIPIC_ACID = builder()
         .id("adipic_acid")
-        .structure(Formula.deserialize("linear:O=C(OH+4.43f)CCCCC(=O)OH+5.41f"))
+        .structure(Formula.deserialize("destroy:linear:O=C(OH+4.43f)CCCCC(=O)OH+5.41f"))
         .boilingPoint(338)
         .build(),
 
     ADIPONITRILE = builder()
         .id("adiponitrile")
-        .structure(Formula.deserialize("linear:N#CCCCCC#N"))
+        .structure(Formula.deserialize("destroy:linear:N#CCCCCC#N"))
         .boilingPoint(295)
         .build(),
 
     AIBN = builder()
         .id("aibn")
-        .structure(Formula.deserialize("linear:CC(C)(C#N)N=NC(C)(C#N)C"))
+        .structure(Formula.deserialize("destroy:linear:CC(C)(C#N)N=NC(C)(C#N)C"))
         .boilingPoint(10000)
         .build(),
 
     AMMONIA = builder()
         .id("ammonia")
-        .structure(Formula.deserialize("linear:N"))
+        .structure(Formula.deserialize("destroy:linear:N"))
         .boilingPoint(-33)
         .build(),
 
@@ -73,17 +73,17 @@ public final class DestroyMolecules {
         .charge(1)
         .build(),
 
-    ASPIRIN = builder()
-        .id("aspirin")
-        .structure(Formula.deserialize("benzene:OC(=O)C,C(=O)OH+3.5f,,,,"))
-        .boilingPoint(140)
-        .build(),
+    // ASPIRIN = builder()
+    //     .id("aspirin")
+    //     .structure(Formula.deserialize("destroy:benzene:OC(=O)C,C(=O)OH+3.5f,,,,"))
+    //     .boilingPoint(140)
+    //     .build(),
 
-    BENZYL_CHLORIDE = builder()
-        .id("benzyl_chloride")
-        .structure(Formula.deserialize("benzene:CCl,,,,,"))
-        .boilingPoint(179)
-        .build(),
+    // BENZYL_CHLORIDE = builder()
+    //     .id("benzyl_chloride")
+    //     .structure(Formula.deserialize("destroy:benzene:CCl,,,,,"))
+    //     .boilingPoint(179)
+    //     .build(),
 
     CARBON_MONOXIDE = builder()
         .id("carbon_monoxide")
@@ -95,7 +95,7 @@ public final class DestroyMolecules {
 
     CARBON_TETRACHLORIDE = builder()
         .id("carbon_tetrachloride")
-        .structure(Formula.deserialize("linear:ClC(Cl)(Cl)Cl"))
+        .structure(Formula.deserialize("destroy:linear:ClC(Cl)(Cl)Cl"))
         .boilingPoint(77)
         .build(),
 
@@ -107,25 +107,25 @@ public final class DestroyMolecules {
 
     CHLORINE = builder()
         .id("chlorine")
-        .structure(Formula.deserialize("linear:ClCl"))
+        .structure(Formula.deserialize("destroy:linear:ClCl"))
         .boilingPoint(-34)
         .build(),
 
     CHLOROAURATE = builder()
         .id("chloroaurate")
-        .structure(Formula.deserialize("linear:ClAu(Cl)(Cl)Cl"))
+        .structure(Formula.deserialize("destroy:linear:ClAu(Cl)(Cl)Cl"))
         .charge(-1)
         .build(),
 
     CHLORODIFLUOROMETHANE = builder()
         .id("chlorodifluoromethane")
-        .structure(Formula.deserialize("linear:ClC(F)F"))
+        .structure(Formula.deserialize("destroy:linear:ClC(F)F"))
         .boilingPoint(-41)
         .build(),
 
     CHLOROFORM = builder()
         .id("chloroform")
-        .structure(Formula.deserialize("linear:ClC(Cl)Cl"))
+        .structure(Formula.deserialize("destroy:linear:ClC(Cl)Cl"))
         .boilingPoint(61)
         .build(),
 
@@ -149,110 +149,99 @@ public final class DestroyMolecules {
         .boilingPoint(270)
         .build(),
 
-    CYCLOHEXENE = builder()
-        .id("cyclohexene")
-        .structure(Formula.deserialize("cyclohexene:,,,,,"))
-        .boilingPoint(83)
-        .build(),
-
-    CYCLOPENTADIENYL = builder()
-        .id("cyclopentadienyl")
-        .structure(Formula.deserialize("cyclopentadienyl:,,,,"))
-        .charge(-1)
+    CUBANE = builder()
+        .id("cubane")
+        .structure(Formula.deserialize("destroy:cubane:,"))
+        .boilingPoint(134)
+        .density(1290f)
         .build(),
 
     ETHANOL = builder()
         .id("ethanol")
-        .structure(Formula.deserialize("linear:CCO"))
+        .structure(Formula.deserialize("destroy:linear:CCO"))
         .boilingPoint(78)
-        .build(),
-
-    ETHYLANTHRAQUINONE = builder()
-        .id("ethylanthraquinone")
-        .structure(Formula.deserialize("dihydroanthracene:,CC,,,,,,,=O,=O"))
-        .boilingPoint(415)
         .build(),
 
     GENERIC_ACID_ANHYDRIDE = builder()
         .id("generic_acid_anhydride")
-        .structure(Formula.deserialize("linear:RC(=O)OC(=O)R"))
+        .structure(Formula.deserialize("destroy:linear:RC(=O)OC(=O)R"))
         .hypothetical()
         .translationKey("acid_anhydride")
         .build(),
 
     GENERIC_ACYL_CHLORIDE = builder()
         .id("generic_acyl_chloride")
-        .structure(Formula.deserialize("linear:RC(=O)Cl"))
+        .structure(Formula.deserialize("destroy:linear:RC(=O)Cl"))
         .hypothetical()
         .translationKey("acyl_chloride")
         .build(),
 
     GENERIC_ALCOHOL = builder()
         .id("generic_alcohol")
-        .structure(Formula.deserialize("linear:RO"))
+        .structure(Formula.deserialize("destroy:linear:RO"))
         .hypothetical()
         .translationKey("alcohol")
         .build(),
 
     GENERIC_ALKENE = builder()
         .id("generic_alkene")
-        .structure(Formula.deserialize("linear:RC=(R)C(R)R"))
+        .structure(Formula.deserialize("destroy:linear:RC=(R)C(R)R"))
         .hypothetical()
         .translationKey("alkene")
         .build(),
 
     GENERIC_AMIDE = builder()
         .id("generic_amide")
-        .structure(Formula.deserialize("linear:RC(=O)N(R)R"))
+        .structure(Formula.deserialize("destroy:linear:RC(=O)N(R)R"))
         .hypothetical()
         .translationKey("amide")
         .build(),
     
     GENERIC_AMINE = builder()
         .id("generic_amine")
-        .structure(Formula.deserialize("linear:RN"))
+        .structure(Formula.deserialize("destroy:linear:RN"))
         .hypothetical()
         .translationKey("amine")
         .build(),
 
     GENERIC_CARBONYL = builder()
         .id("generic_carbonyl")
-        .structure(Formula.deserialize("linear:RC=(R)O"))
+        .structure(Formula.deserialize("destroy:linear:RC=(R)O"))
         .hypothetical()
         .translationKey("carbonyl")
         .build(),
 
     GENERIC_CARBOXYLIC_ACID = builder()
         .id("generic_carboxylic_acid")
-        .structure(Formula.deserialize("linear:RC(=O)O"))
+        .structure(Formula.deserialize("destroy:linear:RC(=O)O"))
         .hypothetical()
         .translationKey("carboxylic_acid")
         .build(),
     
     GENERIC_CHLORIDE = builder()
         .id("generic_chloride")
-        .structure(Formula.deserialize("linear:RCl"))
+        .structure(Formula.deserialize("destroy:linear:RCl"))
         .hypothetical()
         .translationKey("chloride")
         .build(),
 
     GENERIC_ESTER = builder()
         .id("generic_ester")
-        .structure(Formula.deserialize("linear:RC(=O)OR"))
+        .structure(Formula.deserialize("destroy:linear:RC(=O)OR"))
         .hypothetical()
         .translationKey("ester")
         .build(),
 
     GENERIC_NITRILE = builder()
         .id("generic_nitrile")
-        .structure(Formula.deserialize("linear:R#N"))
+        .structure(Formula.deserialize("destroy:linear:R#N"))
         .hypothetical()
         .translationKey("nitrile")
         .build(),
 
     GLYCEROL = builder()
         .id("glycerol")
-        .structure(Formula.deserialize("linear:C(O)C(O)CO"))
+        .structure(Formula.deserialize("destroy:linear:C(O)C(O)CO"))
         .build()
         ,
 
@@ -269,13 +258,13 @@ public final class DestroyMolecules {
 
     METHANOL = builder()
         .id("methanol")
-        .structure(Formula.deserialize("linear:CO"))
+        .structure(Formula.deserialize("destroy:linear:CO"))
         .boilingPoint(65)
         .build(),
 
     METHYL_ACETATE = builder()
         .id("methyl_acetate")
-        .structure(Formula.deserialize("linear:CC(=O)OC"))
+        .structure(Formula.deserialize("destroy:linear:CC(=O)OC"))
         .boilingPoint(57)
         .build(),
 
@@ -303,7 +292,7 @@ public final class DestroyMolecules {
 
     WATER = builder()
         .id("water")
-        .structure(Formula.deserialize("linear:O"))
+        .structure(Formula.deserialize("destroy:linear:O"))
         .tag(Tags.SOLVENT)
         .boilingPoint(100)
         .build(),

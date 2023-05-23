@@ -125,7 +125,7 @@ public class Molecule implements INameableProduct {
     /**
      * If given a:<ul>
      * <li>{@link Molecule} {@link Molecule#getFullID ID} (e.g. {@code destroy:ethanol}), gives the Molecule identified by that ID, or {@code null} if it does not exist.</li>
-     * <li><a href="https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS</a> code (e.g. {@code linear:OCO}), generates the novel Molecule with that {@link Formula}.
+     * <li><a href="https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS</a> code (e.g. {@code destroy:linear:OCO}), generates the novel Molecule with that {@link Formula}.
      * An error will be thrown if the FROWNS code is invalid.</li>
      * </ul><p>This method does not {@link Molecule#getEquivalent check for pre-existing defined Molecules} of the same structure. To generate novel Molecules from a
      * FROWNS code {@code x:y} and also check if they already exist, use a {@link MoleculeBuilder Molecule Builder} with {@code .structure(Formula.deserialize(x:y))}.</p>
@@ -134,13 +134,13 @@ public class Molecule implements INameableProduct {
      */
     @Nullable
     public static Molecule getMolecule(String id) {
-        String nameSpace = id.split(":")[0];
-        if (NAMESPACES.contains(nameSpace)) { // If this is a known Molecule
-            return MOLECULES.get(id);
-        } else if (FORBIDDEN_NAMESPACES.contains(nameSpace)) {
+        String[] idComponents = id.split(":");
+        if (idComponents.length == 3) {
             return new MoleculeBuilder("novel")
                 .structure(Formula.deserialize(id))
                 .build();
+        } else if (idComponents.length == 2) {
+            return MOLECULES.get(id);
         };
         Destroy.LOGGER.warn("Could not find Molecule '"+id+"'.");
         return null;
@@ -237,6 +237,9 @@ public class Molecule implements INameableProduct {
         return dipoleMoment;
     };
 
+    /**
+     * Whether this Molecule is cyclic (its {@link Formula structure} is not {@link Formula.Topology#LINEAR linear}).
+     */
     public boolean isCyclic() {
         return structure.isCyclic();
     };
@@ -492,6 +495,7 @@ public class Molecule implements INameableProduct {
          */
         public MoleculeBuilder density(float density) {
             molecule.density = density;
+            hasForcedDensity = true;
             return this;
         };
 

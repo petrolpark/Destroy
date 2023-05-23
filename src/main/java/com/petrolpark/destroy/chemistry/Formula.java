@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
-import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -16,6 +15,9 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Node;
+import com.simibubi.create.foundation.utility.Pair;
+
+import net.minecraft.world.phys.Vec3;
 
 /**
  * A Formula is all the {@link Atom Atoms} in a {@link Molecule}, and the {@link Bond Bonds} that those Atoms have to other Atoms - a Molecule's 'structure'.
@@ -51,10 +53,14 @@ public class Formula implements Cloneable {
     private List<Group> groups;
     
     /**
-     * @deprecated The Cycle Type enum will be replaced with a class.
+     * The {@link Topology Topology} (3D structure) of this Formula if it is cyclic.
      */
-    @Deprecated
-    private CycleType cycleType;
+    private Topology topology;
+    /**
+     * The ordered list of Atoms in the base {@link Topology} of this Formula, if it is cyclic.
+     * This may contain repeats if multiple side-chains are bonded to the same {@link Atom}.
+     * @see Formula#addGroupToPosition Adding side-chains
+     */
     private List<Atom> cyclicAtoms;
 
     /**
@@ -68,7 +74,8 @@ public class Formula implements Cloneable {
 
     private Formula() {
         structure = new HashMap<Atom, List<Bond>>();
-        cycleType = CycleType.NONE; //TODO replace
+        groups = new ArrayList<>();
+        topology = Topology.LINEAR;
         optimumFROWNSCode = null;
     };
 
@@ -80,11 +87,10 @@ public class Formula implements Cloneable {
         structure = new HashMap<Atom, List<Bond>>();
         structure.put(startingAtom, new ArrayList<Bond>());
         this.startingAtom = startingAtom;
-        this.currentAtom = startingAtom;
-
-        // TODO replace
-        this.cycleType = CycleType.NONE;
-        this.cyclicAtoms = new ArrayList<Atom>();
+        currentAtom = startingAtom;
+        groups = new ArrayList<>();
+        topology = Topology.LINEAR;
+        cyclicAtoms = new ArrayList<Atom>();
     };
 
     /**
@@ -144,134 +150,6 @@ public class Formula implements Cloneable {
      */
     public static Formula acidicAlcohol(float pKa) {
         return Formula.atom(Element.OXYGEN).addAcidicProton(pKa);
-    };
-
-    /**
-     * An anthracene molecule, without any hydrogens.
-     * @param isDihydro Whether this is 9,10-dihyrdoanthracene rather than anthracene.
-     */
-    @Deprecated
-    public static Formula anthracene(boolean isDihydro) {
-        //Atom 1
-        Atom atom1 = new Atom(Element.CARBON);
-        Formula dihydroanthracene = new Formula(atom1);
-        dihydroanthracene.cyclicAtoms.add(atom1);
-
-        //Atoms 2, 3, 4
-        for (int i = 1; i <= 3; i++) {
-            Atom atom = new Atom(Element.CARBON);
-            dihydroanthracene.cyclicAtoms.add(atom);
-            addAtomToStructure(dihydroanthracene.structure, dihydroanthracene.cyclicAtoms.get(i-1), atom, BondType.AROMATIC);
-        };
-
-        //Atom 4a
-        Atom atom4a = new Atom(Element.CARBON);
-        addAtomToStructure(dihydroanthracene.structure, dihydroanthracene.cyclicAtoms.get(3), atom4a, BondType.AROMATIC);
-
-        //Atom 10
-        Atom atom10 = new Atom(Element.CARBON);
-        addAtomToStructure(dihydroanthracene.structure, atom4a, atom10, isDihydro ? BondType.SINGLE : BondType.AROMATIC);
-
-        //Atom 10a
-        Atom atom10a = new Atom(Element.CARBON);
-        addAtomToStructure(dihydroanthracene.structure, atom10, atom10a, isDihydro ? BondType.SINGLE : BondType.AROMATIC);
-
-        //Atom 5
-        Atom atom5 = new Atom(Element.CARBON);
-        dihydroanthracene.cyclicAtoms.add(atom5);
-        addAtomToStructure(dihydroanthracene.structure, atom10a, atom5, BondType.AROMATIC);
-        
-        //Atoms 6, 7, 8
-        for (int i = 6; i <= 8; i++) {
-            Atom atom = new Atom(Element.CARBON);
-            dihydroanthracene.cyclicAtoms.add(atom);
-            addAtomToStructure(dihydroanthracene.structure, dihydroanthracene.cyclicAtoms.get(i-1), atom, BondType.AROMATIC);
-        };
-
-        //Atom 8a
-        Atom atom8a = new Atom(Element.CARBON);
-        addAtomToStructure(dihydroanthracene.structure,  dihydroanthracene.cyclicAtoms.get(7), atom8a, BondType.AROMATIC);
-
-        //Atom 9
-        Atom atom9 = new Atom(Element.CARBON);
-        addAtomToStructure(dihydroanthracene.structure, atom8a, atom9, isDihydro ? BondType.SINGLE : BondType.AROMATIC);
-        dihydroanthracene.cyclicAtoms.add(atom9);
-
-        //Atom 9a
-        Atom atom9a = new Atom(Element.CARBON);
-        addAtomToStructure(dihydroanthracene.structure, atom9, atom9a, isDihydro ? BondType.SINGLE : BondType.AROMATIC);
-
-        //Atom 10 again
-        dihydroanthracene.cyclicAtoms.add(atom10);
-
-        //Remaining bonds
-        addBondBetweenAtoms(dihydroanthracene.structure, atom9a, atom1, BondType.AROMATIC);
-        addBondBetweenAtoms(dihydroanthracene.structure, atom4a, atom9a, BondType.AROMATIC);
-        addBondBetweenAtoms(dihydroanthracene.structure, atom8a, atom10a, BondType.AROMATIC);
-
-        dihydroanthracene.cycleType = isDihydro ? CycleType.DIHYDROANTHRACENE : CycleType.ANTHRACENE;
-
-        return dihydroanthracene;
-
-    };
-
-    /**
-     * A benzene ring (without hydrogens).
-     */
-    @Deprecated
-    public static Formula benzene() {
-        Atom firstAtom = new Atom(Element.CARBON);
-        Formula benzeneRing = new Formula(firstAtom);
-        benzeneRing.cyclicAtoms.add(firstAtom);
-
-        for (int i = 1; i < 6; i++) {
-            Atom atom = new Atom(Element.CARBON);
-            benzeneRing.cyclicAtoms.add(atom);
-            addAtomToStructure(benzeneRing.structure, benzeneRing.cyclicAtoms.get(i-1), atom, BondType.AROMATIC); //bond each Carbon to the previous
-        };
-
-        addBondBetweenAtoms(benzeneRing.structure, firstAtom, benzeneRing.cyclicAtoms.get(5), BondType.AROMATIC); //bond the sixth Carbon to the first
-        benzeneRing.cycleType = CycleType.BENZENE;
-
-        return benzeneRing;
-    };
-
-    /**
-     * A cyclohexene ring (without hydrogens).
-     */
-    @Deprecated
-    public static Formula cyclohexene() { //TODO account for the fact that some carbons can have more than one single bond on them
-        Atom firstAtom = new Atom(Element.CARBON);
-        Formula cyclohexene = new Formula(firstAtom);
-        cyclohexene.cyclicAtoms.add(firstAtom);
-
-        for (int i = 1; i < 6; i++) {
-            Atom atom = new Atom(Element.CARBON);
-            cyclohexene.cyclicAtoms.add(atom);
-            addAtomToStructure(cyclohexene.structure, cyclohexene.cyclicAtoms.get(i-1), atom, BondType.SINGLE);
-        };
-
-        addBondBetweenAtoms(cyclohexene.structure, firstAtom, cyclohexene.cyclicAtoms.get(5), BondType.DOUBLE);
-        cyclohexene.cycleType = CycleType.CYCLOHEXENE;
-
-        return cyclohexene;
-    };
-
-    public static Formula cyclopentadienyl() {
-        Atom firstAtom = new Atom(Element.CARBON);
-        Formula cyclopentadienyl = new Formula(firstAtom);
-        cyclopentadienyl.cyclicAtoms.add(firstAtom);
-
-        for (int i = 1; i < 5; i++) {
-            Atom atom = new Atom(Element.CARBON);
-            cyclopentadienyl.cyclicAtoms.add(atom);
-            addAtomToStructure(cyclopentadienyl.structure, cyclopentadienyl.cyclicAtoms.get(i-1), atom, BondType.AROMATIC);
-        };
-
-        addBondBetweenAtoms(cyclopentadienyl.structure, firstAtom, cyclopentadienyl.cyclicAtoms.get(4), BondType.AROMATIC);
-        cyclopentadienyl.cycleType = CycleType.CYCLOPENTADIENYL;
-
-        return cyclopentadienyl;
     };
 
     /**
@@ -388,9 +266,11 @@ public class Formula implements Cloneable {
         return this;
     };
 
-    @Deprecated
+    /**
+     * Whether this Formula is cylic (has a defined {@link Topology}), or is linear/branched.
+     */
     public boolean isCyclic() {
-        return cycleType != CycleType.NONE;
+        return topology != Topology.LINEAR;
     };
 
     /**
@@ -481,6 +361,7 @@ public class Formula implements Cloneable {
 
     /**
      * Get the <a href = "https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS</a> code of this Formula or Group, with the given {@link Atom Atom} as the first character.
+     * The {@link Topology} of this Formula is not included, and in fact this will quietly fail for cyclic {@link Molecule Molecules}.
      * @param atom
      */
     public String serializeStartingWithAtom(Atom atom) {
@@ -488,12 +369,13 @@ public class Formula implements Cloneable {
         Map<Atom, List<Bond>> newStructure = stripHydrogens(structure);
 
         String body = "";
-        String prefix = cycleType.getName();
-        if (cycleType == CycleType.NONE) {
+        if (topology == Topology.LINEAR) {
             body = getMaximumBranch(atom, newStructure).serialize();
+        } else {
+            Destroy.LOGGER.warn("Cannot serialize branch if it is cyclic.");
         };
 
-        return prefix+":"+body;
+        return body;
     };
 
     /**
@@ -508,11 +390,11 @@ public class Formula implements Cloneable {
         };
 
         String body = "";
-        String prefix = cycleType.getName();
+        String prefix = topology.getID();
 
         Map<Atom, List<Bond>> newStructure = stripHydrogens(shallowCopyStructure(structure));
 
-        if (cycleType == CycleType.NONE) {
+        if (topology == Topology.LINEAR) {
 
             //TODO fix
 
@@ -537,8 +419,10 @@ public class Formula implements Cloneable {
             body = serializeStartingWithAtom(startingAtom);
 
         } else {
-            for (int i = 0; i < cycleType.getPositions(); i++) {
+            for (int i = 0; i < topology.getConnections(); i++) {
                 body += ",";
+                //TODO add side chains
+                //TODO ensure this gives the same thing every time for symmetrical Topologies
             };
             body = body.substring(0, body.length() - 1);
         };
@@ -555,20 +439,30 @@ public class Formula implements Cloneable {
      * @param FROWNSstring
      * @return A new Formula instance
      */
+    @SuppressWarnings("null")
     public static Formula deserialize(String FROWNSstring) {
 
         try {
             Formula formula;
 
-            String[] cycleTypeAndFormula = FROWNSstring.strip().split(":");
-            CycleType cycleType = CycleType.getByName(cycleTypeAndFormula[0]);
-            String formulaString = cycleTypeAndFormula[1];
+            String[] topologyAndFormula = FROWNSstring.strip().split(":");
+            Topology topology;
+            String formulaString;
 
-            if (cycleType == CycleType.NONE) {
+            if (topologyAndFormula.length == 3) {
+                topology = Topology.getTopology(topologyAndFormula[0] + ":" + topologyAndFormula[1]);
+                formulaString = topologyAndFormula[2];
+            } else {
+                topology = Topology.LINEAR;
+                formulaString = topologyAndFormula[1];
+            };
+
+            if (topology == Topology.LINEAR) {
                 List<String> symbols = Arrays.stream(formulaString.split("(?=\\p{Upper})")).toList(); //split String into sub-strings that start with a capital letter (i.e. Elements)
                 formula = groupFromString(symbols);
             } else {
-                formula = cycleType.create();
+                if (topology.formula == null) throw new IllegalStateException("Missing base formula for Topology "+topology.getID());
+                formula = topology.formula.shallowCopy(); // Gives a null warning which has been accounted for
                 int i = 0;
                 for (String group : formulaString.split(",")) {
                     if (group.isBlank()) continue;
@@ -597,7 +491,7 @@ public class Formula implements Cloneable {
             return formula.addAllHydrogens().refreshFunctionalGroups();
 
         } catch(Exception e) {
-            throw new Error("Could not parse FROWNS String '" + FROWNSstring + "': " + e);
+            throw new IllegalArgumentException("Could not parse FROWNS String '" + FROWNSstring + "'", e);
         }
     };
 
@@ -627,11 +521,13 @@ public class Formula implements Cloneable {
             Formula newFormula = (Formula) super.clone();
             newFormula.structure = new HashMap<>();
 
-            newFormula.structure = shallowCopyStructure(structure); //shallow copy the Structure
+            newFormula.structure = shallowCopyStructure(structure); // Shallow copy the Structure
 
-            newFormula.groups = new ArrayList<>(groups); //shallow copy the Groups
+            newFormula.groups = new ArrayList<>(groups); // Shallow copy the Groups
 
-            newFormula.optimumFROWNSCode = null; //delete the FROWNS Code, as copies are typically going to be modified
+            newFormula.topology = this.topology; // Shallow copy the Topology
+
+            newFormula.optimumFROWNSCode = null; // Delete the FROWNS Code, as copies are typically going to be modified
 
             return newFormula;
 
@@ -782,7 +678,7 @@ public class Formula implements Cloneable {
      * @see Formula#addGroup(Formula, Boolean, BondType) The wrapper for this method
      */
     private static void addGroupToStructure(Map<Atom, List<Bond>> structureToMutate, Atom rootAtom, Formula group, BondType bondType) {
-        if (group.cycleType != CycleType.NONE) { //TODO replace
+        if (group.topology != Topology.LINEAR) {
             Destroy.LOGGER.warn("Cannot add Cycles as side-groups - to create a Cyclic Molecule, start with the Cycle and use addGroupAtPosition()");
         };
         structureToMutate.putAll(group.structure);
@@ -924,47 +820,212 @@ public class Formula implements Cloneable {
         };
         return newStructure;
     };
+
+    /**
+     * A 3D structure of a {@link Molecule} if it is cyclic.
+     * This class contains {@link com.petrolpark.destroy.client.gui.MoleculeRenderer rendering} information.
+     */
+    public static class Topology {
     
-    @Deprecated
-    private enum CycleType {
+        /**
+         * The register of Topologies, mapped to their IDs (e.g. {@code destroy:benzene}).
+         */
+        private static final Map<String, Topology> TOPOLOGIES = new HashMap<>();
 
-        NONE("linear", 0, Formula::nothing),
-        ANTHRACENE("anthracene", 10, () -> anthracene(false)),
-        BENZENE("benzene", 6, Formula::benzene),
-        CYCLOHEXENE("cyclohexene", 10, Formula::cyclohexene),
-        CYCLOPENTADIENYL("cyclopentadienyl", 5, () -> cyclopentadienyl()),
-        DIHYDROANTHRACENE("dihydroanthracene", 10, () -> anthracene(true))
-        ;
+        public static final Topology LINEAR = new Builder(Destroy.MOD_ID).build("linear");
+    
+        /**
+         * The name space of the mod by which this Topology was defined.
+         */
+        private final String nameSpace;
+        /**
+         * The {@link Topology#getID ID} of this Molecule, not including its {@link Topology#nameSpace name space}.
+         */
+        private String id;
 
-        private String name; //used for de/serialization
-        private Supplier<Formula> constructor;
-        private int positions;
-
-        private CycleType(String name, int positions, Supplier<Formula> constructor) {
-            this.name = name;
-            this.positions = positions;
-            this.constructor = constructor;
-            Molecule.FORBIDDEN_NAMESPACES.add(name);
+        /**
+         * The {@link Formula structure} of this Topology, when it has no side chains attached.
+         */
+        @Nullable
+        private Formula formula;
+        /**
+         * Every {@link Atom} in this Topology, paired with its location relative to the first Atom in the Topology.
+         */
+        private final List<Pair<Vec3, Atom>> atomsAndLocations;
+        /**
+         * The {@link SideChainInformation side-chains} this Topology can accomodate.
+         */
+        private final List<SideChainInformation> connections;
+    
+        private Topology(String nameSpace) {
+            this.nameSpace = nameSpace;
+            formula = null;
+            atomsAndLocations = new ArrayList<>();
+            connections = new ArrayList<>();
+        };
+    
+        /**
+         * Get the Topology with the given ID.
+         * @param id e.g. {@code destroy:benzene}.
+         * @return A Topology, or null if the given ID has no associated Topology.
+         */
+        public static Topology getTopology(String id) {
+            return TOPOLOGIES.get(id);
         };
 
-        public static CycleType getByName(String name) {
-            for (CycleType cycleType : values()) {
-                if (cycleType.name.equals(name)) return cycleType;
+        /**
+         * Get the ID of this Topology in the form {@code <nameSpace>:<id>} (for
+         * example {@code destroy:benzene}) for use in {@link Formula#serialize serialization} of {@link Molecule Molecules}.
+         */
+        public String getID() {
+            return nameSpace + ":" + id;
+        };
+
+        /**
+         * Get the number of side-chains this Molecule can accomodate.
+         */
+        public int getConnections() {
+            return connections.size();
+        };
+    
+        /**
+         * A class for constructing {@link Topology Topologies}.
+         */
+        public static class Builder {
+
+            /**
+             * The ID of the mod creating this Topology.
+             */
+            private final String nameSpace;
+            /**
+             * The Topology being built.
+             */
+            private final Topology topology;
+
+            public Builder(String nameSpace) {
+                this.nameSpace = nameSpace;
+                topology = new Topology(nameSpace);
             };
-            throw new Error("Unknown Cycle Type "+name);
+
+            /**
+             * Creates the first {@link Atom} in the Topology. It's position is defined as {@code (0,0,0)},
+             * and the positions of all other Atoms in this Topology are given relative to it.
+             * @param element The Element of the Atom to add
+             * @return This Topology builder
+             */
+            public Builder startWith(Element element) {
+                topology.formula = Formula.atom(element);
+                return this;
+            };
+
+            /**
+             * Adds an {@link Atom} to a Topology. Call {@link Builder#startWith startWith} first.
+             * @param element The Element of the Atom to add (note that this is an Element and not an Atom because Atoms in cyclic {@link Formula structures} are not
+             * allowed the same additional detail as regular Atoms, such as {@link Atom#getpKa pKa} and charge)
+             * @param location The location of this Atom relative to the starting Atom, which is at {@code (0,0,0)} - for appropriate scaling, the distance between
+             * bonded Atoms should be set to {@code 1.0}
+             * @return The {@link AttachedAtom attached Atom, ready to be modified, such as by {@link AttachedAtom#withSideBranch adding additional side chains}.
+             * @throws IllegalStateException If {@link Builder#startWith startWith} hasn't been called
+             * @see AttachedAtom#attach Adding the Atom to this Topology once it has been modified
+             */
+            @SuppressWarnings("null")
+            public AttachedAtom atom(Element element, Vec3 location) {
+                // Check the Formula has been initialized
+                if (topology.formula == null) throw new IllegalStateException("Cannot add Atoms to a Topology that hasn't been initialized with startWith(Element)");
+                // Create the Atom
+                Atom atom = new Atom(element);
+                // Add the Atom to the Formula's structure
+                topology.formula.structure.put(atom, new ArrayList<>()); // This gives a null warning which has been accounted for
+                // Add the Atom to the list of Atoms to render
+                topology.atomsAndLocations.add(Pair.of(location, atom));
+                AttachedAtom attachedAtom = new AttachedAtom(this, atom);
+                return attachedAtom;
+            };
+
+            /**
+             * Add this Topology to the {@link Topology#TOPOLOGIES register}, allowing it to be referenced
+             * when constructing {@link Molecules}.
+             * @param id The name under which to register this Topology; it will be saved as {@code <nameSpace>:<id>}
+             * @return The newly-built Topology
+             */
+            @SuppressWarnings("null")
+            public Topology build(String id) {
+                // Set the ID of the Topology
+                topology.id = id;
+                if (topology.formula != null) {
+                    // Set the Topology of the Formula so any time it is copied (which is done when deserializing a cyclic Molecule) it has the right Topology
+                    topology.formula.topology = topology;
+                    // Tell the Formula where to bond side-chains
+                    topology.atomsAndLocations.forEach(pair -> topology.formula.cyclicAtoms.add(pair.getSecond())); // Gives a null warning, which has been accounted for
+                }; 
+                // Add the Topology to the register
+                TOPOLOGIES.put(nameSpace+":"+id, topology);
+                return topology;
+            };
+        };
+    
+        /**
+         * An entry in a Topology, containing information about the {@link Atom} itself, connections
+         * from this Atom to other Atoms in the Topology (allowing for the creation of cyclic {@link Molecule Molecules}),
+         * and the geometrical data (for use in {@link com.petrolpark.destroy.client.gui.MoleculeRenderer rendering}) on
+         * any side-chains attached to this Atom should generate.
+         */
+        public static class AttachedAtom {
+    
+            private final Builder builder;
+            private final Atom atom;
+    
+            /**
+             * Creates an attached {@link Atom}.
+             * @param builder The Builder of the Topology to which to attach this Atom
+             * @param atom The Atom being attached to this Topology
+             */
+            private AttachedAtom(Builder builder, Atom atom) {
+                this.builder = builder;
+                this.atom = atom;
+            };
+
+            /**
+             * Adds a {@link Bond} between this Atom and the {@code n}th Atom
+             * to be added to this Topology (where the first is {@code 0}).
+             * @param n The index of the Atom to which to bond <em>this</em> Atom
+             * @param bondType The {@link Bond.BondType type} of Bond between these two Atoms
+             * @return This attached Atom
+             */
+            @SuppressWarnings("null")
+            public AttachedAtom withBondTo(int n, BondType bondType) {
+                if (n >= builder.topology.atomsAndLocations.size() || builder.topology.formula == null) throw new IllegalArgumentException("Cannot add Bonds between Atoms that do not exist on the structure");
+                addBondBetweenAtoms(builder.topology.formula.structure, atom, builder.topology.atomsAndLocations.get(n).getSecond(), bondType);// Gives a null warning, which is accounted for
+                return this;
+            };
+    
+            /**
+             * 
+             * @param bondDirection The direction of the next {@link Bond}
+             * @param branchDirection The direction in which the side-chain should continue (as chains of Atoms zig-zag,
+             * this is the net direction of movement. This information is used in {@link com.petrolpark.destroy.client.gui.MoleculeRenderer rendering})
+             * @return This attached Atom
+             */
+            public AttachedAtom withSideBranch(Vec3 bondDirection, Vec3 branchDirection) {
+                builder.topology.connections.add(new SideChainInformation(atom, bondDirection, branchDirection));
+                return this;
+            };
+    
+            /**
+             * Attaches this Atom with all of its information to the Topology.
+             * @return The Topology Builder
+             */
+            public Builder attach() {
+                return builder;
+            };
         };
 
-        public String getName() {
-            return name;
-        };
-
-        public int getPositions() {
-            return positions;
-        };
-
-        public Formula create() {
-            return this.constructor.get();
-        };
+        /**
+         * @param atom The Atom in the Topology the side-chain to which the side-chain connects
+         * @param bondDirection The direction of the first {@link Bond} in the side-chain
+         * @param branchDirection The general direction of propagation of the side-chain
+         */
+        public static record SideChainInformation(Atom atom, Vec3 bondDirection, Vec3 branchDirection) {};
     };
 
 };

@@ -11,6 +11,7 @@ import com.petrolpark.destroy.chemistry.index.DestroyGenericReactions;
 import com.petrolpark.destroy.chemistry.index.DestroyGroupFinder;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.DestroyReactions;
+import com.petrolpark.destroy.chemistry.index.DestroyTopologies;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.ponder.DestroyPonderIndex;
 import com.petrolpark.destroy.client.ponder.DestroyPonderTags;
@@ -105,6 +106,7 @@ public class Destroy {
 
         // Chemistry
         // DestroyGroupFinder.register();
+        DestroyTopologies.register();
         DestroyMolecules.register();
         DestroyReactions.register();
         // DestroyGenericReactions.register();

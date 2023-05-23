@@ -21,9 +21,21 @@ import net.minecraft.world.phys.Vec3;
 
 public class MoleculeRenderer {
 
-    protected int x; // Width
-    protected int y; // Height
+    /**
+     * The distance from 0 to the highest X value of any rendered object.
+     */
+    protected int x;
+    /**
+     * The distance from 0 to the highest Y value of any rendered object.
+     */
+    protected int y;
+    /**
+     * How far below X = 0 this rendered Molecule extends.
+     */
     protected int xOffset;
+    /**
+     * How far above Y = 0 this rendered Molecule extends (remember positive Y is down).
+     */
     protected int yOffset;
 
     protected static final double BOND_LENGTH = 12;
@@ -41,8 +53,11 @@ public class MoleculeRenderer {
         yOffset = 0;
         RENDERED_OBJECTS = new ArrayList<>();
 
-        if (molecule.getAtoms().size() == 1 || molecule.isCyclic()) {
-
+        if (molecule.getAtoms().size() == 1) {
+            // Add the one Atom in this Molecule
+            RENDERED_OBJECTS.add(Pair.of(Vec3.ZERO, new AtomRenderInstance(molecule.getAtoms().iterator().next().getElement())));
+        } else if (molecule.isCyclic()) {
+            
         } else {
             Vec3 startLocation = new Vec3(0d, 0d, 0d);
             Vec3 startDirection = new Vec3(1d, 0d, -1d).normalize();
@@ -57,8 +72,9 @@ public class MoleculeRenderer {
         for (Pair<Vec3, IRenderable> pair : RENDERED_OBJECTS) {
             x = Math.max(x, (int)pair.first().x);
             y = Math.max(y, (int)pair.first().y);
-            xOffset = -(int)Math.min(xOffset, pair.first().x);
-            yOffset = (int)Math.max(yOffset, pair.first().y); //TODO fix
+            // Set the X and Y offSets to the positive of the most negative respective coordinate of any rendered object present
+            xOffset = -(int)Math.min(-xOffset, pair.first().x);
+            yOffset = -(int)Math.max(-yOffset, pair.first().y);
         };
 
     };
@@ -68,14 +84,14 @@ public class MoleculeRenderer {
     };
 
     public int getHeight() {
-        return y + yOffset;
+        return y;
     };
 
     /**
      * Draw all Atoms and Bonds in this Molecule.
      */
-    public void render(PoseStack poseStack, int x, int y) {
-        poseStack.translate(x + xOffset, y + yOffset, 0f);
+    public void render(PoseStack poseStack, int xPosition, int yPosition) {
+        poseStack.translate(xPosition + xOffset, yPosition, 0d);
         poseStack.pushPose();
         for (Pair<Vec3, IRenderable> pair : RENDERED_OBJECTS) {
             pair.second().render(poseStack, pair.first());
