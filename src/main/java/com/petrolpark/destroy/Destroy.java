@@ -21,6 +21,7 @@ import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.compostable.DestroyCompostables;
 import com.petrolpark.destroy.item.potatoCannonProjectileType.DestroyPotatoCannonProjectileTypes;
+import com.petrolpark.destroy.item.properties.DestroyItemProperties;
 import com.petrolpark.destroy.item.tooltip.IDynamicItemDescription;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.recipe.DestroyCropMutations;
@@ -134,6 +135,7 @@ public class Destroy {
             DestroyMessages.register();
             DestroyCompostables.register();
             DestroyVillagers.registerPOIs();
+            DestroyItemProperties.register();
         });
         DestroyMysteriousItemConversions.register();
         DestroyAdvancements.register();

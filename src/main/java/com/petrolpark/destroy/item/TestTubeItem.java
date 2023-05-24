@@ -73,6 +73,10 @@ public class TestTubeItem extends ItemFluidContainer {
         });
     };
 
+    public static boolean isEmpty(ItemStack stack)  {
+        return getContents(stack).map(FluidStack::isEmpty).orElse(true);  
+    };
+
     public static int getColor(ItemStack stack, int tintIndex) {
         if (tintIndex == 0) {
             return getContents(stack).map(MixtureFluid::getTintColor).orElse(-1);

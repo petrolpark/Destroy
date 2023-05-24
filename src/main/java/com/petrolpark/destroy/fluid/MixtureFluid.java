@@ -67,6 +67,7 @@ public class MixtureFluid extends VirtualFluid {
     };
 
     public static int getTintColor(FluidStack stack) {
+        if (stack.isEmpty()) return -1; // Transparent
         return 0; //TODO Auto-generated method stub
     };
 
