@@ -4,6 +4,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
 import com.petrolpark.destroy.item.DestroyItems;
+import com.petrolpark.destroy.mixin.accessor.AbstractVillagerAccessor;
+import com.petrolpark.destroy.mixin.accessor.AgeableMobAccessor;
+import com.petrolpark.destroy.mixin.accessor.VillagerAccessor;
 
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.Item;

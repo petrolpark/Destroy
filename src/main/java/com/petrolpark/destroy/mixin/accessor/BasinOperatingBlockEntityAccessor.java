@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.mixin;
+package com.petrolpark.destroy.mixin.accessor;
 
 import java.util.Optional;
 

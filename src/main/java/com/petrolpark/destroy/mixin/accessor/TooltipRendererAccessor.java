@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.mixin;
+package com.petrolpark.destroy.mixin.accessor;
 
 import mezz.jei.common.gui.TooltipRenderer;
 import net.minecraft.client.gui.Font;

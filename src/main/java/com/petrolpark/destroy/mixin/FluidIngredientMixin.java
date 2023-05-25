@@ -11,6 +11,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.petrolpark.destroy.fluid.MoleculeFluidIngredient;
+import com.petrolpark.destroy.mixin.accessor.FluidIngredientAccessor;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 
 import net.minecraft.util.GsonHelper;

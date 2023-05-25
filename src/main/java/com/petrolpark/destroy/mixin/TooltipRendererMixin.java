@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.item.MoleculeDisplayItem;
+import com.petrolpark.destroy.mixin.accessor.TooltipRendererAccessor;
 
 @Mixin(TooltipRenderer.class)
 public class TooltipRendererMixin {
