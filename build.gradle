@@ -103,28 +103,36 @@ minecraft.runs.all {
 }
 
 dependencies {
-    //MC
+
+    // HARD DEPENDENCIES
+
+    // Minecraft
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     
-    //JEI
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
-    
-    //Create
+    // Create
     implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
 
-    //Flywheel
+    // Flywheel
     implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
 
-    //Registrate
+    // Registrate
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 
-    //MongoDB
+    // MongoDB
     library 'org.mongodb:mongodb-driver-sync:4.9.0'
     jarJar('org.mongodb:mongodb-driver-sync:4.9.0') {
         jarJar.ranged(it, "[4.9.0]")
     }
+
+    // OPTIONAL DEPENDENCIES
+
+    // JEI
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
+    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+
+    // Farmer's Delight
+    implementation fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
 }
 
 jar {

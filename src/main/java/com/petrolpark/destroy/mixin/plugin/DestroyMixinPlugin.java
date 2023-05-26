@@ -10,8 +10,6 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
-import com.petrolpark.destroy.Destroy;
-
 import net.minecraftforge.fml.loading.FMLLoader;
 
 public class DestroyMixinPlugin implements IMixinConfigPlugin {
@@ -20,8 +18,13 @@ public class DestroyMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
-        onlyLoadIfModPresent("com.petrolpark.destroy.mixin.TooltipRendererMixin", "jei");
         onlyLoadIfModPresent("com.petrolpark.destroy.mixin.accessor.TooltipRendererAccessor", "jei");
+        onlyLoadIfModPresent("com.petrolpark.destroy.mixin.BasinCategoryMixin.java", "jei");
+        onlyLoadIfModPresent("com.petrolpark.destroy.mixin.CreateRecipeCategoryMixin", "jei");
+        onlyLoadIfModPresent("com.petrolpark.destroy.mixin.MixingRecipeCategoryMixin", "jei");
+        onlyLoadIfModPresent("com.petrolpark.destroy.mixin.PackingRecipeCategoryMixin", "jei");
+        onlyLoadIfModPresent("com.petrolpark.destroy.mixin.ProcessingRecipeMixin", "jei");
+        onlyLoadIfModPresent("com.petrolpark.destroy.mixin.TooltipRendererMixin", "jei");
     };
 
     @Override
@@ -58,11 +61,11 @@ public class DestroyMixinPlugin implements IMixinConfigPlugin {
     
     /**
      * Tells Mixin to only apply a Mixin if a given Mod is present.
-     * @param mixinClassName Fully-qualified class name
+     * @param mixinClassName Fully-qualified class name. <strong>Don't use {@code SomeMixin.getClass().getSimpleName()} for this</strong>,
+     * as this calls the class, which will crash as it can't find the class into which its mixing
      * @param modID ID of the Mod on which this Mixin depends
      */
     private static void onlyLoadIfModPresent(String mixinClassName, String modID) {
-        Destroy.LOGGER.info("Mixin "+ mixinClassName + " will only load if "+modID+" is loaded.");
         SHOULD_LOAD.put(mixinClassName, () -> FMLLoader.getLoadingModList().getModFileById(modID) != null);
     };
     

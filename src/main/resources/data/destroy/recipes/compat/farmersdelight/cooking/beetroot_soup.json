@@ -1,0 +1,20 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "farmersdelight"
+    }
+  ],
+  "type": "farmersdelight:cooking",
+  "recipe_book_tab": "meals",
+  "ingredients": [
+    {
+      "tag": "destroy:hefty_beetroot"
+    }
+  ],
+  "result": {
+    "item": "minecraft:beetroot_soup"
+  },
+  "experience": 1.0,
+  "cookingtime": 200
+  }

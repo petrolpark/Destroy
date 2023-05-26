@@ -34,3 +34,4 @@ description='''A destructive chemistry-based add-on to Create.'''
 	versionRange="[0.5.1.a,)"
 	ordering="NONE"
 	side="BOTH"
+
