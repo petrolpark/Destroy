@@ -7,7 +7,7 @@ buildscript {
         maven { url = 'https://maven.parchmentmc.org' } // Parchment
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: "${forgegradle_version}", changing: false // Forge
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: "${forgegradle_version}", changing: true // Forge
         classpath "org.spongepowered:mixingradle:${mixingradle_version}" // Mixins
         classpath "org.parchmentmc:librarian:${librarian_version}" // Parchment
     }
@@ -25,7 +25,7 @@ mixin {
     add sourceSets.main, "destroy.refmap.json"
 }
 
-//Mod Details
+// Mod Details
 version = "${mod_version}"
 group = 'com.petrolpark.destroy'
 archivesBaseName = 'destroy'

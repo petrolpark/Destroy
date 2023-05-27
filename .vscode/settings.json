@@ -1,5 +1,8 @@
 {
     "java.configuration.updateBuildConfiguration": "automatic",
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.debug.settings.onBuildFailureProceed": true
+    "java.debug.settings.onBuildFailureProceed": true,
+    "java.jdt.ls.java.home": "/Library/Java/JavaVirtualMachines/jdk-17.0.4.1.jdk/Contents/Home",
+    "java.eclipse.downloadSources": true,
+    "maven.terminal.useJavaHome": true
 }
