@@ -1,0 +1,19 @@
+{
+    "variants": {
+        "facing=north": {
+            "model": "destroy:block/pumpjack/base"
+        },
+        "facing=east": {
+            "model": "destroy:block/pumpjack/base",
+            "y": 90
+        },
+        "facing=south": {
+            "model": "destroy:block/pumpjack/base",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "destroy:block/pumpjack/base",
+            "y": 270
+        }
+    }
+}

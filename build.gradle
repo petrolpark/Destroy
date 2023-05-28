@@ -84,6 +84,9 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven { // Blueprint
+        url = "https://maven.jaackson.me"
+    }
 }
 
 configurations {
@@ -133,6 +136,9 @@ dependencies {
 
     // Farmer's Delight
     implementation fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
+
+    // Blueprint
+    implementation fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
 }
 
 jar {

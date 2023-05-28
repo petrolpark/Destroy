@@ -4,12 +4,14 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.instance.CentrifugeCogInstance;
 import com.petrolpark.destroy.block.instance.DynamoCogInstance;
+import com.petrolpark.destroy.block.instance.PumpjackInstance;
 import com.petrolpark.destroy.block.renderer.AgingBarrelRenderer;
 import com.petrolpark.destroy.block.renderer.BubbleCapRenderer;
 import com.petrolpark.destroy.block.renderer.CentrifugeRenderer;
 import com.petrolpark.destroy.block.renderer.CoolerRenderer;
 import com.petrolpark.destroy.block.renderer.DynamoRenderer;
 import com.petrolpark.destroy.block.renderer.PollutometerRenderer;
+import com.petrolpark.destroy.block.renderer.PumpjackRenderer;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
@@ -54,6 +56,13 @@ public class DestroyBlockEntities {
         .validBlocks(DestroyBlocks.POLLUTOMETER)
         .renderer(() -> PollutometerRenderer::new)
         .register();
+
+    public static final BlockEntityEntry<PumpjackBlockEntity> PUMPJACK = REGISTRATE
+		.blockEntity("pumpjack", PumpjackBlockEntity::new)
+		.instance(() -> PumpjackInstance::new, false)
+		.validBlocks(DestroyBlocks.PUMPJACK)
+		.renderer(() -> PumpjackRenderer::new)
+		.register();
 
     public static final BlockEntityEntry<SandCastleBlockEntity> SAND_CASTLE = REGISTRATE
         .blockEntity("sand_castle", SandCastleBlockEntity::new)

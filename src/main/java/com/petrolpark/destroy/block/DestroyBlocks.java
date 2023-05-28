@@ -11,6 +11,7 @@ import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours;
 import com.simibubi.create.foundation.data.AssetLookup;
+import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.simibubi.create.foundation.data.TagGen;
@@ -39,14 +40,10 @@ public class DestroyBlocks {
         REGISTRATE.creativeModeTab(() -> DestroyCreativeModeTabs.TAB_DESTROY);
     };
 
-    // static {
-    //     REGISTRATE.startSection(AllSections.KINETICS);
-    // };
-
     // CONTRAPTIONS
 
     public static final BlockEntry<BubbleCapBlock> BUBBLE_CAP = REGISTRATE.block("bubble_cap", BubbleCapBlock::new)
-        .initialProperties(SharedProperties::stone)
+        .initialProperties(SharedProperties::copperMetal)
         .properties(p -> p
             .color(MaterialColor.COLOR_ORANGE)
             .noOcclusion()
@@ -57,7 +54,7 @@ public class DestroyBlocks {
         .register();
 
     public static final BlockEntry<CentrifugeBlock> CENTRIFUGE = REGISTRATE.block("centrifuge", CentrifugeBlock::new)
-        .initialProperties(SharedProperties::stone)
+        .initialProperties(SharedProperties::copperMetal)
         .properties(p -> p
             .color(MaterialColor.COLOR_ORANGE)
             .noOcclusion()
@@ -79,7 +76,7 @@ public class DestroyBlocks {
         .register();
 
     public static final BlockEntry<DynamoBlock> DYNAMO = REGISTRATE.block("dynamo", DynamoBlock::new)
-        .initialProperties(SharedProperties::stone)
+        .initialProperties(SharedProperties::softMetal)
         .properties(p -> p
             .color(MaterialColor.GOLD)
             .noOcclusion()
@@ -89,10 +86,6 @@ public class DestroyBlocks {
         .item(AssemblyOperatorBlockItem::new)
         .transform(customItemModel())
         .register();
-
-    // static {
-    //     REGISTRATE.startSection(AllSections.LOGISTICS);
-    // };
 
     public static final BlockEntry<PollutometerBlock> POLLUTOMETER = REGISTRATE.block("pollutometer", PollutometerBlock::new)
         .initialProperties(SharedProperties::stone)
@@ -105,9 +98,35 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
-    // static {
-    //     REGISTRATE.startSection(AllSections.CURIOSITIES);
-    // };
+    public static final BlockEntry<PumpjackBlock> PUMPJACK = REGISTRATE.block("pumpjack", PumpjackBlock::new)
+        .initialProperties(SharedProperties::copperMetal)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_ORANGE)
+            .noOcclusion()
+        ).transform(TagGen.pickaxeOnly())
+        .transform(BlockStressDefaults.setImpact(8.0))
+        .blockstate((c, p) -> p.horizontalFaceBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
+        .item()
+        .transform(customItemModel())
+        .register();
+
+    public static final BlockEntry<PumpjackCamBlock> PUMPJACK_CAM = REGISTRATE.block("pumpjack_cam", PumpjackCamBlock::new)
+        .initialProperties(SharedProperties::stone)
+        .properties(p -> p.color(MaterialColor.METAL))
+        .transform(TagGen.pickaxeOnly())
+        .blockstate(BlockStateGen.horizontalAxisBlockProvider(false))
+        .register();
+
+    public static final BlockEntry<PumpjackStructuralBlock> PUMPJACK_STRUCTURAL = REGISTRATE.block("pumpjack_structure", PumpjackStructuralBlock::new)
+        .initialProperties(SharedProperties::wooden)
+        .properties(p -> p
+            .color(MaterialColor.DIRT)
+            .noOcclusion()
+        ).transform(TagGen.pickaxeOnly())
+        .blockstate((c, p) -> p.getVariantBuilder(c.get())
+            .forAllStatesExcept(BlockStateGen.mapToAir(p), PumpjackStructuralBlock.FACING)
+        )
+        .register();
 
     public static final BlockEntry<SandCastleBlock> SAND_CASTLE = REGISTRATE.block("sand_castle", SandCastleBlock::new)
         .initialProperties(Material.DECORATION)
@@ -142,10 +161,6 @@ public class DestroyBlocks {
         ).item()
         .build()
         .register();
-
-    // static {
-    //     REGISTRATE.startSection(AllSections.MATERIALS);
-    // };
 
     // EXPLOSIVES
 
@@ -359,6 +374,14 @@ public class DestroyBlocks {
         .register();
 
     // CROPS
+
+    public static final BlockEntry<YeastMushroomBlock>
+
+    YEAST_MUSHROOM = REGISTRATE.block("yeast_mushroom", YeastMushroomBlock::new)
+        .initialProperties(() -> Blocks.BROWN_MUSHROOM)
+        .item()
+        .build()
+        .register();
 
     public static final BlockEntry<FullyGrownCropBlock>
     

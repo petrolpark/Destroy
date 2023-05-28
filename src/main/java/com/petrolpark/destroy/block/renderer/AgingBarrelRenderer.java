@@ -7,7 +7,7 @@ import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.entity.AgingBarrelBlockEntity;
-import com.petrolpark.destroy.item.DestroyItems;
+import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour.TankSegment;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
@@ -23,9 +23,7 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
  
@@ -53,7 +51,7 @@ public class AgingBarrelRenderer extends SmartBlockEntityRenderer<AgingBarrelBlo
         //count all the Items
         for (int slot = 0; slot < inv.getSlots(); slot++) {
             if (!inv.getStackInSlot(slot).isEmpty()) {
-                if (inv.getStackInSlot(slot).is(DestroyItems.YEAST.get()) && renderYeast == false) { //if both Items are Yeast, only do the fancy render for one
+                if (inv.getStackInSlot(slot).is(DestroyItemTags.YEAST.tag) && renderYeast == false) { //if both Items are Yeast, only do the fancy render for one
                     renderYeast = true;
                 } else {
                     itemStacks.add(inv.getStackInSlot(slot));
@@ -84,11 +82,11 @@ public class AgingBarrelRenderer extends SmartBlockEntityRenderer<AgingBarrelBlo
 
         ms.popPose();
 
-        //render Yeast
+        // Render Yeast
         ms.pushPose();
         if (renderYeast) {
-            //I know it says FluidRenderer but I'm just using it to render a generic texture
-            FluidRenderer.renderStillTiledFace(Direction.UP, 2 / 16f, 2 / 16f, 14 / 16f, 14 / 16f, fluidLevel + 0.01f, FluidRenderer.getFluidBuilder(buffer), ms, light, IClientFluidTypeExtensions.of(Fluids.LAVA).getTintColor(), //TODO replace lava with some other dummy fluid
+            // I know it says FluidRenderer but I'm just using it to render a generic texture, sue me
+            FluidRenderer.renderStillTiledFace(Direction.UP, 2 / 16f, 2 / 16f, 14 / 16f, 14 / 16f, fluidLevel + 0.01f, FluidRenderer.getFluidBuilder(buffer), ms, light, 0xFFFFFFFF,
                 Minecraft.getInstance()
 			    .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
                 .apply(Destroy.asResource("block/yeast_overlay"))

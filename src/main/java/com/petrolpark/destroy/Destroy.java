@@ -15,6 +15,7 @@ import com.petrolpark.destroy.chemistry.index.DestroyTopologies;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.ponder.DestroyPonderIndex;
 import com.petrolpark.destroy.client.ponder.DestroyPonderTags;
+import com.petrolpark.destroy.compat.jei.DestroyJEI;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.fluid.DestroyFluids;
@@ -50,6 +51,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLLoader;
+
 import org.slf4j.Logger;
 
 @Mod(Destroy.MOD_ID)
@@ -83,7 +86,7 @@ public class Destroy {
     public Destroy() {
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        //IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
+        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
         REGISTRATE.registerEventListeners(modEventBus);
 
@@ -122,6 +125,11 @@ public class Destroy {
         modEventBus.addListener(Destroy::clientInit);
         modEventBus.addListener(DestroyParticleTypes::registerProviders);
         modEventBus.addListener(EventPriority.LOWEST, Destroy::gatherData);
+
+        // JEI compat
+        if (FMLLoader.getLoadingModList().getModFileById("jei") != null) {
+            forgeEventBus.register(DestroyJEI.ClientEvents.class);
+        };
 
         // Client
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DestroyPartials::init);

@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:block/cross",
+    "textures": {
+      "cross": "destroy:block/yeast_mushroom"
+    },
+    "render_type": "cutout"
+}

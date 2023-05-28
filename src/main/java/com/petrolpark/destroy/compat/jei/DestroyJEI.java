@@ -342,8 +342,7 @@ public class DestroyJEI implements IModPlugin {
         };
     };
 
-    @EventBusSubscriber(modid = "jei")
-    public class DestroyClientEvents {
+    public class ClientEvents {
 
         @SubscribeEvent
         public static void onTick(TickEvent.ClientTickEvent event) {

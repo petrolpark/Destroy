@@ -1,0 +1,130 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "create:block/large_wheels",
+	"textures": {
+		"particle": "block/stripped_spruce_log"
+	},
+	"elements": [
+		{
+			"name": "Bottom",
+			"from": [1, 0, 3],
+			"to": [15, 13, 13],
+			"color": 8,
+			"faces": {
+				"north": {"uv": [0, 0, 14, 13], "texture": "#missing"},
+				"east": {"uv": [0, 0, 10, 13], "texture": "#missing"},
+				"south": {"uv": [0, 0, 14, 13], "texture": "#missing"},
+				"west": {"uv": [0, 0, 10, 13], "texture": "#missing"},
+				"up": {"uv": [0, 0, 14, 10], "texture": "#missing"},
+				"down": {"uv": [0, 0, 14, 10], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "Pipe",
+			"from": [4, 0, -13],
+			"to": [12, 8, 3],
+			"color": 0,
+			"faces": {
+				"north": {"uv": [0, 0, 8, 8], "texture": "#missing"},
+				"east": {"uv": [0, 0, 16, 8], "texture": "#missing"},
+				"south": {"uv": [0, 0, 8, 8], "texture": "#missing"},
+				"west": {"uv": [0, 0, 16, 8], "texture": "#missing"},
+				"up": {"uv": [0, 0, 8, 16], "texture": "#missing"},
+				"down": {"uv": [0, 0, 8, 16], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "East Beam Support",
+			"from": [10, 13, 6],
+			"to": [12, 28, 10],
+			"color": 0,
+			"faces": {
+				"north": {"uv": [0, 0, 2, 15], "texture": "#missing"},
+				"east": {"uv": [0, 0, 4, 15], "texture": "#missing"},
+				"south": {"uv": [0, 0, 2, 15], "texture": "#missing"},
+				"west": {"uv": [0, 0, 4, 15], "texture": "#missing"},
+				"up": {"uv": [0, 0, 2, 4], "texture": "#missing"},
+				"down": {"uv": [0, 0, 2, 4], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "West Beam Support",
+			"from": [4, 13, 6],
+			"to": [6, 28, 10],
+			"color": 0,
+			"faces": {
+				"north": {"uv": [0, 0, 2, 15], "texture": "#missing"},
+				"east": {"uv": [0, 0, 4, 15], "texture": "#missing"},
+				"south": {"uv": [0, 0, 2, 15], "texture": "#missing"},
+				"west": {"uv": [0, 0, 4, 15], "texture": "#missing"},
+				"up": {"uv": [0, 0, 2, 4], "texture": "#missing"},
+				"down": {"uv": [0, 0, 2, 4], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "East Cam Support",
+			"from": [13, 5, 13],
+			"to": [15, 11, 27],
+			"color": 0,
+			"faces": {
+				"north": {"uv": [0, 0, 2, 6], "texture": "#missing"},
+				"east": {"uv": [0, 0, 14, 6], "texture": "#missing"},
+				"south": {"uv": [0, 0, 2, 6], "texture": "#missing"},
+				"west": {"uv": [0, 0, 14, 6], "texture": "#missing"},
+				"up": {"uv": [0, 0, 2, 14], "texture": "#missing"},
+				"down": {"uv": [0, 0, 2, 14], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "West Cam Support",
+			"from": [1, 5, 13],
+			"to": [3, 11, 27],
+			"color": 0,
+			"faces": {
+				"north": {"uv": [0, 0, 2, 6], "texture": "#missing"},
+				"east": {"uv": [0, 0, 14, 6], "texture": "#missing"},
+				"south": {"uv": [0, 0, 2, 6], "texture": "#missing"},
+				"west": {"uv": [0, 0, 14, 6], "texture": "#missing"},
+				"up": {"uv": [0, 0, 2, 14], "texture": "#missing"},
+				"down": {"uv": [0, 0, 2, 14], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "East Pipe Connection",
+			"from": [15, 3, 3],
+			"to": [16, 13, 13],
+			"color": 0,
+			"faces": {
+				"north": {"uv": [0, 0, 1, 10], "texture": "#missing"},
+				"east": {"uv": [0, 0, 10, 10], "texture": "#missing"},
+				"south": {"uv": [0, 0, 1, 10], "texture": "#missing"},
+				"west": {"uv": [0, 0, 10, 10], "texture": "#missing"},
+				"up": {"uv": [0, 0, 1, 10], "texture": "#missing"},
+				"down": {"uv": [0, 0, 1, 10], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "West Pipe Connection",
+			"from": [0, 3, 3],
+			"to": [1, 13, 13],
+			"color": 0,
+			"faces": {
+				"north": {"uv": [0, 0, 1, 10], "texture": "#missing"},
+				"east": {"uv": [0, 0, 10, 10], "texture": "#missing"},
+				"south": {"uv": [0, 0, 1, 10], "texture": "#missing"},
+				"west": {"uv": [0, 0, 10, 10], "texture": "#missing"},
+				"up": {"uv": [0, 0, 1, 10], "texture": "#missing"},
+				"down": {"uv": [0, 0, 1, 10], "texture": "#missing"}
+			}
+		}
+	],
+	"display": {},
+	"groups": [
+		{
+			"name": "Base",
+			"origin": [0, 0, 0],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5, 6, 7]
+		}
+	]
+}

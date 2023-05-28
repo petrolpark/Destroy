@@ -1,0 +1,108 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "create:block/large_wheels",
+	"textures": {
+		"particle": "block/stripped_spruce_log"
+	},
+	"elements": [
+		{
+			"name": "Main",
+			"from": [6, 23, -4],
+			"to": [10, 27, 21],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 25, 8]},
+			"color": 9,
+			"faces": {
+				"north": {"uv": [0, 0, 4, 4], "texture": "#missing"},
+				"east": {"uv": [0, 0, 16, 4], "texture": "#missing"},
+				"south": {"uv": [0, 0, 4, 4], "texture": "#missing"},
+				"west": {"uv": [0, 0, 16, 4], "texture": "#missing"},
+				"up": {"uv": [0, 0, 4, 16], "texture": "#missing"},
+				"down": {"uv": [0, 0, 4, 16], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "East Clamp",
+			"from": [10, 23, 18],
+			"to": [12, 27, 28],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 25, 8]},
+			"color": 0,
+			"faces": {
+				"north": {"uv": [0, 0, 2, 4], "texture": "#missing"},
+				"east": {"uv": [0, 0, 10, 4], "texture": "#missing"},
+				"south": {"uv": [0, 0, 2, 4], "texture": "#missing"},
+				"west": {"uv": [0, 0, 10, 4], "texture": "#missing"},
+				"up": {"uv": [0, 0, 2, 10], "texture": "#missing"},
+				"down": {"uv": [0, 0, 2, 10], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "West Clamp",
+			"from": [4, 23, 18],
+			"to": [6, 27, 28],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 25, 8]},
+			"color": 0,
+			"faces": {
+				"north": {"uv": [0, 0, 2, 4], "texture": "#missing"},
+				"east": {"uv": [0, 0, 10, 4], "texture": "#missing"},
+				"south": {"uv": [0, 0, 2, 4], "texture": "#missing"},
+				"west": {"uv": [0, 0, 10, 4], "texture": "#missing"},
+				"up": {"uv": [0, 0, 2, 10], "texture": "#missing"},
+				"down": {"uv": [0, 0, 2, 10], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "Head Back",
+			"from": [3, 25, -10],
+			"to": [13, 27, -2],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 25, 8]},
+			"color": 2,
+			"faces": {
+				"north": {"uv": [0, 0, 10, 2], "texture": "#missing"},
+				"east": {"uv": [0, 0, 8, 2], "texture": "#missing"},
+				"south": {"uv": [0, 0, 10, 2], "texture": "#missing"},
+				"west": {"uv": [0, 0, 8, 2], "texture": "#missing"},
+				"up": {"uv": [0, 0, 10, 8], "texture": "#missing"},
+				"down": {"uv": [0, 0, 10, 8], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "Head Bottom",
+			"from": [3, 11, -4],
+			"to": [13, 25, -2],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 25, 8]},
+			"color": 1,
+			"faces": {
+				"north": {"uv": [0, 0, 10, 14], "texture": "#missing"},
+				"east": {"uv": [0, 0, 2, 14], "texture": "#missing"},
+				"south": {"uv": [0, 0, 10, 14], "texture": "#missing"},
+				"west": {"uv": [0, 0, 2, 14], "texture": "#missing"},
+				"up": {"uv": [0, 0, 10, 2], "texture": "#missing"},
+				"down": {"uv": [0, 0, 10, 2], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "Head Slope",
+			"from": [3.1, 17, -8.5],
+			"to": [12.9, 32, -2.5],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 25, 8]},
+			"color": 0,
+			"faces": {
+				"north": {"uv": [0, 0, 9.8, 15], "texture": "#missing"},
+				"east": {"uv": [0, 0, 6, 15], "texture": "#missing"},
+				"south": {"uv": [0, 0, 9.8, 15], "texture": "#missing"},
+				"west": {"uv": [0, 0, 6, 15], "texture": "#missing"},
+				"up": {"uv": [0, 0, 9.8, 6], "texture": "#missing"},
+				"down": {"uv": [0, 0, 9.8, 6], "texture": "#missing"}
+			}
+		}
+	],
+	"display": {},
+	"groups": [
+		{
+			"name": "Beam",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5]
+		}
+	]
+}

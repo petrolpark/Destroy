@@ -1,0 +1,33 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "create:block/large_wheels",
+	"textures": {
+		"particle": "block/stripped_spruce_log"
+	},
+	"elements": [
+		{
+			"name": "Pipe",
+			"from": [7, 4, -9],
+			"to": [9, 23, -7],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 25, 8]},
+			"color": 4,
+			"faces": {
+				"north": {"uv": [0, 0, 2, 16], "texture": "#missing"},
+				"east": {"uv": [0, 0, 2, 16], "texture": "#missing"},
+				"south": {"uv": [0, 0, 2, 16], "texture": "#missing"},
+				"west": {"uv": [0, 0, 2, 16], "texture": "#missing"},
+				"up": {"uv": [0, 0, 2, 2], "texture": "#missing"},
+				"down": {"uv": [0, 0, 2, 2], "texture": "#missing"}
+			}
+		}
+	],
+	"display": {},
+	"groups": [
+		{
+			"name": "Pump",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0]
+		}
+	]
+}
