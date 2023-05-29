@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.block.renderer;
 
+import com.jozufozu.flywheel.backend.Backend;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.block.entity.PumpjackBlockEntity;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
@@ -13,8 +14,8 @@ public class PumpjackRenderer extends SafeBlockEntityRenderer<PumpjackBlockEntit
 
     @Override
     protected void renderSafe(PumpjackBlockEntity pumpjack, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'renderSafe'");
+        if (Backend.canUseInstancing(pumpjack.getLevel()))
+			return;
     };
     
 };
