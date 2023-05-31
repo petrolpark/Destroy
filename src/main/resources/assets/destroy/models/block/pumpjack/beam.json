@@ -2,22 +2,23 @@
 	"credit": "Made with Blockbench",
 	"parent": "create:block/large_wheels",
 	"textures": {
-		"particle": "block/stripped_spruce_log"
+		"2": "destroy:block/pumpjack",
+		"particle": "destroy:block/pumpjack"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"name": "Main",
 			"from": [6, 23, -4],
 			"to": [10, 27, 21],
 			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 25, 8]},
-			"color": 9,
 			"faces": {
-				"north": {"uv": [0, 0, 4, 4], "texture": "#missing"},
-				"east": {"uv": [0, 0, 16, 4], "texture": "#missing"},
-				"south": {"uv": [0, 0, 4, 4], "texture": "#missing"},
-				"west": {"uv": [0, 0, 16, 4], "texture": "#missing"},
-				"up": {"uv": [0, 0, 4, 16], "texture": "#missing"},
-				"down": {"uv": [0, 0, 4, 16], "texture": "#missing"}
+				"north": {"uv": [0, 0, 1, 1], "texture": "#2"},
+				"east": {"uv": [2, 0, 1, 6.25], "rotation": 270, "texture": "#2"},
+				"south": {"uv": [0, 5, 1, 6], "texture": "#2"},
+				"west": {"uv": [1, 0, 2, 6.25], "rotation": 90, "texture": "#2"},
+				"up": {"uv": [1, 6.25, 2, 12.5], "rotation": 180, "texture": "#2"},
+				"down": {"uv": [0, 6.25, 1, 12.5], "texture": "#2"}
 			}
 		},
 		{
@@ -25,14 +26,13 @@
 			"from": [10, 23, 18],
 			"to": [12, 27, 28],
 			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 25, 8]},
-			"color": 0,
 			"faces": {
-				"north": {"uv": [0, 0, 2, 4], "texture": "#missing"},
-				"east": {"uv": [0, 0, 10, 4], "texture": "#missing"},
-				"south": {"uv": [0, 0, 2, 4], "texture": "#missing"},
-				"west": {"uv": [0, 0, 10, 4], "texture": "#missing"},
-				"up": {"uv": [0, 0, 2, 10], "texture": "#missing"},
-				"down": {"uv": [0, 0, 2, 10], "texture": "#missing"}
+				"north": {"uv": [3, 3.25, 2, 2.75], "rotation": 90, "texture": "#2"},
+				"east": {"uv": [2, 2.75, 3, 0.5], "rotation": 90, "texture": "#2"},
+				"south": {"uv": [2, 0.5, 3, 0], "rotation": 90, "texture": "#2"},
+				"west": {"uv": [3.5, 2.75, 4.5, 0.5], "rotation": 90, "texture": "#2"},
+				"up": {"uv": [3.5, 0.5, 3, 2.75], "rotation": 180, "texture": "#2"},
+				"down": {"uv": [3.5, 0.5, 3, 2.75], "rotation": 180, "texture": "#2"}
 			}
 		},
 		{
@@ -40,44 +40,27 @@
 			"from": [4, 23, 18],
 			"to": [6, 27, 28],
 			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 25, 8]},
-			"color": 0,
 			"faces": {
-				"north": {"uv": [0, 0, 2, 4], "texture": "#missing"},
-				"east": {"uv": [0, 0, 10, 4], "texture": "#missing"},
-				"south": {"uv": [0, 0, 2, 4], "texture": "#missing"},
-				"west": {"uv": [0, 0, 10, 4], "texture": "#missing"},
-				"up": {"uv": [0, 0, 2, 10], "texture": "#missing"},
-				"down": {"uv": [0, 0, 2, 10], "texture": "#missing"}
+				"north": {"uv": [2, 2.75, 3, 3.25], "rotation": 90, "texture": "#2"},
+				"east": {"uv": [3.5, 0.5, 4.5, 2.75], "rotation": 90, "texture": "#2"},
+				"south": {"uv": [2, 0, 3, 0.5], "rotation": 90, "texture": "#2"},
+				"west": {"uv": [2, 0.5, 3, 2.75], "rotation": 90, "texture": "#2"},
+				"up": {"uv": [3, 0.5, 3.5, 2.75], "rotation": 180, "texture": "#2"},
+				"down": {"uv": [3, 0.5, 3.5, 2.75], "rotation": 180, "texture": "#2"}
 			}
 		},
 		{
 			"name": "Head Back",
 			"from": [3, 25, -10],
 			"to": [13, 27, -2],
-			"rotation": {"angle": 0, "axis": "x", "origin": [8, 25, 8]},
-			"color": 2,
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 25, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 10, 2], "texture": "#missing"},
-				"east": {"uv": [0, 0, 8, 2], "texture": "#missing"},
-				"south": {"uv": [0, 0, 10, 2], "texture": "#missing"},
-				"west": {"uv": [0, 0, 8, 2], "texture": "#missing"},
-				"up": {"uv": [0, 0, 10, 8], "texture": "#missing"},
-				"down": {"uv": [0, 0, 10, 8], "texture": "#missing"}
-			}
-		},
-		{
-			"name": "Head Bottom",
-			"from": [3, 11, -4],
-			"to": [13, 25, -2],
-			"rotation": {"angle": 0, "axis": "x", "origin": [8, 25, 8]},
-			"color": 1,
-			"faces": {
-				"north": {"uv": [0, 0, 10, 14], "texture": "#missing"},
-				"east": {"uv": [0, 0, 2, 14], "texture": "#missing"},
-				"south": {"uv": [0, 0, 10, 14], "texture": "#missing"},
-				"west": {"uv": [0, 0, 2, 14], "texture": "#missing"},
-				"up": {"uv": [0, 0, 10, 2], "texture": "#missing"},
-				"down": {"uv": [0, 0, 10, 2], "texture": "#missing"}
+				"north": {"uv": [4.5, 0, 7, 0.5], "texture": "#2"},
+				"east": {"uv": [7, 0, 9, 0.5], "texture": "#2"},
+				"south": {"uv": [4.5, 0, 7, 0.5], "texture": "#2"},
+				"west": {"uv": [9, 0, 7, 0.5], "texture": "#2"},
+				"up": {"uv": [8, 3.75, 10.5, 5.75], "rotation": 180, "texture": "#2"},
+				"down": {"uv": [13, 0, 15.5, 2], "texture": "#2"}
 			}
 		},
 		{
@@ -85,18 +68,30 @@
 			"from": [3.1, 17, -8.5],
 			"to": [12.9, 32, -2.5],
 			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 25, 8]},
-			"color": 0,
 			"faces": {
-				"north": {"uv": [0, 0, 9.8, 15], "texture": "#missing"},
-				"east": {"uv": [0, 0, 6, 15], "texture": "#missing"},
-				"south": {"uv": [0, 0, 9.8, 15], "texture": "#missing"},
-				"west": {"uv": [0, 0, 6, 15], "texture": "#missing"},
-				"up": {"uv": [0, 0, 9.8, 6], "texture": "#missing"},
-				"down": {"uv": [0, 0, 9.8, 6], "texture": "#missing"}
+				"north": {"uv": [10.5, 0, 13, 3.75], "texture": "#2"},
+				"east": {"uv": [9, 0, 10.5, 3.75], "texture": "#2"},
+				"south": {"uv": [13, 0, 15.5, 3.75], "texture": "#2"},
+				"west": {"uv": [10.5, 0, 9, 3.75], "texture": "#2"},
+				"up": {"uv": [13, 0, 15.5, 1.5], "texture": "#2"},
+				"down": {"uv": [10.5, 5.25, 13, 3.5], "texture": "#2"}
+			}
+		},
+		{
+			"name": "Head Bottom",
+			"from": [3, 11, -4],
+			"to": [13, 25, -2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 25, 8]},
+			"faces": {
+				"north": {"uv": [10.5, 1, 13, 3.75], "texture": "#2"},
+				"east": {"uv": [7, 0.5, 7.5, 3.25], "texture": "#2"},
+				"south": {"uv": [4.5, 0.5, 7, 3.25], "texture": "#2"},
+				"west": {"uv": [7.5, 0.5, 7, 3.25], "texture": "#2"},
+				"up": {"uv": [0, 0, 0, 0], "texture": "#2"},
+				"down": {"uv": [4.5, 3.25, 7, 3.75], "rotation": 180, "texture": "#2"}
 			}
 		}
 	],
-	"display": {},
 	"groups": [
 		{
 			"name": "Beam",

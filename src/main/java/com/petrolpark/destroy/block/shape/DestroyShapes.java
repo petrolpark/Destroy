@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.block.shape;
 
+import com.petrolpark.destroy.block.IPumpjackStructuralBlock;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.AllShapes.Builder;
 import com.simibubi.create.foundation.utility.VoxelShaper;
@@ -11,6 +12,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class DestroyShapes {
 
     public static final VoxelShape
+
+    BLOCK = shape(0, 0, 0, 16, 16, 16)
+        .build(),
     
     CENTRIFUGE = shape(0, 0, 0, 16, 4, 16)
         .add(2, 4, 2, 14, 12, 14)
@@ -58,6 +62,33 @@ public class DestroyShapes {
 
     public static final VoxelShaper BLACKLIGHT_FLIPPED = shape(5, 0, 0, 11, 4, 16)
         .forDirectional(Direction.DOWN);
+
+    public static final VoxelShaper getPumpJackShaper(IPumpjackStructuralBlock.Component component) {
+        switch (component) {
+            case FRONT:
+                return shape(4, 0, 0, 12, 8, 12)
+                    .forDirectional(Direction.NORTH);
+            case BACK:
+                return shape(3, 0, 0, 13, 16, 16)
+                    .add(1, 5, 5, 3, 11, 16)
+                    .add(13, 5, 5, 15, 11, 16)
+                    .forDirectional(Direction.NORTH);
+            case MIDDLE:
+                return shape(1, 0, 3, 15, 13, 13)
+                    .add(4, 0, 13, 12, 8, 16)
+                    .add(1, 5, 0, 3, 11, 3)
+                    .add(13, 5, 0, 15, 11, 3)
+                    .add(4, 13, 6, 6, 16, 10)
+                    .add(10, 13, 6, 12, 16, 10)
+                    .forDirectional(Direction.NORTH);
+            case TOP:
+                return shape(4, 0, 6, 6, 12, 10)
+                    .add(10, 0, 6, 12, 12, 10)
+                    .forDirectional(Direction.NORTH);
+            default:
+                return null;
+        }
+    };
 
     /**
      * Changes the voxel shape of the Aging Barrel based on how far through the aging process the Barrel is.

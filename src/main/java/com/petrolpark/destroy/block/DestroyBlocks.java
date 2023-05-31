@@ -111,16 +111,18 @@ public class DestroyBlocks {
         .register();
 
     public static final BlockEntry<PumpjackCamBlock> PUMPJACK_CAM = REGISTRATE.block("pumpjack_cam", PumpjackCamBlock::new)
-        .initialProperties(SharedProperties::stone)
-        .properties(p -> p.color(MaterialColor.METAL))
-        .transform(TagGen.pickaxeOnly())
+        .initialProperties(SharedProperties::copperMetal)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_ORANGE)
+            .noOcclusion()
+        ).transform(TagGen.pickaxeOnly())
         .blockstate(BlockStateGen.horizontalAxisBlockProvider(false))
         .register();
 
     public static final BlockEntry<PumpjackStructuralBlock> PUMPJACK_STRUCTURAL = REGISTRATE.block("pumpjack_structure", PumpjackStructuralBlock::new)
-        .initialProperties(SharedProperties::wooden)
+        .initialProperties(SharedProperties::copperMetal)
         .properties(p -> p
-            .color(MaterialColor.DIRT)
+            .color(MaterialColor.COLOR_ORANGE)
             .noOcclusion()
         ).transform(TagGen.pickaxeOnly())
         .blockstate((c, p) -> p.getVariantBuilder(c.get())

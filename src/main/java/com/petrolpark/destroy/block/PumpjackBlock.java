@@ -5,8 +5,11 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
+import com.petrolpark.destroy.block.IPumpjackStructuralBlock.Component;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.entity.PumpjackBlockEntity;
+import com.petrolpark.destroy.block.shape.DestroyShapes;
+import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.core.BlockPos;
@@ -15,13 +18,17 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class PumpjackBlock extends Block implements IBE<PumpjackBlockEntity> {
 
@@ -58,6 +65,11 @@ public class PumpjackBlock extends Block implements IBE<PumpjackBlockEntity> {
     };
 
     @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return DestroyShapes.getPumpJackShaper(Component.MIDDLE).get(state.getValue(FACING));
+    };
+
+    @Override
 	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
 		if (!level.getBlockTicks().hasScheduledTick(pos, this)) level.scheduleTick(pos, this, 1);
 	};
@@ -68,11 +80,11 @@ public class PumpjackBlock extends Block implements IBE<PumpjackBlockEntity> {
 		Direction facing = state.getValue(FACING);
 
         // Check all the structural blocks are still present
-        for (Entry<BlockPos, Direction> entry : getStructuralBlocks(facing, pos).entrySet()) {
+        for (Entry<BlockPos, BlockState> entry : getStructuralBlocks(facing, pos).entrySet()) {
             // What the State at the given position is
             BlockState occupiedState = level.getBlockState(entry.getKey());
             // What the State at the given position should be
-            BlockState requiredState = DestroyBlocks.PUMPJACK_STRUCTURAL.getDefaultState().setValue(PumpjackStructuralBlock.FACING, entry.getValue());
+            BlockState requiredState = entry.getValue();
             if (occupiedState == requiredState) continue;
             // If we can't put the structural Block State here, destroy the whole Pumpjack
             if (!occupiedState.getMaterial().isReplaceable()) {
@@ -84,23 +96,31 @@ public class PumpjackBlock extends Block implements IBE<PumpjackBlockEntity> {
 	};
 
     /**  
-     * Map of locations of structural Blocks to the direction they should be pointing to conserve the structure.
+     * Map of locations of structural Blocks to the Block States they should be
      */
-    public Map<BlockPos, Direction> getStructuralBlocks(Direction facing, BlockPos pos) {
+    public Map<BlockPos, BlockState> getStructuralBlocks(Direction facing, BlockPos pos) {
         /* 
          *  O---O---O---O
-         *  |5 v|3 v|2 v|
+         *  |   |2 v|   |
          *  O---O---O---O
-         *  |4 >| c |1 <|
+         *  |3 >| c |1 <|
          *  O---O---O---O
          * 'c' is this Block State; each box shows the direction the structural Block State points.
          */
         return Map.of(
-            pos.relative(facing, 1), facing.getOpposite(), // 1
-            pos.relative(facing, 1).above(), Direction.DOWN, // 2
-            pos.above(), Direction.DOWN, // 3
-            pos.relative(facing.getOpposite(), 1), facing, // 4
-            pos.relative(facing.getOpposite(), 1).above(), Direction.DOWN // 5
+            pos.relative(facing, 1), // 1
+                DestroyBlocks.PUMPJACK_CAM.getDefaultState()
+                    .setValue(DirectionalBlock.FACING, facing.getOpposite())
+                    .setValue(IPumpjackStructuralBlock.COMPONENT, Component.BACK)
+                    .setValue(RotatedPillarKineticBlock.AXIS, facing.getClockWise(Axis.Y).getAxis()),
+            pos.above(), // 2
+                DestroyBlocks.PUMPJACK_STRUCTURAL.getDefaultState()
+                    .setValue(DirectionalBlock.FACING, Direction.DOWN)
+                    .setValue(IPumpjackStructuralBlock.COMPONENT, Component.TOP),
+            pos.relative(facing.getOpposite(), 1), // 3
+                DestroyBlocks.PUMPJACK_STRUCTURAL.getDefaultState()
+                    .setValue(DirectionalBlock.FACING, facing)
+                    .setValue(IPumpjackStructuralBlock.COMPONENT, Component.FRONT)
         );
     };
 

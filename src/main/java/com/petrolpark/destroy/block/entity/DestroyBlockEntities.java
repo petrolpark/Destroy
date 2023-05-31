@@ -64,6 +64,11 @@ public class DestroyBlockEntities {
 		.renderer(() -> PumpjackRenderer::new)
 		.register();
 
+    public static final BlockEntityEntry<PumpjackCamBlockEntity> PUMPJACK_CAM = REGISTRATE
+		.blockEntity("powered_shaft", PumpjackCamBlockEntity::new)
+		.validBlocks(DestroyBlocks.PUMPJACK_CAM)
+		.register();
+
     public static final BlockEntityEntry<SandCastleBlockEntity> SAND_CASTLE = REGISTRATE
         .blockEntity("sand_castle", SandCastleBlockEntity::new)
         .validBlocks(DestroyBlocks.SAND_CASTLE)

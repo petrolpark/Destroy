@@ -12,7 +12,6 @@ import com.petrolpark.destroy.block.partial.DestroyPartials;
 import com.simibubi.create.foundation.utility.AngleHelper;
 
 import net.minecraft.core.Direction;
-import net.minecraft.core.Direction.Axis;
 import net.minecraft.util.Mth;
 
 public class PumpjackInstance extends BlockEntityInstance<PumpjackBlockEntity> implements DynamicInstance {
@@ -64,7 +63,7 @@ public class PumpjackInstance extends BlockEntityInstance<PumpjackBlockEntity> i
         transformed(cam, facing)
             .translate(0d, 0d, 1d)
             .centre()
-            .rotateX(angle)
+            .rotateX(angle - 90d)
             .centre()
             .translate(0d, 0d, -1d)
             .unCentre()
@@ -83,7 +82,7 @@ public class PumpjackInstance extends BlockEntityInstance<PumpjackBlockEntity> i
         transformed(beam, facing)
             .translate(0d, 1d, 0d)
             .centre()
-            .rotateX((Mth.sin(angleInRads) - 1) * -20d)
+            .rotateX((Mth.sin(angleInRads) - 1) * -18d)
             .centre()
             .translate(0d, -1d, 0d)
             .unCentre()

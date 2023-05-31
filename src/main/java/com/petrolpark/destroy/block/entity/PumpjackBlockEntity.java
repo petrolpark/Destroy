@@ -59,12 +59,13 @@ public class PumpjackBlockEntity extends SmartBlockEntity {
 	};
 
     @Nullable
+    @SuppressWarnings("null")
     public PumpjackCamBlockEntity getCam() {
         PumpjackCamBlockEntity cam = source.get();
         if (cam == null || cam.isRemoved() || !cam.canPower(worldPosition)) {
             if (cam != null) source = new WeakReference<>(null);
             Direction facing = PumpjackBlock.getFacing(getBlockState());
-            BlockEntity anyCamAt = level.getBlockEntity(worldPosition.relative(facing, -1));
+            BlockEntity anyCamAt = getLevel().getBlockEntity(worldPosition.relative(facing, -1)); // It thinks getLevel() might be null
             if (anyCamAt instanceof PumpjackCamBlockEntity newCam && newCam.canPower(worldPosition)) {
                 cam = newCam;
 				source = new WeakReference<>(cam);

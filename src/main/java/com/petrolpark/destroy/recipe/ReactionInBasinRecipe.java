@@ -63,7 +63,6 @@ public class ReactionInBasinRecipe extends MixingRecipe {
         availableFluids.stream().map(fluidStack -> FluidIngredient.fromFluidStack(fluidStack)).forEach(fluidIngredient -> builder.require(fluidIngredient));
         builder.require(DestroyItems.ABS.get());
 
-        //TODO split result up over multiple tanks if the output is too large
         //And also tell the Player if their Mixtures can't be mixed because they're in the output tank (not the input tank)
 
         return builder.build();

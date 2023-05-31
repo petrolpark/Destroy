@@ -123,6 +123,8 @@
     "block.destroy.pollutometer.tooltip.condition1": "When Used as Display Link Source",
     "block.destroy.pollutometer.tooltip.behaviour1": "Displays the level of the selected type of pollution",
     "block.destroy.pressure_chamber": "Pressure Chamber",
+    "block.destroy.pumpjack": "Pumpjack",
+    "block.destroy.pumpjack_structure": "Pumpjack",
     "block.destroy.raw_fries_block": "Raw Fries Block",
     "block.destroy.raw_nickel_block": "Raw Nickel Block",
     "block.destroy.rhodium_block": "Rhodium Block",
