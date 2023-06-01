@@ -5,7 +5,6 @@
 		"2": "destroy:block/pumpjack",
 		"particle": "destroy:block/pumpjack"
 	},
-	"render_type": "cutout",
 	"elements": [
 		{
 			"name": "Main",
@@ -99,5 +98,6 @@
 			"color": 0,
 			"children": [0, 1, 2, 3, 4, 5]
 		}
-	]
+	],
+	"render_type": "cutout"
 }

@@ -59,13 +59,13 @@ public class DestroyBlockEntities {
 
     public static final BlockEntityEntry<PumpjackBlockEntity> PUMPJACK = REGISTRATE
 		.blockEntity("pumpjack", PumpjackBlockEntity::new)
-		.instance(() -> PumpjackInstance::new, false)
+		//.instance(() -> PumpjackInstance::new, false) Can't use instancing because that can't render cutout for some reason
 		.validBlocks(DestroyBlocks.PUMPJACK)
 		.renderer(() -> PumpjackRenderer::new)
 		.register();
 
     public static final BlockEntityEntry<PumpjackCamBlockEntity> PUMPJACK_CAM = REGISTRATE
-		.blockEntity("powered_shaft", PumpjackCamBlockEntity::new)
+		.blockEntity("pumpjack_cam", PumpjackCamBlockEntity::new)
 		.validBlocks(DestroyBlocks.PUMPJACK_CAM)
 		.register();
 

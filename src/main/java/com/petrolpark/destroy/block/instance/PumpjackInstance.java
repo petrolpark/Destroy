@@ -5,7 +5,6 @@ import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.petrolpark.destroy.block.PumpjackBlock;
 import com.petrolpark.destroy.block.entity.PumpjackBlockEntity;
 import com.petrolpark.destroy.block.partial.DestroyPartials;
@@ -47,23 +46,21 @@ public class PumpjackInstance extends BlockEntityInstance<PumpjackBlockEntity> i
 
     @Override
     public void beginFrame() {
-        Float angle = 2 * AnimationTickHolder.getRenderTime();
-        float angleInRads = angle * Mth.PI / 180;
-        //Float angle = blockEntity.getTargetAngle();
-		// if (angle == null) {
-		// 	cam.setEmptyTransform();
-		// 	linkage.setEmptyTransform();
-		// 	beam.setEmptyTransform();
-        //     pump.setEmptyTransform();
-		// 	return;
-		// };
+        Float angle = blockEntity.getTargetAngle();
+		if (angle == null) {
+			cam.setEmptyTransform();
+			linkage.setEmptyTransform();
+			beam.setEmptyTransform();
+            pump.setEmptyTransform();
+			return;
+		};
 
         Direction facing = PumpjackBlock.getFacing(blockState);
 
         transformed(cam, facing)
             .translate(0d, 0d, 1d)
             .centre()
-            .rotateX(angle - 90d)
+            .rotateXRadians(angle - Mth.HALF_PI)
             .centre()
             .translate(0d, 0d, -1d)
             .unCentre()
@@ -71,9 +68,9 @@ public class PumpjackInstance extends BlockEntityInstance<PumpjackBlockEntity> i
 
         transformed(linkage, facing)
             .translate(0d, -5 / 16d, 1d)
-            .translate(0d, Mth.sin(angleInRads) * 5 / 16d, -Mth.cos(angleInRads) * 5 / 16d)
+            .translate(0d, Mth.sin(angle) * 5 / 16d, -Mth.cos(angle) * 5 / 16d)
             .centre()
-            .rotateX(Mth.cos(angleInRads) * 10d)
+            .rotateX(Mth.cos(angle) * 10d)
             .centre()
             .translate(0d, 0d, -1d)
             .unCentre()
@@ -82,14 +79,14 @@ public class PumpjackInstance extends BlockEntityInstance<PumpjackBlockEntity> i
         transformed(beam, facing)
             .translate(0d, 1d, 0d)
             .centre()
-            .rotateX((Mth.sin(angleInRads) - 1) * -18d)
+            .rotateX((Mth.sin(angle) - 1) * -18d)
             .centre()
             .translate(0d, -1d, 0d)
             .unCentre()
             .unCentre();
 
         transformed(pump, facing)
-            .translate(0d, (3 / 16) - (Mth.sin(angleInRads) * 3 / 16d), 0d);
+            .translate(0d, (3 / 16) - (Mth.sin(angle) * 3 / 16d), 0d);
     };
 
     protected ModelData transformed(ModelData modelData, Direction facing) {
@@ -102,7 +99,7 @@ public class PumpjackInstance extends BlockEntityInstance<PumpjackBlockEntity> i
 
     @Override
 	public void updateLight() {
-		relight(pos, cam, linkage, beam, pump);
+		relight(pos.above(), cam, linkage, beam, pump);
 	};
 
     @Override

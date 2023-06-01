@@ -7,7 +7,6 @@
 		"3": "create:block/axis_top",
 		"particle": "destroy:block/pumpjack"
 	},
-	"render_type": "cutout",
 	"elements": [
 		{
 			"name": "East Shaft",

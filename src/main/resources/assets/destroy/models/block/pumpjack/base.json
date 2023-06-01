@@ -7,7 +7,6 @@
 		"5": "create:block/pipes_connected",
 		"particle": "destroy:block/pumpjack"
 	},
-	"render_type": "cutout",
 	"elements": [
 		{
 			"name": "Bottom",

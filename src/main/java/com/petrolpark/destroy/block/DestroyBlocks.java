@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraftforge.common.Tags;
@@ -80,8 +81,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.GOLD)
             .noOcclusion()
-        ).blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p)))
-        .transform(TagGen.pickaxeOnly())
+        ).transform(TagGen.pickaxeOnly())
         .transform(BlockStressDefaults.setImpact(6.0))
         .item(AssemblyOperatorBlockItem::new)
         .transform(customItemModel())
@@ -105,7 +105,6 @@ public class DestroyBlocks {
             .noOcclusion()
         ).transform(TagGen.pickaxeOnly())
         .transform(BlockStressDefaults.setImpact(8.0))
-        .blockstate((c, p) -> p.horizontalFaceBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
         .item()
         .transform(customItemModel())
         .register();
@@ -490,6 +489,8 @@ public class DestroyBlocks {
         .item()
         .build()
         .register();
+
+    public static final Material PUMPJACK_MATERIAL = new Material(MaterialColor.COLOR_GRAY, false, true, true, false, false, false, PushReaction.BLOCK);
 
     public static void register() {};
 }
