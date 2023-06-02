@@ -1,5 +1,5 @@
 {
-    "parent": "destroy:seismometer",
+    "parent": "destroy:distillation",
     "criteria": {
       "hold": {
         "trigger": "minecraft:inventory_changed",

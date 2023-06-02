@@ -22,6 +22,7 @@ public class DestroyPonderTags {
             .add(DestroyBlocks.COOLER)
             .add(DestroyBlocks.DYNAMO)
             .add(DestroyItems.HYPERACCUMULATING_FERTILIZER)
+            .add(DestroyBlocks.PUMPJACK)
         ;
 
         PonderRegistry.TAGS.forTag(AllPonderTags.FLUIDS)

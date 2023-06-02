@@ -1,5 +1,5 @@
 {
-    "parent": "destroy:root",
+    "parent": "destroy:pumpjack",
     "criteria": {
       "distill": {
         "conditions": {},

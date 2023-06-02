@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:item/crushed_raw_palladium"
+      "layer0": "destroy:item/crushed_raw_rhodium"
     }
   }

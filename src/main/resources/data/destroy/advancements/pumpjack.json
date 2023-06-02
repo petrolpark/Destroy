@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:seismometer",
+    "criteria": {
+      "pumpjack": {
+        "conditions": {},
+        "trigger": "destroy:use_pumpjack"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.pumpjack.description"
+      },
+      "icon": {
+        "item": "destroy:pumpjack"
+      },
+      "title": {
+        "translate": "advancement.destroy.pumpjack"
+      }
+    },
+    "requirements": [
+      [
+        "pumpjack"
+      ]
+    ]
+  }

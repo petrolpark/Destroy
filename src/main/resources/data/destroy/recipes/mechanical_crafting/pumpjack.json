@@ -1,0 +1,35 @@
+{
+    "type": "create:mechanical_crafting",
+    "pattern": [
+      "PSSSB",
+      "LMCFF"
+    ],
+    "key": {
+      "B": {
+        "tag": "forge:storage_blocks/brass"
+      },
+      "S": {
+        "item": "create:shaft"
+      },
+      "P": {
+        "tag": "forge:plates/brass"
+      },
+      "L": {
+        "item": "create:large_cogwheel"
+      },
+      "M": {
+        "item": "create:precision_mechanism"
+      },
+      "C": {
+        "item": "create:brass_casing"
+      },
+      "F": {
+        "item": "create:fluid_pipe"
+      }
+    },
+    "result": {
+      "item": "destroy:pumpjack",
+      "count": 1
+    },
+    "acceptMirrored": false
+  }

@@ -4,7 +4,6 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.instance.CentrifugeCogInstance;
 import com.petrolpark.destroy.block.instance.DynamoCogInstance;
-import com.petrolpark.destroy.block.instance.PumpjackInstance;
 import com.petrolpark.destroy.block.renderer.AgingBarrelRenderer;
 import com.petrolpark.destroy.block.renderer.BubbleCapRenderer;
 import com.petrolpark.destroy.block.renderer.CentrifugeRenderer;

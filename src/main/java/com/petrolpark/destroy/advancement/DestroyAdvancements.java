@@ -30,6 +30,7 @@ public enum DestroyAdvancements {
     MECHANICAL_HANDS("mechanical_hands"),
     OTSWALD_PROCESS("otswald_process"),
     FULLY_POLLUTE("fully_pollute"),
+    USE_PUMPJACK("use_pumpjack"),
     JUMP_ON_SAND_CASTLE("jump_on_sand_castle"),
     USE_SEISMOMETER("use_seismometer"),
     COLLECT_TEARS("collect_tears"),

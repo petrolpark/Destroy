@@ -13,9 +13,11 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.client.gui.MoleculeRenderer;
+import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * A Molecule is any species - that could be an actual chemical molecule or an inorganic ion.
@@ -415,6 +417,17 @@ public class Molecule implements INameableProduct {
      */
     public Branch getRenderBranch() {
         return structure.getRenderBranch();
+    };
+
+    /**
+     * Get the list of {@link Atom Atoms} (and their locations relative to the starting Atom) of all Atoms
+     * in the base {@link Formula.Topology Topology} of this Molecule.
+     * This does not include Atoms in side branches.
+     * @return An empty list if this is an acyclic Molecule
+     */
+    public List<Pair<Vec3, Atom>> getCyclicAtomsForRendering() {
+        if (!isCyclic()) return List.of();
+        return structure.getCyclicAtomsForRendering();
     };
 
     /**

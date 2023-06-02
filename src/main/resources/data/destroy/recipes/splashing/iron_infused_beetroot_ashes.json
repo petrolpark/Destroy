@@ -21,7 +21,7 @@
         "chance": 0.05
       },
       {
-        "item": "create:crushed_nickel_ore",
+        "item": "destroy:crushed_raw_nickel",
         "count": 1,
         "chance": 0.03
       },

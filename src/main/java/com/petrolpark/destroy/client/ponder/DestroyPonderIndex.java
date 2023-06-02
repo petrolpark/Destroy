@@ -22,14 +22,23 @@ public class DestroyPonderIndex {
         // Centrifuge
         HELPER.forComponents(DestroyBlocks.CENTRIFUGE)
             .addStoryBoard("centrifuge", DestroyScenes::centrifuge);
+
+        // Cooler
+        HELPER.forComponents(DestroyBlocks.COOLER)
+            .addStoryBoard("cooler", DestroyScenes::cooler);
         
         // Dynamo
         HELPER.forComponents(DestroyBlocks.DYNAMO)
             .addStoryBoard("dynamo/redstone", DestroyScenes::dynamoRedstone)
-            .addStoryBoard("dynamo/charging", DestroyScenes::dynamoCharging);
+            .addStoryBoard("dynamo/charging", DestroyScenes::dynamoCharging)
+            .addStoryBoard("dynamo/electrolysis", DestroyScenes::dynamoElectrolysis);
 
         // Hyperaccumulating Fertilizer
         HELPER.forComponents(DestroyItems.HYPERACCUMULATING_FERTILIZER)
             .addStoryBoard("phytomining", DestroyScenes::phytomining);
+
+        // Pumpjack
+        HELPER.forComponents(DestroyBlocks.PUMPJACK)
+            .addStoryBoard("pumpjack", DestroyScenes::pumpjack);
     };
 };

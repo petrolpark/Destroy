@@ -274,6 +274,15 @@ public class Formula implements Cloneable {
     };
 
     /**
+     * Get the list of {@link Topology#atomsAndLocations cyclic Atoms} in the {@link Topology} associated with this Formula.
+     * @return May be empty
+     * @see Molecule#getCyclicAtomsForRendering The wrapper for this method
+     */
+    public List<Pair<Vec3, Atom>> getCyclicAtomsForRendering() {
+        return topology.atomsAndLocations;
+    };
+
+    /**
      * Removes the given Atom, without moving the currently selected Atom.
      * <p><b>To modify existing Formulae, {@link Formula#shallowCopy copy} them first.</b></p>
      * @param atom If this is the currently selected Atom, an error will be raised.

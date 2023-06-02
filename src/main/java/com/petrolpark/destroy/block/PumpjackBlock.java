@@ -9,6 +9,7 @@ import com.petrolpark.destroy.block.IPumpjackStructuralBlock.Component;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
 import com.petrolpark.destroy.block.entity.PumpjackBlockEntity;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
+import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 
@@ -31,7 +32,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class PumpjackBlock extends Block implements IBE<PumpjackBlockEntity> {
+public class PumpjackBlock extends Block implements IBE<PumpjackBlockEntity>, IHaveGoggleInformation {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -57,7 +58,7 @@ public class PumpjackBlock extends Block implements IBE<PumpjackBlockEntity> {
     @Override
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        Direction facing = context.getHorizontalDirection().getClockWise(Axis.Y);
+        Direction facing = context.getHorizontalDirection().getCounterClockWise(Axis.Y);
         for (BlockPos pos : getStructuralBlocks(facing, context.getClickedPos()).keySet()) {
             // Don't place if the structural Blocks won't be able to fit
             if (!context.getLevel().getBlockState(pos).getMaterial().isReplaceable()) return null;

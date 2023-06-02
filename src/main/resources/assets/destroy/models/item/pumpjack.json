@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:item/crushed_rhodium_ore"
+      "layer0": "destroy:item/pumpjack"
     }
   }

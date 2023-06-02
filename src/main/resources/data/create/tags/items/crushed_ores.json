@@ -2,6 +2,6 @@
   "values": [
     "destroy:crushed_palladium_ore",
     "destroy:crushed_platinum_ore",
-    "destroy:crushed_rhodium_ore"
+    "destroy:crushed_raw_rhodium"
   ]
 }

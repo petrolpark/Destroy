@@ -120,14 +120,14 @@ public class DestroyItems {
     RAW_NICKEL = REGISTRATE.item("raw_nickel", Item::new)
         .tag(forgeItemTag("raw_materials/nickel"), Tags.Items.RAW_MATERIALS)
         .register(),
-    CRUSHED_PALLADIUM_ORE = REGISTRATE.item("crushed_palladium_ore", Item::new)
+    CRUSHED_RAW_PALLADIUM = REGISTRATE.item("crushed_raw_palladium", Item::new)
         .tag(AllItemTags.CRUSHED_RAW_MATERIALS.tag)
         .register(),
-    CRUSHED_PLATINUM_ORE = REGISTRATE.item("crushed_platinum_ore", Item::new)
+    CRUSHED_RAW_PLATINUM = REGISTRATE.item("crushed_raw_platinum", Item::new)
         .tag(AllItemTags.CRUSHED_RAW_MATERIALS.tag)
         .model(AssetLookup.existingItemModel())
         .register(),
-    CRUSHED_RHODIUM_ORE = REGISTRATE.item("crushed_rhodium_ore", Item::new)
+    CRUSHED_RAW_NICKEL = REGISTRATE.item("crushed_raw_rhodium", Item::new)
         .tag(AllItemTags.CRUSHED_RAW_MATERIALS.tag)
         .register(),
     PURE_GOLD_DUST = REGISTRATE.item("pure_gold_dust", Item::new)

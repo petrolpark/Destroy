@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.google.common.collect.ImmutableList;
-import com.jozufozu.flywheel.util.Pair;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Molecule;
@@ -15,6 +14,7 @@ import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Node;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
+import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -53,12 +53,16 @@ public class MoleculeRenderer {
         yOffset = 0;
         RENDERED_OBJECTS = new ArrayList<>();
 
-        if (molecule.getAtoms().size() == 1) {
-            // Add the one Atom in this Molecule
+        if (molecule.getAtoms().size() == 1) { // Monatomic Molecules
             RENDERED_OBJECTS.add(Pair.of(Vec3.ZERO, new AtomRenderInstance(molecule.getAtoms().iterator().next().getElement())));
-        } else if (molecule.isCyclic()) {
-            
-        } else {
+        } else if (molecule.isCyclic()) { // Cyclic Molecules
+            molecule.getCyclicAtomsForRendering().forEach(pair -> {
+                RENDERED_OBJECTS.add(Pair.of(
+                    pair.getFirst().scale(BOND_LENGTH), // The relative location of the Atom
+                    new AtomRenderInstance(pair.getSecond().getElement()) // The Element of the Atom
+                ));
+            });
+        } else { // Standard branched Molecules
             Vec3 startLocation = new Vec3(0d, 0d, 0d);
             Vec3 startDirection = new Vec3(1d, 0d, -1d).normalize();
             Vec3 startPlane = new Vec3(1d, 0d, 1d).normalize();
@@ -66,15 +70,15 @@ public class MoleculeRenderer {
         };
 
         // Order the Atoms and Bonds so the furthest back get Rendered first
-        Collections.sort(RENDERED_OBJECTS, (pair1, pair2) -> Double.compare(pair1.first().z, pair2.first().z));
+        Collections.sort(RENDERED_OBJECTS, (pair1, pair2) -> Double.compare(pair1.getFirst().z, pair2.getFirst().z));
 
         // Rescale the Renderer to fit every Atom
         for (Pair<Vec3, IRenderable> pair : RENDERED_OBJECTS) {
-            x = Math.max(x, (int)pair.first().x);
-            y = Math.max(y, (int)pair.first().y);
+            x = Math.max(x, (int)pair.getFirst().x);
+            y = Math.max(y, (int)pair.getFirst().y);
             // Set the X and Y offSets to the positive of the most negative respective coordinate of any rendered object present
-            xOffset = -(int)Math.min(-xOffset, pair.first().x);
-            yOffset = -(int)Math.max(-yOffset, pair.first().y);
+            xOffset = -(int)Math.min(-xOffset, pair.getFirst().x);
+            yOffset = -(int)Math.max(-yOffset, pair.getFirst().y);
         };
 
     };
@@ -94,7 +98,7 @@ public class MoleculeRenderer {
         poseStack.translate(xPosition + xOffset, yPosition, 0d);
         poseStack.pushPose();
         for (Pair<Vec3, IRenderable> pair : RENDERED_OBJECTS) {
-            pair.second().render(poseStack, pair.first());
+            pair.getSecond().render(poseStack, pair.getFirst());
         };
         poseStack.popPose();
     };

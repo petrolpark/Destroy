@@ -258,6 +258,14 @@ public class DestroyScenes {
         scene.markAsFinished();
     };
 
+    public static void cooler(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("cooler", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 5);
+        scene.showBasePlate();
+
+        scene.markAsFinished();
+    };
+
     public static void dynamoRedstone(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("dynamo_redstone", "This text is defined in a language file.");
         scene.configureBasePlate(0, 0, 5);
@@ -337,6 +345,21 @@ public class DestroyScenes {
 		scene.overlay.showControls(new InputWindowElement(depotCenter, Pointing.UP).withItem(chargedCell), 50);
 		scene.idle(60);
 
+        scene.markAsFinished();
+    };
+
+    public static void dynamoElectrolysis(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("dynamo_electrolysis", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 5);
+        scene.showBasePlate();
+
+        scene.markAsFinished();
+    };
+
+    public static void pumpjack(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("pumpjack", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 5);
+        scene.showBasePlate();
 
         scene.markAsFinished();
     };

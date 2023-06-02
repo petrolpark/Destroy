@@ -18,7 +18,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -33,7 +35,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 
-//TODO make wrenchable
 public interface IPumpjackStructuralBlock extends IProxyHoveringInformation, IWrenchable {
 
     public static final EnumProperty<Component> COMPONENT = EnumProperty.create("component", Component.class);
@@ -45,6 +46,35 @@ public interface IPumpjackStructuralBlock extends IProxyHoveringInformation, IWr
 				.get(level.getBlockState(getMaster(level, pos, state)).getValue(PumpjackBlock.FACING)); // Face it in the right direction
 		};
 		return DestroyShapes.BLOCK;
+	};
+
+	@Override
+	public default InteractionResult onWrenched(BlockState state, UseOnContext context) {
+		return InteractionResult.PASS;
+	};
+
+	@Override
+	public default InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
+		BlockPos clickedPos = context.getClickedPos();
+		Level level = context.getLevel();
+
+		if (stillValid(level, clickedPos, state)) {
+			BlockPos masterPos = getMaster(level, clickedPos, state);
+			context = new UseOnContext(level,
+				context.getPlayer(),
+				context.getHand(),
+				context.getItemInHand(),
+				new BlockHitResult(
+					context.getClickLocation(),
+					context.getClickedFace(),
+					masterPos,
+					context.isInside()
+				)
+			);
+			state = level.getBlockState(masterPos);
+		};
+
+		return IWrenchable.super.onSneakWrenched(state, context);
 	};
 
 	public static void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
