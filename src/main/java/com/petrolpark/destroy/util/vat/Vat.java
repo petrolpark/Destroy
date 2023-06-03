@@ -2,12 +2,13 @@ package com.petrolpark.destroy.util.vat;
 
 import java.util.EnumMap;
 
+import com.petrolpark.destroy.Destroy;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 
 public class Vat {
 
@@ -18,50 +19,110 @@ public class Vat {
      */
     public static void tryConstruct(Level level, BlockPos pos) {
 
+        Destroy.LOGGER.info("NEW VAT ATTEMPT: "+pos.toString());
+
         boolean successful = true;
 
-        EnumMap<Direction, Integer> dimensions = new EnumMap<>(Direction.class);
+        EnumMap<Direction, Integer> dimensions = new EnumMap<>(Direction.class) {
+            @Override
+            public Integer get(Object key) {
+                Integer value = super.get(key);
+                if (value == null) {
+                    return 0;
+                } else {
+                    return value;
+                }
+            };
+        };
 
+        // Expand the dimenions of the vat in each direction as far as possible
         tryExpandInDirection: for (Direction direction : Direction.values()) {
 
-            // Don't expand more 
-            if (dimensions.get(direction) > 2) { // TODO make better
-                successful = false;
-                break tryExpandInDirection;
-            };
-
             while (true) {
+
+                Destroy.LOGGER.info("Size in "+direction+" is "+dimensions.get(direction));
+
+                // Don't expand more than a diameter of 5 blocks
+                if (dimensions.get(direction) + dimensions.get(direction.getOpposite()) > 5) {
+                    successful = false;
+                    Destroy.LOGGER.info("Could mot make vat because too big");
+                    break tryExpandInDirection;
+                };
                 
-                BlockPos newPlaneCentre = new BlockPos(pos).relative(direction, dimensions.get(direction));
-                AABB aabb = new AABB(newPlaneCentre);
+                // Add a new one Block thick plane on and see if its all valid
+                BlockPos newPlaneCentre = new BlockPos(pos).relative(direction, 1 + dimensions.get(direction));
+
+                // We're defining the plane with two opposing corners
+                BlockPos lowerCorner = new BlockPos(newPlaneCentre);
+                BlockPos upperCorner = new BlockPos(newPlaneCentre);
+
+                // Scale the plane perpendicular to the direction we're trying to expand in
                 tryAddNewPlane: for (Direction secondaryDirection : Direction.values()) {
                     if (direction.getAxis() == secondaryDirection.getAxis()) continue tryAddNewPlane;
-                    aabb = aabb.expandTowards(new Vec3(secondaryDirection.getStepX(), secondaryDirection.getStepY(), secondaryDirection.getStepZ()).scale(dimensions.get(secondaryDirection)));
+                    if (secondaryDirection.getAxisDirection() == AxisDirection.POSITIVE) {
+                        upperCorner = upperCorner.relative(secondaryDirection, dimensions.get(secondaryDirection));
+                    } else {
+                        lowerCorner = lowerCorner.relative(secondaryDirection, dimensions.get(secondaryDirection));
+                    };
                 };
 
+                // Now check all Blocks in the plane
                 boolean allAir = true;
                 boolean allWalls = true;
-                for (BlockPos blockPos : BlockPos.betweenClosedStream(aabb).toList()) {
+                for (BlockPos blockPos : BlockPos.betweenClosed(lowerCorner, upperCorner)) {
+                    Destroy.LOGGER.info("Checling blockpos "+blockPos.toString());
                     BlockState state = level.getBlockState(blockPos);
                     if (state.isAir()) {
-                        
+                        allWalls = false;
                     } else {
                         allAir = false;
+                        Destroy.LOGGER.info("Reached a non-air block "+state.toString());
                         if (!VatMaterial.isValid(state.getBlock())) allWalls = false;
                     }
                 };
 
                 // If we have reached a boundary where everything is a wall
                 if (allWalls) {
+                    Destroy.LOGGER.info("Reached a wall in direction "+direction.name());
                     continue tryExpandInDirection;
+                // If we have reached an illegal block
                 } else if (!allAir) {
+                    Destroy.LOGGER.info("Could not make vat because theres an ugly block in the way.");
                     successful = false;
                     break tryExpandInDirection;
                 };
 
-                // Increment the value in that direction
-                dimensions.merge(direction, 1, (i1, i2) -> i1++);
+                // Increment the value in this direction
+                dimensions.merge(direction, 1, (i1, i2) -> i1 + 1);
             }
         };
+
+        // Determine the precise location of the Vat, inflated by 1 in each direction so it includes the walls
+        int topSide = pos.getY() + 1 + dimensions.get(Direction.UP);
+        int northSide = pos.getZ() - 1 - dimensions.get(Direction.NORTH);
+        int eastSide = pos.getX() + 1 + dimensions.get(Direction.EAST);
+        int southSide = pos.getZ() + 1 + dimensions.get(Direction.SOUTH);
+        int westSide = pos.getX() - 1 - dimensions.get(Direction.WEST);
+        int bottomSide = pos.getY() - 1 - dimensions.get(Direction.DOWN);
+        BlockPos lowerCorner = new BlockPos(eastSide, topSide, northSide);
+        BlockPos upperCorner = new BlockPos(westSide, bottomSide, southSide);
+
+        Destroy.LOGGER.info("Checking between "+lowerCorner.toString()+" and "+upperCorner.toString());
+
+        for (BlockPos blockPos : BlockPos.betweenClosed(lowerCorner, upperCorner)) {
+            int x = blockPos.getX();
+            int y = blockPos.getY();
+            int z = blockPos.getZ();
+            // Check all blocks which form a face of the Vat, but aren't an edge or corner
+            if ((x == eastSide || x == westSide) ^ (y == topSide || y == bottomSide) ^ (z == northSide || z == southSide)) {
+                if (!VatMaterial.isValid(level.getBlockState(blockPos).getBlock())) {
+                    successful = false;
+                    Destroy.LOGGER.info("Could not make vat because theres walls missing.");
+                    break;
+                };
+            };
+        };
+
+        Destroy.LOGGER.info("Could make vat? "+successful);
     };
 };

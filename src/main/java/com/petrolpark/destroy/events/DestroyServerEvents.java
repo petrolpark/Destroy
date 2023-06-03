@@ -28,6 +28,7 @@ import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
 import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
+import com.petrolpark.destroy.util.vat.Vat;
 import com.petrolpark.destroy.util.InebriationHelper;
 import com.petrolpark.destroy.world.DestroyDamageSources;
 import com.petrolpark.destroy.world.entity.goal.BuildSandCastleGoal;
@@ -187,6 +188,11 @@ public class DestroyServerEvents {
             player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> {
                 crouchingCap.ticksCrouching++;
                 if (urinating) {crouchingCap.ticksUrinating++;} else crouchingCap.ticksUrinating = 0;
+
+                //TODO remove
+                if (crouchingCap.ticksCrouching == 30) {
+                    Vat.tryConstruct(level, posOn.above());
+                };
             });
         } else {
             player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> {

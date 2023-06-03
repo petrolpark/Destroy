@@ -13,9 +13,11 @@ import com.petrolpark.destroy.block.renderer.PollutometerRenderer;
 import com.petrolpark.destroy.block.renderer.PumpjackRenderer;
 import com.petrolpark.destroy.util.vat.VatMaterial;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.tterrag.registrate.builders.BlockEntityBuilder;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
+import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Block;
 
 public class DestroyBlockEntityTypes {
 
@@ -76,10 +78,17 @@ public class DestroyBlockEntityTypes {
         .validBlocks(DestroyBlocks.SAND_CASTLE)
         .register();
 
-    public static final BlockEntityEntry<VatSideBlockEntity> VAT_SIDE = REGISTRATE
-        .blockEntity("vat_side", VatSideBlockEntity::new)
-        .validBlocks(() -> Blocks.GLASS)
-        .register();
+    private static final BlockEntityBuilder<VatSideBlockEntity, CreateRegistrate> VAT_SIDE_BUILDER = REGISTRATE
+        .blockEntity("vat_side", VatSideBlockEntity::new);
+    
+    static {
+        VatMaterial.registerDestroyVatMaterials();
+        for (NonNullSupplier<? extends Block> block : VatMaterial.BLOCK_MATERIALS.keySet()) {
+            VAT_SIDE_BUILDER.validBlock(block);
+        };
+    };
+
+    public static final BlockEntityEntry<VatSideBlockEntity> VAT_SIDE = VAT_SIDE_BUILDER.register();
 
     public static void register() {};
     

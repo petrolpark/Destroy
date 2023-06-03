@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.simibubi.create.AllBlocks;
+import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -16,21 +17,21 @@ import net.minecraft.world.level.block.Blocks;
  */
 public record VatMaterial(float maxPressure, boolean transparent, boolean corrodes) {
 
-    public static final Map<Block, VatMaterial> BLOCK_MATERIALS = new HashMap<>();
+    public static final Map<NonNullSupplier<? extends Block>, VatMaterial> BLOCK_MATERIALS = new HashMap<>();
 
     /**
      * Whether the given Block can be used to construct a Vat.
      * @param block
      */
     public static boolean isValid(Block block) {
-        return BLOCK_MATERIALS.containsKey(block);
+        return BLOCK_MATERIALS.keySet().stream().anyMatch(sup -> block == sup.get());
     };
 
     public static void registerDestroyVatMaterials() {
 
         VatMaterial GLASS_MATERIAL = new VatMaterial(10000f, true, false);
 
-        BLOCK_MATERIALS.put(AllBlocks.COPPER_CASING.get(), new VatMaterial(500000f, false, true));
-        BLOCK_MATERIALS.put(Blocks.GLASS, GLASS_MATERIAL);
+        BLOCK_MATERIALS.put(AllBlocks.COPPER_CASING.lazy(), new VatMaterial(500000f, false, true));
+        BLOCK_MATERIALS.put(() -> Blocks.GLASS, GLASS_MATERIAL);
     };
 };
