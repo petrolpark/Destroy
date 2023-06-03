@@ -11,10 +11,13 @@ import com.petrolpark.destroy.block.renderer.CoolerRenderer;
 import com.petrolpark.destroy.block.renderer.DynamoRenderer;
 import com.petrolpark.destroy.block.renderer.PollutometerRenderer;
 import com.petrolpark.destroy.block.renderer.PumpjackRenderer;
+import com.petrolpark.destroy.util.vat.VatMaterial;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
-public class DestroyBlockEntities {
+import net.minecraft.world.level.block.Blocks;
+
+public class DestroyBlockEntityTypes {
 
     private static CreateRegistrate REGISTRATE = Destroy.registrate();
 
@@ -71,6 +74,11 @@ public class DestroyBlockEntities {
     public static final BlockEntityEntry<SandCastleBlockEntity> SAND_CASTLE = REGISTRATE
         .blockEntity("sand_castle", SandCastleBlockEntity::new)
         .validBlocks(DestroyBlocks.SAND_CASTLE)
+        .register();
+
+    public static final BlockEntityEntry<VatSideBlockEntity> VAT_SIDE = REGISTRATE
+        .blockEntity("vat_side", VatSideBlockEntity::new)
+        .validBlocks(() -> Blocks.GLASS)
         .register();
 
     public static void register() {};

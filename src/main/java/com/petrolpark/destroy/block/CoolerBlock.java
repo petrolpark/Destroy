@@ -3,7 +3,7 @@ package com.petrolpark.destroy.block;
 
 import com.petrolpark.destroy.block.entity.CoolerBlockEntity;
 import com.petrolpark.destroy.block.entity.CoolerBlockEntity.ColdnessLevel;
-import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
+import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
@@ -93,7 +93,7 @@ public class CoolerBlock extends Block implements IBE<CoolerBlockEntity> {
 
     @Override
     public BlockEntityType<? extends CoolerBlockEntity> getBlockEntityType() {
-        return DestroyBlockEntities.COOLER.get();
+        return DestroyBlockEntityTypes.COOLER.get();
     };
 
     @Override

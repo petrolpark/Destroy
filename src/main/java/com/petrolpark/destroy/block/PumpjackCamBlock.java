@@ -1,6 +1,6 @@
 package com.petrolpark.destroy.block;
 
-import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
+import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.AbstractShaftBlock;
 
@@ -78,7 +78,7 @@ public class PumpjackCamBlock extends AbstractShaftBlock implements IPumpjackStr
 
     @Override
     public BlockEntityType<? extends KineticBlockEntity> getBlockEntityType() {
-        return DestroyBlockEntities.PUMPJACK_CAM.get();
+        return DestroyBlockEntityTypes.PUMPJACK_CAM.get();
     };
     
 };

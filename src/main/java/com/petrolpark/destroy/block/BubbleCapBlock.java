@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
-import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
+import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
@@ -134,7 +134,7 @@ public class BubbleCapBlock extends Block implements IBE<BubbleCapBlockEntity>, 
 
     @Override
     public BlockEntityType<? extends BubbleCapBlockEntity> getBlockEntityType() {
-        return DestroyBlockEntities.BUBBLE_CAP.get();
+        return DestroyBlockEntityTypes.BUBBLE_CAP.get();
     }
     
 }

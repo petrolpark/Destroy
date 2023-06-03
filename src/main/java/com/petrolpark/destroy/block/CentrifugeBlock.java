@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
-import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
+import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
@@ -104,7 +104,7 @@ public class CentrifugeBlock extends KineticBlock implements IBE<CentrifugeBlock
 
     @Override
     public BlockEntityType<? extends CentrifugeBlockEntity> getBlockEntityType() {
-        return DestroyBlockEntities.CENTRIFUGE.get();
+        return DestroyBlockEntityTypes.CENTRIFUGE.get();
     };
 
     @Override

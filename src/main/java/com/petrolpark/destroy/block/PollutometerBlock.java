@@ -1,6 +1,6 @@
 package com.petrolpark.destroy.block;
 
-import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
+import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.entity.PollutometerBlockEntity;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.foundation.block.IBE;
@@ -49,7 +49,7 @@ public class PollutometerBlock extends Block implements IBE<PollutometerBlockEnt
 
     @Override
     public BlockEntityType<? extends PollutometerBlockEntity> getBlockEntityType() {
-        return DestroyBlockEntities.POLLUTOMETER.get();
+        return DestroyBlockEntityTypes.POLLUTOMETER.get();
     };
     
 };

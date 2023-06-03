@@ -5,7 +5,7 @@ import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.badge.Badge;
 import com.petrolpark.destroy.badge.DestroyBadges;
 import com.petrolpark.destroy.block.DestroyBlocks;
-import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
+import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.partial.DestroyPartials;
 import com.petrolpark.destroy.chemistry.index.DestroyGenericReactions;
 import com.petrolpark.destroy.chemistry.index.DestroyGroupFinder;
@@ -92,7 +92,7 @@ public class Destroy {
 
         // Mod objects
         DestroyTags.register();
-        DestroyBlockEntities.register();
+        DestroyBlockEntityTypes.register();
         DestroyBlocks.register();
         DestroyMobEffects.register(modEventBus);
         DestroyItems.register();

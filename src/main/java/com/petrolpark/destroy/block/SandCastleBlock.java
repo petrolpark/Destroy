@@ -1,7 +1,7 @@
 package com.petrolpark.destroy.block;
 
 import com.petrolpark.destroy.behaviour.SentimentalBehaviour;
-import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
+import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.entity.SandCastleBlockEntity;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.foundation.block.IBE;
@@ -92,7 +92,7 @@ public class SandCastleBlock extends Block implements IBE<SandCastleBlockEntity>
 
     @Override
     public BlockEntityType<? extends SandCastleBlockEntity> getBlockEntityType() {
-        return DestroyBlockEntities.SAND_CASTLE.get();
+        return DestroyBlockEntityTypes.SAND_CASTLE.get();
     };
     
 };

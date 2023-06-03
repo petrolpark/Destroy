@@ -2,7 +2,7 @@ package com.petrolpark.destroy.block;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.entity.AgingBarrelBlockEntity;
-import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
+import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
@@ -208,7 +208,7 @@ public class AgingBarrelBlock extends Block implements IBE<AgingBarrelBlockEntit
 
     @Override
     public BlockEntityType<? extends AgingBarrelBlockEntity> getBlockEntityType() {
-        return DestroyBlockEntities.AGING_BARREL.get();
+        return DestroyBlockEntityTypes.AGING_BARREL.get();
     };
 
 }

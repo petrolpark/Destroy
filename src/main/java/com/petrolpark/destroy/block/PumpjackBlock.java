@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.block.IPumpjackStructuralBlock.Component;
-import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
+import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.entity.PumpjackBlockEntity;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
@@ -138,7 +138,7 @@ public class PumpjackBlock extends Block implements IBE<PumpjackBlockEntity>, IH
 
     @Override
     public BlockEntityType<? extends PumpjackBlockEntity> getBlockEntityType() {
-        return DestroyBlockEntities.PUMPJACK.get();
+        return DestroyBlockEntityTypes.PUMPJACK.get();
     };
     
 }

@@ -3,7 +3,7 @@ package com.petrolpark.destroy.block;
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
-import com.petrolpark.destroy.block.entity.DestroyBlockEntities;
+import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.entity.DynamoBlockEntity;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
@@ -77,7 +77,7 @@ public class DynamoBlock extends KineticBlock implements IBE<DynamoBlockEntity>,
 
     @Override
     public BlockEntityType<? extends DynamoBlockEntity> getBlockEntityType() {
-        return DestroyBlockEntities.DYNAMO.get();
+        return DestroyBlockEntityTypes.DYNAMO.get();
     };
     
 }
