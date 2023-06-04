@@ -9,7 +9,6 @@ import com.petrolpark.destroy.block.IPumpjackStructuralBlock.Component;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.entity.PumpjackBlockEntity;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 
@@ -32,7 +31,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class PumpjackBlock extends Block implements IBE<PumpjackBlockEntity>, IHaveGoggleInformation {
+public class PumpjackBlock extends Block implements IBE<PumpjackBlockEntity> {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 

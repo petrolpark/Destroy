@@ -7,10 +7,22 @@ import com.petrolpark.destroy.Destroy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.AxisDirection;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class Vat {
+
+    public static final int MB_PER_BLOCK = 4000;
+
+    private BlockPos lowerCorner;
+    private BlockPos upperCorner;
+
+    public Vat(BlockPos lowerCorner, BlockPos upperCorner) {
+        this.lowerCorner = lowerCorner;
+        this.upperCorner = upperCorner;  
+    };
 
     /**
      * 
@@ -104,8 +116,8 @@ public class Vat {
         int southSide = pos.getZ() + 1 + dimensions.get(Direction.SOUTH);
         int westSide = pos.getX() - 1 - dimensions.get(Direction.WEST);
         int bottomSide = pos.getY() - 1 - dimensions.get(Direction.DOWN);
-        BlockPos lowerCorner = new BlockPos(eastSide, topSide, northSide);
-        BlockPos upperCorner = new BlockPos(westSide, bottomSide, southSide);
+        BlockPos lowerCorner = new BlockPos(eastSide, bottomSide, northSide);
+        BlockPos upperCorner = new BlockPos(westSide, topSide, southSide);
 
         Destroy.LOGGER.info("Checking between "+lowerCorner.toString()+" and "+upperCorner.toString());
 
@@ -124,5 +136,34 @@ public class Vat {
         };
 
         Destroy.LOGGER.info("Could make vat? "+successful);
+    };
+
+    public void read(CompoundTag tag) {
+        lowerCorner = NbtUtils.readBlockPos(tag.getCompound("LowerCorner"));
+        upperCorner = NbtUtils.readBlockPos(tag.getCompound("UpperCorner"));
+    };
+
+    public void write(CompoundTag tag) {
+        tag.put("LowerCorner", NbtUtils.writeBlockPos(lowerCorner));
+        tag.put("UpperCorner", NbtUtils.writeBlockPos(upperCorner));
+    };
+
+    public int getCapacity() {
+        return (upperCorner.getX() - internalLowerCorner().getX())
+            * (getInternalHeight())
+            * (upperCorner.getZ() - internalLowerCorner().getZ())
+            * MB_PER_BLOCK;
+    };
+
+    public BlockPos internalLowerCorner() {
+        return lowerCorner.above().east().south();
+    };
+
+    public BlockPos internalUpperCorner() {
+        return upperCorner.below().west().north();
+    };
+
+    public int getInternalHeight() {
+        return upperCorner.getY() - internalLowerCorner().getY();
     };
 };
