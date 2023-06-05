@@ -6,6 +6,7 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.display.PollutometerDisplaySource;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.item.DestroyItems;
+import com.petrolpark.destroy.item.PumpjackBlockItem;
 import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
@@ -105,7 +106,7 @@ public class DestroyBlocks {
             .noOcclusion()
         ).transform(TagGen.pickaxeOnly())
         .transform(BlockStressDefaults.setImpact(8.0))
-        .item()
+        .item(PumpjackBlockItem::new)
         .transform(customItemModel())
         .register();
 

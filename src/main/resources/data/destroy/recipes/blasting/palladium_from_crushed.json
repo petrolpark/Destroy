@@ -1,7 +1,7 @@
 {
     "type": "minecraft:blasting",
     "ingredient": {
-      "item": "destroy:crushed_palladium_ore"
+      "item": "destroy:crushed_raw_palladium"
     },
     "result": "destroy:palladium_ingot",
     "experience": 1.0,

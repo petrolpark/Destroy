@@ -13,7 +13,7 @@
         "item": "create:crushed_platinum_ore"
       },
       {
-        "item": "destroy:crushed_palladium_ore"
+        "item": "destroy:crushed_raw_palladium"
       },
       {
         "item": "destroy:crushed_raw_rhodium"

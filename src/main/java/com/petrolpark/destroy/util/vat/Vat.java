@@ -3,6 +3,8 @@ package com.petrolpark.destroy.util.vat;
 import java.util.EnumMap;
 
 import com.petrolpark.destroy.Destroy;
+import com.simibubi.create.CreateClient;
+import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,6 +13,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class Vat {
 
@@ -149,21 +154,35 @@ public class Vat {
     };
 
     public int getCapacity() {
-        return (upperCorner.getX() - internalLowerCorner().getX())
+        return (upperCorner.getX() - getInternalLowerCorner().getX())
             * (getInternalHeight())
-            * (upperCorner.getZ() - internalLowerCorner().getZ())
+            * (upperCorner.getZ() - getInternalLowerCorner().getZ())
             * MB_PER_BLOCK;
     };
 
-    public BlockPos internalLowerCorner() {
+    public BlockPos getLowerCorner() {
+        return lowerCorner;
+    };
+
+    public BlockPos getInternalLowerCorner() {
         return lowerCorner.above().east().south();
     };
 
-    public BlockPos internalUpperCorner() {
+    public BlockPos getUpperCorner() {
+        return upperCorner;
+    };
+
+    public BlockPos getInternalUpperCorner() {
         return upperCorner.below().west().north();
     };
 
     public int getInternalHeight() {
-        return upperCorner.getY() - internalLowerCorner().getY();
+        return upperCorner.getY() - getInternalLowerCorner().getY();
+    };
+
+    @OnlyIn(Dist.CLIENT)
+    public void showBoundingBox() {
+        CreateClient.OUTLINER.showAABB(Pair.of("outliner", lowerCorner), new AABB(lowerCorner, upperCorner), 100)
+            .colored(0xFF_ebd31e);
     };
 };

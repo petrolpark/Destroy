@@ -21,7 +21,7 @@
         "chance": 0.05
       },
       {
-        "item": "destroy:crushed_palladium_ore",
+        "item": "destroy:crushed_raw_palladium",
         "count": 1,
         "chance": 0.03
       }

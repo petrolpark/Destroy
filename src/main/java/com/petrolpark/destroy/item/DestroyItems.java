@@ -127,7 +127,7 @@ public class DestroyItems {
         .tag(AllItemTags.CRUSHED_RAW_MATERIALS.tag)
         .model(AssetLookup.existingItemModel())
         .register(),
-    CRUSHED_RAW_NICKEL = REGISTRATE.item("crushed_raw_rhodium", Item::new)
+    CRUSHED_RAW_NICKEL = REGISTRATE.item("crushed_raw_nickel", Item::new)
         .tag(AllItemTags.CRUSHED_RAW_MATERIALS.tag)
         .register(),
     PURE_GOLD_DUST = REGISTRATE.item("pure_gold_dust", Item::new)
