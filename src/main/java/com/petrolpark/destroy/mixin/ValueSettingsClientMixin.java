@@ -1,0 +1,57 @@
+package com.petrolpark.destroy.mixin;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import com.petrolpark.destroy.client.gui.BetterValueSettingsScreen;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsClient;
+import com.simibubi.create.foundation.gui.ScreenOpener;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.phys.BlockHitResult;
+
+@Mixin(ValueSettingsClient.class)
+public class ValueSettingsClientMixin {
+
+    Minecraft mc = Minecraft.getInstance();
+
+    /**
+     * Replace that {@link com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsScreen screen} that opens to edit a value
+     * with an {@link com.petrolpark.destroy.client.gui.BetterValueSettingsScreen improved version}.
+     * @param ci The callback information
+     */
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "open"), cancellable = true)
+    public void inTick(CallbackInfo ci) {
+
+        // Get the Value Box Behaviour
+        BlockEntityBehaviour behaviour = BlockEntityBehaviour.get(mc.level, thisValueSettingsClient().interactHeldPos, ((ValueSettingsClient)(Object)this).interactHeldBehaviour);
+        if (!(behaviour instanceof ValueSettingsBehaviour valueSettingBehaviour)) return;
+
+        // Get the Block hit result
+        if (!(mc.hitResult instanceof BlockHitResult blockHitResult)) return;
+
+        // Open the screen
+        ScreenOpener.open(new BetterValueSettingsScreen(
+            thisValueSettingsClient().interactHeldPos,
+            thisValueSettingsClient().interactHeldFace,
+            thisValueSettingsClient().interactHeldHand,
+            valueSettingBehaviour.createBoard(mc.player, blockHitResult),
+            valueSettingBehaviour.getValueSettings(),
+            valueSettingBehaviour::newSettingHovered)
+        );
+        
+        // Replace the cancelled code
+		thisValueSettingsClient().interactHeldTicks = -1;
+
+        // Cancel the rest of the method
+        ci.cancel();
+    };
+
+    private ValueSettingsClient thisValueSettingsClient() {
+        return (ValueSettingsClient)(Object)this;
+    };
+};

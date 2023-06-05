@@ -1,0 +1,8 @@
+{
+    "parent": "minecraft:block/cube_bottom_top",
+    "textures": {
+        "bottom": "destroy:block/nitrocellulose_bottom",
+        "side": "destroy:block/nitrocellulose_side",
+        "top": "destroy:block/nitrocellulose_top"
+    }
+}

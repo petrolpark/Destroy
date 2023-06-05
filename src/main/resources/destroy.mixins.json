@@ -10,6 +10,7 @@
         "accessor.FluidIngredientAccessor",
         "accessor.ProcessingRecipeParamsAccessor",
         "accessor.TooltipRendererAccessor",
+        "accessor.ValueSettingsPacketAccessor",
         "accessor.VillagerAccessor",
         "BasinCategoryMixin",
         "ClientComponentTooltipMixin",
@@ -25,6 +26,8 @@
         "ProcessingRecipeMixin",
         "SchematicannonInventoryMixin",
         "TooltipRendererMixin",
+        "ValueSettingsClientMixin",
+        "ValueSettingsPacketMixin",
         "VanillaFluidTargetsMixin",
         "VillagerMixin"
     ],

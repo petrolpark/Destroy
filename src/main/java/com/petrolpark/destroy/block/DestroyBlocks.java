@@ -182,6 +182,30 @@ public class DestroyBlocks {
         .build()
         .register();
 
+    public static final BlockEntry<DynamiteBlock> DYNAMITE_BLOCK = REGISTRATE.block("dynamite_block", DynamiteBlock::new)
+        .initialProperties(() -> Blocks.TNT)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_ORANGE)
+        ).item()
+        .build()
+        .register();
+
+    public static final BlockEntry<Block> NITROCELLULOSE_BLOCK = REGISTRATE.block("nitrocellulose_block", Block::new)
+        .initialProperties(() -> Blocks.TNT)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_LIGHT_GREEN)
+        ).item()
+        .build()
+        .register();
+
+    public static final BlockEntry<Block> SODIUM_PICRATE_BLOCK = REGISTRATE.block("sodium_picrate_block", Block::new)
+        .initialProperties(() -> Blocks.TNT)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_YELLOW)
+        ).item()
+        .build()
+        .register();
+
     // STORAGE BLOCKS
 
     public static final BlockEntry<Block> FLUORITE_BLOCK = REGISTRATE.block("fluorite_block", Block::new)

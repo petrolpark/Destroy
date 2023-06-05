@@ -7,11 +7,11 @@
     ],
     "results": [
       {
-        "item": "destroy:crushed_raw_nickel",
+        "item": "create:crushed_raw_nickel",
         "count": 1
       },
       {
-        "item": "destroy:crushed_raw_nickel",
+        "item": "create:crushed_raw_nickel",
         "count": 1,
         "chance": 0.5
       },

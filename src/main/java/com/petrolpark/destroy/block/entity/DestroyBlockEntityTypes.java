@@ -49,6 +49,11 @@ public class DestroyBlockEntityTypes {
         .renderer(() -> CoolerRenderer::new)
         .register();
 
+    public static final BlockEntityEntry<DynamiteBlockEntity> DYNAMITE = REGISTRATE
+        .blockEntity("dynamite", DynamiteBlockEntity::new)
+        .validBlocks(DestroyBlocks.DYNAMITE_BLOCK)
+        .register();
+
     public static final BlockEntityEntry<DynamoBlockEntity> DYNAMO = REGISTRATE
         .blockEntity("dynamo", DynamoBlockEntity::new)
         .instance(() -> DynamoCogInstance::new)

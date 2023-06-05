@@ -25,7 +25,7 @@ public interface DestroyFrictionModifier extends IForgeBlockState {
     @Overwrite
     public default BlockState self() {
         return (BlockState)this;
-    }
+    };
 
     /**
      * Overwritten but mostly copied from {@link net.minecraftforge.common.extensions.IForgeBlockState#getFriction Minecraft source code},

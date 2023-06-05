@@ -12,6 +12,7 @@ import com.simibubi.create.foundation.utility.LangBuilder;
 import com.simibubi.create.foundation.utility.LangNumberFormat;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -29,6 +30,10 @@ public class DestroyLang {
 
     public static LangBuilder number(double d) {
         return builder().text(LangNumberFormat.format(d));
+    };
+
+    public static LangBuilder direction(Direction direction) {
+        return translate("generic.direction."+Lang.asId(direction.name())+"");
     };
 
     /**

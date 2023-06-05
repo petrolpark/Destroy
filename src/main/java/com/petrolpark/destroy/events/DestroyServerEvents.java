@@ -415,7 +415,7 @@ public class DestroyServerEvents {
     };
 
     @SubscribeEvent
-    public static void onExplosion(ExplosionEvent event) {
+    public static void onExplosion(ExplosionEvent.Start event) {
         Level level = event.getLevel();
         level.getEntitiesOfClass(Player.class, AABB.ofSize(event.getExplosion().getPosition(), 16, 16, 16), player -> true).forEach(player -> {
             boolean holdingSeismometer = false;

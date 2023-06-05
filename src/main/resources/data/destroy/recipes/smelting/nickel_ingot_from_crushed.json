@@ -1,7 +1,7 @@
 {
     "type": "minecraft:smelting",
     "ingredient": {
-      "item": "destroy:crushed_raw_nickel"
+      "item": "create:crushed_raw_nickel"
     },
     "result": "destroy:nickel_ingot",
     "experience": 0.1,

@@ -141,7 +141,7 @@ public class SmartExplosion extends Explosion {
                         // ...we determine the direction vector from the center of the Explosion to the center of that square.
                         Vec3 direction = new Vec3(i, j, k).normalize();
 
-                        // We pick a (slightly randomised) 'momentum' in this direction, based on the radius of this Explosion
+                        // We pick a (slightly randomised) 'momentum' in this direction, based on the radius and smoothness of this Explosion
                         // Every time the line of this direction vector runs into a Block or Entity, the momentum will decrease slightly.
                         float momentum = radius * ((1f - smoothness / 2f) + random.nextFloat() * smoothness);
 
@@ -156,7 +156,7 @@ public class SmartExplosion extends Explosion {
                                 Entity entity = hitResult.getEntity();
                                 // ...update the Entity to experience the maximum strength it could experience from this Explosion...
                                 entities.merge(hitResult.getEntity(), momentum / maxMomentum, (existingStrength, strength) -> Math.max(existingStrength, strength));
-                                // ...and decrease the momentum
+                                // ...and decrease the momentum of the explosion in this direction
                                 if (entity instanceof LivingEntity livingEntity) {
                                     momentum -= 0.1f + (0.125f
                                         * (1d - ProtectionEnchantment.getExplosionKnockbackAfterDampener(livingEntity, momentum)) // Increase the momentum loss if the Entity has Blast Resistance

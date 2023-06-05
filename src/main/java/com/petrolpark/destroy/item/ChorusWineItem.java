@@ -47,7 +47,7 @@ public class ChorusWineItem extends AlcoholicDrinkItem implements IDynamicItemDe
     public ItemDescription getItemDescription() {
         return new ItemDescription.Builder(getPalette())
             .addSummary(Component.translatable("item.destroy.chorus_wine_bottle.dynamic_tooltip.summary").getString())
-            .addAction(Component.translatable("item.destroy.tooltip.chorus_wine_bottle.dynamic_tooltip.condition1").getString(), Component.translatable("item.destroy.tooltip.chorus_wine.dynamic_tooltip.behaviour1", DestroyAllConfigs.COMMON.substances.teleportTime.get()).getString())
+            .addAction(Component.translatable("item.destroy.chorus_wine_bottle.dynamic_tooltip.condition").getString(), Component.translatable("item.destroy.chorus_wine_bottle.dynamic_tooltip.behaviour", DestroyAllConfigs.COMMON.substances.teleportTime.get()).getString())
             .build();
     };
 
