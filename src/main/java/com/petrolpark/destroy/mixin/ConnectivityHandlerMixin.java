@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.petrolpark.destroy.behaviour.PollutingBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
 
@@ -22,7 +22,7 @@ public class ConnectivityHandlerMixin {
     /**
      * Injection into {@link com.simibubi.create.api.connectivity.ConnectivityHandler ConnectivityHandler}.
      * This is called whenever part of a {@link com.simibubi.create.content.contraptions.base.fluids.tank.FluidTankBlockEntity Fluid Tank} is destroyed. It's purpose is to determine if any Fluid
-     * had to be voided because it wouldn't fit, and if so, {@link com.petrolpark.destroy.behaviour.PollutingBehaviour#pollute pollute the Level} accordingly.
+     * had to be voided because it wouldn't fit, and if so, {@link com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour#pollute pollute the Level} accordingly.
      * It's mostly all copied from {@link com.simibubi.create.api.connectivity.ConnectivityHandler this internal splitMulti method}.
      * @param <T> A type of Block Entity (typically Fluid Tank)
      * @param be The BE which was destroyed

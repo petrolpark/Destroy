@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.events;
 
+import com.petrolpark.destroy.block.renderer.BlockEntityBehaviourRenderer;
 import com.petrolpark.destroy.item.renderer.SeismometerItemRenderer;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -14,6 +15,8 @@ public class DestroyClientEvents {
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
             SeismometerItemRenderer.tick();
+        } else {
+            BlockEntityBehaviourRenderer.tick();
         };
     };
 };

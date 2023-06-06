@@ -1,7 +1,7 @@
 package com.petrolpark.destroy.chemistry.reactionResult;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
-import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReactionResult;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;

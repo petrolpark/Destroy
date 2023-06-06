@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
-import com.petrolpark.destroy.behaviour.ChargingBehaviour;
-import com.petrolpark.destroy.behaviour.ChargingBehaviour.ChargingBehaviourSpecifics;
-import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.block.entity.behaviour.ChargingBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.ChargingBehaviour.ChargingBehaviourSpecifics;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.recipe.ChargingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;

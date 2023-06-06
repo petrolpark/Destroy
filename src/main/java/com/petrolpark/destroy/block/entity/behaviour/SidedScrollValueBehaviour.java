@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.behaviour;
+package com.petrolpark.destroy.block.entity.behaviour;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -29,24 +29,26 @@ public class SidedScrollValueBehaviour extends BlockEntityBehaviour implements S
 
     public static final BehaviourType<SidedScrollValueBehaviour> TYPE = new BehaviourType<>();
 
-	ValueBoxTransform slotPositioning;
-	Vec3 textShift;
+	protected ValueBoxTransform slotPositioning;
+	protected Vec3 textShift;
 
-	int min = 0;
+	protected int min = 0;
 	protected int max = 1;
 	public int[] values = {0, 0, 0, 0, 0, 0};
-    public Direction lastSideAccessed;
+    protected Direction lastSideAccessed;
 	public Component label;
-	BiConsumer<Direction, Integer> callback;
-	Function<Integer, String> formatter;
+	protected BiConsumer<Direction, Integer> callback;
+	public boolean oppositeSides;
+	protected Function<Integer, String> formatter;
 	private Supplier<Boolean> isActive;
-	boolean needsWrench;
+	protected boolean needsWrench;
 
 	public SidedScrollValueBehaviour(Component label, SmartBlockEntity be, ValueBoxTransform slot) {
 		super(be);
 		this.setLabel(label);
 		slotPositioning = slot;
 		callback = (d, i) -> {};
+		oppositeSides = true;
 		formatter = i -> Integer.toString(i);
 		isActive = () -> true;
 	};
@@ -70,6 +72,16 @@ public class SidedScrollValueBehaviour extends BlockEntityBehaviour implements S
 
 	public SidedScrollValueBehaviour withCallback(BiConsumer<Direction, Integer> valueCallback) {
 		callback = valueCallback;
+		return this;
+	};
+
+	/**
+	 * Label the scroll box on one face of the Block
+	 * with the <em>opposite</em> side of the Block (e.g.
+	 * the north side is labelled "South").
+	 */
+	public SidedScrollValueBehaviour oppositeSides() {
+		oppositeSides = true;
 		return this;
 	};
 
@@ -132,6 +144,27 @@ public class SidedScrollValueBehaviour extends BlockEntityBehaviour implements S
         return slotPositioning;
     };
 
+	@Override
+	public boolean readFromClipboard(CompoundTag tag, Player player, Direction side, boolean simulate) {
+		if (!acceptsValueSettings()) return false;
+		if (!tag.contains("Values")) return false;
+		if (simulate) return true;
+		int[] newValues = tag.getIntArray("Values");
+		for (Direction direction : Direction.values()) {
+			setValue(direction, newValues[direction.ordinal()]);
+		};
+		playFeedbackSound(this);
+		return true;
+	};
+
+	@Override
+	public boolean writeToClipboard(CompoundTag tag, Direction side) {
+		if (!acceptsValueSettings())
+			return false;
+		tag.putIntArray("Values", values);
+		return true;
+	};
+
     @Override
     public void onShortInteract(Player player, InteractionHand hand, Direction side) {
         lastSideAccessed = side;
@@ -142,8 +175,10 @@ public class SidedScrollValueBehaviour extends BlockEntityBehaviour implements S
     @Override
     public ValueSettingsBoard createBoard(Player player, BlockHitResult hitResult) {
         lastSideAccessed = hitResult.getDirection();
-        return new ValueSettingsBoard(label, max, 10, ImmutableList.of(DestroyLang.direction(lastSideAccessed).component()),
-			new ValueSettingsFormatter(ValueSettings::format));
+        return new ValueSettingsBoard(label, max, 10,
+			ImmutableList.of(DestroyLang.direction(oppositeSides ? lastSideAccessed.getOpposite() : lastSideAccessed).component()),
+			new ValueSettingsFormatter(ValueSettings::format)
+		);
     };
 
 	@Override

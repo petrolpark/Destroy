@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.behaviour;
+package com.petrolpark.destroy.block.entity.behaviour;
 
 import java.util.ArrayList;
 import java.util.List;

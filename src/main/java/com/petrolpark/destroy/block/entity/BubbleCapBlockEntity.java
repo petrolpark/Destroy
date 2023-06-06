@@ -9,10 +9,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
-import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
-import com.petrolpark.destroy.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.BubbleCapBlock;
 import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
+import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
 import com.petrolpark.destroy.util.DestroyLang;

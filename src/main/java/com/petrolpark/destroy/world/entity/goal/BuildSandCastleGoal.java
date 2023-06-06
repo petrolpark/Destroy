@@ -2,7 +2,7 @@ package com.petrolpark.destroy.world.entity.goal;
 
 import javax.annotation.Nullable;
 
-import com.petrolpark.destroy.behaviour.SentimentalBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.SentimentalBehaviour;
 import com.petrolpark.destroy.item.BucketAndSpadeItem;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;

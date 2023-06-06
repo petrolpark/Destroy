@@ -2,13 +2,13 @@ package com.petrolpark.destroy.client.ponder;
 
 import java.util.List;
 
-import com.petrolpark.destroy.behaviour.ChargingBehaviour;
 import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.AgingBarrelBlockEntity;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
 import com.petrolpark.destroy.block.entity.DynamoBlockEntity;
+import com.petrolpark.destroy.block.entity.behaviour.ChargingBehaviour;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
 import com.petrolpark.destroy.fluid.DestroyFluids;

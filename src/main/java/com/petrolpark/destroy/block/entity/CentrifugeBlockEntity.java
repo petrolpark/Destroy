@@ -7,9 +7,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
-import com.petrolpark.destroy.behaviour.DestroyAdvancementBehaviour;
-import com.petrolpark.destroy.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.CentrifugeBlock;
+import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;

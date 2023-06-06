@@ -2,7 +2,7 @@ package com.petrolpark.destroy.block.entity;
 
 import java.util.List;
 
-import com.petrolpark.destroy.behaviour.SentimentalBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.SentimentalBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 

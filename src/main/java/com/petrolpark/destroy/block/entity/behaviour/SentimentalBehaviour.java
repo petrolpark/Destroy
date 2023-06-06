@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.behaviour;
+package com.petrolpark.destroy.block.entity.behaviour;
 
 import javax.annotation.Nullable;
 

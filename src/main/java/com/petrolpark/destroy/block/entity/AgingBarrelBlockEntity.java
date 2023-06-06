@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.petrolpark.destroy.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.AgingBarrelBlock;
+import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.recipe.AgingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.util.DestroyLang;

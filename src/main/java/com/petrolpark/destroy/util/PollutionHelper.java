@@ -63,7 +63,7 @@ public class PollutionHelper {
     };
 
     /**
-     * <p>To summon the evaporation Particles too, use {@link com.petrolpark.destroy.behaviour.PollutingBehaviour#pollute PollutingBehaviour.pollute}.</p>
+     * <p>To summon the evaporation Particles too, use {@link com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour#pollute PollutingBehaviour.pollute}.</p>
      * @param level
      * @param fluidStack
      */

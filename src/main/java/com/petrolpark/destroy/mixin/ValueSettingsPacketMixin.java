@@ -3,7 +3,7 @@ package com.petrolpark.destroy.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-import com.petrolpark.destroy.behaviour.SmartValueSettingsBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.SmartValueSettingsBehaviour;
 import com.petrolpark.destroy.mixin.accessor.ValueSettingsPacketAccessor;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -17,7 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 public class ValueSettingsPacketMixin {
     
     /**
-     * Pass Block Entities with {@link com.petrolpark.destroy.behaviour.SmartValueSettingsBehaviour Smart Value Settings Behaviours} additional information.
+     * Pass Block Entities with {@link com.petrolpark.destroy.block.entity.behaviour.SmartValueSettingsBehaviour Smart Value Settings Behaviours} additional information.
      * Copied and minorly adjusted from the {@link com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsPacket Create source code}.
      */
     @Overwrite
