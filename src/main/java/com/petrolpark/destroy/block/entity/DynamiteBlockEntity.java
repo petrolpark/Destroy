@@ -27,8 +27,8 @@ import net.minecraft.world.phys.Vec3;
 
 public class DynamiteBlockEntity extends SmartBlockEntity {
 
-    protected BlockPos excavationAreaUpperCorner;
-    protected BlockPos excavationAreaLowerCorner;
+    public BlockPos excavationAreaUpperCorner;
+    public BlockPos excavationAreaLowerCorner;
     protected SidedScrollValueBehaviour scrollValueBehaviour;
     protected WhenTargetedBehaviour targetedBehaviour;
 

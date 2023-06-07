@@ -263,14 +263,15 @@ public class SmartExplosion extends Explosion {
     public void effects(boolean spawnParticles) {
         // Sounds
         if (level.isClientSide()) {
-            level.playLocalSound(x, y, z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 4.0f, (1.0f + (random.nextFloat() * 0.4f)) * 0.7f, false);
+            level.playLocalSound(position.x, position.y, position.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 4.0f, (1.0f + (random.nextFloat() * 0.4f)) * 0.7f, false);
         };
+
         // Particles
-        if (spawnParticles) {
+        if (spawnParticles && level instanceof ServerLevel serverLevel) {
             if (radius > 2.0f) {
-               level.addParticle(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 0.0d, 0.0d, 0.0d);
+               level.addParticle(ParticleTypes.EXPLOSION_EMITTER, position.x, position.y, position.z, 0d, 0d, 0d);
             } else {
-               level.addParticle(ParticleTypes.EXPLOSION, x, y, z, 0.0d, 0.0d, 0.0d);
+               level.addParticle(ParticleTypes.EXPLOSION, position.x, position.y, position.z, 0d, 0d, 0d);
             };
         };
     };
