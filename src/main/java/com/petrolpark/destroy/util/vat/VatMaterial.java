@@ -3,6 +3,7 @@ package com.petrolpark.destroy.util.vat;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.petrolpark.destroy.block.DestroyBlocks;
 import com.simibubi.create.AllBlocks;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
@@ -19,6 +20,9 @@ public record VatMaterial(float maxPressure, boolean transparent, boolean corrod
 
     public static final Map<NonNullSupplier<? extends Block>, VatMaterial> BLOCK_MATERIALS = new HashMap<>();
 
+    public static final VatMaterial UNBREAKABLE = new VatMaterial(Float.MAX_VALUE, false, false);
+    public static final VatMaterial GLASS = new VatMaterial(10000f, true, false);
+
     /**
      * Whether the given Block can be used to construct a Vat.
      * @param block
@@ -29,9 +33,8 @@ public record VatMaterial(float maxPressure, boolean transparent, boolean corrod
 
     public static void registerDestroyVatMaterials() {
 
-        VatMaterial GLASS_MATERIAL = new VatMaterial(10000f, true, false);
-
+        BLOCK_MATERIALS.put(DestroyBlocks.VAT_CONTROLLER.lazy(), UNBREAKABLE);
         BLOCK_MATERIALS.put(AllBlocks.COPPER_CASING.lazy(), new VatMaterial(500000f, false, true));
-        BLOCK_MATERIALS.put(() -> Blocks.GLASS, GLASS_MATERIAL);
+        BLOCK_MATERIALS.put(() -> Blocks.GLASS, GLASS);
     };
 };

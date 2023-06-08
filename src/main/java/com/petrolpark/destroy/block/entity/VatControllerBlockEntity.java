@@ -4,48 +4,88 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.block.VatControllerBlock;
+import com.petrolpark.destroy.block.entity.behaviour.WhenTargetedBehaviour;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.petrolpark.destroy.util.vat.Vat;
+import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
+import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
+import com.simibubi.create.foundation.utility.Pair;
 
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 
-    private Optional<Vat> vat;
+    protected Optional<Vat> vat;
 
-    private SmartFluidTankBehaviour tankBehaviour;
-    private LazyOptional<IFluidHandler> fluidCapability;
+    protected SmartFluidTankBehaviour tankBehaviour;
+    protected LazyOptional<IFluidHandler> fluidCapability;
+
+    protected WhenTargetedBehaviour targetedBehaviour;
 
     public VatControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+        vat = Optional.empty();
     };
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+        targetedBehaviour = new WhenTargetedBehaviour(this, this::onTargeted);
+        behaviours.add(targetedBehaviour);
+    };
+
+    @Override
+    public void addBehavioursDeferred(List<BlockEntityBehaviour> behaviours) {
         if (vat.isPresent()) {
             tankBehaviour = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.TYPE, this, 1, vat.get().getCapacity(), false)
                 .whenFluidUpdates(this::onFluidStackChanged)
                 .forbidInsertion();
-            fluidCapability = tankBehaviour.getCapability().cast();
+            fluidCapability = LazyOptional.of(() -> {
+                return new CombinedTankWrapper(tankBehaviour.getCapability().orElse(null));
+            });
+            behaviours.add(tankBehaviour);
         };
     };
 
     @Override
     public void tick() {
         super.tick();
+    };
+
+    @Override
+    protected void read(CompoundTag tag, boolean clientPacket) {
+        super.read(tag, clientPacket);
+        if (tag.contains("VatLowerCorner") && tag.contains("VatUpperCorner")) {
+            vat = Optional.of(new Vat(NbtUtils.readBlockPos(tag.getCompound("VatLowerCorner")), NbtUtils.readBlockPos(tag.getCompound("VatUpperCorner"))));
+        };
+    };
+
+    @Override
+    protected void write(CompoundTag tag, boolean clientPacket) {
+        super.write(tag, clientPacket);
+        if (vat.isPresent()) {
+            tag.put("VatLowerCorner", NbtUtils.writeBlockPos(vat.get().getLowerCorner()));
+            tag.put("VatUpperCorner", NbtUtils.writeBlockPos(vat.get().getUpperCorner()));
+        };
     };
 
     /**
@@ -91,6 +131,19 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         return vat;
     };
 
+    /**
+     * Try to make a {@link com.petrolpark.destroy.util.vat.Vat Vat} attached to this Vat Controller.
+     */
+    @SuppressWarnings("null")
+    public void tryMakeVat() {
+        if (!hasLevel()) return;
+        BlockPos vatInternalStartPos = new BlockPos(getBlockPos().relative(getLevel().getBlockState(getBlockPos()).getValue(VatControllerBlock.FACING).getOpposite()));
+        Optional<Vat> newVat = Vat.tryConstruct(getLevel(), vatInternalStartPos);
+        if (!newVat.isPresent()) return;
+        vat = Optional.of(newVat.get());
+        Destroy.LOGGER.info("is vat present "+vat.isPresent());
+    };
+
     // Nullable
     public SmartFluidTank getTank() {
         return tankBehaviour.getPrimaryHandler();
@@ -122,10 +175,17 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         }
     };
 
+    private void onTargeted(LocalPlayer player, BlockHitResult blockHitResult) {
+        if (vat.isPresent()) {
+            Destroy.LOGGER.info("I am henry");
+            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), new AABB(vat.get().getLowerCorner(), vat.get().getUpperCorner()))
+                .colored(0xFF_d80051);
+        };
+    };
+
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        if (!vat.isPresent()) return false;
-        return containedFluidTooltip(tooltip, isPlayerSneaking, fluidCapability); //TODO make better
+        return false;
     };
     
 };

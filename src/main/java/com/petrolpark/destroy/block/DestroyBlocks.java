@@ -140,6 +140,14 @@ public class DestroyBlocks {
             .sound(SoundType.SAND)
         ).register();
 
+    public static final BlockEntry<VatControllerBlock> VAT_CONTROLLER = REGISTRATE.block("vat_controller", VatControllerBlock::new)
+        .initialProperties(SharedProperties::copperMetal)
+        .properties(p -> p
+        
+        ).item()
+        .build()
+        .register();
+
     public static final BlockEntry<AgingBarrelBlock> AGING_BARREL = REGISTRATE.block("aging_barrel", AgingBarrelBlock::new)
         .initialProperties(SharedProperties::stone)
         .properties(p -> p

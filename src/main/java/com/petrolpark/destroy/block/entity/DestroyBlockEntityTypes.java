@@ -86,6 +86,7 @@ public class DestroyBlockEntityTypes {
 
     public static final BlockEntityEntry<VatControllerBlockEntity> VAT_CONTROLLER = REGISTRATE
         .blockEntity("vat_controller", VatControllerBlockEntity::new)
+        .validBlock(DestroyBlocks.VAT_CONTROLLER)
         .renderer(() -> VatRenderer::new)
         .register();
 

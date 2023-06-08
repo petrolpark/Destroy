@@ -1,6 +1,7 @@
 package com.petrolpark.destroy.util.vat;
 
 import java.util.EnumMap;
+import java.util.Optional;
 
 import com.petrolpark.destroy.Destroy;
 import com.simibubi.create.CreateClient;
@@ -9,8 +10,6 @@ import com.simibubi.create.foundation.utility.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.AxisDirection;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -34,7 +33,7 @@ public class Vat {
      * @param level
      * @param pos The position of the first space in the Vat
      */
-    public static void tryConstruct(Level level, BlockPos pos) {
+    public static Optional<Vat> tryConstruct(Level level, BlockPos pos) {
 
         Destroy.LOGGER.info("NEW VAT ATTEMPT: "+pos.toString());
 
@@ -114,6 +113,8 @@ public class Vat {
             }
         };
 
+        if (!successful) return Optional.empty();
+
         // Determine the precise location of the Vat, inflated by 1 in each direction so it includes the walls
         int topSide = pos.getY() + 1 + dimensions.get(Direction.UP);
         int northSide = pos.getZ() - 1 - dimensions.get(Direction.NORTH);
@@ -141,16 +142,13 @@ public class Vat {
         };
 
         Destroy.LOGGER.info("Could make vat? "+successful);
-    };
 
-    public void read(CompoundTag tag) {
-        lowerCorner = NbtUtils.readBlockPos(tag.getCompound("LowerCorner"));
-        upperCorner = NbtUtils.readBlockPos(tag.getCompound("UpperCorner"));
-    };
-
-    public void write(CompoundTag tag) {
-        tag.put("LowerCorner", NbtUtils.writeBlockPos(lowerCorner));
-        tag.put("UpperCorner", NbtUtils.writeBlockPos(upperCorner));
+        if (successful) {
+            Vat vat = new Vat(lowerCorner, upperCorner);
+            return Optional.of(vat);
+        } else {
+            return Optional.empty();
+        }
     };
 
     public int getCapacity() {

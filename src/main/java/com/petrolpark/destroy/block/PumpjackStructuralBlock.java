@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -72,5 +73,10 @@ public class PumpjackStructuralBlock extends DirectionalBlock implements IPumpja
     @Override
 	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 		IPumpjackStructuralBlock.tick(state, level, pos, random);
+	};
+
+	@Override
+	public boolean addLandingEffects(BlockState state1, ServerLevel level, BlockPos pos, BlockState state2, LivingEntity entity, int numberOfParticles) {
+		return true;
 	};
 };

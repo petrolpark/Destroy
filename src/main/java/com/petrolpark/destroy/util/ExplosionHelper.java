@@ -14,7 +14,7 @@ public class ExplosionHelper {
     public static Explosion explode(ServerLevel level, SmartExplosion explosion) {
         if (ForgeEventFactory.onExplosionStart(level, explosion)) return explosion; // True if cancelled
         explosion.explode();
-        explosion.finalizeExplosion(false);
+        explosion.finalizeExplosion(true);
 
         Vec3 pos = explosion.getPosition();
 

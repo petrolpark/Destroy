@@ -7,11 +7,13 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import com.petrolpark.destroy.Destroy;
 import com.simibubi.create.foundation.utility.VecHelper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -60,16 +62,18 @@ public class ExcavationExplosion extends SmartExplosion {
 
     @Override
     public void effects(boolean spawnParticles) {
+        Destroy.LOGGER.info("my area is "+explosionArea.toString());
         // Sounds
         if (level.isClientSide()) {
             level.playLocalSound(position.x, position.y, position.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 4.0f, (1.0f + (random.nextFloat() * 0.4f)) * 0.7f, false);
         };
         // Particles
-        if (spawnParticles) {
-            for (double x = explosionArea.minX; x < explosionArea.maxX; x += 2d) {
-                for (double y = explosionArea.minY; y < explosionArea.maxY; y += 2d) {
-                    for (double z = explosionArea.minZ; z < explosionArea.maxZ; z += 2d) {
-                        level.addParticle(ParticleTypes.EXPLOSION, x, y, z, 0d, 0d, 0d);
+        if (spawnParticles && level instanceof ServerLevel serverLevel) {
+            for (double x = explosionArea.minX; x < explosionArea.maxX; x += 3d) {
+                for (double y = explosionArea.minY; y < explosionArea.maxY; y += 3d) {
+                    for (double z = explosionArea.minZ; z < explosionArea.maxZ; z += 3d) {
+                        Destroy.LOGGER.info("Adding particle at "+x+" "+y+" "+z);
+                        serverLevel.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 1, 0d, 0d, 0d, 0.15d);
                     };
                 };
             };

@@ -69,18 +69,6 @@ public class PumpjackBlockEntity extends SmartBlockEntity {
 		return angle;
     };
 
-    @Override
-    @SuppressWarnings("null")
-	public void remove() {
-		PumpjackCamBlockEntity cam = getCam();
-        if (!hasLevel() || cam == null) {
-            super.remove();
-            return;
-        };
-		getLevel().removeBlock(cam.getBlockPos(), false);
-		super.remove();
-	};
-
     @Nullable
     @SuppressWarnings("null")
     public PumpjackCamBlockEntity getCam() {

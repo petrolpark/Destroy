@@ -526,7 +526,7 @@
     "item.destroy.baby_blue_powder.tooltip.behaviour1": "Gives a strong, short-lasting _Baby Blue High_, followed by a _Baby Blue Withdrawal_.",
     "item.destroy.baby_blue_syringe": "Syringe of Baby Blue",
     "item.destroy.baby_blue_syringe.tooltip": "SYRINGE_OF_BABY_BLUE",
-    "item.destroy.baby_blue_syringe.tooltip.summary": "99.1% Pure",
+    "item.destroy.baby_blue_syringe.tooltip.summary": "99.1\u0025 Pure",
     "item.destroy.baby_blue_syringe.tooltip.condition1": "When Injected",
     "item.destroy.baby_blue_syringe.tooltip.behaviour1": "Gives a weak, long-lasting _Baby Blue High_, followed by a _Baby Blue Withdrawal_.",
     "item.destroy.baby_blue_syringe.tooltip.control1": "R-Click on Entity",
