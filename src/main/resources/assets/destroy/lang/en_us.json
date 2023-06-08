@@ -459,6 +459,9 @@
     "destroy.tooltip.pollutometer.pollution_type": "Type of Pollution Monitored:",
     "destroy.tooltip.seismometer.crude_oil": "There are about %1$s bucket(s) of Crude Oil in this chunk",
     "destroy.tooltip.unknown_molecule": "Unknown Molecule",
+    "destroy.tooltip.vat.not_initialized_1": "A valid Vat could not be formed.",
+    "destroy.tooltip.vat.not_initialized_2": "Click the TODO REPLACE WITH NAME OF CONTROLLER to try again.",
+    "destroy.tooltip.vat.not_initialized_3": "Ponder the SAME HERE to learn more.",
 
     "effect.destroy.cancer": "Cancer Awareness",
     "effect.destroy.cancer.description": "Has no effect in-game. Many things in the Destroy Mod are jokes, but cancer is not one of them. This is here to raise awareness of the increase in cancer risk associated with occupational exposure, and with harm to the ozone layer. Please see a professional source like 'cancerresearchuk.org'.",

@@ -122,8 +122,8 @@ public class Vat {
         int southSide = pos.getZ() + 1 + dimensions.get(Direction.SOUTH);
         int westSide = pos.getX() - 1 - dimensions.get(Direction.WEST);
         int bottomSide = pos.getY() - 1 - dimensions.get(Direction.DOWN);
-        BlockPos lowerCorner = new BlockPos(eastSide, bottomSide, northSide);
-        BlockPos upperCorner = new BlockPos(westSide, topSide, southSide);
+        BlockPos lowerCorner = new BlockPos(westSide, bottomSide, northSide);
+        BlockPos upperCorner = new BlockPos(eastSide, topSide, southSide);
 
         Destroy.LOGGER.info("Checking between "+lowerCorner.toString()+" and "+upperCorner.toString());
 
@@ -132,10 +132,25 @@ public class Vat {
             int y = blockPos.getY();
             int z = blockPos.getZ();
             // Check all blocks which form a face of the Vat, but aren't an edge or corner
-            if ((x == eastSide || x == westSide) ^ (y == topSide || y == bottomSide) ^ (z == northSide || z == southSide)) {
+
+            boolean onXSide = (x == eastSide || x == westSide); // A
+            boolean onYSide = (y == topSide || y == bottomSide); // B
+            boolean onZSide = (z == northSide || z == southSide); // C
+            /*
+             * Check all sides which are on a face, but are not an edge or corner.
+             * A B C Output
+             * 0 0 0 0
+             * 0 0 1 1
+             * 0 1 0 1
+             * 0 1 1 0
+             * 1 0 0 1
+             * 1 0 1 0
+             * 1 1 0 0
+             * 1 1 1 0
+             */
+            if (((onXSide ^ onYSide) ^ onZSide) && !(onXSide && onYSide)) {
                 if (!VatMaterial.isValid(level.getBlockState(blockPos).getBlock())) {
                     successful = false;
-                    Destroy.LOGGER.info("Could not make vat because theres walls missing.");
                     break;
                 };
             };

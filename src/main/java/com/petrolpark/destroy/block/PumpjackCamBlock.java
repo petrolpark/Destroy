@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.block;
 
+import java.util.function.Consumer;
+
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.AbstractShaftBlock;
@@ -24,6 +26,7 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 
 public class PumpjackCamBlock extends AbstractShaftBlock implements IPumpjackStructuralBlock {
 
@@ -92,5 +95,10 @@ public class PumpjackCamBlock extends AbstractShaftBlock implements IPumpjackStr
     public BlockEntityType<? extends KineticBlockEntity> getBlockEntityType() {
         return DestroyBlockEntityTypes.PUMPJACK_CAM.get();
     };
+
+	@Override
+	public void initializeClient(Consumer<IClientBlockExtensions> consumer) {
+		consumer.accept(new IPumpjackStructuralBlock.RenderProperties());
+	};
     
 };

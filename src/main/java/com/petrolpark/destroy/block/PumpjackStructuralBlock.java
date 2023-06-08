@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.block;
 
+import java.util.function.Consumer;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 
 /**
  * Almost entirely copied from the {@link com.simibubi.create.content.kinetics.waterwheel.PumpjackStructuralBlock Create source code}.
@@ -73,6 +76,11 @@ public class PumpjackStructuralBlock extends DirectionalBlock implements IPumpja
     @Override
 	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 		IPumpjackStructuralBlock.tick(state, level, pos, random);
+	};
+
+	@Override
+	public void initializeClient(Consumer<IClientBlockExtensions> consumer) {
+		consumer.accept(new IPumpjackStructuralBlock.RenderProperties());
 	};
 
 	@Override

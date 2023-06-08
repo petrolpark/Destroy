@@ -10,6 +10,7 @@ import com.petrolpark.destroy.block.entity.behaviour.WhenTargetedBehaviour;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
+import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.vat.Vat;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
@@ -20,6 +21,7 @@ import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.utility.Pair;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -39,41 +41,47 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     protected SmartFluidTankBehaviour tankBehaviour;
     protected LazyOptional<IFluidHandler> fluidCapability;
+    protected boolean full;
 
     protected WhenTargetedBehaviour targetedBehaviour;
+
+    protected int initializationTicks;
 
     public VatControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         vat = Optional.empty();
+        full = false;
+        initializationTicks = 3;
     };
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         targetedBehaviour = new WhenTargetedBehaviour(this, this::onTargeted);
         behaviours.add(targetedBehaviour);
-    };
 
-    @Override
-    public void addBehavioursDeferred(List<BlockEntityBehaviour> behaviours) {
-        if (vat.isPresent()) {
-            tankBehaviour = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.TYPE, this, 1, vat.get().getCapacity(), false)
-                .whenFluidUpdates(this::onFluidStackChanged)
-                .forbidInsertion();
-            fluidCapability = LazyOptional.of(() -> {
-                return new CombinedTankWrapper(tankBehaviour.getCapability().orElse(null));
-            });
-            behaviours.add(tankBehaviour);
-        };
+        tankBehaviour = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.TYPE, this, 1, 5000000, false)
+            .whenFluidUpdates(this::onFluidStackChanged)
+            .forbidExtraction() // Forbid extraction until the Vat is initialized
+            .forbidInsertion(); // Forbid insertion no matter what
+        fluidCapability = LazyOptional.of(() -> {
+            return new CombinedTankWrapper(tankBehaviour.getCapability().orElse(null));
+        });
+        behaviours.add(tankBehaviour);
     };
 
     @Override
     public void tick() {
         super.tick();
+
+        if (initializationTicks > 0) {
+            initializationTicks--;
+        };
     };
 
     @Override
     protected void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
+        full = tag.getBoolean("Full");
         if (tag.contains("VatLowerCorner") && tag.contains("VatUpperCorner")) {
             vat = Optional.of(new Vat(NbtUtils.readBlockPos(tag.getCompound("VatLowerCorner")), NbtUtils.readBlockPos(tag.getCompound("VatUpperCorner"))));
         };
@@ -82,6 +90,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     @Override
     protected void write(CompoundTag tag, boolean clientPacket) {
         super.write(tag, clientPacket);
+        tag.putBoolean("Full", full);
         if (vat.isPresent()) {
             tag.put("VatLowerCorner", NbtUtils.writeBlockPos(vat.get().getLowerCorner()));
             tag.put("VatUpperCorner", NbtUtils.writeBlockPos(vat.get().getUpperCorner()));
@@ -124,6 +133,12 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     };
 
     private void onFluidStackChanged() {
+        if (!vat.isPresent()) return;
+        if (getTank().getFluidAmount() >= getVat().get().getCapacity()) {
+            full = true;
+        } else {
+            full = false;
+        };
         setChanged();
     };
 
@@ -137,16 +152,25 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     @SuppressWarnings("null")
     public void tryMakeVat() {
         if (!hasLevel()) return;
+
+        // Create the Vat starting with the Block behind the Controller
         BlockPos vatInternalStartPos = new BlockPos(getBlockPos().relative(getLevel().getBlockState(getBlockPos()).getValue(VatControllerBlock.FACING).getOpposite()));
         Optional<Vat> newVat = Vat.tryConstruct(getLevel(), vatInternalStartPos);
         if (!newVat.isPresent()) return;
+
+        // Once the Vat has been successfully created
         vat = Optional.of(newVat.get());
+        tankBehaviour.allowExtraction(); // Enable extraction from the Vat now it actually exists
         Destroy.LOGGER.info("is vat present "+vat.isPresent());
     };
 
-    // Nullable
+    // Nullable, just not annotated so VSC stops giving me ugly yellow lines
     public SmartFluidTank getTank() {
         return tankBehaviour.getPrimaryHandler();
+    };
+
+    public boolean isFull() {
+        return full;
     };
 
     /**
@@ -177,15 +201,27 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     private void onTargeted(LocalPlayer player, BlockHitResult blockHitResult) {
         if (vat.isPresent()) {
-            Destroy.LOGGER.info("I am henry");
-            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), new AABB(vat.get().getLowerCorner(), vat.get().getUpperCorner()))
-                .colored(0xFF_d80051);
+            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), new AABB(vat.get().getInternalLowerCorner(), vat.get().getUpperCorner()).inflate(1d), 20)
+                .colored(0xFF_fffec2);
         };
     };
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        return false;
+        if (getVat().isPresent()) {
+
+        } else if (initializationTicks == 0) {
+            DestroyLang.translate("tooltip.vat.not_initialized_1")
+                .style(ChatFormatting.RED)
+                .forGoggles(tooltip);
+            DestroyLang.translate("tooltip.vat.not_initialized_2")
+                .style(ChatFormatting.RED)
+                .forGoggles(tooltip);
+            DestroyLang.translate("tooltip.vat.not_initialized_3")
+                .style(ChatFormatting.RED)
+                .forGoggles(tooltip);
+        };
+        return true;
     };
     
 };

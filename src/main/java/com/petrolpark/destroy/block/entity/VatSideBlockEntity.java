@@ -57,6 +57,7 @@ public class VatSideBlockEntity extends SmartBlockEntity implements IHaveGoggleI
             };
 			return new VatTankCapability(outputCap.orElse(null), inputCap.orElse(null));
         });
+        //TODO check fluids can fit in the Vat
     };
 
     @Nullable

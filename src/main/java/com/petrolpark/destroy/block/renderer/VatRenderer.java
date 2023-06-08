@@ -9,6 +9,7 @@ import com.simibubi.create.foundation.fluid.FluidRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fluids.FluidStack;
 
 public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntity> {
 
@@ -22,7 +23,9 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
         Vec3 relativeInternalLowerCorner = Vec3.atLowerCornerOf(vat.getInternalLowerCorner().subtract(controller.getBlockPos()));
         Vec3 relativeInternalUpperCorner = Vec3.atLowerCornerOf(vat.getUpperCorner().subtract(controller.getBlockPos()));
 
-        FluidRenderer.renderFluidBox(controller.getTank().getFluid(),
+        FluidStack fluidStack = controller.getTank().getFluid();
+        if (fluidStack.isEmpty()) return;
+        FluidRenderer.renderFluidBox(fluidStack,
             (float)relativeInternalLowerCorner.x, (float)relativeInternalLowerCorner.y, (float)relativeInternalLowerCorner.z,
             (float)relativeInternalUpperCorner.x, controller.getRenderedFluidLevel(partialTicks), (float)relativeInternalUpperCorner.z,
             bufferSource, ms, light, true);
