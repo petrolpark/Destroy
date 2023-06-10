@@ -1,0 +1,24 @@
+{
+  "values": [
+    "destroy:bubble_cap",
+    "destroy:centrifuge",
+    "destroy:cooler",
+    "destroy:dynamo",
+    "destroy:pollutometer",
+    "destroy:pumpjack",
+    "destroy:pumpjack_cam",
+    "destroy:pumpjack_structure",
+    "destroy:fluorite_block",
+    "destroy:raw_nickel_block",
+    "destroy:nickel_block",
+    "destroy:palladium_block",
+    "destroy:platinum_block",
+    "destroy:rhodium_block",
+    "destroy:zirconium_block",
+    "destroy:fluorite_ore",
+    "destroy:deepslate_fluorite_ore",
+    "destroy:end_fluorite_ore",
+    "destroy:nickel_ore",
+    "destroy:deepslate_nickel_ore"
+  ]
+}

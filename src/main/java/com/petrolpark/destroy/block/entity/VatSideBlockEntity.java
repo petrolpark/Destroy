@@ -88,6 +88,19 @@ public class VatSideBlockEntity extends SmartBlockEntity implements IHaveGoggleI
     };
 
     @Override
+    public void tick() {
+        if (getBlockState().isAir()) {
+            VatControllerBlockEntity vatController = getController();
+            if (vatController == null) {
+                remove();
+                return;
+            };
+            vatController.deleteVat();
+        };
+        super.tick();
+    };
+
+    @Override
     protected void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
         if (tag.contains("Side")) {

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.VatControllerBlock;
 import com.petrolpark.destroy.block.entity.behaviour.WhenTargetedBehaviour;
 import com.petrolpark.destroy.chemistry.Mixture;
@@ -161,7 +160,17 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         // Once the Vat has been successfully created
         vat = Optional.of(newVat.get());
         tankBehaviour.allowExtraction(); // Enable extraction from the Vat now it actually exists
-        Destroy.LOGGER.info("is vat present "+vat.isPresent());
+        
+    };
+
+    @Override
+    public void destroy() {
+        deleteVat();
+        super.destroy();
+    };
+
+    public void deleteVat() {
+
     };
 
     // Nullable, just not annotated so VSC stops giving me ugly yellow lines
@@ -171,6 +180,12 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     public boolean isFull() {
         return full;
+    };
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        fluidCapability.invalidate();
     };
 
     /**

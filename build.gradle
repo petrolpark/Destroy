@@ -21,6 +21,11 @@ apply plugin: 'eclipse'
 
 jarJar.enable()
 
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+    exclude '.cache/'
+}
+
 mixin {
     add sourceSets.main, "destroy.refmap.json"
 }
@@ -56,6 +61,18 @@ minecraft {
             arg '-mixin.config=create.mixins.json'
             arg '-mixin.config=destroy.mixins.json'
             property 'forge.logging.console.level', 'info'
+            mods {
+                destroy {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'destroy', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources')
             mods {
                 destroy {
                     source sourceSets.main
@@ -122,10 +139,10 @@ dependencies {
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 
     // MongoDB
-    library 'org.mongodb:mongodb-driver-sync:4.9.0'
-    jarJar('org.mongodb:mongodb-driver-sync:4.9.0') {
-        jarJar.ranged(it, "[4.9.0]")
-    }
+    // library 'org.mongodb:mongodb-driver-sync:4.9.0'
+    // jarJar('org.mongodb:mongodb-driver-sync:4.9.0') {
+    //     jarJar.ranged(it, "[4.9.0]")
+    // }
 
     // OPTIONAL DEPENDENCIES
 

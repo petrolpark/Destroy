@@ -641,7 +641,7 @@ public class DestroyItems {
         .tag(Tags.Items.DUSTS)
         .register();
 
-    public static final ItemEntry<RecordItem> MUSIC_DISC_SPECTRUM = REGISTRATE.item("music_disc_spectrum", p -> new RecordItem(9, DestroySoundEvents.MUSIC_DISC_SPECTRUM, p, 3720))
+    public static final ItemEntry<RecordItem> MUSIC_DISC_SPECTRUM = REGISTRATE.item("music_disc_spectrum", p -> new RecordItem(9, () -> DestroySoundEvents.MUSIC_DISC_SPECTRUM.getMainEvent(), p, 3720))
         .properties(p -> p
             .stacksTo(1)
         ).tag(ItemTags.MUSIC_DISCS)

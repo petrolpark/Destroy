@@ -19,79 +19,69 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public class DestroyBlockEntityTypes {
 
     private static CreateRegistrate REGISTRATE = Destroy.registrate();
 
-    public static final BlockEntityEntry<AgingBarrelBlockEntity> AGING_BARREL = REGISTRATE
-        .blockEntity("aging_barrel", AgingBarrelBlockEntity::new)
+    public static final BlockEntityEntry<AgingBarrelBlockEntity> AGING_BARREL = REGISTRATE.blockEntity("aging_barrel", AgingBarrelBlockEntity::new)
         .validBlocks(DestroyBlocks.AGING_BARREL)
         .renderer(() -> AgingBarrelRenderer::new)
         .register();
 
-    public static final BlockEntityEntry<BubbleCapBlockEntity> BUBBLE_CAP = REGISTRATE
-        .blockEntity("bubble_cap", BubbleCapBlockEntity::new)
+    public static final BlockEntityEntry<BubbleCapBlockEntity> BUBBLE_CAP = REGISTRATE.blockEntity("bubble_cap", BubbleCapBlockEntity::new)
         .validBlocks(DestroyBlocks.BUBBLE_CAP)
         .renderer(() -> BubbleCapRenderer::new)
         .register();
 
-    public static final BlockEntityEntry<CentrifugeBlockEntity> CENTRIFUGE = REGISTRATE
-        .blockEntity("centrifuge", CentrifugeBlockEntity::new)
+    public static final BlockEntityEntry<CentrifugeBlockEntity> CENTRIFUGE = REGISTRATE.blockEntity("centrifuge", CentrifugeBlockEntity::new)
         .instance(() -> CentrifugeCogInstance::new)
         .validBlocks(DestroyBlocks.CENTRIFUGE)
         .renderer(() -> CentrifugeRenderer::new)
         .register();
 
-    public static final BlockEntityEntry<CoolerBlockEntity> COOLER = REGISTRATE
-        .blockEntity("cooler", CoolerBlockEntity::new)
+    public static final BlockEntityEntry<CoolerBlockEntity> COOLER = REGISTRATE.blockEntity("cooler", CoolerBlockEntity::new)
         .validBlocks(DestroyBlocks.COOLER)
         .renderer(() -> CoolerRenderer::new)
         .register();
 
-    public static final BlockEntityEntry<DynamiteBlockEntity> DYNAMITE = REGISTRATE
-        .blockEntity("dynamite", DynamiteBlockEntity::new)
+    public static final BlockEntityEntry<DynamiteBlockEntity> DYNAMITE = REGISTRATE.blockEntity("dynamite", DynamiteBlockEntity::new)
         .validBlocks(DestroyBlocks.DYNAMITE_BLOCK)
         .register();
 
-    public static final BlockEntityEntry<DynamoBlockEntity> DYNAMO = REGISTRATE
-        .blockEntity("dynamo", DynamoBlockEntity::new)
+    public static final BlockEntityEntry<DynamoBlockEntity> DYNAMO = REGISTRATE.blockEntity("dynamo", DynamoBlockEntity::new)
         .instance(() -> DynamoCogInstance::new)
         .validBlocks(DestroyBlocks.DYNAMO)
         .renderer(() -> DynamoRenderer::new)
         .register();
 
-    public static final BlockEntityEntry<PollutometerBlockEntity> POLLUTOMETER = REGISTRATE
-        .blockEntity("pollutometer", PollutometerBlockEntity::new)
+    public static final BlockEntityEntry<PollutometerBlockEntity> POLLUTOMETER = REGISTRATE.blockEntity("pollutometer", PollutometerBlockEntity::new)
         .validBlocks(DestroyBlocks.POLLUTOMETER)
         .renderer(() -> PollutometerRenderer::new)
         .register();
 
-    public static final BlockEntityEntry<PumpjackBlockEntity> PUMPJACK = REGISTRATE
-		.blockEntity("pumpjack", PumpjackBlockEntity::new)
+    public static final BlockEntityEntry<PumpjackBlockEntity> PUMPJACK = REGISTRATE.blockEntity("pumpjack", PumpjackBlockEntity::new)
 		//.instance(() -> PumpjackInstance::new, false) Can't use instancing because that can't render cutout for some reason
 		.validBlocks(DestroyBlocks.PUMPJACK)
 		.renderer(() -> PumpjackRenderer::new)
 		.register();
 
-    public static final BlockEntityEntry<PumpjackCamBlockEntity> PUMPJACK_CAM = REGISTRATE
-		.blockEntity("pumpjack_cam", PumpjackCamBlockEntity::new)
+    public static final BlockEntityEntry<PumpjackCamBlockEntity> PUMPJACK_CAM = REGISTRATE.blockEntity("pumpjack_cam", PumpjackCamBlockEntity::new)
 		.validBlocks(DestroyBlocks.PUMPJACK_CAM)
 		.register();
 
-    public static final BlockEntityEntry<SandCastleBlockEntity> SAND_CASTLE = REGISTRATE
-        .blockEntity("sand_castle", SandCastleBlockEntity::new)
+    public static final BlockEntityEntry<SandCastleBlockEntity> SAND_CASTLE = REGISTRATE.blockEntity("sand_castle", SandCastleBlockEntity::new)
         .validBlocks(DestroyBlocks.SAND_CASTLE)
         .register();
 
-    public static final BlockEntityEntry<VatControllerBlockEntity> VAT_CONTROLLER = REGISTRATE
-        .blockEntity("vat_controller", VatControllerBlockEntity::new)
+    public static final BlockEntityEntry<VatControllerBlockEntity> VAT_CONTROLLER = REGISTRATE.blockEntity("vat_controller", VatControllerBlockEntity::new)
         .validBlock(DestroyBlocks.VAT_CONTROLLER)
         .renderer(() -> VatRenderer::new)
         .register();
 
-    private static final BlockEntityBuilder<VatSideBlockEntity, CreateRegistrate> VAT_SIDE_BUILDER = REGISTRATE
-        .blockEntity("vat_side", VatSideBlockEntity::new);
+    private static final BlockEntityBuilder<VatSideBlockEntity, CreateRegistrate> VAT_SIDE_BUILDER = REGISTRATE.blockEntity("vat_side", VatSideBlockEntity::new)
+        .validBlock(NonNullSupplier.of(() -> Blocks.AIR));
     
     static {
         VatMaterial.registerDestroyVatMaterials();

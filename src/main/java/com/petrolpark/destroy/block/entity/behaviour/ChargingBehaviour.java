@@ -133,7 +133,6 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
                 } case BELT: {
                     // This is handled in BeltChargingCallback
                 };
-                //TODO sounds
                 if (!level.isClientSide()) {
                     blockEntity.sendData();
                 };

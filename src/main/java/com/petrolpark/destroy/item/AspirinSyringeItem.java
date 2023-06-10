@@ -16,7 +16,7 @@ public class AspirinSyringeItem extends SyringeItem {
 
     @Override
     public void onInject(ItemStack itemStack, Level level, LivingEntity target) {
-        target.removeEffect(DestroyMobEffects.HANGOVER.get());
+        if (!target.removeEffect(DestroyMobEffects.HANGOVER.get())) return;
         if (target instanceof Player player) {
             DestroyAdvancements.CURE_HANGOVER.award(level, player);
         };

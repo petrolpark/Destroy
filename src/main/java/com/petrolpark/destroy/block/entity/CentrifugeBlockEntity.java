@@ -110,8 +110,6 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IFluidB
         return false;
     };
 
-    //TODO Sounds
-
     @Override
     @SuppressWarnings("null")
     public void tick() {

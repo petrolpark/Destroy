@@ -1,6 +1,5 @@
 package com.petrolpark.destroy.mixin;
 
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -68,6 +67,7 @@ public class ConnectivityHandlerMixin {
                             case X -> origin.offset(yOffset, xOffset, zOffset);
                             case Y -> origin.offset(xOffset, yOffset, zOffset);
                             case Z -> origin.offset(xOffset, zOffset, yOffset);
+                            default -> origin;
                         };
                         
                         T partAt = ConnectivityHandler.partAt(be.getType(), level, pos); // Get this BE in the multi

@@ -4,6 +4,7 @@ import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.entity.AgingBarrelBlockEntity;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
+import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
 import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
@@ -63,6 +64,7 @@ public class AgingBarrelBlock extends Block implements IBE<AgingBarrelBlockEntit
         return onBlockEntityUse(level, pos, be -> {
 
             if (be.tryOpen()) {
+                DestroySoundEvents.AGING_BARREL_OPEN.playOnServer(level, pos);
                 DestroyAdvancements.OPEN_AGING_BARREL.award(level, player);
                 return InteractionResult.SUCCESS;
             };

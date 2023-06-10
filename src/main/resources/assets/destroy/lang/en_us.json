@@ -435,6 +435,18 @@
     "destroy.recipe.mutation": "Phytomining",
     "destroy.recipe.reaction": "Chemical Reaction",
 
+    "destroy.subtitle.aging_barrel_balloon": "Balloon inflates",
+    "destroy.subtitle.aging_barrel_open": "Aging Barrel opens",
+    "destroy.subtitle.aging_barrel_shut": "Aging Barrel shuts",
+    "destroy.subtitle.cooler_break": "Block broken",
+    "destroy.subtitle.cooler_place": "Block placed",
+    "destroy.subtitle.distillate_boil": "Distillate boils",
+    "destroy.subtitle.distillate_condense": "Distillate condenses",
+    "destroy.subtitle.dynamo_crackle": "Dynamo crackles",
+    "destroy.subtitle.oil_gurgle": "Oil gurgles",
+    "destroy.subtitle.pumpjack_creak_1": "Pumpjack creaks",
+    "destroy.subtitle.pumpjack_creak_2": "Pumpjack creaks",
+
     "destroy.tooltip.aging_barrel.aging_tank": "Aging",
     "destroy.tooltip.aging_barrel.progress": "Progress:",
     "destroy.tooltip.aging_barrel.aging_time": "Duration: %1$s",

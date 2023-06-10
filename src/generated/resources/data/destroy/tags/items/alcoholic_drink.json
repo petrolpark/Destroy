@@ -1,0 +1,9 @@
+{
+  "values": [
+    "destroy:undistilled_moonshine_bottle",
+    "destroy:once_distilled_moonshine_bottle",
+    "destroy:twice_distilled_moonshine_bottle",
+    "destroy:thrice_distilled_moonshine_bottle",
+    "destroy:chorus_wine_bottle"
+  ]
+}

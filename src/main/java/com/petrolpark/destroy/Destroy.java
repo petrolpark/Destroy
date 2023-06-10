@@ -2,8 +2,8 @@ package com.petrolpark.destroy;
 
 import com.mojang.logging.LogUtils;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
-import com.petrolpark.destroy.badge.Badge;
-import com.petrolpark.destroy.badge.DestroyBadges;
+// import com.petrolpark.destroy.badge.Badge;
+// import com.petrolpark.destroy.badge.DestroyBadges;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.partial.DestroyPartials;
@@ -27,7 +27,6 @@ import com.petrolpark.destroy.item.tooltip.IDynamicItemDescription;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.recipe.DestroyCropMutations;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
-import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.DestroyTags;
 import com.petrolpark.destroy.world.loot.condition.DestroyLootConditions;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
@@ -100,11 +99,10 @@ public class Destroy {
         DestroyParticleTypes.register(modEventBus);
         DestroyFluids.register();
         DestroyOreFeatureConfigEntries.init();
-        DestroySoundEvents.register(modEventBus);
         DestroyCropMutations.register();
         DestroyWorldGen.register(modEventBus);
         DestroyVillagers.register(modEventBus);
-        DestroyBadges.register(modEventBus);
+        // DestroyBadges.register(modEventBus);
         DestroyLootConditions.register(modEventBus);
 
         // Chemistry
@@ -154,6 +152,6 @@ public class Destroy {
     };
 
     public static void gatherData(GatherDataEvent event) {
-        DestroyTags.datagen();
+
     };
 }

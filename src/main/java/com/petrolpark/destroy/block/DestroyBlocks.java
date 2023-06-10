@@ -8,6 +8,7 @@ import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.PumpjackBlockItem;
 import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
+import com.petrolpark.destroy.sound.DestroySoundTypes;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours;
@@ -42,7 +43,17 @@ public class DestroyBlocks {
         REGISTRATE.creativeModeTab(() -> DestroyCreativeModeTabs.TAB_DESTROY);
     };
 
-    // CONTRAPTIONS
+    // BLOCK ENTITIES
+
+    public static final BlockEntry<AgingBarrelBlock> AGING_BARREL = REGISTRATE.block("aging_barrel", AgingBarrelBlock::new)
+        .initialProperties(SharedProperties::stone)
+        .properties(p -> p
+            .color(MaterialColor.COLOR_BROWN)
+            .noOcclusion()
+        ).transform(TagGen.axeOnly())
+        .item()
+        .transform(customItemModel())
+        .register();
 
     public static final BlockEntry<BubbleCapBlock> BUBBLE_CAP = REGISTRATE.block("bubble_cap", BubbleCapBlock::new)
         .initialProperties(SharedProperties::copperMetal)
@@ -72,6 +83,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .color(MaterialColor.COLOR_GRAY)
             .noOcclusion()
+            .sound(DestroySoundTypes.COOLER)
         ).transform(TagGen.pickaxeOnly())
         .item()
         .transform(customItemModel())
@@ -146,16 +158,6 @@ public class DestroyBlocks {
         
         ).item()
         .build()
-        .register();
-
-    public static final BlockEntry<AgingBarrelBlock> AGING_BARREL = REGISTRATE.block("aging_barrel", AgingBarrelBlock::new)
-        .initialProperties(SharedProperties::stone)
-        .properties(p -> p
-            .color(MaterialColor.COLOR_BROWN)
-            .noOcclusion()
-        ).transform(TagGen.axeOnly())
-        .item()
-        .transform(customItemModel())
         .register();
 
     public static final BlockEntry<UrineCauldronBlock> URINE_CAULDRON = REGISTRATE.block("urine_cauldron", p -> new UrineCauldronBlock(p, DestroyCauldronInteractions.URINE))

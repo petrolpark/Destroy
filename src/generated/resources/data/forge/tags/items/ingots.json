@@ -1,0 +1,10 @@
+{
+  "values": [
+    "destroy:nickel_ingot",
+    "destroy:palladium_ingot",
+    "destroy:platinum_ingot",
+    "destroy:rhodium_ingot",
+    "destroy:pure_gold_ingot",
+    "destroy:zirconium_ingot"
+  ]
+}

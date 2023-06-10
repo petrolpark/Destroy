@@ -11,6 +11,7 @@ import com.petrolpark.destroy.block.entity.behaviour.ChargingBehaviour.ChargingB
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.recipe.ChargingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
+import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
@@ -20,6 +21,7 @@ import com.simibubi.create.foundation.recipe.RecipeApplier;
 import com.simibubi.create.foundation.utility.VecHelper;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -41,8 +43,11 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
     public ChargingBehaviour chargingBehaviour;
     protected DestroyAdvancementBehaviour advancementBehaviour;
 
+    private int soundDuration;
+
     public DynamoBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
+        soundDuration = 0;
     };
 
     @Override
@@ -57,6 +62,29 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
 
     public void onItemCharged(ItemStack stack) {
         advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.CHARGE_WITH_DYNAMO);
+    };
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (soundDuration > 0) {
+            soundDuration--;
+        } else if (isRunning()) {
+            DestroySoundEvents.DYNAMO_CRACKLE.playOnServer(level, getBlockPos());
+            soundDuration = 80;
+        };
+    };
+
+    @Override
+    protected void read(CompoundTag compound, boolean clientPacket) {
+        super.read(compound, clientPacket);
+        soundDuration = compound.getInt("SoundDuration");
+    };
+
+    @Override
+    protected void write(CompoundTag compound, boolean clientPacket) {
+        super.write(compound, clientPacket);
+        compound.putInt("SoundDuration", soundDuration);
     };
 
     @Override

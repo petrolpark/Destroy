@@ -15,6 +15,7 @@ import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
+import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DistillationTower;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
@@ -151,6 +152,9 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
         super.tick();
         if (ticksToFill > 0) {
             ticksToFill--;
+            if (ticksToFill == 0) {
+                DestroySoundEvents.DISTILLATION_TOWER_CONDENSE.playOnServer(getLevel(), getBlockPos());
+            };
         };
         if (ticksToFill <= 0 && !internalTank.isEmpty()) {
             FluidStack transferredFluid = getInternalTank().drain(TRANSFER_SPEED, FluidAction.EXECUTE);
@@ -170,6 +174,8 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
     };
 
     public void onDistill() {
+        if (!isController) return;
+        DestroySoundEvents.DISTILLATION_TOWER_BOIL.playOnServer(level, getBlockPos());
         advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.DISTILL);
     };
 
