@@ -1,7 +1,0 @@
-{
-  "values": [
-    "minecraft:gunpowder",
-    "#destroy:explosive/primary",
-    "#destroy:explosive/secondary"
-  ]
-}

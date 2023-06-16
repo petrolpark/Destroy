@@ -156,7 +156,7 @@ public class DestroyJEI implements IModPlugin {
 
     @Override
 	public void registerRecipes(IRecipeRegistration registration) {
-        //MOLECULES_INPUT.clear();
+        //MOLECULES_INPUT.clear(); //TODO fix because currently all recipes involving mixtrures get re-registered every time the world is loaded
         //MOLECULES_OUTPUT.clear();
         DestroyMysteriousItemConversions.register();
         allCategories.forEach(c -> c.registerRecipes(registration));

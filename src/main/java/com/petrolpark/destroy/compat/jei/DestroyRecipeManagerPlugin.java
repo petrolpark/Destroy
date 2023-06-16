@@ -3,7 +3,6 @@ package com.petrolpark.destroy.compat.jei;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.compat.jei.category.ReactionCategory;
 import com.petrolpark.destroy.fluid.DestroyFluids;
@@ -70,7 +69,6 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
                     
                     // Add non-Reaction Recipes
                     List<Recipe<?>> recipeUses = DestroyJEI.MOLECULES_INPUT.get(molecule); // Recipes in which a Mixture containing this Molecule is required
-                    if (recipeUses != null) Destroy.LOGGER.info("There are "+recipeUses.size()+" for this");
                     if (recipeUses != null) {
                         recipes.addAll(recipeUses.stream()
                             .filter(recipe -> recipe.getClass().equals(DestroyJEI.RECIPE_TYPES.get(recipeCategory.getRecipeType()))) // Check for Recipes that match this category
@@ -78,6 +76,7 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
                             .toList()
                         );
                     };
+                    break;
                 }
                 case OUTPUT: {
                     // Add Reaction Recipes
@@ -90,13 +89,14 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
                         .map(recipe -> (T) recipe) // Cast these Recipes (unchecked conversion, but should be okay as we just checked the class)
                         .toList()
                     );
+                    break;
                 }
                 case CATALYST: {
-                    
+                    break;
                 }
                 case RENDER_ONLY: {
-
-                };
+                    break;
+                }
             };
         };
         return recipes;

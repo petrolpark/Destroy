@@ -68,7 +68,7 @@ public class Molecule implements INameableProduct {
     /**
      * The {@link ReadOnlyMixture#temperature temperature} (in Kelvins) at which this Molecule forms a gas.
      */
-    private int boilingPoint;
+    private float boilingPoint;
     /**
      * The polarity of this Molecule, used to determine its solubility with other Molecules.
      */
@@ -222,13 +222,13 @@ public class Molecule implements INameableProduct {
      * Get the 'concentration' (molar density) of this Molecule when it is the only Molecule in a solution.
      */
     public float getPureConcentration() {
-        return getMass() / getDensity();
+        return 1000 * getMass() / getDensity();
     };
 
     /**
      * The {@link ReadOnlyMixture#temperature temperature} (in Kelvins) at which this Molecule forms a gas.
      */
-    public int getBoilingPoint() {
+    public float getBoilingPoint() {
         return boilingPoint;
     };
 
@@ -528,7 +528,7 @@ public class Molecule implements INameableProduct {
          * @param boilingPoint In degrees Celcius
          * @return This Molecule Builder
          */
-        public MoleculeBuilder boilingPoint(int boilingPoint) {
+        public MoleculeBuilder boilingPoint(float boilingPoint) {
             return boilingPointInKelvins(boilingPoint + 273);
         };
 
@@ -538,7 +538,7 @@ public class Molecule implements INameableProduct {
          * @param boilingPoint In Kelvins
          * @return This Molecule Builder
          */
-        public MoleculeBuilder boilingPointInKelvins(int boilingPoint) {
+        public MoleculeBuilder boilingPointInKelvins(float boilingPoint) {
             molecule.boilingPoint = boilingPoint;
             hasForcedBoilingPoint = true;
             return this;
@@ -646,7 +646,7 @@ public class Molecule implements INameableProduct {
             return total;
         };
 
-        private int calculateBoilingPoint() {
+        private float calculateBoilingPoint() {
             //TODO calculate Boiling Point
             return 0;
         };

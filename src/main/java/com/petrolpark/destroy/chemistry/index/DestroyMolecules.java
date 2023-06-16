@@ -242,8 +242,19 @@ public final class DestroyMolecules {
     GLYCEROL = builder()
         .id("glycerol")
         .structure(Formula.deserialize("destroy:linear:C(O)C(O)CO"))
-        .build()
-        ,
+        .build(),
+
+    HYDROCHLORIC_ACID = builder()
+        .id("hydrochloric_acid")
+        .structure(Formula.deserialize("destroy:linear:ClH+-5.9"))
+        .build(), // TODO physiucal properties
+
+    HYDROFLUORIC_ACID = builder()
+        .id("hydrofluoric_acid")
+        .structure(Formula.deserialize("destroy:linear:FH+3.17"))
+        .density(1.15f)
+        .boilingPoint(19.5f)
+        .build(),
 
     HYDROXIDE = builder()
         .id("hydroxide")
@@ -288,6 +299,11 @@ public final class DestroyMolecules {
         .id("tnt")
         .structure(Formula.atom(Element.CARBON)) //TODO actual structure
         .charge(1)
+        .build(),
+
+    TETRACHLOROETHENE = builder()
+        .id("tetrachloroethene")
+        .structure(Formula.deserialize("destroy:linear:FC=(F)C(F)F"))
         .build(),
 
     WATER = builder()

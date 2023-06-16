@@ -12,7 +12,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.client.gui.stackedTextBox.AbstractStackedTextBox;
 import com.petrolpark.destroy.client.gui.stackedTextBox.StackedTextBox;
-import com.petrolpark.destroy.client.gui.stackedTextBox.StackedTextBox.Area;
+import com.petrolpark.destroy.client.gui.stackedTextBox.AbstractStackedTextBox.Area;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.recipe.ReactionRecipe;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -25,7 +25,6 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 
 public class ReactionCategory extends DestroyRecipeCategory<ReactionRecipe> implements ITickableCategory {
 
@@ -76,7 +75,7 @@ public class ReactionCategory extends DestroyRecipeCategory<ReactionRecipe> impl
                 if (pair.getFirst().isIn((int)mouseX, (int)mouseY)) {
                     textBoxStack = new StackedTextBox(minecraft, (int)mouseX, (int)mouseY, AbstractStackedTextBox.NOTHING)
                         .withActivationArea(pair.getFirst())
-                        .withLines(Component.literal("I am henry i am henry i am henry"));
+                        .withText("I am henry {pee, destroy:bond}");
                     break;
                 };
             };

@@ -1,8 +1,14 @@
 package com.petrolpark.destroy.util.vat;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableList;
 import com.petrolpark.destroy.Destroy;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.utility.Pair;
@@ -23,9 +29,11 @@ public class Vat {
     private BlockPos lowerCorner;
     private BlockPos upperCorner;
 
+    private ImmutableList<BlockPos> sides; // NOT synced server/client
+
     public Vat(BlockPos lowerCorner, BlockPos upperCorner) {
         this.lowerCorner = lowerCorner;
-        this.upperCorner = upperCorner;  
+        this.upperCorner = upperCorner;
     };
 
     /**
@@ -125,7 +133,7 @@ public class Vat {
         BlockPos lowerCorner = new BlockPos(westSide, bottomSide, northSide);
         BlockPos upperCorner = new BlockPos(eastSide, topSide, southSide);
 
-        Destroy.LOGGER.info("Checking between "+lowerCorner.toString()+" and "+upperCorner.toString());
+        List<BlockPos> sides = new ArrayList<>();
 
         for (BlockPos blockPos : BlockPos.betweenClosed(lowerCorner, upperCorner)) {
             int x = blockPos.getX();
@@ -153,6 +161,7 @@ public class Vat {
                     successful = false;
                     break;
                 };
+                sides.add(blockPos);
             };
         };
 
@@ -160,6 +169,7 @@ public class Vat {
 
         if (successful) {
             Vat vat = new Vat(lowerCorner, upperCorner);
+            vat.sides = ImmutableList.copyOf(sides);
             return Optional.of(vat);
         } else {
             return Optional.empty();
@@ -191,6 +201,29 @@ public class Vat {
 
     public int getInternalHeight() {
         return upperCorner.getY() - getInternalLowerCorner().getY();
+    };
+
+    @Nullable
+    public Collection<BlockPos> getSideBlockPositions() {
+        if (this.sides == null) {
+            List<BlockPos> newSides = new ArrayList<>();
+            for (BlockPos blockPos : BlockPos.betweenClosed(lowerCorner, upperCorner)) {
+                int x = blockPos.getX();
+                int y = blockPos.getY();
+                int z = blockPos.getZ();
+                // Check all blocks which form a face of the Vat, but aren't an edge or corner
+    
+                boolean onXSide = (x == lowerCorner.getX() || x == upperCorner.getX());
+                boolean onYSide = (y == lowerCorner.getY() || x == upperCorner.getY());
+                boolean onZSide = (z == lowerCorner.getZ() || x == upperCorner.getZ());
+
+                if (((onXSide ^ onYSide) ^ onZSide) && !(onXSide && onYSide)) {
+                    newSides.add(blockPos);
+                };
+            };
+            sides = ImmutableList.copyOf(newSides);
+        };
+        return sides;
     };
 
     @OnlyIn(Dist.CLIENT)

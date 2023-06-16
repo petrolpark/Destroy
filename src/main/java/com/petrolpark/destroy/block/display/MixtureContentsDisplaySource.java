@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import com.mongodb.lang.Nullable;
+import javax.annotation.Nullable;
+
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;

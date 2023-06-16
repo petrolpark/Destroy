@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.block.entity;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -158,9 +159,16 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         if (!newVat.isPresent()) return;
 
         // Once the Vat has been successfully created
+        Collection<BlockPos> sides = newVat.get().getSideBlockPositions();
+        if (sides == null) return;
+        sides.forEach(pos -> {
+            getLevel().setBlockEntity(new VatSideBlockEntity(DestroyBlockEntityTypes.VAT_SIDE.get(), pos, getLevel().getBlockState(pos)));
+        });
+
+
         vat = Optional.of(newVat.get());
         tankBehaviour.allowExtraction(); // Enable extraction from the Vat now it actually exists
-        
+
     };
 
     @Override
@@ -170,7 +178,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     };
 
     public void deleteVat() {
-
+        //TODO handle leftover fluid
     };
 
     // Nullable, just not annotated so VSC stops giving me ugly yellow lines

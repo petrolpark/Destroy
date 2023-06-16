@@ -42,6 +42,7 @@ public class DestroyLang {
      * @param tooltip
      * @param tank
      */
+    //TODO redo
     public static void tankContentsTooltip(List<Component> tooltip, LangBuilder tankName, FluidTank tank) {
         if (tank.isEmpty()) return;
         Component indent = Component.literal(IHaveGoggleInformation.spacing);

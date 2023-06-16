@@ -8,9 +8,8 @@ import javax.annotation.Nonnull;
 
 import com.google.common.base.Strings;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 import com.simibubi.create.foundation.utility.Components;
+import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -21,10 +20,13 @@ public class StackedTextBox extends AbstractStackedTextBox {
 
     private static final int PERMANENCE_LIFETIME = 20;
 
-    private final Minecraft minecraft;
-
     private Area activationArea;
     private boolean isActivationAreaHovered;
+
+    /**
+     * A list of Activation Areas and the translation keys of the definitions they will show
+     */
+    private List<Pair<Area, String>> possibleChildActivationAreas;
 
     private int lifetime;
 
@@ -32,8 +34,14 @@ public class StackedTextBox extends AbstractStackedTextBox {
 
     public StackedTextBox(Minecraft minecraft, int x, int y, AbstractStackedTextBox parent) {
         super(x, y, parent, AbstractStackedTextBox.NOTHING);
+
         this.minecraft = minecraft;
+
         activationArea = new Area(x, y, width, height);
+        isActivationAreaHovered = true; // Should always be true when first opened, but this is set just in case
+
+        possibleChildActivationAreas = List.of();
+
         lifetime = 0;
         lines = new ArrayList<>();
     };
@@ -43,20 +51,14 @@ public class StackedTextBox extends AbstractStackedTextBox {
         return this;
     };
 
-    public StackedTextBox withLines(Component text) {
-        this.lines.clear();
-        this.lines.addAll(TooltipHelper.cutTextComponent(text, Palette.GRAY));
+    public StackedTextBox withText(String text) {
+        LinesAndActivationAreas result = getTextAndActivationAreas(text, x, y, 200, minecraft.font);
 
-        // Determine the height and width of this info box
-        int width = 0;
-        int height = 11 + minecraft.font.lineHeight;
-        for (Component line : lines) {
-            width = Math.max(width, minecraft.font.width(line));
-            height += minecraft.font.lineHeight;
-        };
-        // Set the height and width
-        this.width = width + 5;
-        this.height = height;
+        lines.clear();
+        lines.addAll(result.lines());
+        possibleChildActivationAreas = result.areas();
+        width = result.width();
+        height = result.height();
 
         return this;
     };
@@ -65,6 +67,18 @@ public class StackedTextBox extends AbstractStackedTextBox {
     protected void beforeRender(@Nonnull PoseStack ms, int mouseX, int mouseY, float partialTicks) {
         super.beforeRender(ms, mouseX, mouseY, partialTicks);
         isActivationAreaHovered = activationArea.isIn(mouseX, mouseY);
+
+        // If there is a potential child to render
+        if (child == AbstractStackedTextBox.NOTHING && lifetime >= PERMANENCE_LIFETIME) {
+            for (Pair<Area, String> pair : possibleChildActivationAreas) {
+                Area area = pair.getFirst();
+                if (area.isIn(mouseX, mouseY)) {
+                    child = new StackedTextBox(minecraft, mouseX, mouseY + 5, this)
+                        .withActivationArea(area)
+                        .withText(Component.translatable(pair.getSecond()).getString());
+                };
+            };
+        };
     };
 
     @Override
@@ -136,23 +150,5 @@ public class StackedTextBox extends AbstractStackedTextBox {
         bars += ChatFormatting.GRAY + Strings.repeat("|", current);
         bars += ChatFormatting.DARK_GRAY + Strings.repeat("|", total - current);
         return Components.literal(bars);
-    };
-
-    public static class Area {
-        private int minX;
-        private int maxX;
-        private int minY;
-        private int maxY;
-
-        public Area(int x, int y, int width, int height) {
-            minX = x;
-            minY = y;
-            maxX = x + width;
-            maxY = y + height;
-        };
-
-        public boolean isIn(int x, int y) {
-            return (x >= minX && x <= maxX && y >= minY && y <= maxY);
-        };
     };
 };

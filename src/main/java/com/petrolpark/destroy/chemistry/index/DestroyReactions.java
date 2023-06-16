@@ -5,27 +5,42 @@ import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
 
 public class DestroyReactions {
 
-    public static final Reaction ACETIC_ANHYDRIDE_HYDROLYSIS = builder()
+    public static final Reaction
+    
+    ACETIC_ANHYDRIDE_HYDROLYSIS = builder()
         .addReactant(DestroyMolecules.ACETIC_ANHYDRIDE)
         .addReactant(DestroyMolecules.WATER)
         .addProduct(DestroyMolecules.ACETIC_ACID, 2)
-        .build();
+        .build(),
 
-    public static final Reaction METHYL_ACETATE_CARBONYLATION = builder()
+    CHLORODIFLUOROMETHANE_PYROLYSIS = builder()
+        .addReactant(DestroyMolecules.CHLORODIFLUOROMETHANE, 2)
+        .addProduct(DestroyMolecules.HYDROFLUORIC_ACID, 2)
+        .addProduct(DestroyMolecules.TETRACHLOROETHENE)
+        .build(),
+
+    CHLOROFORM_FLUORINATION = builder()
+        .addReactant(DestroyMolecules.CHLOROFORM)
+        .addReactant(DestroyMolecules.HYDROFLUORIC_ACID, 2)
+        .addProduct(DestroyMolecules.CHLORODIFLUOROMETHANE)
+        .addProduct(DestroyMolecules.HYDROCHLORIC_ACID, 2)
+        .build(),
+
+    METHYL_ACETATE_CARBONYLATION = builder()
         .translationKey("methyl_acetate_carbonylation")
         .addReactant(DestroyMolecules.METHANOL)
         .addReactant(DestroyMolecules.CARBON_MONOXIDE)
         .addProduct(DestroyMolecules.ACETIC_ACID)
-        .build();
+        .build(),
 
-    public static final Reaction METHYL_ACETATE_ACID_HYDROLYSIS = builder()
+    METHYL_ACETATE_ACID_HYDROLYSIS = builder()
         .addReactant(DestroyMolecules.METHYL_ACETATE)
         .addReactant(DestroyMolecules.WATER)
         .addProduct(DestroyMolecules.METHANOL)
         .addProduct(DestroyMolecules.ACETIC_ACID)
-        .build();
+        .build(),
 
-    public static final Reaction HYDROXIDE_NEUTRALIZATION = builder()
+    HYDROXIDE_NEUTRALIZATION = builder()
         .translationKey("hydroxide_neutralization")
         .addReactant(DestroyMolecules.HYDROXIDE)
         .addReactant(DestroyMolecules.PROTON)
