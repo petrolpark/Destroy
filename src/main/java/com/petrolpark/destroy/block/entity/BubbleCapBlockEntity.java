@@ -65,6 +65,8 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
     protected DestroyAdvancementBehaviour advancementBehaviour;
     protected PollutingBehaviour pollutingBehaviour;
 
+    private int initializationTicks;
+
     public BubbleCapBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
         pipeFace = state.getValue(BubbleCapBlock.PIPE_FACE);
@@ -73,6 +75,7 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
         towerControllerPos = pos; // Temporary assignment
         ticksToFill = 0;
         particleFluid = FluidStack.EMPTY;
+        initializationTicks = 3;
     };
 
     @Override
@@ -130,6 +133,7 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
 
         ticksToFill = compound.getInt("TicksToFill");
         pipeFace = getBlockState().getValue(BubbleCapBlock.PIPE_FACE);
+        initializationTicks = compound.getInt("InitializationTicks");
     };
 
     @Override
@@ -144,12 +148,14 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
         if (clientPacket) {
             compound.put("ParticleFluid", particleFluid.writeToNBT(new CompoundTag()));
         };
+        compound.putInt("InitializationTicks", initializationTicks);
     };
 
     @Override
     @SuppressWarnings("null")
     public void tick() {
         super.tick();
+        if (initializationTicks > 0) initializationTicks--;
         if (ticksToFill > 0) {
             ticksToFill--;
             if (ticksToFill == 0) {
@@ -314,42 +320,36 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        try { // There's one tick after placing before the Distillation Tower is loaded
-            DistillationTower clientTower = getDistillationTower();
-            if (isController) {
-                DestroyLang.translate("tooltip.bubble_cap.input_tank")
-                    .style(ChatFormatting.WHITE)
-                    .forGoggles(tooltip);
-            } else {
-                DestroyLang.builder()
-                    .add(Component.translatable("block.destroy.bubble_cap"))
-                    .style(ChatFormatting.WHITE)
-                    .space()
-                    .add(Component.literal(""+fraction+"/"+(clientTower.getHeight() - 1)))
-                    .forGoggles(tooltip);
-            };
-            SmartFluidTank inputTank = clientTower.getControllerBubbleCap().getTank();
-            boolean hasInputFluid = !inputTank.isEmpty();
-            boolean hasOutputFluid = !getTank().isEmpty();
-            if (hasInputFluid || hasOutputFluid) {
-                DestroyLang.translate("tooltip.fluidcontraption.contents")
-                    .style(ChatFormatting.GRAY)
-                    .forGoggles(tooltip);
-                if (hasInputFluid) { // If the bottom Bubble Cap contains Fluid
-                    DestroyLang.tankContentsTooltip(tooltip, DestroyLang.translate("tooltip.bubble_cap.input_tank"), inputTank);
-                };
-                if (hasOutputFluid && !isController) { // If this contains Fluid and it's not the bottom
-                    DestroyLang.tankContentsTooltip(tooltip, DestroyLang.translate("tooltip.bubble_cap.output_tank"), getTank());
-                };
-            };
-            return true;
-        } catch(Exception e) {
-            if (e instanceof NullPointerException) { // Error caused by it being unable to find the Tower
-                return false;
-            } else {
-                throw e;
-            }
-        }
+        if (initializationTicks > 0) return false;
+        DistillationTower clientTower = getDistillationTower();
+        if (clientTower == null) return false;
+
+        // Label this Bubble Cap
+        if (isController) {
+            DestroyLang.translate("tooltip.bubble_cap.input_tank")
+                .style(ChatFormatting.WHITE)
+                .forGoggles(tooltip);
+        } else {
+            DestroyLang.builder()
+                .add(Component.translatable("block.destroy.bubble_cap"))
+                .style(ChatFormatting.WHITE)
+                .space()
+                .add(Component.literal(""+fraction+"/"+(clientTower.getHeight() - 1)))
+                .forGoggles(tooltip);
+        };
+
+        SmartFluidTank inputTank = clientTower.getControllerBubbleCap().getTank();
+
+        // Add Fluid info header
+        DestroyLang.fluidContainerInfoHeader(tooltip);
+
+        // Add contents 
+        if (!isController) {
+            DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.bubble_cap.output_tank"), getTank());
+        };
+        DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.bubble_cap.input_tank"), inputTank);
+
+        return true;
     };
 
     public static MixtureContentsDisplaySource BUBBLE_CAP_DISPLAY_SOURCE = new MixtureContentsDisplaySource() {

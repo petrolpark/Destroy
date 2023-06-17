@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.VatControllerBlock;
 import com.petrolpark.destroy.block.entity.behaviour.WhenTargetedBehaviour;
 import com.petrolpark.destroy.chemistry.Mixture;
@@ -19,9 +20,9 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
+import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Pair;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -161,8 +162,12 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         // Once the Vat has been successfully created
         Collection<BlockPos> sides = newVat.get().getSideBlockPositions();
         sides.forEach(pos -> {
-            getLevel().setBlockEntity(DestroyBlockEntityTypes.VAT_SIDE.create(pos, getLevel().getBlockState(pos)));
-            getLevel().blockUpdated(pos, level.getBlockState(pos).getBlock());
+            BlockState oldState = getLevel().getBlockState(pos);
+            getLevel().setBlockAndUpdate(pos, DestroyBlocks.VAT_SIDE.getDefaultState());
+            getLevel().getBlockEntity(pos, DestroyBlockEntityTypes.VAT_SIDE.get()).ifPresent(vatSide -> {
+                vatSide.setMaterial(oldState);
+                vatSide.controllerPosition = getBlockPos();
+            });
         });
 
         vat = Optional.of(newVat.get());
@@ -175,6 +180,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     @Override
     public void destroy() {
         deleteVat();
+        // TODO replace all Vat Sides with original Blocks
         super.destroy();
     };
 
@@ -240,15 +246,9 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         if (getVat().isPresent()) {
 
         } else if (initializationTicks == 0) {
-            DestroyLang.translate("tooltip.vat.not_initialized_1")
-                .style(ChatFormatting.RED)
-                .forGoggles(tooltip);
-            DestroyLang.translate("tooltip.vat.not_initialized_2")
-                .style(ChatFormatting.RED)
-                .forGoggles(tooltip);
-            DestroyLang.translate("tooltip.vat.not_initialized_3")
-                .style(ChatFormatting.RED)
-                .forGoggles(tooltip);
+            TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.vat.not_initialized").string(), TooltipHelper.Palette.RED).forEach(component -> {
+                DestroyLang.builder().add(component.copy()).forGoggles(tooltip);
+            });
         };
         return true;
     };

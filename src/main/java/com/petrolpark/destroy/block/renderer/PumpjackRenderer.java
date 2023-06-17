@@ -60,7 +60,7 @@ public class PumpjackRenderer extends SafeBlockEntityRenderer<PumpjackBlockEntit
         transformed(DestroyPartials.PUMPJACK_BEAM, blockState, facing)
             .translate(0d, 1d, 0d)
             .centre()
-            .rotateX((Mth.sin(angle) - 1) * -18d)
+            .rotateX((Mth.sin(angle) - 1) * -20d)
             .centre()
             .translate(0d, -1d, 0d)
             .unCentre()

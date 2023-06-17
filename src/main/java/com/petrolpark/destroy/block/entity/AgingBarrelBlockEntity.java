@@ -222,19 +222,13 @@ public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGog
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        containedFluidTooltip(tooltip, isPlayerSneaking, fluidCapability);
         if (timer != -1) {
-            DestroyLang.translate("tooltip.fluidcontraption.contents")
-                .style(ChatFormatting.GRAY)
+            DestroyLang.translate("tooltip.aging_barrel.progress", (int)((1 - (timer/(float)totalTime)) * 100) + "%")
+                .style(ChatFormatting.WHITE)
                 .forGoggles(tooltip);
-            DestroyLang.tankContentsTooltip(tooltip, DestroyLang.translate("tooltip.aging_barrel.aging_tank"), getTank());
-            DestroyLang.translate("tooltip.aging_barrel.progress")
-                .style(ChatFormatting.GRAY)
-                .space()
-                .add(Component.literal((int)((1 - (timer/(float)totalTime)) * 100)+"%"))
-                .forGoggles(tooltip);
-            return true;
         };
-        return false;
+        return true;
     };
 
     public SmartFluidTank getTank(){

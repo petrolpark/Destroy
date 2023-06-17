@@ -6,7 +6,7 @@ import java.util.List;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.LangBuilder;
 import com.simibubi.create.foundation.utility.LangNumberFormat;
@@ -36,32 +36,40 @@ public class DestroyLang {
         return translate("generic.direction."+Lang.asId(direction.name())+"");
     };
 
-    /**
-     * Adds information about a Tank to the given tooltip.
-     * @param tankName What should be displayed before the contents of the Tank (e.g. '[tankName]: 1000mB of Water')
-     * @param tooltip
-     * @param tank
-     */
-    //TODO redo
-    public static void tankContentsTooltip(List<Component> tooltip, LangBuilder tankName, FluidTank tank) {
-        if (tank.isEmpty()) return;
-        Component indent = Component.literal(IHaveGoggleInformation.spacing);
-        Lang.builder()
-            .add(indent.plainCopy())
-            .add(tankName
-                .add(Component.literal(":"))
-                .style(ChatFormatting.DARK_GRAY))
-            .space()
-            .add(Lang.number(tank.getFluidAmount())
-                .add(Lang.translate("generic.unit.millibuckets"))
-                .style(ChatFormatting.GOLD)
-            ).space()
-            .add(DestroyLang.translate("tooltip.fluidcontraption.of")
-                .style(ChatFormatting.DARK_GRAY)
-            ).space()
-            .add(Lang.fluidName(tank.getFluid()))
-            .style(ChatFormatting.GRAY)
+    public static void fluidContainerInfoHeader(List<Component> tooltip) {
+        Lang.translate("gui.goggles.fluid_container")
             .forGoggles(tooltip);
+    };
+
+    public static void tankInfoTooltip(List<Component> tooltip, LangBuilder tankName, FluidTank tank) {
+        LangBuilder mb = Lang.translate("generic.unit.millibuckets");
+
+        tankName
+            .style(ChatFormatting.GRAY)
+            .forGoggles(tooltip, 1);
+
+        if (tank.isEmpty()) {
+            Lang.translate("gui.goggles.fluid_container.capacity")
+			.add(Lang.number(tank.getCapacity())
+				.add(mb)
+				.style(ChatFormatting.GOLD))
+			.style(ChatFormatting.GRAY)
+			.forGoggles(tooltip, 2);
+        } else {
+            Lang.fluidName(tank.getFluid())
+            .style(ChatFormatting.GRAY)
+            .forGoggles(tooltip, 2);
+
+            Lang.builder()
+                .add(Lang.number(tank.getFluid().getAmount())
+                    .add(mb)
+                    .style(ChatFormatting.GOLD))
+                .text(ChatFormatting.GRAY, " / ")
+                .add(Lang.number(tank.getCapacity())
+                    .add(mb)
+                    .style(ChatFormatting.DARK_GRAY))
+                .forGoggles(tooltip, 2);
+        };
     };
 
     /**
@@ -109,17 +117,8 @@ public class DestroyLang {
         Molecule molecule = Molecule.getMolecule(moleculeID);
         Component moleculeName = molecule == null ? DestroyLang.translate("tooltip.unknown_molecule").component() : molecule.getName(DestroyAllConfigs.CLIENT.chemistry.iupacNames.get());
 
-        tooltip.add(DestroyLang.translate("tooltip.mixture_ingredient_1").style(ChatFormatting.GRAY)
-            .space()
-            .add(moleculeName.plainCopy().withStyle(ChatFormatting.WHITE))
-            .space()
-            .add(DestroyLang.translate("tooltip.mixture_ingredient_2").style(ChatFormatting.GRAY))
-            .space()
-            .add(Component.literal(Float.toString(concentration) + "M").withStyle(ChatFormatting.WHITE))
-            .add(Component.literal(".").withStyle(ChatFormatting.GRAY))
-            .component()
-        );
-        tooltip.add(DestroyLang.translate("tooltip.mixture_ingredient_3").component().withStyle(ChatFormatting.GRAY));
+        tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient", moleculeName.getString(), Float.toString(concentration) + "M").string(), TooltipHelper.Palette.GRAY_AND_WHITE));
+
         return tooltip;
     };
 }

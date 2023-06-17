@@ -29,7 +29,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
@@ -261,14 +260,15 @@ public class CoolerBlockEntity extends SmartBlockEntity implements IHaveGoggleIn
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         if (coolingTicks <= 0) return false;
-        final MutableComponent timeRemaining;
+        final String timeRemaining;
         int seconds = (coolingTicks % 1200) / 20;
         if (coolingTicks < 72000) {
-            timeRemaining = Component.literal("" + coolingTicks / 1200 + ":" + (seconds < 10 ? "0" : "") + seconds);
+            timeRemaining = "" + coolingTicks / 1200 + ":" + (seconds < 10 ? "0" : "") + seconds;
         } else {
-            timeRemaining = DestroyLang.translate("tooltip.cooler.long_time_remaining").component();
+            timeRemaining = DestroyLang.translate("tooltip.cooler.long_time_remaining").string();
         };
-        DestroyLang.translate("tooltip.cooler.time_remaining").space().add(timeRemaining).forGoggles(tooltip);
+        DestroyLang.translate("tooltip.cooler.time_remaining", timeRemaining)
+            .forGoggles(tooltip);
         return true;
     };
     

@@ -34,7 +34,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     private LazyOptional<IFluidHandler> fluidCapability;
 
     private Direction direction; // The outward direction this side is facing
-    private BlockPos controllerPosition;
+    public BlockPos controllerPosition;
 
     public VatSideBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);

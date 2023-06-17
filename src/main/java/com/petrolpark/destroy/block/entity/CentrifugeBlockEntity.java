@@ -265,32 +265,19 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IFluidB
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
 
-        //"Lubrication: <level>"
         if (MAX_LUBRICATION_LEVEL != 0) {
             DestroyLang.translate("tooltip.centrifuge.lubrication")
-                .style(ChatFormatting.GRAY)
+                .style(ChatFormatting.WHITE)
                 .space()
                 .add(DestroyLang.barMeterComponent(lubricationLevel, MAX_LUBRICATION_LEVEL, Math.min(MAX_LUBRICATION_LEVEL, 20)))
                 .forGoggles(tooltip);
         };
-        //"Contents: "
-        if (!(inputTank.isEmpty() && denseOutputTank.isEmpty() && lightOutputTank.isEmpty())) {
-            DestroyLang.translate("tooltip.fluidcontraption.contents")
-                .style(ChatFormatting.GRAY)
-                .forGoggles(tooltip);
-            //"Unprocessed: <fluid>"
-            if (!inputTank.isEmpty()) {
-                DestroyLang.tankContentsTooltip(tooltip, DestroyLang.translate("tooltip.centrifuge.input_tank"), getInputTank());
-            };
-            //"Dense Product: <fluid>"
-            if (!denseOutputTank.isEmpty()) {
-                DestroyLang.tankContentsTooltip(tooltip, DestroyLang.translate("tooltip.centrifuge.dense_output_tank"), getDenseOutputTank());
-            };
-            //"Light Product: <fluid>"
-            if (!lightOutputTank.isEmpty()) {
-                DestroyLang.tankContentsTooltip(tooltip, DestroyLang.translate("tooltip.centrifuge.light_output_tank"), getLightOutputTank());
-            };
-        };
+
+        DestroyLang.fluidContainerInfoHeader(tooltip);
+        DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.centrifuge.input_tank"), getInputTank());
+        DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.centrifuge.dense_output_tank"), getDenseOutputTank());
+        DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.centrifuge.light_output_tank"), getLightOutputTank());
+        
         return true;
     };
 
