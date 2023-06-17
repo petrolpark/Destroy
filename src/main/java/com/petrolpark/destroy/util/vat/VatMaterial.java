@@ -28,7 +28,7 @@ public record VatMaterial(float maxPressure, boolean transparent, boolean corrod
      * @param block
      */
     public static boolean isValid(Block block) {
-        return block == DestroyBlocks.VAT_SIDE.get() || BLOCK_MATERIALS.keySet().stream().anyMatch(sup -> block == sup.get());
+        return BLOCK_MATERIALS.keySet().stream().anyMatch(sup -> block == sup.get());
     };
 
     public static void registerDestroyVatMaterials() {

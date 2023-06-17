@@ -28,6 +28,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -47,6 +48,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     protected WhenTargetedBehaviour targetedBehaviour;
 
     protected int initializationTicks;
+    protected boolean underDeconstruction; // Whether this Vat is already in the process of being deleted
 
     public VatControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -85,7 +87,10 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         full = tag.getBoolean("Full");
         if (tag.contains("VatLowerCorner") && tag.contains("VatUpperCorner")) {
             vat = Optional.of(new Vat(NbtUtils.readBlockPos(tag.getCompound("VatLowerCorner")), NbtUtils.readBlockPos(tag.getCompound("VatUpperCorner"))));
+        } else {
+            vat = Optional.empty();
         };
+        underDeconstruction = tag.getBoolean("UnderDeconstruction");
     };
 
     @Override
@@ -96,6 +101,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             tag.put("VatLowerCorner", NbtUtils.writeBlockPos(vat.get().getLowerCorner()));
             tag.put("VatUpperCorner", NbtUtils.writeBlockPos(vat.get().getUpperCorner()));
         };
+        tag.putBoolean("UnderDeconstruction", underDeconstruction);
     };
 
     /**
@@ -151,22 +157,26 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
      * Try to make a {@link com.petrolpark.destroy.util.vat.Vat Vat} attached to this Vat Controller.
      */
     @SuppressWarnings("null")
-    public void tryMakeVat() {
-        if (!hasLevel()) return;
+    public boolean tryMakeVat() {
+        if (!hasLevel()) return false;
 
         // Create the Vat starting with the Block behind the Controller
         BlockPos vatInternalStartPos = new BlockPos(getBlockPos().relative(getLevel().getBlockState(getBlockPos()).getValue(VatControllerBlock.FACING).getOpposite()));
         Optional<Vat> newVat = Vat.tryConstruct(getLevel(), vatInternalStartPos);
-        if (!newVat.isPresent()) return;
+        if (!newVat.isPresent()) return false;
 
         // Once the Vat has been successfully created
         Collection<BlockPos> sides = newVat.get().getSideBlockPositions();
         sides.forEach(pos -> {
             BlockState oldState = getLevel().getBlockState(pos);
+            if (oldState.is(DestroyBlocks.VAT_CONTROLLER.get())) return;
             getLevel().setBlockAndUpdate(pos, DestroyBlocks.VAT_SIDE.getDefaultState());
             getLevel().getBlockEntity(pos, DestroyBlockEntityTypes.VAT_SIDE.get()).ifPresent(vatSide -> {
                 vatSide.setMaterial(oldState);
+                vatSide.setConsumedItem(new ItemStack(oldState.getBlock().asItem()));
                 vatSide.controllerPosition = getBlockPos();
+                vatSide.setChanged();
+                vatSide.sendData();
             });
         });
 
@@ -175,22 +185,36 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
         sendData();
         setChanged();
+
+        return true;
     };
 
     @Override
     public void destroy() {
-        deleteVat();
-        // TODO replace all Vat Sides with original Blocks
+        deleteVat(getBlockPos());
         super.destroy();
     };
 
     @SuppressWarnings("null")
-    public void deleteVat() {
+    public void deleteVat(BlockPos posDestroyed) {
+        if (underDeconstruction) return;
+        underDeconstruction = true;
+
+        tankBehaviour.forbidExtraction();
         if (!vat.isPresent()) return;
         vat.get().getSideBlockPositions().forEach(pos -> {
-            getLevel().removeBlockEntity(pos);
+            getLevel().getBlockEntity(pos, DestroyBlockEntityTypes.VAT_SIDE.get()).ifPresent(vatSide -> {
+                if (pos == posDestroyed) return;
+                BlockState newState = vatSide.getMaterial();
+                getLevel().removeBlock(pos, false);
+                getLevel().setBlockAndUpdate(pos, newState);
+            });
         });
-        //TODO handle leftover fluid
+
+        vat = Optional.empty();
+        underDeconstruction = false;
+        sendData();
+        setChanged();
     };
 
     // Nullable, just not annotated so VSC stops giving me ugly yellow lines

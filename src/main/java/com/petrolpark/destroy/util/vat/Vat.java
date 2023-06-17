@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.google.common.collect.ImmutableList;
-import com.petrolpark.destroy.Destroy;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.utility.Pair;
 
@@ -41,8 +40,6 @@ public class Vat {
      */
     public static Optional<Vat> tryConstruct(Level level, BlockPos pos) {
 
-        Destroy.LOGGER.info("NEW VAT ATTEMPT: "+pos.toString());
-
         boolean successful = true;
 
         EnumMap<Direction, Integer> dimensions = new EnumMap<>(Direction.class) {
@@ -62,12 +59,9 @@ public class Vat {
 
             while (true) {
 
-                Destroy.LOGGER.info("Size in "+direction+" is "+dimensions.get(direction));
-
                 // Don't expand more than a diameter of 5 blocks
                 if (dimensions.get(direction) + dimensions.get(direction.getOpposite()) > 5) {
                     successful = false;
-                    Destroy.LOGGER.info("Could mot make vat because too big");
                     break tryExpandInDirection;
                 };
                 
@@ -92,24 +86,20 @@ public class Vat {
                 boolean allAir = true;
                 boolean allWalls = true;
                 for (BlockPos blockPos : BlockPos.betweenClosed(lowerCorner, upperCorner)) {
-                    Destroy.LOGGER.info("Checling blockpos "+blockPos.toString());
                     BlockState state = level.getBlockState(blockPos);
                     if (state.isAir()) {
                         allWalls = false;
                     } else {
                         allAir = false;
-                        Destroy.LOGGER.info("Reached a non-air block "+state.toString());
                         if (!VatMaterial.isValid(state.getBlock())) allWalls = false;
                     }
                 };
 
                 // If we have reached a boundary where everything is a wall
                 if (allWalls) {
-                    Destroy.LOGGER.info("Reached a wall in direction "+direction.name());
                     continue tryExpandInDirection;
                 // If we have reached an illegal block
                 } else if (!allAir) {
-                    Destroy.LOGGER.info("Could not make vat because theres an ugly block in the way.");
                     successful = false;
                     break tryExpandInDirection;
                 };
@@ -159,11 +149,9 @@ public class Vat {
                     successful = false;
                     break;
                 };
-                sides.add(blockPos);
+                sides.add(new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
             };
         };
-
-        Destroy.LOGGER.info("Could make vat? "+successful);
 
         if (successful) {
             Vat vat = new Vat(lowerCorner, upperCorner);
@@ -215,7 +203,7 @@ public class Vat {
                 boolean onZSide = (z == lowerCorner.getZ() || x == upperCorner.getZ());
 
                 if (((onXSide ^ onYSide) ^ onZSide) && !(onXSide && onYSide)) {
-                    newSides.add(blockPos);
+                    newSides.add(new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
                 };
             };
             sides = ImmutableList.copyOf(newSides);

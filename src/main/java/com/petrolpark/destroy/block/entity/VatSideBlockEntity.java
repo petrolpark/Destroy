@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.capability.block.VatTankCapability;
 import com.petrolpark.destroy.util.vat.Vat;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
@@ -59,6 +60,13 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         //TODO check fluids can fit in the Vat
     };
 
+    @Override
+    public void destroy() {
+        super.destroy();
+        VatControllerBlockEntity vatController = getController();
+        if (vatController != null && !vatController.underDeconstruction) vatController.deleteVat(getBlockPos());
+    };
+
     @Nullable
     @SuppressWarnings("null")
     public VatControllerBlockEntity getController() {
@@ -87,19 +95,6 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     };
 
     @Override
-    public void tick() {
-        if (getBlockState().isAir()) {
-            VatControllerBlockEntity vatController = getController();
-            if (vatController == null) {
-                remove();
-                return;
-            };
-            vatController.deleteVat();
-        };
-        super.tick();
-    };
-
-    @Override
     protected void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
         if (tag.contains("Side")) {
@@ -123,6 +118,12 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             return fluidCapability.cast();
         };
         return super.getCapability(cap, side);
+    };
+
+    @Override
+    public void setMaterial(BlockState blockState) {
+        if (blockState.is(DestroyBlocks.VAT_SIDE.get())) return;
+        super.setMaterial(blockState);
     };
 
     @Override

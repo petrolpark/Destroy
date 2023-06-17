@@ -10,7 +10,7 @@
 			"name": "Main",
 			"from": [6, 23, -4],
 			"to": [10, 27, 21],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 25, 8]},
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 25, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 1], "texture": "#2"},
 				"east": {"uv": [2, 0, 1, 6.25], "rotation": 270, "texture": "#2"},
@@ -24,7 +24,7 @@
 			"name": "East Clamp",
 			"from": [10, 23, 18],
 			"to": [12, 27, 28],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 25, 8]},
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 25, 8]},
 			"faces": {
 				"north": {"uv": [3, 3.25, 2, 2.75], "rotation": 90, "texture": "#2"},
 				"east": {"uv": [2, 2.75, 3, 0.5], "rotation": 90, "texture": "#2"},
@@ -38,7 +38,7 @@
 			"name": "West Clamp",
 			"from": [4, 23, 18],
 			"to": [6, 27, 28],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 25, 8]},
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 25, 8]},
 			"faces": {
 				"north": {"uv": [2, 2.75, 3, 3.25], "rotation": 90, "texture": "#2"},
 				"east": {"uv": [3.5, 0.5, 4.5, 2.75], "rotation": 90, "texture": "#2"},
@@ -52,7 +52,7 @@
 			"name": "Head Back",
 			"from": [3, 25, -10],
 			"to": [13, 27, -2],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 25, 8]},
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8, 25, 8]},
 			"faces": {
 				"north": {"uv": [4.5, 0, 7, 0.5], "texture": "#2"},
 				"east": {"uv": [7, 0, 9, 0.5], "texture": "#2"},
@@ -66,7 +66,7 @@
 			"name": "Head Slope",
 			"from": [3.1, 17, -8.5],
 			"to": [12.9, 32, -2.5],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 25, 8]},
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 25, 8]},
 			"faces": {
 				"north": {"uv": [10.5, 0, 13, 3.75], "texture": "#2"},
 				"east": {"uv": [9, 0, 10.5, 3.75], "texture": "#2"},
@@ -80,7 +80,7 @@
 			"name": "Head Bottom",
 			"from": [3, 11, -4],
 			"to": [13, 25, -2],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 25, 8]},
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8, 25, 8]},
 			"faces": {
 				"north": {"uv": [10.5, 1, 13, 3.75], "texture": "#2"},
 				"east": {"uv": [7, 0.5, 7.5, 3.25], "texture": "#2"},
@@ -98,6 +98,5 @@
 			"color": 0,
 			"children": [0, 1, 2, 3, 4, 5]
 		}
-	],
-	"render_type": "cutout"
+	]
 }

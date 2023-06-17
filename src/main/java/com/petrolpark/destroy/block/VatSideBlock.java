@@ -5,9 +5,11 @@ import javax.annotation.Nullable;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
+import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntityTicker;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -50,8 +53,35 @@ public class VatSideBlock extends CopycatBlock {
     };
 
     @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        IBE.onRemove(state, level, pos, newState);
+        super.onRemove(state, level, pos, newState, isMoving);
+    };
+
+    @Override
+    public boolean canFaceBeOccluded(BlockState state, Direction face) {
+        return true;
+    };
+
+    @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         return true;
+    };
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir) {
+        return getMaterial(level, pos).getBlock().skipRendering(state, neighborState, dir);
+    };
+
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+        return getMaterial(level, pos).getShadeBrightness(level, pos);
+    };
+  
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
+        return getMaterial(reader, pos).propagatesSkylightDown(reader, pos);
     };
 
     @Override

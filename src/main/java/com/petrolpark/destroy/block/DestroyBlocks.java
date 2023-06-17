@@ -163,11 +163,8 @@ public class DestroyBlocks {
         .register();
 
     public static final BlockEntry<VatSideBlock> VAT_SIDE = REGISTRATE.block("vat_side", VatSideBlock::new)
-        .initialProperties(SharedProperties::softMetal)
         .transform(BuilderTransformers.copycat())
-        .properties(p -> p.color(MaterialColor.GLOW_LICHEN))
         .onRegister(CreateRegistrate.blockModel(() -> CopycatBlockModel::new))
-        .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
         .register();
 
     public static final BlockEntry<UrineCauldronBlock> URINE_CAULDRON = REGISTRATE.block("urine_cauldron", p -> new UrineCauldronBlock(p, DestroyCauldronInteractions.URINE))

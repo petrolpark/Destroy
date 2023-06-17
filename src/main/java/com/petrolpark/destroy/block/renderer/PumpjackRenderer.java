@@ -22,6 +22,8 @@ public class PumpjackRenderer extends SafeBlockEntityRenderer<PumpjackBlockEntit
 
     public PumpjackRenderer(BlockEntityRendererProvider.Context context) {}
 
+    private static final double beamRotation = Math.asin(5 / 17d);
+
     @Override
     protected void renderSafe(PumpjackBlockEntity pumpjack, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
         //if (Backend.canUseInstancing(pumpjack.getLevel())) return; Can't use instancing because it can't render cutout for some reason
@@ -46,10 +48,10 @@ public class PumpjackRenderer extends SafeBlockEntityRenderer<PumpjackBlockEntit
 			.renderInto(ms, vbSolid);
 
         transformed(DestroyPartials.PUMPJACK_LINKAGE, blockState, facing)
-            .translate(0d, -5 / 16d, 1d)
+            .translate(0d, -4.5 / 16d, 1d)
             .translate(0d, Mth.sin(angle) * 5 / 16d, -Mth.cos(angle) * 5 / 16d)
             .centre()
-            .rotateX(Mth.cos(angle) * 10d)
+            .rotateXRadians((Mth.cos(angle)) * beamRotation * 0.73d)
             .centre()
             .translate(0d, 0d, -1d)
             .unCentre()
@@ -60,7 +62,7 @@ public class PumpjackRenderer extends SafeBlockEntityRenderer<PumpjackBlockEntit
         transformed(DestroyPartials.PUMPJACK_BEAM, blockState, facing)
             .translate(0d, 1d, 0d)
             .centre()
-            .rotateX((Mth.sin(angle) - 1) * -20d)
+            .rotateXRadians((Mth.sin(angle)) * -beamRotation)
             .centre()
             .translate(0d, -1d, 0d)
             .unCentre()

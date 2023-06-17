@@ -4,10 +4,13 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
+import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -45,10 +48,12 @@ public class VatControllerBlock extends Block implements IBE<VatControllerBlockE
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return onBlockEntityUse(level, pos, be -> {
+            if (level.isClientSide()) return InteractionResult.SUCCESS;
             if (be.getVat().isPresent()) {
                 return InteractionResult.PASS;
             } else {
-                be.tryMakeVat();
+                SoundEvent sound = be.tryMakeVat() ? AllSoundEvents.CONFIRM.getMainEvent() : AllSoundEvents.DENY.getMainEvent();
+                level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), sound, SoundSource.BLOCKS, 1f, 1f);
                 return InteractionResult.SUCCESS;
             }
         });
