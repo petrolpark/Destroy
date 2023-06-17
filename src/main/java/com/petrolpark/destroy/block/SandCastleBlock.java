@@ -43,7 +43,7 @@ public class SandCastleBlock extends Block implements IBE<SandCastleBlockEntity>
     };
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext pContext) {
         return DestroyShapes.SAND_CASTLE;
     };
 

@@ -5,7 +5,7 @@ import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.petrolpark.destroy.block.entity.CoolerBlockEntity.ColdnessLevel;
-import com.petrolpark.destroy.block.partial.DestroyPartials;
+import com.petrolpark.destroy.block.model.DestroyPartials;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 

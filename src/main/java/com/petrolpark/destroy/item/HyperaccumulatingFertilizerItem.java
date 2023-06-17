@@ -33,13 +33,13 @@ public class HyperaccumulatingFertilizerItem extends BoneMealItem {
      */
     private static boolean grow(Level level, BlockPos cropPos) {
 
-        BlockState cropState = level.getBlockState(cropPos);
-        Block cropBlock = cropState.getBlock();
+        BlockState crostate = level.getBlockState(cropPos);
+        Block cropBlock = crostate.getBlock();
         BlockPos potentialOrePos = cropPos.below(2);
         BlockState potentialOreState = level.getBlockState(potentialOrePos);
 
-        if (cropBlock instanceof BonemealableBlock && cropState.is(BlockTags.CROPS)) {
-            CropMutation mutation = CropMutation.getMutation(cropState, potentialOreState);
+        if (cropBlock instanceof BonemealableBlock && crostate.is(BlockTags.CROPS)) {
+            CropMutation mutation = CropMutation.getMutation(crostate, potentialOreState);
             if (mutation.isSuccessful()) {
                 if (level.isClientSide()) {
                     addGrowthParticles(level, cropPos, 100);

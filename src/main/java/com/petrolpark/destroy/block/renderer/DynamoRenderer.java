@@ -3,7 +3,7 @@ package com.petrolpark.destroy.block.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.block.DynamoBlock;
 import com.petrolpark.destroy.block.entity.DynamoBlockEntity;
-import com.petrolpark.destroy.block.partial.DestroyPartials;
+import com.petrolpark.destroy.block.model.DestroyPartials;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.render.CachedBufferer;

@@ -16,12 +16,12 @@ public class UrineCauldronBlock extends AbstractCauldronBlock {
     };
 
     @Override
-    public boolean isFull(BlockState pState) {
+    public boolean isFull(BlockState state) {
         return true;
     };
 
     @Override
-    public int getAnalogOutputSignal(BlockState pState, Level pLevel, BlockPos pPos) {
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pPos) {
         return 2;
     };
 

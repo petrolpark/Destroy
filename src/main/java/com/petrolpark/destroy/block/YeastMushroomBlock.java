@@ -14,7 +14,7 @@ public class YeastMushroomBlock extends MushroomBlock {
     };
 
     @Override
-    public boolean growMushroom(ServerLevel pLevel, BlockPos pPos, BlockState pState, RandomSource pRandom) {
+    public boolean growMushroom(ServerLevel level, BlockPos pos, BlockState state, RandomSource pRandom) {
         return false;
     };
 

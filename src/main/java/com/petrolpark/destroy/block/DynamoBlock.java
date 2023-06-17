@@ -66,7 +66,7 @@ public class DynamoBlock extends KineticBlock implements IBE<DynamoBlockEntity>,
 
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext pContext) {
         return DestroyShapes.DYNAMO;
     };
 

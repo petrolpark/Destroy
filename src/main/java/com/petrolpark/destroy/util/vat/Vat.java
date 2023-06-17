@@ -6,8 +6,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
-
 import com.google.common.collect.ImmutableList;
 import com.petrolpark.destroy.Destroy;
 import com.simibubi.create.CreateClient;
@@ -203,7 +201,6 @@ public class Vat {
         return upperCorner.getY() - getInternalLowerCorner().getY();
     };
 
-    @Nullable
     public Collection<BlockPos> getSideBlockPositions() {
         if (this.sides == null) {
             List<BlockPos> newSides = new ArrayList<>();

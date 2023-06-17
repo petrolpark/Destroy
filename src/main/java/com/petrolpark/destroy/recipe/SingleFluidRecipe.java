@@ -25,7 +25,7 @@ public abstract class SingleFluidRecipe extends ProcessingRecipe<RecipeWrapper> 
     static RecipeWrapper wrapper = new RecipeWrapper(new EmptyHandler());
 
     @Override
-    public boolean matches(RecipeWrapper pContainer, Level pLevel) {
+    public boolean matches(RecipeWrapper pContainer, Level level) {
         return true;
     };
 

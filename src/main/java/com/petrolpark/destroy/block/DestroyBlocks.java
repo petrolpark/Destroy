@@ -5,6 +5,7 @@ import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.display.PollutometerDisplaySource;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
+import com.petrolpark.destroy.block.model.CopycatBlockModel;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.PumpjackBlockItem;
 import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
@@ -14,6 +15,7 @@ import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BlockStateGen;
+import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.simibubi.create.foundation.data.TagGen;
@@ -158,6 +160,14 @@ public class DestroyBlocks {
         
         ).item()
         .build()
+        .register();
+
+    public static final BlockEntry<VatSideBlock> VAT_SIDE = REGISTRATE.block("vat_side", VatSideBlock::new)
+        .initialProperties(SharedProperties::softMetal)
+        .transform(BuilderTransformers.copycat())
+        .properties(p -> p.color(MaterialColor.GLOW_LICHEN))
+        .onRegister(CreateRegistrate.blockModel(() -> CopycatBlockModel::new))
+        .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
         .register();
 
     public static final BlockEntry<UrineCauldronBlock> URINE_CAULDRON = REGISTRATE.block("urine_cauldron", p -> new UrineCauldronBlock(p, DestroyCauldronInteractions.URINE))

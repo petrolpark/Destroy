@@ -18,7 +18,7 @@ public class HeftyBeetrootBlock extends FullyGrownCropBlock {
     };
 
     @Override
-    public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext pContext) {
         return DestroyShapes.HEFTY_BEETROOT;
     };
     

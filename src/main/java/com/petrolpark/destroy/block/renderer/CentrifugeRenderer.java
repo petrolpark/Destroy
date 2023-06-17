@@ -1,7 +1,7 @@
 package com.petrolpark.destroy.block.renderer;
 
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
-import com.petrolpark.destroy.block.partial.DestroyPartials;
+import com.petrolpark.destroy.block.model.DestroyPartials;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;

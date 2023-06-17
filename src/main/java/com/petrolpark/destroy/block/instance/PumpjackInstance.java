@@ -7,7 +7,7 @@ import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
 import com.petrolpark.destroy.block.PumpjackBlock;
 import com.petrolpark.destroy.block.entity.PumpjackBlockEntity;
-import com.petrolpark.destroy.block.partial.DestroyPartials;
+import com.petrolpark.destroy.block.model.DestroyPartials;
 import com.simibubi.create.foundation.utility.AngleHelper;
 
 import net.minecraft.core.Direction;

@@ -1,7 +1,7 @@
 package com.petrolpark.destroy.item.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.petrolpark.destroy.block.partial.DestroyPartials;
+import com.petrolpark.destroy.block.model.DestroyPartials;
 
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.resources.model.BakedModel;

@@ -62,11 +62,11 @@ public class AlcoholicDrinkItem extends Item {
         return this.strength;
     };
 
-    public int getUseDuration(ItemStack pStack) {
+    public int getUseDuration(ItemStack stack) {
         return DRINK_DURATION;
     };
     
-    public UseAnim getUseAnimation(ItemStack pStack) {
+    public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.DRINK;
     }
 

@@ -3,7 +3,7 @@ package com.petrolpark.destroy.compat.jei.animation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.petrolpark.destroy.block.DestroyBlocks;
-import com.petrolpark.destroy.block.partial.DestroyPartials;
+import com.petrolpark.destroy.block.model.DestroyPartials;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 
 public class AnimatedCentrifuge extends AnimatedKinetics {

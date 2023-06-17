@@ -63,7 +63,7 @@ public class VatControllerBlock extends Block implements IBE<VatControllerBlockE
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        IBE.onRemove(state, level, pos, state);
+        IBE.onRemove(state, level, pos, newState);
     };
 
     @Override

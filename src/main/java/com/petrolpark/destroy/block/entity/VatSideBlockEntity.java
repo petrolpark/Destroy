@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.petrolpark.destroy.capability.block.VatTankCapability;
 import com.petrolpark.destroy.util.vat.Vat;
+import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
-import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 
@@ -28,13 +28,12 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
-public class VatSideBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
+public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggleInformation {
 
     private SmartFluidTankBehaviour inputBehaviour;
     private LazyOptional<IFluidHandler> fluidCapability;
 
-    // The outward direction this side is facing
-    private Direction direction;
+    private Direction direction; // The outward direction this side is facing
     private BlockPos controllerPosition;
 
     public VatSideBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -115,7 +114,7 @@ public class VatSideBlockEntity extends SmartBlockEntity implements IHaveGoggleI
     protected void write(CompoundTag tag, boolean clientPacket) {
         super.write(tag, clientPacket);
         if (direction != null) tag.putInt("Side", direction.ordinal());
-        tag.put("ControllerPosition", NbtUtils.writeBlockPos(controllerPosition));
+        if (controllerPosition != null) tag.put("ControllerPosition", NbtUtils.writeBlockPos(controllerPosition));
     };
 
     @Override

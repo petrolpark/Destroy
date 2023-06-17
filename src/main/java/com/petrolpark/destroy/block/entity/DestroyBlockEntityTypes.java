@@ -12,14 +12,8 @@ import com.petrolpark.destroy.block.renderer.DynamoRenderer;
 import com.petrolpark.destroy.block.renderer.PollutometerRenderer;
 import com.petrolpark.destroy.block.renderer.PumpjackRenderer;
 import com.petrolpark.destroy.block.renderer.VatRenderer;
-import com.petrolpark.destroy.util.vat.VatMaterial;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.tterrag.registrate.builders.BlockEntityBuilder;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
-import com.tterrag.registrate.util.nullness.NonNullSupplier;
-
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
 public class DestroyBlockEntityTypes {
 
@@ -80,18 +74,10 @@ public class DestroyBlockEntityTypes {
         .renderer(() -> VatRenderer::new)
         .register();
 
-    private static final BlockEntityBuilder<VatSideBlockEntity, CreateRegistrate> VAT_SIDE_BUILDER = REGISTRATE.blockEntity("vat_side", VatSideBlockEntity::new)
-        .validBlock(NonNullSupplier.of(() -> Blocks.AIR));
-    
-    static {
-        VatMaterial.registerDestroyVatMaterials();
-        for (NonNullSupplier<? extends Block> block : VatMaterial.BLOCK_MATERIALS.keySet()) {
-            VAT_SIDE_BUILDER.validBlock(block);
-        };
-    };
-
-    public static final BlockEntityEntry<VatSideBlockEntity> VAT_SIDE = VAT_SIDE_BUILDER.register();
+    public static final BlockEntityEntry<VatSideBlockEntity> VAT_SIDE = REGISTRATE.blockEntity("vat_side", VatSideBlockEntity::new)
+        .validBlock(DestroyBlocks.VAT_SIDE)
+        .register();
 
     public static void register() {};
     
-}
+};

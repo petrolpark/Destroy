@@ -59,8 +59,8 @@ public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGog
     private int timer; // -1 = open, 0 = done processing but closed
     private int totalTime;
 
-    public AgingBarrelBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
-        super(pType, pPos, pBlockState);
+    public AgingBarrelBlockEntity(BlockEntityType<?> pType, BlockPos pos, BlockState pBlockState) {
+        super(pType, pos, pBlockState);
         inventory = new SmartInventory(2, this, 1, false)
             .whenContentsChanged($ -> checkRecipe())
             .forbidExtraction();

@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.block.partial;
+package com.petrolpark.destroy.block.model;
 
 import com.jozufozu.flywheel.core.PartialModel;
 import com.petrolpark.destroy.Destroy;

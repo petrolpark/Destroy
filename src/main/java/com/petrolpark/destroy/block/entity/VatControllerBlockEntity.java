@@ -160,15 +160,16 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
         // Once the Vat has been successfully created
         Collection<BlockPos> sides = newVat.get().getSideBlockPositions();
-        if (sides == null) return;
         sides.forEach(pos -> {
-            getLevel().setBlockEntity(new VatSideBlockEntity(DestroyBlockEntityTypes.VAT_SIDE.get(), pos, getLevel().getBlockState(pos)));
+            getLevel().setBlockEntity(DestroyBlockEntityTypes.VAT_SIDE.create(pos, getLevel().getBlockState(pos)));
+            getLevel().blockUpdated(pos, level.getBlockState(pos).getBlock());
         });
-
 
         vat = Optional.of(newVat.get());
         tankBehaviour.allowExtraction(); // Enable extraction from the Vat now it actually exists
 
+        sendData();
+        setChanged();
     };
 
     @Override
@@ -177,7 +178,12 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         super.destroy();
     };
 
+    @SuppressWarnings("null")
     public void deleteVat() {
+        if (!vat.isPresent()) return;
+        vat.get().getSideBlockPositions().forEach(pos -> {
+            getLevel().removeBlockEntity(pos);
+        });
         //TODO handle leftover fluid
     };
 
