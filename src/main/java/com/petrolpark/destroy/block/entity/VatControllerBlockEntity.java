@@ -55,6 +55,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         vat = Optional.empty();
         full = false;
         initializationTicks = 3;
+        underDeconstruction = false;
     };
 
     @Override
@@ -158,7 +159,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
      */
     @SuppressWarnings("null")
     public boolean tryMakeVat() {
-        if (!hasLevel()) return false;
+        if (!hasLevel() || getLevel().isClientSide()) return false;
 
         // Create the Vat starting with the Block behind the Controller
         BlockPos vatInternalStartPos = new BlockPos(getBlockPos().relative(getLevel().getBlockState(getBlockPos()).getValue(VatControllerBlock.FACING).getOpposite()));
@@ -175,6 +176,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                 vatSide.setMaterial(oldState);
                 vatSide.setConsumedItem(new ItemStack(oldState.getBlock().asItem()));
                 vatSide.controllerPosition = getBlockPos();
+                //TODO set direction
+
                 vatSide.setChanged();
                 vatSide.sendData();
             });
@@ -197,18 +200,19 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     @SuppressWarnings("null")
     public void deleteVat(BlockPos posDestroyed) {
-        if (underDeconstruction) return;
+        if (underDeconstruction || getLevel().isClientSide()) return;
         underDeconstruction = true;
 
         tankBehaviour.forbidExtraction();
         if (!vat.isPresent()) return;
         vat.get().getSideBlockPositions().forEach(pos -> {
-            getLevel().getBlockEntity(pos, DestroyBlockEntityTypes.VAT_SIDE.get()).ifPresent(vatSide -> {
-                if (pos == posDestroyed) return;
-                BlockState newState = vatSide.getMaterial();
-                getLevel().removeBlock(pos, false);
-                getLevel().setBlockAndUpdate(pos, newState);
-            });
+            if (!pos.equals(posDestroyed)) {
+                getLevel().getBlockEntity(pos, DestroyBlockEntityTypes.VAT_SIDE.get()).ifPresent(vatSide -> {
+                    BlockState newState = vatSide.getMaterial();
+                    getLevel().removeBlock(pos, false);
+                    getLevel().setBlockAndUpdate(pos, newState);
+                });
+            };
         });
 
         vat = Optional.empty();

@@ -46,7 +46,7 @@ public class DestroyLang {
 
         tankName
             .style(ChatFormatting.GRAY)
-            .forGoggles(tooltip, 1);
+            .forGoggles(tooltip, 0);
 
         if (tank.isEmpty()) {
             Lang.translate("gui.goggles.fluid_container.capacity")
@@ -54,11 +54,11 @@ public class DestroyLang {
 				.add(mb)
 				.style(ChatFormatting.GOLD))
 			.style(ChatFormatting.GRAY)
-			.forGoggles(tooltip, 2);
+			.forGoggles(tooltip, 1);
         } else {
             Lang.fluidName(tank.getFluid())
             .style(ChatFormatting.GRAY)
-            .forGoggles(tooltip, 2);
+            .forGoggles(tooltip, 1);
 
             Lang.builder()
                 .add(Lang.number(tank.getFluid().getAmount())

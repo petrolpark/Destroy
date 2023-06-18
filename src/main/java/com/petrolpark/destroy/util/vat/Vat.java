@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.google.common.collect.ImmutableList;
+import com.petrolpark.destroy.Destroy;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.utility.Pair;
 
@@ -156,6 +157,7 @@ public class Vat {
         if (successful) {
             Vat vat = new Vat(lowerCorner, upperCorner);
             vat.sides = ImmutableList.copyOf(sides);
+            Destroy.LOGGER.info("there are this many sides blocks: "+sides.size());
             return Optional.of(vat);
         } else {
             return Optional.empty();
@@ -199,13 +201,14 @@ public class Vat {
                 // Check all blocks which form a face of the Vat, but aren't an edge or corner
     
                 boolean onXSide = (x == lowerCorner.getX() || x == upperCorner.getX());
-                boolean onYSide = (y == lowerCorner.getY() || x == upperCorner.getY());
-                boolean onZSide = (z == lowerCorner.getZ() || x == upperCorner.getZ());
+                boolean onYSide = (y == lowerCorner.getY() || y == upperCorner.getY());
+                boolean onZSide = (z == lowerCorner.getZ() || z == upperCorner.getZ());
 
                 if (((onXSide ^ onYSide) ^ onZSide) && !(onXSide && onYSide)) {
                     newSides.add(new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
                 };
             };
+            Destroy.LOGGER.info("there are this many sides blocks: "+newSides.size());
             sides = ImmutableList.copyOf(newSides);
         };
         return sides;
