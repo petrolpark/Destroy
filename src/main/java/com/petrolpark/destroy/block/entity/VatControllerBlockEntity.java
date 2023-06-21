@@ -48,7 +48,10 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     protected WhenTargetedBehaviour targetedBehaviour;
 
     protected int initializationTicks;
-    protected boolean underDeconstruction; // Whether this Vat is already in the process of being deleted
+    /**
+     * Whether the {@link com.petrolpark.destroy.util.vat.Vat Vat} associated with this Vat Controller is already under the process of being deleted.
+     */
+    protected boolean underDeconstruction;
 
     public VatControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -166,29 +169,28 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         Optional<Vat> newVat = Vat.tryConstruct(getLevel(), vatInternalStartPos);
         if (!newVat.isPresent()) return false;
 
-        // Once the Vat has been successfully created
+        // Once the Vat has been successfully created...
         Collection<BlockPos> sides = newVat.get().getSideBlockPositions();
+        // For each Block which makes up a side of this Vat...
         sides.forEach(pos -> {
             BlockState oldState = getLevel().getBlockState(pos);
             if (oldState.is(DestroyBlocks.VAT_CONTROLLER.get())) return;
+            // ...replace it with a Vat Side Block which imitates the Block it's replacing
             getLevel().setBlockAndUpdate(pos, DestroyBlocks.VAT_SIDE.getDefaultState());
             getLevel().getBlockEntity(pos, DestroyBlockEntityTypes.VAT_SIDE.get()).ifPresent(vatSide -> {
+                // Configure the Vat Side
                 vatSide.setMaterial(oldState);
                 vatSide.setConsumedItem(new ItemStack(oldState.getBlock().asItem()));
                 vatSide.controllerPosition = getBlockPos();
-                //TODO set direction
-
-                vatSide.setChanged();
-                vatSide.sendData();
+                vatSide.direction = newVat.get().whereIsSideFacing(pos);
+                vatSide.notifyUpdate();
             });
         });
 
         vat = Optional.of(newVat.get());
         tankBehaviour.allowExtraction(); // Enable extraction from the Vat now it actually exists
 
-        sendData();
-        setChanged();
-
+        notifyUpdate();
         return true;
     };
 
@@ -203,7 +205,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         if (underDeconstruction || getLevel().isClientSide()) return;
         underDeconstruction = true;
 
-        tankBehaviour.forbidExtraction();
+        tankBehaviour.forbidExtraction(); // Forbid Fluid extraction now this Vat no longer exists
         if (!vat.isPresent()) return;
         vat.get().getSideBlockPositions().forEach(pos -> {
             if (!pos.equals(posDestroyed)) {
@@ -215,10 +217,11 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             };
         });
 
+        //TODO pollute leftover Mixture
+
         vat = Optional.empty();
         underDeconstruction = false;
-        sendData();
-        setChanged();
+        notifyUpdate();
     };
 
     // Nullable, just not annotated so VSC stops giving me ugly yellow lines

@@ -31,14 +31,17 @@ import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggleInformation {
 
-    private SmartFluidTankBehaviour inputBehaviour;
-    private LazyOptional<IFluidHandler> fluidCapability;
+    protected SmartFluidTankBehaviour inputBehaviour;
+    protected LazyOptional<IFluidHandler> fluidCapability;
 
-    private Direction direction; // The outward direction this side is facing
+    public Direction direction; // The outward direction this side is facing
     public BlockPos controllerPosition;
+
+    protected DisplayType displayType;
 
     public VatSideBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+        displayType = DisplayType.NORMAL;
     };
 
     @Override
@@ -103,6 +106,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             direction = null;
         }
         controllerPosition = NbtUtils.readBlockPos(tag.getCompound("ControllerPosition"));
+        displayType = DisplayType.values()[tag.getInt("DisplayType")];
     };
 
     @Override
@@ -110,11 +114,12 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         super.write(tag, clientPacket);
         if (direction != null) tag.putInt("Side", direction.ordinal());
         if (controllerPosition != null) tag.put("ControllerPosition", NbtUtils.writeBlockPos(controllerPosition));
+        tag.putInt("DisplayType", displayType.ordinal());
     };
 
     @Override
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.FLUID_HANDLER && side == direction) {
+        if (cap == ForgeCapabilities.FLUID_HANDLER && side == direction && (displayType == DisplayType.NORMAL || displayType == DisplayType.PIPE)) {
             return fluidCapability.cast();
         };
         return super.getCapability(cap, side);
@@ -124,6 +129,25 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     public void setMaterial(BlockState blockState) {
         if (blockState.is(DestroyBlocks.VAT_SIDE.get())) return;
         super.setMaterial(blockState);
+    };
+
+    public static enum DisplayType {
+        NORMAL,
+        BAROMETER,
+        THERMOMETER,
+        PIPE
+    };
+
+    public DisplayType getDisplayType() {
+        return displayType;
+    };
+
+    @SuppressWarnings("null")
+    public void setDisplayType(DisplayType displayType) {
+        this.displayType = displayType;
+        notifyUpdate();
+        if (!hasLevel() || level.isClientSide()) return;
+        getLevel().updateNeighborsAt(getBlockPos(), DestroyBlocks.VAT_SIDE.get()); //TODO fix
     };
 
     @Override
