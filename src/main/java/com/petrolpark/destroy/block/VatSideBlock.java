@@ -7,10 +7,8 @@ import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
 import com.petrolpark.destroy.block.entity.VatSideBlockEntity.DisplayType;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
-import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntityTicker;
-import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,7 +27,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.fluids.FluidStack;
 
 public class VatSideBlock extends CopycatBlock {
 
@@ -72,15 +69,9 @@ public class VatSideBlock extends CopycatBlock {
 
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
-        FluidTransportBehaviour behaviour = BlockEntityBehaviour.get(level, neighbor, FluidTransportBehaviour.TYPE);
         withBlockEntityDo(level, pos, be -> {
             if (!(be instanceof VatSideBlockEntity vatSide)) return;
-            boolean nextToPipe = behaviour == null ? false : behaviour.canHaveFlowToward(state, vatSide.direction) || behaviour.canPullFluidFrom(FluidStack.EMPTY, state, vatSide.direction);
-            if (vatSide.getDisplayType() == DisplayType.NORMAL && nextToPipe) {
-                vatSide.setDisplayType(DisplayType.PIPE);
-            } else if (vatSide.getDisplayType() == DisplayType.PIPE && !nextToPipe) {
-                vatSide.setDisplayType(DisplayType.NORMAL);
-            };
+            vatSide.updateDisplayType(neighbor);
         });
     };
 

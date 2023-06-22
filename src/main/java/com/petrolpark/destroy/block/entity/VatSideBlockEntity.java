@@ -12,6 +12,7 @@ import com.petrolpark.destroy.capability.block.VatTankCapability;
 import com.petrolpark.destroy.util.vat.Vat;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 
@@ -142,12 +143,25 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         return displayType;
     };
 
-    @SuppressWarnings("null")
     public void setDisplayType(DisplayType displayType) {
+        if (this.displayType == displayType) return;
         this.displayType = displayType;
+        if (!hasLevel()) return;
+        getBlockState().updateNeighbourShapes(getLevel(), getBlockPos(), 3);
+        updateDisplayType(getBlockPos().relative(direction)); // Check for a Pipe
         notifyUpdate();
-        if (!hasLevel() || level.isClientSide()) return;
-        getLevel().updateNeighborsAt(getBlockPos(), DestroyBlocks.VAT_SIDE.get()); //TODO fix
+    };
+
+    @SuppressWarnings("null")
+    public void updateDisplayType(BlockPos neighborPos) {
+        if (getController() == null) return;
+        FluidTransportBehaviour behaviour = BlockEntityBehaviour.get(getLevel(), neighborPos, FluidTransportBehaviour.TYPE);
+        boolean nextToPipe = behaviour == null ? false : behaviour.canHaveFlowToward(getBlockState(), direction) || behaviour.canPullFluidFrom(getController().getTank().getFluid(), getBlockState(), direction);
+        if (getDisplayType() == DisplayType.NORMAL && nextToPipe) {
+            setDisplayType(DisplayType.PIPE);
+        } else if (getDisplayType() == DisplayType.PIPE && !nextToPipe) {
+            setDisplayType(DisplayType.NORMAL);
+        };
     };
 
     @Override

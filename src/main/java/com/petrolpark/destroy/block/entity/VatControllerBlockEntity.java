@@ -180,9 +180,10 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             getLevel().getBlockEntity(pos, DestroyBlockEntityTypes.VAT_SIDE.get()).ifPresent(vatSide -> {
                 // Configure the Vat Side
                 vatSide.setMaterial(oldState);
-                vatSide.setConsumedItem(new ItemStack(oldState.getBlock().asItem()));
+                vatSide.setConsumedItem(new ItemStack(oldState.getBlock().asItem())); // Required to co-operate with the Copycat Block's internals
                 vatSide.controllerPosition = getBlockPos();
                 vatSide.direction = newVat.get().whereIsSideFacing(pos);
+                vatSide.updateDisplayType(pos.relative(vatSide.direction));
                 vatSide.notifyUpdate();
             });
         });

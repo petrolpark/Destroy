@@ -95,7 +95,7 @@
     "block.destroy.cordite_block.tooltip": "CORDITE_BLOCK",
     "block.destroy.cordite_block.tooltip.summary": "An explosive that _vaporizes_ anything in its way, making it _optimal_ for mining for _Ancient Debris_.",
     "block.destroy.cordite_block.tooltip.condition1": "When Exploded",
-    "block.destroy.cordite_block.tooltip.behaviour1": "_Evaporates_ Liquids, doesn't drop items and does _minimal damage_ to Mobs.",
+    "block.destroy.cordite_block.tooltip.behaviour1": "_Evaporates_ liquids, doesn't drop items and does _minimal damage_ to mobs.",
     "block.destroy.deepslate_fluorite_ore": "Deepslate Fluorite Ore",
     "block.destroy.deepslate_nickel_ore": "Deepslate Nickel Ore",
     "block.destroy.dynamite_block": "Dynamite Block",
