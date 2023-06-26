@@ -80,10 +80,10 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         return vatController;
     };
 
-    public Optional<Vat> getVat() {
+    public Optional<Vat> getVatOptional() {
         VatControllerBlockEntity vatController = getController();
         if (vatController == null) return Optional.empty();
-        return vatController.getVat();
+        return vatController.getVatOptional();
     };
 
     public void tryInsertFluidInVat() {
@@ -126,6 +126,15 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         return super.getCapability(cap, side);
     };
 
+    /**
+     * @see VatControllerBlockEntity#getPercentagePressur
+     */
+    public float getPercentagePressure() {
+        VatControllerBlockEntity controller = getController();
+        if (controller == null) return 0f;
+        return controller.getPercentagePressure();
+    };
+
     @Override
     public void setMaterial(BlockState blockState) {
         if (blockState.is(DestroyBlocks.VAT_SIDE.get())) return;
@@ -166,8 +175,14 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        VatControllerBlockEntity vatController = getController();
-        if (vatController == null) return false;
-        return vatController.addToGoggleTooltip(tooltip, isPlayerSneaking);
+        switch (getDisplayType()) {
+            case THERMOMETER: {
+                return true;
+            } case BAROMETER: {
+                return true;
+            } default: {
+                return false;
+            }
+        }
     };
 };
