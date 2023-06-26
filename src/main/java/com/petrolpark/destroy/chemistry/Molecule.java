@@ -66,13 +66,17 @@ public class Molecule implements INameableProduct {
      */
     private float density;
     /**
-     * The {@link ReadOnlyMixture#temperature temperature} (in Kelvins) at which this Molecule forms a gas.
+     * The {@link ReadOnlyMixture#temperature temperature} (in kelvins) at which this Molecule forms a gas.
      */
     private float boilingPoint;
     /**
      * The polarity of this Molecule, used to determine its solubility with other Molecules.
      */
     private float dipoleMoment;
+    /**
+     * The specific heat capacity in joules per kilogram-kelvin of this Molecule.
+     */
+    private float specificHeatCapacity;
     /**
      * The {@link Formula} of this Molecule.
      */
@@ -226,7 +230,7 @@ public class Molecule implements INameableProduct {
     };
 
     /**
-     * The {@link ReadOnlyMixture#temperature temperature} (in Kelvins) at which this Molecule forms a gas.
+     * The {@link ReadOnlyMixture#temperature temperature} (in kelvins) at which this Molecule forms a gas.
      */
     public float getBoilingPoint() {
         return boilingPoint;
@@ -237,6 +241,13 @@ public class Molecule implements INameableProduct {
      */
     public float getDipoleMoment() {
         return dipoleMoment;
+    };
+
+    /**
+     * The energy required to heat one mole of this Molecule by one kelvin.
+     */
+    public float getMolarHeatCapacity() {
+        return specificHeatCapacity * 1000 / getMass();
     };
 
     /**
@@ -533,9 +544,9 @@ public class Molecule implements INameableProduct {
         };
 
         /**
-         * Set the {@link Molecule#boilingPoint boiling point} in Kelvins.
+         * Set the {@link Molecule#boilingPoint boiling point} in kelvins.
          * If not supplied, the boiling point will be very loosely {@link MoleculeBuilder#calculateBoilingPoint estimated}, but setting one is recommended.
-         * @param boilingPoint In Kelvins
+         * @param boilingPoint In kelvins
          * @return This Molecule Builder
          */
         public MoleculeBuilder boilingPointInKelvins(float boilingPoint) {

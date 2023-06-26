@@ -301,8 +301,8 @@ public final class DestroyMolecules {
         .charge(1)
         .build(),
 
-    TETRACHLOROETHENE = builder()
-        .id("tetrachloroethene")
+    TETRAFLUOROETHENE = builder()
+        .id("tetrafluoroethene")
         .structure(Formula.deserialize("destroy:linear:FC=(F)C(F)F"))
         .build(),
 

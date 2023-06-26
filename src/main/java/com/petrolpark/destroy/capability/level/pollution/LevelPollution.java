@@ -9,12 +9,16 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIc
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.utility.Lang;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 
 public class LevelPollution {
 
     private Map<PollutionType, Integer> levels;
+    private float outdoorTemperature; // In kelvins
+
     private boolean hasPollutionEverBeenMaxed;
     private boolean hasPollutionEverBeenFullyReduced;
 
@@ -25,14 +29,38 @@ public class LevelPollution {
         });
         hasPollutionEverBeenMaxed = false;
         hasPollutionEverBeenFullyReduced = true;
+        outdoorTemperature = 289.0f; // 16ºC
     };
 
     /**
-     * Get the value of the given type of Pollution in this Level
+     * Get the value of the given type of Pollution in this Level.
      */
     public int get(PollutionType pollutionType) {
         if (pollutionType == null) return 0;
         return levels.get(pollutionType);
+    };
+
+    /**
+     * Get the global outdoor temperature, not accounting for the biome.
+     * @return Temperature in kelvins
+     * @see LevelPollution#getLocalTemperature Get the temperature accounting for the biome.
+     */
+    public float getGlobalTemperature() {
+        return outdoorTemperature;
+    };
+
+    /**
+     * Get the outdoor ("room") temperature at the given position, accounting for the change in temperature due to pollution
+     * and the natural heat of the Biome at that position.
+     * @param level
+     * @param pos
+     * @return Temperature in kelvins
+     * @see LevelPollution#getGlobalTemperature Get the temperature not accounting for the Biome
+     */
+    public static float getLocalTemperature(Level level, BlockPos pos) {
+        return level.getCapability(LevelPollutionProvider.LEVEL_POLLUTION).map(pollution -> {
+            return pollution.outdoorTemperature + (10f * level.getBiome(pos).get().getBaseTemperature());
+        }).orElse(289f);
     };
 
     /**
@@ -64,8 +92,9 @@ public class LevelPollution {
             //currently no radioactivity
         ) {
             hasPollutionEverBeenFullyReduced = true;
-        }
+        };
 
+        updateTemperature();
         return value;
     };
 
@@ -95,6 +124,13 @@ public class LevelPollution {
         });
         hasPollutionEverBeenMaxed = tag.getBoolean("EverMaxed");
         hasPollutionEverBeenFullyReduced = tag.getBoolean("EverReduced");
+        updateTemperature();
+    };
+
+    public void updateTemperature() {
+        outdoorTemperature = 289f
+            + (levels.get(PollutionType.GREENHOUSE) / PollutionType.GREENHOUSE.max) * 20f
+            + (levels.get(PollutionType.OZONE_DEPLETION) / PollutionType.OZONE_DEPLETION.max) * 4f;
     };
 
     /**
@@ -105,7 +141,7 @@ public class LevelPollution {
     };
 
     /**
-     * Whether every Pollution Type is at 0.
+     * Whether every Pollution Type is at 0, where before they were all maxed.
      */
     public boolean hasPollutionEverBeenFullyReduced() {
         return hasPollutionEverBeenFullyReduced;

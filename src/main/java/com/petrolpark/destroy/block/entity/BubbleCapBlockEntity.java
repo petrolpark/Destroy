@@ -326,7 +326,7 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
 
         // Label this Bubble Cap
         if (isController) {
-            DestroyLang.translate("tooltip.bubble_cap.input_tank")
+            DestroyLang.translate("tooltip.bubble_cap.reboiler")
                 .style(ChatFormatting.WHITE)
                 .forGoggles(tooltip);
         } else {

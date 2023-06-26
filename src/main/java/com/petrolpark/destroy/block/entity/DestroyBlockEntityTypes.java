@@ -12,7 +12,7 @@ import com.petrolpark.destroy.block.renderer.DynamoRenderer;
 import com.petrolpark.destroy.block.renderer.PollutometerRenderer;
 import com.petrolpark.destroy.block.renderer.PumpjackRenderer;
 import com.petrolpark.destroy.block.renderer.VatRenderer;
-import com.petrolpark.destroy.util.vat.VatMaterial;
+import com.petrolpark.destroy.block.renderer.VatSideRenderer;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
@@ -77,11 +77,8 @@ public class DestroyBlockEntityTypes {
 
     public static final BlockEntityEntry<VatSideBlockEntity> VAT_SIDE = REGISTRATE.blockEntity("vat_side", VatSideBlockEntity::new)
         .validBlock(DestroyBlocks.VAT_SIDE)
+        .renderer(() -> VatSideRenderer::new)
         .register();
-
-    static {
-        VatMaterial.registerDestroyVatMaterials();
-    };
 
     public static void register() {};
     

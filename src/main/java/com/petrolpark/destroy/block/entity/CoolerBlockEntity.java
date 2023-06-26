@@ -11,6 +11,7 @@ import com.petrolpark.destroy.util.PollutionHelper;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.fluids.tank.FluidTankBlock;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -157,7 +158,7 @@ public class CoolerBlockEntity extends SmartBlockEntity implements IHaveGoggleIn
     @SuppressWarnings("null") // It think's getLevel() could be null (it can't be)
     public void updateHeatLevel(ColdnessLevel coldnessLevel) {
         if (!hasLevel()) return;
-        BlockState newState = getBlockState().setValue(CoolerBlock.HEAT_LEVEL, coldnessLevel == ColdnessLevel.FROSTING ? HeatLevel.valueOf("FROSTING") : HeatLevel.NONE);
+        BlockState newState = getBlockState().setValue(BlazeBurnerBlock.HEAT_LEVEL, coldnessLevel == ColdnessLevel.FROSTING ? HeatLevel.valueOf("FROSTING") : HeatLevel.NONE);
         if (!newState.equals(getBlockState())) {
             getLevel().setBlockAndUpdate(getBlockPos(), newState);
         };

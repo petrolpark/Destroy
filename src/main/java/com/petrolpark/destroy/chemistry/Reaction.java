@@ -53,7 +53,7 @@ public class Reaction {
 
     /**
      * The rate constant of this Reaction at the given temperature.
-     * @param temperature (in Kelvins).
+     * @param temperature (in kelvins).
      */
     public float getRateConstant(float temperature) {
         return preexponentialFactor * (float)Math.exp(-((activationEnergy * 1000) / (GAS_CONSTANT * temperature)));

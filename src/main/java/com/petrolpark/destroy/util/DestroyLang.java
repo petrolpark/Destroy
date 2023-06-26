@@ -68,7 +68,7 @@ public class DestroyLang {
                 .add(Lang.number(tank.getCapacity())
                     .add(mb)
                     .style(ChatFormatting.DARK_GRAY))
-                .forGoggles(tooltip, 2);
+                .forGoggles(tooltip, 1);
         };
     };
 

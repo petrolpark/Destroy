@@ -187,7 +187,7 @@ public class Mixture extends ReadOnlyMixture {
         if (equilibrium) return results; // If we have already reached equilibrium, nothing more is going to happen, so don't bother reacting
 
         equilibrium = true; // Start by assuming we have reached equilibrium
-        Boolean shouldRefreshPossibleReactions = false; // Rather than refreshing the possible Reactions every time a new Molecule is added or removed, start by assuming we won't need to, and flag for refreshing if we ever do
+        boolean shouldRefreshPossibleReactions = false; // Rather than refreshing the possible Reactions every time a new Molecule is added or removed, start by assuming we won't need to, and flag for refreshing if we ever do
 
         Map<Molecule, Float> oldContents = new HashMap<>(contents); // Copy all the old concentrations of everything
         Map<Reaction, Float> reactionRates = new HashMap<>(); // Rates of all Reactions
@@ -250,6 +250,15 @@ public class Mixture extends ReadOnlyMixture {
     };
 
     /**
+     * Add or take heat from this Mixture.
+     * @param energy In joules per bucket
+     */
+    public void heat(float energy) {
+        // We have assumed that the latent heat of all substances is 0
+        temperature += energy / getVolumetricHeatCapacity();
+    };
+
+    /**
      * {@link Mixture#reactForTick React} this Mixture until it reaches {@link Mixture#equilibrium equilibrium}. This is mutative.
      * @return A {@link com.petrolpark.destroy.recipe.ReactionInBasinRecipe.ReactionInBasinResult ReactionInBasinResult} containing
      * the number of ticks it took to reach equilibrium and the {@link ReactionResult Reaction Results}.
@@ -262,6 +271,17 @@ public class Mixture extends ReadOnlyMixture {
             ticks++;
         };
         return new ReactionInBasinResult(ticks, Set.of());
+    };
+
+    /**
+     * Get the heat capacity (in joules per bucket-kelvin) of this Mixture.
+     */
+    public float getVolumetricHeatCapacity() {
+        float totalHeatCapacity = 0f;
+        for (Entry<Molecule, Float> entry : contents.entrySet()) {
+            totalHeatCapacity += entry.getKey().getMolarHeatCapacity() * entry.getValue();
+        };
+        return totalHeatCapacity;
     };
 
     /**

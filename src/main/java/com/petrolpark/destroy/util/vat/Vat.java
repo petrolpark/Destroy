@@ -25,10 +25,24 @@ public class Vat {
 
     public static final int MB_PER_BLOCK = 4000;
 
+    static {
+        VatMaterial.registerDestroyVatMaterials();
+    };
+
     private BlockPos lowerCorner;
     private BlockPos upperCorner;
 
     private ImmutableList<BlockPos> sides; // NOT synced server/client
+
+    /**
+     * The {@link VatMaterial#maxPressure maximum pressure} of the weakest Block making up this Vat.
+     */
+    private float maximumPressure;
+    
+    /**
+     * The conductance (in watts per kelvin) of the area of this Vat.
+     */
+    private float conductance;
 
     public Vat(BlockPos lowerCorner, BlockPos upperCorner) {
         this.lowerCorner = lowerCorner;
@@ -124,6 +138,8 @@ public class Vat {
         BlockPos upperCorner = new BlockPos(eastSide, topSide, southSide);
 
         List<BlockPos> sides = new ArrayList<>();
+        float maximumPressure = Float.MAX_VALUE;
+        float conductance = 0f;
 
         for (BlockPos blockPos : BlockPos.betweenClosed(lowerCorner, upperCorner)) {
             int x = blockPos.getX();
@@ -147,10 +163,14 @@ public class Vat {
              * 1 1 1 0
              */
             if (((onXSide ^ onYSide) ^ onZSide) && !(onXSide && onYSide)) {
-                if (!VatMaterial.isValid(level.getBlockState(blockPos).getBlock())) {
+                BlockState state = level.getBlockState(blockPos);
+                if (!VatMaterial.isValid(state.getBlock())) {
                     successful = false;
                     break;
                 };
+                VatMaterial material = VatMaterial.BLOCK_MATERIALS.get(state.getBlock());
+                maximumPressure = Math.min(material.maxPressure(), maximumPressure);
+                conductance += material.thermalConductivity(); // As area and width = 1, conductivity = conductance
                 sides.add(new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
             };
         };
@@ -158,6 +178,8 @@ public class Vat {
         if (successful) {
             Vat vat = new Vat(lowerCorner, upperCorner);
             vat.sides = ImmutableList.copyOf(sides);
+            vat.maximumPressure = maximumPressure;
+            vat.conductance = conductance;
             return Optional.of(vat);
         } else {
             return Optional.empty();
@@ -216,7 +238,7 @@ public class Vat {
     /**
      * Get the outward-facing Direction corresponding to the side of the Vat this Block Pos is on.
      * @param sideBlockPos
-     * @return {@code null} if the Block Pos is not part of the Vat Sides
+     * @return {@code null} if the Block Pos is not part of the Vat's sides
      */
     @Nullable
     public Direction whereIsSideFacing(BlockPos sideBlockPos) {

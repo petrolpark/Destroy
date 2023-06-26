@@ -42,7 +42,7 @@ public class ReadOnlyMixture {
     protected String translationKey;
     
     /**
-     * How hot (in Kelvins) this Mixture is. Temperature affects the rate of {@link Reaction Reactions}.
+     * How hot (in kelvins) this Mixture is. Temperature affects the rate of {@link Reaction Reactions}.
      */
     protected float temperature;
 
@@ -114,7 +114,7 @@ public class ReadOnlyMixture {
     };
 
     /**
-     * How hot (in Kelvins) this Mixture is. Temperature affects the rate of {@link Reaction Reactions}.
+     * How hot (in kelvins) this Mixture is. Temperature affects the rate of {@link Reaction Reactions}.
      */
     public float getTemperature() {
         return temperature;

@@ -27,13 +27,12 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -43,16 +42,15 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class AgingBarrelBlock extends Block implements IBE<AgingBarrelBlockEntity>, IWrenchable {
+public class AgingBarrelBlock extends HorizontalDirectionalBlock implements IBE<AgingBarrelBlockEntity>, IWrenchable {
 
-    public static final DirectionProperty DIRECTION = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty IS_OPEN = BooleanProperty.create("open");
     public static final IntegerProperty PROGRESS = IntegerProperty.create("progress", 0, 4); //0 = smallest balloon, ... 4 = done (biggest balloon)
 
     public AgingBarrelBlock(Properties pProperties) {
         super(pProperties);
         registerDefaultState(defaultBlockState()
-            .setValue(DIRECTION, Direction.NORTH)
+            .setValue(FACING, Direction.NORTH)
             .setValue(IS_OPEN, true)
             .setValue(PROGRESS, 0)
         );
@@ -147,7 +145,7 @@ public class AgingBarrelBlock extends Block implements IBE<AgingBarrelBlockEntit
     @Override
     public VoxelShape getShape(BlockState blockstate, BlockGetter level, BlockPos pos, CollisionContext context) {
         if (blockstate.getValue(IS_OPEN)) {
-            return DestroyShapes.AGING_BARREL_OPEN.get(blockstate.getValue(DIRECTION));
+            return DestroyShapes.AGING_BARREL_OPEN.get(blockstate.getValue(FACING));
         } else {
             return DestroyShapes.agingBarrelClosed(blockstate.getValue(PROGRESS));
         }
@@ -164,7 +162,7 @@ public class AgingBarrelBlock extends Block implements IBE<AgingBarrelBlockEntit
 
     @Override
     public VoxelShape getInteractionShape(BlockState blockstate, BlockGetter level, BlockPos pos) {
-        return DestroyShapes.AGING_BARREL_OPEN_RAYTRACE.get(blockstate.getValue(DIRECTION));
+        return DestroyShapes.AGING_BARREL_OPEN_RAYTRACE.get(blockstate.getValue(FACING));
     };
 
     @Override
@@ -193,13 +191,13 @@ public class AgingBarrelBlock extends Block implements IBE<AgingBarrelBlockEntit
 	};
 
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        BlockState blockstate = this.defaultBlockState().setValue(DIRECTION, pContext.getHorizontalDirection().getOpposite());
+        BlockState blockstate = this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
         return blockstate;
     };
 
     @Override
     protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
-        builder.add(DIRECTION, IS_OPEN, PROGRESS);
+        builder.add(FACING, IS_OPEN, PROGRESS);
         super.createBlockStateDefinition(builder);
     };
 

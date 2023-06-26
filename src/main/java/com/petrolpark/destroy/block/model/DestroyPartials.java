@@ -24,6 +24,9 @@ public class DestroyPartials {
     POLLUTOMETER_ANEMOMETER = block("pollutometer/anemometer"),
     POLLUTOMETER_WEATHERVANE = block("pollutometer/weathervane"),
 
+    // Vat
+    VAT_SIDE_PIPE = block("vat_side/pipe"),
+
     // Miscellaneous
     GAS_MASK = block("gas_mask"),
     STRAY_SKULL = block("cooler/skull");
