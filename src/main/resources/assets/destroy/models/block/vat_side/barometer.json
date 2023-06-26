@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"2": "create:block/gauge",
 		"3": "destroy:block/vat_side_barometer",
-		"particle": "create:block/boiler_gauge"
+		"4": "create:block/gauge",
+		"6": "create:block/pipes"
 	},
 	"elements": [
 		{
@@ -12,12 +12,12 @@
 			"to": [18.5, 6.3, 6.3],
 			"rotation": {"angle": 0, "axis": "y", "origin": [10, 8, 8]},
 			"faces": {
-				"north": {"uv": [0, 9.5, 0.5, 10], "texture": "#2"},
-				"east": {"uv": [0, 9.5, 0.5, 10], "texture": "#2"},
-				"south": {"uv": [0, 9.5, 0.5, 10], "texture": "#2"},
-				"west": {"uv": [0, 9.5, 0.5, 10], "texture": "#2"},
-				"up": {"uv": [0, 9.5, 0.5, 10], "texture": "#2"},
-				"down": {"uv": [0, 9.5, 0.5, 10], "texture": "#2"}
+				"north": {"uv": [0, 9.5, 0.5, 10], "texture": "#4"},
+				"east": {"uv": [0, 9.5, 0.5, 10], "texture": "#4"},
+				"south": {"uv": [0, 9.5, 0.5, 10], "texture": "#4"},
+				"west": {"uv": [0, 9.5, 0.5, 10], "texture": "#4"},
+				"up": {"uv": [0, 9.5, 0.5, 10], "texture": "#4"},
+				"down": {"uv": [0, 9.5, 0.5, 10], "texture": "#4"}
 			}
 		},
 		{
@@ -29,9 +29,11 @@
 				"north": {"uv": [11, 0, 13, 10], "texture": "#3"},
 				"east": {"uv": [0, 0, 10, 10], "texture": "#3"},
 				"south": {"uv": [11, 0, 13, 10], "rotation": 180, "texture": "#3"},
+				"west": {"uv": [1.05, 11.05, 5.95, 15.95], "texture": "#6"},
 				"up": {"uv": [11, 0, 13, 10], "rotation": 180, "texture": "#3"},
 				"down": {"uv": [11, 0, 13, 10], "rotation": 180, "texture": "#3"}
 			}
 		}
-	]
+	],
+	"display": {}
 }

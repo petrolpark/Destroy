@@ -49,7 +49,7 @@ public class VatControllerBlock extends Block implements IBE<VatControllerBlockE
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return onBlockEntityUse(level, pos, be -> {
             if (level.isClientSide()) return InteractionResult.SUCCESS;
-            if (be.getVat().isPresent()) {
+            if (be.getVatOptional().isPresent()) {
                 return InteractionResult.PASS;
             } else {
                 SoundEvent sound = be.tryMakeVat() ? AllSoundEvents.CONFIRM.getMainEvent() : AllSoundEvents.DENY.getMainEvent();

@@ -15,12 +15,20 @@ import com.simibubi.create.foundation.utility.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.AxisDirection;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+/**
+ * A physical Vat and the Blocks that make it up. Handling of the contents of the Vat and the actual chemistry
+ * is done in {@link com.petrolpark.destroy.block.entity.VatControllerBlockEntity VatControllerBlockEntity}.
+ */
 public class Vat {
 
     public static final int MB_PER_BLOCK = 4000;
@@ -38,19 +46,39 @@ public class Vat {
      * The {@link VatMaterial#maxPressure maximum pressure} of the weakest Block making up this Vat.
      */
     private float maximumPressure;
-    
+    /**
+     * The {@link Vat#maximumPressure weakest Block} in this Vat.
+     */
+    private BlockState weakestBlockState;
+
     /**
      * The conductance (in watts per kelvin) of the area of this Vat.
      */
     private float conductance;
 
-    public Vat(BlockPos lowerCorner, BlockPos upperCorner) {
+    private Vat(BlockPos lowerCorner, BlockPos upperCorner) {
         this.lowerCorner = lowerCorner;
         this.upperCorner = upperCorner;
     };
 
+    public static Optional<Vat> read(CompoundTag tag) {
+        if (!tag.contains("LowerCorner", Tag.TAG_COMPOUND) || !tag.contains("UpperCorner", Tag.TAG_COMPOUND)) return Optional.empty();
+        Vat vat = new Vat(NbtUtils.readBlockPos(tag.getCompound("LowerCorner")), NbtUtils.readBlockPos(tag.getCompound("UpperCorner")));
+        vat.conductance = tag.getFloat("Conductance");
+        vat.weakestBlockState = NbtUtils.readBlockState(tag.getCompound("WeakestBlock"));
+        vat.maximumPressure = VatMaterial.BLOCK_MATERIALS.get(vat.weakestBlockState.getBlock()).maxPressure();
+        return Optional.of(vat);
+    };
+
+    public void write(CompoundTag tag) {
+        tag.put("LowerCorner", NbtUtils.writeBlockPos(lowerCorner));
+        tag.put("UpperCorner", NbtUtils.writeBlockPos(upperCorner));
+        tag.putFloat("Conductance", conductance);
+        tag.put("WeakestBlock", NbtUtils.writeBlockState(weakestBlockState));
+    };
+
     /**
-     * 
+     * Try and form a Vat.
      * @param level
      * @param pos The position of the first space in the Vat
      */
@@ -140,6 +168,7 @@ public class Vat {
         List<BlockPos> sides = new ArrayList<>();
         float maximumPressure = Float.MAX_VALUE;
         float conductance = 0f;
+        BlockState weakestBlockState = Blocks.AIR.defaultBlockState();
 
         for (BlockPos blockPos : BlockPos.betweenClosed(lowerCorner, upperCorner)) {
             int x = blockPos.getX();
@@ -169,7 +198,10 @@ public class Vat {
                     break;
                 };
                 VatMaterial material = VatMaterial.BLOCK_MATERIALS.get(state.getBlock());
-                maximumPressure = Math.min(material.maxPressure(), maximumPressure);
+                if (material.maxPressure() < maximumPressure) {
+                    maximumPressure = material.maxPressure();
+                    weakestBlockState = state;
+                };
                 conductance += material.thermalConductivity(); // As area and width = 1, conductivity = conductance
                 sides.add(new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
             };
@@ -180,6 +212,7 @@ public class Vat {
             vat.sides = ImmutableList.copyOf(sides);
             vat.maximumPressure = maximumPressure;
             vat.conductance = conductance;
+            vat.weakestBlockState = weakestBlockState;
             return Optional.of(vat);
         } else {
             return Optional.empty();
@@ -213,6 +246,22 @@ public class Vat {
         return upperCorner.getY() - getInternalLowerCorner().getY();
     };
 
+    public int getInternalWidth() {
+        return upperCorner.getX() - getInternalLowerCorner().getX();
+    };
+
+    public int getInternalLength() {
+        return upperCorner.getZ() - getInternalLowerCorner().getZ();
+    };
+
+    /**
+     * Internal volume (in Blocks) of this Vat.
+     * @return
+     */
+    public int getVolume() {
+        return getInternalHeight() * getInternalWidth() * getInternalLength();
+    };
+
     public Collection<BlockPos> getSideBlockPositions() {
         if (this.sides == null) {
             List<BlockPos> newSides = new ArrayList<>();
@@ -233,6 +282,20 @@ public class Vat {
             sides = ImmutableList.copyOf(newSides);
         };
         return sides;
+    };
+
+    /**
+     * The {@link VatMaterial#maxPressure maximum pressure} of the weakest Block making up this Vat.
+     */
+    public float getMaxPressure() {
+        return maximumPressure;
+    };
+
+    /**
+     * The thermal conductance (in watts per kelvin) of the area of this Vat.
+     */
+    public float getConductance() {
+        return conductance;
     };
 
     /**

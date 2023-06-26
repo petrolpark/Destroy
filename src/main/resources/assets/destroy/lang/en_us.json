@@ -465,6 +465,9 @@
     "destroy.tooltip.seismometer.crude_oil": "There are about %1$s bucket(s) of Crude Oil in this chunk",
     "destroy.tooltip.unknown_molecule": "Unknown Molecule",
     "destroy.tooltip.vat.not_initialized": "A valid Vat could _not_ be formed. _Click_ to try again, or _Ponder_ the _Vat Controller_ to learn more.",
+    "destroy.tooltip.vat.pressure.header": "Vat Pressure:",
+    "destroy.tooltip.vat.pressure.current": "%1$skPa",
+    "destroy.tooltip.vat.pressure.max": "Maximum: %1$skPa (%2$s)",
 
     "effect.destroy.cancer": "Cancer Awareness",
     "effect.destroy.cancer.description": "Has no effect in-game. Many things in the Destroy Mod are jokes, but cancer is not one of them. This is here to raise awareness of the increase in cancer risk associated with occupational exposure, and with harm to the ozone layer. Please see a professional source like 'cancerresearchuk.org'.",

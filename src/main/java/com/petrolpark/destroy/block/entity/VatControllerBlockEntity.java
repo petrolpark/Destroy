@@ -9,6 +9,7 @@ import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.VatControllerBlock;
 import com.petrolpark.destroy.block.entity.behaviour.WhenTargetedBehaviour;
 import com.petrolpark.destroy.chemistry.Mixture;
+import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -26,7 +27,7 @@ import com.simibubi.create.foundation.utility.Pair;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -41,6 +42,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     protected Optional<Vat> vat;
 
+    protected Mixture cachedMixture;
     protected SmartFluidTankBehaviour tankBehaviour;
     protected LazyOptional<IFluidHandler> fluidCapability;
     protected boolean full;
@@ -89,12 +91,13 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     protected void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
         full = tag.getBoolean("Full");
-        if (tag.contains("VatLowerCorner") && tag.contains("VatUpperCorner")) {
-            vat = Optional.of(new Vat(NbtUtils.readBlockPos(tag.getCompound("VatLowerCorner")), NbtUtils.readBlockPos(tag.getCompound("VatUpperCorner"))));
+        if (tag.contains("Vat", Tag.TAG_COMPOUND)) {
+            vat = Vat.read(tag.getCompound("Vat"));
         } else {
             vat = Optional.empty();
         };
         underDeconstruction = tag.getBoolean("UnderDeconstruction");
+        updateCachedMixture();
     };
 
     @Override
@@ -102,8 +105,9 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         super.write(tag, clientPacket);
         tag.putBoolean("Full", full);
         if (vat.isPresent()) {
-            tag.put("VatLowerCorner", NbtUtils.writeBlockPos(vat.get().getLowerCorner()));
-            tag.put("VatUpperCorner", NbtUtils.writeBlockPos(vat.get().getUpperCorner()));
+            CompoundTag vatTag = new CompoundTag();
+            vat.get().write(vatTag);
+            tag.put("Vat", vatTag);
         };
         tag.putBoolean("UnderDeconstruction", underDeconstruction);
     };
@@ -140,21 +144,38 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         getTank().setFluid(MixtureFluid.of(existingFluid.getAmount() + newFluidStack.getAmount(), newMixture, null));
         tankBehaviour.forbidInsertion();
 
+        updateCachedMixture();
+
         return fluidAmountInserted;
     };
 
     private void onFluidStackChanged() {
         if (!vat.isPresent()) return;
-        if (getTank().getFluidAmount() >= getVat().get().getCapacity()) {
+        if (getTank().getFluidAmount() >= getVatOptional().get().getCapacity()) {
             full = true;
         } else {
             full = false;
         };
+        updateCachedMixture();
         setChanged();
     };
 
-    public Optional<Vat> getVat() {
+    public Optional<Vat> getVatOptional() {
         return vat;
+    };
+
+    private void updateCachedMixture() {
+        Mixture emptyMixture = new Mixture();
+        if (!getVatOptional().isPresent()) {
+            cachedMixture = emptyMixture;
+            return;
+        };
+        FluidStack containedFluid = getTank().getFluid();
+        if (containedFluid.isEmpty() || !containedFluid.getOrCreateTag().contains("Mixture")) {
+            cachedMixture = emptyMixture;
+            return;
+        };
+        cachedMixture = Mixture.readNBT(getTank().getFluid().getOrCreateTag().getCompound("Mixture"));
     };
 
     /**
@@ -266,6 +287,17 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         }
     };
 
+    /**
+     * Get the pressure (above air pressure) of gas in this Vat as a proportion of the {@link com.petrolpark.destroy.util.vat.Vat#getMaxPressure maximum pressure}
+     * the Vat can withstand.
+     */
+    public float getPercentagePressure() {
+        if (!getVatOptional().isPresent()) return 0f;
+        Vat vat = getVatOptional().get();
+        float moles = 1f; // TODO calculate moles of gas
+        return (moles * Reaction.GAS_CONSTANT * cachedMixture.getTemperature() / vat.getVolume()) / vat.getMaxPressure();
+    };
+
     private void onTargeted(LocalPlayer player, BlockHitResult blockHitResult) {
         if (vat.isPresent()) {
             CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), new AABB(vat.get().getInternalLowerCorner(), vat.get().getUpperCorner()).inflate(1d), 20)
@@ -275,7 +307,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        if (getVat().isPresent()) {
+        if (getVatOptional().isPresent()) {
 
         } else if (initializationTicks == 0) {
             TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.vat.not_initialized").string(), TooltipHelper.Palette.RED).forEach(component -> {

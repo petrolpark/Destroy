@@ -17,8 +17,8 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
 
     @Override
     protected void renderSafe(VatControllerBlockEntity controller, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        if (!controller.getVat().isPresent()) return;
-        Vat vat = controller.getVat().get();
+        if (!controller.getVatOptional().isPresent()) return;
+        Vat vat = controller.getVatOptional().get();
         
         Vec3 relativeInternalLowerCorner = Vec3.atLowerCornerOf(vat.getInternalLowerCorner().subtract(controller.getBlockPos()));
         Vec3 relativeInternalUpperCorner = Vec3.atLowerCornerOf(vat.getUpperCorner().subtract(controller.getBlockPos()));

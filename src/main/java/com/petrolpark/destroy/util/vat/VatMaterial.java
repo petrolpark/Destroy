@@ -21,7 +21,7 @@ public record VatMaterial(float maxPressure, float thermalConductivity, boolean 
     public static final Map<Block, VatMaterial> BLOCK_MATERIALS = new HashMap<>();
 
     public static final VatMaterial UNBREAKABLE = new VatMaterial(Float.MAX_VALUE, 0f, false);
-    public static final VatMaterial GLASS = new VatMaterial(110000f, 1.38f, true);
+    public static final VatMaterial GLASS = new VatMaterial(10000f, 1.38f, true);
 
     /**
      * Whether the given Block can be used to construct a Vat.
@@ -36,6 +36,6 @@ public record VatMaterial(float maxPressure, float thermalConductivity, boolean 
         BLOCK_MATERIALS.put(DestroyBlocks.VAT_CONTROLLER.get(), UNBREAKABLE);
         BLOCK_MATERIALS.put(AllBlocks.COPPER_CASING.get(), new VatMaterial(500000f, 400f, false));
         BLOCK_MATERIALS.put(Blocks.GLASS, GLASS);
-        BLOCK_MATERIALS.put(Blocks.TINTED_GLASS, new VatMaterial(110000f, 1.2f, false));
+        BLOCK_MATERIALS.put(Blocks.TINTED_GLASS, new VatMaterial(10000f, 1.2f, false));
     };
 };

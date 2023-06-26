@@ -19,7 +19,7 @@ public class Reaction {
     private float activationEnergy;
     private String translationKey;
 
-    private static final Float GAS_CONSTANT = 8.3145f;
+    public static final Float GAS_CONSTANT = 8.3145f;
 
     private Reaction() {};
 
