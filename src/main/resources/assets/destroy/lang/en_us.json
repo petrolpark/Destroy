@@ -487,13 +487,11 @@
 
     "entity.minecraft.villager.destroy.innkeeper": "Innkeeper",
 
-    "fluid.destroy.brine": "Brine",
     "fluid.destroy.chorus_wine": "Chorus Wine",
     "fluid.destroy.cream": "Cream",
     "fluid.destroy.crude_oil": "Crude Oil",
     "fluid.destroy.diesel": "Diesel",
     "fluid.destroy.distilled_water": "Distilled Water",
-    "fluid.destroy.ethanol_distillate": "Ethanol Distillate",
     "fluid.destroy.fuel_oil": "Fuel Oil",
     "fluid.destroy.kerosene": "Kerosene",
     "fluid.destroy.lpg": "LPG",

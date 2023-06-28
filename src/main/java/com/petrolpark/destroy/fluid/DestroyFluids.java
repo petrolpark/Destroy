@@ -5,6 +5,7 @@ import com.petrolpark.destroy.fluid.MixtureFluid.MixtureFluidType;
 import com.petrolpark.destroy.fluid.UrineFluid.UrineFluidType;
 import com.simibubi.create.content.fluids.VirtualFluid;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.tterrag.registrate.builders.FluidBuilder;
 import com.tterrag.registrate.util.entry.FluidEntry;
 
 public class DestroyFluids {
@@ -24,7 +25,7 @@ public class DestroyFluids {
         .register(),
     CREAM = REGISTRATE.virtualFluid("cream")
         .register(),
-    CRUDE_OIL = REGISTRATE.virtualFluid("crude_oil")
+    CRUDE_OIL = virtualFluid("crude_oil")
         .register(),
     DIESEL = REGISTRATE.virtualFluid("diesel")
         .register(),
@@ -52,6 +53,10 @@ public class DestroyFluids {
         .register(),
     UNDISTILLED_MOONSHINE = REGISTRATE.virtualFluid("undistilled_moonshine")
         .register();
+
+    private static FluidBuilder<VirtualFluid, CreateRegistrate> virtualFluid(String name) {
+        return REGISTRATE.virtualFluid(name, Destroy.asResource("fluid/"+name), Destroy.asResource("fluid/"+name));
+    };
 
     public static void register() {}
 
