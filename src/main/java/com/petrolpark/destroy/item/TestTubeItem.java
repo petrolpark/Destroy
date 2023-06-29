@@ -32,7 +32,7 @@ public class TestTubeItem extends ItemFluidContainer {
 
     static {
         df.setMinimumFractionDigits(1);
-        df.setMinimumFractionDigits(1);
+        df.setMaximumFractionDigits(1);
     };
 
     public TestTubeItem(Properties properties) {

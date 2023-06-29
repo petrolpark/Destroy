@@ -283,6 +283,13 @@ public class Vat {
         };
         return sides;
     };
+    
+    /**
+     * The {@link Vat#maximumPressure weakest Block} in this Vat.
+     */
+    public BlockState getWeakestBlock() {
+        return weakestBlockState;
+    };
 
     /**
      * The {@link VatMaterial#maxPressure maximum pressure} of the weakest Block making up this Vat.

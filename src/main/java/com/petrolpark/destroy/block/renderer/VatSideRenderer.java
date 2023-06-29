@@ -7,6 +7,7 @@ import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
 import com.petrolpark.destroy.block.model.DestroyPartials;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
+import com.simibubi.create.foundation.fluid.FluidRenderer;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
 import com.simibubi.create.foundation.utility.AngleHelper;
@@ -15,16 +16,30 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.fluids.FluidStack;
 
 public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity> {
+
+    private static final FluidStack THERMOMETER_FLUID;
+
+    static {
+        // ReadOnlyMixture mixture = new ReadOnlyMixture();
+        // mixture.addMolecule(DestroyMolecules.MERCURY, DestroyMolecules.MERCURY.getPureConcentration());
+        // THERMOMETER_FLUID = MixtureFluid.of(1000, mixture, "");
+        THERMOMETER_FLUID = new FluidStack(Fluids.WATER, 1000); //TODO update to use mercury
+    };
 
     public VatSideRenderer(BlockEntityRendererProvider.Context context) {};
 
     @Override
+    @SuppressWarnings("null")
     protected void renderSafe(VatSideBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
         BlockState state = be.getBlockState();
-        VertexConsumer vb = bufferSource.getBuffer(RenderType.solid());
+        if (be.getController() == null) return;
+        VertexConsumer vb = bufferSource.getBuffer(RenderType.cutout());
         float dialPivot = 5.75f / 16;
 
         switch (be.getDisplayType()) {
@@ -39,7 +54,7 @@ public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity>
                     .light(light)
                     .renderInto(ms, vb);
                 transformed(AllPartialModels.BOILER_GAUGE_DIAL, state, be.direction.getClockWise())
-                    .translate( 2 / 16d, 0d, 0d)
+                    .translate(2 / 16d, 0d, 0d)
                     .translate(0, dialPivot, dialPivot)
                     .rotateX(-90 * be.getPercentagePressure())
                     .translate(0, -dialPivot, -dialPivot)
@@ -47,6 +62,10 @@ public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity>
                     .renderInto(ms, vb);
                 break;
             } case THERMOMETER: {
+                transformed(DestroyPartials.VAT_SIDE_THERMOMETER, state, be.direction.getOpposite())
+                    .renderInto(ms, vb);
+                FluidRenderer.renderFluidBox(THERMOMETER_FLUID, 7 / 16f, 1.5f / 16f, -2 / 16f, 9 / 16f, 3.9f / 16f, 0 / 16f, bufferSource, ms, light, true);
+                FluidRenderer.renderFluidBox(THERMOMETER_FLUID, 7.5f / 16f, 3.9f / 16f, -1.5f / 16f, 8.5f / 16f, (10.1f * Mth.clamp((be.getController().getTemperature() - 298f) / 202f, 0, 1) + 3.9f) / 16f, -0.5f / 16f, bufferSource, ms, light, false);
                 break;
             }
         }

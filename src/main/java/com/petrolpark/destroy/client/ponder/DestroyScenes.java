@@ -213,6 +213,7 @@ public class DestroyScenes {
         //Define Selections
         Selection distillationTower = util.select.fromTo(2, 1, 1, 2, 3, 1);
         Selection kinetics = util.select.fromTo(2, 1, 2, 3, 3, 5).add(util.select.position(2, 0, 5));
+        BlockPos blazeBurner = new BlockPos(1, 1, 1);
         BlockPos bottomBubbleCap = new BlockPos(2, 1, 1);
         BlockPos middleBubbleCap = new BlockPos(2, 2, 1);
 
@@ -224,7 +225,7 @@ public class DestroyScenes {
         });
 
         scene.world.showSection(util.select.fromTo(0, 0, 0, 4, 0, 4), Direction.UP);
-        scene.world.showSection(distillationTower, Direction.DOWN);
+        ElementLink<WorldSectionElement> distillationTowerElement = scene.world.showIndependentSection(distillationTower, Direction.DOWN);
         scene.idle(10);
         scene.overlay.showText(60)
             .text("This text is defined in a language file.")
@@ -254,6 +255,16 @@ public class DestroyScenes {
             .text("This text is defined in a language file.")
             .pointAt(util.vector.blockSurface(new BlockPos(2, 3, 1), Direction.WEST))
             .attachKeyFrame();
+        scene.idle(120);
+        scene.world.hideSection(kinetics, Direction.SOUTH);
+        scene.world.moveSection(distillationTowerElement, new Vec3(0, 1, 0), 20);
+        scene.idle(10);
+        scene.world.moveSection(scene.world.showIndependentSection(util.select.position(blazeBurner), Direction.EAST), new Vec3(1, 0, 0), 20);
+        scene.idle(30);
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame()
+            .pointAt(util.vector.blockSurface(bottomBubbleCap, Direction.WEST));
         scene.idle(120);
         scene.markAsFinished();
     };

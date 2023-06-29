@@ -27,6 +27,7 @@ public class DestroyPartials {
     // Vat
     VAT_SIDE_PIPE = block("vat_side/pipe"),
     VAT_SIDE_BAROMETER = block("vat_side/barometer"),
+    VAT_SIDE_THERMOMETER = block("vat_side/thermometer"),
 
     // Miscellaneous
     GAS_MASK = block("gas_mask"),

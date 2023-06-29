@@ -2,7 +2,6 @@ package com.petrolpark.destroy.fluid;
 
 import javax.annotation.Nullable;
 
-import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.simibubi.create.AllFluids.TintedFluidType;
 import com.simibubi.create.content.fluids.VirtualFluid;
@@ -23,17 +22,17 @@ public class MixtureFluid extends VirtualFluid {
     /**
      * Creates a Fluid Stack of the given {@link com.petrolpark.destroy.chemistry.Mixture Mixture}.
      * @param amount How many mB this Fluid Stack is
-     * @param mixture
+     * @param mixture Doesn't have to be read-only
      * @param translationKey The translation key of the custom name of this Mixture (which will override the normal naming algorithm). {@code null} or {@code ""} for no name
      */
-    public static FluidStack of(int amount, Mixture mixture, @Nullable String translationKey) {
+    public static FluidStack of(int amount, ReadOnlyMixture mixture, @Nullable String translationKey) {
         FluidStack fluidStack = new FluidStack(DestroyFluids.MIXTURE.get(), amount);
         mixture.setTranslationKey(translationKey);
         addMixtureToFluidStack(fluidStack, mixture);
         return fluidStack;
     };
 
-    public static FluidStack addMixtureToFluidStack(FluidStack fluidStack, Mixture mixture) {
+    public static FluidStack addMixtureToFluidStack(FluidStack fluidStack, ReadOnlyMixture mixture) {
         if (mixture.isEmpty()) {
             fluidStack.removeChildTag("Mixture");
             return fluidStack;

@@ -23,7 +23,7 @@ public class DestroyFluids {
     
     CHORUS_WINE = REGISTRATE.virtualFluid("chorus_wine")
         .register(),
-    CREAM = REGISTRATE.virtualFluid("cream")
+    CREAM = virtualFluid("cream")
         .register(),
     CRUDE_OIL = virtualFluid("crude_oil")
         .register(),

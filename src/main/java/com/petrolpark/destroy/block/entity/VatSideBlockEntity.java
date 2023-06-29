@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.block.entity;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.capability.block.VatTankCapability;
+import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.vat.Vat;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
@@ -16,6 +18,7 @@ import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -31,6 +34,12 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggleInformation {
+
+    private static final DecimalFormat df = new DecimalFormat();
+    static {
+        df.setMinimumFractionDigits(1);
+        df.setMaximumFractionDigits(1);
+    };
 
     protected SmartFluidTankBehaviour inputBehaviour;
     protected LazyOptional<IFluidHandler> fluidCapability;
@@ -174,11 +183,18 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     };
 
     @Override
+    @SuppressWarnings("null")
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        if (!getVatOptional().isPresent() || getController() == null) return false;
         switch (getDisplayType()) {
             case THERMOMETER: {
+                DestroyLang.translate("tooltip.vat.temperature", df.format(getController().getTemperature())).style(ChatFormatting.WHITE).forGoggles(tooltip);
                 return true;
             } case BAROMETER: {
+                Vat vat = getVatOptional().get();
+                DestroyLang.translate("tooltip.vat.pressure.header").style(ChatFormatting.WHITE).forGoggles(tooltip);
+                DestroyLang.translate("tooltip.vat.pressure.current", df.format(getController().getPressure() / 1000f)).style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
+                DestroyLang.translate("tooltip.vat.pressure.max", df.format(vat.getMaxPressure() / 1000f), vat.getWeakestBlock().getBlock().getName().getString()).style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
                 return true;
             } default: {
                 return false;

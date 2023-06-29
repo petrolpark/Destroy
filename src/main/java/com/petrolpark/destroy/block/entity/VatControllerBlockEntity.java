@@ -8,6 +8,7 @@ import java.util.Optional;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.VatControllerBlock;
 import com.petrolpark.destroy.block.entity.behaviour.WhenTargetedBehaviour;
+import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.fluid.DestroyFluids;
@@ -287,6 +288,17 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         }
     };
 
+    public float getTemperature() {
+        if (getVatOptional().isEmpty() || cachedMixture == null) return LevelPollution.getLocalTemperature(getLevel(), getBlockPos());
+        return cachedMixture.getTemperature();
+    };
+
+    public float getPressure() {
+        if (!getVatOptional().isPresent()) return 0f;
+        float moles = 1f; // TODO calculate moles of gas
+        return moles * Reaction.GAS_CONSTANT * cachedMixture.getTemperature() / vat.get().getVolume();
+    };
+
     /**
      * Get the pressure (above air pressure) of gas in this Vat as a proportion of the {@link com.petrolpark.destroy.util.vat.Vat#getMaxPressure maximum pressure}
      * the Vat can withstand.
@@ -294,8 +306,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     public float getPercentagePressure() {
         if (!getVatOptional().isPresent()) return 0f;
         Vat vat = getVatOptional().get();
-        float moles = 1f; // TODO calculate moles of gas
-        return (moles * Reaction.GAS_CONSTANT * cachedMixture.getTemperature() / vat.getVolume()) / vat.getMaxPressure();
+        return getPressure() / vat.getMaxPressure();
     };
 
     private void onTargeted(LocalPlayer player, BlockHitResult blockHitResult) {
