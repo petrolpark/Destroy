@@ -2,7 +2,6 @@ package com.petrolpark.destroy.fluid;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.fluid.MixtureFluid.MixtureFluidType;
-import com.petrolpark.destroy.fluid.UrineFluid.UrineFluidType;
 import com.simibubi.create.content.fluids.VirtualFluid;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.builders.FluidBuilder;
@@ -18,46 +17,49 @@ public class DestroyFluids {
         .lang("Mixture")
         .register();
 
-    public static final FluidEntry<UrineFluid> URINE = REGISTRATE.virtualFluid("urine", new ResourceLocation("minecraft", "block/water_still"), new ResourceLocation("minecraft", "block/water_flow"), UrineFluidType::new, UrineFluid::new)
-        .register();
-
     public static final FluidEntry<VirtualFluid>
     
-    CHORUS_WINE = REGISTRATE.virtualFluid("chorus_wine")
+    URINE = coloredWaterFluid("urine", 0xA0EADA4E)
+        .register(),
+    CHORUS_WINE = virtualFluid("chorus_wine")
         .register(),
     CREAM = virtualFluid("cream")
         .register(),
     CRUDE_OIL = virtualFluid("crude_oil")
         .register(),
-    DIESEL = REGISTRATE.virtualFluid("diesel")
+    DIESEL = virtualFluid("diesel")
         .register(),
-    FUEL_OIL = REGISTRATE.virtualFluid("fuel_oil")
+    FUEL_OIL = virtualFluid("fuel_oil")
         .register(),
-    KEROSENE = REGISTRATE.virtualFluid("kerosene")
+    KEROSENE = virtualFluid("kerosene")
         .register(),
-    LPG = REGISTRATE.virtualFluid("lpg")
+    LPG = virtualFluid("lpg")
         .register(),
-    MOLTEN_CINNABAR = REGISTRATE.virtualFluid("molten_cinnabar")
+    MOLTEN_CINNABAR = virtualFluid("molten_cinnabar")
         .register(),
-    NAPALM_SUNDAE = REGISTRATE.virtualFluid("napalm_sundae")
+    NAPALM_SUNDAE = virtualFluid("napalm_sundae")
         .register(),
-    NAPTHA = REGISTRATE.virtualFluid("naptha")
+    NAPTHA = virtualFluid("naptha")
         .register(),
-    ONCE_DISTILLED_MOONSHINE = REGISTRATE.virtualFluid("once_distilled_moonshine")
+    ONCE_DISTILLED_MOONSHINE = coloredWaterFluid("once_distilled_moonshine", 0xE0684F31)
         .register(),
-    PETROL = REGISTRATE.virtualFluid("petrol")
+    PETROL = virtualFluid("petrol")
         .register(),
-    SKIMMED_MILK = REGISTRATE.virtualFluid("skimmed_milk")
+    SKIMMED_MILK = coloredWaterFluid("skimmed_milk", 0xD0FFFFFF)
         .register(),
-    THRICE_DISTILLED_MOONSHINE = REGISTRATE.virtualFluid("thrice_distilled_moonshine")
+    THRICE_DISTILLED_MOONSHINE = coloredWaterFluid("thrice_distilled_moonshine", 0xC0A18666)
         .register(),
-    TWICE_DISTILLED_MOONSHINE = REGISTRATE.virtualFluid("twice_distilled_moonshine")
+    TWICE_DISTILLED_MOONSHINE = coloredWaterFluid("twice_distilled_moonshine", 0xD08C6B46)
         .register(),
-    UNDISTILLED_MOONSHINE = REGISTRATE.virtualFluid("undistilled_moonshine")
+    UNDISTILLED_MOONSHINE = coloredWaterFluid("undistilled_moonshine", 0xF053330D)
         .register();
 
     private static FluidBuilder<VirtualFluid, CreateRegistrate> virtualFluid(String name) {
         return REGISTRATE.virtualFluid(name, Destroy.asResource("fluid/"+name), Destroy.asResource("fluid/"+name));
+    };
+
+    private static FluidBuilder<VirtualFluid, CreateRegistrate> coloredWaterFluid(String name, int color) {
+        return REGISTRATE.virtualFluid(name, (properties, stillTexture, flowingTexture) -> new ColoredWaterFluidType(properties, color), VirtualFluid::new);
     };
 
     public static void register() {}
