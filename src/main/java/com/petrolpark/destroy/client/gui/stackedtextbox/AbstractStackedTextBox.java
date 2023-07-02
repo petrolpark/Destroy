@@ -5,11 +5,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.simibubi.create.foundation.gui.widget.ElementWidget;
+import com.simibubi.create.foundation.item.TooltipHelper.Palette;
+import com.simibubi.create.foundation.utility.Components;
+import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 
 public abstract class AbstractStackedTextBox extends ElementWidget {
 
@@ -38,7 +44,7 @@ public abstract class AbstractStackedTextBox extends ElementWidget {
 
     };
 
-    public static LinesAndActivationAreas getTextAndActivationAreas(String text, int startX, int startY, int maxWidthPerLine, Font font) {
+    public static LinesAndActivationAreas getTextAndActivationAreas(String text, int startX, int startY, int maxWidthPerLine, Screen screen, Font font, Palette palette) {
 
         // Break the String into sections of plain text, Molecule names, and hoverable definitions
         List<StackedTextBoxComponent> components = new ArrayList<>();
@@ -113,7 +119,7 @@ public abstract class AbstractStackedTextBox extends ElementWidget {
 		int currentLineWidth = 0;
         for (StackedTextBoxComponent component : components) {
             addAllWordsInComponent: for (String word : component.getWords()) {
-                int wordWidth = font.width(word);
+                int wordWidth = font.width(word.replaceAll("_", ""));
                 if (currentLineWidth + wordWidth > maxWidthPerLine) {
                     if (currentLineWidth > 0) {
                         String line = currentLine.toString();
@@ -135,7 +141,7 @@ public abstract class AbstractStackedTextBox extends ElementWidget {
                 currentLine.append(word);
 
                 // Set the current activation area on the offchance there is one
-                currentActivationArea.minX = startX + currentLineWidth + 5;
+                currentActivationArea.minX = startX + currentLineWidth;
                 currentActivationArea.minY = startY + (lines.size()) * font.lineHeight;
                 currentActivationArea.maxY = startY + (lines.size() + 1) * font.lineHeight;
 
@@ -143,11 +149,11 @@ public abstract class AbstractStackedTextBox extends ElementWidget {
                 maxLineWidth = Math.max(maxLineWidth, currentLineWidth);
 
                 // Set the current activation area on the offchance there is one
-                currentActivationArea.maxX = startX + currentLineWidth + 5;
+                currentActivationArea.maxX = startX + currentLineWidth;
             };
 
             if (component instanceof StackedTextBoxComponent.Definition definition) {
-                areasAndTextBoxes.add(Pair.of(currentActivationArea, definition.definitionTranslationKey));
+                areasAndTextBoxes.add(Pair.of(currentActivationArea, Component.translatable(definition.definitionTranslationKey).getString()));
             };
 
             currentActivationArea = new Area(0, 0, 0, 0);
@@ -157,12 +163,34 @@ public abstract class AbstractStackedTextBox extends ElementWidget {
 			lines.add(currentLine.toString());
 		};
 
+        // Make the lines look pretty
+        Couple<Style> styles = Couple.create(palette.highlight(), palette.primary());
+        MutableComponent lineStart = Component.literal("");
+        lineStart.withStyle(palette.primary());
+        boolean currentlyHighlighted = false;
         List<Component> formattedLines = new ArrayList<>(lines.size());
         for (String line : lines) {
-            formattedLines.add(Component.literal(line));
+            MutableComponent currentComponent = lineStart.plainCopy();
+            String[] split = line.split("_");
+			for (String part : split) {
+				currentComponent.append(Components.literal(part).withStyle(styles.get(currentlyHighlighted)));
+				currentlyHighlighted = !currentlyHighlighted;
+			}
+            formattedLines.add(currentComponent);
+			currentlyHighlighted = !currentlyHighlighted;
         };
 
-        return new LinesAndActivationAreas(formattedLines, areasAndTextBoxes, maxLineWidth + 5, 11 + (lines.size() + 1) * font.lineHeight);
+        // Reposition the tooltip if it's in the bottom or right-hand side of the screen
+        int width = maxLineWidth + 5;
+        int height = 11 + (lines.size() + 1) * font.lineHeight;
+        if (startX + (width / 2) > screen.width / 2) {
+            startX -= width;
+        };
+        if (startY + (height / 2) > screen.height / 2) {
+            startY -= (height + font.lineHeight);
+        };
+
+        return new LinesAndActivationAreas(formattedLines, areasAndTextBoxes, startX, startY, width, height);
     };
 
     public static class Area {
@@ -186,9 +214,11 @@ public abstract class AbstractStackedTextBox extends ElementWidget {
     /**
      * @param lines An ordered list of the lines for this tooltip
      * @param areas Pair of Activation Areas and the IDs of the Stacked Text Boxes they would open
+     * @param startX
+     * @param startY
      * @param height The height that this text requires
      * @param width The width that this text requires
      */
-    public static record LinesAndActivationAreas(List<Component> lines, List<Pair<Area, String>> areas, int width, int height) {};
+    public static record LinesAndActivationAreas(List<Component> lines, List<Pair<Area, String>> areas, int startX, int startY, int width, int height) {};
     
 };

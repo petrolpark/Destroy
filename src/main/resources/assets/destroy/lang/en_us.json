@@ -343,6 +343,7 @@
     "destroy.chemical.zinc": "Zinc",
     "destroy.chemical.zirconium": "Zirconium",
 
+    "destroy.chemistry.acid": "TODO finish later hi im henry {pee, destroy:bond}",
     "destroy.chemistry.bond": "Two atoms can bond by sharing a pair of electrons. The positive nuclei of the atoms are attracted to the negative electrons. TODO finish",
     "destroy.chemistry.catalyst": "A catalyst is a substance that speeds up or enables a chemical reaction, without being used up itself.",
     "destroy.chemistry.cycle": "A cyclic molecule has a least one loop in its structure.",
@@ -419,9 +420,9 @@
     "destroy.reaction.diels-alder": "Diels-Alder Reaction",
     "destroy.reaction.diels-alder.description": "A Diels-Alder reaction is a type of {cyclization, destroy:cycle} that occurs between a {destroy:diene} and a {destroy:dienophile}.",
     "destroy.reaction.hydroxide_neutralization": "Neutralization",
-    "destroy.reaction.hydroxide_neutralization.description": "The reaction of an {acid, destroy:acid} and a {base, destroy:base} to produce [destroy:water]",
+    "destroy.reaction.hydroxide_neutralization.description": "The reaction of an {acid, destroy:acid} and a {base, destroy:base} to produce [destroy:water].",
     "destroy.reaction.methyl_acetate_carbonylation": "[destroy:methyl_acetate] Carbonylation",
-    "destroy.reaction.methyl_acetate_carbonylation.description": "A method for the production of [destroy:acetic_anhydride] by the _carbonylation_ of [destroy:methyl_acetate].",
+    "destroy.reaction.methyl_acetate_carbonylation.description": "A method for the production of [destroy:acetic_anhydride] by the carbonylation of [destroy:methyl_acetate].",
 
     "destroy.recipe.aging": "Aging",
     "destroy.recipe.assembly.charging": "Charge with Dynamo",

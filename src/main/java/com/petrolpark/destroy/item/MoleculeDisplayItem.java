@@ -102,7 +102,7 @@ public class MoleculeDisplayItem extends Item {
         public void renderImage(Font font, int mouseX, int mouseY, PoseStack poseStack, ItemRenderer itemRenderer, int blitOffset) {
             poseStack.pushPose(); 
             poseStack.translate(0, 0, 401);
-            renderer.render(poseStack, mouseX + 10, mouseY + 10);
+            renderer.render(poseStack, mouseX + 10, mouseY + 5);
             poseStack.popPose();
         };
     };

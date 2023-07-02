@@ -27,6 +27,10 @@ public abstract class StackedTextBoxComponent {
         
         public Plain(String value) {
             super(value);
+            setWords(value);
+        };
+
+        protected void setWords(String value) {
             words = new LinkedList<>();
             BreakIterator iterator = BreakIterator.getLineInstance(Minecraft.getInstance().getLocale());
             iterator.setText(value);
@@ -43,20 +47,15 @@ public abstract class StackedTextBoxComponent {
         };
     };
 
-    public static class Molecule extends StackedTextBoxComponent {
-
-        private String moleculeName;
+    public static class Molecule extends Plain {
 
         public Molecule(String value) {
             super(value);
             String[] nameSpaceAndId = value.split(":");
-            moleculeName = Component.translatable(nameSpaceAndId[0] + ".chemical." + nameSpaceAndId[1]).getString();
+            String moleculeName = Component.translatable(nameSpaceAndId[0] + ".chemical." + nameSpaceAndId[1]).getString(); //TODO check if IUPAC names are enabled
+            setWords(moleculeName);
         };
-
-        @Override
-        public String[] getWords() {
-            return moleculeName.split(" ");
-        };
+    
     };
 
     public static class Definition extends StackedTextBoxComponent {
@@ -67,7 +66,7 @@ public abstract class StackedTextBoxComponent {
         public Definition(String value) {
             super(value);
             String[] s = value.split(",");
-            displayedString = s[0];
+            displayedString = "_"+s[0]+"_";
             String[] definitionId = s[1].trim().split(":");
             definitionTranslationKey = definitionId[0] + ".chemistry." + definitionId[1];
         };

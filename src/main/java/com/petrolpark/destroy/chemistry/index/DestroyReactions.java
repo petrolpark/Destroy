@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.chemistry.index;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
 
@@ -50,7 +51,7 @@ public class DestroyReactions {
         .build();
 
     private static ReactionBuilder builder() {
-        return new ReactionBuilder(false);
+        return new ReactionBuilder(Destroy.MOD_ID);
     };
 
     public static void register() {};

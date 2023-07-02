@@ -9,7 +9,7 @@
     "results": [
         {
             "fluid": "destroy:mixture",
-            "amount": 52,
+            "amount": 54,
             "nbt": {
                 "Mixture": {
                     "TranslationKey": "fluid.destroy.molten_sulfur",
@@ -29,11 +29,11 @@
         },
         {
             "fluid": "destroy:diesel",
-            "amount": 172
+            "amount": 173
         },
         {
             "fluid": "destroy:kerosene",
-            "amount": 118
+            "amount": 115
         },
         {
             "fluid": "destroy:naptha",
@@ -41,11 +41,11 @@
         },
         {
             "fluid": "destroy:petrol",
-            "amount": 158
+            "amount": 159
         },
         {
             "fluid": "destroy:lpg",
-            "amount": 112
+            "amount": 111
         }
     ],
     "heatRequirement": "heated"

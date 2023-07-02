@@ -78,13 +78,14 @@ public class MoleculeRenderer {
             y = Math.max(y, (int)pair.getFirst().y);
             // Set the X and Y offSets to the positive of the most negative respective coordinate of any rendered object present
             xOffset = -(int)Math.min(-xOffset, pair.getFirst().x);
-            yOffset = -(int)Math.max(-yOffset, pair.getFirst().y);
+            yOffset = -(int)Math.min(-yOffset, pair.getFirst().y);
         };
-
+        x += xOffset;
+        y += yOffset;
     };
 
     public int getWidth() {
-        return x + xOffset;
+        return x;
     };
 
     public int getHeight() {
@@ -95,8 +96,8 @@ public class MoleculeRenderer {
      * Draw all Atoms and Bonds in this Molecule.
      */
     public void render(PoseStack poseStack, int xPosition, int yPosition) {
-        poseStack.translate(xPosition + xOffset, yPosition, 0d);
         poseStack.pushPose();
+        poseStack.translate(xPosition + xOffset, yPosition + yOffset, 0d);
         for (Pair<Vec3, IRenderable> pair : RENDERED_OBJECTS) {
             pair.getSecond().render(poseStack, pair.getFirst());
         };

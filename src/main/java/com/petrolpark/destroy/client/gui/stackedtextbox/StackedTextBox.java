@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 
 import com.google.common.base.Strings;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Pair;
 
@@ -19,6 +20,8 @@ import net.minecraft.network.chat.Component;
 public class StackedTextBox extends AbstractStackedTextBox {
 
     private static final int PERMANENCE_LIFETIME = 20;
+
+    private String plainText = "";
 
     private Area activationArea;
     private boolean isActivationAreaHovered;
@@ -32,6 +35,12 @@ public class StackedTextBox extends AbstractStackedTextBox {
 
     private final List<Component> lines;
 
+    /**
+     * @param minecraft
+     * @param x This may not be respected if the text in this box requires that it be repositioned to fit on the screen
+     * @param y Ditto
+     * @param parent
+     */
     public StackedTextBox(Minecraft minecraft, int x, int y, AbstractStackedTextBox parent) {
         super(x, y, parent, AbstractStackedTextBox.NOTHING);
 
@@ -52,7 +61,13 @@ public class StackedTextBox extends AbstractStackedTextBox {
     };
 
     public StackedTextBox withText(String text) {
-        LinesAndActivationAreas result = getTextAndActivationAreas(text, x, y, 200, minecraft.font);
+        plainText = text;
+        updateTextBoxSize(text);
+        return this;
+    };
+
+    protected void updateTextBoxSize(String text) {
+        LinesAndActivationAreas result = getTextAndActivationAreas(text, x, y, 200, minecraft.screen, minecraft.font, TooltipHelper.Palette.GRAY_AND_WHITE);
 
         lines.clear();
         lines.addAll(result.lines());
@@ -60,7 +75,9 @@ public class StackedTextBox extends AbstractStackedTextBox {
         width = result.width();
         height = result.height();
 
-        return this;
+        // Move the text box if necessary to fit it on the screen
+        x = result.startX();
+        y = result.startY();
     };
 
     @Override
@@ -88,14 +105,20 @@ public class StackedTextBox extends AbstractStackedTextBox {
         // Don't render if the mouse isn't in the right place
         if (!isActive()) return;
 
+        ms.pushPose();
+
         // Render the text
         Screen screen = minecraft.screen;
-        ms.pushPose();
         if (screen != null) {
+            // Check if the screen has been resized and reposition if so
+            if (x + width > screen.width || y + height > screen.height) {
+                updateTextBoxSize(plainText);
+                return;
+            };
             ms.translate(0, 0, 10);
             List<Component> allLines = new ArrayList<>(lines);
             allLines.add(progressBar());
-            screen.renderTooltip(ms, allLines, Optional.empty(), x - 17, y + 5);
+            screen.renderTooltip(ms, allLines, Optional.empty(), x - 22, y + 5);
         };
 
         // Render the next text box in the chain (if it exists)
