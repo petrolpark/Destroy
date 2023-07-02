@@ -98,7 +98,7 @@ public class AgingCategory extends DestroyRecipeCategory<AgingRecipe> {
         stack.popPose();
 
         // Render duration text
-        DestroyGuiTextures.JEI_TEXT_BOX.render(stack, 4, 63);
+        DestroyGuiTextures.JEI_TEXT_BOX_LONG.render(stack, 4, 63);
         int seconds = (recipe.getProcessingDuration() % 1200) / 20;
         Minecraft.getInstance().font.draw(stack, DestroyLang.translate("tooltip.aging_barrel.aging_time", ""+ recipe.getProcessingDuration() / 1200 + ":" + (seconds < 10 ? "0" : "") + seconds).string(), 9,
 				69, 0xFFFFFF);

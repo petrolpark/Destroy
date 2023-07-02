@@ -45,7 +45,7 @@ public class DestroyFluids {
         .register(),
     PETROL = virtualFluid("petrol")
         .register(),
-    SKIMMED_MILK = coloredWaterFluid("skimmed_milk", 0xD0FFFFFF)
+    SKIMMED_MILK = coloredWaterFluid("skimmed_milk", 0xE0FFFFFF)
         .register(),
     THRICE_DISTILLED_MOONSHINE = coloredWaterFluid("thrice_distilled_moonshine", 0xC0A18666)
         .register(),

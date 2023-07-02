@@ -3,11 +3,11 @@
     "ingredients": [
       {
         "fluid": "destroy:cream",
-        "amount": 250
+        "amount": 400
       },
       {
         "fluid": "destroy:skimmed_milk",
-        "amount": 250
+        "amount": 100
       }
     ],
     "results": [

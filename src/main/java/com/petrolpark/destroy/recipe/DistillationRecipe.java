@@ -17,7 +17,7 @@ public class DistillationRecipe extends SingleFluidRecipe {
 
     @Override
     protected int getMaxFluidOutputCount() {
-        return 8;
+        return 7;
     };
 
     @Override

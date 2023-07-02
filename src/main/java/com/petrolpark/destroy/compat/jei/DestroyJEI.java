@@ -110,7 +110,7 @@ public class DestroyJEI implements IModPlugin {
             .acceptsMixtures()
             .catalyst(DestroyBlocks.BUBBLE_CAP::get)
             .itemIcon(DestroyBlocks.BUBBLE_CAP.get())
-            .emptyBackground(50, 160)
+            .emptyBackground(123, 125)
             .build("distillation", DistillationCategory::new),
         
         mutation = builder(MutationRecipe.class)

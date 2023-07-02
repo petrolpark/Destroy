@@ -1,0 +1,52 @@
+{
+    "type": "destroy:distillation",
+    "ingredients": [
+        {
+            "fluid": "destroy:crude_oil",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "destroy:mixture",
+            "amount": 52,
+            "nbt": {
+                "Mixture": {
+                    "TranslationKey": "fluid.destroy.molten_sulfur",
+                    "Temperature": "388",
+                    "Contents": [
+                        {
+                            "Molecule": "destroy:sulfur",
+                            "Concentration": 56.7
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "fluid": "destroy:fuel_oil",
+            "amount": 252
+        },
+        {
+            "fluid": "destroy:diesel",
+            "amount": 172
+        },
+        {
+            "fluid": "destroy:kerosene",
+            "amount": 118
+        },
+        {
+            "fluid": "destroy:naptha",
+            "amount": 136
+        },
+        {
+            "fluid": "destroy:petrol",
+            "amount": 158
+        },
+        {
+            "fluid": "destroy:lpg",
+            "amount": 112
+        }
+    ],
+    "heatRequirement": "heated"
+}

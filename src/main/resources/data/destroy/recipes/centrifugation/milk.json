@@ -2,7 +2,7 @@
     "type": "destroy:centrifugation",
     "ingredients": [
         {
-            "fluidTag": "forge:milk",
+            "fluid": "minecraft:milk",
             "amount": 1000
         }
     ],
