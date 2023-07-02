@@ -8,15 +8,17 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.builders.FluidBuilder;
 import com.tterrag.registrate.util.entry.FluidEntry;
 
+import net.minecraft.resources.ResourceLocation;
+
 public class DestroyFluids {
 
     private static CreateRegistrate REGISTRATE = Destroy.registrate();
     
-    public static final FluidEntry<MixtureFluid> MIXTURE = REGISTRATE.virtualFluid("mixture", MixtureFluidType::new, MixtureFluid::new)
+    public static final FluidEntry<MixtureFluid> MIXTURE = REGISTRATE.virtualFluid("mixture", new ResourceLocation("minecraft", "block/water_still"), new ResourceLocation("minecraft", "block/water_flow"), MixtureFluidType::new, MixtureFluid::new)
         .lang("Mixture")
         .register();
 
-    public static final FluidEntry<UrineFluid> URINE = REGISTRATE.virtualFluid("urine", UrineFluidType::new, UrineFluid::new)
+    public static final FluidEntry<UrineFluid> URINE = REGISTRATE.virtualFluid("urine", new ResourceLocation("minecraft", "block/water_still"), new ResourceLocation("minecraft", "block/water_flow"), UrineFluidType::new, UrineFluid::new)
         .register();
 
     public static final FluidEntry<VirtualFluid>

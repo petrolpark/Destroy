@@ -7,6 +7,7 @@ import com.simibubi.create.AllFluids.TintedFluidType;
 import com.simibubi.create.content.fluids.VirtualFluid;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -22,7 +23,7 @@ public class MixtureFluid extends VirtualFluid {
     /**
      * Creates a Fluid Stack of the given {@link com.petrolpark.destroy.chemistry.Mixture Mixture}.
      * @param amount How many mB this Fluid Stack is
-     * @param mixture Doesn't have to be read-only
+     * @param mixture This does not have to be read-only
      * @param translationKey The translation key of the custom name of this Mixture (which will override the normal naming algorithm). {@code null} or {@code ""} for no name
      */
     public static FluidStack of(int amount, ReadOnlyMixture mixture, @Nullable String translationKey) {
@@ -54,20 +55,21 @@ public class MixtureFluid extends VirtualFluid {
 
         @Override
         protected int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
-            // As Mixture Fluids are virtual they should never exist in a Fluid State
+            // As Mixture Fluids are virtual they should never exist in a Fluid State, so there is no need to have a tint
             return 0;
         };
 
         @Override
         public Component getDescription(FluidStack stack) {
-            return ReadOnlyMixture.readNBT(stack.getChildTag("Mixture")).getName();
+            return ReadOnlyMixture.readNBT(stack.getChildTag("Mixture")).getName(); //TODO cache Mixture name to avoid calculating every time
         };
 
     };
 
     public static int getTintColor(FluidStack stack) {
         if (stack.isEmpty()) return -1; // Transparent
-        return 0; //TODO Auto-generated method stub
+        if (!stack.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND)) return -1;
+        return ReadOnlyMixture.readNBT(stack.getChildTag("Mixture")).getColor(); //TODO cache Mixture color to avoid calculating every time
     };
 
     

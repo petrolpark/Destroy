@@ -18,11 +18,11 @@ public class UrineFluid extends VirtualFluid {
 
     public static class UrineFluidType extends TintedFluidType {
 
-        private static final int PEE_TINT = 15391310;
-
         public UrineFluidType(Properties properties, ResourceLocation stillTexture, ResourceLocation flowingTexture) {
-            super(properties, new ResourceLocation("minecraft", "water_still"), new ResourceLocation("minecraft", "water_flow"));
+            super(properties, stillTexture, flowingTexture);
         };
+
+        private static final int PEE_TINT = 15391310;
     
         @Override
         protected int getTintColor(FluidStack stack) {

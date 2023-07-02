@@ -114,6 +114,7 @@ public final class DestroyMolecules {
     CHLOROAURATE = builder()
         .id("chloroaurate")
         .structure(Formula.deserialize("destroy:linear:ClAu(Cl)(Cl)Cl"))
+        .color(0x7FEDCA4A)
         .charge(-1)
         .build(),
 
@@ -265,6 +266,7 @@ public final class DestroyMolecules {
     MERCURY = builder()
         .id("mercury")
         .structure(Formula.atom(Element.MERCURY))
+        .color(0xFFB3B3B3)
         .build(),
 
     METHANOL = builder()

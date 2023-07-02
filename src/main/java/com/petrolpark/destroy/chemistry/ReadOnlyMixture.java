@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.jozufozu.flywheel.util.Color;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -207,6 +208,25 @@ public class ReadOnlyMixture {
         return tooltip;
     };
 
+    public int getColor() {
+        float totalColorContribution = 0f;
+        float totalRed = 0;
+        float totalGreen = 0;
+        float totalBlue = 0;
+        int totalAlpha = 64;
+        for (Entry<Molecule, Float> entry : contents.entrySet()) {
+            if (entry.getKey().isColorless()) continue;
+            Color color = new Color(entry.getKey().getColor());
+            float colorContribution = entry.getValue() * color.getAlphaAsFloat();
+            totalColorContribution += colorContribution;
+            totalRed += color.getRed() * colorContribution;
+            totalGreen += color.getGreen() * colorContribution;
+            totalBlue += color.getBlue() * colorContribution;
+            totalAlpha = Math.max(totalAlpha, color.getAlpha());
+        };
+        return new Color((int)(totalRed / totalColorContribution), (int)(totalGreen / totalColorContribution), (int)(totalBlue / totalColorContribution), totalAlpha).getRGB();
+    };
+
     /**
      * Update the {@link ReadOnlyMixture#name name} of this Mixture to reflect what's in it.
      */
@@ -217,7 +237,7 @@ public class ReadOnlyMixture {
             return;
         };
 
-        boolean iupac = false; //TODO change
+        boolean iupac = false; //TODO change to use config values
         //boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
 
         List<INameableProduct> products = new ArrayList<>();

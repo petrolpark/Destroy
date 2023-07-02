@@ -30,6 +30,8 @@ import net.minecraft.world.phys.Vec3;
  */
 public class Molecule implements INameableProduct {
 
+    // ID
+
     /**
      * The set of name spaces of all mods which add Molecules.
      */
@@ -51,6 +53,8 @@ public class Molecule implements INameableProduct {
      * The {@link Molecule#getFullID ID} of this Molecule, not including its {@link Molecule#nameSpace name space}.
      */
     private String id;
+
+    // PHYSICAL PROPERTIES
 
     /**
      * The charge of this Molecule, used to balance salts.
@@ -82,10 +86,7 @@ public class Molecule implements INameableProduct {
      */
     private Formula structure;
 
-    /**
-     * The {@link com.petrolpark.destroy.client.gui.MoleculeRenderer Renderer} for this Molecule.
-     */
-    private MoleculeRenderer renderer;
+    // REACTIONS
 
     /**
      * The {@link MoleculeTag tags} which apply to this Molecule.
@@ -100,6 +101,8 @@ public class Molecule implements INameableProduct {
      * The specific {@link Reaction Reactions} in which this Molecule is a {@link Reaction#getProducts product}.
      */
     private List<Reaction> productReactions;
+
+    // DISPLAY PROPERTIES
 
     /**
      * The last term in the translation key of this Molecule. For non-novel Molecules this is usually derived from their {@link Molecule#getFullID ID}.
@@ -116,6 +119,15 @@ public class Molecule implements INameableProduct {
      * for novel Molecules this will be their {@link Molecule#getSerlializedMolecularFormula molecular formula}.
      */
     private Component name;
+    /**
+     * The color this Molecule adds to a {@link Mixture}.
+     */
+    private int color;
+
+    /**
+     * The {@link com.petrolpark.destroy.client.gui.MoleculeRenderer Renderer} for this Molecule.
+     */
+    private MoleculeRenderer renderer;
 
     private Molecule(String nameSpace) {
         this.nameSpace = nameSpace;
@@ -404,6 +416,21 @@ public class Molecule implements INameableProduct {
     };
 
     /**
+     * The color this Molecule adds to a {@link Mixture}.
+     * @return ARGB value e.g. {@code 0xFFFF00FF}
+     */
+    public int getColor() {
+        return color;
+    };
+
+    /**
+     * Whether this Molecule's {@link Molecule#getColor color} is completely transparent (its alpha value is {@code 00}).
+     */
+    public boolean isColorless() {
+        return color == 0 || color == 0xFFFFFF00; // TODO actually split into bits and check the alpha channel
+    };
+
+    /**
      * Get a String representing the {@link Molecule#charge charge} of this Molecule.
      * For example, this will be {@code -} for the chloride ion, and {@code 2+} for the magnesium ion.
      * @param alwaysShowNumber If true, a Molecule with charge -1 will return {@code 1-} instead of {@code -}, etc.
@@ -577,6 +604,16 @@ public class Molecule implements INameableProduct {
         };
 
         /**
+         * Set the {@link Molecule#color color} of this Molecule.
+         * @param color ARGB color e.g. {@code 0xFFFF00FF}
+         * @return This Molecule Builder
+         */
+        public MoleculeBuilder color(int color) {
+            molecule.color = color;
+            return this;
+        };
+
+        /**
          * Mark this Molecule as being hypothetical - if this Molecule appears in a solution, an error will be raised.
          * @return This Molecule Builder
          */
@@ -633,6 +670,10 @@ public class Molecule implements INameableProduct {
 
             if (!hasForcedDipoleMoment) {
                 molecule.dipoleMoment = calculateDipoleMoment();
+            };
+            
+            if (molecule.color == 0) {
+                molecule.color = 0x20FFFFFF;
             };
 
             molecule.refreshFunctionalGroups();
