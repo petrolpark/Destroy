@@ -2,7 +2,9 @@ package com.petrolpark.destroy.client.gui;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.common.collect.ImmutableList;
@@ -11,7 +13,7 @@ import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
-import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
@@ -50,14 +52,14 @@ public class MoleculeRenderer {
      */
     protected int zOffset;
 
-    protected static final double SCALE = 46d;
+    protected static final double SCALE = 23d;
     protected static final double BOND_LENGTH = SCALE / 2;
 
     /**
      * The list of Atoms and Bonds to render, and their locations.
      * This is ordered from back to front.
      */
-    List<Pair<Vec3, IRenderable>> RENDERED_OBJECTS;
+    List<Pair<Vec3, IRenderableMoleculePart>> RENDERED_OBJECTS;
 
     public MoleculeRenderer(Molecule molecule) {
         moleculeID = molecule.getFullID();
@@ -71,10 +73,22 @@ public class MoleculeRenderer {
         if (molecule.getAtoms().size() == 1) { // Monatomic Molecules
             RENDERED_OBJECTS.add(Pair.of(Vec3.ZERO, new AtomRenderInstance(molecule.getAtoms().iterator().next().getElement())));
         } else if (molecule.isCyclic()) { // Cyclic Molecules
+            // Add all Atoms in the cycle
+            Map<Atom, Vec3> cyclicAtomsAndLocations = new HashMap<>(); // Store the location of each Atom so we can refer to them when adding the Bonds
             molecule.getCyclicAtomsForRendering().forEach(pair -> {
+                cyclicAtomsAndLocations.put(pair.getSecond(), pair.getFirst());
                 RENDERED_OBJECTS.add(Pair.of(
                     pair.getFirst().scale(BOND_LENGTH), // The relative location of the Atom
                     new AtomRenderInstance(pair.getSecond().getElement()) // The Element of the Atom
+                ));
+            });
+            // Add all Bonds in the cycle
+            molecule.getCyclicBondsForRendering().forEach(bond -> {
+                Vec3 sourceAtomLocation = cyclicAtomsAndLocations.get(bond.getSourceAtom());
+                Vec3 zig = cyclicAtomsAndLocations.get(bond.getDestinationAtom()).subtract(sourceAtomLocation).normalize();
+                RENDERED_OBJECTS.add(Pair.of(
+                   sourceAtomLocation.scale(BOND_LENGTH).add(zig.scale(BOND_LENGTH / 2)),
+                   BondRenderInstance.fromZig(bond.getType(), zig)
                 ));
             });
         } else { // Standard branched Molecules
@@ -94,10 +108,10 @@ public class MoleculeRenderer {
         Collections.sort(RENDERED_OBJECTS, (pair1, pair2) -> Double.compare(pair1.getFirst().z, pair2.getFirst().z));
 
         // Rescale the Renderer to fit every Atom
-        for (Pair<Vec3, IRenderable> pair : RENDERED_OBJECTS) {
+        for (Pair<Vec3, IRenderableMoleculePart> pair : RENDERED_OBJECTS) {
             width = Math.max(width, (int)pair.getFirst().x);
             height = Math.max(height, (int)pair.getFirst().y);
-            // Set the X and Y offSets to the positive of the most negative respective coordinate of any rendered object present
+            // Set the X and Y offsets to the positive of the most negative respective coordinate of any rendered object present
             xOffset = -(int)Math.min(-xOffset, pair.getFirst().x);
             yOffset = -(int)Math.min(-yOffset, pair.getFirst().y);
             zOffset = -(int)Math.min(-zOffset, pair.getFirst().z);
@@ -120,7 +134,9 @@ public class MoleculeRenderer {
     public void render(PoseStack poseStack, int xPosition, int yPosition) {
         poseStack.pushPose();
         poseStack.translate(xPosition + xOffset, yPosition + yOffset, zOffset + 100);
-        for (Pair<Vec3, IRenderable> pair : RENDERED_OBJECTS) {
+        TransformStack.cast(poseStack)
+            .rotateY(AnimationTickHolder.getRenderTime());
+        for (Pair<Vec3, IRenderableMoleculePart> pair : RENDERED_OBJECTS) {
             pair.getSecond().render(poseStack, pair.getFirst());
         };
         poseStack.popPose();
@@ -128,7 +144,6 @@ public class MoleculeRenderer {
 
     /**
      * Recursively generate the position of all Atoms in a chain, and all side chains.
-     * @param poseStack The Pose Stack to use to render everything
      * @param branch
      * @param startLocation The location of the first Atom in this chain
      * @param direction The overall direction in which this chain should continue (as chains zig-zag, this is the direction of net movement)
@@ -161,12 +176,15 @@ public class MoleculeRenderer {
             // Render side chains
             int j = 1;
             for (Entry<Branch, BondType> sideBranchAndBondType : node.getSideBranches().entrySet()) {
-                if (j >= geometry.connections.size()) {
-                    Destroy.LOGGER.warn("Skipped rendering a side branch on Molecule '" + moleculeID+ "' as it would not fit.");
-                    break; // This should never happen
+
+                Vec3 sideZag; // The zag which will connect the side chain
+                if (j == geometry.connections.size()) { // This occurs if we're adding side chains on the first Node in the branch: if so, we need to add the side chain 'behind' it
+                    sideZag = confinedGeometry.getInverseZig();
+                } else {
+                    sideZag = confinedGeometry.getZag(j);
                 };
+
                 Branch sideBranch = sideBranchAndBondType.getKey();
-                Vec3 sideZag = confinedGeometry.getZag(j);
                 Vec3 newPlane = confinedGeometry.getZig().cross(sideZag);
                 RENDERED_OBJECTS.add(Pair.of(location.add(sideZag.scale(0.5d * BOND_LENGTH)), BondRenderInstance.fromZig(BondType.SINGLE,  sideZag)));
                 generateBranch(sideBranch, location.add(sideZag.scale(BOND_LENGTH)), rotate(sideZag, newPlane, 90d), newPlane, sideZag);
@@ -214,6 +232,7 @@ public class MoleculeRenderer {
          * The default input direction for a Geometry, to which all the output directions are relative.
          */
         private static final Vec3 standardDirection = new Vec3(1d, 0d, 0d);
+        private static final Vec3 inverseStandardDirection = new Vec3(-1d, 0d, 0d);
 
         /**
          * The normalized direction vector of each additional connection out of this Geometry
@@ -258,6 +277,14 @@ public class MoleculeRenderer {
 
             return new ConfinedGeometry(this, rotationVec, angle, flip);
         };
+
+        public List<Vec3> getConnections(boolean includeInput) {
+            if (!includeInput) return connections;
+            List<Vec3> connectionsAndInput = new ArrayList<>(connections.size() + 1);
+            connectionsAndInput.addAll(connections);
+            connectionsAndInput.add(inverseStandardDirection);
+            return connectionsAndInput;
+        };
     };
 
     private static class ConfinedGeometry {
@@ -278,6 +305,10 @@ public class MoleculeRenderer {
 
         private Vec3 getZig() {
             return rotate(Geometry.standardDirection, rotationAxis, angle);
+        };
+
+        private Vec3 getInverseZig() {
+            return rotate(Geometry.inverseStandardDirection, rotationAxis, angle);
         };
 
         private Vec3 getZag() {
@@ -330,14 +361,19 @@ public class MoleculeRenderer {
         return (point.subtract(linePoint)).cross(lineDirection).length() / lineDirection.length();
     };
 
-    protected static interface IRenderable {
+    protected static interface IRenderableMoleculePart {
         public void render(PoseStack poseStack, Vec3 location);
     };
 
-    protected static record BondRenderInstance(BondType type, Quaternion rotation) implements IRenderable {
+    protected static record BondRenderInstance(BondType type, Quaternion rotation) implements IRenderableMoleculePart {
 
         private static Vec3 bond = new Vec3(1d, 0d, 0d);
 
+        /**
+         * Generate a Bond render instance betweem two Atoms
+         * @param type The {@link com.petrolpark.destroy.chemistry.Bond.BondType type} of the bond
+         * @param zig The direction vector which connects the two Atoms this Bond connects
+         */
         public static BondRenderInstance fromZig(BondType type, Vec3 zig) {
             Vec3 z = zig.normalize();
             Vector3f axis = new Vector3f(bond.cross(z));
@@ -349,8 +385,6 @@ public class MoleculeRenderer {
         @Override
         public void render(PoseStack poseStack, Vec3 location) {
             poseStack.pushPose();
-            TransformStack.cast(poseStack)
-                .rotateY(AnimationTickHolder.getRenderTime());
             poseStack.translate(location.x, location.y, location.z);
             TransformStack.cast(poseStack)
                 .rotateCentered(rotation);
@@ -362,17 +396,15 @@ public class MoleculeRenderer {
         };
     };
 
-    protected static record AtomRenderInstance(Element element) implements IRenderable {
+    protected static record AtomRenderInstance(Element element) implements IRenderableMoleculePart {
 
         @Override
         public void render(PoseStack poseStack, Vec3 location) {
             poseStack.pushPose();
-            TransformStack.cast(poseStack)
-                .rotateY(AnimationTickHolder.getRenderTime());
             poseStack.translate(location.x, location.y, location.z);
             GuiGameElement.of(element.getPartial())
                 .scale(SCALE)
-                .rotate(15.5d, 22.5d, 0d)
+                //.rotate(15.5d, 22.5d, 0d)
                 .render(poseStack, 0, 0);
             poseStack.popPose();
         };

@@ -20,7 +20,7 @@ public class MoleculeFluidIngredient extends FluidIngredient {
 
     @Override
     protected boolean testInternal(FluidStack fluidStack) {
-        if (fluidStack.getFluid().getFluidType() == DestroyFluids.MIXTURE.getType()) return false; // If it's not a Mixture
+        if (!(fluidStack.getFluid().getFluidType() == DestroyFluids.MIXTURE.getType())) return false; // If it's not a Mixture
         CompoundTag mixtureTag = fluidStack.getChildTag("Mixture");
         if (mixtureTag.isEmpty()) return false; // If this Mixture Fluid has no associated Mixture
         return Mixture.readNBT(mixtureTag).hasUsableMolecule(molecule, concentration);

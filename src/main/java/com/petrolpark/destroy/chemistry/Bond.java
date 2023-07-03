@@ -36,6 +36,12 @@ public class Bond {
         this.type = type;
     };
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Bond otherBond)) return false;
+        return (type == otherBond.type && srcAtom == otherBond.srcAtom && destAtom == otherBond.destAtom);
+    };
+
     /**
      * The {@link Atom} from which this Bond is.
      */

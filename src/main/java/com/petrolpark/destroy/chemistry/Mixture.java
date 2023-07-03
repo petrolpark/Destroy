@@ -161,7 +161,7 @@ public class Mixture extends ReadOnlyMixture {
      */
     public boolean hasUsableMolecule(Molecule molecule, float concentration) {
         if (!contents.containsKey(molecule)) return false;
-        if (!areVeryClose(concentration, getConcentrationOf(molecule))) return false; //TODO replace with a more lenient check
+        if (Math.abs(concentration - getConcentrationOf(molecule)) > IMPURITY_THRESHOLD) return false; //TODO replace with a more lenient check
         for (Entry<Molecule, Float> otherMolecule : contents.entrySet()) {
             if (otherMolecule.getKey() == molecule) continue; // If this is the Molecule we want, ignore it.
             if (otherMolecule.getKey().hasTag(DestroyMolecules.Tags.SOLVENT)) continue; // If this is a solvent, ignore it

@@ -238,7 +238,7 @@ public class Molecule implements INameableProduct {
      * Get the 'concentration' (molar density) of this Molecule when it is the only Molecule in a solution.
      */
     public float getPureConcentration() {
-        return 1000 * getMass() / getDensity();
+        return getDensity() / getMass();
     };
 
     /**
@@ -467,6 +467,14 @@ public class Molecule implements INameableProduct {
         if (!isCyclic()) return List.of();
         return structure.getCyclicAtomsForRendering();
     };
+    /**
+     * Get the list of {@link Bond Bonds} in the base {@link Formula.Topology Topology} of this Molecule.
+     * @return An empty list if this is an acyclic Molecule
+     */
+    public List<Bond> getCyclicBondsForRendering() {
+        if (!isCyclic()) return List.of();
+        return structure.getCyclicBondsForRendering();
+    };
 
     /**
      * Get the {@link com.petrolpark.destroy.client.gui.MoleculeRenderer Renderer} for this Molecule.
@@ -474,9 +482,9 @@ public class Molecule implements INameableProduct {
      * in this Molecule and referred to for later use.
      */
     public MoleculeRenderer getRenderer() {
-        //if (renderer == null) { // TODO uncomment so renderer is cached
+        // if (renderer == null) { //TODO uncomment
             renderer = new MoleculeRenderer(this);
-        //};
+        // };
         return renderer;
     };
 

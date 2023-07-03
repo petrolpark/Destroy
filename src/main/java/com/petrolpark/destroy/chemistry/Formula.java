@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
+import com.petrolpark.destroy.chemistry.genericReaction.GenericReaction;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Node;
 import com.simibubi.create.foundation.utility.Pair;
@@ -283,6 +284,15 @@ public class Formula implements Cloneable {
     };
 
     /**
+     * Get the list of {@link Topology#bonds cyclic Bonds} in the {@link Topology} associated with this Formula.
+     * @return May be empty
+     * @see Molecule#getCyclicBondsForRendering The wrapper for this method
+     */
+    public List<Bond> getCyclicBondsForRendering() {
+        return topology.bonds;
+    };
+
+    /**
      * Removes the given Atom, without moving the currently selected Atom.
      * <p><b>To modify existing Formulae, {@link Formula#shallowCopy copy} them first.</b></p>
      * @param atom If this is the currently selected Atom, an error will be raised.
@@ -294,6 +304,9 @@ public class Formula implements Cloneable {
         };
         if (atom == currentAtom) {
             throw new IllegalStateException("Cannot remove the currently selected Atom from a structure being built.");
+        };
+        if (topology.atomsAndLocations.stream().anyMatch(pair -> pair.getSecond() == atom)) {
+            throw new IllegalStateException("Cannot remove Atoms in a cyclic Molecule ");
         };
         
         for (Bond bondToOtherAtom : structure.get(atom)) {
@@ -405,7 +418,7 @@ public class Formula implements Cloneable {
 
         if (topology == Topology.LINEAR) {
 
-            //TODO fix
+            //TODO fix so serialized Molecules are deterministic
 
             // Map<Atom, List<Bond>> newStructure = stripHydrogens(structure);
 
@@ -862,6 +875,11 @@ public class Formula implements Cloneable {
          */
         private final List<Pair<Vec3, Atom>> atomsAndLocations;
         /**
+         * Every {@link Bond} in this Topology. Although Bonds are monodirectional, this list only contains a single
+         * Bond out of the 'pair' that join two {@link Atom Atoms}.
+         */
+        private final List<Bond> bonds;
+        /**
          * The {@link SideChainInformation side-chains} this Topology can accomodate.
          */
         private final List<SideChainInformation> connections;
@@ -870,6 +888,7 @@ public class Formula implements Cloneable {
             this.nameSpace = nameSpace;
             formula = null;
             atomsAndLocations = new ArrayList<>();
+            bonds = new ArrayList<>();
             connections = new ArrayList<>();
         };
     
@@ -922,8 +941,10 @@ public class Formula implements Cloneable {
              * @param element The Element of the Atom to add
              * @return This Topology builder
              */
+            @SuppressWarnings("null")
             public Builder startWith(Element element) {
                 topology.formula = Formula.atom(element);
+                topology.atomsAndLocations.add(Pair.of(new Vec3(0f, 0f, 0f), topology.formula.currentAtom)); // This gives a null warning which has been accounted for
                 return this;
             };
 
@@ -1004,7 +1025,9 @@ public class Formula implements Cloneable {
             @SuppressWarnings("null")
             public AttachedAtom withBondTo(int n, BondType bondType) {
                 if (n >= builder.topology.atomsAndLocations.size() || builder.topology.formula == null) throw new IllegalArgumentException("Cannot add Bonds between Atoms that do not exist on the structure");
-                addBondBetweenAtoms(builder.topology.formula.structure, atom, builder.topology.atomsAndLocations.get(n).getSecond(), bondType);// Gives a null warning, which is accounted for
+                Atom atomToWhichToAttach = builder.topology.atomsAndLocations.get(n).getSecond();
+                builder.topology.bonds.add(new Bond(atom, atomToWhichToAttach, bondType));
+                addBondBetweenAtoms(builder.topology.formula.structure, atom, atomToWhichToAttach, bondType);// Gives a null warning, which is accounted for
                 return this;
             };
     

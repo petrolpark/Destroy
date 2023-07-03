@@ -70,7 +70,7 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
         if (soundDuration > 0) {
             soundDuration--;
         } else if (isRunning()) {
-            DestroySoundEvents.DYNAMO_CRACKLE.playOnServer(level, getBlockPos());
+            //DestroySoundEvents.DYNAMO_CRACKLE.playOnServer(level, getBlockPos()); //TODO uncommment once sound is sorted out
             soundDuration = 80;
         };
     };

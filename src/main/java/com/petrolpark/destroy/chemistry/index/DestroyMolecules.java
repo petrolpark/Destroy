@@ -21,7 +21,7 @@ public final class DestroyMolecules {
 
     ACETIC_ACID = builder()
         .id("acetic_acid")
-        .structure(Formula.deserialize("destroy:linear:CC(=O)H+4.756"))
+        .structure(Formula.deserialize("destroy:linear:CC(=O)OH+4.756"))
         .boilingPoint(118)
         .build(),
 
@@ -242,7 +242,7 @@ public final class DestroyMolecules {
 
     GLYCEROL = builder()
         .id("glycerol")
-        .structure(Formula.deserialize("destroy:linear:C(O)C(O)CO"))
+        .structure(Formula.deserialize("destroy:linear:OCC(O)CO"))
         .build(),
 
     HYDROCHLORIC_ACID = builder()
@@ -266,6 +266,7 @@ public final class DestroyMolecules {
     MERCURY = builder()
         .id("mercury")
         .structure(Formula.atom(Element.MERCURY))
+        .density(13534f)
         .color(0xFFB3B3B3)
         .build(),
 
