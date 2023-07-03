@@ -474,9 +474,9 @@ public class Molecule implements INameableProduct {
      * in this Molecule and referred to for later use.
      */
     public MoleculeRenderer getRenderer() {
-        if (renderer == null) {
+        //if (renderer == null) { // TODO uncomment so renderer is cached
             renderer = new MoleculeRenderer(this);
-        };
+        //};
         return renderer;
     };
 

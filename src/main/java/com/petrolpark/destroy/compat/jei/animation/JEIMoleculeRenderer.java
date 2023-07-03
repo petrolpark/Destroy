@@ -14,12 +14,12 @@ public class JEIMoleculeRenderer extends MoleculeRenderer implements IDrawable {
 
     @Override
     public int getWidth() {
-        return x;
+        return width;
     };
 
     @Override
     public int getHeight() {
-        return y;
+        return height;
     };
 
     @Override

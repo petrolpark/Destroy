@@ -6,13 +6,19 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.google.common.collect.ImmutableList;
+import com.jozufozu.flywheel.util.AnimationTickHolder;
+import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Node;
-import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
+
+import com.simibubi.create.foundation.gui.ILightingSettings;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.utility.Pair;
 
@@ -21,14 +27,16 @@ import net.minecraft.world.phys.Vec3;
 
 public class MoleculeRenderer {
 
+    protected String moleculeID;
+
     /**
      * The distance from 0 to the highest X value of any rendered object.
      */
-    protected int x;
+    protected int width;
     /**
      * The distance from 0 to the highest Y value of any rendered object.
      */
-    protected int y;
+    protected int height;
     /**
      * How far below X = 0 this rendered Molecule extends.
      */
@@ -37,8 +45,13 @@ public class MoleculeRenderer {
      * How far above Y = 0 this rendered Molecule extends (remember positive Y is down).
      */
     protected int yOffset;
+    /**
+     * How far behind Z = 0 this rendered Molecule extends
+     */
+    protected int zOffset;
 
-    protected static final double BOND_LENGTH = 12;
+    protected static final double SCALE = 46d;
+    protected static final double BOND_LENGTH = SCALE / 2;
 
     /**
      * The list of Atoms and Bonds to render, and their locations.
@@ -47,10 +60,12 @@ public class MoleculeRenderer {
     List<Pair<Vec3, IRenderable>> RENDERED_OBJECTS;
 
     public MoleculeRenderer(Molecule molecule) {
-        x = 0;
-        y = 0;
+        moleculeID = molecule.getFullID();
+        width = 0;
+        height = 0;
         xOffset = 0;
         yOffset = 0;
+        zOffset = 0;
         RENDERED_OBJECTS = new ArrayList<>();
 
         if (molecule.getAtoms().size() == 1) { // Monatomic Molecules
@@ -66,7 +81,13 @@ public class MoleculeRenderer {
             Vec3 startLocation = new Vec3(0d, 0d, 0d);
             Vec3 startDirection = new Vec3(1d, 0d, -1d).normalize();
             Vec3 startPlane = new Vec3(1d, 0d, 1d).normalize();
-            generateBranch(molecule.getRenderBranch(), startLocation, startDirection, startPlane, rotate(startDirection, startPlane, 180d + (getGeometry(molecule.getRenderBranch().getNodes().get(1)).getAngle() * 0.5d)));
+            generateBranch(
+                molecule.getRenderBranch(),
+                startLocation,
+                startDirection,
+                startPlane,
+                rotate(startDirection, startPlane, 180d + (getGeometry(molecule.getRenderBranch().getNodes().get(1)).getAngle() * 0.5d))
+            );
         };
 
         // Order the Atoms and Bonds so the furthest back get Rendered first
@@ -74,22 +95,23 @@ public class MoleculeRenderer {
 
         // Rescale the Renderer to fit every Atom
         for (Pair<Vec3, IRenderable> pair : RENDERED_OBJECTS) {
-            x = Math.max(x, (int)pair.getFirst().x);
-            y = Math.max(y, (int)pair.getFirst().y);
+            width = Math.max(width, (int)pair.getFirst().x);
+            height = Math.max(height, (int)pair.getFirst().y);
             // Set the X and Y offSets to the positive of the most negative respective coordinate of any rendered object present
             xOffset = -(int)Math.min(-xOffset, pair.getFirst().x);
             yOffset = -(int)Math.min(-yOffset, pair.getFirst().y);
+            zOffset = -(int)Math.min(-zOffset, pair.getFirst().z);
         };
-        x += xOffset;
-        y += yOffset;
+        width += xOffset;
+        height += yOffset;
     };
 
     public int getWidth() {
-        return x;
+        return width;
     };
 
     public int getHeight() {
-        return y;
+        return height;
     };
 
     /**
@@ -97,7 +119,7 @@ public class MoleculeRenderer {
      */
     public void render(PoseStack poseStack, int xPosition, int yPosition) {
         poseStack.pushPose();
-        poseStack.translate(xPosition + xOffset, yPosition + yOffset, 0d);
+        poseStack.translate(xPosition + xOffset, yPosition + yOffset, zOffset + 100);
         for (Pair<Vec3, IRenderable> pair : RENDERED_OBJECTS) {
             pair.getSecond().render(poseStack, pair.getFirst());
         };
@@ -127,9 +149,6 @@ public class MoleculeRenderer {
             // Increment the number of Atoms rendered
             i++;
 
-            // If that was the last Atom, there is no need to render the next bond or determine the position of the next Atom
-            if (i >= branch.getNodes().size()) break;
-
             // Determine the Geometry of this node
             Geometry geometry = getGeometry(node);
 
@@ -139,20 +158,26 @@ public class MoleculeRenderer {
             // Get the zag from the zig
             zag = confinedGeometry.getZag();
 
-            // Mark the Bond for rendering at this location
-            RENDERED_OBJECTS.add(Pair.of(location.add(zag.scale(0.5d * BOND_LENGTH)), new BondRenderInstance(BondType.SINGLE, zag)));
-
             // Render side chains
             int j = 1;
             for (Entry<Branch, BondType> sideBranchAndBondType : node.getSideBranches().entrySet()) {
-                if (j >= geometry.connections.size()) break; // This should never happen
+                if (j >= geometry.connections.size()) {
+                    Destroy.LOGGER.warn("Skipped rendering a side branch on Molecule '" + moleculeID+ "' as it would not fit.");
+                    break; // This should never happen
+                };
                 Branch sideBranch = sideBranchAndBondType.getKey();
                 Vec3 sideZag = confinedGeometry.getZag(j);
                 Vec3 newPlane = confinedGeometry.getZig().cross(sideZag);
-                RENDERED_OBJECTS.add(Pair.of(location.add(sideZag.scale(0.5d * BOND_LENGTH)), new BondRenderInstance(BondType.SINGLE,  sideZag)));
+                RENDERED_OBJECTS.add(Pair.of(location.add(sideZag.scale(0.5d * BOND_LENGTH)), BondRenderInstance.fromZig(BondType.SINGLE,  sideZag)));
                 generateBranch(sideBranch, location.add(sideZag.scale(BOND_LENGTH)), rotate(sideZag, newPlane, 90d), newPlane, sideZag);
                 j++;
             };
+
+            // If that was the last Atom, there is no need to render the next bond or determine the position of the next Atom
+            if (i >= branch.getNodes().size()) break;
+
+            // Mark the Bond for rendering at this location
+            RENDERED_OBJECTS.add(Pair.of(location.add(zag.scale(0.5d * BOND_LENGTH)), BondRenderInstance.fromZig(BondType.SINGLE, zag)));
 
             // Get the position of the next Atom in the chain
             location = location.add(zag.scale(BOND_LENGTH));
@@ -160,7 +185,22 @@ public class MoleculeRenderer {
     };
 
     private Geometry getGeometry(Node node) {
-        return Geometry.TETRAHEDRAL;
+        // TODO replace with interfaces in the Element enum so Atoms properly consider lone pairs
+        switch (node.getEdges().size() + node.getSideBranches().size()) {
+            case 1:
+                return Geometry.LINEAR;
+            case 2:
+                return Geometry.LINEAR;
+            case 3:
+                return Geometry.TRIGONAL_PLANAR;
+            case 4:
+                return Geometry.TETRAHEDRAL;
+            case 5:
+                // TODO add trigonal bipyramidal geometry
+            case 6:
+                return Geometry.OCTAHEDRAL;
+        };
+        return Geometry.OCTAHEDRAL;
     };
 
     public static enum Geometry {
@@ -173,7 +213,7 @@ public class MoleculeRenderer {
         /**
          * The default input direction for a Geometry, to which all the output directions are relative.
          */
-        private static final Vec3 standardDirection = new Vec3(1f, 0f, 0f);
+        private static final Vec3 standardDirection = new Vec3(1d, 0d, 0d);
 
         /**
          * The normalized direction vector of each additional connection out of this Geometry
@@ -191,8 +231,8 @@ public class MoleculeRenderer {
          * specifically, the angle between the input vector (1,0,0) and the XY-coplanar output vector.
          */
         public double getAngle() {
-            double angle = angleBetween(standardDirection, connections.get(0), new Vec3(0f, 0f, 1f));
-            return angle < 90f ? 180f - angle : angle; // We always want the obtuse angle
+            double angle = angleBetween(standardDirection, connections.get(0), new Vec3(0d, 0d, 1d));
+            return angle < 90d ? 180d - angle : angle; // We always want the obtuse angle
         };
 
         /**
@@ -261,11 +301,11 @@ public class MoleculeRenderer {
      */
     public static Vec3 rotate(Vec3 vec, Vec3 rotationAxis, double angle) {
         Vec3 k = rotationAxis.normalize();
-        float angleInRads = (float)(angle * Mth.PI / 180d);
+        double angleInRads = angle * Mth.PI / 180d;
         // Rodrigues' formula
-        return vec.scale(Mth.cos(angleInRads))
-            .add(k.cross(vec).scale(Mth.sin(angleInRads)))
-            .add(k.scale(k.dot(vec) * (1 - Mth.cos(angleInRads)))); 
+        return vec.scale(Math.cos(angleInRads))
+            .add(k.cross(vec).scale(Math.sin(angleInRads)))
+            .add(k.scale(k.dot(vec) * (1 - Math.cos(angleInRads)))); 
     };
 
     /**
@@ -275,8 +315,8 @@ public class MoleculeRenderer {
      * @param plane The approximate vector around which {@code vec1} was rotated to get {@code vec2}
      */
     public static double angleBetween(Vec3 vec1, Vec3 vec2, Vec3 plane) {
-        double angle = Math.acos(vec1.dot(vec2) / (vec1.length() * vec2.length())) * 180f / Mth.PI;
-        if (vec1.dot(vec2.cross(plane)) < 0f) angle = 360f - angle;
+        double angle = Math.acos(vec1.dot(vec2) / (vec1.length() * vec2.length())) * 180d / Mth.PI;
+        if (vec1.dot(vec2.cross(plane)) < 0d) angle = 360d - angle;
         return angle;
     };
 
@@ -294,20 +334,29 @@ public class MoleculeRenderer {
         public void render(PoseStack poseStack, Vec3 location);
     };
 
-    protected static record BondRenderInstance(BondType type, double xRot, double yRot, double zRot) implements IRenderable {
+    protected static record BondRenderInstance(BondType type, Quaternion rotation) implements IRenderable {
 
-        public BondRenderInstance(BondType type, Vec3 zig) {
-            this(type, 0d, Math.atan2(zig.z, zig.x) * 180d / Mth.PI, 90d + Math.atan2(zig.x, zig.y) * 180d / Mth.PI);
+        private static Vec3 bond = new Vec3(1d, 0d, 0d);
+
+        public static BondRenderInstance fromZig(BondType type, Vec3 zig) {
+            Vec3 z = zig.normalize();
+            Vector3f axis = new Vector3f(bond.cross(z));
+            Quaternion q = new Quaternion(axis.x(), axis.y(), axis.z(), (float)bond.dot(z) + (float)Math.sqrt(bond.lengthSqr() * z.lengthSqr()));
+            q.normalize();
+            return new BondRenderInstance(type, q.copy());
         };
 
         @Override
         public void render(PoseStack poseStack, Vec3 location) {
             poseStack.pushPose();
-            poseStack.translate(location.x, location.y, 0d);
+            TransformStack.cast(poseStack)
+                .rotateY(AnimationTickHolder.getRenderTime());
+            poseStack.translate(location.x, location.y, location.z);
+            TransformStack.cast(poseStack)
+                .rotateCentered(rotation);
             GuiGameElement.of(type().getPartial())
-                .lighting(AnimatedKinetics.DEFAULT_LIGHTING)
-                .scale(23)
-                .rotate(xRot(), yRot(), zRot())
+                .lighting(ILightingSettings.DEFAULT_FLAT)
+                .scale(SCALE)
                 .render(poseStack, 0, 0);
             poseStack.popPose();
         };
@@ -318,10 +367,12 @@ public class MoleculeRenderer {
         @Override
         public void render(PoseStack poseStack, Vec3 location) {
             poseStack.pushPose();
-            poseStack.translate(location.x, location.y, 0d);
+            TransformStack.cast(poseStack)
+                .rotateY(AnimationTickHolder.getRenderTime());
+            poseStack.translate(location.x, location.y, location.z);
             GuiGameElement.of(element.getPartial())
-                .scale(23)
-                .rotate(15.5f, 22.5f, 0f)
+                .scale(SCALE)
+                .rotate(15.5d, 22.5d, 0d)
                 .render(poseStack, 0, 0);
             poseStack.popPose();
         };
