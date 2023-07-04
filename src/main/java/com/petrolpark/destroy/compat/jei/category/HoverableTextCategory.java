@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.compat.jei;
+package com.petrolpark.destroy.compat.jei.category;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,8 +10,7 @@ import com.petrolpark.destroy.client.gui.stackedTextBox.AbstractStackedTextBox;
 import com.petrolpark.destroy.client.gui.stackedTextBox.AbstractStackedTextBox.Area;
 import com.petrolpark.destroy.client.gui.stackedTextBox.AbstractStackedTextBox.LinesAndActivationAreas;
 import com.petrolpark.destroy.client.gui.stackedTextBox.StackedTextBox;
-import com.petrolpark.destroy.compat.jei.category.DestroyRecipeCategory;
-import com.petrolpark.destroy.compat.jei.category.ITickableCategory;
+import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 import com.simibubi.create.foundation.utility.Pair;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -37,6 +36,10 @@ public abstract class HoverableTextCategory<T extends Recipe<?>> extends Destroy
      * Any text boxes registered here will be automatically rendered, and their activation areas will be checked.
      */
     public abstract Collection<LinesAndActivationAreas> getHoverableTexts(T recipe);
+
+    public Palette getPaletteForBoxes() {
+        return Palette.GRAY_AND_WHITE;
+    };
 
     @Override
     public void tick() {
@@ -75,6 +78,7 @@ public abstract class HoverableTextCategory<T extends Recipe<?>> extends Destroy
                     if (pair.getFirst().isIn((int)mouseX, (int)mouseY)) {
                         textBoxStack = new StackedTextBox(minecraft, (int)mouseX, (int)mouseY, AbstractStackedTextBox.NOTHING)
                             .withActivationArea(pair.getFirst())
+                            .withPalette(getPaletteForBoxes())
                             .withText(pair.getSecond());
                         break checkParagraphs;
                     };

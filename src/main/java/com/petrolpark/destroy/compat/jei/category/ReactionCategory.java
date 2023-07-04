@@ -9,7 +9,6 @@ import java.util.Map;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.client.gui.stackedTextBox.AbstractStackedTextBox;
 import com.petrolpark.destroy.client.gui.stackedTextBox.AbstractStackedTextBox.LinesAndActivationAreas;
-import com.petrolpark.destroy.compat.jei.HoverableTextCategory;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.recipe.ReactionRecipe;
 import com.simibubi.create.foundation.item.TooltipHelper.Palette;
@@ -25,7 +24,8 @@ import net.minecraft.network.chat.Component;
 
 public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
 
-    public static final Palette WHITE_AND_BLUE = Palette.ofColors(ChatFormatting.WHITE, ChatFormatting.AQUA);
+    public static final Palette DARK_GRAY_AND_BLUE = Palette.ofColors(ChatFormatting.DARK_GRAY, ChatFormatting.BLUE);
+    public static final Palette WHITE_AND_AQUA = Palette.ofColors(ChatFormatting.WHITE, ChatFormatting.AQUA);
 
     public static RecipeType<ReactionRecipe> TYPE;
 
@@ -52,9 +52,14 @@ public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
 
         Minecraft minecraft = Minecraft.getInstance();
         List<LinesAndActivationAreas> paragraphs = new ArrayList<>(2);
-        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getTranslationKey()).getString(), 2, 2, 176, minecraft.screen, minecraft.font, WHITE_AND_BLUE));
-        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getTranslationKey() + ".description").getString(), 2, 84, 176, minecraft.screen, minecraft.font, WHITE_AND_BLUE));
+        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getTranslationKey()).getString(), 2, 2, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE));
+        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getTranslationKey() + ".description").getString(), 2, 84, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE));
         return paragraphs;
+    };
+
+    @Override
+    public Palette getPaletteForBoxes() {
+        return WHITE_AND_AQUA;
     };
 
     @Override

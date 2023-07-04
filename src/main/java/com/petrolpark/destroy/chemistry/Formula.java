@@ -294,6 +294,19 @@ public class Formula implements Cloneable {
     };
 
     /**
+     * Get the list of {@link Formula#sideChains} side chains off of {@link Formula#topology cyclic} {@link Atom Atoms}
+     * in this Formula.
+     * @return May be empty
+     * @see Molecule#getSideChainsForRendering The wrapper for this method
+     */
+    public List<Pair<SideChainInformation, Branch>> getSideChainsForRendering() {
+        return sideChains.stream().map(pair -> {
+            Formula sideChain = pair.getSecond();
+            return Pair.of(pair.getFirst(), getMaximumBranch(sideChain.startingAtom, sideChain.structure));
+        }).toList();
+    };
+
+    /**
      * Removes the given Atom, without moving the currently selected Atom.
      * <p><b>To modify existing Formulae, {@link Formula#shallowCopy copy} them first.</b></p>
      * @param atom If this is the currently selected Atom, an error will be raised.
@@ -563,13 +576,10 @@ public class Formula implements Cloneable {
 
             Formula newFormula = (Formula) super.clone();
             newFormula.structure = new HashMap<>();
-
             newFormula.structure = shallowCopyStructure(structure); // Shallow copy the Structure
-
             newFormula.groups = new ArrayList<>(groups); // Shallow copy the Groups
-
             newFormula.topology = this.topology; // Shallow copy the Topology
-
+            newFormula.sideChains = sideChains.stream().map(pair -> Pair.of(pair.getFirst(), pair.getSecond().shallowCopy())).toList();
             newFormula.optimumFROWNSCode = null; // Delete the FROWNS Code, as copies are typically going to be modified
 
             return newFormula;

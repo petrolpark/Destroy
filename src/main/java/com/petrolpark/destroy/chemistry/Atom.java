@@ -2,6 +2,9 @@ package com.petrolpark.destroy.chemistry;
 
 /**
  * A specific Atom in a specific {@link Molecule}.
+ * Atoms can be rearranged and added to {@link Formula Formulae}, but <strong>never modify Atoms themselves</strong>.
+ * Also note that {@link Element#HYDROGEN Hydrogen} Atoms are not conserved, so the Hydrogens
+ * a Molecule is created with will not necessarily be carried over when accessed from different points.
  */
 public class Atom {
     /**

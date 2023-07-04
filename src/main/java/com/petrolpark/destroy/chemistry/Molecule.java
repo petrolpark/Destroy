@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.chemistry.Formula.Topology.SideChainInformation;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.client.gui.MoleculeRenderer;
@@ -450,6 +451,8 @@ public class Molecule implements INameableProduct {
         return structure.getFunctionalGroups();
     };
 
+    // RENDERING
+
     /**
      * Get a directed structure of this Molecule for use in {@link Molecule#getRenderer rendering}.
      */
@@ -467,6 +470,7 @@ public class Molecule implements INameableProduct {
         if (!isCyclic()) return List.of();
         return structure.getCyclicAtomsForRendering();
     };
+
     /**
      * Get the list of {@link Bond Bonds} in the base {@link Formula.Topology Topology} of this Molecule.
      * @return An empty list if this is an acyclic Molecule
@@ -477,14 +481,26 @@ public class Molecule implements INameableProduct {
     };
 
     /**
+     * Get the side-chains off of {@link Topology cyclic} {@link Atom Atoms} in this Molecule.
+     * <strong>Do not use this for modifying {@link Formula structures} in {@link com.petrolpark.destroy.chemistry.genericReaction.GenericReaction
+     * Generic Reaction generation}.</strong>
+     * @return An empty list if this is an acyclic Molecule
+     * @see Molecule#shallowCopyStructure How to properly modify structures
+     */
+    public List<Pair<SideChainInformation, Branch>> getSideChainsForRendering() {
+        if (!isCyclic()) return List.of();
+        return structure.getSideChainsForRendering();
+    };
+
+    /**
      * Get the {@link com.petrolpark.destroy.client.gui.MoleculeRenderer Renderer} for this Molecule.
      * To save on processing time, the first time Renderer is generated, it is {@link Molecule#renderer stored}
      * in this Molecule and referred to for later use.
      */
     public MoleculeRenderer getRenderer() {
-        // if (renderer == null) { //TODO uncomment
+        if (renderer == null) {
             renderer = new MoleculeRenderer(this);
-        // };
+        };
         return renderer;
     };
 

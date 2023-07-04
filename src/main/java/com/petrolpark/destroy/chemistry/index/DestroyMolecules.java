@@ -152,9 +152,14 @@ public final class DestroyMolecules {
 
     CUBANE = builder()
         .id("cubane")
-        .structure(Formula.deserialize("destroy:cubane:,"))
+        .structure(Formula.deserialize("destroy:cubane:,,,,,,"))
         .boilingPoint(134)
         .density(1290f)
+        .build(),
+
+    CUBANEDICARBOXYLIC_ACID = builder()
+        .id("cubanedicarboxylic_acid")
+        .structure(Formula.deserialize("destroy:cubane:C(=O)OH,,,C(=O)OH,,,"))
         .build(),
 
     ETHANOL = builder()

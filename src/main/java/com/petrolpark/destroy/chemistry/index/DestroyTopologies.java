@@ -23,7 +23,7 @@ public class DestroyTopologies {
             .withBondTo(0, BondType.SINGLE)
             .attach()
         .atom(Element.CARBON, new Vec3(1d, 1d, 0d)) // 4
-            .withSideBranch(new Vec3(1d, 1d, -1d).normalize(), new Vec3(1d, -1d, -1d).normalize())
+            .withSideBranch(new Vec3(1d, 1d, -1d).normalize(), new Vec3(1d, 1d, -1d).normalize())
             .withBondTo(1, BondType.SINGLE)
             .withBondTo(2, BondType.SINGLE)
             .attach()
@@ -38,7 +38,7 @@ public class DestroyTopologies {
             .withBondTo(3, BondType.SINGLE)
             .attach()
         .atom(Element.CARBON, new Vec3(1d, 1d, 1d)) // 7
-            .withSideBranch(new Vec3(-1d, -1d, 1d).normalize(), new Vec3(-1d, -1d, -1d).normalize())
+            .withSideBranch(new Vec3(1d, 1d, 1d).normalize(), new Vec3(1d, 1d, 1d).normalize())
             .withBondTo(4, BondType.SINGLE)
             .withBondTo(5, BondType.SINGLE)
             .withBondTo(6, BondType.SINGLE)

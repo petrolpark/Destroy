@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 
 import com.google.common.base.Strings;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.foundation.item.TooltipHelper;
+import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Pair;
 
@@ -19,8 +19,9 @@ import net.minecraft.network.chat.Component;
 
 public class StackedTextBox extends AbstractStackedTextBox {
 
-    private static final int PERMANENCE_LIFETIME = 20;
+    private static final int PERMANENCE_LIFETIME = 15;
 
+    private Palette palette;
     private String plainText = "";
 
     private Area activationArea;
@@ -46,6 +47,8 @@ public class StackedTextBox extends AbstractStackedTextBox {
 
         this.minecraft = minecraft;
 
+        palette = Palette.GRAY_AND_WHITE;
+
         activationArea = new Area(x, y, width, height);
         isActivationAreaHovered = true; // Should always be true when first opened, but this is set just in case
 
@@ -53,6 +56,11 @@ public class StackedTextBox extends AbstractStackedTextBox {
 
         lifetime = 0;
         lines = new ArrayList<>();
+    };
+
+    public StackedTextBox withPalette(Palette palette) {
+        this.palette = palette;
+        return this;
     };
 
     public StackedTextBox withActivationArea(Area area) {
@@ -67,7 +75,7 @@ public class StackedTextBox extends AbstractStackedTextBox {
     };
 
     protected void updateTextBoxSize(String text) {
-        LinesAndActivationAreas result = getTextAndActivationAreas(text, x, y, 200, minecraft.screen, minecraft.font, TooltipHelper.Palette.GRAY_AND_WHITE);
+        LinesAndActivationAreas result = getTextAndActivationAreas(text, x, y, 200, minecraft.screen, minecraft.font, palette);
 
         lines.clear();
         lines.addAll(result.lines());
@@ -92,6 +100,7 @@ public class StackedTextBox extends AbstractStackedTextBox {
                 if (area.isIn(mouseX, mouseY)) {
                     child = new StackedTextBox(minecraft, mouseX, mouseY + 5, this)
                         .withActivationArea(area)
+                        .withPalette(palette)
                         .withText(Component.translatable(pair.getSecond()).getString());
                 };
             };

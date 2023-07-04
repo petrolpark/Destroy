@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.common.collect.ImmutableList;
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
@@ -17,6 +16,7 @@ import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
+import com.petrolpark.destroy.chemistry.Formula.Topology.SideChainInformation;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Node;
 
@@ -70,9 +70,13 @@ public class MoleculeRenderer {
         zOffset = 0;
         RENDERED_OBJECTS = new ArrayList<>();
 
-        if (molecule.getAtoms().size() == 1) { // Monatomic Molecules
+        // Monatomic Molecules
+        if (molecule.getAtoms().size() == 1) {
+
             RENDERED_OBJECTS.add(Pair.of(Vec3.ZERO, new AtomRenderInstance(molecule.getAtoms().iterator().next().getElement())));
-        } else if (molecule.isCyclic()) { // Cyclic Molecules
+
+        // Cyclic Molecules
+        } else if (molecule.isCyclic()) {
             // Add all Atoms in the cycle
             Map<Atom, Vec3> cyclicAtomsAndLocations = new HashMap<>(); // Store the location of each Atom so we can refer to them when adding the Bonds
             molecule.getCyclicAtomsForRendering().forEach(pair -> {
@@ -91,7 +95,24 @@ public class MoleculeRenderer {
                    BondRenderInstance.fromZig(bond.getType(), zig)
                 ));
             });
-        } else { // Standard branched Molecules
+            // Add all side chains
+            molecule.getSideChainsForRendering().forEach(pair -> {
+                SideChainInformation sideChainInfo = pair.getFirst();
+                Vec3 zig = sideChainInfo.bondDirection();
+                Vec3 cyclicAtomLocation = cyclicAtomsAndLocations.get(sideChainInfo.atom()).scale(BOND_LENGTH);
+                Vec3 startLocation = cyclicAtomLocation.add(zig.scale(BOND_LENGTH));
+                Vec3 startDirection = sideChainInfo.branchDirection();
+                Vec3 startPlane = sideChainInfo.bondDirection().cross(sideChainInfo.branchDirection());
+                RENDERED_OBJECTS.add(Pair.of(
+                    cyclicAtomLocation.add(zig.scale(BOND_LENGTH / 2)),
+                    BondRenderInstance.fromZig(BondType.SINGLE, zig) //TODO change to use correct Bond Type
+                ));
+
+                generateBranch(pair.getSecond(), startLocation, startDirection, startPlane, zig, true);
+            });
+
+        // Standard branched Molecules
+        } else {
             Vec3 startLocation = new Vec3(0d, 0d, 0d);
             Vec3 startDirection = new Vec3(1d, 0d, -1d).normalize();
             Vec3 startPlane = new Vec3(1d, 0d, 1d).normalize();
@@ -100,7 +121,8 @@ public class MoleculeRenderer {
                 startLocation,
                 startDirection,
                 startPlane,
-                rotate(startDirection, startPlane, 180d + (getGeometry(molecule.getRenderBranch().getNodes().get(1)).getAngle() * 0.5d))
+                rotate(startDirection, startPlane, 180d + (getGeometry(molecule.getRenderBranch().getNodes().get(1), false).getAngle() * 0.5d)),
+                false
             );
         };
 
@@ -134,8 +156,6 @@ public class MoleculeRenderer {
     public void render(PoseStack poseStack, int xPosition, int yPosition) {
         poseStack.pushPose();
         poseStack.translate(xPosition + xOffset, yPosition + yOffset, zOffset + 100);
-        TransformStack.cast(poseStack)
-            .rotateY(AnimationTickHolder.getRenderTime());
         for (Pair<Vec3, IRenderableMoleculePart> pair : RENDERED_OBJECTS) {
             pair.getSecond().render(poseStack, pair.getFirst());
         };
@@ -149,8 +169,9 @@ public class MoleculeRenderer {
      * @param direction The overall direction in which this chain should continue (as chains zig-zag, this is the direction of net movement)
      * @param plane The normal to the plane in which this chain should appear
      * @param zig The vector representing the direction of the imaginary first zig in the chain - the zig from some imaginary Atom to the first Atom in the Branch
+     * @param addOneConnectionToFirstNode Whether to add one to the number of connections the first node it thinks it has (i.e. a linear Geometry will become trigonal planar);
      */
-    public void generateBranch(Branch branch, Vec3 startLocation, Vec3 direction, Vec3 plane, Vec3 zig) {
+    public void generateBranch(Branch branch, Vec3 startLocation, Vec3 direction, Vec3 plane, Vec3 zig, boolean addOneConnectionToFirstNode) {
         Vec3 location = new Vec3(startLocation.x, startLocation.y, startLocation.z); // The working location at which to render Atoms; this moves
         Vec3 zag = new Vec3(zig.x, zig.y, zig.z); // The direction of the next bond; this changes, hopefully in a zigzagular fashion
 
@@ -165,7 +186,8 @@ public class MoleculeRenderer {
             i++;
 
             // Determine the Geometry of this node
-            Geometry geometry = getGeometry(node);
+            Geometry geometry = getGeometry(node, addOneConnectionToFirstNode);
+            if (addOneConnectionToFirstNode) addOneConnectionToFirstNode = false; // Only add an additional connection to the first Node
 
             // Determine the orientation of this Atom
             ConfinedGeometry confinedGeometry = geometry.confine(zag, plane, direction);
@@ -187,7 +209,7 @@ public class MoleculeRenderer {
                 Branch sideBranch = sideBranchAndBondType.getKey();
                 Vec3 newPlane = confinedGeometry.getZig().cross(sideZag);
                 RENDERED_OBJECTS.add(Pair.of(location.add(sideZag.scale(0.5d * BOND_LENGTH)), BondRenderInstance.fromZig(BondType.SINGLE,  sideZag)));
-                generateBranch(sideBranch, location.add(sideZag.scale(BOND_LENGTH)), rotate(sideZag, newPlane, 90d), newPlane, sideZag);
+                generateBranch(sideBranch, location.add(sideZag.scale(BOND_LENGTH)), rotate(sideZag, newPlane, 90d), newPlane, sideZag, false);
                 j++;
             };
 
@@ -202,9 +224,9 @@ public class MoleculeRenderer {
         };
     };
 
-    private Geometry getGeometry(Node node) {
+    private Geometry getGeometry(Node node, boolean addOne) {
         // TODO replace with interfaces in the Element enum so Atoms properly consider lone pairs
-        switch (node.getEdges().size() + node.getSideBranches().size()) {
+        switch (node.getEdges().size() + node.getSideBranches().size() + (addOne ? 1 : 0)) {
             case 1:
                 return Geometry.LINEAR;
             case 2:
