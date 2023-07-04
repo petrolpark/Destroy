@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
+import com.petrolpark.destroy.chemistry.Formula.Topology.SideChainInformation;
 import com.petrolpark.destroy.chemistry.genericReaction.GenericReaction;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Node;
@@ -57,12 +58,13 @@ public class Formula implements Cloneable {
      * The {@link Topology Topology} (3D structure) of this Formula if it is cyclic.
      */
     private Topology topology;
+
     /**
-     * The ordered list of Atoms in the base {@link Topology} of this Formula, if it is cyclic.
-     * This may contain repeats if multiple side-chains are bonded to the same {@link Atom}.
-     * @see Formula#addGroupToPosition Adding side-chains
+     * A list of copies of Formulas attached to {@link Formula#topology cyclic} {@link Atom Atoms} in this Formula.
+     * This is just used for {@link Molecule#getRenderer rendering} and {@link Formula#serialize serialization} - originals
+     * of all Atoms in the side-chains are still stored in this Formula.
      */
-    private List<Atom> cyclicAtoms;
+    private List<Pair<SideChainInformation, Formula>> sideChains;
 
     /**
      * The <a href="https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS</a> code representing this Formula.
@@ -77,6 +79,7 @@ public class Formula implements Cloneable {
         structure = new HashMap<Atom, List<Bond>>();
         groups = new ArrayList<>();
         topology = Topology.LINEAR;
+        sideChains = new ArrayList<>();
         optimumFROWNSCode = null;
     };
 
@@ -85,13 +88,10 @@ public class Formula implements Cloneable {
      * @param startingAtom The Atom from which to start constructing this Formula.
      */
     public Formula(Atom startingAtom) {
-        structure = new HashMap<Atom, List<Bond>>();
+        this();
         structure.put(startingAtom, new ArrayList<Bond>());
         this.startingAtom = startingAtom;
         currentAtom = startingAtom;
-        groups = new ArrayList<>();
-        topology = Topology.LINEAR;
-        cyclicAtoms = new ArrayList<Atom>();
     };
 
     /**
@@ -262,7 +262,8 @@ public class Formula implements Cloneable {
      */
     @Deprecated
     public Formula addGroupToPosition(Formula group, int position, BondType bondType) {
-        addGroupToStructure(structure, cyclicAtoms.get(position), group, bondType);
+        addGroupToStructure(structure, sideChains.get(position).getFirst().atom(), group, bondType); // Add a Bond between the cyclic Atom and this Group
+        sideChains.get(position).setSecond(group); // Update the group attached to this position
         currentAtom = group.currentAtom;
         return this;
     };
@@ -414,7 +415,7 @@ public class Formula implements Cloneable {
         String body = "";
         String prefix = topology.getID();
 
-        Map<Atom, List<Bond>> newStructure = stripHydrogens(shallowCopyStructure(structure));
+        //Map<Atom, List<Bond>> newStructure = stripHydrogens(shallowCopyStructure(structure));
 
         if (topology == Topology.LINEAR) {
 
@@ -441,12 +442,14 @@ public class Formula implements Cloneable {
             body = serializeStartingWithAtom(startingAtom);
 
         } else {
-            for (int i = 0; i < topology.getConnections(); i++) {
+            addAllSideChains: for (int i = 0; i < topology.getConnections(); i++) {
+                Formula sideChain = sideChains.get(i).getSecond();
+                if (sideChain.getAllAtoms().size() == 0) continue addAllSideChains;
+                body += sideChain.serializeStartingWithAtom(sideChain.startingAtom);
                 body += ",";
-                //TODO add side chains
                 //TODO ensure this gives the same thing every time for symmetrical Topologies
             };
-            body = body.substring(0, body.length() - 1);
+            body = body.substring(0, body.length() - 1); // The -1 removes the final comma
         };
 
 
@@ -506,7 +509,7 @@ public class Formula implements Cloneable {
                     if (stripBond) group = group.substring(1);
                     formula.addGroupToPosition(groupFromString(Arrays.stream(group.split("(?=\\p{Upper})")).toList()), i, bond);
                     i++;
-                    if (i >= formula.cyclicAtoms.size()) throw new IllegalStateException("Formula '" + FROWNSstring + "' has too many groups (" + i + ") for its Cycle Type (" + formula.cyclicAtoms.size() + ").");
+                    if (i >= formula.topology.connections.size()) throw new IllegalStateException("Formula '" + FROWNSstring + "' has too many groups (" + (i+1) + ") for its Cycle Type (" + formula.topology.connections.size() + ").");
                 };
             };
 
@@ -944,7 +947,7 @@ public class Formula implements Cloneable {
             @SuppressWarnings("null")
             public Builder startWith(Element element) {
                 topology.formula = Formula.atom(element);
-                topology.atomsAndLocations.add(Pair.of(new Vec3(0f, 0f, 0f), topology.formula.currentAtom)); // This gives a null warning which has been accounted for
+                topology.atomsAndLocations.add(Pair.of(new Vec3(0f, 0f, 0f), topology.formula.startingAtom)); // This gives a null warning which has been accounted for
                 return this;
             };
 
@@ -986,7 +989,7 @@ public class Formula implements Cloneable {
                     // Set the Topology of the Formula so any time it is copied (which is done when deserializing a cyclic Molecule) it has the right Topology
                     topology.formula.topology = topology;
                     // Tell the Formula where to bond side-chains
-                    topology.atomsAndLocations.forEach(pair -> topology.formula.cyclicAtoms.add(pair.getSecond())); // Gives a null warning, which has been accounted for
+                    topology.connections.forEach(sideChainInfo -> topology.formula.sideChains.add(Pair.of(sideChainInfo, new Formula()))); // Gives a null warning, which has been accounted for
                 }; 
                 // Add the Topology to the register
                 TOPOLOGIES.put(nameSpace+":"+id, topology);
@@ -1053,7 +1056,7 @@ public class Formula implements Cloneable {
         };
 
         /**
-         * @param atom The Atom in the Topology the side-chain to which the side-chain connects
+         * @param atom The Atom in the Topology to which the side-chain connects
          * @param bondDirection The direction of the first {@link Bond} in the side-chain
          * @param branchDirection The general direction of propagation of the side-chain
          */

@@ -1,18 +1,26 @@
 package com.petrolpark.destroy.test;
 
-import com.petrolpark.destroy.chemistry.Mixture;
+import com.petrolpark.destroy.chemistry.Formula;
+import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.Molecule.MoleculeBuilder;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.DestroyReactions;
+import com.petrolpark.destroy.chemistry.index.DestroyTopologies;
 
 public class ChemistryTest {
 
     public static void main(String ...args) {
 
+        DestroyTopologies.register();
+        DestroyMolecules.register();
         DestroyReactions.register();
-        Mixture mixture1 = new Mixture();
-        mixture1.addMolecule(DestroyMolecules.METHANOL, 1f);
-        mixture1.addMolecule(DestroyMolecules.CARBON_MONOXIDE, 1f);
-        mixture1.reactInBasin();
-        System.out.println(mixture1.getContentsString());
+        
+        MoleculeBuilder builder = new MoleculeBuilder("test");
+        Molecule HENRYANE = builder.id("henryane")
+            .structure(Formula.deserialize("destroy:cubane:COOH,OC,N,COOH,Cl,F,N"))
+            .build();
+        
+        System.out.println(HENRYANE.getStructuralFormula());
+        
     };
 };
