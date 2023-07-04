@@ -17,7 +17,7 @@ public class ChemistryTest {
         
         MoleculeBuilder builder = new MoleculeBuilder("test");
         Molecule HENRYANE = builder.id("henryane")
-            .structure(Formula.deserialize("destroy:cubane:COOH,OC,N,COOH,Cl,F,N"))
+            .structure(Formula.deserialize("destroy:cubane:COOH+1.9,,,COOH,Cl,F,N"))
             .build();
         
         System.out.println(HENRYANE.getStructuralFormula());

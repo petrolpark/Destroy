@@ -337,15 +337,27 @@ public class Formula implements Cloneable {
      * @return This Formula
      */
     public Formula addAllHydrogens() {
-        Map<Atom, List<Bond>> newStructure = new HashMap<Atom, List<Bond>>(structure); //creates a shallow copy, as the original structure can't be modified while being iterated over
+        Map<Atom, List<Bond>> newStructure = new HashMap<Atom, List<Bond>>(structure); // Create a shallow copy, as the original structure can't be modified while being iterated over
 
+        // Replace all empty side chains with Hydrogen, if necessary
+        if (topology != Topology.LINEAR) {
+            for (int i = 0; i < sideChains.size(); i++) {
+                Atom atom = sideChains.get(i).getFirst().atom();
+                int totalBonds = getTotalBonds(newStructure.get(atom));
+                if (atom.getElement().getNextLowestValency(totalBonds) - totalBonds > 0) {
+                    sideChains.get(i).setSecond(Formula.atom(Element.HYDROGEN));
+                };
+            };
+        };
+
+        // Add all the rest of the Hydrogens
         for (Entry<Atom, List<Bond>> entry : structure.entrySet()) {
             Atom atom = entry.getKey();
             List<Bond> bonds = entry.getValue();
             int totalBonds = getTotalBonds(bonds);
             //if (totalBonds > atom.getElement().getMaxValency()) throw new IllegalStateException(atom.getElement()+" Atom has invalid number of bonds");
             for (int i = 0; i < atom.getElement().getNextLowestValency(totalBonds) - totalBonds; i++) {
-                addAtomToStructure(newStructure, atom, new Atom(Element.HYDROGEN), BondType.SINGLE); //I think this works 'cause it's a shallow copy and not a deep copy?
+                addAtomToStructure(newStructure, atom, new Atom(Element.HYDROGEN), BondType.SINGLE); 
             };
         };
         structure = newStructure;
@@ -442,10 +454,11 @@ public class Formula implements Cloneable {
             body = serializeStartingWithAtom(startingAtom);
 
         } else {
-            addAllSideChains: for (int i = 0; i < topology.getConnections(); i++) {
+            for (int i = 0; i < topology.getConnections(); i++) {
                 Formula sideChain = sideChains.get(i).getSecond();
-                if (sideChain.getAllAtoms().size() == 0) continue addAllSideChains;
-                body += sideChain.serializeStartingWithAtom(sideChain.startingAtom);
+                if (sideChain.getAllAtoms().size() != 0 && !(sideChain.getAllAtoms().size() == 1 && sideChain.getAllAtoms().stream().anyMatch(atom -> atom.getElement() == Element.HYDROGEN))) { // If there's actually a chain to add and not just a hydrogen
+                    body += sideChain.serializeStartingWithAtom(sideChain.startingAtom);
+                };
                 body += ",";
                 //TODO ensure this gives the same thing every time for symmetrical Topologies
             };
@@ -490,26 +503,31 @@ public class Formula implements Cloneable {
                 formula = topology.formula.shallowCopy(); // Gives a null warning which has been accounted for
                 int i = 0;
                 for (String group : formulaString.split(",")) {
-                    if (group.isBlank()) continue;
-                    Boolean stripBond = true; //start by assuming by a =/#/~ will have to be taken off the start of the group
+                    Formula sideChain;
                     BondType bond = BondType.SINGLE; //start by assuming the Bond will be single
-                    switch (group.charAt(0)) {
-                        case '=':
-                            bond = BondType.DOUBLE;
-                            break;
-                        case '#':
-                            bond = BondType.TRIPLE;
-                            break;
-                        case '~':
-                            bond = BondType.AROMATIC;
-                            break;
-                        default: //if there is no =/#/~, then don't actually take anything off
-                            stripBond = false;
+                    if (group.isBlank()) {
+                        sideChain = new Formula(new Atom(Element.HYDROGEN));
+                    } else {
+                        Boolean stripBond = true; //start by assuming by a =/#/~ will have to be taken off the start of the group
+                        switch (group.charAt(0)) {
+                            case '=':
+                                bond = BondType.DOUBLE;
+                                break;
+                            case '#':
+                                bond = BondType.TRIPLE;
+                                break;
+                            case '~':
+                                bond = BondType.AROMATIC;
+                                break;
+                            default: //if there is no =/#/~, then don't actually take anything off
+                                stripBond = false;
+                        };
+                        if (stripBond) group = group.substring(1);
+                        sideChain = groupFromString(Arrays.stream(group.split("(?=\\p{Upper})")).toList());
                     };
-                    if (stripBond) group = group.substring(1);
-                    formula.addGroupToPosition(groupFromString(Arrays.stream(group.split("(?=\\p{Upper})")).toList()), i, bond);
+                    formula.addGroupToPosition(sideChain, i, bond);
                     i++;
-                    if (i >= formula.topology.connections.size()) throw new IllegalStateException("Formula '" + FROWNSstring + "' has too many groups (" + (i+1) + ") for its Cycle Type (" + formula.topology.connections.size() + ").");
+                    if (i > formula.topology.connections.size()) throw new IllegalStateException("Formula '" + FROWNSstring + "' has too many groups (" + (i+1) + ") for its Cycle Type (" + formula.topology.connections.size() + ").");
                 };
             };
 
