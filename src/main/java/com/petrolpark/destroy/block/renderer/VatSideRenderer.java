@@ -5,6 +5,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
 import com.petrolpark.destroy.block.model.DestroyPartials;
+import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
+import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
@@ -18,7 +21,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 
 public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity> {
@@ -26,10 +28,9 @@ public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity>
     private static final FluidStack THERMOMETER_FLUID;
 
     static {
-        // ReadOnlyMixture mixture = new ReadOnlyMixture();
-        // mixture.addMolecule(DestroyMolecules.MERCURY, DestroyMolecules.MERCURY.getPureConcentration());
-        // THERMOMETER_FLUID = MixtureFluid.of(1000, mixture, "");
-        THERMOMETER_FLUID = new FluidStack(Fluids.WATER, 1000); //TODO update to use mercury
+        ReadOnlyMixture mixture = new ReadOnlyMixture();
+        mixture.addMolecule(DestroyMolecules.MERCURY, DestroyMolecules.MERCURY.getPureConcentration());
+        THERMOMETER_FLUID = MixtureFluid.of(1000, mixture, "");
     };
 
     public VatSideRenderer(BlockEntityRendererProvider.Context context) {};

@@ -65,7 +65,7 @@ public class ReadOnlyMixture {
      */
     public CompoundTag writeNBT() {
         CompoundTag compound = new CompoundTag();
-        if (translationKey != "") {
+        if (translationKey != "" && translationKey != null) {
             compound.putString("TranslationKey", translationKey);
         };
         compound.putFloat("Temperature", temperature);

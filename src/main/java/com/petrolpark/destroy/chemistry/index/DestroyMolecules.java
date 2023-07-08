@@ -261,6 +261,11 @@ public final class DestroyMolecules {
         .density(1.15f)
         .boilingPoint(19.5f)
         .build(),
+    
+    HYDROGEN_PEROXIDE = builder()
+        .id("hydrogen_peroxide")
+        .structure(Formula.deserialize("destroy:linear:OO"))
+        .build(),
 
     HYDROXIDE = builder()
         .id("hydroxide")

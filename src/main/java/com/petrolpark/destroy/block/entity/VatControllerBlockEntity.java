@@ -133,12 +133,19 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             fluidAmountInserted = remainingSpace; // Set the actual amount of Fluid inserted
         };
 
-        // Create the new Mixture
         FluidStack existingFluid = getTank().getFluid();
-        Mixture newMixture = Mixture.mix(Map.of(
-            Mixture.readNBT(existingFluid.getOrCreateTag().getCompound("Mixture")), (double)existingFluid.getAmount(),
-            Mixture.readNBT(newFluidStack.getOrCreateTag().getCompound("Mixture")), (double)newFluidStack.getAmount()
-        ));
+        Mixture newMixture;
+
+        if (getTank().isEmpty()) { // If this is the first Mixture to be added to the Tank
+            // Set the 'new' Mixture to the one in this Fluid Stack
+            newMixture = Mixture.readNBT(newFluidStack.getOrCreateTag().getCompound("Mixture"));
+        } else { // If we're mixing in new Fluid
+            // Create the new Mixture
+            newMixture = Mixture.mix(Map.of(
+                Mixture.readNBT(existingFluid.getOrCreateTag().getCompound("Mixture")), (double)existingFluid.getAmount(),
+                Mixture.readNBT(newFluidStack.getOrCreateTag().getCompound("Mixture")), (double)newFluidStack.getAmount()
+            ));
+        };
 
         // Replace the Fluid in the Tank
         tankBehaviour.allowInsertion();

@@ -80,6 +80,13 @@ public class Reaction {
     };
 
     /**
+     * Whether this Reaction has a {@link ReactionResult Result}. 
+     */
+    public boolean hasResult() {
+        return result != null;
+    };
+
+    /**
      * The {@link ReactionResult Result} of this Reaction, which occurs once a set
      * number of moles of Reaction have occured.
      * @return {@code null} if this Reaction has no result.
@@ -239,12 +246,12 @@ public class Reaction {
             };
 
             if (!hasForcedActivationEnergy || reaction.activationEnergy <= 0f) {
-                reaction.activationEnergy = 100f;
+                reaction.activationEnergy = 50f;
                 Destroy.LOGGER.warn("Activation energy of reaction '"+reactionString()+"' was missing or invalid, so estimated as 100kJ.");
             };
 
             if (!hasForcedPreExponentialFactor || reaction.preexponentialFactor <= 0f) {
-                reaction.preexponentialFactor = 1e6f;
+                reaction.preexponentialFactor = 1e8f;
                 Destroy.LOGGER.warn("Pre-exponential factor of reaction '"+reactionString()+"' was missing or invalid, so was estimated as 1e6.");
             };
 

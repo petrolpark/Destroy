@@ -3,6 +3,8 @@ package com.petrolpark.destroy.chemistry.index;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
+import com.petrolpark.destroy.chemistry.reactionResult.PrecipitateReactionResult;
+import com.petrolpark.destroy.item.DestroyItems;
 
 public class DestroyReactions {
 
@@ -37,6 +39,14 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.WATER)
         .activationEnergy(0f)
         .preexponentialFactor(1e14f)
+        .build(),
+
+    TATP = builder()
+        .id("tatp")
+        .addReactant(DestroyMolecules.ACETONE)
+        .addReactant(DestroyMolecules.HYDROGEN_PEROXIDE)
+        // TODO acid catalyst
+        .withResult(3f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.ACETONE_PEROXIDE.asStack()))
         .build();
 
     private static ReactionBuilder builder() {

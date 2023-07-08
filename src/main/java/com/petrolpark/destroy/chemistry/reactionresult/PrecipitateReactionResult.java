@@ -1,6 +1,6 @@
 package com.petrolpark.destroy.chemistry.reactionResult;
 
-import java.util.List;
+import java.util.function.Supplier;
 
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
 import com.petrolpark.destroy.chemistry.Mixture;
@@ -13,17 +13,21 @@ import net.minecraft.world.level.Level;
 
 public class PrecipitateReactionResult extends ReactionResult {
     
-    private final ItemStack precipitate;
+    private final Supplier<ItemStack> precipitate;
 
-    public PrecipitateReactionResult(float moles, Reaction reaction, ItemStack precipitate) {
+    public PrecipitateReactionResult(float moles, Reaction reaction, Supplier<ItemStack> precipitate) {
         super(moles, reaction);
         this.precipitate = precipitate;
     };
 
+    public ItemStack getPrecipitate() {
+        return precipitate.get();
+    };
+
     @Override
     public void onBasinReaction(Level level, BasinBlockEntity basin, Mixture mixture) {
-        basin.acceptOutputs(List.of(precipitate), List.of(), false);
-    }
+        // Do nothing, this is handled in ReactionInBasinRecipe
+    };
 
     @Override
     public void onVatReaction(Level level, VatControllerBlockEntity vatController, Mixture mixture) {

@@ -80,6 +80,11 @@ public class Mixture extends ReadOnlyMixture {
 
     public static Mixture readNBT(CompoundTag compound) {
         Mixture mixture = new Mixture();
+        
+        if (compound == null) {
+            Destroy.LOGGER.warn("Null Mixture loaded");
+            return mixture;
+        };
 
         mixture.translationKey = compound.getString("TranslationKey"); // Set to "" if the key is not present
 
@@ -153,6 +158,7 @@ public class Mixture extends ReadOnlyMixture {
     public static Mixture mix(Map<Mixture, Double> mixtures) {
         Mixture resultMixture = new Mixture();
         Map<Molecule, Double> moleculesAndMoles = new HashMap<>(); // A Map of all Molecules to their quantity in moles (not their concentration)
+        Map<ReactionResult, Double> reactionResultsAndMoles = new HashMap<>(); // A Map of all Reaction Results to their quantity in moles
         double totalAmount = 0d;
 
         for (Entry<Mixture, Double> mixtureAndAmount : mixtures.entrySet()) {
@@ -161,7 +167,11 @@ public class Mixture extends ReadOnlyMixture {
             totalAmount += amount;
 
             for (Entry<Molecule, Float> entry : mixture.contents.entrySet()) {
-                moleculesAndMoles.merge(entry.getKey(), (entry.getValue() * amount), (m1, m2) -> m1 + m2); // Add the Molecule to the map if it's a new one, or increase the existing molar quantity otherwise
+                moleculesAndMoles.merge(entry.getKey(), entry.getValue() * amount, (m1, m2) -> m1 + m2); // Add the Molecule to the map if it's a new one, or increase the existing molar quantity otherwise
+            };
+
+            for (Entry<ReactionResult, Float> entry : mixture.reactionResults.entrySet()) {
+                reactionResultsAndMoles.merge(entry.getKey(), entry.getValue() * amount, (r1, r2) -> r1 + r2); // Same for Reaction Results
             };
         };
 
@@ -169,9 +179,14 @@ public class Mixture extends ReadOnlyMixture {
             resultMixture.internalAddMolecule(moleculeAndMoles.getKey(), (float)(moleculeAndMoles.getValue() / totalAmount), false); // Add all these Molecules to the new Mixture
         };
 
+        for (Entry<ReactionResult, Double> reactionResultAndMoles : reactionResultsAndMoles.entrySet()) {
+            resultMixture.doReaction(reactionResultAndMoles.getKey().getReaction(), (float)(reactionResultAndMoles.getValue() / totalAmount)); // Add all Reaction Results to the new Mixture
+        };
+
         resultMixture.refreshPossibleReactions();
         resultMixture.updateName();
         //TODO determine temperature
+        //TODO combine Reaction results
 
         return resultMixture;
     };
@@ -245,6 +260,8 @@ public class Mixture extends ReadOnlyMixture {
 
             if (molesOfReaction <= 0f) continue doEachReaction; // Don't bother going any further if this Reaction won't happen
 
+            doReaction(reaction, molesOfReaction); // Increment the amount of this Reaction which has occured
+
             for (Molecule reactant : reaction.getReactants()) {
                 changeConcentrationOf(reactant, - (molesOfReaction * reaction.getReactantMolarRatio(reactant)), false); // Use up the right amount of all the reagents
             };
@@ -290,18 +307,46 @@ public class Mixture extends ReadOnlyMixture {
     };
 
     /**
+     * Increase the number of moles of Reaction which have occured.
+     * @param reaction
+     * @param molesPerBucket Moles (per Bucket) of Reaction
+     */
+    protected void doReaction(Reaction reaction, float molesPerBucket) {
+        if (!reaction.hasResult()) return;
+        ReactionResult result = reaction.getResult();
+        reactionResults.merge(result, molesPerBucket, (f1, f2) -> f1 + f2);
+    };
+
+    /**
      * {@link Mixture#reactForTick React} this Mixture until it reaches {@link Mixture#equilibrium equilibrium}. This is mutative.
      * @return A {@link com.petrolpark.destroy.recipe.ReactionInBasinRecipe.ReactionInBasinResult ReactionInBasinResult} containing
      * the number of ticks it took to reach equilibrium and the {@link ReactionResult Reaction Results}.
+     * @param volume (in mB) of this Reaction
      */
-    public ReactionInBasinResult reactInBasin() {
-        //TODO reaction results
+    public ReactionInBasinResult reactInBasin(int volume) {
+        float volumeInBuckets = (float)volume / 1000f;
         int ticks = 0;
+
         while (!equilibrium) {
             reactForTick();
             ticks++;
         };
-        return new ReactionInBasinResult(ticks, Set.of());
+
+        List<ReactionResult> results = new ArrayList<>();
+        for (ReactionResult result : reactionResults.keySet()) {
+            Float molesPerBucketOfReaction = reactionResults.get(result);
+            int numberOfResult = (int) (volumeInBuckets * molesPerBucketOfReaction / result.getRequiredMoles());
+
+            // Decrease the amount of Reaction that has happened
+            reactionResults.replace(result, molesPerBucketOfReaction - numberOfResult * result.getRequiredMoles() / volumeInBuckets);
+
+            // Add the Reaction Result the required number of times
+            for (int i = 0; i < numberOfResult; i++) {
+                results.add(result);
+            };
+        };
+
+        return new ReactionInBasinResult(ticks, results);
     };
 
     /**

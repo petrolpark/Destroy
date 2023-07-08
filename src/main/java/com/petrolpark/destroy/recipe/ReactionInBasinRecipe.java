@@ -2,17 +2,17 @@ package com.petrolpark.destroy.recipe;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReactionResult;
+import com.petrolpark.destroy.chemistry.reactionResult.PrecipitateReactionResult;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
-import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
@@ -50,7 +50,7 @@ public class ReactionInBasinRecipe extends MixingRecipe {
 
         // TODO modify temp according to Heat Level
         Mixture mixture = Mixture.mix(mixtures);
-        ReactionInBasinResult result = mixture.reactInBasin(); // Mutably react the Mixture 
+        ReactionInBasinResult result = mixture.reactInBasin(totalAmount); // Mutably react the Mixture 
 
         int duration = Mth.clamp(result.ticks(), 40, 600); // Ensure this takes at least 2 seconds and less than 30 seconds
 
@@ -61,7 +61,13 @@ public class ReactionInBasinRecipe extends MixingRecipe {
 
         // Add all the given Fluid Stacks as "required ingredients"
         availableFluids.stream().map(fluidStack -> FluidIngredient.fromFluidStack(fluidStack)).forEach(fluidIngredient -> builder.require(fluidIngredient));
-        builder.require(DestroyItems.ABS.get());
+
+        for (ReactionResult reactionResult : result.reactionResults()) {
+            if (reactionResult instanceof PrecipitateReactionResult precipitationResult) {
+                builder.output(precipitationResult.getPrecipitate());
+            };
+            // TODO other Reaction Results
+        };
 
         // TODO Tell the Player if their Mixtures can't be mixed because they're in the output tank (not the input tank)
 
@@ -78,6 +84,6 @@ public class ReactionInBasinRecipe extends MixingRecipe {
      * @param ticks The number of ticks it took for the Mixture to reach equilibrium.
      * @param reactionResults The {@link com.petrolpark.destroy.chemistry.ReactionResult results} of Reacting this Mixture.
      */
-    public static record ReactionInBasinResult(int ticks, Set<ReactionResult> reactionResults) {};
+    public static record ReactionInBasinResult(int ticks, List<ReactionResult> reactionResults) {};
     
 };

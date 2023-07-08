@@ -51,7 +51,6 @@ public class VatSideBlock extends CopycatBlock {
             if (!(be instanceof VatSideBlockEntity vatSide)) return InteractionResult.PASS;
             switch (vatSide.getDisplayType()) {
                 case PIPE:
-                        return InteractionResult.PASS;
                 case NORMAL: {
                     vatSide.setDisplayType(DisplayType.THERMOMETER);
                     return InteractionResult.SUCCESS;
@@ -60,6 +59,7 @@ public class VatSideBlock extends CopycatBlock {
                     return InteractionResult.SUCCESS;
                 } case BAROMETER: {
                     vatSide.setDisplayType(DisplayType.NORMAL);
+                    vatSide.updateDisplayType(vatSide.getBlockPos().relative(vatSide.direction));
                     return InteractionResult.SUCCESS;
                 } default:
                     return InteractionResult.PASS;
