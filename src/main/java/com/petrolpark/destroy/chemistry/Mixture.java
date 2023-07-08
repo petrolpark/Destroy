@@ -15,13 +15,22 @@ import com.petrolpark.destroy.chemistry.genericReaction.GenericReaction;
 import com.petrolpark.destroy.chemistry.genericReaction.SingleGroupGenericReaction;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.recipe.ReactionInBasinRecipe.ReactionInBasinResult;
+import com.simibubi.create.foundation.utility.NBTHelper;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 
 public class Mixture extends ReadOnlyMixture {
 
     private static final int TICKS_PER_SECOND = 20;
+
+    /**
+     * A Map of all {@link ReactionResult Results} of {@link Reaction Reactions} generated in this Mixture, mapped
+     * to their 'concentrations' (moles of the Reaction which have occured per Bucket of this Mixture, since the last
+     * instance of that Reaction Result was dealt with).
+     */
+    private Map<ReactionResult, Float> reactionResults;
 
     /**
      * {@link Molecule Molecules} which can donate protons.
@@ -58,6 +67,8 @@ public class Mixture extends ReadOnlyMixture {
     public Mixture() {
         super();
 
+        reactionResults = new HashMap<>();
+
         acids = new ArrayList<>();
         novelMolecules = new ArrayList<>();
 
@@ -74,12 +85,23 @@ public class Mixture extends ReadOnlyMixture {
 
         if (compound.contains("Temperature")) mixture.temperature = compound.getFloat("Temperature");
 
-        ListTag contents = compound.getList("Contents", 10);
+        ListTag contents = compound.getList("Contents", Tag.TAG_COMPOUND);
         contents.forEach(tag -> {
             CompoundTag moleculeTag = (CompoundTag) tag;
             mixture.addMolecule(Molecule.getMolecule(moleculeTag.getString("Molecule")), moleculeTag.getFloat("Concentration"));
         });
+
         mixture.equilibrium = compound.getBoolean("AtEquilibrium");
+
+        if (compound.contains("Results", Tag.TAG_LIST)) {
+            ListTag results = compound.getList("Results", Tag.TAG_COMPOUND);
+            results.forEach(tag -> {
+                CompoundTag resultTag = (CompoundTag) tag;
+                ReactionResult result = Reaction.get(resultTag.getString("Result")).getResult();
+                if (result == null) return;
+                mixture.reactionResults.put(result, resultTag.getFloat("MolesPerBucket"));
+            });
+        };
 
         mixture.updateName();
         if (!mixture.equilibrium) mixture.refreshPossibleReactions();
@@ -91,6 +113,15 @@ public class Mixture extends ReadOnlyMixture {
     public CompoundTag writeNBT() {
         CompoundTag tag = super.writeNBT();
         tag.putBoolean("AtEquilibrium", equilibrium);
+
+        if (!reactionResults.isEmpty()) {
+            tag.put("Results", NBTHelper.writeCompoundList(reactionResults.entrySet(), entry -> {
+                CompoundTag resultTag = new CompoundTag();
+                resultTag.putString("Result", entry.getKey().getReaction().getFullId()); //TODO
+                resultTag.putFloat("MolesPerBucket", entry.getValue());
+                return resultTag;
+            }));
+        };
         return tag;
     };
 

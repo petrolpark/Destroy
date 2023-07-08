@@ -9,7 +9,7 @@
     "results": [
         {
             "fluid": "destroy:mixture",
-            "amount": 543,
+            "amount": 516,
             "nbt": {
                 "Mixture": {
                     "TranslationKey": "destroy.chemical.mercury",
@@ -24,7 +24,7 @@
         },
         {
             "fluid": "destroy:mixture",
-            "amount": 457,
+            "amount": 614,
             "nbt": {
                 "Mixture": {
                     "TranslationKey": "fluid.destroy.molten_sulfur",

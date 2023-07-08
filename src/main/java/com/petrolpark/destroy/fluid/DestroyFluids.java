@@ -19,7 +19,7 @@ public class DestroyFluids {
 
     public static final FluidEntry<VirtualFluid>
     
-    URINE = coloredWaterFluid("urine", 0xA0EADA4E)
+    URINE = virtualFluid("urine")
         .register(),
     CHORUS_WINE = virtualFluid("chorus_wine")
         .register(),

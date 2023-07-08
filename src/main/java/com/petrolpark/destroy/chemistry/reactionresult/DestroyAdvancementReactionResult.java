@@ -1,8 +1,10 @@
 package com.petrolpark.destroy.chemistry.reactionResult;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
+import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.chemistry.Mixture;
+import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.ReactionResult;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 
@@ -16,8 +18,8 @@ public class DestroyAdvancementReactionResult extends ReactionResult {
 
     private final DestroyAdvancements advancement;
 
-    public DestroyAdvancementReactionResult(float moles, DestroyAdvancements advancement) {
-        super(moles);
+    public DestroyAdvancementReactionResult(float moles, Reaction reaction, DestroyAdvancements advancement) {
+        super(moles, reaction);
         this.advancement = advancement;
     };
 
@@ -27,8 +29,9 @@ public class DestroyAdvancementReactionResult extends ReactionResult {
     };
 
     @Override
-    public void onVatReaction(Level level, Mixture mixture) {
+    public void onVatReaction(Level level, VatControllerBlockEntity vatController, Mixture mixture) {
         // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onVatReaction'");
     };
     
 };

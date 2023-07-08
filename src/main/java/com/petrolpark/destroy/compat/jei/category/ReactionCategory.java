@@ -40,7 +40,7 @@ public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
      * Generate every Reaction's recipe to go in JEI.
      */
     static {
-        for (Reaction reaction : Reaction.REACTIONS) {
+        for (Reaction reaction : Reaction.REACTIONS.values()) {
             RECIPES.put(reaction, ReactionRecipe.create(reaction));
         };
     };
@@ -48,12 +48,12 @@ public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
     @Override
     public Collection<LinesAndActivationAreas> getHoverableTexts(ReactionRecipe recipe) {
         Reaction reaction = recipe.getReaction();
-        if (reaction.getTranslationKey() == null) return List.of();
+        if (reaction.getId() == null) return List.of();
 
         Minecraft minecraft = Minecraft.getInstance();
         List<LinesAndActivationAreas> paragraphs = new ArrayList<>(2);
-        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getTranslationKey()).getString(), 2, 2, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE));
-        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getTranslationKey() + ".description").getString(), 2, 84, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE));
+        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getId()).getString(), 2, 2, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE));
+        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getId() + ".description").getString(), 2, 84, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE));
         return paragraphs;
     };
 

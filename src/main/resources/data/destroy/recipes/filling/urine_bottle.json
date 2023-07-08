@@ -1,0 +1,17 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "minecraft:glass_bottle"
+      },
+      {
+        "fluid": "destroy:urine",
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:urine_wine_bottle"
+      }
+    ]
+  }

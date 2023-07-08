@@ -69,10 +69,10 @@ public class ReadOnlyMixture {
             compound.putString("TranslationKey", translationKey);
         };
         compound.putFloat("Temperature", temperature);
-        compound.put("Contents", NBTHelper.writeCompoundList(contents.keySet(), (molecule) -> {
+        compound.put("Contents", NBTHelper.writeCompoundList(contents.entrySet(), (entry) -> {
             CompoundTag moleculeTag = new CompoundTag();
-            moleculeTag.putString("Molecule", molecule.getFullID());
-            moleculeTag.putFloat("Concentration", contents.get(molecule));
+            moleculeTag.putString("Molecule", entry.getKey().getFullID());
+            moleculeTag.putFloat("Concentration", entry.getValue());
             return moleculeTag;
         }));
         return compound;
