@@ -13,7 +13,12 @@ public class DestroyFluids {
 
     private static CreateRegistrate REGISTRATE = Destroy.registrate();
     
-    public static final FluidEntry<MixtureFluid> MIXTURE = REGISTRATE.virtualFluid("mixture", new ResourceLocation("minecraft", "block/water_still"), new ResourceLocation("minecraft", "block/water_flow"), MixtureFluidType::new, MixtureFluid::new)
+    public static final FluidEntry<MixtureFluid> MIXTURE = REGISTRATE.virtualFluid("mixture",
+        new ResourceLocation("destroy", "fluid/mixture_still"),
+        new ResourceLocation("destroy", "fluid/mixture_flow"),
+        MixtureFluidType::new,
+        MixtureFluid::new
+    )
         .lang("Mixture")
         .register();
 

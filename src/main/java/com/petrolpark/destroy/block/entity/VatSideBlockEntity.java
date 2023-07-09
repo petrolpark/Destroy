@@ -35,6 +35,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggleInformation {
 
+    private static final int BUFFER_TANK_CAPACITY = 1000;
+
     private static final DecimalFormat df = new DecimalFormat();
     static {
         df.setMinimumFractionDigits(1);
@@ -56,13 +58,13 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-        inputBehaviour = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.TYPE, this, 1, 1000, false)
+        inputBehaviour = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.TYPE, this, 1, BUFFER_TANK_CAPACITY, false)
             .whenFluidUpdates(this::tryInsertFluidInVat)
             .forbidExtraction();
         fluidCapability = LazyOptional.of(() -> {
-            // Allow inputting into this side tank (which is then mixed into the main tank)
+            // Allow inserting into this side tank (which is then mixed into the main tank)
             LazyOptional<? extends IFluidHandler> inputCap = inputBehaviour.getCapability();
-            // Allow outputting from the main tank
+            // Allow withdrawing from the main tank
             LazyOptional<? extends IFluidHandler> outputCap = LazyOptional.empty();
             VatControllerBlockEntity vatController = getController();
             if (vatController != null) {
@@ -70,6 +72,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             };
 			return new VatTankCapability(outputCap.orElse(null), inputCap.orElse(null));
         });
+        behaviours.add(inputBehaviour);
         //TODO check fluids can fit in the Vat
     };
 
@@ -101,7 +104,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         // Attempt to transfer Fluid from this Vat Side Block Entity to the Controller's Tank, which is the main one
         inputBehaviour.allowExtraction();
         // Determine how much Fluid could be added to the main tank (this should usually be everything)
-        int drained = vatController.addFluid(inputBehaviour.getPrimaryHandler().drain(1000, FluidAction.SIMULATE));
+        int drained = vatController.addFluid(inputBehaviour.getPrimaryHandler().drain(BUFFER_TANK_CAPACITY, FluidAction.SIMULATE));
         // Drain that amount from this Vat Side Block Entity's Tank
         inputBehaviour.getPrimaryHandler().drain(drained, FluidAction.EXECUTE);
         inputBehaviour.forbidExtraction();
@@ -117,6 +120,17 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         }
         controllerPosition = NbtUtils.readBlockPos(tag.getCompound("ControllerPosition"));
         displayType = DisplayType.values()[tag.getInt("DisplayType")];
+    };
+
+    @Override
+    public void tick() {
+        super.tick();
+        VatControllerBlockEntity controller = getController();
+        if (controller == null || controller.full) {
+            inputBehaviour.forbidInsertion();
+        } else {
+            inputBehaviour.allowInsertion();
+        };
     };
 
     @Override
@@ -136,7 +150,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     };
 
     /**
-     * @see VatControllerBlockEntity#getPercentagePressur
+     * @see VatControllerBlockEntity#getPercentagePressure()
      */
     public float getPercentagePressure() {
         VatControllerBlockEntity controller = getController();

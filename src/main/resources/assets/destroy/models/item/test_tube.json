@@ -11,5 +11,6 @@
         },
         "model": "destroy:item/test_tube_empty"
       }
-    ]
+    ],
+    "render_type": "translucent"
   }

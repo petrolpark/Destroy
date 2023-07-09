@@ -25,10 +25,16 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
 
         FluidStack fluidStack = controller.getTank().getFluid();
         if (fluidStack.isEmpty()) return;
+        controller.getRenderedFluidLevel(partialTicks);
         FluidRenderer.renderFluidBox(fluidStack,
             (float)relativeInternalLowerCorner.x, (float)relativeInternalLowerCorner.y, (float)relativeInternalLowerCorner.z,
             (float)relativeInternalUpperCorner.x, controller.getRenderedFluidLevel(partialTicks), (float)relativeInternalUpperCorner.z,
-            bufferSource, ms, light, true);
+            bufferSource, ms, light, true); // TODO stop light being so dark
+    };
+
+    @Override
+    public boolean shouldRenderOffScreen(VatControllerBlockEntity controller) {
+        return true;
     };
     
 };

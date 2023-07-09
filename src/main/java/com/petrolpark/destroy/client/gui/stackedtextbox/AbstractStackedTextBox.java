@@ -46,6 +46,8 @@ public abstract class AbstractStackedTextBox extends ElementWidget {
 
     public static LinesAndActivationAreas getTextAndActivationAreas(String text, int startX, int startY, int maxWidthPerLine, Screen screen, Font font, Palette palette) {
 
+        if (screen == null) return new LinesAndActivationAreas(List.of(), List.of(), startX, startY, 0, 0);
+
         // Break the String into sections of plain text, Molecule names, and hoverable definitions
         List<StackedTextBoxComponent> components = new ArrayList<>();
         String currentSection = "";

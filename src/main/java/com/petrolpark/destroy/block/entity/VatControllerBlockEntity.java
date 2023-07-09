@@ -38,6 +38,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 
@@ -69,7 +70,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         targetedBehaviour = new WhenTargetedBehaviour(this, this::onTargeted);
         behaviours.add(targetedBehaviour);
 
-        tankBehaviour = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.TYPE, this, 1, 5000000, false)
+        tankBehaviour = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.TYPE, this, 1, 1000000, false) // Tank capacity is set very high but is not this high in effect
             .whenFluidUpdates(this::onFluidStackChanged)
             .forbidExtraction() // Forbid extraction until the Vat is initialized
             .forbidInsertion(); // Forbid insertion no matter what
@@ -120,17 +121,18 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
      */
     public int addFluid(FluidStack fluidStack) {
         // Don't mix in anything if there's no Vat
-        if (!vat.isPresent()) return 0;
+        if (!vat.isPresent() || full) return 0;
         // Don't mix in anything that's not a Mixture
         if (!DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid())) return 0;
 
         // If we need to, shrink the Fluid Stack we're trying to insert
-        int remainingSpace = getTank().getSpace();
+        int remainingSpace = getCapacity() - getTank().getFluidAmount();
         int fluidAmountInserted = fluidStack.getAmount(); // Assume we insert the entire Fluid Stack
         FluidStack newFluidStack = fluidStack.copy();
         if (fluidStack.getAmount() > remainingSpace) {
             newFluidStack.setAmount(remainingSpace);
             fluidAmountInserted = remainingSpace; // Set the actual amount of Fluid inserted
+            full = true;
         };
 
         FluidStack existingFluid = getTank().getFluid();
@@ -170,6 +172,11 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     public Optional<Vat> getVatOptional() {
         return vat;
+    };
+
+    public int getCapacity() {
+        if (vat.isEmpty()) return 0;
+        return vat.get().getCapacity();
     };
 
     private void updateCachedMixture() {
@@ -235,6 +242,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         if (underDeconstruction || getLevel().isClientSide()) return;
         underDeconstruction = true;
 
+        getTank().drain(getTank().getCapacity(), FluidAction.EXECUTE);
+
         tankBehaviour.forbidExtraction(); // Forbid Fluid extraction now this Vat no longer exists
         if (!vat.isPresent()) return;
         vat.get().getSideBlockPositions().forEach(pos -> {
@@ -246,8 +255,6 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                 });
             };
         });
-
-        //TODO pollute leftover Mixture
 
         vat = Optional.empty();
         underDeconstruction = false;
@@ -276,7 +283,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
      */
     public float getFluidLevel() {
         if (vat.isPresent()) {
-            return (float)vat.get().getInternalHeight() * (float)getTank().getFluidAmount() / (float)getTank().getCapacity();
+            return (float)vat.get().getInternalHeight() * (float)getTank().getFluidAmount() / (float)getCapacity();
         } else {
             return 0f;
         }
@@ -289,7 +296,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
      */
     public float getRenderedFluidLevel(float partialTicks) {
         if (vat.isPresent()) {
-            return (float)vat.get().getInternalHeight() * (float)tankBehaviour.getPrimaryTank().getTotalUnits(partialTicks) / (float)getTank().getCapacity();
+            return (float)vat.get().getInternalHeight() * (float)tankBehaviour.getPrimaryTank().getTotalUnits(partialTicks) / (float)getCapacity();
         } else {
             return 0f;
         }

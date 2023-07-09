@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.fluid.MixtureFluid;
+import com.petrolpark.destroy.item.renderer.ILayerTintsWithAlphaItem;
 import com.simibubi.create.foundation.utility.Lang;
 
 import net.minecraft.ChatFormatting;
@@ -25,7 +26,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.ItemFluidContainer;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
-public class TestTubeItem extends ItemFluidContainer {
+public class TestTubeItem extends ItemFluidContainer implements ILayerTintsWithAlphaItem {
 
     public static final int CAPACITY = 200;
     private static final DecimalFormat df = new DecimalFormat();
@@ -79,9 +80,9 @@ public class TestTubeItem extends ItemFluidContainer {
 
     public static int getColor(ItemStack stack, int tintIndex) {
         if (tintIndex == 0) {
-            return getContents(stack).map(MixtureFluid::getTintColor).orElse(-1);
+            return getContents(stack).map(MixtureFluid::getTintColor).orElse(0xFFFFFFFF);
         } else {
-            return -1;
+            return 0xFFFFFFFF;
         }
     };
 

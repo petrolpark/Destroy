@@ -31,7 +31,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 public class Vat {
 
-    public static final int MB_PER_BLOCK = 4000;
+    public static final int MB_PER_BLOCK = 1000;
 
     static {
         VatMaterial.registerDestroyVatMaterials();
