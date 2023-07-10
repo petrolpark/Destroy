@@ -157,7 +157,7 @@ public class DestroyBlocks {
     public static final BlockEntry<VatControllerBlock> VAT_CONTROLLER = REGISTRATE.block("vat_controller", VatControllerBlock::new)
         .initialProperties(SharedProperties::copperMetal)
         .properties(p -> p
-        
+            .noOcclusion()
         ).item()
         .build()
         .register();

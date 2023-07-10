@@ -15,7 +15,6 @@ import com.simibubi.create.foundation.utility.Lang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -47,6 +46,12 @@ public class TestTubeItem extends ItemFluidContainer implements ILayerTintsWithA
     };
 
     @Override
+    public Component getName(ItemStack itemStack) {
+        if (isEmpty(itemStack)) return Component.translatable("item.destroy.test_tube.empty");
+        return Component.translatable("item.destroy.test_tube.filled", getContents(itemStack).get().getDisplayName());
+    };
+
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
         super.appendHoverText(stack, level, tooltip, isAdvanced);
@@ -55,22 +60,18 @@ public class TestTubeItem extends ItemFluidContainer implements ILayerTintsWithA
 
             if (fluidStack.isEmpty()) return;
 
-            MutableComponent name;
             String temperature = "";
         
             CompoundTag mixtureTag = fluidStack.getOrCreateTag().getCompound("Mixture");
-            if (mixtureTag.isEmpty()) { // If this is not a Mixture
-                name = fluidStack.getDisplayName().copy();
-            } else { // If this is a Mixture
+            if (!mixtureTag.isEmpty()) { // If this is a Mixture
                 ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(mixtureTag);
 
                 boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
-                name = mixture.getName().copy();
                 temperature = df.format(mixture.getTemperature());
                 tooltip.addAll(mixture.getContentsTooltip(iupac).stream().map(c -> c.copy()).toList());
             };
 
-            tooltip.add(1, name.withStyle(ChatFormatting.GRAY).append(" "+fluidStack.getAmount()).append(Lang.translateDirect("generic.unit.millibuckets")).append(" "+temperature+"K"));
+            tooltip.add(1, Component.literal(" "+fluidStack.getAmount()).withStyle(ChatFormatting.GRAY).append(Lang.translateDirect("generic.unit.millibuckets")).append(" "+temperature+"K"));
         });
     };
 

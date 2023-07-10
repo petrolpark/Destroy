@@ -67,7 +67,7 @@ public class MixtureFluid extends VirtualFluid {
     };
 
     public static int getTintColor(FluidStack stack) {
-        if (stack.isEmpty()) return -1; // Transparent
+        if (stack.isEmpty()) return 0x00FFFFFF; // Transparent
         if (!stack.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND)) return -1;
         return ReadOnlyMixture.readNBT(stack.getChildTag("Mixture")).getColor(); //TODO cache Mixture color to avoid calculating every time
     };

@@ -81,6 +81,12 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     };
 
     @Override
+    protected AABB createRenderBoundingBox() {
+		if (vat.isEmpty()) return super.createRenderBoundingBox();
+        return wholeVatAABB();
+	};
+
+    @Override
     public void tick() {
         super.tick();
 
@@ -227,6 +233,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         vat = Optional.of(newVat.get());
         tankBehaviour.allowExtraction(); // Enable extraction from the Vat now it actually exists
 
+        invalidateRenderBoundingBox(); // Update the render box to be larger
         notifyUpdate();
         return true;
     };
@@ -258,6 +265,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
         vat = Optional.empty();
         underDeconstruction = false;
+        invalidateRenderBoundingBox(); // Update the render bounding box to be smaller
         notifyUpdate();
     };
 
@@ -323,9 +331,13 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         return getPressure() / vat.getMaxPressure();
     };
 
+    private AABB wholeVatAABB() {
+        return new AABB(vat.get().getInternalLowerCorner(), vat.get().getUpperCorner()).inflate(1d);
+    };
+
     private void onTargeted(LocalPlayer player, BlockHitResult blockHitResult) {
         if (vat.isPresent()) {
-            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), new AABB(vat.get().getInternalLowerCorner(), vat.get().getUpperCorner()).inflate(1d), 20)
+            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), wholeVatAABB(), 20)
                 .colored(0xFF_fffec2);
         };
     };

@@ -73,7 +73,6 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
 			return new VatTankCapability(outputCap.orElse(null), inputCap.orElse(null));
         });
         behaviours.add(inputBehaviour);
-        //TODO check fluids can fit in the Vat
     };
 
     @Override
