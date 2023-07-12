@@ -101,6 +101,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         full = tag.getBoolean("Full");
         if (tag.contains("Vat", Tag.TAG_COMPOUND)) {
             vat = Vat.read(tag.getCompound("Vat"));
+            finalizeVatConstruction();
         } else {
             vat = Optional.empty();
         };
@@ -231,11 +232,15 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         });
 
         vat = Optional.of(newVat.get());
-        tankBehaviour.allowExtraction(); // Enable extraction from the Vat now it actually exists
+        finalizeVatConstruction();
 
+        return true;
+    };
+
+    private void finalizeVatConstruction() {
+        tankBehaviour.allowExtraction(); // Enable extraction from the Vat now it actually exists
         invalidateRenderBoundingBox(); // Update the render box to be larger
         notifyUpdate();
-        return true;
     };
 
     @Override

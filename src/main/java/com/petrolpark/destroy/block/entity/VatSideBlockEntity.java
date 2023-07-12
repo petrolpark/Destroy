@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
-import com.petrolpark.destroy.capability.block.VatTankCapability;
+import com.petrolpark.destroy.capability.blockEntity.VatTankCapability;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.vat.Vat;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
@@ -61,6 +61,18 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         inputBehaviour = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.TYPE, this, 1, BUFFER_TANK_CAPACITY, false)
             .whenFluidUpdates(this::tryInsertFluidInVat)
             .forbidExtraction();
+        behaviours.add(inputBehaviour);
+        refreshFluidCapability();
+    };
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        VatControllerBlockEntity vatController = getController();
+        if (vatController != null && !vatController.underDeconstruction) vatController.deleteVat(getBlockPos());
+    };
+
+    protected void refreshFluidCapability() {
         fluidCapability = LazyOptional.of(() -> {
             // Allow inserting into this side tank (which is then mixed into the main tank)
             LazyOptional<? extends IFluidHandler> inputCap = inputBehaviour.getCapability();
@@ -72,14 +84,11 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             };
 			return new VatTankCapability(outputCap.orElse(null), inputCap.orElse(null));
         });
-        behaviours.add(inputBehaviour);
     };
 
     @Override
-    public void destroy() {
-        super.destroy();
-        VatControllerBlockEntity vatController = getController();
-        if (vatController != null && !vatController.underDeconstruction) vatController.deleteVat(getBlockPos());
+    public void invalidateCaps() {
+        fluidCapability.invalidate();
     };
 
     @Nullable
@@ -180,7 +189,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         if (!hasLevel()) return;
         getBlockState().updateNeighbourShapes(getLevel(), getBlockPos(), 3);
         updateDisplayType(getBlockPos().relative(direction)); // Check for a Pipe
-        notifyUpdate();
+        sendData();
     };
 
     @SuppressWarnings("null")
@@ -210,7 +219,8 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
                 DestroyLang.translate("tooltip.vat.pressure.max", df.format(vat.getMaxPressure() / 1000f), vat.getWeakestBlock().getBlock().getName().getString()).style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
                 return true;
             } default: {
-                return false;
+                DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.vat.contents"), getController().getTank().getFluid(), getController().getCapacity());
+                return true;
             }
         }
     };

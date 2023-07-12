@@ -12,7 +12,6 @@ import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.mixin.accessor.BasinOperatingBlockEntityAccessor;
 import com.petrolpark.destroy.recipe.ReactionInBasinRecipe;
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
-import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 
 import net.minecraft.world.item.ItemStack;
@@ -27,11 +26,10 @@ public class MechanicalMixerBlockEntityMixin {
     
     /**
      * Injection into {@link com.simibubi.create.content.contraptions.components.mixer.MechanicalMixerBlockEntity Mechanical Mixers}
-     * to allow them to recognise Mixtures that are able to React. A lot is copied from the {@link }
+     * to allow them to recognise Mixtures that are able to React.
      * @see com.petrolpark.destroy.recipe.ReactionInBasinRecipe Reactions in Basins
      */
     @Inject(method = "getMatchingRecipes", at = @At(value = "HEAD"), cancellable = true)
-    @SuppressWarnings("null")
     public void inGetMatchingRecipes(CallbackInfoReturnable<List<Recipe<?>>> ci) {
 
         ((BasinOperatingBlockEntityAccessor)this).invokeGetBasin().ifPresent(basin -> {
@@ -63,7 +61,7 @@ public class MechanicalMixerBlockEntityMixin {
             };
               
             // Only return this if there is definitely a Reaction possible
-            ReactionInBasinRecipe recipe = ReactionInBasinRecipe.create(availableFluidStacks, availableItemStacks, BasinBlockEntity.getHeatLevelOf(basin.getLevel().getBlockState(basin.getBlockPos().below())));
+            ReactionInBasinRecipe recipe = ReactionInBasinRecipe.create(availableFluidStacks, availableItemStacks, basin);
             if (!(recipe == null) && BasinRecipe.match(basin, recipe)) ci.setReturnValue(List.of(recipe)); // It thinks basin.getLevel() might be null
         });
     };

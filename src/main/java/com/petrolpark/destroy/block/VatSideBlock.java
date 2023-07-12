@@ -59,7 +59,6 @@ public class VatSideBlock extends CopycatBlock {
                     return InteractionResult.SUCCESS;
                 } case BAROMETER: {
                     vatSide.setDisplayType(DisplayType.NORMAL);
-                    vatSide.updateDisplayType(vatSide.getBlockPos().relative(vatSide.direction));
                     return InteractionResult.SUCCESS;
                 } default:
                     return InteractionResult.PASS;

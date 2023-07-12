@@ -13,6 +13,7 @@
         "accessor.TooltipRendererAccessor",
         "accessor.ValueSettingsPacketAccessor",
         "accessor.VillagerAccessor",
+        "BasinBlockEntityMixin",
         "BasinCategoryMixin",
         "ClientComponentTooltipMixin",
         "ConnectivityHandlerMixin",

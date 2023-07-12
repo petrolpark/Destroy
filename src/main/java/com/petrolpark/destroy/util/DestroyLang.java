@@ -16,6 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class DestroyLang {
@@ -42,30 +43,34 @@ public class DestroyLang {
     };
 
     public static void tankInfoTooltip(List<Component> tooltip, LangBuilder tankName, FluidTank tank) {
+        tankInfoTooltip(tooltip, tankName, tank.getFluid(), tank.getCapacity());
+    };
+
+    public static void tankInfoTooltip(List<Component> tooltip, LangBuilder tankName, FluidStack contents, int capacity) {
         LangBuilder mb = Lang.translate("generic.unit.millibuckets");
 
         tankName
             .style(ChatFormatting.GRAY)
             .forGoggles(tooltip, 0);
 
-        if (tank.isEmpty()) {
+        if (contents.isEmpty()) {
             Lang.translate("gui.goggles.fluid_container.capacity")
-			.add(Lang.number(tank.getCapacity())
+			.add(Lang.number(capacity)
 				.add(mb)
 				.style(ChatFormatting.GOLD))
 			.style(ChatFormatting.GRAY)
 			.forGoggles(tooltip, 1);
         } else {
-            Lang.fluidName(tank.getFluid())
+            Lang.fluidName(contents)
             .style(ChatFormatting.GRAY)
             .forGoggles(tooltip, 1);
 
             Lang.builder()
-                .add(Lang.number(tank.getFluid().getAmount())
+                .add(Lang.number(contents.getAmount())
                     .add(mb)
                     .style(ChatFormatting.GOLD))
                 .text(ChatFormatting.GRAY, " / ")
-                .add(Lang.number(tank.getCapacity())
+                .add(Lang.number(capacity)
                     .add(mb)
                     .style(ChatFormatting.DARK_GRAY))
                 .forGoggles(tooltip, 1);

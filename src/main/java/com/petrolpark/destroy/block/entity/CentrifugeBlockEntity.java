@@ -249,8 +249,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IFluidB
     };
 
     private void onFluidStackChanged() {
-        setChanged();
-        sendData();
+        notifyUpdate();
     };
 
     /**

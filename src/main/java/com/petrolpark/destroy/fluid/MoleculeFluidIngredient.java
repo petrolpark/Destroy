@@ -57,7 +57,7 @@ public class MoleculeFluidIngredient extends FluidIngredient {
     // As far as I can tell this is only used for displaying (e.g. in JEI) so a comprehensive list isn't required.
     @Override
     protected List<FluidStack> determineMatchingFluidStacks() {
-        FluidStack fluidStack = new FluidStack(DestroyFluids.MIXTURE.get(), amountRequired);
+        FluidStack fluidStack = new FluidStack(DestroyFluids.MIXTURE.getSource(), amountRequired);
         CompoundTag fluidTag = fluidStack.getOrCreateTag();
         // To avoid having to regenerate the Mixture every tick, generate all the information we need here, stick it in the NBT and just read it off when needed.
         fluidTag.putString("DisplayName", ReadOnlyMixture.readNBT(fluidTag.getCompound("Mixture")).getName().getString());

@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.capability.block;
+package com.petrolpark.destroy.capability.blockEntity;
 
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
