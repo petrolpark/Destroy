@@ -11,7 +11,7 @@ import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.compat.jei.DestroyJEI;
 import com.petrolpark.destroy.fluid.DestroyFluids;
-import com.petrolpark.destroy.fluid.MoleculeFluidIngredient;
+import com.petrolpark.destroy.fluid.ingredient.MoleculeFluidIngredient;
 import com.petrolpark.destroy.mixin.accessor.ProcessingRecipeParamsAccessor;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;

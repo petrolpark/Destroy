@@ -59,7 +59,7 @@ public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
      * Injection into {@link com.simibubi.create.compat.jei.category.CreateRecipeCategory#CreateRecipeCategory CreateRecipeCategory}.
      * As Create's {@link mezz.jei.api.recipe.RecipeType Recipe Types} are not exposed by default, we snipe them here and add them to the
      * {@link com.petrolpark.destroy.compat.jei.DestroyJEI#RECIPE_TYPES list of Recipe Types} for which {@link com.petrolpark.destroy.chemistry.Mixture Mixtures}
-     * can be {@link com.petrolpark.destroy.fluid.MoleculeFluidIngredient ingredients} or results.
+     * can be {@link com.petrolpark.destroy.fluid.ingredient.MoleculeFluidIngredient ingredients} or results.
      */
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     public void inInit(Info<T> info, CallbackInfo ci) {

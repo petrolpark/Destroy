@@ -23,6 +23,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.item.TooltipHelper;
+import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.client.player.LocalPlayer;
@@ -336,7 +337,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         return getPressure() / vat.getMaxPressure();
     };
 
-    private AABB wholeVatAABB() {
+    public AABB wholeVatAABB() {
         return new AABB(vat.get().getInternalLowerCorner(), vat.get().getUpperCorner()).inflate(1d);
     };
 
@@ -350,13 +351,19 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         if (getVatOptional().isPresent()) {
-
+            vatFluidTooltip(this, tooltip);
         } else if (initializationTicks == 0) {
-            TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.vat.not_initialized").string(), TooltipHelper.Palette.RED).forEach(component -> {
+            TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.vat.not_initialized").component(), TooltipHelper.Palette.RED).forEach(component -> {
                 DestroyLang.builder().add(component.copy()).forGoggles(tooltip);
             });
         };
         return true;
+    };
+
+    public static void vatFluidTooltip(VatControllerBlockEntity vatController, List<Component> tooltip) {
+        Lang.translate("gui.goggles.fluid_container")
+			.forGoggles(tooltip);
+        DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.vat.contents"), vatController.getTank().getFluid(), vatController.getCapacity());
     };
     
 };

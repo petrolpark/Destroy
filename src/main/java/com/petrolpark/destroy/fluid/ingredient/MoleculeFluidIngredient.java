@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.fluid;
+package com.petrolpark.destroy.fluid.ingredient;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
+import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 
 import net.minecraft.nbt.CompoundTag;

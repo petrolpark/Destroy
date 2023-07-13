@@ -44,6 +44,7 @@ public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity>
         if (be.getController() == null) return;
         VertexConsumer vb = bufferSource.getBuffer(RenderType.cutout());
         float dialPivot = 5.75f / 16;
+
         Direction facing = be.direction.getOpposite();
 
         switch (be.getDisplayType()) {
@@ -52,7 +53,31 @@ public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity>
             } case PIPE: {
                 transformed(DestroyPartials.VAT_SIDE_PIPE, state, facing)
                     .renderInto(ms, vb);
+                
+                if (be.spoutingTicks == 0 || be.isPipeSubmerged(true, partialTicks) || facing == Direction.UP) break;
+                // Render Fluid stream if necessary
+                float fluidLevel = be.getController().getRenderedFluidLevel(partialTicks);
+                if (facing == Direction.DOWN) {
+                    FluidRenderer.renderFluidBox(be.spoutingFluid, 6.5f / 16f, fluidLevel - be.getVatOptional().get().getInternalHeight(), 6.5f / 16f, 
+                        9.5f / 16f, 0 / 16f, 9.5f / 16f,
+                        bufferSource, ms, light, false
+                    );
+                } else {
+                    ms.pushPose();
+                    ms.translate(0.5, 0.5, 0.5);
+                    TransformStack.cast(ms)
+                        .rotateY(AngleHelper.horizontalAngle(facing))
+                        .rotateX(AngleHelper.verticalAngle(facing));
+                    ms.translate(-0.5, -0.5, -0.5);
+                    FluidRenderer.renderFluidBox(be.spoutingFluid, 6.5f / 16f, 4 / 16f, 17 / 16f, 9.5f / 16f, 6 / 16f, 19 / 16f, bufferSource, ms, light, false);
+                    FluidRenderer.renderFluidBox(be.spoutingFluid, 6.5f / 16f, fluidLevel - be.pipeHeightAboveVatBase() + 4 / 16f, 19 / 16f, 
+                        9.5f / 16f, 6 / 16f, 22 / 16f,
+                        bufferSource, ms, light, false
+                    );
+                    ms.popPose();
+                };
                 break;
+
             } case BAROMETER: {
                 transformed(DestroyPartials.VAT_SIDE_BAROMETER, state, facing)
                     .centre()
@@ -71,6 +96,7 @@ public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity>
                     .light(light)
                     .renderInto(ms, vb);
                 break;
+
             } case THERMOMETER: {
                 transformed(DestroyPartials.VAT_SIDE_THERMOMETER, state, facing)
                     .renderInto(ms, vb);
@@ -101,5 +127,9 @@ public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity>
             .rotateX(AngleHelper.verticalAngle(facing))
 			.unCentre();
 	};
-    
+
+    @Override
+    public boolean shouldRenderOffScreen(VatSideBlockEntity be) {
+        return true;
+    };
 };

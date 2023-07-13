@@ -473,6 +473,8 @@
     "destroy.tooltip.unknown_molecule": "Unknown Molecule",
     "destroy.tooltip.vat.contents": "Vat:",
     "destroy.tooltip.vat.not_initialized": "A valid Vat could _not_ be formed. _Click_ to try again, or _Ponder_ the _Vat Controller_ to learn more.",
+    "destroy.tooltip.vat.not_submerged.header": "Unsubmerged Pipe:",
+    "destroy.tooltip.vat.not_submerged": "This pipe is _above_ the level of Mixture in this Vat. It can _still insert_ Mixtures, but can _only extract gases_.",
     "destroy.tooltip.vat.pressure.current": "%1$skPa above air pressure",
     "destroy.tooltip.vat.pressure.header": "Vat Pressure:",
     "destroy.tooltip.vat.pressure.max": "Maximum: %1$skPa (%2$s)",

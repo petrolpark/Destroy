@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.petrolpark.destroy.fluid.MoleculeFluidIngredient;
+import com.petrolpark.destroy.fluid.ingredient.MoleculeFluidIngredient;
 import com.petrolpark.destroy.mixin.accessor.FluidIngredientAccessor;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 
@@ -27,7 +27,7 @@ public class FluidIngredientMixin {
     
 	/**
 	 * Overwriting of {@link com.simibubi.create.foundation.fluid.FluidIngredient#isFluidIngredient FluidIngredient} to
-	 * say {@link com.petrolpark.destroy.fluid.MoleculeFluidIngredient Molecule ingredients} and //TODO Molecule Tag ingredient
+	 * say {@link com.petrolpark.destroy.fluid.ingredient.MoleculeFluidIngredient Molecule ingredients} and //TODO Molecule Tag ingredient
 	 * Molecule Tag ingredients are valid.
 	 */
     @Overwrite
@@ -45,7 +45,7 @@ public class FluidIngredientMixin {
 
 	/**
 	 * Overwritten but mostly copied from {@link com.simibubi.create.foundation.fluid.FluidIngredient#deserialize FluidIngredient}.
-	 * This deserializes {@link com.petrolpark.destroy.fluid.MoleculeFluidIngredient Molecule ingredients} and //TODO Molecule Tag ingredient
+	 * This deserializes {@link com.petrolpark.destroy.fluid.ingredient.MoleculeFluidIngredient Molecule ingredients} and //TODO Molecule Tag ingredient
 	 * Molecule Tag ingredients.
 	 */
     @Overwrite
