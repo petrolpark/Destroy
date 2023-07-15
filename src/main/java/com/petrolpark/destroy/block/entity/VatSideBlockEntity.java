@@ -102,7 +102,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             if (vatController != null) {
                 outputCap = vatController.getBehaviour(SmartFluidTankBehaviour.TYPE).getCapability();
             };
-			return new VatTankCapability(outputCap.orElse(null), inputCap.orElse(null));
+			return new VatTankCapability(this, outputCap.orElse(null), inputCap.orElse(null));
         });
     };
 
@@ -148,14 +148,6 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     @SuppressWarnings("null")
     public void tick() {
         super.tick();
-        VatControllerBlockEntity controller = getController();
-        if (controller == null || !hasLevel()) return;
-
-        if (controller.full) {
-            inputBehaviour.forbidInsertion();
-        } else {
-            inputBehaviour.allowInsertion();
-        };
  
         if (spoutingTicks > 0 && getLevel().isClientSide()) {
             spoutingTicks--;

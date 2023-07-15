@@ -27,7 +27,7 @@ import com.petrolpark.destroy.recipe.DestroyCropMutations;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.util.DestroyTags;
 import com.petrolpark.destroy.util.vat.VatMaterial;
-import com.petrolpark.destroy.world.loot.condition.DestroyLootConditions;
+import com.petrolpark.destroy.world.loot.DestroyLoot;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
 import com.petrolpark.destroy.world.worldgen.DestroyOreFeatureConfigEntries;
 import com.petrolpark.destroy.world.worldgen.DestroyWorldGen;
@@ -103,7 +103,7 @@ public class Destroy {
         DestroyWorldGen.register(modEventBus);
         DestroyVillagers.register(modEventBus);
         // DestroyBadges.register(modEventBus);
-        DestroyLootConditions.register(modEventBus);
+        DestroyLoot.register(modEventBus);
 
         // Chemistry
         // DestroyGroupFinder.register();

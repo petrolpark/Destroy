@@ -11,6 +11,7 @@ import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.capability.chunk.ChunkCrudeOil;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
+import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
 import com.petrolpark.destroy.capability.player.PlayerCrouching;
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddiction;
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
@@ -30,6 +31,7 @@ import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.petrolpark.destroy.util.InebriationHelper;
+import com.petrolpark.destroy.util.PollutionHelper;
 import com.petrolpark.destroy.world.DestroyDamageSources;
 import com.petrolpark.destroy.world.entity.goal.BuildSandCastleGoal;
 import com.petrolpark.destroy.world.village.DestroyTrades;
@@ -49,6 +51,7 @@ import com.simibubi.create.foundation.ModFilePackResources;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -57,11 +60,13 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Stray;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -84,12 +89,14 @@ import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.event.level.SleepFinishedTimeEvent;
+import net.minecraftforge.event.level.BlockEvent.CropGrowEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
@@ -138,6 +145,26 @@ public class DestroyServerEvents {
         };
     };
 
+    /**
+     * Update the Level Pollution the Player sees (for example, this affects the colour of foliage).
+     */
+    @SubscribeEvent
+    public static void onPlayerEntersWorld(PlayerEvent.PlayerLoggedInEvent event) {
+        Player player = event.getEntity();
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
+        Level level = player.getLevel();
+        level.getCapability(LevelPollutionProvider.LEVEL_POLLUTION).ifPresent(levelPollution -> {
+            DestroyMessages.sendToClient(new LevelPollutionS2CPacket(levelPollution), serverPlayer);
+        });
+
+        // try {
+        //     Badge.getBadgesOf(player.getGameProfile().getName());
+        // } finally {};
+    };
+
+    /**
+     * Conserve Baby Blue addiction across death.
+     */
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
         if (event.isWasDeath()) {
@@ -166,6 +193,54 @@ public class DestroyServerEvents {
         event.register(PlayerCrouching.class);
     };
 
+    @SubscribeEvent
+    public static void attachBasinBehaviours(BlockEntityBehaviourEvent<BasinBlockEntity> event) {
+        BasinBlockEntity basin = event.getBlockEntity();
+        event.attach(new DestroyAdvancementBehaviour(basin));
+        event.attach(new PollutingBehaviour(basin));
+        event.attach(new BasinTooFullBehaviour(basin));
+    };
+
+    @SubscribeEvent
+    public static void attachDrainBehaviours(BlockEntityBehaviourEvent<ItemDrainBlockEntity> event) {
+        event.attach(new PollutingBehaviour(event.getBlockEntity()));
+    };
+
+    @SubscribeEvent
+    public static void attachSpoutBehaviours(BlockEntityBehaviourEvent<SpoutBlockEntity> event) {
+        event.attach(new PollutingBehaviour(event.getBlockEntity()));
+    };
+
+    /**
+     * Add trades to the Innkeeper.
+     */
+    @SubscribeEvent
+    public static void addVillagerTrades(VillagerTradesEvent event) {
+        if (event.getType() == DestroyVillagers.INNKEEPER.get()) {
+            Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
+            trades.get(1).addAll(DestroyTrades.INNKEEPER_NOVICE_TRADES);
+            trades.get(2).addAll(DestroyTrades.INNKEEPER_APPRENTICE_TRADES);
+            trades.get(3).addAll(DestroyTrades.INNKEEPER_JOURNEYMAN_TRADES);
+            trades.get(4).addAll(DestroyTrades.INNKEEPER_EXPERT_TRADES);
+            trades.get(5).addAll(DestroyTrades.INNKEEPER_MASTER_TRADES);
+        };
+    };
+
+    /**
+     * Allow inns to spawn in Villages.
+     */
+    @SubscribeEvent
+    public static void addVillagerBuildings(ServerAboutToStartEvent event) {
+        Registry<StructureTemplatePool> templatePoolRegistry = event.getServer().registryAccess().registry(Registry.TEMPLATE_POOL_REGISTRY).orElseThrow();
+        Registry<StructureProcessorList> processorListRegistry = event.getServer().registryAccess().registry(Registry.PROCESSOR_LIST_REGISTRY).orElseThrow();
+        
+        DestroyVillageAddition.addBuildingToPool(templatePoolRegistry, processorListRegistry, new ResourceLocation("minecraft:village/plains/houses"), "destroy:plains_inn", 250);
+    };
+
+    /**
+     * Store the Player's previous positions (for use with {@link com.petrolpark.destroy.item.ChorusWineItem Chorus Wine}),
+     * and check if the Player should be urinating
+     */
     @SubscribeEvent
     public static void playerTick(TickEvent.PlayerTickEvent event) {
         if (event.side.isClient()) return;
@@ -210,6 +285,9 @@ public class DestroyServerEvents {
         };
     };
 
+    /**
+     * Give the Player Haste/Mining Fatigue if they have Baby Blue High/Withdrawal respectively.
+     */
     @SubscribeEvent
     @SuppressWarnings("null") // Capability is checked for nullness
     public static void changeMiningSpeedWithBabyBlueEffects(PlayerEvent.BreakSpeed event) {
@@ -224,8 +302,12 @@ public class DestroyServerEvents {
         };
     };
 
+    /**
+     * Damage the Player if they are hungover and hear loud sounds.
+     */
     @SubscribeEvent
     public static void playerHearsSound(PlayLevelSoundEvent.AtPosition event) {
+        if (event.getOriginalVolume() < 0.5f) return;
         switch (event.getSource()) {
             // Ignore these sounds:
             case AMBIENT:
@@ -255,20 +337,10 @@ public class DestroyServerEvents {
         };
     };
 
-    @SubscribeEvent
-    public static void onPlayerEntersWorld(PlayerEvent.PlayerLoggedInEvent event) {
-        Player player = event.getEntity();
-        if (!(player instanceof ServerPlayer serverPlayer)) return;
-        Level level = player.getLevel();
-        level.getCapability(LevelPollutionProvider.LEVEL_POLLUTION).ifPresent(levelPollution -> {
-            DestroyMessages.sendToClient(new LevelPollutionS2CPacket(levelPollution), serverPlayer);
-        });
-
-        // try {
-        //     Badge.getBadgesOf(player.getGameProfile().getName());
-        // } finally {};
-    };
-
+    /**
+     * The clues in the name.
+     * @param event
+     */
     @SubscribeEvent
     public static void disableEatingWithBabyBlueWithdrawal(PlayerInteractEvent.RightClickItem event) {
         if (event.getItemStack().getItem().isEdible() && event.getItemStack().getItem() != DestroyItems.BABY_BLUE_POWDER.get() && event.getEntity().hasEffect(DestroyMobEffects.BABY_BLUE_WITHDRAWAL.get())) {
@@ -276,6 +348,9 @@ public class DestroyServerEvents {
         };
     };
 
+    /**
+     * Give Players a hangover when they wake up if they go to sleep drunk.
+     */
     @SubscribeEvent
     public static void onPlayersWakeUp(SleepFinishedTimeEvent event) {
         for (Player player : event.getLevel().players()) {
@@ -288,6 +363,9 @@ public class DestroyServerEvents {
         };
     };
 
+    /**
+     * Enact the effect of injecting a syringe when it is used to attack a Mob.
+     */
     @SubscribeEvent
     public static void onSyringeAttack(LivingAttackEvent event) {
         Entity attacker = event.getSource().getEntity();
@@ -298,6 +376,9 @@ public class DestroyServerEvents {
         livingAttacker.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(DestroyItems.SYRINGE.get()));
     };
 
+    /**
+     * Award the silly little Tally Hall reference Advancement.
+     */
     @SubscribeEvent
     public static void onMechanicalHandAttack(LivingDeathEvent event) {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
@@ -307,26 +388,9 @@ public class DestroyServerEvents {
         };
     };
 
-    @SubscribeEvent
-    public static void addVillagerTrades(VillagerTradesEvent event) {
-        if (event.getType() == DestroyVillagers.INNKEEPER.get()) {
-            Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
-            trades.get(1).addAll(DestroyTrades.INNKEEPER_NOVICE_TRADES);
-            trades.get(2).addAll(DestroyTrades.INNKEEPER_APPRENTICE_TRADES);
-            trades.get(3).addAll(DestroyTrades.INNKEEPER_JOURNEYMAN_TRADES);
-            trades.get(4).addAll(DestroyTrades.INNKEEPER_EXPERT_TRADES);
-            trades.get(5).addAll(DestroyTrades.INNKEEPER_MASTER_TRADES);
-        };
-    };
-
-    @SubscribeEvent
-    public static void addVillagerBuildings(ServerAboutToStartEvent event) {
-        Registry<StructureTemplatePool> templatePoolRegistry = event.getServer().registryAccess().registry(Registry.TEMPLATE_POOL_REGISTRY).orElseThrow();
-        Registry<StructureProcessorList> processorListRegistry = event.getServer().registryAccess().registry(Registry.PROCESSOR_LIST_REGISTRY).orElseThrow();
-        
-        DestroyVillageAddition.addBuildingToPool(templatePoolRegistry, processorListRegistry, new ResourceLocation("minecraft:village/plains/houses"), "destroy:plains_inn", 250);
-    };
-
+    /**
+     * Award an Advancement for shooting Hefty Beetroots and allow Baby Villagers to build sandcastles.
+     */
     @SubscribeEvent
     public static void onJoinEntity(EntityJoinLevelEvent event) {
 
@@ -342,24 +406,9 @@ public class DestroyServerEvents {
     
     };
 
-    @SubscribeEvent
-    public static void attachBasinBehaviours(BlockEntityBehaviourEvent<BasinBlockEntity> event) {
-        BasinBlockEntity basin = event.getBlockEntity();
-        event.attach(new DestroyAdvancementBehaviour(basin));
-        event.attach(new PollutingBehaviour(basin));
-        event.attach(new BasinTooFullBehaviour(basin));
-    };
-
-    @SubscribeEvent
-    public static void attachDrainBehaviours(BlockEntityBehaviourEvent<ItemDrainBlockEntity> event) {
-        event.attach(new PollutingBehaviour(event.getBlockEntity()));
-    };
-
-    @SubscribeEvent
-    public static void attachSpoutBehaviours(BlockEntityBehaviourEvent<SpoutBlockEntity> event) {
-        event.attach(new PollutingBehaviour(event.getBlockEntity()));
-    };
-
+    /**
+     * Allow Strays to be captured and tears to be collected from crying Mobs.
+     */
     @SubscribeEvent
     public static void rightClickEntity(PlayerInteractEvent.EntityInteractSpecific event) {
         Player player = event.getEntity();
@@ -411,6 +460,9 @@ public class DestroyServerEvents {
         };
     };
 
+    /**
+     * Trigger Handheld Seismometers when there are nearby Explosions.
+     */
     @SubscribeEvent
     public static void onExplosion(ExplosionEvent.Start event) {
         Level level = event.getLevel();
@@ -437,6 +489,36 @@ public class DestroyServerEvents {
         });
     };
 
+    /**
+     * Add a chance for birth failures depending on the level of smog in the world.
+     */
+    @SubscribeEvent
+    public static void onBabyBirthed(BabyEntitySpawnEvent event) {
+        Level level = event.getParentA().getLevel();
+        RandomSource random = event.getParentA().getRandom();
+        if (event.getParentA().getRandom().nextInt(PollutionType.SMOG.max) <= PollutionHelper.getPollution(level, PollutionType.SMOG)) { // 0% chance of failure for 0 smog, 100% chance for full smog
+            if (level instanceof ServerLevel serverLevel) {
+                for (Mob parent : List.of(event.getParentA(), event.getParentB())) {
+                    for(int i = 0; i < 7; ++i) {
+                        serverLevel.sendParticles(ParticleTypes.ANGRY_VILLAGER, parent.getRandomX(1d), parent.getRandomY() + 0.5d, parent.getRandomZ(1d), 1, random.nextGaussian() * 0.5d, random.nextGaussian() * 0.5d, random.nextGaussian() * 0.5d, 0.02d);
+                    };
+                };
+            };
+            event.setCanceled(true);
+        };
+    };
+
+    /**
+     * Add a chance for crop growth failures depending on the level of smog and greenhouse gas.
+     */
+    @SubscribeEvent
+    public static void onPlantGrows(CropGrowEvent.Pre event) {
+        if (!(event.getLevel() instanceof Level level)) return;
+        if (level.random.nextInt(PollutionType.SMOG.max + PollutionType.GREENHOUSE.max) <= PollutionHelper.getPollution(level, PollutionType.SMOG) + PollutionHelper.getPollution(level, PollutionType.GREENHOUSE)) {
+            event.setResult(Result.DENY);
+        };
+    };
+
     @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 	public static class ModBusEvents {
 
@@ -457,8 +539,8 @@ public class DestroyServerEvents {
 				event.addRepositorySource((consumer, constructor) -> {
 					consumer.accept(Pack.create(Destroy.asResource("destroy_create_patches").toString(), true, () -> new ModFilePackResources("Destroy Patches For Create", modFile, "resourcepacks/destroy_create_patches"), constructor, Pack.Position.TOP, PackSource.BUILT_IN));
 				});
-			}
-		}
+			};
+		};
 
 	};
 };

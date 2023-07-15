@@ -28,7 +28,7 @@ public class LevelPollution {
             levels.put(p, 0);
         });
         hasPollutionEverBeenMaxed = false;
-        hasPollutionEverBeenFullyReduced = true;
+        hasPollutionEverBeenFullyReduced = false;
         outdoorTemperature = 289.0f; // 16ºC
     };
 

@@ -1,0 +1,71 @@
+{
+    "type": "minecraft:fishing",
+    "pools": [
+        {
+        "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "alternatives",
+                    "children": [
+                        {
+                            "type": "minecraft:loot_table",
+                            "conditions": [
+                                {
+                                    "condition": "value_check",
+                                    "value": {
+                                        "type": "uniform",
+                                        "min": 0,
+                                        "max": 100
+                                    },
+                                    "range": {
+                                        "min": 0,
+                                        "max": {
+                                            "type": "destroy:pollution",
+                                            "pollution_type": "SMOG",
+                                            "scale": 100,
+                                            "invert": false
+                                        }
+                                    }
+                                }
+                            ],
+                            "name": "minecraft:gameplay/fishing/junk",
+                            "quality": -1,
+                            "weight": 85
+                        },
+                        {
+                            "type": "minecraft:loot_table",
+                            "name": "minecraft:gameplay/fishing/fish",
+                            "quality": -1,
+                            "weight": 85
+                        }
+                    ]
+                },
+                {
+                    "type": "minecraft:loot_table",
+                    "name": "minecraft:gameplay/fishing/junk",
+                    "quality": -2,
+                    "weight": 10
+                },
+                {
+                    "type": "minecraft:loot_table",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:entity_properties",
+                            "entity": "this",
+                            "predicate": {
+                                "type_specific": {
+                                    "type": "fishing_hook",
+                                    "in_open_water": true
+                                }
+                            }
+                        }
+                    ],
+                    "name": "minecraft:gameplay/fishing/treasure",
+                    "quality": 2,
+                    "weight": 5
+                }
+            ],
+            "rolls": 1.0
+        }
+    ]
+}
