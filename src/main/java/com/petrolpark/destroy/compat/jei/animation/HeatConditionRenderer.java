@@ -3,7 +3,6 @@ package com.petrolpark.destroy.compat.jei.animation;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.AllBlocks;
@@ -14,6 +13,7 @@ import com.simibubi.create.foundation.utility.Lang;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
@@ -21,14 +21,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class HeatConditionRenderer {
 
-    public static void drawHeatConditionName(Font font, PoseStack matrixStack, int x, int y, HeatCondition requiredHeat) {
+    public static void drawHeatConditionName(Font font, GuiGraphics graphics, int x, int y, HeatCondition requiredHeat) {
         MutableComponent name = Component.empty();
         if (requiredHeat.name() == "COOLED") { // Scuffed but okay keep your opinions to yourself
             name = DestroyLang.translate(requiredHeat.getTranslationKey()).component();
         } else {
             name = Lang.translate(requiredHeat.getTranslationKey()).component();
         };
-        font.draw(matrixStack, name, x, y, requiredHeat.getColor()); // This is equivalent of the line being overwritten
+        graphics.drawString(font, name, x, y, requiredHeat.getColor()); // This is equivalent of the line being overwritten
     };
 
     /**

@@ -16,6 +16,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
@@ -76,37 +77,38 @@ public class MutationCategory extends DestroyRecipeCategory<MutationRecipe> {
     };
 
     @Override
-    public void draw(MutationRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
+    public void draw(MutationRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
+        PoseStack stack = graphics.pose();
 
         BlockState startOreBlock = recipe.getMutation().isOreSpecific() ? recipe.getMutation().getOreSupplier().get().defaultBlockState() : Blocks.STONE.defaultBlockState();
         BlockState endOreBlock = recipe.getMutation().getResultantBlockUnder(startOreBlock);
 
         // Shadows
-        AllGuiTextures.JEI_SHADOW.render(stack, LEFT_BLOCK_X - 11, BOTTOM_BLOCK_Y - 2);
-        AllGuiTextures.JEI_SHADOW.render(stack, RIGHT_BLOCK_X - 11, BOTTOM_BLOCK_Y - 2);
+        AllGuiTextures.JEI_SHADOW.render(graphics, LEFT_BLOCK_X - 11, BOTTOM_BLOCK_Y - 2);
+        AllGuiTextures.JEI_SHADOW.render(graphics, RIGHT_BLOCK_X - 11, BOTTOM_BLOCK_Y - 2);
 
         // Arrow
-        DestroyGuiTextures.JEI_SHORT_RIGHT_ARROW.render(stack, 52, 60);
+        DestroyGuiTextures.JEI_SHORT_RIGHT_ARROW.render(graphics, 52, 60);
 
         // Left pillar of Blocks
         stack.pushPose();
         stack.translate(LEFT_BLOCK_X, BOTTOM_BLOCK_Y, 200);
-        blockRenderer.renderBlock(startOreBlock, stack, BLOCK_SCALE); // Ore or Stone Block
+        blockRenderer.renderBlock(startOreBlock, graphics, BLOCK_SCALE); // Ore or Stone Block
         stack.translate(0, 1 - BLOCK_SCALE, BLOCK_SCALE / 2f);
-        blockRenderer.renderBlock(farmlandBlock, stack, BLOCK_SCALE); // Farmland Block
+        blockRenderer.renderBlock(farmlandBlock, graphics, BLOCK_SCALE); // Farmland Block
         stack.translate(0, 1 - BLOCK_SCALE, BLOCK_SCALE / 2f);
-        blockRenderer.renderBlock(recipe.getMutation().getStartCropSupplier().get().defaultBlockState(), stack, BLOCK_SCALE); // Crop
+        blockRenderer.renderBlock(recipe.getMutation().getStartCropSupplier().get().defaultBlockState(), graphics, BLOCK_SCALE); // Crop
         stack.popPose();
 
         // Right pillar of Blocks
         stack.pushPose();
         stack.translate(RIGHT_BLOCK_X, BOTTOM_BLOCK_Y, 200);
-        blockRenderer.renderBlock(endOreBlock, stack, BLOCK_SCALE); // Stone Block
+        blockRenderer.renderBlock(endOreBlock, graphics, BLOCK_SCALE); // Stone Block
         stack.translate(0, 1 - BLOCK_SCALE, BLOCK_SCALE / 2f);
-        blockRenderer.renderBlock(farmlandBlock, stack, BLOCK_SCALE); // Farmland Block
+        blockRenderer.renderBlock(farmlandBlock, graphics, BLOCK_SCALE); // Farmland Block
         stack.translate(0, 1 - BLOCK_SCALE, BLOCK_SCALE / 2f);
-        blockRenderer.renderBlock(recipe.getMutation().getResultantCropSupplier().get(), stack, BLOCK_SCALE); // Resultant Crop
+        blockRenderer.renderBlock(recipe.getMutation().getResultantCropSupplier().get(), graphics, BLOCK_SCALE); // Resultant Crop
         stack.popPose();
     };
     

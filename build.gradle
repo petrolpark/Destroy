@@ -1,18 +1,21 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net' } // Maven
-        mavenCentral() // Also Maven
-        jcenter() // Dunno
+        maven { url = 'https://maven.minecraftforge.net' }
+        mavenCentral()
+        jcenter()
         maven { url = 'https://repo.spongepowered.org/repository/maven-public' } // Mixins
         maven { url = 'https://maven.parchmentmc.org' } // Parchment
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: "${forgegradle_version}", changing: true // Forge
+        classpath "net.minecraftforge.gradle:ForgeGradle:${forgegradle_version}" // Forge
         classpath "org.spongepowered:mixingradle:${mixingradle_version}" // Mixins
         classpath "org.parchmentmc:librarian:${librarian_version}" // Parchment
     }
 }
 
+plugins {
+    id 'com.matthewprenger.cursegradle' version "${cursegradle_version}"
+}
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
@@ -104,6 +107,13 @@ repositories {
     maven { // Blueprint
         url = "https://maven.jaackson.me"
     }
+    maven { // Fallback
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 configurations {
@@ -133,7 +143,7 @@ dependencies {
     implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
 
     // Flywheel
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
+    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
 
     // Registrate
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
@@ -155,7 +165,7 @@ dependencies {
     implementation fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
 
     // Blueprint
-    implementation fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
+    //implementation fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
 }
 
 jar {

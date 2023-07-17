@@ -28,19 +28,19 @@ public class PollutionCommand {
 
     private int queryLevelPollution(CommandSourceStack source, PollutionType pollutionType) {
         int pollutionLevel = PollutionHelper.getPollution(source.getLevel(), pollutionType);
-        source.sendSuccess(Component.translatable("commands.destroy.pollution.query", pollutionType.name(), pollutionLevel), true);
+        source.sendSuccess(() ->  Component.translatable("commands.destroy.pollution.query", pollutionType.name(), pollutionLevel), true);
         return pollutionLevel;
     };
 
     private int setLevelPollution(CommandSourceStack source, PollutionType pollutionType, int value) {
         int pollutionLevel = PollutionHelper.setPollution(source.getLevel(), pollutionType, value);
-        source.sendSuccess(Component.translatable("commands.destroy.pollution.set", pollutionType.name(), pollutionLevel), true);
+        source.sendSuccess(() ->  Component.translatable("commands.destroy.pollution.set", pollutionType.name(), pollutionLevel), true);
         return pollutionLevel;
     };
 
     private int addLevelPollution(CommandSourceStack source, PollutionType pollutionType, int change) {
         int pollutionLevel = PollutionHelper.changePollution(source.getLevel(), pollutionType, change);
-        source.sendSuccess(Component.translatable("commands.destroy.pollution.set", pollutionType.name(), pollutionLevel), true);
+        source.sendSuccess(() ->  Component.translatable("commands.destroy.pollution.set", pollutionType.name(), pollutionLevel), true);
         return pollutionLevel;
     };
 };

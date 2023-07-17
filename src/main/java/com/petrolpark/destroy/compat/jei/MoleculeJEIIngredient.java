@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
@@ -17,7 +16,7 @@ import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.UidContext;
-import mezz.jei.common.render.ItemStackRenderer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -84,11 +83,10 @@ public class MoleculeJEIIngredient {
 
     public static final IIngredientRenderer<Molecule> RENDERER = new IIngredientRenderer<Molecule>() {
         private static boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
-        private static final ItemStackRenderer itemStackRenderer = new ItemStackRenderer();
 
         @Override
-        public void render(PoseStack poseStack, Molecule ingredient) {
-            itemStackRenderer.render(poseStack, MoleculeDisplayItem.with(ingredient));
+        public void render(GuiGraphics graphics, Molecule ingredient) {
+            graphics.renderItem(MoleculeDisplayItem.with(ingredient), 0, 0); // TODO check positioning
         };
 
         @Override

@@ -29,7 +29,7 @@ public class BabyBlueAddictionCommand {
     private int queryBabyBlueAddiction(CommandSourceStack source, ServerPlayer player) {
         return player.getCapability(PlayerBabyBlueAddictionProvider.PLAYER_BABY_BLUE_ADDICTION).map(babyblueAddiction -> {
             int addictionLevel = babyblueAddiction.getBabyBlueAddiction();
-            source.sendSuccess(Component.translatable("commands.destroy.babyblueaddiction.query", player.getDisplayName(), addictionLevel), true);
+            source.sendSuccess(() -> Component.translatable("commands.destroy.babyblueaddiction.query", player.getDisplayName(), addictionLevel), true);
             return addictionLevel;
         }).orElse(0);
     };
@@ -42,9 +42,9 @@ public class BabyBlueAddictionCommand {
             });
         };
         if (players.size() == 1) {
-            source.sendSuccess(Component.translatable("commands.destroy.babyblueaddiction.set.single", amount, players.iterator().next().getDisplayName()), true);
+            source.sendSuccess(() -> Component.translatable("commands.destroy.babyblueaddiction.set.single", amount, players.iterator().next().getDisplayName()), true);
         } else {
-            source.sendSuccess(Component.translatable("commands.destroy.babyblueaddiction.set.multiple", amount, players.size()), true);
+            source.sendSuccess(() ->  Component.translatable("commands.destroy.babyblueaddiction.set.multiple", amount, players.size()), true);
         };
         return players.size();
     };

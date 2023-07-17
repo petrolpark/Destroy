@@ -106,7 +106,7 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
         Optional<ChargingRecipe> recipe = getChargingRecipe(input.stack);
 		if (!recipe.isPresent()) return false;
 		if (simulate) return true;
-		List<ItemStack> outputs = RecipeApplier.applyRecipeOn(canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), recipe.get());
+		List<ItemStack> outputs = RecipeApplier.applyRecipeOn(getLevel(), canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), recipe.get());
 
 		for (ItemStack createdItemStack : outputs) {
 			if (!createdItemStack.isEmpty()) {
@@ -133,7 +133,7 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
 			RecipeApplier.applyRecipeOn(itemEntity, recipe.get()); // Apply the charging Recipe
 			itemStackCreated = itemEntity.getItem().copy();
 		} else {
-			for (ItemStack result : RecipeApplier.applyRecipeOn(ItemHandlerHelper.copyStackWithSize(itemStack, 1), recipe.get())) { // Apply the Charging Recipe
+			for (ItemStack result : RecipeApplier.applyRecipeOn(getLevel(), ItemHandlerHelper.copyStackWithSize(itemStack, 1), recipe.get())) { // Apply the Charging Recipe
 				if (itemStackCreated.isEmpty()) {
 					itemStackCreated = result.copy();
                 };

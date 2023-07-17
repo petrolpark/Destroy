@@ -24,6 +24,7 @@ import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -83,10 +84,11 @@ public class AgingCategory extends DestroyRecipeCategory<AgingRecipe> {
 
     @Override
     @SuppressWarnings("resource")
-    public void draw(AgingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
-        AllGuiTextures.JEI_DOWN_ARROW.render(stack, 136, 14);
-        AllGuiTextures.JEI_SHADOW.render(stack, 81, 50);
+    public void draw(AgingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
+        PoseStack stack = graphics.pose();
+        AllGuiTextures.JEI_DOWN_ARROW.render(graphics, 136, 14);
+        AllGuiTextures.JEI_SHADOW.render(graphics, 81, 50);
 
         // Render Aging Barrel
         stack.pushPose();
@@ -94,13 +96,13 @@ public class AgingCategory extends DestroyRecipeCategory<AgingRecipe> {
         blockRenderer.renderBlock(DestroyBlocks.AGING_BARREL.getDefaultState()
             .setValue(AgingBarrelBlock.IS_OPEN, true)
             .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH),
-        stack, 23);
+        graphics, 23);
         stack.popPose();
 
         // Render duration text
-        DestroyGuiTextures.JEI_TEXT_BOX_LONG.render(stack, 4, 63);
+        DestroyGuiTextures.JEI_TEXT_BOX_LONG.render(graphics, 4, 63);
         int seconds = (recipe.getProcessingDuration() % 1200) / 20;
-        Minecraft.getInstance().font.draw(stack, DestroyLang.translate("tooltip.aging_barrel.aging_time", ""+ recipe.getProcessingDuration() / 1200 + ":" + (seconds < 10 ? "0" : "") + seconds).string(), 9,
+        graphics.drawString(Minecraft.getInstance().font, DestroyLang.translate("tooltip.aging_barrel.aging_time", ""+ recipe.getProcessingDuration() / 1200 + ":" + (seconds < 10 ? "0" : "") + seconds).string(), 9,
 				69, 0xFFFFFF);
 
     };

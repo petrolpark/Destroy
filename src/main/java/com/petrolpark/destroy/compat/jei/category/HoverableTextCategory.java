@@ -19,6 +19,7 @@ import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.crafting.Recipe;
 
 public abstract class HoverableTextCategory<T extends Recipe<?>> extends DestroyRecipeCategory<T> implements ITickableCategory {
@@ -55,8 +56,9 @@ public abstract class HoverableTextCategory<T extends Recipe<?>> extends Destroy
      * @throws NullPointerException if the super method {@link HoverableTextCategory#setRecipe} is not called by a child.
      */
     @Override
-    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
+    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
+        PoseStack stack = graphics.pose();
 
         Collection<LinesAndActivationAreas> paragraphs = PARAGRAPHS.get(recipe);
 
@@ -67,7 +69,7 @@ public abstract class HoverableTextCategory<T extends Recipe<?>> extends Destroy
         // Render hoverable paragraphs
         for (LinesAndActivationAreas paragraph : paragraphs) {
             for (int i = 0; i < paragraph.lines().size(); i++) {
-                minecraft.font.draw(stack, paragraph.lines().get(i), paragraph.startX(), paragraph.startY() + (i * font.lineHeight), 0xFFFFFF);
+                graphics.drawString(font, paragraph.lines().get(i), paragraph.startX(), paragraph.startY() + (i * font.lineHeight), 0xFFFFFF);
             };
         };
 
@@ -89,7 +91,7 @@ public abstract class HoverableTextCategory<T extends Recipe<?>> extends Destroy
         // Render the current stack of text boxes
         stack.pushPose();
         stack.translate(10, 10, 0);
-        textBoxStack.render(stack, (int)mouseX, (int)mouseY, partialTicks);
+        textBoxStack.render(graphics, (int)mouseX, (int)mouseY, partialTicks);
         stack.popPose();
     };
 };

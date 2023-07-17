@@ -60,7 +60,7 @@ public class BuildSandCastleGoal extends MoveToBlockGoal {
     };
 
     private boolean tryFindBlock() {
-        return blockPos != null && isValidTarget(mob.level, blockPos) ? true : findNearestBlock();
+        return blockPos != null && isValidTarget(mob.level(), blockPos) ? true : findNearestBlock();
     };
 
     @Override
@@ -72,7 +72,7 @@ public class BuildSandCastleGoal extends MoveToBlockGoal {
     @Override
     public void tick() {
         super.tick();
-        Level level = mob.level;
+        Level level = mob.level();
 
         BlockPos targetPos = getPosWithBlock(mob.blockPosition(), level);
 

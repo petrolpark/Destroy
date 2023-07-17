@@ -1,6 +1,5 @@
 package com.petrolpark.destroy.compat.jei.category;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.client.gui.DestroyGuiTextures;
 import com.petrolpark.destroy.compat.jei.animation.HeatConditionRenderer;
@@ -13,6 +12,7 @@ import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -52,17 +52,17 @@ public class DistillationCategory extends DestroyRecipeCategory<DistillationReci
 
     @Override
     @SuppressWarnings("resource")
-    public void draw(DistillationRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
+    public void draw(DistillationRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
         for (int i = 0; i < recipe.getFluidResults().size(); i++) {
-            DestroyGuiTextures.JEI_DISTILLATION_TOWER_MIDDLE.render(stack, 55, 76 - (12 * i));
-            if (i % 2 == 0) DestroyGuiTextures.JEI_DISTILLATION_TOWER_BRANCH.render(stack, 75, 81 - (12 * i));
+            DestroyGuiTextures.JEI_DISTILLATION_TOWER_MIDDLE.render(graphics, 55, 76 - (12 * i));
+            if (i % 2 == 0) DestroyGuiTextures.JEI_DISTILLATION_TOWER_BRANCH.render(graphics, 75, 81 - (12 * i));
         };
-        DestroyGuiTextures.JEI_DISTILLATION_TOWER_TOP.render(stack, 55, 2 + (7 - recipe.getFluidResults().size()) * 12);
-        DestroyGuiTextures.JEI_DISTILLATION_TOWER_BOTTOM.render(stack, 55, 88);
-        DestroyGuiTextures.JEI_DISTILLATION_TOWER_BRANCH.render(stack, 35, 90);
-        DestroyGuiTextures.JEI_TEXT_BOX_SHORT.render(stack, 4, 102);
-        HeatConditionRenderer.drawHeatConditionName(Minecraft.getInstance().font, stack, 9, 108, recipe.getRequiredHeat());
+        DestroyGuiTextures.JEI_DISTILLATION_TOWER_TOP.render(graphics, 55, 2 + (7 - recipe.getFluidResults().size()) * 12);
+        DestroyGuiTextures.JEI_DISTILLATION_TOWER_BOTTOM.render(graphics, 55, 88);
+        DestroyGuiTextures.JEI_DISTILLATION_TOWER_BRANCH.render(graphics, 35, 90);
+        DestroyGuiTextures.JEI_TEXT_BOX_SHORT.render(graphics, 4, 102);
+        HeatConditionRenderer.drawHeatConditionName(Minecraft.getInstance().font, graphics, 9, 108, recipe.getRequiredHeat());
     };
     
 };

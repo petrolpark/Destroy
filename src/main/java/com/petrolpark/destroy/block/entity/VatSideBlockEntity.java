@@ -151,7 +151,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
  
         if (spoutingTicks > 0 && getLevel().isClientSide()) {
             spoutingTicks--;
-            if (!isPipeSubmerged(true, null))spawnParticles(spoutingFluid, getLevel());
+            if (!isPipeSubmerged(true, null)) spawnParticles(spoutingFluid, getLevel());
         };
     };
 

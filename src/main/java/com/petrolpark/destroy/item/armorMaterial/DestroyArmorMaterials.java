@@ -8,6 +8,7 @@ import com.petrolpark.destroy.item.DestroyItems;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem.Type;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -38,14 +39,14 @@ public enum DestroyArmorMaterials implements ArmorMaterial {
     };
 
     @Override
-	public int getDurabilityForSlot(EquipmentSlot slot) {
-		return MAX_DAMAGE[slot.getIndex()] * maxDamageFactor;
-	}
+    public int getDurabilityForType(Type type) {
+        return MAX_DAMAGE[type.ordinal()] * maxDamageFactor;
+    };
 
-	@Override
-	public int getDefenseForSlot(EquipmentSlot slot) {
-		return damageReductionAmountArray[slot.getIndex()];
-	}
+    @Override
+    public int getDefenseForType(Type type) {
+        return damageReductionAmountArray[type.ordinal()];
+    };
 
     @Override
     public int getEnchantmentValue() {

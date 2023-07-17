@@ -35,10 +35,10 @@ public class CryingMobEffect extends MobEffect {
     @SuppressWarnings({"resource", "null"})
     public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
         RandomSource rand = livingEntity.getRandom();
-        if (livingEntity.level.isClientSide() && rand.nextFloat() > 0.8f) {
+        if (livingEntity.level().isClientSide() && rand.nextFloat() > 0.8f) {
             Vec3 pos = livingEntity.getEyePosition();
             boolean isFirstPerson = Minecraft.getInstance().options.getCameraType().isFirstPerson() && Minecraft.getInstance().player.is(livingEntity);
-            livingEntity.level.addParticle(new TearParticle.Data(), pos.x, isFirstPerson ? pos.y - 0.15d : pos.y, pos.z,
+            livingEntity.level().addParticle(new TearParticle.Data(), pos.x, isFirstPerson ? pos.y - 0.15d : pos.y, pos.z,
                 livingEntity.getDeltaMovement().x + Mth.cos(Mth.PI * (livingEntity.getYHeadRot() + 90 - 15 + rand.nextFloat() * 30) / 180) * 0.15d, 
                 livingEntity.getDeltaMovement().y,
                 livingEntity.getDeltaMovement().z + Mth.sin(Mth.PI * (livingEntity.getYHeadRot() + 90 - 15 + rand.nextFloat() * 30) / 180) * 0.15d

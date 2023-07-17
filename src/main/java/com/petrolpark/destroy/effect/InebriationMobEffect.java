@@ -18,7 +18,7 @@ public class InebriationMobEffect extends UncurableMobEffect {
     @SuppressWarnings("null") // It's not null; I checked
     public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
         int pDuration = livingEntity.getEffect(DestroyMobEffects.INEBRIATION.get()).getDuration(); // This is the bit it says is null
-        if (!livingEntity.level.isClientSide()) {
+        if (!livingEntity.level().isClientSide()) {
             if (amplifier >= 3) {
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 15, (amplifier - 2), true, false, false));
             };
@@ -30,7 +30,7 @@ public class InebriationMobEffect extends UncurableMobEffect {
                     livingEntity.hurt(DestroyDamageSources.ALCOHOL, 1f);
                 };
                 if (livingEntity instanceof Player player) {
-                    DestroyAdvancements.VERY_DRUNK.award(player.getLevel(), player);
+                    DestroyAdvancements.VERY_DRUNK.award(player.level(), player);
                 };
             };
         };

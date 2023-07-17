@@ -32,7 +32,7 @@ public class CrudeOilCommand {
             crudeOil.generate(chunk, player);
             return crudeOil.getAmount();
         }).orElse(0);
-        source.sendSuccess(Component.translatable("commands.destroy.crudeoil", amount, pos.getX(), pos.getY(), pos.getZ()), true);
+        source.sendSuccess(() ->  Component.translatable("commands.destroy.crudeoil", amount, pos.getX(), pos.getY(), pos.getZ()), true);
         return amount;
     };
 };

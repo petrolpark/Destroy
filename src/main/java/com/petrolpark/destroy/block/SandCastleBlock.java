@@ -68,7 +68,7 @@ public class SandCastleBlock extends Block implements IBE<SandCastleBlockEntity>
 
     @Override
     public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
-        withBlockEntityDo(level, pos, be -> be.sentimentalBehaviour.onRemove(state, explosion.getSourceMob() instanceof Player player ? player : null));
+        withBlockEntityDo(level, pos, be -> be.sentimentalBehaviour.onRemove(state, explosion.getDirectSourceEntity() instanceof Player player ? player : null));
     };
 
     @Override

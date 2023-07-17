@@ -114,7 +114,7 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
 						return; // ...don't start anything, as this is already handled in DynamoBlockEntity
 
 					for (ItemEntity itemEntity : level.getEntitiesOfClass(ItemEntity.class, new AABB(pos.below()).deflate(.125f))) { // Check all Item Entities in the block below
-						if (!itemEntity.isAlive() || !itemEntity.isOnGround()) continue; // Ignore Item Entities marked for removal
+						if (!itemEntity.isAlive() || !itemEntity.onGround()) continue; // Ignore Item Entities marked for removal
 						if (!specifics.tryProcessInWorld(itemEntity, true)) continue; // Ignore if the Item Stack cannot be processed
 						start(Mode.WORLD, itemEntity.position().add(0f, 0.1f, 0f)); // At the first chargeable Item we get, stop looking for any more and start processing
 						return;
@@ -177,7 +177,7 @@ public class ChargingBehaviour extends BeltProcessingBehaviour {
 
 		for (Entity entity : level.getEntities(null, bb)) {
 			if (!(entity instanceof ItemEntity itemEntity)) continue; // Ignore non-Item Entities
-			if (!entity.isAlive() || !entity.isOnGround()) continue; // Ignore Item Entities marked for removal
+			if (!entity.isAlive() || !entity.onGround()) continue; // Ignore Item Entities marked for removal
 
 			entityScanCooldown = 0; // Reset the Item Entity scanner
 			if (specifics.tryProcessInWorld(itemEntity, false)) blockEntity.sendData(); // If successfully charged the Item Stack

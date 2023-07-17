@@ -39,6 +39,7 @@ import com.petrolpark.destroy.world.village.DestroyVillageAddition;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
+import com.simibubi.create.Create;
 import com.simibubi.create.api.event.BlockEntityBehaviourEvent;
 import com.simibubi.create.content.equipment.potatoCannon.PotatoProjectileEntity;
 import com.simibubi.create.content.fluids.FluidFX;
@@ -47,11 +48,13 @@ import com.simibubi.create.content.fluids.spout.SpoutBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlockItem;
 import com.simibubi.create.foundation.ModFilePackResources;
+import com.simibubi.create.foundation.utility.Components;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -152,7 +155,7 @@ public class DestroyServerEvents {
     public static void onPlayerEntersWorld(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();
         if (!(player instanceof ServerPlayer serverPlayer)) return;
-        Level level = player.getLevel();
+        Level level = player.level();
         level.getCapability(LevelPollutionProvider.LEVEL_POLLUTION).ifPresent(levelPollution -> {
             DestroyMessages.sendToClient(new LevelPollutionS2CPacket(levelPollution), serverPlayer);
         });
@@ -231,8 +234,8 @@ public class DestroyServerEvents {
      */
     @SubscribeEvent
     public static void addVillagerBuildings(ServerAboutToStartEvent event) {
-        Registry<StructureTemplatePool> templatePoolRegistry = event.getServer().registryAccess().registry(Registry.TEMPLATE_POOL_REGISTRY).orElseThrow();
-        Registry<StructureProcessorList> processorListRegistry = event.getServer().registryAccess().registry(Registry.PROCESSOR_LIST_REGISTRY).orElseThrow();
+        Registry<StructureTemplatePool> templatePoolRegistry = event.getServer().registryAccess().registry(Registries.TEMPLATE_POOL).orElseThrow();
+        Registry<StructureProcessorList> processorListRegistry = event.getServer().registryAccess().registry(Registries.PROCESSOR_LIST).orElseThrow();
         
         DestroyVillageAddition.addBuildingToPool(templatePoolRegistry, processorListRegistry, new ResourceLocation("minecraft:village/plains/houses"), "destroy:plains_inn", 250);
     };
@@ -245,7 +248,7 @@ public class DestroyServerEvents {
     public static void playerTick(TickEvent.PlayerTickEvent event) {
         if (event.side.isClient()) return;
         Player player = event.player;
-        Level level = player.getLevel();
+        Level level = player.level();
 
         // Store the positions of this player for use with Chorus Wine
         player.getCapability(PlayerPreviousPositionsProvider.PLAYER_PREVIOUS_POSITIONS).ifPresent((playerPreviousPositions -> {
@@ -358,7 +361,7 @@ public class DestroyServerEvents {
             if (effect != null) {
                 player.addEffect(new MobEffectInstance(DestroyMobEffects.HANGOVER.get(), DestroyAllConfigs.COMMON.substances.hangoverDuration.get() * (effect.getAmplifier() + 1)));
                 player.removeEffect(DestroyMobEffects.INEBRIATION.get());
-                DestroyAdvancements.HANGOVER.award(player.getLevel(), player);
+                DestroyAdvancements.HANGOVER.award(player.level(), player);
             };
         };
     };
@@ -372,7 +375,7 @@ public class DestroyServerEvents {
         if (!(attacker instanceof LivingEntity livingAttacker)) return;
         ItemStack itemStack = livingAttacker.getMainHandItem();
         if (!(itemStack.getItem() instanceof SyringeItem syringeItem)) return;
-        syringeItem.onInject(itemStack, attacker.getLevel(), event.getEntity());
+        syringeItem.onInject(itemStack, attacker.level(), event.getEntity());
         livingAttacker.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(DestroyItems.SYRINGE.get()));
     };
 
@@ -384,7 +387,7 @@ public class DestroyServerEvents {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
         if (AllBlocks.MECHANICAL_ARM.isIn(player.getMainHandItem()) && DestroyItems.ZIRCONIUM_PANTS.isIn(player.getItemBySlot(EquipmentSlot.LEGS))) {
             event.getEntity().spawnAtLocation(new ItemStack(DestroyItems.CHALK_DUST.get()));
-            DestroyAdvancements.MECHANICAL_HANDS.award(player.getLevel(), player);
+            DestroyAdvancements.MECHANICAL_HANDS.award(player.level(), player);
         };
     };
 
@@ -396,7 +399,7 @@ public class DestroyServerEvents {
 
         // Award achievement for shooting a Hefty Beetroot
         if (event.getEntity() instanceof PotatoProjectileEntity projectile && projectile.getOwner() instanceof ServerPlayer player && DestroyItemTags.HEFTY_BEETROOT.matches(projectile.getItem().getItem())) {
-            DestroyAdvancements.SHOOT_HEFTY_BEETROOT.award(player.getLevel(), player);
+            DestroyAdvancements.SHOOT_HEFTY_BEETROOT.award(player.level(), player);
         };
 
         // Attach new AI to Villagers
@@ -419,7 +422,7 @@ public class DestroyServerEvents {
             BlazeBurnerBlockItem item = (BlazeBurnerBlockItem) itemStack.getItem();
             if (item.hasCapturedBlaze()) return;
 
-            event.getLevel().playSound(null, new BlockPos(stray.position()), SoundEvents.STRAY_HURT, SoundSource.HOSTILE, 0.25f, 0.75f);
+            event.getLevel().playSound(null, BlockPos.containing(stray.position()), SoundEvents.STRAY_HURT, SoundSource.HOSTILE, 0.25f, 0.75f);
             stray.discard(); // Remove the Stray
 
             // Give the Cooler to the Player
@@ -494,7 +497,7 @@ public class DestroyServerEvents {
      */
     @SubscribeEvent
     public static void onBabyBirthed(BabyEntitySpawnEvent event) {
-        Level level = event.getParentA().getLevel();
+        Level level = event.getParentA().level();
         RandomSource random = event.getParentA().getRandom();
         if (event.getParentA().getRandom().nextInt(PollutionType.SMOG.max) <= PollutionHelper.getPollution(level, PollutionType.SMOG)) { // 0% chance of failure for 0 smog, 100% chance for full smog
             if (level instanceof ServerLevel serverLevel) {
@@ -536,8 +539,11 @@ public class DestroyServerEvents {
 					return;
 				}
 				IModFile modFile = modFileInfo.getFile();
-				event.addRepositorySource((consumer, constructor) -> {
-					consumer.accept(Pack.create(Destroy.asResource("destroy_create_patches").toString(), true, () -> new ModFilePackResources("Destroy Patches For Create", modFile, "resourcepacks/destroy_create_patches"), constructor, Pack.Position.TOP, PackSource.BUILT_IN));
+                event.addRepositorySource(consumer -> {
+					Pack pack = Pack.readMetaAndCreate(Create.asResource("destroy_create_patches").toString(), Components.literal("Destroy Patches For Create"), true, id -> new ModFilePackResources(id, modFile, "resourcepacks/destroy_create_patches"), PackType.CLIENT_RESOURCES, Pack.Position.TOP, PackSource.BUILT_IN);
+					if (pack != null) {
+						consumer.accept(pack);
+					}
 				});
 			};
 		};

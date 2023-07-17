@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.joml.Quaternionf;
+
 import com.google.common.collect.ImmutableList;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Molecule;
@@ -24,6 +24,7 @@ import com.simibubi.create.foundation.gui.ILightingSettings;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.utility.Pair;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
@@ -153,11 +154,12 @@ public class MoleculeRenderer {
     /**
      * Draw all Atoms and Bonds in this Molecule.
      */
-    public void render(PoseStack poseStack, int xPosition, int yPosition) {
+    public void render(int xPosition, int yPosition, GuiGraphics graphics) {
+        PoseStack poseStack = graphics.pose();
         poseStack.pushPose();
         poseStack.translate(xPosition + xOffset, yPosition + yOffset, zOffset + 100);
         for (Pair<Vec3, IRenderableMoleculePart> pair : RENDERED_OBJECTS) {
-            pair.getSecond().render(poseStack, pair.getFirst());
+            pair.getSecond().render(graphics, pair.getFirst());
         };
         poseStack.popPose();
     };
@@ -384,10 +386,10 @@ public class MoleculeRenderer {
     };
 
     protected static interface IRenderableMoleculePart {
-        public void render(PoseStack poseStack, Vec3 location);
+        public void render(GuiGraphics graphics, Vec3 location);
     };
 
-    protected static record BondRenderInstance(BondType type, Quaternion rotation) implements IRenderableMoleculePart {
+    protected static record BondRenderInstance(BondType type, Quaternionf rotation) implements IRenderableMoleculePart {
 
         private static Vec3 bond = new Vec3(1d, 0d, 0d);
 
@@ -398,14 +400,14 @@ public class MoleculeRenderer {
          */
         public static BondRenderInstance fromZig(BondType type, Vec3 zig) {
             Vec3 z = zig.normalize();
-            Vector3f axis = new Vector3f(bond.cross(z));
-            Quaternion q = new Quaternion(axis.x(), axis.y(), axis.z(), (float)bond.dot(z) + (float)Math.sqrt(bond.lengthSqr() * z.lengthSqr()));
-            q.normalize();
-            return new BondRenderInstance(type, q.copy());
+            Vec3 axis = bond.cross(z);
+            Quaternionf q = new Quaternionf(axis.x(), axis.y(), axis.z(), (float)bond.dot(z) + (float)Math.sqrt(bond.lengthSqr() * z.lengthSqr()));
+            return new BondRenderInstance(type, new Quaternionf(q.normalize()));
         };
 
         @Override
-        public void render(PoseStack poseStack, Vec3 location) {
+        public void render(GuiGraphics graphics, Vec3 location) {
+            PoseStack poseStack = graphics.pose();
             poseStack.pushPose();
             poseStack.translate(location.x, location.y, location.z);
             TransformStack.cast(poseStack)
@@ -413,7 +415,7 @@ public class MoleculeRenderer {
             GuiGameElement.of(type().getPartial())
                 .lighting(ILightingSettings.DEFAULT_FLAT)
                 .scale(SCALE)
-                .render(poseStack, 0, 0);
+                .render(graphics, 0, 0);
             poseStack.popPose();
         };
     };
@@ -421,13 +423,14 @@ public class MoleculeRenderer {
     protected static record AtomRenderInstance(Element element) implements IRenderableMoleculePart {
 
         @Override
-        public void render(PoseStack poseStack, Vec3 location) {
+        public void render(GuiGraphics graphics, Vec3 location) {
+            PoseStack poseStack = graphics.pose();
             poseStack.pushPose();
             poseStack.translate(location.x, location.y, location.z);
             GuiGameElement.of(element.getPartial())
                 .scale(SCALE)
                 //.rotate(15.5d, 22.5d, 0d)
-                .render(poseStack, 0, 0);
+                .render(graphics, 0, 0);
             poseStack.popPose();
         };
     };

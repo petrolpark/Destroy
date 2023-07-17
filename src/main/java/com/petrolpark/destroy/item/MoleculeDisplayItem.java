@@ -13,8 +13,8 @@ import com.petrolpark.destroy.util.DestroyLang;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
@@ -99,10 +99,11 @@ public class MoleculeDisplayItem extends Item {
         };
 
         @Override
-        public void renderImage(Font font, int mouseX, int mouseY, PoseStack poseStack, ItemRenderer itemRenderer, int blitOffset) {
+        public void renderImage(Font font, int mouseX, int mouseY, GuiGraphics graphics) {
+            PoseStack poseStack = graphics.pose();
             poseStack.pushPose(); 
             poseStack.translate(0, 0, 401);
-            renderer.render(poseStack, mouseX + 10, mouseY + 5);
+            renderer.render(mouseX + 10, mouseY + 5, graphics);
             poseStack.popPose();
         };
     };

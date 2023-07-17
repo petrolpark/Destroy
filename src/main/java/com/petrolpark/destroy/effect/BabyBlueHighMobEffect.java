@@ -22,7 +22,7 @@ public class BabyBlueHighMobEffect extends UncurableMobEffect {
     @Override
     @SuppressWarnings("null") // It's not null; I checked
     public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
-        if (!livingEntity.level.isClientSide) {
+        if (!livingEntity.level().isClientSide()) {
             int duration = livingEntity.getEffect(DestroyMobEffects.BABY_BLUE_HIGH.get()).getDuration(); // This is the bit it says is null
             if (duration == 1) {
                 // Apply the Baby Blue Withdrawal Effect as the BabyBlue High Effect runs out.
@@ -36,7 +36,7 @@ public class BabyBlueHighMobEffect extends UncurableMobEffect {
             };
 
             if (livingEntity instanceof Player player) {
-                Level level = player.getLevel();
+                Level level = player.level();
                 DestroyAdvancements.TAKE_BABY_BLUE.award(level, player);
                 if (player.getY() >= 1000) DestroyAdvancements.TAKE_BABY_BLUE_HIGH.award(level, player);
             };

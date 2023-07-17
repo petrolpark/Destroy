@@ -60,7 +60,7 @@ public class PumpjackBlock extends Block implements IBE<PumpjackBlockEntity> {
         Direction facing = context.getHorizontalDirection().getCounterClockWise(Axis.Y);
         for (BlockPos pos : getStructuralBlocks(facing, context.getClickedPos()).keySet()) {
             // Don't place if the structural Blocks won't be able to fit
-            if (!context.getLevel().getBlockState(pos).getMaterial().isReplaceable()) return null;
+            if (!context.getLevel().getBlockState(pos).canBeReplaced()) return null;
         };
         return defaultBlockState().setValue(FACING, facing);
     };
@@ -93,7 +93,7 @@ public class PumpjackBlock extends Block implements IBE<PumpjackBlockEntity> {
             BlockState requiredState = entry.getValue();
             if (occupiedState == requiredState) continue;
             // If we can't put the structural Block State here, destroy the whole Pumpjack
-            if (!occupiedState.getMaterial().isReplaceable()) {
+            if (!occupiedState.canBeReplaced()) {
 				level.destroyBlock(pos, false);
 				return;
 			}

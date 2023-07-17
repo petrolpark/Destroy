@@ -1,7 +1,6 @@
 package com.petrolpark.destroy.config;
 
 import com.petrolpark.destroy.Destroy;
-import com.simibubi.create.infrastructure.worldgen.AllOreFeatureConfigEntries;
 
 import net.minecraftforge.common.ForgeConfigSpec.Builder;
 

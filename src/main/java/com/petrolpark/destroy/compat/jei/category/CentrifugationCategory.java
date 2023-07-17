@@ -1,6 +1,5 @@
 package com.petrolpark.destroy.compat.jei.category;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.client.gui.DestroyGuiTextures;
 import com.petrolpark.destroy.compat.jei.animation.AnimatedCentrifuge;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
@@ -13,6 +12,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraftforge.fluids.FluidStack;
 
 public class CentrifugationCategory extends DestroyRecipeCategory<CentrifugationRecipe> {
@@ -54,15 +54,15 @@ public class CentrifugationCategory extends DestroyRecipeCategory<Centrifugation
     };
 
     @Override
-    public void draw(CentrifugationRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
-        super.draw(recipe, recipeSlotsView, matrixStack, mouseX, mouseY);
+    public void draw(CentrifugationRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
 
-        AllGuiTextures.JEI_SHADOW.render(matrixStack, CENTRIFUGE_X - 19, CENTRIFUGE_Y - 5);
-        centrifuge.draw(matrixStack, CENTRIFUGE_X, CENTRIFUGE_Y);
+        AllGuiTextures.JEI_SHADOW.render(graphics, CENTRIFUGE_X - 19, CENTRIFUGE_Y - 5);
+        centrifuge.draw(graphics, CENTRIFUGE_X, CENTRIFUGE_Y);
 
-        AllGuiTextures.JEI_DOWN_ARROW.render(matrixStack, 29, 9);
-        DestroyGuiTextures.JEI_SHORT_DOWN_ARROW.render(matrixStack, 33, 70);
-        DestroyGuiTextures.JEI_SHORT_RIGHT_ARROW.render(matrixStack, 72, 38);
+        AllGuiTextures.JEI_DOWN_ARROW.render(graphics, 29, 9);
+        DestroyGuiTextures.JEI_SHORT_DOWN_ARROW.render(graphics, 33, 70);
+        DestroyGuiTextures.JEI_SHORT_RIGHT_ARROW.render(graphics, 72, 38);
     };
     
 }

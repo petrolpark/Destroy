@@ -2,18 +2,17 @@ package com.petrolpark.destroy.client.gui.stackedTextBox;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import javax.annotation.Nonnull;
 
 import com.google.common.base.Strings;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.simibubi.create.foundation.gui.RemovedGuiUtils;
 import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -75,7 +74,7 @@ public class StackedTextBox extends AbstractStackedTextBox {
     };
 
     protected void updateTextBoxSize(String text) {
-        LinesAndActivationAreas result = getTextAndActivationAreas(text, x, y, 200, minecraft.screen, minecraft.font, palette);
+        LinesAndActivationAreas result = getTextAndActivationAreas(text, getX(), getY(), 200, minecraft.screen, minecraft.font, palette);
 
         lines.clear();
         lines.addAll(result.lines());
@@ -84,13 +83,13 @@ public class StackedTextBox extends AbstractStackedTextBox {
         height = result.height();
 
         // Move the text box if necessary to fit it on the screen
-        x = result.startX();
-        y = result.startY();
+        setX(result.startX());
+        setY(result.startY());
     };
 
     @Override
-    protected void beforeRender(@Nonnull PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-        super.beforeRender(ms, mouseX, mouseY, partialTicks);
+    protected void beforeRender(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        super.beforeRender(guiGraphics, mouseX, mouseY, partialTicks);
         isActivationAreaHovered = activationArea.isIn(mouseX, mouseY);
 
         // If there is a potential child to render
@@ -108,40 +107,36 @@ public class StackedTextBox extends AbstractStackedTextBox {
     };
 
     @Override
-    public void render(@Nonnull PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-        super.render(ms, mouseX, mouseY, partialTicks);
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(guiGraphics, mouseX, mouseY, partialTicks);
 
         // Don't render if the mouse isn't in the right place
         if (!isActive()) return;
 
+        PoseStack ms = guiGraphics.pose();
         ms.pushPose();
 
         // Render the text
         Screen screen = minecraft.screen;
         if (screen != null) {
             // Check if the screen has been resized and reposition if so
-            if (x + width > screen.width || y + height > screen.height) {
+            if (getX() + width > screen.width || getY() + height > screen.height) {
                 updateTextBoxSize(plainText);
                 return;
             };
             ms.translate(0, 0, 10);
             List<Component> allLines = new ArrayList<>(lines);
             allLines.add(progressBar());
-            screen.renderTooltip(ms, allLines, Optional.empty(), x - 22, y + 5);
+            RemovedGuiUtils.drawHoveringText(guiGraphics, allLines, getX() - 22, getY() + 5, screen.width, screen.height, -1, minecraft.font);
         };
 
         // Render the next text box in the chain (if it exists)
         ms.pushPose();
         ms.translate(0, 0, 1);
-        child.render(ms, mouseX, mouseY, partialTicks);
+        child.render(guiGraphics, mouseX, mouseY, partialTicks);
         ms.popPose();
 
         ms.popPose();
-    };
-    
-    @Override
-    protected void renderBg(PoseStack ms, Minecraft minecraft, int mouseX, int mouseY) {
-        super.renderBg(ms, minecraft, mouseX, mouseY);
     };
     
     @Override
