@@ -96,7 +96,7 @@ public class SmartExplosion extends Explosion {
     @Override
     public void finalizeExplosion(boolean spawnParticles) {
 
-        boolean createExperience = getSourceMob() instanceof Player || shouldAlwaysDropExperience();
+        boolean createExperience = getDirectSourceEntity() instanceof Player || shouldAlwaysDropExperience();
 
         // Generate the Block drops and do anything else necessary
         for (BlockPos pos : toBlow) {
@@ -169,7 +169,7 @@ public class SmartExplosion extends Explosion {
                                 };
                             };
 
-                            BlockPos blockPosToExplode = new BlockPos(positionToExplode);
+                            BlockPos blockPosToExplode = BlockPos.containing(positionToExplode);
                             BlockState blockState = level.getBlockState(blockPosToExplode);
                             FluidState fluidState = level.getFluidState(blockPosToExplode);
 
@@ -214,7 +214,7 @@ public class SmartExplosion extends Explosion {
         if (level instanceof ServerLevel serverLevel) {
             BlockEntity blockEntity = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
             LootContext.Builder builder = new LootContext.Builder(serverLevel)
-                .withRandom(random)
+                .withRandomSource(random)
                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
                 .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
                 .withParameter(LootContextParams.EXPLOSION_RADIUS, radius)
