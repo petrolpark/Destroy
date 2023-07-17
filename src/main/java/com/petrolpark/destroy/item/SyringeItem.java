@@ -59,8 +59,8 @@ public class SyringeItem extends Item implements CustomUseEffectsItem {
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        if (entity instanceof LivingEntity && !entity.getLevel().isClientSide()) {
-            onInject(stack, entity.getLevel(), (LivingEntity) entity);
+        if (entity instanceof LivingEntity && !entity.level().isClientSide()) {
+            onInject(stack, entity.level(), (LivingEntity) entity);
             player.getInventory().removeItem(stack);
             player.getInventory().add(new ItemStack(DestroyItems.SYRINGE.get()));
         };
@@ -76,14 +76,6 @@ public class SyringeItem extends Item implements CustomUseEffectsItem {
     };
 
     @Override
-    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
-        if (count == 8 && !player.getLevel().isClientSide()) {
-            player.hurt(DestroyDamageSources.SELF_NEEDLE, 1f);
-        };
-        super.onUsingTick(stack, player, count);
-    }
-
-    @Override
     public void releaseUsing(ItemStack itemStack, Level level, LivingEntity entity, int timeLeft) {
         if (!(entity instanceof Player)) return;
         itemStack.getOrCreateTag().remove("Injecting");
@@ -96,7 +88,9 @@ public class SyringeItem extends Item implements CustomUseEffectsItem {
 
     @Override
     public boolean triggerUseEffects(ItemStack stack, LivingEntity entity, int count, RandomSource random) {
-        //TODO Sounds and particles here
+        if (count == 8 && !entity.level().isClientSide()) {
+            entity.hurt(DestroyDamageSources.SELF_NEEDLE, 1f);
+        };
         return true;
     };
 

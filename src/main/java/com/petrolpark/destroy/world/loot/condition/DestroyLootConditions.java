@@ -2,7 +2,7 @@ package com.petrolpark.destroy.world.loot.condition;
 
 import com.petrolpark.destroy.Destroy;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.Serializer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
@@ -12,7 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class DestroyLootConditions {
 
-    public static final DeferredRegister<LootItemConditionType> LOOT_CONDITIONS = DeferredRegister.create(Registry.LOOT_ITEM_REGISTRY, Destroy.MOD_ID);
+    public static final DeferredRegister<LootItemConditionType> LOOT_CONDITIONS = DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, Destroy.MOD_ID);
 
     public static final RegistryObject<LootItemConditionType>
     OBLITERATION = registerLootCondition("obliteration", new ObliterationCondition.Serializer());

@@ -3,7 +3,6 @@ package com.petrolpark.destroy.item;
 import static com.simibubi.create.AllTags.forgeItemTag;
 
 import com.petrolpark.destroy.Destroy;
-import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.item.food.DestroyFoods;
 import com.petrolpark.destroy.item.renderer.GasMaskModel;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
@@ -17,12 +16,12 @@ import com.simibubi.create.foundation.item.CombustibleItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BowlFoodItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.RecordItem;
+import net.minecraft.world.item.ArmorItem.Type;
 import net.minecraftforge.common.Tags;
 
 public class DestroyItems {
@@ -30,14 +29,12 @@ public class DestroyItems {
     private static CreateRegistrate REGISTRATE = Destroy.registrate();
 
     public static final ItemEntry<Item> LOGO = REGISTRATE.item("logo", Item::new)
-        .properties(p -> p
-            .tab(null)
-        ).register();
+        .tab(null)
+        .register();
 
     public static final ItemEntry<MoleculeDisplayItem> MOLECULE_DISPLAY = REGISTRATE.item("molecule_display", MoleculeDisplayItem::new)
-        .properties(p -> p
-            .tab(null)
-        ).register();
+        .tab(null)
+        .register();
 
     public static final ItemEntry<Item>
 
@@ -235,17 +232,17 @@ public class DestroyItems {
 
     public static final ItemEntry<? extends HazmatSuitArmorItem>
 
-    HAZMAT_SUIT = REGISTRATE.item("hazmat_suit", p -> new HazmatSuitArmorItem(EquipmentSlot.CHEST, p))
+    HAZMAT_SUIT = REGISTRATE.item("hazmat_suit", p -> new HazmatSuitArmorItem(Type.CHESTPLATE, p))
         .properties(p -> p
             .stacksTo(1)
         ).tag(DestroyItemTags.CHEMICAL_PROTECTION_TORSO.tag)
         .register(),
-    HAZMAT_LEGGINGS = REGISTRATE.item("hazmat_leggings", p -> new HazmatSuitArmorItem(EquipmentSlot.LEGS, p))
+    HAZMAT_LEGGINGS = REGISTRATE.item("hazmat_leggings", p -> new HazmatSuitArmorItem(Type.LEGGINGS, p))
         .properties(p -> p
             .stacksTo(1)
         ).tag(DestroyItemTags.CHEMICAL_PROTECTION_LEGS.tag)
         .register(),
-    WELLINGTON_BOOTS = REGISTRATE.item("wellington_boots", p -> new HazmatSuitArmorItem(EquipmentSlot.FEET, p))
+    WELLINGTON_BOOTS = REGISTRATE.item("wellington_boots", p -> new HazmatSuitArmorItem(Type.BOOTS, p))
         .properties(p -> p
             .stacksTo(1)
         ).tag(DestroyItemTags.CHEMICAL_PROTECTION_FEET.tag)
@@ -402,7 +399,6 @@ public class DestroyItems {
 
     UNDISTILLED_MOONSHINE_BOTTLE = REGISTRATE.item("undistilled_moonshine_bottle", p -> new AlcoholicDrinkItem(p, 1))
         .properties(p -> p
-            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
             .food(DestroyFoods.MOONSHINE)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)
@@ -410,7 +406,6 @@ public class DestroyItems {
         .register(),
     ONCE_DISTILLED_MOONSHINE_BOTTLE = REGISTRATE.item("once_distilled_moonshine_bottle", p -> new AlcoholicDrinkItem(p, 1))
         .properties(p -> p
-            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
             .food(DestroyFoods.MOONSHINE)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)
@@ -418,7 +413,6 @@ public class DestroyItems {
         .register(),
     TWICE_DISTILLED_MOONSHINE_BOTTLE = REGISTRATE.item("twice_distilled_moonshine_bottle", p -> new AlcoholicDrinkItem(p, 2))
         .properties(p -> p
-            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
             .food(DestroyFoods.MOONSHINE)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)
@@ -426,7 +420,6 @@ public class DestroyItems {
         .register(),
     THRICE_DISTILLED_MOONSHINE_BOTTLE = REGISTRATE.item("thrice_distilled_moonshine_bottle", p -> new AlcoholicDrinkItem(p, 3))
         .properties(p -> p
-            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
             .food(DestroyFoods.MOONSHINE)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)
@@ -437,7 +430,6 @@ public class DestroyItems {
     
     CHORUS_WINE_BOTTLE = REGISTRATE.item("chorus_wine_bottle", p -> new ChorusWineItem(p, 1))
         .properties(p -> p
-            .tab(DestroyCreativeModeTabs.TAB_DESTROY)
             .food(DestroyFoods.MOONSHINE)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)
@@ -449,30 +441,24 @@ public class DestroyItems {
     public static final ItemEntry<SequencedAssemblyItem>
 
     UNFINISHED_BLACKLIGHT = REGISTRATE.item("unfinished_blacklight", SequencedAssemblyItem::new)
-        .properties(p -> p
-            .tab(null)
-        ).register(),
+        .tab(null)
+        .register(),
     UNFINISHED_VOLTAIC_PILE = REGISTRATE.item("unfinished_voltaic_pile", SequencedAssemblyItem::new)
-        .properties(p -> p
-            .tab(null)
-        ).register(),
+        .tab(null)
+        .register(),
     UNPROCESSED_CONVERSION_CATALYST = REGISTRATE.item("unprocessed_conversion_catalyst", SequencedAssemblyItem::new)
-        .properties(p -> p
-            .tab(null)
-        ).register(),
+        .tab(null)
+        .register(),
     UNPROCESSED_MASHED_POTATO = REGISTRATE.item("unprocessed_mashed_potato", SequencedAssemblyItem::new)
-        .properties(p -> p
-            .tab(null)
-        ).register(),
+        .tab(null)
+        .register(),
     UNPROCESSED_NAPALM_SUNDAE = REGISTRATE.item("unprocessed_napalm_sundae", SequencedAssemblyItem::new)
-        .properties(p -> p
-            .tab(null)
-        ).tag(AllItemTags.UPRIGHT_ON_BELT.tag)
+        .tab(null)
+        .tag(AllItemTags.UPRIGHT_ON_BELT.tag)
         .register(),
     UNPROCESSED_SUPER_GLUE = REGISTRATE.item("unprocessed_super_glue", SequencedAssemblyItem::new)
-        .properties(p -> p
-            .tab(null)
-        ).register();
+        .tab(null)
+        .register();
 
     public static final ItemEntry<CombustibleItem>
 

@@ -3,7 +3,7 @@ package com.petrolpark.destroy.item;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 
 public class ContactExplosiveItem extends Item {
 
@@ -13,8 +13,8 @@ public class ContactExplosiveItem extends Item {
 
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (entity.isOnGround()) {
-            entity.getLevel().explode(entity, entity.getX(), entity.getY(), entity.getZ(), 0.5f, Explosion.BlockInteraction.NONE);
+        if (entity.onGround()) {
+            entity.level().explode(entity, entity.getX(), entity.getY(), entity.getZ(), 0.5f, Level.ExplosionInteraction.NONE);
             entity.kill();
             return true;
         };

@@ -14,9 +14,9 @@ import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer {
@@ -48,18 +48,18 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer {
 
     @Override
     @SuppressWarnings("null")
-    protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer, TransformType transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+    protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer, ItemDisplayContext transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         float partialTicks = AnimationTickHolder.getPartialTicks();
         int ticksThroughAnimation = AnimationTickHolder.getTicks(true) % 32;
         TransformStack msr = TransformStack.cast(ms);
 
         Minecraft mc = Minecraft.getInstance();
         boolean rightHanded = mc.options.mainHand().get() == HumanoidArm.RIGHT;
-        TransformType mainHand = rightHanded ? TransformType.FIRST_PERSON_RIGHT_HAND : TransformType.FIRST_PERSON_LEFT_HAND;
-        TransformType offHand = rightHanded ? TransformType.FIRST_PERSON_LEFT_HAND : TransformType.FIRST_PERSON_RIGHT_HAND;
+        ItemDisplayContext mainHand = rightHanded ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND;
+        ItemDisplayContext offHand = rightHanded ? ItemDisplayContext.FIRST_PERSON_LEFT_HAND : ItemDisplayContext.FIRST_PERSON_RIGHT_HAND;
         boolean animate = false;
 
-        int handModifier = transformType == TransformType.FIRST_PERSON_LEFT_HAND ? -1 : 1;
+        int handModifier = transformType == ItemDisplayContext.FIRST_PERSON_LEFT_HAND ? -1 : 1;
 
         boolean noControllerInMain = !DestroyItems.SEISMOMETER.isIn(mc.player.getMainHandItem()); // It thinks mc.player might be null
 

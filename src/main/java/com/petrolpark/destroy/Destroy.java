@@ -20,6 +20,7 @@ import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.pipeEffectHandler.MixtureOpenEndedPipeEffectHandler;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.compostable.DestroyCompostables;
+import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.item.potatoCannonProjectileType.DestroyPotatoCannonProjectileTypes;
 import com.petrolpark.destroy.item.tooltip.IDynamicItemDescription;
 import com.petrolpark.destroy.network.DestroyMessages;
@@ -95,6 +96,7 @@ public class Destroy {
         DestroyBlocks.register();
         DestroyMobEffects.register(modEventBus);
         DestroyItems.register();
+        DestroyCreativeModeTabs.register(modEventBus);
         DestroyRecipeTypes.register(modEventBus);
         DestroyParticleTypes.register(modEventBus);
         DestroyFluids.register();

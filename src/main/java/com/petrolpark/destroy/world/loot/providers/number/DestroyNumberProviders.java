@@ -2,7 +2,7 @@ package com.petrolpark.destroy.world.loot.providers.number;
 
 import com.petrolpark.destroy.Destroy;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.Serializer;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -12,7 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class DestroyNumberProviders {
 
-    public static final DeferredRegister<LootNumberProviderType> NUMBER_PROVIDERS = DeferredRegister.create(Registry.LOOT_NUMBER_PROVIDER_REGISTRY, Destroy.MOD_ID);
+    public static final DeferredRegister<LootNumberProviderType> NUMBER_PROVIDERS = DeferredRegister.create(Registries.LOOT_NUMBER_PROVIDER_TYPE, Destroy.MOD_ID);
 
     public static final RegistryObject<LootNumberProviderType> POLLUTION = register("pollution", new PollutionNumberProvider.Serializer());
 

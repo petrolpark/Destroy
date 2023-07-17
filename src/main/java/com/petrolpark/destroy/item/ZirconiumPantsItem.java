@@ -13,7 +13,7 @@ public class ZirconiumPantsItem extends ArmorItem {
     private static final String TEXTURE = Destroy.asResource("textures/entity/armor/zirconium.png").toString();
 
     public ZirconiumPantsItem(Properties properties) {
-        super(DestroyArmorMaterials.ZIRCONIUM, EquipmentSlot.LEGS, properties);
+        super(DestroyArmorMaterials.ZIRCONIUM, Type.LEGGINGS, properties);
     };
 
     @Override

@@ -10,11 +10,11 @@ import net.minecraft.world.item.ItemStack;
 
 public class HazmatSuitArmorItem extends ArmorItem {
 
-    private static String TEXTURE = Destroy.asResource("textures/models/armor/hazmat.png").toString();
-
-    public HazmatSuitArmorItem(EquipmentSlot slot, Properties properties) {
-        super(DestroyArmorMaterials.HAZMAT, slot, properties);
+    public HazmatSuitArmorItem(Type type, Properties properties) {
+        super(DestroyArmorMaterials.HAZMAT, type, properties);
     };
+
+    private static String TEXTURE = Destroy.asResource("textures/models/armor/hazmat.png").toString();
 
     @Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {

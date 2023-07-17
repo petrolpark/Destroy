@@ -14,7 +14,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.BlockHitResult;
@@ -40,8 +39,8 @@ public class DestroyPotatoCannonProjectileTypes {
         .knockback(0.5f)
         .renderTumbling()
         .soundPitch(0.95f)
-        .onEntityHit(explodeEntity(2, false, Explosion.BlockInteraction.BREAK))
-        .onBlockHit(explodeBlock(2, false, Explosion.BlockInteraction.BREAK))
+        .onEntityHit(explodeEntity(2, false, Level.ExplosionInteraction.TNT))
+        .onBlockHit(explodeBlock(2, false, Level.ExplosionInteraction.TNT))
         .registerAndAssign(DestroyItems.BOMB_BON.get()),
 
     BUTTER = create("butter")
@@ -233,7 +232,7 @@ public class DestroyPotatoCannonProjectileTypes {
     private static Predicate<EntityHitResult> setEffect(MobEffect effect, int amplifier, int ticks, boolean recoverable) {
 		return ray -> {
 			Entity entity = ray.getEntity();
-			if (entity.level.isClientSide)
+			if (entity.level().isClientSide())
 				return true;
 			if (entity instanceof LivingEntity) {
                 LivingEntity livingEntity = (LivingEntity) entity;
@@ -254,7 +253,7 @@ public class DestroyPotatoCannonProjectileTypes {
         };
     };
 
-    private static BiPredicate<LevelAccessor, BlockHitResult> explodeBlock(float radius, boolean causesFire, Explosion.BlockInteraction mode) {
+    private static BiPredicate<LevelAccessor, BlockHitResult> explodeBlock(float radius, boolean causesFire, Level.ExplosionInteraction mode) {
         return (world, ray) -> {
             if (world.isClientSide()) return true;
             BlockPos pos = ray.getBlockPos();
@@ -265,10 +264,10 @@ public class DestroyPotatoCannonProjectileTypes {
         };
     };
 
-    private static Predicate<EntityHitResult> explodeEntity(float radius, boolean causesFire, Explosion.BlockInteraction mode) {
+    private static Predicate<EntityHitResult> explodeEntity(float radius, boolean causesFire, Level.ExplosionInteraction mode) {
         return ray -> {
             Entity entity = ray.getEntity();
-            entity.getLevel().explode(entity, entity.getX(), entity.getY(), entity.getZ(), radius, causesFire, mode);
+            entity.level().explode(entity, entity.getX(), entity.getY(), entity.getZ(), radius, causesFire, mode);
             return false;
         };
     };

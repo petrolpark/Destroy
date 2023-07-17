@@ -5,7 +5,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.compat.jei.animation.HeatConditionRenderer;
 import com.simibubi.create.compat.jei.category.BasinCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
@@ -14,6 +13,7 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 
 @Mixin(BasinCategory.class)
 public class BasinCategoryMixin {
@@ -34,8 +34,8 @@ public class BasinCategoryMixin {
      */
     @SuppressWarnings("resource")
     @Inject(method = "draw", at = @At(value = "INVOKE", target = "getInstance"), cancellable = true) // Injects when it is writing "Heated", "Superheated", etc at the bottom of the screen
-    protected void drawInjection(BasinRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY, CallbackInfo ci) {
-        HeatConditionRenderer.drawHeatConditionName(Minecraft.getInstance().font, matrixStack, 9, 86, recipe.getRequiredHeat());
+    protected void drawInjection(BasinRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY, CallbackInfo ci) {
+        HeatConditionRenderer.drawHeatConditionName(Minecraft.getInstance().font, graphics, 9, 86, recipe.getRequiredHeat());
         ci.cancel(); // Don't execute the rest of the method
     };
 }

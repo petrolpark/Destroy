@@ -43,7 +43,7 @@ public class VillagerMixin {
     public void inUpdateSpecialPrices(Player player, CallbackInfo ci) {
         Villager thisVillager = (Villager)(Object)this;
         for (MerchantOffer trade : thisVillager.getOffers()) {
-            int change = (int)(50d * (double)PollutionHelper.getPollution(thisVillager.level, PollutionType.SMOG) / (double)PollutionType.SMOG.max);
+            int change = (int)(50d * (double)PollutionHelper.getPollution(thisVillager.level(), PollutionType.SMOG) / (double)PollutionType.SMOG.max);
             trade.addToSpecialPriceDiff(change);
         };
     };

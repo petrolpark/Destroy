@@ -17,10 +17,10 @@ public class IodineItem extends Item {
     @Override
     public boolean onEntityItemUpdate(ItemStack itemStack, ItemEntity itemEntity) {
 
-        if (itemEntity.isOnFire() && !itemEntity.getLevel().isClientSide()) {
-            EnderDragon dummyDragon = new EnderDragon(null, itemEntity.getLevel()); //create a dummy Ender Dragon
+        if (itemEntity.isOnFire() && !itemEntity.level().isClientSide()) {
+            EnderDragon dummyDragon = new EnderDragon(null, itemEntity.level()); //create a dummy Ender Dragon
 
-            AreaEffectCloud dragonBreath = new AreaEffectCloud(itemEntity.level, itemEntity.getX(), itemEntity.getY(),itemEntity.getZ());
+            AreaEffectCloud dragonBreath = new AreaEffectCloud(itemEntity.level(), itemEntity.getX(), itemEntity.getY(),itemEntity.getZ());
             dragonBreath.setParticle(ParticleTypes.DRAGON_BREATH);
             dragonBreath.setRadius(1.0F);
             dragonBreath.setDuration(100);
@@ -29,7 +29,7 @@ public class IodineItem extends Item {
             dragonBreath.setPos(itemEntity.getX(), itemEntity.getY(), itemEntity.getZ());
             dragonBreath.setOwner(dummyDragon);
 
-            itemEntity.getLevel().addFreshEntity(dragonBreath); //summon Dragon's breath
+            itemEntity.level().addFreshEntity(dragonBreath); //summon Dragon's breath
 
             itemEntity.kill(); //remove thrown Iodine (otherwise for some reason it executes twice)
             dummyDragon.kill(); //remove the dummy Dragon
