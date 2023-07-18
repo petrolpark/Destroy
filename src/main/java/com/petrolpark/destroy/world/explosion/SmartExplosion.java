@@ -36,7 +36,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
@@ -213,15 +213,14 @@ public class SmartExplosion extends Explosion {
         BlockState state = level.getBlockState(pos);
         if (level instanceof ServerLevel serverLevel) {
             BlockEntity blockEntity = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
-            LootContext.Builder builder = new LootContext.Builder(serverLevel)
-                .withRandomSource(random)
+            LootParams.Builder builder = new LootParams.Builder(serverLevel)
                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
                 .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
                 .withParameter(LootContextParams.EXPLOSION_RADIUS, radius)
                 .withOptionalParameter(LootContextParams.BLOCK_ENTITY, blockEntity)
                 .withOptionalParameter(LootContextParams.THIS_ENTITY, source)
                 .withOptionalParameter(DestroyLootContextParams.SMART_EXPLOSION, this);
-            if (getSourceMob() instanceof Player player) builder.withLuck(player.getLuck());
+            if (getDirectSourceEntity() instanceof Player player) builder.withLuck(player.getLuck());
             modifyLoot(pos, builder);
             addBlockDrops(pos, state.getDrops(builder));
         };
@@ -232,7 +231,7 @@ public class SmartExplosion extends Explosion {
      * @param pos The position of the Block State which is to be destroyed
      * @param builder The loot generation builder
      */
-    public void modifyLoot(BlockPos pos, LootContext.Builder builder) {};
+    public void modifyLoot(BlockPos pos, LootParams.Builder builder) {};
     
     /**
      * Deal with each Entity exploded.

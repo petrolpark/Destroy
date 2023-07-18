@@ -1,0 +1,28 @@
+{
+    "values": [
+        {
+          "id": "destroy:acid_burn",
+          "required": false
+        },
+        {
+          "id": "destroy:alcohol",
+          "required": false
+        },
+        {
+          "id": "destroy:base_burn",
+          "required": false
+        },
+        {
+          "id": "destroy:headache",
+          "required": false
+        },
+        {
+          "id": "destroy:needle",
+          "required": false
+        },
+        {
+            "id": "destroy:self_needle",
+            "required": false
+        }
+      ]
+}

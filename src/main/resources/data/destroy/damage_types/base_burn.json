@@ -1,0 +1,6 @@
+{
+    "exhaustion": 0.1,
+    "message_id": "destroy.base_burn",
+    "scaling": "always",
+    "effects": "burning"
+}

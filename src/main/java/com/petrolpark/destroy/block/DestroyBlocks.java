@@ -36,7 +36,7 @@ public class DestroyBlocks {
     private static CreateRegistrate REGISTRATE = Destroy.registrate();
 
     static {
-        REGISTRATE.defaultCreativeTab(DestroyCreativeModeTabs.TAB_DESTROY);
+        REGISTRATE.useCreativeTab(DestroyCreativeModeTabs.MAIN_TAB);
     };
 
     // BLOCK ENTITIES

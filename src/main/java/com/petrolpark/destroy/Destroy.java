@@ -30,8 +30,6 @@ import com.petrolpark.destroy.util.DestroyTags;
 import com.petrolpark.destroy.util.vat.VatMaterial;
 import com.petrolpark.destroy.world.loot.DestroyLoot;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
-import com.petrolpark.destroy.world.worldgen.DestroyOreFeatureConfigEntries;
-import com.petrolpark.destroy.world.worldgen.DestroyWorldGen;
 import com.simibubi.create.content.fluids.OpenEndedPipe;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
@@ -65,6 +63,10 @@ public class Destroy {
 
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MOD_ID);
 
+    static {
+        REGISTRATE.defaultCreativeTab(DestroyCreativeModeTabs.MAIN_TAB);
+    };
+
     public static final CreateRegistrate registrate() {
         return REGISTRATE;  
     };
@@ -91,18 +93,18 @@ public class Destroy {
         REGISTRATE.registerEventListeners(modEventBus);
 
         // Mod objects
+        DestroyCreativeModeTabs.register(modEventBus);
         DestroyTags.register();
         DestroyBlockEntityTypes.register();
         DestroyBlocks.register();
         DestroyMobEffects.register(modEventBus);
         DestroyItems.register();
-        DestroyCreativeModeTabs.register(modEventBus);
         DestroyRecipeTypes.register(modEventBus);
         DestroyParticleTypes.register(modEventBus);
         DestroyFluids.register();
-        DestroyOreFeatureConfigEntries.init();
+        //DestroyOreFeatureConfigEntries.init();
         DestroyCropMutations.register();
-        DestroyWorldGen.register(modEventBus);
+        //DestroyWorldGen.register(modEventBus);
         DestroyVillagers.register(modEventBus);
         // DestroyBadges.register(modEventBus);
         DestroyLoot.register(modEventBus);

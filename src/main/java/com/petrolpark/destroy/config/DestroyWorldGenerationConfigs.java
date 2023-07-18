@@ -1,7 +1,5 @@
 package com.petrolpark.destroy.config;
 
-import com.petrolpark.destroy.Destroy;
-
 import net.minecraftforge.common.ForgeConfigSpec.Builder;
 
 public class DestroyWorldGenerationConfigs extends DestroyConfigBase {
@@ -19,7 +17,7 @@ public class DestroyWorldGenerationConfigs extends DestroyConfigBase {
 	@Override
 	public void registerAll(Builder builder) {
 		super.registerAll(builder);
-		AllOreFeatureConfigEntries.fillConfig(builder, Destroy.MOD_ID);
+		//AllOreFeatureConfigEntries.fillConfig(builder, Destroy.MOD_ID);
 	};
 
 	@Override

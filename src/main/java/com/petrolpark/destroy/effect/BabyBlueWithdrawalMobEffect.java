@@ -1,7 +1,7 @@
 package com.petrolpark.destroy.effect;
 
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
-import com.petrolpark.destroy.world.DestroyDamageSources;
+import com.petrolpark.destroy.world.DestroyDamageTypes;
 
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,11 +26,11 @@ public class BabyBlueWithdrawalMobEffect extends UncurableMobEffect {
             if (livingEntity instanceof Player) {
                 livingEntity.getCapability(PlayerBabyBlueAddictionProvider.PLAYER_BABY_BLUE_ADDICTION).ifPresent(babyBlueAddiction -> {
                     if (duration % Math.round(100 / (Math.log(babyBlueAddiction.getBabyBlueAddiction() + 1))) == 0) { // Apply damage at a rate roughly equal to ln(baby blue addiction level)
-                        livingEntity.hurt(DestroyDamageSources.BABY_BLUE_OVERDOSE, 1f);
+                        livingEntity.hurt(DestroyDamageTypes.BABY_BLUE_OVERDOSE.source(livingEntity.level()), 1f);
                     }
                 });
             } else if (duration % 50 == 0) { // For non-players, deal damage at a set rate
-                livingEntity.hurt(DestroyDamageSources.BABY_BLUE_OVERDOSE, 1f);
+                livingEntity.hurt(DestroyDamageTypes.BABY_BLUE_OVERDOSE.source(livingEntity.level()), 1f);
             };
         };
         super.applyEffectTick(livingEntity, amplifier);

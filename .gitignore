@@ -27,3 +27,5 @@ tempdata
 # Files from Forge MDK
 forge*changelog.txt
 .DS_Store
+.apt_generated
+.apt_generated_tests

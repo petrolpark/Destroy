@@ -15,6 +15,7 @@ import com.simibubi.create.foundation.utility.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.AxisDirection;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -65,7 +66,7 @@ public class Vat {
         if (!tag.contains("LowerCorner", Tag.TAG_COMPOUND) || !tag.contains("UpperCorner", Tag.TAG_COMPOUND)) return Optional.empty();
         Vat vat = new Vat(NbtUtils.readBlockPos(tag.getCompound("LowerCorner")), NbtUtils.readBlockPos(tag.getCompound("UpperCorner")));
         vat.conductance = tag.getFloat("Conductance");
-        vat.weakestBlockState = NbtUtils.readBlockState(tag.getCompound("WeakestBlock"));
+        vat.weakestBlockState = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("WeakestBlock")); //TODO check works
         vat.maximumPressure = VatMaterial.BLOCK_MATERIALS.get(vat.weakestBlockState.getBlock()).maxPressure();
         return Optional.of(vat);
     };
