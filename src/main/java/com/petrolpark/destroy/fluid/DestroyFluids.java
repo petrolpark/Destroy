@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.fluid;
 
+import static com.petrolpark.destroy.Destroy.REGISTRATE;
+
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.fluid.MixtureFluid.MixtureFluidType;
 import com.simibubi.create.content.fluids.VirtualFluid;
@@ -10,8 +12,6 @@ import com.tterrag.registrate.util.entry.FluidEntry;
 import net.minecraft.resources.ResourceLocation;
 
 public class DestroyFluids {
-
-    private static CreateRegistrate REGISTRATE = Destroy.registrate();
     
     public static final FluidEntry<MixtureFluid> MIXTURE = REGISTRATE.virtualFluid("mixture",
         new ResourceLocation("destroy", "fluid/mixture_still"),

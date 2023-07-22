@@ -61,15 +61,7 @@ public class Destroy {
 
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MOD_ID);
-
-    static {
-        REGISTRATE.defaultCreativeTab(DestroyCreativeModeTabs.MAIN_TAB);
-    };
-
-    public static final CreateRegistrate registrate() {
-        return REGISTRATE;  
-    };
+    public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MOD_ID);
 
     public static ResourceLocation asResource(String path) {
         return new ResourceLocation(MOD_ID, path);
@@ -143,7 +135,6 @@ public class Destroy {
         event.enqueueWork(() -> {
             DestroyMessages.register();
             DestroyCompostables.register();
-            DestroyVillagers.registerPOIs();
         });
         VatMaterial.registerDestroyVatMaterials();
         OpenEndedPipe.registerEffectHandler(new MixtureOpenEndedPipeEffectHandler());

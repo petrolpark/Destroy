@@ -165,7 +165,7 @@ dependencies {
     implementation fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
 
     // Blueprint
-    //implementation fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
+    implementation fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
 }
 
 jar {

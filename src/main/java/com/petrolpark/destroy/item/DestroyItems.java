@@ -1,8 +1,9 @@
 package com.petrolpark.destroy.item;
 
+import static com.petrolpark.destroy.Destroy.REGISTRATE;
 import static com.simibubi.create.AllTags.forgeItemTag;
 
-import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.item.food.DestroyFoods;
 import com.petrolpark.destroy.item.renderer.GasMaskModel;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
@@ -26,7 +27,9 @@ import net.minecraftforge.common.Tags;
 
 public class DestroyItems {
 
-    private static CreateRegistrate REGISTRATE = Destroy.registrate();
+    static {
+        REGISTRATE.useCreativeTab(DestroyCreativeModeTabs.MAIN_TAB);
+    };
 
     public static final ItemEntry<Item> LOGO = REGISTRATE.item("logo", Item::new)
         .tab(null)

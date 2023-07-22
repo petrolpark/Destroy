@@ -1,6 +1,7 @@
 package com.petrolpark.destroy.block.entity;
 
-import com.petrolpark.destroy.Destroy;
+import static com.petrolpark.destroy.Destroy.REGISTRATE;
+
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.instance.CentrifugeCogInstance;
 import com.petrolpark.destroy.block.instance.DynamoCogInstance;
@@ -13,12 +14,9 @@ import com.petrolpark.destroy.block.renderer.PollutometerRenderer;
 import com.petrolpark.destroy.block.renderer.PumpjackRenderer;
 import com.petrolpark.destroy.block.renderer.VatRenderer;
 import com.petrolpark.destroy.block.renderer.VatSideRenderer;
-import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 public class DestroyBlockEntityTypes {
-
-    private static CreateRegistrate REGISTRATE = Destroy.registrate();
 
     public static final BlockEntityEntry<AgingBarrelBlockEntity> AGING_BARREL = REGISTRATE.blockEntity("aging_barrel", AgingBarrelBlockEntity::new)
         .validBlocks(DestroyBlocks.AGING_BARREL)

@@ -1,8 +1,8 @@
 package com.petrolpark.destroy.block;
 
+import static com.petrolpark.destroy.Destroy.REGISTRATE;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.display.PollutometerDisplaySource;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.block.model.CopycatBlockModel;
@@ -32,8 +32,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.Tags;
 
 public class DestroyBlocks {
-
-    private static CreateRegistrate REGISTRATE = Destroy.registrate();
 
     static {
         REGISTRATE.useCreativeTab(DestroyCreativeModeTabs.MAIN_TAB);
