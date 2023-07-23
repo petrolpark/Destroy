@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "destroy:bonds",
-		"particle": "destroy:bonds"
+		"0": "destroy:chemistry/bonds",
+		"particle": "destroy:chemistry/bonds"
 	},
 	"elements": [
 		{

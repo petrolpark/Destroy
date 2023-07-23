@@ -69,7 +69,7 @@ public abstract class HoverableTextCategory<T extends Recipe<?>> extends Destroy
         // Render hoverable paragraphs
         for (LinesAndActivationAreas paragraph : paragraphs) {
             for (int i = 0; i < paragraph.lines().size(); i++) {
-                graphics.drawString(font, paragraph.lines().get(i), paragraph.startX(), paragraph.startY() + (i * font.lineHeight), 0xFFFFFF);
+                graphics.drawString(font, paragraph.lines().get(i), paragraph.startX(), paragraph.startY() + (i * font.lineHeight), 0xFFFFFF, false);
             };
         };
 

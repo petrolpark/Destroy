@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import org.joml.Quaternionf;
 
 import com.google.common.collect.ImmutableList;
+import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.chemistry.Atom;
@@ -158,6 +159,7 @@ public class MoleculeRenderer {
         PoseStack poseStack = graphics.pose();
         poseStack.pushPose();
         poseStack.translate(xPosition + xOffset, yPosition + yOffset, zOffset + 100);
+        TransformStack.cast(poseStack).rotateY(AnimationTickHolder.getRenderTime());
         for (Pair<Vec3, IRenderableMoleculePart> pair : RENDERED_OBJECTS) {
             pair.getSecond().render(graphics, pair.getFirst());
         };

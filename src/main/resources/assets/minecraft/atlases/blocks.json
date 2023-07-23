@@ -1,0 +1,68 @@
+{
+    "sources": [
+      {
+        "type": "single",
+        "resource": "destroy:fluid/chorus_wine"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:fluid/cream"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:fluid/crude_oil"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:fluid/diesel"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:fluid/fuel_oil"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:fluid/kerosene"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:fluid/lpq"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:fluid/mixture_flow"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:fluid/mixture_still"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:fluid/molten_cinnabar"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:fluid/napalm_sundae"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:fluid/naptha"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:fluid/petrol"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:fluid/urine"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:chemistry/bonds"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:chemistry/elements"
+      }
+    ]
+  }

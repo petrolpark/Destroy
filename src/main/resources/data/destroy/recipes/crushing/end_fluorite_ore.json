@@ -2,7 +2,7 @@
     "type": "create:crushing",
     "ingredients": [
       {
-        "item": "destroy:deepslate_fluorite_ore"
+        "item": "destroy:end_fluorite_ore"
       }
     ],
     "results": [

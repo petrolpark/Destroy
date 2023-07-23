@@ -16,12 +16,12 @@
         "chance": 0.5
       },
       {
-        "item": "create:crushed_iron_ore",
+        "item": "create:crushed_raw_iron",
         "count": 1,
         "chance": 0.1
       },
       {
-        "item": "create:crushed_platinum_ore",
+        "item": "create:crushed_raw_platinum",
         "count": 1,
         "chance": 0.02
       }

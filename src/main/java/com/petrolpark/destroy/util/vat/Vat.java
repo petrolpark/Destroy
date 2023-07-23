@@ -62,11 +62,12 @@ public class Vat {
         this.upperCorner = upperCorner;
     };
 
+    @SuppressWarnings("deprecation")
     public static Optional<Vat> read(CompoundTag tag) {
         if (!tag.contains("LowerCorner", Tag.TAG_COMPOUND) || !tag.contains("UpperCorner", Tag.TAG_COMPOUND)) return Optional.empty();
         Vat vat = new Vat(NbtUtils.readBlockPos(tag.getCompound("LowerCorner")), NbtUtils.readBlockPos(tag.getCompound("UpperCorner")));
         vat.conductance = tag.getFloat("Conductance");
-        vat.weakestBlockState = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("WeakestBlock")); //TODO check works
+        vat.weakestBlockState = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("WeakestBlock"));
         vat.maximumPressure = VatMaterial.BLOCK_MATERIALS.get(vat.weakestBlockState.getBlock()).maxPressure();
         return Optional.of(vat);
     };

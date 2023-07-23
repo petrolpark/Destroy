@@ -2,7 +2,7 @@
     "type": "create:mixing",
     "ingredients": [
       {
-        "item": "create:crushed_iron_ore"
+        "item": "create:crushed_raw_iron"
       },
       {
         "tag": "forge:dusts/zinc"

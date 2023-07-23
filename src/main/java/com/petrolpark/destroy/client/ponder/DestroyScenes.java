@@ -129,7 +129,6 @@ public class DestroyScenes {
 			Villager villagerEntity = EntityType.VILLAGER.create(w);
 			Vec3 v = util.vector.topOf(new BlockPos(1, 0, 0));
             villagerEntity.setVillagerData(new VillagerData(VillagerType.PLAINS, DestroyVillagers.INNKEEPER.get(), 0));
-            //villagerEntity.animationPosition = 0; // TODO stop villager walking
 			villagerEntity.setPos(v.x, v.y, v.z);
             villagerEntity.xo = v.x;
             villagerEntity.yo = v.y;

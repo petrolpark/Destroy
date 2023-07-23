@@ -6,10 +6,10 @@
         "amount": 250
       },
       {
-        "item": "create:crushed_lead_ore"
+        "item": "create:crushed_raw_lead"
       },
       {
-        "item": "create:crushed_lead_ore"
+        "item": "create:crushed_raw_lead"
       },
       {
         "tag": "forge:dyes/black"

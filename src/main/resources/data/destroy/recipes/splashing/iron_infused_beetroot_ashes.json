@@ -7,11 +7,11 @@
     ],
     "results": [
       {
-        "item": "create:crushed_iron_ore",
+        "item": "create:crushed_raw_iron",
         "count": 1
       },
       {
-        "item": "create:crushed_iron_ore",
+        "item": "create:crushed_raw_iron",
         "count": 1,
         "chance": 0.5
       },

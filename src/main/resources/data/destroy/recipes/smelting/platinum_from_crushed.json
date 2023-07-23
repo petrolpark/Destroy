@@ -1,7 +1,7 @@
 {
     "type": "minecraft:smelting",
     "ingredient": {
-      "item": "create:crushed_platinum_ore"
+      "item": "create:crushed_raw_platinum"
     },
     "result": "destroy:platinum_ingot",
     "experience": 1.0,
