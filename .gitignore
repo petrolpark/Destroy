@@ -25,7 +25,7 @@ run
 tempdata
 
 # Files from Forge MDK
-#.DS_Store
+.DS_Store
 forge*changelog.txt
 .apt_generated
 .apt_generated_tests
