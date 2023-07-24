@@ -483,7 +483,7 @@ public class DestroyServerEvents {
                     return crudeOil.getAmount();
                 }).orElse(0) / 1000;
                 // Let the Player know how much Oil there is
-                player.displayClientMessage(DestroyLang.translate("tooltip.seismometer.crude_oil", bucketsOfOil).component(), false);
+                if (!level.isClientSide()) player.displayClientMessage(DestroyLang.translate("tooltip.seismometer.crude_oil", bucketsOfOil).component(), true);
                 // Update the animation of the Seismometer(s)
                 if (player instanceof ServerPlayer serverPlayer) DestroyMessages.sendToClient(new SeismometerSpikeS2CPacket(), serverPlayer);
                 // Award Advancement if some oil was found

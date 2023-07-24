@@ -28,7 +28,7 @@ public class HeatConditionRenderer {
         } else {
             name = Lang.translate(requiredHeat.getTranslationKey()).component();
         };
-        graphics.drawString(font, name, x, y, requiredHeat.getColor()); // This is equivalent of the line being overwritten
+        graphics.drawString(font, name, x, y, requiredHeat.getColor(), false); // This is equivalent of the line being overwritten
     };
 
     /**

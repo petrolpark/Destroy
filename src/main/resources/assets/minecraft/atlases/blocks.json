@@ -63,6 +63,14 @@
       {
         "type": "single",
         "resource": "destroy:chemistry/elements"
+      },
+      {
+        "type": "single",
+        "resource": "minecraft:entity/skeleton/stray"
+      },
+      {
+        "type": "single",
+        "resource": "minecraft:entity/skeleton/stray_overlay"
       }
     ]
   }

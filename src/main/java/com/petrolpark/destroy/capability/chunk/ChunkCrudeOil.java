@@ -45,6 +45,10 @@ public class ChunkCrudeOil {
         return amount;
     };
 
+    public void decreaseAmount(int decrease) {
+        amount = (int)Math.max(0, amount - decrease);
+    };
+
     public static class Provider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
         public static Capability<ChunkCrudeOil> CHUNK_CRUDE_OIL = CapabilityManager.get(new CapabilityToken<ChunkCrudeOil>() {});

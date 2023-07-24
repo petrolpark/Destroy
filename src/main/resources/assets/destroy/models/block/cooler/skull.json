@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "entity/skeleton/stray",
-		"2": "entity/skeleton/stray_overlay",
-		"particle": "entity/skeleton/stray_overlay"
+		"1": "minecraft:entity/skeleton/stray",
+		"2": "minecraft:entity/skeleton/stray_overlay",
+		"particle": "minecraft:entity/skeleton/stray_overlay"
 	},
 	"elements": [
 		{

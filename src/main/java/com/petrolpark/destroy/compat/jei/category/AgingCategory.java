@@ -103,7 +103,7 @@ public class AgingCategory extends DestroyRecipeCategory<AgingRecipe> {
         DestroyGuiTextures.JEI_TEXT_BOX_LONG.render(graphics, 4, 63);
         int seconds = (recipe.getProcessingDuration() % 1200) / 20;
         graphics.drawString(Minecraft.getInstance().font, DestroyLang.translate("tooltip.aging_barrel.aging_time", ""+ recipe.getProcessingDuration() / 1200 + ":" + (seconds < 10 ? "0" : "") + seconds).string(), 9,
-				69, 0xFFFFFF);
+				69, 0xFFFFFF, false);
 
     };
     

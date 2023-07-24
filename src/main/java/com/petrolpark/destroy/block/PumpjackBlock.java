@@ -46,6 +46,11 @@ public class PumpjackBlock extends Block implements IBE<PumpjackBlockEntity> {
         builder.add(FACING);
     };
 
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        IBE.onRemove(state, level, pos, newState);
+    };
+
     public static Direction getFacing(BlockState state) {
         return state.getValue(FACING);
     };

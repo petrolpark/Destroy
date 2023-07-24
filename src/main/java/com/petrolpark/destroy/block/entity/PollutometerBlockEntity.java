@@ -64,7 +64,7 @@ public class PollutometerBlockEntity extends SmartBlockEntity {
 
         @Override
         public Vec3 getLocalOffset(BlockState state) {
-            return VecHelper.rotateCentered(VecHelper.voxelSpace(8, 6, 13f), AngleHelper.horizontalAngle(getSide()), Axis.Y);
+            return VecHelper.rotateCentered(getSouthLocation(), AngleHelper.horizontalAngle(getSide()), Axis.Y);
         };
 
         @Override
@@ -74,12 +74,7 @@ public class PollutometerBlockEntity extends SmartBlockEntity {
 
         @Override
         protected Vec3 getSouthLocation() {
-            return VecHelper.voxelSpace(8, 6, 13f);
-        };
-
-        @Override
-        public float getScale() {
-            return 0.35f;
+            return VecHelper.voxelSpace(8, 6, 12.75f);
         };
     };
     

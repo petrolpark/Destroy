@@ -9,11 +9,14 @@ import com.petrolpark.destroy.Destroy;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.utility.Color;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class DestroyIcons extends AllIcons {
 
@@ -43,31 +46,32 @@ public class DestroyIcons extends AllIcons {
 		RenderSystem.setShaderTexture(0, DESTROY_ICON_ATLAS);
 	};
 
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public void render(GuiGraphics graphics, int x, int y) {
+		graphics.blit(DESTROY_ICON_ATLAS, x, y, 0, iconX, iconY, 16, 16, 256, 256);
+	};
+
     /**
-     * All copied from the {@link com.simibubi.create.foundation.gui.AllIcons#render Create source code}.
+     * All copied from the {@link com.simibubi.create.foundation.gui.AllIcons#render Create source code}, with DESTROY_ICON_ATLAS instead of Create's.
      */
     @Override
     public void render(PoseStack ms, MultiBufferSource buffer, int color) {
-		VertexConsumer builder = buffer.getBuffer(RenderType.textSeeThrough(DESTROY_ICON_ATLAS));
+		VertexConsumer builder = buffer.getBuffer(RenderType.text(DESTROY_ICON_ATLAS));
 		Matrix4f matrix = ms.last().pose();
 		Color rgb = new Color(color);
 		int light = LightTexture.FULL_BRIGHT;
-
-		Vec3 vec1 = new Vec3(0, 0, 0);
-		Vec3 vec2 = new Vec3(0, 1, 0);
-		Vec3 vec3 = new Vec3(1, 1, 0);
-		Vec3 vec4 = new Vec3(1, 0, 0);
 
 		float u1 = iconX * 1f / DESTROY_ICON_ATLAS_SIZE;
 		float u2 = (iconX + 16) * 1f / DESTROY_ICON_ATLAS_SIZE;
 		float v1 = iconY * 1f / DESTROY_ICON_ATLAS_SIZE;
 		float v2 = (iconY + 16) * 1f / DESTROY_ICON_ATLAS_SIZE;
 
-		vertex(builder, matrix, vec1, rgb, u1, v1, light);
-		vertex(builder, matrix, vec2, rgb, u1, v2, light);
-		vertex(builder, matrix, vec3, rgb, u2, v2, light);
-		vertex(builder, matrix, vec4, rgb, u2, v1, light);
-	}
+		vertex(builder, matrix, new Vec3(0, 0, 0), rgb, u1, v1, light);
+		vertex(builder, matrix, new Vec3(0, 1, 0), rgb, u1, v2, light);
+		vertex(builder, matrix, new Vec3(1, 1, 0), rgb, u2, v2, light);
+		vertex(builder, matrix, new Vec3(1, 0, 0), rgb, u2, v1, light);
+	};
 
     /** 
      * All copied from the {@link com.simibubi.create.foundation.gui.AllIcons#vertex Create source code}.
