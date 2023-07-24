@@ -42,8 +42,8 @@ import net.minecraftforge.fml.DistExecutor;
 public class PumpjackBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 
     public SmartFluidTankBehaviour tank;
-    public PollutingBehaviour pollutionBehaviour;
-    public DestroyAdvancementBehaviour advancementBehaviour;
+    protected PollutingBehaviour pollutionBehaviour;
+    protected DestroyAdvancementBehaviour advancementBehaviour;
 
     public WeakReference<PumpjackCamBlockEntity> source;
 
