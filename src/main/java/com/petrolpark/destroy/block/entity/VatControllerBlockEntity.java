@@ -46,8 +46,15 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     protected Optional<Vat> vat;
 
     protected Mixture cachedMixture;
+    /**
+     * The power (in W) being supplied to this Vat. This can be positive (if the Vat is
+     * being heated) or negative (if it is being cooled).
+     */
+    protected float heatingPower;
+
     protected SmartFluidTankBehaviour tankBehaviour;
     protected LazyOptional<IFluidHandler> fluidCapability;
+
     protected boolean full;
 
     protected WhenTargetedBehaviour targetedBehaviour;
@@ -94,12 +101,24 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         if (initializationTicks > 0) {
             initializationTicks--;
         };
+
+        if (getVatOptional().isEmpty()) return;
+        Vat vat = getVatOptional().get();
+        if (tankBehaviour.isEmpty()) return;
+        float energyChange = heatingPower;
+        energyChange += (LevelPollution.getLocalTemperature(getLevel(), getBlockPos()) - cachedMixture.getTemperature()) * vat.getConductance(); // Fourier's Law (sort of)
+        if (Math.abs(energyChange) > 0.0001f) {
+            cachedMixture.heat(1000 * energyChange / getTank().getFluidAmount()); // 1000 converts getFluidAmount() in mB to Buckets
+        };
+        updateFluidMixture();
+        sendData();
     };
 
     @Override
     protected void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
         full = tag.getBoolean("Full");
+        heatingPower = tag.getFloat("HeatingPower");
         if (tag.contains("Vat", Tag.TAG_COMPOUND)) {
             vat = Vat.read(tag.getCompound("Vat"));
             finalizeVatConstruction();
@@ -114,6 +133,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     protected void write(CompoundTag tag, boolean clientPacket) {
         super.write(tag, clientPacket);
         tag.putBoolean("Full", full);
+        tag.putFloat("HeatingPower", heatingPower);
         if (vat.isPresent()) {
             CompoundTag vatTag = new CompoundTag();
             vat.get().write(vatTag);
@@ -175,7 +195,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             full = false;
         };
         updateCachedMixture();
-        setChanged();
+        sendData();
     };
 
     public Optional<Vat> getVatOptional() {
@@ -187,6 +207,10 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         return vat.get().getCapacity();
     };
 
+    /**
+     * Set the cached Mixture to the Mixture stored in the NBT of the contained Fluid.
+     * @see VatControllerBlockEntity#updateFluidMixture Doing the opposite
+     */
     private void updateCachedMixture() {
         Mixture emptyMixture = new Mixture();
         if (!getVatOptional().isPresent()) {
@@ -199,6 +223,15 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             return;
         };
         cachedMixture = Mixture.readNBT(getTank().getFluid().getOrCreateTag().getCompound("Mixture"));
+    };
+
+    /**
+     * Set the Mixture stored in the NBT of the contained Fluid to the cached Mixture.
+     * @see VatControllerBlockEntity#updateCachedMixture Doing the opposite
+     */
+    private void updateFluidMixture() {
+        int amount = getTank().getFluidAmount();
+        getTank().setFluid(MixtureFluid.of(amount, cachedMixture, ""));
     };
 
     /**
@@ -227,7 +260,9 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                 vatSide.setConsumedItem(new ItemStack(oldState.getBlock().asItem())); // Required to co-operate with the Copycat Block's internals
                 vatSide.controllerPosition = getBlockPos();
                 vatSide.direction = newVat.get().whereIsSideFacing(pos);
-                vatSide.updateDisplayType(pos.relative(vatSide.direction));
+                BlockPos adjacentPos = pos.relative(vatSide.direction);
+                vatSide.updateDisplayType(adjacentPos);
+                vatSide.setPowerFromAdjacentBlock(adjacentPos);
                 vatSide.notifyUpdate();
             });
         });
@@ -268,6 +303,9 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                 });
             };
         });
+        heatingPower = 0f;
+
+        //TODO evaporation
 
         vat = Optional.empty();
         underDeconstruction = false;
@@ -314,6 +352,11 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         } else {
             return 0f;
         }
+    };
+
+    public void changeHeatingPower(float powerChange) {
+        heatingPower += powerChange;
+        sendData();
     };
 
     public float getTemperature() {

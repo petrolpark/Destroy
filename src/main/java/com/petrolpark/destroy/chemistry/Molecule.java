@@ -519,6 +519,7 @@ public class Molecule implements INameableProduct {
         private Boolean hasForcedDensity = false; // Whether this molecule has a custom density or it should be calculated
         private Boolean hasForcedBoilingPoint = false; // Whether this molecule has a custom boiling point or it should be calculated
         private Boolean hasForcedDipoleMoment = false; // Whether this molecule has a forced dipole moment or it should be calculated
+        private Boolean hasForcedSpecificHeatCapacity = false; // Whether this molecule has a forced specific heat capacity or it should be calculated
 
         private String translationKey;
 
@@ -618,6 +619,17 @@ public class Molecule implements INameableProduct {
         };
 
         /**
+         * Set the {@link Molecule#specificHeatCapacity specific heat capacity} of this Molecule,
+         * in joules per kilogram-kelvin.
+         * @return This Molecule Builder
+         */
+        public MoleculeBuilder specificHeatCapacity(float specificHeatCapacity) {
+            molecule.specificHeatCapacity = specificHeatCapacity;
+            hasForcedSpecificHeatCapacity = true;
+            return this;
+        };
+
+        /**
          * Sets the {@link Molecule#translationKey translation key} of this Molecule, so that the full translation key is {@code <namespace>.chemical.<translationKey>}.
          * @param translationKey The last term in the full translation key (e.g. {@code acetone} not {@code destroy.chemical.acetone}.)
          * @return This Molecule Builder
@@ -694,6 +706,10 @@ public class Molecule implements INameableProduct {
 
             if (!hasForcedDipoleMoment) {
                 molecule.dipoleMoment = calculateDipoleMoment();
+            };
+
+            if (!hasForcedSpecificHeatCapacity) {
+                molecule.specificHeatCapacity = 1000;
             };
             
             if (molecule.color == 0) {

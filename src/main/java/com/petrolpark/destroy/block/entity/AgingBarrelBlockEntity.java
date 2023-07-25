@@ -11,7 +11,6 @@ import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.recipe.AgingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
-import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
@@ -200,8 +199,9 @@ public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGog
         if (newState != oldState) {
             getLevel().setBlockAndUpdate(getBlockPos(), newState); // This is the bit it thinks might be null
             sendData();
-            if (newState.getValue(AgingBarrelBlock.PROGRESS) != 0) DestroySoundEvents.AGING_BARREL_BALLOON.playOnServer(level, getBlockPos());
-            if (timer < 0) DestroySoundEvents.AGING_BARREL_OPEN.playOnServer(level, getBlockPos()); // If the Barrel has been opened
+            // TODO uncomment once sound has been implemented
+            //if (newState.getValue(AgingBarrelBlock.PROGRESS) != 0) DestroySoundEvents.AGING_BARREL_BALLOON.playOnServer(level, getBlockPos());
+            //if (timer < 0) DestroySoundEvents.AGING_BARREL_OPEN.playOnServer(level, getBlockPos()); // If the Barrel has been opened
         };
     };
 

@@ -72,7 +72,7 @@ public class ReactionInBasinRecipe extends MixingRecipe {
             // Set the duration of the Recipe to the time it took to React
             builder.duration(duration);
             // Add the resultant Mixture to the results for this Recipe
-            FluidStack outputMixtureStack = MixtureFluid.of(totalAmount, mixture, "");
+            FluidStack outputMixtureStack = MixtureFluid.of(result.amount(), mixture, "");
             builder.output(outputMixtureStack);
 
             // Add all the given Fluid Stacks as "required ingredients"
@@ -109,9 +109,10 @@ public class ReactionInBasinRecipe extends MixingRecipe {
 
     /**
      * The outcome of {@link com.petrolpark.destroy.chemistry.Reaction reacting} a {@link com.petrolpark.destroy.chemistry.Reaction Mixture} in a Basin.
-     * @param ticks The number of ticks it took for the Mixture to reach equilibrium.
-     * @param reactionResults The {@link com.petrolpark.destroy.chemistry.ReactionResult results} of Reacting this Mixture.
+     * @param ticks The number of ticks it took for the Mixture to reach equilibrium
+     * @param reactionResults The {@link com.petrolpark.destroy.chemistry.ReactionResult results} of Reacting this Mixture
+     * @param amount The amount (in mB) of resultant Mixture
      */
-    public static record ReactionInBasinResult(int ticks, List<ReactionResult> reactionResults) {};
+    public static record ReactionInBasinResult(int ticks, List<ReactionResult> reactionResults, int amount) {};
     
 };

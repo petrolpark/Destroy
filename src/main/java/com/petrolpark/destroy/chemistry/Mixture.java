@@ -301,9 +301,31 @@ public class Mixture extends ReadOnlyMixture {
      * Add or take heat from this Mixture.
      * @param energy In joules per bucket
      */
-    public void heat(float energy) {
+    public void heat(float energyDensity) {
         // We have assumed that the latent heat of all substances is 0
-        temperature += energy / getVolumetricHeatCapacity();
+        temperature += energyDensity / getVolumetricHeatCapacity();
+    };
+
+    /**
+     * Corrects the volume of this Mixture, to prevent things like Mixtures containing
+     * 1M water and nothing else (which is physically impossible). This is mutative.
+     * @param initialVolume The initial volume (in mB)
+     * @return The new volume (in mB) of this Mixture
+     */
+    public int recalculateVolume(int initialVolume) {
+        double initialVolumeInBuckets = (double)initialVolume / 1000d;
+        double newVolumeInBuckets = 0d;
+        Map<Molecule, Double> molesOfMolecules = new HashMap<>();
+        for (Entry<Molecule, Float> entry : contents.entrySet()) {
+            Molecule molecule = entry.getKey();
+            double molesOfMolecule = entry.getValue() * initialVolumeInBuckets;
+            molesOfMolecules.put(molecule, molesOfMolecule);
+            newVolumeInBuckets += molesOfMolecule / molecule.getPureConcentration();
+        };
+        for (Entry<Molecule, Double> entry : molesOfMolecules.entrySet()) {
+            contents.replace(entry.getKey(), (float)(entry.getValue() / newVolumeInBuckets));
+        };
+        return (int)(newVolumeInBuckets * 1000);
     };
 
     /**
@@ -346,7 +368,9 @@ public class Mixture extends ReadOnlyMixture {
             };
         };
 
-        return new ReactionInBasinResult(ticks, results);
+        int amount = recalculateVolume(volume);
+
+        return new ReactionInBasinResult(ticks, results, amount);
     };
 
     /**

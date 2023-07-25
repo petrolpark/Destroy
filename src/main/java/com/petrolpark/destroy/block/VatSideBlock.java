@@ -61,7 +61,7 @@ public class VatSideBlock extends CopycatBlock {
                     vatSide.setDisplayType(DisplayType.NORMAL);
                     return InteractionResult.SUCCESS;
                 } default:
-                    return InteractionResult.PASS;
+                    return InteractionResult.PASS;  
             }
         });
     };
@@ -71,6 +71,7 @@ public class VatSideBlock extends CopycatBlock {
         withBlockEntityDo(level, pos, be -> {
             if (!(be instanceof VatSideBlockEntity vatSide)) return;
             vatSide.updateDisplayType(neighbor);
+            vatSide.setPowerFromAdjacentBlock(neighbor);   
         });
     };
 

@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.capability.blockEntity.VatTankCapability;
 import com.petrolpark.destroy.util.DestroyLang;
+import com.petrolpark.destroy.util.vat.IVatHeaterBlock;
 import com.petrolpark.destroy.util.vat.Vat;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
@@ -55,6 +56,12 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     protected SmartFluidTankBehaviour inputBehaviour;
     protected LazyOptional<IFluidHandler> fluidCapability;
 
+    /**
+     * The power in/output from a {@link com.petrolpark.destroy.util.vat.IVatHeaterBlock heater or cooler} this
+     * Vat Side had last time its adjacent block was changed.
+     */
+    protected float oldPower;
+
     public Direction direction; // The outward direction this side is facing
     public BlockPos controllerPosition;
 
@@ -67,6 +74,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         displayType = DisplayType.NORMAL;
         spoutingTicks = 0;
         spoutingFluid = FluidStack.EMPTY;
+        oldPower = 0f;
     };
 
     @Override
@@ -162,9 +170,10 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             direction = Direction.values()[tag.getInt("Side")];
         } else {
             direction = null;
-        }
+        };
         controllerPosition = NbtUtils.readBlockPos(tag.getCompound("ControllerPosition"));
         displayType = DisplayType.values()[tag.getInt("DisplayType")];
+        oldPower = tag.getFloat("OldHeatingPower");
         if (clientPacket) {
             spoutingTicks = tag.getInt("SpoutingTicks");
             spoutingFluid = FluidStack.loadFluidStackFromNBT(tag.getCompound("SpoutingFluid"));
@@ -177,6 +186,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         if (direction != null) tag.putInt("Side", direction.ordinal());
         if (controllerPosition != null) tag.put("ControllerPosition", NbtUtils.writeBlockPos(controllerPosition));
         tag.putInt("DisplayType", displayType.ordinal());
+        tag.putFloat("OldHeatingPower", oldPower);
         if (clientPacket) {
             tag.putInt("SpoutingTicks", spoutingTicks);
             if (!spoutingFluid.isEmpty()) tag.put("SpoutingFluid", spoutingFluid.writeToNBT(new CompoundTag()));
@@ -226,6 +236,16 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     public void setMaterial(BlockState blockState) {
         if (blockState.is(DestroyBlocks.VAT_SIDE.get())) return;
         super.setMaterial(blockState);
+    };
+
+    public void setPowerFromAdjacentBlock(BlockPos heaterPos) {
+        VatControllerBlockEntity vatController = getController();
+        if (vatController == null) return;
+        float newPower = IVatHeaterBlock.getHeatingPower(getLevel(), heaterPos, direction.getOpposite());
+        if (newPower == oldPower) return;
+        vatController.changeHeatingPower(newPower - oldPower);
+        oldPower = newPower;
+        sendData();
     };
 
     public static enum DisplayType {
@@ -278,6 +298,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         switch (getDisplayType()) {
             case THERMOMETER: {
                 DestroyLang.translate("tooltip.vat.temperature", df.format(getController().getTemperature())).style(ChatFormatting.WHITE).forGoggles(tooltip);
+                DestroyLang.builder().add(Component.literal(Float.toString(getController().heatingPower))).forGoggles(tooltip); // Temporary
                 break;
             } case BAROMETER: {
                 Vat vat = getVatOptional().get();

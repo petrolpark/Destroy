@@ -26,13 +26,15 @@ public interface IVatHeaterBlock {
     public static float getHeatingPower(Level level, BlockPos blockPos, Direction face) {
         BlockState state = level.getBlockState(blockPos);
 
+        if (state.isAir()) return 0f;
+
         // IVatHeaters
         if (state.getBlock() instanceof IVatHeaterBlock heater) {
             return heater.getHeatingPower(level, state, blockPos, face);
         };
 
         // Blaze Burners, Coolers, etc.
-        if (state.hasProperty(BlazeBurnerBlock.HEAT_LEVEL)) {
+        if (state.hasProperty(BlazeBurnerBlock.HEAT_LEVEL) && face == Direction.UP) {
             HeatLevel heatLevel = state.getValue(BlazeBurnerBlock.HEAT_LEVEL);
             if (heatLevel == HeatLevel.KINDLED) {
                 return 15000f;
