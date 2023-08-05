@@ -97,12 +97,42 @@ public final class DestroyMolecules {
         // Couldn't find heat capacity
         .build(),
 
+    BENZENE = builder()
+        .id("benzene")
+        .structure(Formula.deserialize("destroy:benzene:,,,,"))
+        .boilingPoint(80.1f)
+        .density(876.5f)
+        .molarHeatCapacity(134.8f),
+
     BENZYL_CHLORIDE = builder()
         .id("benzyl_chloride")
         .structure(Formula.deserialize("destroy:benzene:CCl,,,,,"))
         .boilingPoint(179f)
         .density(1100f)
         .molarHeatCapacity(182.4f)
+        .build(),
+
+    BUTADIENE = builder()
+        .id("butadiene")
+        .structure(Formula.deserialize("destroy:linear:C=CC=C"))
+        .boilingPoint(-4.41f)
+        .density(614.9f)
+        .molarHeatCapacity(123.65f)
+        .build(),
+
+    CALCIUM_ION = builder()
+        .id("calcium_ion")
+        .translationKey("calcium")
+        .structure(Formula.atom(Element.CALCIUM))
+        .charge(2)
+        .build(),
+
+    CARBON_DIOXIDE = builder()
+        .id("carbon_dioxide")
+        .structure(Formula.deserialize("destroy:linear:O=C=O"))
+        .boilingPoint(-78.4645) // Sublimes, doesn't "boil"
+        .density(1.977) // Gas density
+        .molarHeatCapacity(37.135f)
         .build(),
 
     CARBON_MONOXIDE = builder()
@@ -183,6 +213,20 @@ public final class DestroyMolecules {
         .density(3740f)
         .build(),
 
+    COPPER_I = builder()
+        .id("copper_i")
+        .structure(Formula.atom(Element.COPPER))
+        .color(0xE0D30823)
+        .charge(1)
+        .build(),
+
+    COPPER_II = builder()
+        .id("copper_ii")
+        .structure(Formula.atom(Element.COPPER))
+        .color(0xE00FFCA1)
+        .charge(2)
+        .build(),
+
     CUBANE = builder()
         .id("cubane")
         .structure(Formula.deserialize("destroy:cubane:,,,,,,"))
@@ -197,6 +241,17 @@ public final class DestroyMolecules {
         .boilingPoint(457.4f)
         .density(2400f)
         .build(),
+
+    CYANIDE = builder()
+        .id("cyanide")
+        .structure(Formula.atom(Element.CARBON)
+            .addAtom(Element.NITROGEN, BondType.TRIPLE)
+        ).charge(-1)
+        .build(),
+    
+    // TODO cyclohexene Topology
+
+    
 
     ETHANOL = builder()
         .id("ethanol")
@@ -345,6 +400,14 @@ public final class DestroyMolecules {
         .boilingPoint(56.9f)
         .density(932f)
         .molarHeatCapacity(140.2f)
+        .build(),
+
+    PROPENE = builder()
+        .id("propene")
+        .structure(Formula.deserialize("destroy:linear:C=CC"))
+        .boilingPoint(-47.6f)
+        .density(1810f)
+        .molarHeatCapacity(102f)
         .build(),
 
     NITRATE = builder()
