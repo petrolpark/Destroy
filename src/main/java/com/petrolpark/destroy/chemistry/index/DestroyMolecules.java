@@ -15,56 +15,72 @@ public final class DestroyMolecules {
     ACETAMIDE = builder()
         .id("acetamide")
         .structure(Formula.deserialize("destroy:linear:CC(=O)N"))
-        .boilingPoint(221)
+        .boilingPoint(221.2f)
+        .density(1159f)
+        .molarHeatCapacity(91.3f)
         .tag(Tags.ACUTELY_TOXIC)
         .build(),
 
     ACETIC_ACID = builder()
         .id("acetic_acid")
         .structure(Formula.deserialize("destroy:linear:CC(=O)OH+4.756"))
-        .boilingPoint(118)
+        .boilingPoint(118.5f)
+        .density(1049f)
+        .molarHeatCapacity(123.1f)
         .build(),
 
     ACETIC_ANHYDRIDE = builder()
         .id("acetic_anhydride")
         .structure(Formula.deserialize("destroy:linear:CC(=O)OC(=O)C"))
-        .boilingPoint(140)
+        .boilingPoint(140f)
+        .density(1082f)
         .build(),
 
     ACETONE = builder()
         .id("acetone")
         .structure(Formula.deserialize("destroy:linear:CC(=O)C"))
-        .boilingPoint(56)
+        .boilingPoint(56.08f)
+        .density(784.5f)
+        .molarHeatCapacity(126.3f)
         .build(),
 
     ACRYLONITRILE = builder()
         .id("acrylonitrile")
         .structure(Formula.deserialize("destroy:linear:C=CC#N"))
-        .boilingPoint(77)
+        .boilingPoint(77f)
+        .density(810f)
+        .molarHeatCapacity(113f)
         .build(),
 
     ADIPIC_ACID = builder()
         .id("adipic_acid")
         .structure(Formula.deserialize("destroy:linear:O=C(OH+4.43f)CCCCC(=O)OH+5.41f"))
-        .boilingPoint(338)
+        .boilingPoint(337.5f)
+        .density(1360f)
+        .molarHeatCapacity(196.5f)
         .build(),
 
     ADIPONITRILE = builder()
         .id("adiponitrile")
         .structure(Formula.deserialize("destroy:linear:N#CCCCCC#N"))
-        .boilingPoint(295)
+        .boilingPoint(295.1f)
+        .density(951f)
         .build(),
 
     AIBN = builder()
         .id("aibn")
         .structure(Formula.deserialize("destroy:linear:CC(C)(C#N)N=NC(C)(C#N)C"))
-        .boilingPoint(10000)
+        .boilingPoint(10000) // Doesn't boil - decomposes
+        .density(1100f)
         .build(),
 
     AMMONIA = builder()
         .id("ammonia")
         .structure(Formula.deserialize("destroy:linear:N"))
-        .boilingPoint(-33)
+        .boilingPoint(-33.34f)
+        .density(900f) // Ammonium hydroxide has a density of ~0.9gcm^-3
+        .molarHeatCapacity(80f)
+        .tag(Tags.REFRIGERANT)
         .build(),
 
     AMMONIUM = builder()
@@ -73,30 +89,38 @@ public final class DestroyMolecules {
         .charge(1)
         .build(),
 
-    // ASPIRIN = builder()
-    //     .id("aspirin")
-    //     .structure(Formula.deserialize("destroy:benzene:OC(=O)C,C(=O)OH+3.5f,,,,"))
-    //     .boilingPoint(140)
-    //     .build(),
+    ASPIRIN = builder()
+        .id("aspirin")
+        .structure(Formula.deserialize("destroy:benzene:OC(=O)C,C(=O)OH+3.5f,,,,"))
+        .boilingPoint(140f)
+        .density(1400f)
+        // Couldn't find heat capacity
+        .build(),
 
-    // BENZYL_CHLORIDE = builder()
-    //     .id("benzyl_chloride")
-    //     .structure(Formula.deserialize("destroy:benzene:CCl,,,,,"))
-    //     .boilingPoint(179)
-    //     .build(),
+    BENZYL_CHLORIDE = builder()
+        .id("benzyl_chloride")
+        .structure(Formula.deserialize("destroy:benzene:CCl,,,,,"))
+        .boilingPoint(179f)
+        .density(1100f)
+        .molarHeatCapacity(182.4f)
+        .build(),
 
     CARBON_MONOXIDE = builder()
         .id("carbon_monoxide")
         .structure(
             Formula.atom(Element.CARBON)
             .addAtom(Element.OXYGEN, BondType.TRIPLE)
-        ).boilingPoint(-140)
+        ).boilingPoint(-191.5f)
+        .density(789f) // Liquid density; gas density is the same order of magnitude
+        .molarHeatCapacity(29.1f)
         .build(),
 
     CARBON_TETRACHLORIDE = builder()
         .id("carbon_tetrachloride")
         .structure(Formula.deserialize("destroy:linear:ClC(Cl)(Cl)Cl"))
-        .boilingPoint(77)
+        .boilingPoint(76.72f)
+        .density(1586.7f)
+        .molarHeatCapacity(132.6f)
         .build(),
 
     CHLORIDE = builder()
@@ -108,7 +132,10 @@ public final class DestroyMolecules {
     CHLORINE = builder()
         .id("chlorine")
         .structure(Formula.deserialize("destroy:linear:ClCl"))
-        .boilingPoint(-34)
+        .color(0x20F9FCC2)
+        .boilingPoint(-34.04f)
+        .density(3.2f) // Gas density
+        .molarHeatCapacity(33.949f)
         .build(),
 
     CHLOROAURATE = builder()
@@ -121,13 +148,18 @@ public final class DestroyMolecules {
     CHLORODIFLUOROMETHANE = builder()
         .id("chlorodifluoromethane")
         .structure(Formula.deserialize("destroy:linear:ClC(F)F"))
-        .boilingPoint(-41)
+        .boilingPoint(-40.7f)
+        .density(3.66f) // Gas density
+        .molarHeatCapacity(112.6f)
+        .tag(Tags.REFRIGERANT)
         .build(),
 
     CHLOROFORM = builder()
         .id("chloroform")
         .structure(Formula.deserialize("destroy:linear:ClC(Cl)Cl"))
-        .boilingPoint(61)
+        .boilingPoint(61.15f)
+        .density(1489f)
+        .molarHeatCapacity(114.25f)
         .build(),
 
     CISPLATIN = builder()
@@ -147,25 +179,31 @@ public final class DestroyMolecules {
                 .addAtom(Element.HYDROGEN)
                 .addAtom(Element.HYDROGEN), true
             ))
-        .boilingPoint(270)
+        .boilingPoint(270f)
+        .density(3740f)
         .build(),
 
     CUBANE = builder()
         .id("cubane")
         .structure(Formula.deserialize("destroy:cubane:,,,,,,"))
-        .boilingPoint(134)
+        .boilingPoint(161.6f)
         .density(1290f)
+        // Specific heat capacity unknown
         .build(),
 
     CUBANEDICARBOXYLIC_ACID = builder()
         .id("cubanedicarboxylic_acid")
         .structure(Formula.deserialize("destroy:cubane:C(=O)OH,,,C(=O)OH,,,"))
+        .boilingPoint(457.4f)
+        .density(2400f)
         .build(),
 
     ETHANOL = builder()
         .id("ethanol")
         .structure(Formula.deserialize("destroy:linear:CCO"))
-        .boilingPoint(78)
+        .boilingPoint(78.23f)
+        .density(789.45f)
+        .molarHeatCapacity(109f)
         .build(),
 
     GENERIC_ACID_ANHYDRIDE = builder()
@@ -248,23 +286,34 @@ public final class DestroyMolecules {
     GLYCEROL = builder()
         .id("glycerol")
         .structure(Formula.deserialize("destroy:linear:OCC(O)CO"))
+        .boilingPoint(290f)
+        .density(1261f)
+        .molarHeatCapacity(213.8f)
         .build(),
 
     HYDROCHLORIC_ACID = builder()
         .id("hydrochloric_acid")
         .structure(Formula.deserialize("destroy:linear:ClH+-5.9"))
-        .build(), // TODO physiucal properties
+        .boilingPoint(-85.05f)
+        .density(1490f)
+        .specificHeatCapacity(798.1f)
+        .build(),
 
     HYDROFLUORIC_ACID = builder()
         .id("hydrofluoric_acid")
         .structure(Formula.deserialize("destroy:linear:FH+3.17"))
         .density(1.15f)
         .boilingPoint(19.5f)
+        // Heat capacity unknown
         .build(),
     
     HYDROGEN_PEROXIDE = builder()
         .id("hydrogen_peroxide")
         .structure(Formula.deserialize("destroy:linear:OO"))
+        .color(0x40C7F4FC)
+        .boilingPoint(150.2f)
+        .density(1110f)
+        .specificHeatCapacity(2619f)
         .build(),
 
     HYDROXIDE = builder()
@@ -276,7 +325,9 @@ public final class DestroyMolecules {
     MERCURY = builder()
         .id("mercury")
         .structure(Formula.atom(Element.MERCURY))
+        .boilingPoint(356.73f)
         .density(13534f)
+        .molarHeatCapacity(27.98f)
         .color(0xFFB3B3B3)
         .build(),
 
@@ -284,12 +335,16 @@ public final class DestroyMolecules {
         .id("methanol")
         .structure(Formula.deserialize("destroy:linear:CO"))
         .boilingPoint(65)
+        .density(792f)
+        .molarHeatCapacity(68.62f)
         .build(),
 
     METHYL_ACETATE = builder()
         .id("methyl_acetate")
         .structure(Formula.deserialize("destroy:linear:CC(=O)OC"))
-        .boilingPoint(57)
+        .boilingPoint(56.9f)
+        .density(932f)
+        .molarHeatCapacity(140.2f)
         .build(),
 
     NITRATE = builder()
@@ -310,20 +365,28 @@ public final class DestroyMolecules {
     
     TRINITROTOLUENE = builder()
         .id("tnt")
-        .structure(Formula.atom(Element.CARBON)) //TODO actual structure
-        .charge(1)
+        .structure(Formula.deserialize("destroy:benzene:N(~O)~O,C,N(~O)~O,,N(~O)~O,"))
+        .color(0xD0FCF1E8)
+        .boilingPoint(240f) // Decomposes
+        .density(1654f)
+        .molarHeatCapacity(243.3f)
         .build(),
 
     TETRAFLUOROETHENE = builder()
         .id("tetrafluoroethene")
         .structure(Formula.deserialize("destroy:linear:FC=(F)C(F)F"))
+        .boilingPoint(-76.3f)
+        .density(1519f)
+        // Couldn't find heat capacity
         .build(),
 
     WATER = builder()
         .id("water")
         .structure(Formula.deserialize("destroy:linear:O"))
         .tag(Tags.SOLVENT)
-        .boilingPoint(100)
+        .boilingPoint(100f)
+        .density(1000f)
+        .specificHeatCapacity(4160f)
         .build(),
 
     PROTON = builder()
@@ -338,20 +401,27 @@ public final class DestroyMolecules {
 
     public static class Tags {
 
+        public static final MoleculeTag
+
         /**
          * This Molecule will cause damage to Players exposed to it.
          */
-        public static final MoleculeTag ACUTELY_TOXIC = new MoleculeTag();
+        ACUTELY_TOXIC = new MoleculeTag(),
 
         /**
          * This Molecule cannot partake in Reactions.
          */
-        public static final MoleculeTag HYPOTHETICAL = new MoleculeTag();
+        HYPOTHETICAL = new MoleculeTag(),
+
+        /**
+         * This Molecule can be used bas 'fuel' for the Cooler.
+         */
+        REFRIGERANT = new MoleculeTag(),
 
         /**
          * This Molecule is ignored when displaying the written contents of a Mixture, and ignored when used in Recipes.
          */
-        public static final MoleculeTag SOLVENT = new MoleculeTag();
+        SOLVENT = new MoleculeTag();
     };
 
     public static void register() {};

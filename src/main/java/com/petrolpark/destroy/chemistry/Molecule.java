@@ -232,6 +232,7 @@ public class Molecule implements INameableProduct {
      * The density of this Molecule when pure, in grams per Bucket.
      */
     public float getDensity() {
+        // TODO check if this is an ion as these do not really have densities
         return density;
     };
 
@@ -696,7 +697,7 @@ public class Molecule implements INameableProduct {
                 tag(DestroyMolecules.Tags.HYPOTHETICAL);
             };
 
-            if (!hasForcedDensity) {
+            if (!hasForcedDensity && molecule.charge != 0) {
                 molecule.density = 1000f;
             };
             
@@ -709,7 +710,7 @@ public class Molecule implements INameableProduct {
             };
 
             if (!hasForcedSpecificHeatCapacity) {
-                molecule.specificHeatCapacity = 1000;
+                molecule.specificHeatCapacity = 1000; //TODO set default MOLAR heat capacity to ~100
             };
             
             if (molecule.color == 0) {
