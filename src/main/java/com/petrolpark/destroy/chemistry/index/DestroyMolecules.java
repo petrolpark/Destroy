@@ -441,6 +441,14 @@ public final class DestroyMolecules {
         .molarHeatCapacity(28.84f)
         .build(),
 
+    HYDROGEN_CYANIDE = builder()
+        .id("hydrogen_cyanide")
+        .structure(Formula.deserialize("destroy:linear:N#C"))
+        .boilingPoint(26f)
+        .density(687.6f)
+        .molarHeatCapacity(35.9f)
+        .build(),
+
     HYDROGEN_IODIDE = builder()
         .id("hydrogen_iodide")
         .structure(Formula.atom(Element.IODINE).addAtom(Element.HYDROGEN))
@@ -616,6 +624,38 @@ public final class DestroyMolecules {
         .molarHeatCapacity(170f) // Estimate based on isomers
         .build(),
 
+    PHENYLACETONE = builder()
+        .id("phenylacetone")
+        .structure(Formula.deserialize("destroy:benzene:CC(=O)C"))
+        .boilingPoint(215f)
+        .density(1006f)
+        .molarHeatCapacity(250f) // Estimate based on isomers
+        .build(),
+    
+    PHTHALIC_ANHYDRIDE = builder()
+        .id("phthalic_anhydride")
+        .structure(Formula.deserialize("destroy:isohydrobenzofuran:,,,,=O,,=O,,"))
+        .boilingPoint(295f)
+        .density(1530f)
+        .molarHeatCapacity(161.8f)
+        .build(),
+
+    PICRIC_ACID = builder()
+        .id("picric_acid")
+        .structure(Formula.deserialize("destroy:benzene:O,N(~O)~O,C,N(~O)~O,,N(~O)~O"))
+        .color(0xC0ED7417)
+        .boilingPoint(300f) // Detonates before this
+        .density(1763f)
+        .molarHeatCapacity(200f) // Estimate, couldn't find heat capacity
+        .build(),
+
+    POTASSIUM_ION = builder()
+        .id("potassium_ion")
+        .translationKey("potassium")
+        .structure(Formula.atom(Element.POTASSIUM))
+        .charge(1)
+        .build(),
+
     PROPENE = builder()
         .id("propene")
         .structure(Formula.deserialize("destroy:linear:C=CC"))
@@ -624,11 +664,84 @@ public final class DestroyMolecules {
         .molarHeatCapacity(102f)
         .build(),
 
+    SALICYLIC_ACID = builder()
+        .id("salicylic_acid")
+        .structure(Formula.deserialize("destroy:benzene:CC(=O)O,O,,,,"))
+        .boilingPoint(200f)
+        .density(1443f)
+        .molarHeatCapacity(159.4f)
+        .build(),
+
     SODIUM_ION = builder()
         .id("sodium_ion")
         .translationKey("sodium")
         .structure(Formula.atom(Element.SODIUM))
         .charge(1)
+        .build(),
+
+    STYRENE = builder()
+        .id("styrene")
+        .structure(Formula.deserialize("destroy:benzene:C=C,,,,,"))
+        .boilingPoint(145f)
+        .density(909f)
+        .molarHeatCapacity(183.2f)
+        .build(),
+
+    SULFATE = builder()
+        .id("sulfate")
+        .structure(Formula.atom(Element.SULFUR)
+            .addAtom(Element.OXYGEN, BondType.DOUBLE)
+            .addAtom(Element.OXYGEN, BondType.DOUBLE)
+            .addAtom(Element.OXYGEN, BondType.SINGLE)
+            .addAtom(Element.OXYGEN, BondType.SINGLE)
+        ).charge(-2)
+        .build(),
+
+    SULFIDE = builder()
+        .id("sulfide")
+        .structure(Formula.atom(Element.SULFUR))
+        .charge(-2)
+        .build(),
+
+    SULFURIC_ACID = builder()
+        .id("sulfuric_acid")
+        .structure(Formula.deserialize("destroy:linear:OS(=O)(=O)O"))
+        .boilingPoint(337f)
+        .density(1830.2f)
+        .molarHeatCapacity(83.68f)
+        .build(),
+
+    TETRAFLUOROETHENE = builder()
+        .id("tetrafluoroethene")
+        .structure(Formula.deserialize("destroy:linear:FC=(F)C(F)F"))
+        .boilingPoint(-76.3f)
+        .density(1519f)
+        // Couldn't find heat capacity
+        .build(),
+    
+    TOLUENE = builder()
+        .id("toluene")
+        .structure(Formula.deserialize("destroy:benzene:C,,,,,"))
+        .boilingPoint(110.6f)
+        .density(862.3f)
+        .molarHeatCapacity(157.3f)
+        .build(),
+
+    TRICHLOROFLUOROMETHANE = builder()
+        .id("trichlorofluoromethane")
+        .structure(Formula.deserialize("destroy:linear:FC(Cl)(Cl)Cl"))
+        .boilingPoint(23.77f)
+        .density(1494f)
+        .molarHeatCapacity(122.5f)
+        .tag(Tags.REFRIGERANT)
+        .build(),
+
+    TRIMETHYLAMINE = builder()
+        .id("trimethylamine")
+        .structure(Formula.deserialize("destroy:linear:CN(C)C"))
+        .boilingPoint(5f)
+        .density(670f)
+        .molarHeatCapacity(132.55f)
         .build(),
     
     TRINITROTOLUENE = builder()
@@ -640,12 +753,12 @@ public final class DestroyMolecules {
         .molarHeatCapacity(243.3f)
         .build(),
 
-    TETRAFLUOROETHENE = builder()
-        .id("tetrafluoroethene")
-        .structure(Formula.deserialize("destroy:linear:FC=(F)C(F)F"))
-        .boilingPoint(-76.3f)
-        .density(1519f)
-        // Couldn't find heat capacity
+    VINYL_ACETATE = builder()
+        .id("vinyl_acetate")
+        .structure(Formula.deserialize("destroy:linear:C=COC(=O)C"))
+        .boilingPoint(72.7f)
+        .density(934f)
+        .molarHeatCapacity(169.5f)
         .build(),
 
     WATER = builder()
@@ -655,6 +768,13 @@ public final class DestroyMolecules {
         .boilingPoint(100f)
         .density(1000f)
         .specificHeatCapacity(4160f)
+        .build(),
+
+    ZINC_ION = builder()
+        .id("zinc_ion")
+        .translationKey("zinc")
+        .structure(Formula.atom(Element.ZINC))
+        .charge(2)
         .build(),
 
     PROTON = builder()

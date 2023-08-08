@@ -112,7 +112,41 @@ public class DestroyTopologies {
             .withBondTo(0, BondType.AROMATIC)
             .withBondTo(5, BondType.AROMATIC)
             .attach()
-        .build("cyclopentadienide");
+        .build("cyclopentadienide"),
+
+    ISOHYDROBENZOFURAN = create(Element.CARBON) // 0
+        .atom(Element.CARBON, new Vec3(0d, 1d, 0d)) // 1
+            .withSideBranch(new Vec3(-Mth.cos(30), Mth.sin(30), 0d), new Vec3(-Mth.cos(30), Mth.sin(30), 0d))
+            .withBondTo(0, BondType.AROMATIC)
+            .attach()
+        .atom(Element.CARBON, new Vec3(Mth.cos(30), 1d + Mth.sin(30), 0d)) // 2
+            .withSideBranch(new Vec3(0d, 1d, 0d), new Vec3(0d, 1d, 0d))
+            .withBondTo(1, BondType.AROMATIC)
+            .attach()
+        .atom(Element.CARBON, new Vec3(2 * Mth.cos(30), 0d, 0d)) // 3
+            .withBondTo(2, BondType.AROMATIC)
+            .attach()
+        .atom(Element.CARBON, new Vec3(2 * Mth.cos(30) + Mth.cos(18), 1d + sin(18), 0d)) // 4
+            .withSideBranch(new Vec3(Mth.cos(72), Mth.sin(72), 0d), new Vec3(Mth.cos(72), Mth.sin(72), 0d))
+            .withBondTo(3, BondType.SINGLE)
+            .attach()
+        .atom(Element.OXYGEN, new Vec3(2 * Mth.cos(30) + Mth.cos(18) + Mth.sin(36), 0.5d, 0d)) // 5
+            .withSideBranch(new Vec3(Mth.cos(72), -Mth.sin(72), 0d), new Vec3(Mth.cos(72), -Mth.sin(72), 0d))
+            .withBondTo(4, BondType.SINGLE)
+            .attach()
+        .atom(Element.CARBON, new Vec3(2 * Mth.cos(30) + Mth.cos(18), -Mth.sin(18))) // 6
+            .withBondTo(5, BondType.SINGLE)
+            .attach()
+        .atom(Element.CARBON, new Vec3(2 * Mth.cos(30), 0d, 0d)) // 7
+            .withBondTo(3, BondType.AROMATIC)
+            .withBondTo(6, BondType.SINGLE)
+            .attach()
+        .atom(Element.CARBON, new Vec3(Mth.cos(30), -Mth.sin(30), 0d)) // 8
+            .withSideBranch(new Vec3(0d, -1d, 0d), new Vec3(0d, -1d, 0d))
+            .withBondTo(0, BondType.AROMATIC)
+            .withBondTo(7, BondType.AROMATIC)
+            .attach()
+        .build("isohydrobenzofuran");
 
     public Topology.Builder anthracene(boolean quinone) {
         //TODO Side branch on original Atom, (-cos(30), -sin(30), 0) (-cos(30), -sin(30), -0.5)
