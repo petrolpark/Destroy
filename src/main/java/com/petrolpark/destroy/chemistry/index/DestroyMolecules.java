@@ -251,7 +251,22 @@ public final class DestroyMolecules {
     
     // TODO cyclohexene Topology
 
-    
+    // TODO cyclopentadiene
+
+    CYCLOPENTADIENIDE = builder()
+        .id("cyclopentadienide")
+        .structure(Formua.deserialize("destroy:cyclopentadienide:,,,"))
+        .charge(-1)
+        .build();
+
+    DICHLORODIFLUOROMETHANE = builder()
+        .id("dichlorodifluoromethane")
+        .structure(Formula.deserialize("destroy:linear:ClC(F)(F)Cl"))
+        .boilingPoint(-28.9f)
+        .density(1486f)
+        .molarHeatCapacity(126.8f) //TODO possibly increase this to make R-12 a more viable refrigerant
+        .tag(Tags.REFRIGERANT)
+        .build();
 
     ETHANOL = builder()
         .id("ethanol")
@@ -259,6 +274,46 @@ public final class DestroyMolecules {
         .boilingPoint(78.23f)
         .density(789.45f)
         .molarHeatCapacity(109f)
+        .build(),
+
+    ETHENE = builder()
+        .id("ethene")
+        .structure(Formula.deserialize("destroy:linear:C=C"))
+        .boilingPoint(-103.7f)
+        .density(1.178f) // Gas density
+        .molarHeatCapacity(67.3f)
+        .build(),
+
+    ETHYLANTHRAQUINONE = builder()
+        .id("ethylanthraquinone")
+        .structure(Formula.deserialize("destroy:anthraquinone:,,,,=O,,,,CC,,,=O,,"))
+        .boilingPoint(415.4f)
+        .density(1231f)
+        .molarHeatCapacity(286.6f) // Not accurate, just based off an isomer
+        .build(),
+
+    ETHYLANTHRAHYDROQUINONE = builder()
+        .id("ethylanthrahydroquinone")
+        .structure(Formula.deserialize("destroy:anthracene:,,,,O,,,,CC,,,O,,"))
+        // No data found so using same as ethylanthraquinone
+        .boilingPoint(415.4f)
+        .density(1231f)
+        .molarHeatCapacity(286.6f)
+        .build(),
+    
+    ETHYLBENZENE = builder()
+        .id("ethylbenzene")
+        .structure(Formula.deserialize("destroy:benzene:CC,,,,,"))
+        .boilingPoint(136f)
+        .density(866.5f)
+        .specificHeatCapacity(1726f)
+        .build(),
+    
+    FLUORIDE_ION = builder()
+        .id("fluoride_ion")
+        .translationKey("fluoride")
+        .structure(Formula.atom(Element.FLUORINE))
+        .charge(-1)
         .build(),
 
     GENERIC_ACID_ANHYDRIDE = builder()
@@ -346,6 +401,22 @@ public final class DestroyMolecules {
         .molarHeatCapacity(213.8f)
         .build(),
 
+    HEXANEDIAMINE = builder()
+        .id("hexanediamine")
+        .structure(Formula.deserialize("destroy:linear:NCCCCCCN"))
+        .boilingPoint(204.6f)
+        .density(840f)
+        .molarHeatCapacity(250f) // Estimate: couldn't find heat capacity
+        .build(),
+
+    HYDRAZINE = builder()
+        .id("hydrazine")
+        .structure(Formula.deserialize("NN"))
+        .boilingPoint(114f)
+        .density(1021f)
+        .molarHeatCapacity(70f) // Estimate: couldn't find heat capacity
+        .build(),
+
     HYDROCHLORIC_ACID = builder()
         .id("hydrochloric_acid")
         .structure(Formula.deserialize("destroy:linear:ClH+-5.9"))
@@ -360,6 +431,22 @@ public final class DestroyMolecules {
         .density(1.15f)
         .boilingPoint(19.5f)
         // Heat capacity unknown
+        .build(),
+
+    HYDROGEN = builder()
+        .id("hydrogen")
+        .structure(Formula.atom(Element.HYDROGEN).addAtom(Element.HYDROGEN))
+        .boilingPointInKelvins(20.271f)
+        .density(0.08988)
+        .molarHeatCapacity(28.84f)
+        .build(),
+
+    HYDROGEN_IODIDE = builder()
+        .id("hydrogen_iodide")
+        .structure(Formula.atom(Element.IODINE).addAtom(Element.HYDROGEN))
+        .boilingPoint(-35.36f)
+        .density(2850)
+        .heatCapacity(29.2f)
         .build(),
     
     HYDROGEN_PEROXIDE = builder()
@@ -377,6 +464,41 @@ public final class DestroyMolecules {
         .charge(-1)
         .build(),
 
+    HYPOCHLORITE = builder()
+        .id("hypochlorite")
+        .structure(Formula.atom(Element.OXYGEN).addAtom(Element.CHLORINE))
+        .charge(-1)
+        .build(),
+
+    IODIDE_ION = builder()
+        .id("iodide_ion")
+        .translationKey("iodide")
+        .structure(Formula.atom(Element.IODINE))
+        .charge(-1)
+        .build(),
+
+    IODOMETHANE = builder()
+        .id("iodomethane")
+        .structure(Formula.deserialize("destroy:linear:CI"))
+        .boilingPoint(42.6f)
+        .density(2280f)
+        .molarHeatCapacity(82.75f)
+        .build(),
+
+    IRON_II = builder()
+        .id("iron_ii")
+        .structure(Formula.atom(Element.IRON))
+        .color(0x80A9C92A)
+        .charge(2)
+        .build(),
+
+    IRON_III = builder()
+        .id("iron_iii")
+        .structure(Formula.atom(Element.IRON))
+        .color(0x80F94939)
+        .charge(3)
+        .build(),
+
     MERCURY = builder()
         .id("mercury")
         .structure(Formula.atom(Element.MERCURY))
@@ -384,6 +506,22 @@ public final class DestroyMolecules {
         .density(13534f)
         .molarHeatCapacity(27.98f)
         .color(0xFFB3B3B3)
+        .build(),
+
+    METAXYLENE = builder()
+        .id("metaxylene")
+        .structure(Formula.deserialize("destroy:benzene:C,,C,,,"))
+        .boilingPoint(139f)
+        .density(860f)
+        .molarHeatCapacity(181.5f)
+        .build(),
+
+    METHANE = builder()
+        .id("methane")
+        .structure(Formula.deserialize("destroy:linear:C"))
+        .boilingPoint(-161.5f)
+        .density(0.657)
+        .molarHeatCapacity(35.7f)
         .build(),
 
     METHANOL = builder()
@@ -394,20 +532,20 @@ public final class DestroyMolecules {
         .molarHeatCapacity(68.62f)
         .build(),
 
+    METHYLAMINE = builder()
+        .id("methylamine")
+        .structure(Formula.deserialize("destroy:linear:CN"))
+        .boilingPoint(-6.3f)
+        .density(656.2f)
+        .molarHeatCapacity(101.8f)
+        .build(),
+
     METHYL_ACETATE = builder()
         .id("methyl_acetate")
         .structure(Formula.deserialize("destroy:linear:CC(=O)OC"))
         .boilingPoint(56.9f)
         .density(932f)
         .molarHeatCapacity(140.2f)
-        .build(),
-
-    PROPENE = builder()
-        .id("propene")
-        .structure(Formula.deserialize("destroy:linear:C=CC"))
-        .boilingPoint(-47.6f)
-        .density(1810f)
-        .molarHeatCapacity(102f)
         .build(),
 
     NITRATE = builder()
@@ -417,6 +555,73 @@ public final class DestroyMolecules {
             .addAtom(Element.OXYGEN, BondType.AROMATIC)
             .addAtom(Element.OXYGEN, BondType.AROMATIC)
         ).charge(-1)
+        .build(),
+
+    NITRIC_ACID = builder()
+        .id("nitric_acid")
+        .structure(Formula.atom(Element.NITROGEN)
+            .addAtom(Element.OXYGEN, BondType.AROMATIC)
+            .addAtom(Element.OXYGEN, BondType.AROMATIC)
+            .addGroup(Formula.atom(Element.OXYGEN)
+                .addAtom(Element.HYDROGEN)
+            ) //TODO maybe add color (though this should come from a decomposition)
+        ).boilingPoint(83f)
+        .density(1510f)
+        .molarHeatCapacity(53.29f)
+        .build(),
+
+    NITROGLYCERINE = builder()
+        .id("nitroglycerine")
+        .structure(Formula.deserialize("destroy:linear:C(ON(~O)(~O))C(ON(~O)(~O))CON(~O)(~O)"))
+        .boilingPoint(50f)
+        .density(1600f)
+        // Heat capacity unknown
+        .build(),
+
+    ORTHOXYLENE = builder()
+        .id("orthoxylene")
+        .structure(Formula.deserialize("destroy:benzene:C,C,,,,"))
+        .boilingPoint(144.4f)
+        .density(880f)
+        .molarHeatCapacity(187.1f)
+        .build(),
+
+    OXIDE = builder()
+        .id("oxide")
+        .structure(Formula.atom(Element.OXYGEN))
+        .charge(-2)
+        .build(),
+
+    PARAXYLENE = builder()
+        .id("paraxylene")
+        .structure(Formula.deserialize("destroy:benzene:C,,,C,,"))
+        .boilingPoint(138.35f)
+        .density(861f)
+        .molarHeatCapacity(182f)
+        .build(),
+
+    PHENOL = builder()
+        .id("phenol")
+        .structure(Formula.deserialize("destroy:benzene:O,,,,,"))
+        .boilingPoint(181.7f)
+        .density(1070f)
+        .molarHeatCapacity(220.9f)
+        .build(),
+
+    PHENYLACETIC_ACID = builder()
+        .id("phenylacetic_acid")
+        .structure(Formula.deserialize("destroy:benzene:CC(=O)O"))
+        .boilingPoint(265.5f)
+        .density(1080.9f)
+        .molarHeatCapacity(170f) // Estimate based on isomers
+        .build(),
+
+    PROPENE = builder()
+        .id("propene")
+        .structure(Formula.deserialize("destroy:linear:C=CC"))
+        .boilingPoint(-47.6f)
+        .density(1810f)
+        .molarHeatCapacity(102f)
         .build(),
 
     SODIUM_ION = builder()
