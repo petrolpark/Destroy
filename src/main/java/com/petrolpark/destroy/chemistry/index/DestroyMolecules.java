@@ -21,6 +21,19 @@ public final class DestroyMolecules {
         .tag(Tags.ACUTELY_TOXIC)
         .build(),
 
+    ACETATE = builder()
+        .id("acetate")
+        .structure(Formula.atom(Element.CARBON)
+            .addAtom(Element.HYDROGEN)
+            .addAtom(Element.HYDROGEN)
+            .addAtom(Element.HYDROGEN)
+            .addGroup(Formula.atom(Element.CARBON)
+                .addGroup(Formula.atom(Element.OXYGEN), true, BondType.DOUBLE)
+                .addAtom(Element.OXYGEN)
+            , false)
+        ).charge(-1)
+        .build(),
+
     ACETIC_ACID = builder()
         .id("acetic_acid")
         .structure(Formula.deserialize("destroy:linear:CC(=O)OH+4.756"))
@@ -34,6 +47,7 @@ public final class DestroyMolecules {
         .structure(Formula.deserialize("destroy:linear:CC(=O)OC(=O)C"))
         .boilingPoint(140f)
         .density(1082f)
+        // Molar heat capacity unknown
         .build(),
 
     ACETONE = builder()
