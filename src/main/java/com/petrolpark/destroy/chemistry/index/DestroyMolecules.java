@@ -58,6 +58,14 @@ public final class DestroyMolecules {
         .molarHeatCapacity(126.3f)
         .build(),
 
+    ACETONE_CYANOHYDRIN = builder()
+        .id("acetone_cyanohydrin")
+        .structure(Formula.deserialize("destroy:linear:CC(OH)(C#N)C"))
+        .boilingPoint(95f)
+        .density(932f)
+        .molarHeatCapacity(160f) // Estimate based on similar compounds
+        .build(),
+
     ACRYLONITRILE = builder()
         .id("acrylonitrile")
         .structure(Formula.deserialize("destroy:linear:C=CC#N"))
@@ -480,6 +488,18 @@ public final class DestroyMolecules {
         .specificHeatCapacity(2619f)
         .build(),
 
+    HYDROGENSULFATE = builder()
+        .id("hydrogensulfate")
+        .structure(Formula.atom(Element.SULFUR)
+            .addAtom(Element.OXYGEN, BondType.DOUBLE)
+            .addAtom(Element.OXYGEN, BondType.DOUBLE)
+            .addAtom(Element.OXYGEN, BondType.SINGLE)
+            .addGroup(Formula.atom(Element.OXYGEN)
+                .addAtom(Element.HYDROGEN)
+            )
+        ).charge(-1)
+        .build(),
+
     HYDROXIDE = builder()
         .id("hydroxide")
         .structure(Formula.atom(Element.OXYGEN).addAtom(Element.HYDROGEN))
@@ -569,6 +589,13 @@ public final class DestroyMolecules {
         .density(932f)
         .molarHeatCapacity(140.2f)
         .build(),
+    
+    NICKEL_ION = builder()
+        .id("nickel_ion")
+        .translationKey("nickel")
+        .structure(Formula.atom(Element.NICKEL))
+        .charge(2)
+        .build(),
 
     NITRATE = builder()
         .id("nitrate")
@@ -592,12 +619,39 @@ public final class DestroyMolecules {
         .molarHeatCapacity(53.29f)
         .build(),
 
+    NITROGEN = builder()
+        .id("nitrogen")
+        .structure(Formula.deserialize("destroy:linear:N#N"))
+        .boilingPointInKelvins(77.355f)
+        .density(1.2506f)
+        .molarHeatCapacity(29.12f)
+        .build(),
+
+    NITROGEN_DIOXIDE = builder()
+        .id("nitrogen_dioxide")
+        .structure(Formula.atom(Element.NITROGEN)
+            .addAtom(Element.OXYGEN, BondType.AROMATIC)
+            .addAtom(Element.OXYGEN, BondType.AROMATIC)
+        ).color(0xD089011A)
+        .boilingPoint(21.15f)
+        .density(1880f)
+        .molarHeatCapacity(37.2f)
+        .build(),
+
     NITROGLYCERINE = builder()
         .id("nitroglycerine")
         .structure(Formula.deserialize("destroy:linear:C(ON(~O)(~O))C(ON(~O)(~O))CON(~O)(~O)"))
         .boilingPoint(50f)
         .density(1600f)
         // Heat capacity unknown
+        .build(),
+
+    NITRONIUM = builder()
+        .id("nitronium")
+        .structure(Formula.atom(Element.NITROGEN)
+            .addAtom(Element.OXYGEN, BondType.DOUBLE)
+            .addAtom(Element.OXYGEN, BondType.DOUBLE)
+        ).charge(1)
         .build(),
 
     ORTHOXYLENE = builder()
@@ -612,6 +666,14 @@ public final class DestroyMolecules {
         .id("oxide")
         .structure(Formula.atom(Element.OXYGEN))
         .charge(-2)
+        .build(),
+
+    OXYGEN = builder()
+        .id("oxygen")
+        .structure(Formula.deserialize("destroy:linear:O=O"))
+        .boilingPointInKelvins(90.188f)
+        .density(1.429f)
+        .molarHeatCapacity(29.378f)
         .build(),
 
     PARAXYLENE = builder()
@@ -804,6 +866,12 @@ public final class DestroyMolecules {
     public static class Tags {
 
         public static final MoleculeTag
+
+        /**
+         * This Molecule automatically has a very high 'concentration' when in open Vats and Basins,
+         * and can be used up as much as necessary without depleting.
+         */
+        ABUNDANT_IN_AIR = new MoleculeTag(),
 
         /**
          * This Molecule will cause damage to Players exposed to it.
