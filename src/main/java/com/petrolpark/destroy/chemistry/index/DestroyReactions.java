@@ -119,7 +119,7 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.METHANOL)
         .addReactant(DestroyMolecules.CARBON_MONOXIDE)
         .addProduct(DestroyMolecules.ACETIC_ACID)
-        .build(),
+        .build(), //TODO silica catalyst
 
     NHN_SYNTHESIS = builder()
         .id("nhn_synthesis")
