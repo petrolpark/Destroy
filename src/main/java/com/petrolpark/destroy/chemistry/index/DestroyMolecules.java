@@ -270,8 +270,14 @@ public final class DestroyMolecules {
             .addAtom(Element.NITROGEN, BondType.TRIPLE)
         ).charge(-1)
         .build(),
-    
-    // TODO cyclohexene Topology
+
+    CYCLOHEXENE = builder()
+        .id("cyclohexene")
+        .structure(Formula.deserialize("destroy:linear:C")) //TODO cyclohexene topology
+        .boilingPoint(82.98f)
+        .density(811f)
+        .molarHeatCapacity(152.9f)
+        .build(),
 
     // TODO cyclopentadiene
 
