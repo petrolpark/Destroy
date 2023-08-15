@@ -19,6 +19,9 @@ public final class DestroyMolecules {
         .density(1159f)
         .molarHeatCapacity(91.3f)
         .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.CARCINOGEN)
+        .tag(Tags.PLASTICIZER)
+        .tag(Tags.SMOG)
         .build(),
 
     ACETATE = builder()
@@ -32,6 +35,8 @@ public final class DestroyMolecules {
                 .addAtom(Element.OXYGEN)
             , false)
         ).charge(-1)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
         .build(),
 
     ACETIC_ACID = builder()
@@ -40,6 +45,8 @@ public final class DestroyMolecules {
         .boilingPoint(118.5f)
         .density(1049f)
         .molarHeatCapacity(123.1f)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
         .build(),
 
     ACETIC_ANHYDRIDE = builder()
@@ -48,6 +55,9 @@ public final class DestroyMolecules {
         .boilingPoint(140f)
         .density(1082f)
         // Molar heat capacity unknown
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
         .build(),
 
     ACETONE = builder()
@@ -56,6 +66,9 @@ public final class DestroyMolecules {
         .boilingPoint(56.08f)
         .density(784.5f)
         .molarHeatCapacity(126.3f)
+        .tag(Tags.SOLVENT)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
         .build(),
 
     ACETONE_CYANOHYDRIN = builder()
@@ -64,6 +77,8 @@ public final class DestroyMolecules {
         .boilingPoint(95f)
         .density(932f)
         .molarHeatCapacity(160f) // Estimate based on similar compounds
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.SMOG)
         .build(),
 
     ACRYLONITRILE = builder()
@@ -72,6 +87,9 @@ public final class DestroyMolecules {
         .boilingPoint(77f)
         .density(810f)
         .molarHeatCapacity(113f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
         .build(),
 
     ADIPIC_ACID = builder()
@@ -80,6 +98,7 @@ public final class DestroyMolecules {
         .boilingPoint(337.5f)
         .density(1360f)
         .molarHeatCapacity(196.5f)
+        .tag(Tags.SMOG)
         .build(),
 
     ADIPONITRILE = builder()
@@ -87,6 +106,8 @@ public final class DestroyMolecules {
         .structure(Formula.deserialize("destroy:linear:N#CCCCCC#N"))
         .boilingPoint(295.1f)
         .density(951f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.SMOG)
         .build(),
 
     AIBN = builder()
@@ -94,6 +115,7 @@ public final class DestroyMolecules {
         .structure(Formula.deserialize("destroy:linear:CC(C)(C#N)N=NC(C)(C#N)C"))
         .boilingPoint(10000) // Doesn't boil - decomposes
         .density(1100f)
+        .tag(Tags.SMOG)
         .build(),
 
     AMMONIA = builder()
@@ -103,6 +125,7 @@ public final class DestroyMolecules {
         .density(900f) // Ammonium hydroxide has a density of ~0.9gcm^-3
         .molarHeatCapacity(80f)
         .tag(Tags.REFRIGERANT)
+        .tag(Tags.SMELLY)
         .build(),
 
     AMMONIUM = builder()
@@ -117,6 +140,7 @@ public final class DestroyMolecules {
         .boilingPoint(140f)
         .density(1400f)
         // Couldn't find heat capacity
+        .tag(Tags.SMOG)
         .build(),
 
     BENZENE = builder()
@@ -124,7 +148,11 @@ public final class DestroyMolecules {
         .structure(Formula.deserialize("destroy:benzene:,,,,"))
         .boilingPoint(80.1f)
         .density(876.5f)
-        .molarHeatCapacity(134.8f),
+        .molarHeatCapacity(134.8f)
+        .tag(Tags.CARCINOGEN)
+        .tag(Tags.SMOG)
+        .tag(Tags.SOLVENT)
+        .build(),
 
     BENZYL_CHLORIDE = builder()
         .id("benzyl_chloride")
@@ -132,6 +160,9 @@ public final class DestroyMolecules {
         .boilingPoint(179f)
         .density(1100f)
         .molarHeatCapacity(182.4f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.OZONE_DEPLETER)
+        .tag(Tags.SMOG)
         .build(),
 
     BUTADIENE = builder()
@@ -140,6 +171,8 @@ public final class DestroyMolecules {
         .boilingPoint(-4.41f)
         .density(614.9f)
         .molarHeatCapacity(123.65f)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
         .build(),
 
     CALCIUM_ION = builder()
@@ -155,6 +188,7 @@ public final class DestroyMolecules {
         .boilingPoint(-78.4645) // Sublimes, doesn't "boil"
         .density(1.977) // Gas density
         .molarHeatCapacity(37.135f)
+        .tag(Tags.GREENHOUSE)
         .build(),
 
     CARBON_MONOXIDE = builder()
@@ -165,6 +199,8 @@ public final class DestroyMolecules {
         ).boilingPoint(-191.5f)
         .density(789f) // Liquid density; gas density is the same order of magnitude
         .molarHeatCapacity(29.1f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.GREENHOUSE)
         .build(),
 
     CARBON_TETRACHLORIDE = builder()
@@ -173,6 +209,9 @@ public final class DestroyMolecules {
         .boilingPoint(76.72f)
         .density(1586.7f)
         .molarHeatCapacity(132.6f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.CARCINOGEN)
+        .tag(Tags.OZONE_DEPLETER)
         .build(),
 
     CHLORIDE = builder()
@@ -188,6 +227,9 @@ public final class DestroyMolecules {
         .boilingPoint(-34.04f)
         .density(3.2f) // Gas density
         .molarHeatCapacity(33.949f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.OZONE_DEPLETER)
+        .tag(Tags.SMELLY)
         .build(),
 
     CHLOROAURATE = builder()
@@ -203,6 +245,7 @@ public final class DestroyMolecules {
         .boilingPoint(-40.7f)
         .density(3.66f) // Gas density
         .molarHeatCapacity(112.6f)
+        .tag(Tags.OZONE_DEPLETER)
         .tag(Tags.REFRIGERANT)
         .build(),
 
@@ -212,6 +255,9 @@ public final class DestroyMolecules {
         .boilingPoint(61.15f)
         .density(1489f)
         .molarHeatCapacity(114.25f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.OZONE_DEPLETER)
+        .tag(Tags.SOLVENT)
         .build(),
 
     CISPLATIN = builder()
@@ -255,6 +301,7 @@ public final class DestroyMolecules {
         .boilingPoint(161.6f)
         .density(1290f)
         // Specific heat capacity unknown
+        .tag(Tags.SMOG)
         .build(),
 
     CUBANEDICARBOXYLIC_ACID = builder()
@@ -262,6 +309,7 @@ public final class DestroyMolecules {
         .structure(Formula.deserialize("destroy:cubane:C(=O)OH,,,C(=O)OH,,,"))
         .boilingPoint(457.4f)
         .density(2400f)
+        .tag(Tags.SMOG)
         .build(),
 
     CYANIDE = builder()
@@ -269,6 +317,7 @@ public final class DestroyMolecules {
         .structure(Formula.atom(Element.CARBON)
             .addAtom(Element.NITROGEN, BondType.TRIPLE)
         ).charge(-1)
+        .tag(Tags.ACUTELY_TOXIC)
         .build(),
 
     CYCLOHEXENE = builder()
@@ -277,6 +326,9 @@ public final class DestroyMolecules {
         .boilingPoint(82.98f)
         .density(811f)
         .molarHeatCapacity(152.9f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
         .build(),
 
     // TODO cyclopentadiene
@@ -285,6 +337,7 @@ public final class DestroyMolecules {
         .id("cyclopentadienide")
         .structure(Formua.deserialize("destroy:cyclopentadienide:,,,"))
         .charge(-1)
+        .tag(Tags.SMOG)
         .build();
 
     DICHLORODIFLUOROMETHANE = builder()
@@ -293,6 +346,8 @@ public final class DestroyMolecules {
         .boilingPoint(-28.9f)
         .density(1486f)
         .molarHeatCapacity(126.8f) //TODO possibly increase this to make R-12 a more viable refrigerant
+        .tag(Tags.GREENHOUSE)
+        .tag(Tags.OZONE_DEPLETER)
         .tag(Tags.REFRIGERANT)
         .build();
 
@@ -302,6 +357,8 @@ public final class DestroyMolecules {
         .boilingPoint(78.23f)
         .density(789.45f)
         .molarHeatCapacity(109f)
+        .tag(Tags.SOLVENT)
+        .tag(Tags.SMOG)
         .build(),
 
     ETHENE = builder()
@@ -310,6 +367,7 @@ public final class DestroyMolecules {
         .boilingPoint(-103.7f)
         .density(1.178f) // Gas density
         .molarHeatCapacity(67.3f)
+        .tag(Tags.SMOG)
         .build(),
 
     ETHYLANTHRAQUINONE = builder()
@@ -318,6 +376,7 @@ public final class DestroyMolecules {
         .boilingPoint(415.4f)
         .density(1231f)
         .molarHeatCapacity(286.6f) // Not accurate, just based off an isomer
+        .tag(Tags.SMOG)
         .build(),
 
     ETHYLANTHRAHYDROQUINONE = builder()
@@ -327,6 +386,7 @@ public final class DestroyMolecules {
         .boilingPoint(415.4f)
         .density(1231f)
         .molarHeatCapacity(286.6f)
+        .tag(Tags.SMOG)
         .build(),
     
     ETHYLBENZENE = builder()
@@ -335,6 +395,8 @@ public final class DestroyMolecules {
         .boilingPoint(136f)
         .density(866.5f)
         .specificHeatCapacity(1726f)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
         .build(),
     
     FLUORIDE_ION = builder()
@@ -427,6 +489,7 @@ public final class DestroyMolecules {
         .boilingPoint(290f)
         .density(1261f)
         .molarHeatCapacity(213.8f)
+        .tag(Tags.SMOG)
         .build(),
 
     HEXANEDIAMINE = builder()
@@ -435,6 +498,8 @@ public final class DestroyMolecules {
         .boilingPoint(204.6f)
         .density(840f)
         .molarHeatCapacity(250f) // Estimate: couldn't find heat capacity
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.SMELLY)
         .build(),
 
     HYDRAZINE = builder()
@@ -443,6 +508,10 @@ public final class DestroyMolecules {
         .boilingPoint(114f)
         .density(1021f)
         .molarHeatCapacity(70f) // Estimate: couldn't find heat capacity
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.CARCINOGEN)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
         .build(),
 
     HYDROCHLORIC_ACID = builder()
@@ -451,6 +520,8 @@ public final class DestroyMolecules {
         .boilingPoint(-85.05f)
         .density(1490f)
         .specificHeatCapacity(798.1f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.OZONE_DEPLETER)
         .build(),
 
     HYDROFLUORIC_ACID = builder()
@@ -459,6 +530,8 @@ public final class DestroyMolecules {
         .density(1.15f)
         .boilingPoint(19.5f)
         // Heat capacity unknown
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.GREENHOUSE)
         .build(),
 
     HYDROGEN = builder()
@@ -475,6 +548,7 @@ public final class DestroyMolecules {
         .boilingPoint(26f)
         .density(687.6f)
         .molarHeatCapacity(35.9f)
+        .tag(Tags.ACUTELY_TOXIC)
         .build(),
 
     HYDROGEN_IODIDE = builder()
@@ -492,6 +566,8 @@ public final class DestroyMolecules {
         .boilingPoint(150.2f)
         .density(1110f)
         .specificHeatCapacity(2619f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.BLEACH)
         .build(),
 
     HYDROGENSULFATE = builder()
@@ -504,6 +580,7 @@ public final class DestroyMolecules {
                 .addAtom(Element.HYDROGEN)
             )
         ).charge(-1)
+        .tag(Tags.ACID_RAIN)
         .build(),
 
     HYDROXIDE = builder()
@@ -516,6 +593,9 @@ public final class DestroyMolecules {
         .id("hypochlorite")
         .structure(Formula.atom(Element.OXYGEN).addAtom(Element.CHLORINE))
         .charge(-1)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.BLEACH)
+        .tag(Tags.OZONE_DEPLETER)
         .build(),
 
     IODIDE_ION = builder()
@@ -531,6 +611,8 @@ public final class DestroyMolecules {
         .boilingPoint(42.6f)
         .density(2280f)
         .molarHeatCapacity(82.75f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.SMOG)
         .build(),
 
     IRON_II = builder()
@@ -562,6 +644,7 @@ public final class DestroyMolecules {
         .boilingPoint(139f)
         .density(860f)
         .molarHeatCapacity(181.5f)
+        .tag(Tags.SMOG)
         .build(),
 
     METHANE = builder()
@@ -570,6 +653,8 @@ public final class DestroyMolecules {
         .boilingPoint(-161.5f)
         .density(0.657)
         .molarHeatCapacity(35.7f)
+        .tag(Tags.GREENHOUSE)
+        .tag(Tags.SMOG)
         .build(),
 
     METHANOL = builder()
@@ -578,6 +663,8 @@ public final class DestroyMolecules {
         .boilingPoint(65)
         .density(792f)
         .molarHeatCapacity(68.62f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.SMOG)
         .build(),
 
     METHYLAMINE = builder()
@@ -586,6 +673,8 @@ public final class DestroyMolecules {
         .boilingPoint(-6.3f)
         .density(656.2f)
         .molarHeatCapacity(101.8f)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
         .build(),
 
     METHYL_ACETATE = builder()
@@ -594,6 +683,9 @@ public final class DestroyMolecules {
         .boilingPoint(56.9f)
         .density(932f)
         .molarHeatCapacity(140.2f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.SMOG)
+        .tag(Tags.SOLVENT)
         .build(),
     
     NICKEL_ION = builder()
@@ -601,6 +693,7 @@ public final class DestroyMolecules {
         .translationKey("nickel")
         .structure(Formula.atom(Element.NICKEL))
         .charge(2)
+        .tag(Tags.CARCINOGEN)
         .build(),
 
     NITRATE = builder()
@@ -610,6 +703,7 @@ public final class DestroyMolecules {
             .addAtom(Element.OXYGEN, BondType.AROMATIC)
             .addAtom(Element.OXYGEN, BondType.AROMATIC)
         ).charge(-1)
+        .tag(Tags.ACID_RAIN)
         .build(),
 
     NITRIC_ACID = builder()
@@ -623,6 +717,8 @@ public final class DestroyMolecules {
         ).boilingPoint(83f)
         .density(1510f)
         .molarHeatCapacity(53.29f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.ACID_RAIN)
         .build(),
 
     NITROGEN = builder()
@@ -631,6 +727,7 @@ public final class DestroyMolecules {
         .boilingPointInKelvins(77.355f)
         .density(1.2506f)
         .molarHeatCapacity(29.12f)
+        .tag(Tags.ABUNDANT_IN_AIR)
         .build(),
 
     NITROGEN_DIOXIDE = builder()
@@ -642,6 +739,9 @@ public final class DestroyMolecules {
         .boilingPoint(21.15f)
         .density(1880f)
         .molarHeatCapacity(37.2f)
+        .tag(Tags.ACID_RAIN)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.CARCINOGEN)
         .build(),
 
     NITROGLYCERINE = builder()
@@ -650,6 +750,7 @@ public final class DestroyMolecules {
         .boilingPoint(50f)
         .density(1600f)
         // Heat capacity unknown
+        .tag(Tags.SMOG)
         .build(),
 
     NITRONIUM = builder()
@@ -660,12 +761,24 @@ public final class DestroyMolecules {
         ).charge(1)
         .build(),
 
+    OCTASULFUR = builder()
+        .id("octasulfur")
+        .translationKey("sulfur")
+        .structure(Formula.deserialize("destroy:octasulfur:"))
+        .boilingPoint(444.6f) //TODO melting point is 119C
+        .density(2070f)
+        .molarHeatCapacity(21.64f)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
+        .build(),
+
     ORTHOXYLENE = builder()
         .id("orthoxylene")
         .structure(Formula.deserialize("destroy:benzene:C,C,,,,"))
         .boilingPoint(144.4f)
         .density(880f)
         .molarHeatCapacity(187.1f)
+        .tag(Tags.SMOG)
         .build(),
 
     OXIDE = builder()
@@ -680,6 +793,7 @@ public final class DestroyMolecules {
         .boilingPointInKelvins(90.188f)
         .density(1.429f)
         .molarHeatCapacity(29.378f)
+        .tag(Tags.ABUNDANT_IN_AIR)
         .build(),
 
     PARAXYLENE = builder()
@@ -688,6 +802,7 @@ public final class DestroyMolecules {
         .boilingPoint(138.35f)
         .density(861f)
         .molarHeatCapacity(182f)
+        .tag(Tags.SMOG)
         .build(),
 
     PHENOL = builder()
@@ -696,6 +811,9 @@ public final class DestroyMolecules {
         .boilingPoint(181.7f)
         .density(1070f)
         .molarHeatCapacity(220.9f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
         .build(),
 
     PHENYLACETIC_ACID = builder()
@@ -704,6 +822,8 @@ public final class DestroyMolecules {
         .boilingPoint(265.5f)
         .density(1080.9f)
         .molarHeatCapacity(170f) // Estimate based on isomers
+        .tag(Tags.FRAGRANT)
+        .tag(Tags.SMOG)
         .build(),
 
     PHENYLACETONE = builder()
@@ -712,6 +832,8 @@ public final class DestroyMolecules {
         .boilingPoint(215f)
         .density(1006f)
         .molarHeatCapacity(250f) // Estimate based on isomers
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.SMOG)
         .build(),
     
     PHTHALIC_ANHYDRIDE = builder()
@@ -720,6 +842,8 @@ public final class DestroyMolecules {
         .boilingPoint(295f)
         .density(1530f)
         .molarHeatCapacity(161.8f)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
         .build(),
 
     PICRIC_ACID = builder()
@@ -729,6 +853,7 @@ public final class DestroyMolecules {
         .boilingPoint(300f) // Detonates before this
         .density(1763f)
         .molarHeatCapacity(200f) // Estimate, couldn't find heat capacity
+        .tag(Tags.SMOG)
         .build(),
 
     POTASSIUM_ION = builder()
@@ -744,6 +869,7 @@ public final class DestroyMolecules {
         .boilingPoint(-47.6f)
         .density(1810f)
         .molarHeatCapacity(102f)
+        .tag(Tags.SMOG)
         .build(),
 
     SALICYLIC_ACID = builder()
@@ -752,6 +878,17 @@ public final class DestroyMolecules {
         .boilingPoint(200f)
         .density(1443f)
         .molarHeatCapacity(159.4f)
+        .tag(Tags.SMOG)
+        .build(),
+
+    SODIUM_METAL = builder()
+        .id("sodium_metal")
+        .translationKey("sodium")
+        .structure(Formula.atom(Element.SODIUM))
+        .color(0xFFB3B3B3)
+        .boilingPoint(882.94f)
+        .density(968f)
+        .molarHeatCapacity(28.23f)
         .build(),
 
     SODIUM_ION = builder()
@@ -767,6 +904,7 @@ public final class DestroyMolecules {
         .boilingPoint(145f)
         .density(909f)
         .molarHeatCapacity(183.2f)
+        .tag(Tags.SMOG)
         .build(),
 
     SULFATE = builder()
@@ -777,6 +915,7 @@ public final class DestroyMolecules {
             .addAtom(Element.OXYGEN, BondType.SINGLE)
             .addAtom(Element.OXYGEN, BondType.SINGLE)
         ).charge(-2)
+        .tag(Tags.ACID_RAIN)
         .build(),
 
     SULFIDE = builder()
@@ -785,12 +924,24 @@ public final class DestroyMolecules {
         .charge(-2)
         .build(),
 
+    SULFUR_DIOXIDE = builder()
+        .id("sulfur_dioxide")
+        .structure(Formula.deserialize("destroy:linear:O=S=O"))
+        .boilingPoint(-10f)
+        .density(2.6288f)
+        .molarHeatCapacity(39.87f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.ACID_RAIN)
+        .build(),
+
     SULFURIC_ACID = builder()
         .id("sulfuric_acid")
         .structure(Formula.deserialize("destroy:linear:OS(=O)(=O)O"))
         .boilingPoint(337f)
         .density(1830.2f)
         .molarHeatCapacity(83.68f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.ACID_RAIN)
         .build(),
 
     TETRAFLUOROETHENE = builder()
@@ -799,6 +950,9 @@ public final class DestroyMolecules {
         .boilingPoint(-76.3f)
         .density(1519f)
         // Couldn't find heat capacity
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.GREENHOUSE)
+        .tag(Tags.SMOG)
         .build(),
     
     TOLUENE = builder()
@@ -807,6 +961,9 @@ public final class DestroyMolecules {
         .boilingPoint(110.6f)
         .density(862.3f)
         .molarHeatCapacity(157.3f)
+        .tag(Tags.CARCINOGEN)
+        .tag(Tags.SMOG)
+        .tag(Tags.SOLVENT)
         .build(),
 
     TRICHLOROFLUOROMETHANE = builder()
@@ -815,7 +972,10 @@ public final class DestroyMolecules {
         .boilingPoint(23.77f)
         .density(1494f)
         .molarHeatCapacity(122.5f)
+        .tag(Tags.GREENHOUSE)
+        .tag(Tags.OZONE_DEPLETER)
         .tag(Tags.REFRIGERANT)
+        .tag(Tags.SMOG)
         .build(),
 
     TRIMETHYLAMINE = builder()
@@ -824,6 +984,8 @@ public final class DestroyMolecules {
         .boilingPoint(5f)
         .density(670f)
         .molarHeatCapacity(132.55f)
+        .tag(Tags.SMELLY)
+        .tag(Tags.SMOG)
         .build(),
     
     TRINITROTOLUENE = builder()
@@ -833,6 +995,9 @@ public final class DestroyMolecules {
         .boilingPoint(240f) // Decomposes
         .density(1654f)
         .molarHeatCapacity(243.3f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.CARCINOGEN)
+        .tag(Tags.SMOG)
         .build(),
 
     VINYL_ACETATE = builder()
@@ -841,6 +1006,9 @@ public final class DestroyMolecules {
         .boilingPoint(72.7f)
         .density(934f)
         .molarHeatCapacity(169.5f)
+        .tag(Tags.CARCINOGEN)
+        .tag(Tags.FRAGRANT)
+        .tag(Tags.SMOG)
         .build(),
 
     WATER = builder()
@@ -850,6 +1018,8 @@ public final class DestroyMolecules {
         .boilingPoint(100f)
         .density(1000f)
         .specificHeatCapacity(4160f)
+        .tag(Tags.GREENHOUSE)
+        .tag(Tags.SOLVENT)
         .build(),
 
     ZINC_ION = builder()
@@ -874,30 +1044,74 @@ public final class DestroyMolecules {
         public static final MoleculeTag
 
         /**
-         * This Molecule automatically has a very high 'concentration' when in open Vats and Basins,
-         * and can be used up as much as necessary without depleting.
+         * This Molecule automatically has a very high 'concentration' when in open Vats and Basins, and can be used up as much as necessary without depleting.
          */
-        ABUNDANT_IN_AIR = new MoleculeTag(),
+        ABUNDANT_IN_AIR = new MoleculeTag("abundant_in_air"),
 
         /**
          * This Molecule will cause damage to Players exposed to it.
          */
-        ACUTELY_TOXIC = new MoleculeTag(),
+        ACUTELY_TOXIC = new MoleculeTag("acutely_toxic"),
+
+        /**
+         * This Molecule will increase the world's acid rain levels if released into the environment.
+         */
+        ACID_RAIN = new MoleculeTag("acid_rain"),
+
+        /**
+         * This Molecule can be used as a bleach in recipes.
+         */
+        BLEACH = new MoleculeTag("bleach"),
+
+        /**
+         * This Molecule is a carcinogen.
+         */
+        CARCINOGEN = new MoleculeTag("carcinogen"),
+
+        /**
+         * This Molecule can be used to make perfume.
+         */
+        FRAGRANT = new MoleculeTag("fragrant"),
+    
+        /**
+         * This Molecule will increase the world's greenhouse gas level if released into the atmosphere.
+         */
+        GREENHOUSE = new MoleculeTag("greenhouse"),
 
         /**
          * This Molecule cannot partake in Reactions.
          */
-        HYPOTHETICAL = new MoleculeTag(),
+        HYPOTHETICAL = new MoleculeTag("hypothetical"),
 
         /**
-         * This Molecule can be used bas 'fuel' for the Cooler.
+         * This Molecule will increase the world's ozone depletion level if released into the atmosphere.
          */
-        REFRIGERANT = new MoleculeTag(),
+        OZONE_DEPLETER = new MoleculeTag("ozone_depleter"),
+
+        /**
+         * This Molecule can be used as a plasticizer for making plastics.
+         */
+        PLASTICIZER = new MoleculeTag("plasticizer"),
+
+        /**
+         * This Molecule can be used as 'fuel' for the Cooler.
+         */
+        REFRIGERANT = new MoleculeTag("refrigerant"),
+
+        /**
+         * This Molecule is nauseous if the Player is not wearing perfume.
+         */
+        SMELLY = new MoleculeTag("smelly"),
+
+        /**
+         * This Molecule will increase the world's smog levels if released into the atmosphere.
+         */
+        SMOG = new MoleculeTag("smog")
 
         /**
          * This Molecule is ignored when displaying the written contents of a Mixture, and ignored when used in Recipes.
          */
-        SOLVENT = new MoleculeTag();
+        SOLVENT = new MoleculeTag("solvent");
     };
 
     public static void register() {};

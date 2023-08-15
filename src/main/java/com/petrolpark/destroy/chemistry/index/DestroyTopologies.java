@@ -148,6 +148,31 @@ public class DestroyTopologies {
             .attach()
         .build("isohydrobenzofuran");
 
+    OCTASULFUR = create(Element.SULFUR) // 0
+        .atom(Element.SULFUR, new Vec3(-0.25d, 0.75d, 0.6124d)) // 1
+            .withBondTo(0)
+            .attach()
+        .atom(Element.SULFUR, new Vec3(0d, 1.5d, 0d)) // 2
+            .withBondTo(1)
+            .attach()
+        .atom(Element.SULFUR, new Vec3(0.75d, 1.25d, 0.6124d)) // 3
+            .withBondTo(2)
+            .attach()
+        .atom(Element.SULFUR, new Vec3(1.5d, 1.5d, 0d)) // 4
+            .withBondTo(3)
+            .attach()
+        .atom(Element.SULFUR, new Vec3(1.25d, 0.75d, 0.6124d)) // 5
+            .withBondTo(4)
+            .attach()
+        .atom(Element.SULFUR, new Vec3(1.5d, 0d, 0d)) // 6
+            .withBondTo(5)
+            .attach()
+        .atom(Element.SULFUR, new Vec3(0.75d, -0.25d, 0.6124d)) // 7
+            .withBondTo(0)
+            .withBondTo(6)
+            .attach()
+        .build("octasulfur")
+
     public Topology.Builder anthracene(boolean quinone) {
         //TODO Side branch on original Atom, (-cos(30), -sin(30), 0) (-cos(30), -sin(30), -0.5)
         return create(Element.CARBON) // 0

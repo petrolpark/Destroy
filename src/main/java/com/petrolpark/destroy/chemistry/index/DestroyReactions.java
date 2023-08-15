@@ -70,6 +70,14 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.CYCLOHEXENE)
         .build(), //TODO add nickel catalyst
 
+    BUTADIENE_CARBONYLATION = builder()
+        .id("butadiene_carbonylation")
+        .addReactant(DestroyMolecules.BUTADIENE)
+        .addReactant(DestroyMolecules.CARBON_MONOXIDE, 2)
+        .addReactant(DestroyMolecules.WATER, 2, 1)
+        .addProduct(DestroyMolecules.ADIPIC_ACID)
+        .build()
+
     CARBON_MONOXIDE_OXIDATION = builder()
         .id("carbon_monoxide_oxidation")
         .addReactant(DestroyMolecules.CARBON_MONOXIDE, 2, 1)
@@ -133,6 +141,14 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.PHENOL)
         .addProduct(DestroyMolecules.ACETONE)
         .build(),
+
+    CYCLOHEXENE_OXIDATIVE_CLEAVAGE = builder()
+        .id("cyclohexene_oxidative_cleavage")
+        .addReactant(DestroyMolecules.CYCLOHEXENE)
+        .addReactant(DestroyMolecules.HYDROGEN_PEROXIDE, 3, 1)
+        .addProduct(DestroyMolecules.ADIPIC_ACID)
+        .addProduct(DestroyMolecules.WATER, 2)
+        .build(), //TODO add "tungsten" catalyst. This reaction also has as phase-transfer catalyst but I have chosen to ignore it.
     
     //TODO contact process
     //TODO cisplatin synthesis
@@ -330,6 +346,13 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.CARBON_MONOXIDE)
         .addProduct(DestroyMolecules.HYDROGEN, 3)
         .build(); //TODO add nickel catalyst
+    
+    SULFUR_OXIDATION = builder()    
+        .id("sulfur_oxidation")
+        .addReactant(DestroyMolecules.OCTASULFUR)
+        .addReactant(DestroyMolecules.OXYGEN, 8, 1)
+        .addProduct(DestroyMolecules.SULFUR_DIOXIDE, 8)
+        .build(), //TODO replace with half-equation
 
     VINYL_ACETATE_SYNTHESIS = builder()
         .id("vinyl_acetate_synthesis")
