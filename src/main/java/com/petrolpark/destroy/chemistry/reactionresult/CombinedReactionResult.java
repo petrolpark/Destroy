@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.chemistry.reactionResult;
+package com.petrolpark.destroy.chemistry.reactionresult;
 
 import java.util.ArrayList;
 import java.util.Collection;

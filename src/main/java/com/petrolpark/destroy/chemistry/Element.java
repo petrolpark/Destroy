@@ -29,6 +29,7 @@ public enum Element {
     ZIRCONIUM("Zr", 91.22f, 1.4f),
     //RHODIUM("Rh", 102.91f, 2.2f),
     //PALLADIUM("Pd", 106.42f, 2.2f),
+    IODINE("I", 126.90f, 2.7f),
     PLATINUM("Pt", 195.08f, 2.2f),
     GOLD("Au", 196.97f, 2.4f, 0, 4),
     MERCURY("Hg", 200.59f, 1.9f, 2),

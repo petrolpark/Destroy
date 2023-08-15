@@ -11,7 +11,7 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.entity.behaviour.BasinTooFullBehaviour;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReactionResult;
-import com.petrolpark.destroy.chemistry.reactionResult.PrecipitateReactionResult;
+import com.petrolpark.destroy.chemistry.reactionresult.PrecipitateReactionResult;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
@@ -78,8 +78,8 @@ public class ReactionInBasinRecipe extends MixingRecipe {
             // Add all the given Fluid Stacks as "required ingredients"
             availableFluids.stream().map(fluidStack -> FluidIngredient.fromFluidStack(fluidStack)).forEach(fluidIngredient -> builder.require(fluidIngredient));
 
-            for (ReactionResult reactionResult : result.reactionResults()) {
-                if (reactionResult instanceof PrecipitateReactionResult precipitationResult) {
+            for (ReactionResult reactionresult : result.reactionresults()) {
+                if (reactionresult instanceof PrecipitateReactionResult precipitationResult) {
                     builder.output(precipitationResult.getPrecipitate());
                 };
                 // TODO other Reaction Results
@@ -110,9 +110,9 @@ public class ReactionInBasinRecipe extends MixingRecipe {
     /**
      * The outcome of {@link com.petrolpark.destroy.chemistry.Reaction reacting} a {@link com.petrolpark.destroy.chemistry.Reaction Mixture} in a Basin.
      * @param ticks The number of ticks it took for the Mixture to reach equilibrium
-     * @param reactionResults The {@link com.petrolpark.destroy.chemistry.ReactionResult results} of Reacting this Mixture
+     * @param reactionresults The {@link com.petrolpark.destroy.chemistry.ReactionResult results} of Reacting this Mixture
      * @param amount The amount (in mB) of resultant Mixture
      */
-    public static record ReactionInBasinResult(int ticks, List<ReactionResult> reactionResults, int amount) {};
+    public static record ReactionInBasinResult(int ticks, List<ReactionResult> reactionresults, int amount) {};
     
 };

@@ -6,10 +6,10 @@ import java.util.Map;
 
 import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.petrolpark.destroy.client.gui.stackedTextBox.AbstractStackedTextBox;
-import com.petrolpark.destroy.client.gui.stackedTextBox.AbstractStackedTextBox.Area;
-import com.petrolpark.destroy.client.gui.stackedTextBox.AbstractStackedTextBox.LinesAndActivationAreas;
-import com.petrolpark.destroy.client.gui.stackedTextBox.StackedTextBox;
+import com.petrolpark.destroy.client.gui.stackedtextbox.AbstractStackedTextBox;
+import com.petrolpark.destroy.client.gui.stackedtextbox.AbstractStackedTextBox.Area;
+import com.petrolpark.destroy.client.gui.stackedtextbox.AbstractStackedTextBox.LinesAndActivationAreas;
+import com.petrolpark.destroy.client.gui.stackedtextbox.StackedTextBox;
 import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 import com.simibubi.create.foundation.utility.Pair;
 

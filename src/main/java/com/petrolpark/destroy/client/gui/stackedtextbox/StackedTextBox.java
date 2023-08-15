@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.client.gui.stackedTextBox;
+package com.petrolpark.destroy.client.gui.stackedtextbox;
 
 import java.util.ArrayList;
 import java.util.List;

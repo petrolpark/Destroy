@@ -116,7 +116,7 @@ public class Reaction {
 
     /**
      * The name space of the mod by which this Reaction was defined.
-     * @return {@code "novel"} if this was generated automatically by a {@link com.petrolpark.destroy.chemistry.genericReaction.GenericReaction Reaction generator}.
+     * @return {@code "novel"} if this was generated automatically by a {@link com.petrolpark.destroy.chemistry.genericreaction.GenericReaction Reaction generator}.
      */
     public String getNameSpace() {
         return nameSpace;
@@ -231,11 +231,11 @@ public class Reaction {
 
         /**
          * Set the {@link ReactionResult Reaction Result} for this Reaction.
-         * Use a {@link reactionResult.CombinedReactionResult} to set multiple]
+         * Use a {@link reactionresult.CombinedReactionResult} to set multiple]
          * @return This Reaction Builder
          */
-        public ReactionBuilder withResult(float moles, BiFunction<Float, Reaction, ReactionResult> reactionResultFactory) {
-            reaction.result = reactionResultFactory.apply(moles, reaction);
+        public ReactionBuilder withResult(float moles, BiFunction<Float, Reaction, ReactionResult> reactionresultFactory) {
+            reaction.result = reactionresultFactory.apply(moles, reaction);
             return this;
         };
 

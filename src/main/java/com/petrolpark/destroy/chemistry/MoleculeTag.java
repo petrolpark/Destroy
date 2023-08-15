@@ -1,5 +1,8 @@
 package com.petrolpark.destroy.chemistry;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Molecule Tags do not affect the behaviour of {@link Molecule Molecules} in {@link Mixture Mixtures}, but instruct other parts of the game on how to deal with them.
  */

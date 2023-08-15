@@ -3,7 +3,7 @@ package com.petrolpark.destroy.chemistry.index;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
-import com.petrolpark.destroy.chemistry.reactionResult.PrecipitateReactionResult;
+import com.petrolpark.destroy.chemistry.reactionresult.PrecipitateReactionResult;
 import com.petrolpark.destroy.item.DestroyItems;
 
 public class DestroyReactions {
@@ -42,7 +42,7 @@ public class DestroyReactions {
 
     ANTHRAQUINONE_PROCESS = builder()
         .id("anthraquinone_process")
-        .addReactant(DestroyMolecules.ETHYLHYDROANTHRAQUINONE)
+        .addReactant(DestroyMolecules.ETHYLANTHRAHYDROQUINONE)
         .addReactant(DestroyMolecules.OXYGEN)
         .addProduct(DestroyMolecules.ETHYLANTHRAQUINONE)
         .addReactant(DestroyMolecules.HYDROGEN_PEROXIDE)
@@ -52,14 +52,14 @@ public class DestroyReactions {
         .id("anthraquinone_reduction")
         .addReactant(DestroyMolecules.ETHYLANTHRAQUINONE)
         .addReactant(DestroyMolecules.HYDROGEN)
-        .addProduct(DestroyMolecules.ETHYLHYDROANTHRAQUINONE)
+        .addProduct(DestroyMolecules.ETHYLANTHRAHYDROQUINONE)
         .build(), //TODO add palladium catalyst
 
     BENZENE_ETHYLATION = builder()
         .id("benzene_ethylation")
         .addReactant(DestroyMolecules.BENZENE)
         .addReactant(DestroyMolecules.ETHENE)
-        .addCatalyst(DestroyMolecules.PROTON)
+        .addCatalyst(DestroyMolecules.PROTON, 1)
         .addProduct(DestroyMolecules.ETHYLBENZENE)
         .build(),
 
@@ -76,7 +76,7 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.CARBON_MONOXIDE, 2)
         .addReactant(DestroyMolecules.WATER, 2, 1)
         .addProduct(DestroyMolecules.ADIPIC_ACID)
-        .build()
+        .build(),
 
     CARBON_MONOXIDE_OXIDATION = builder()
         .id("carbon_monoxide_oxidation")
@@ -136,7 +136,7 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.BENZENE)
         .addReactant(DestroyMolecules.PROPENE)
         .addCatalyst(DestroyMolecules.AIBN, 0)
-        .addCatalyst(DestroyMolecules.PROTON)
+        .addCatalyst(DestroyMolecules.PROTON, 1)
         //TODO add Lewis acid catalyst
         .addProduct(DestroyMolecules.PHENOL)
         .addProduct(DestroyMolecules.ACETONE)
@@ -174,7 +174,7 @@ public class DestroyReactions {
         .id("ethylbenzene_dehydrogenation")
         .addReactant(DestroyMolecules.ETHYLBENZENE)
         .addCatalyst(DestroyMolecules.WATER, 2)
-        .addCatalyst(DestroyMolecules.IRON_III)
+        .addCatalyst(DestroyMolecules.IRON_III, 1)
         .addProduct(DestroyMolecules.STYRENE)
         .addProduct(DestroyMolecules.HYDROGEN)
         .build(), //TODO ensure superheated and carefully balance rate constant with that of hydrogenation of styrene
@@ -236,7 +236,7 @@ public class DestroyReactions {
         .id("hypochlorite_formation")
         .addReactant(DestroyMolecules.CHLORINE)
         .addReactant(DestroyMolecules.HYDROXIDE, 2, 1)
-        .addCatalyst(DestroyMolecules.SODIUM_ION)
+        .addCatalyst(DestroyMolecules.SODIUM_ION, 1)
         .addProduct(DestroyMolecules.CHLORIDE)
         .addProduct(DestroyMolecules.HYPOCHLORITE)
         .addProduct(DestroyMolecules.WATER)
@@ -246,8 +246,8 @@ public class DestroyReactions {
         .id("kolbe_schmitt_reaction")
         .addReactant(DestroyMolecules.CARBON_DIOXIDE)
         .addReactant(DestroyMolecules.PHENOL)
-        .addCatalyst(DestroyMolecules.SODIUM_ION) //TODO actually add sodium phenoxide intermediate
-        .addCatalyst(DestroyMolecules.PROTON)
+        .addCatalyst(DestroyMolecules.SODIUM_ION, 1) //TODO actually add sodium phenoxide intermediate
+        .addCatalyst(DestroyMolecules.PROTON, 1)
         .addProduct(DestroyMolecules.SALICYLIC_ACID)
         .build(),
     
@@ -261,7 +261,7 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.CARBON_DIOXIDE, 2)
         .addProduct(DestroyMolecules.WATER, 18)
         .addProduct(DestroyMolecules.NITROGEN_DIOXIDE, 6)
-        .withResult(1f (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.FULMINATED_MERCURY.asStack())) //TODO figure out actual molar ratios
+        .withResult(1f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.FULMINATED_MERCURY.asStack())) //TODO figure out actual molar ratios
         .build(),
 
     METHANOL_SYNTHESIS = builder()
@@ -283,7 +283,7 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.NICKEL_ION)
         .addReactant(DestroyMolecules.NITRATE, 2, 0)
         .addReactant(DestroyMolecules.HYDRAZINE, 3)
-        .withResult(3f (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.NICKEL_HYDRAZINE_NITRATE.asStack())) //TODO figure out actual molar ratios
+        .withResult(3f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.NICKEL_HYDRAZINE_NITRATE.asStack())) //TODO figure out actual molar ratios
         .build(),
 
     NITRONIUM_FORMATION = builder()
@@ -306,7 +306,7 @@ public class DestroyReactions {
         .id("orthoxylene_oxidation")
         .addReactant(DestroyMolecules.ORTHOXYLENE)
         .addReactant(DestroyMolecules.OXYGEN, 3, 1)
-        .addCatalyst(DestroyMolecules.MERCURY)
+        .addCatalyst(DestroyMolecules.MERCURY, 1)
         .addProduct(DestroyMolecules.PHTHALIC_ANHYDRIDE)
         .build(),
 
@@ -325,7 +325,7 @@ public class DestroyReactions {
         .id("peroxide_process")
         .addReactant(DestroyMolecules.HYDROGEN_PEROXIDE)
         .addReactant(DestroyMolecules.AMMONIA, 2, 1)
-        .addCatalyst(DestroyMolecules.ACETONE) //TODO possibly replace with butanone
+        .addCatalyst(DestroyMolecules.ACETONE, 1) //TODO possibly replace with butanone
         .addCatalyst(DestroyMolecules.PROTON, 0)
         .addProduct(DestroyMolecules.HYDRAZINE)
         .addProduct(DestroyMolecules.WATER, 2)
@@ -345,7 +345,7 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.METHANE)
         .addProduct(DestroyMolecules.CARBON_MONOXIDE)
         .addProduct(DestroyMolecules.HYDROGEN, 3)
-        .build(); //TODO add nickel catalyst
+        .build(), //TODO add nickel catalyst
     
     SULFUR_OXIDATION = builder()    
         .id("sulfur_oxidation")

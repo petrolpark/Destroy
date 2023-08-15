@@ -10,9 +10,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.petrolpark.destroy.Destroy;
-import com.petrolpark.destroy.chemistry.genericReaction.GenericReactant;
-import com.petrolpark.destroy.chemistry.genericReaction.GenericReaction;
-import com.petrolpark.destroy.chemistry.genericReaction.SingleGroupGenericReaction;
+import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
+import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
+import com.petrolpark.destroy.chemistry.genericreaction.SingleGroupGenericReaction;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.recipe.ReactionInBasinRecipe.ReactionInBasinResult;
 import com.simibubi.create.foundation.utility.NBTHelper;
@@ -30,7 +30,7 @@ public class Mixture extends ReadOnlyMixture {
      * to their 'concentrations' (moles of the Reaction which have occured per Bucket of this Mixture, since the last
      * instance of that Reaction Result was dealt with).
      */
-    private Map<ReactionResult, Float> reactionResults;
+    private Map<ReactionResult, Float> reactionresults;
 
     /**
      * {@link Molecule Molecules} which can donate protons.
@@ -50,7 +50,7 @@ public class Mixture extends ReadOnlyMixture {
 
     /**
      * Every {@link Molecule} in this Mixture that has a {@link Group functional Group}, indexed by the {@link Group#getID ID} of that Group.
-     * Molecules are stored as {@link com.petrolpark.destroy.chemistry.genericReaction.GenericReactant Generic Reactants}.
+     * Molecules are stored as {@link com.petrolpark.destroy.chemistry.genericreaction.GenericReactant Generic Reactants}.
      * Molecules which have multiple of the same Group are indexed for each occurence of the Group.
      */
     private Map<String, List<GenericReactant<?>>> groupIDsAndMolecules;
@@ -67,7 +67,7 @@ public class Mixture extends ReadOnlyMixture {
     public Mixture() {
         super();
 
-        reactionResults = new HashMap<>();
+        reactionresults = new HashMap<>();
 
         acids = new ArrayList<>();
         novelMolecules = new ArrayList<>();
@@ -104,7 +104,7 @@ public class Mixture extends ReadOnlyMixture {
                 CompoundTag resultTag = (CompoundTag) tag;
                 ReactionResult result = Reaction.get(resultTag.getString("Result")).getResult();
                 if (result == null) return;
-                mixture.reactionResults.put(result, resultTag.getFloat("MolesPerBucket"));
+                mixture.reactionresults.put(result, resultTag.getFloat("MolesPerBucket"));
             });
         };
 
@@ -119,8 +119,8 @@ public class Mixture extends ReadOnlyMixture {
         CompoundTag tag = super.writeNBT();
         tag.putBoolean("AtEquilibrium", equilibrium);
 
-        if (!reactionResults.isEmpty()) {
-            tag.put("Results", NBTHelper.writeCompoundList(reactionResults.entrySet(), entry -> {
+        if (!reactionresults.isEmpty()) {
+            tag.put("Results", NBTHelper.writeCompoundList(reactionresults.entrySet(), entry -> {
                 CompoundTag resultTag = new CompoundTag();
                 resultTag.putString("Result", entry.getKey().getReaction().getFullId()); //TODO
                 resultTag.putFloat("MolesPerBucket", entry.getValue());
@@ -158,7 +158,7 @@ public class Mixture extends ReadOnlyMixture {
     public static Mixture mix(Map<Mixture, Double> mixtures) {
         Mixture resultMixture = new Mixture();
         Map<Molecule, Double> moleculesAndMoles = new HashMap<>(); // A Map of all Molecules to their quantity in moles (not their concentration)
-        Map<ReactionResult, Double> reactionResultsAndMoles = new HashMap<>(); // A Map of all Reaction Results to their quantity in moles
+        Map<ReactionResult, Double> reactionresultsAndMoles = new HashMap<>(); // A Map of all Reaction Results to their quantity in moles
         double totalAmount = 0d;
 
         for (Entry<Mixture, Double> mixtureAndAmount : mixtures.entrySet()) {
@@ -170,8 +170,8 @@ public class Mixture extends ReadOnlyMixture {
                 moleculesAndMoles.merge(entry.getKey(), entry.getValue() * amount, (m1, m2) -> m1 + m2); // Add the Molecule to the map if it's a new one, or increase the existing molar quantity otherwise
             };
 
-            for (Entry<ReactionResult, Float> entry : mixture.reactionResults.entrySet()) {
-                reactionResultsAndMoles.merge(entry.getKey(), entry.getValue() * amount, (r1, r2) -> r1 + r2); // Same for Reaction Results
+            for (Entry<ReactionResult, Float> entry : mixture.reactionresults.entrySet()) {
+                reactionresultsAndMoles.merge(entry.getKey(), entry.getValue() * amount, (r1, r2) -> r1 + r2); // Same for Reaction Results
             };
         };
 
@@ -179,8 +179,8 @@ public class Mixture extends ReadOnlyMixture {
             resultMixture.internalAddMolecule(moleculeAndMoles.getKey(), (float)(moleculeAndMoles.getValue() / totalAmount), false); // Add all these Molecules to the new Mixture
         };
 
-        for (Entry<ReactionResult, Double> reactionResultAndMoles : reactionResultsAndMoles.entrySet()) {
-            resultMixture.doReaction(reactionResultAndMoles.getKey().getReaction(), (float)(reactionResultAndMoles.getValue() / totalAmount)); // Add all Reaction Results to the new Mixture
+        for (Entry<ReactionResult, Double> reactionresultAndMoles : reactionresultsAndMoles.entrySet()) {
+            resultMixture.doReaction(reactionresultAndMoles.getKey().getReaction(), (float)(reactionresultAndMoles.getValue() / totalAmount)); // Add all Reaction Results to the new Mixture
         };
 
         resultMixture.refreshPossibleReactions();
@@ -336,7 +336,7 @@ public class Mixture extends ReadOnlyMixture {
     protected void doReaction(Reaction reaction, float molesPerBucket) {
         if (!reaction.hasResult()) return;
         ReactionResult result = reaction.getResult();
-        reactionResults.merge(result, molesPerBucket, (f1, f2) -> f1 + f2);
+        reactionresults.merge(result, molesPerBucket, (f1, f2) -> f1 + f2);
     };
 
     /**
@@ -355,12 +355,12 @@ public class Mixture extends ReadOnlyMixture {
         };
 
         List<ReactionResult> results = new ArrayList<>();
-        for (ReactionResult result : reactionResults.keySet()) {
-            Float molesPerBucketOfReaction = reactionResults.get(result);
+        for (ReactionResult result : reactionresults.keySet()) {
+            Float molesPerBucketOfReaction = reactionresults.get(result);
             int numberOfResult = (int) (volumeInBuckets * molesPerBucketOfReaction / result.getRequiredMoles());
 
             // Decrease the amount of Reaction that has happened
-            reactionResults.replace(result, molesPerBucketOfReaction - numberOfResult * result.getRequiredMoles() / volumeInBuckets);
+            reactionresults.replace(result, molesPerBucketOfReaction - numberOfResult * result.getRequiredMoles() / volumeInBuckets);
 
             // Add the Reaction Result the required number of times
             for (int i = 0; i < numberOfResult; i++) {
@@ -519,9 +519,9 @@ public class Mixture extends ReadOnlyMixture {
 
         // Generate specific Generic Reactions
         for (String id : groupIDsAndMolecules.keySet()) {
-            for (GenericReaction genericReaction : Group.getReactionsOfGroupByID(id)) {
-                if (genericReaction.involvesSingleGroup()) { // Generic Reactions involving only one functional Group
-                    newPossibleReactions.addAll(specifySingleGroupGenericReactions(genericReaction, groupIDsAndMolecules.get(id)));
+            for (GenericReaction genericreaction : Group.getReactionsOfGroupByID(id)) {
+                if (genericreaction.involvesSingleGroup()) { // Generic Reactions involving only one functional Group
+                    newPossibleReactions.addAll(specifySingleGroupGenericReactions(genericreaction, groupIDsAndMolecules.get(id)));
                 } else { // Generic Reactions involving two functional Groups
                     //TODO
                     //TODO check for polymerisation
@@ -552,19 +552,19 @@ public class Mixture extends ReadOnlyMixture {
      * Given a {@link SingleGroupGenericReaction Generic Reaction} involving only one {@link Group functional Group},
      * generates the specified {@link Reaction Reactions} that apply to this Mixture.
      * 
-     * <p>For example, if the Generic Reaction supplied is the {@link com.petrolpark.destroy.chemistry.index.genericReaction.AlkeneHydration hydration of an alkene},
+     * <p>For example, if the Generic Reaction supplied is the {@link com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydration hydration of an alkene},
      * and <b>reactants</b> includes {@code destroy:ethene}, the returned collection will include a Reaction with {@code destroy:ethene} and {@code destroy:water} as reactants,
-     * {@code destroy:ethanol} as a product, and all the appropriate rate constants and catalysts as defined in the {@link com.petrolpark.destroy.chemistry.index.genericReaction.AlkeneHydration#generateReaction generator}.</p>
+     * {@code destroy:ethanol} as a product, and all the appropriate rate constants and catalysts as defined in the {@link com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydration#generateReaction generator}.</p>
      * 
      * @param <G> <b>G</b> The Group to which this Generic Reaction applies
-     * @param genericReaction
+     * @param genericreaction
      * @param reactants All {@link GenericReactant Reactants} that have the Group.
      * @return A Collection of all specified Reactions.
      */
     @SuppressWarnings("unchecked")
-    private <G extends Group> List<Reaction> specifySingleGroupGenericReactions(GenericReaction genericReaction, List<GenericReactant<?>> reactants) {
+    private <G extends Group> List<Reaction> specifySingleGroupGenericReactions(GenericReaction genericreaction, List<GenericReactant<?>> reactants) {
         try {
-            SingleGroupGenericReaction<G> singleGroupGenericReaction = (SingleGroupGenericReaction<G>) genericReaction; // Unchecked conversion
+            SingleGroupGenericReaction<G> singleGroupGenericReaction = (SingleGroupGenericReaction<G>) genericreaction; // Unchecked conversion
             List<Reaction> reactions = new ArrayList<>();
             for (GenericReactant<?> reactant : reactants) {
                 reactions.add(singleGroupGenericReaction.generateReaction((GenericReactant<G>)reactant)); // Unchecked conversion

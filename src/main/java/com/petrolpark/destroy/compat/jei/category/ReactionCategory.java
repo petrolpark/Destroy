@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.petrolpark.destroy.chemistry.Reaction;
-import com.petrolpark.destroy.client.gui.stackedTextBox.AbstractStackedTextBox;
-import com.petrolpark.destroy.client.gui.stackedTextBox.AbstractStackedTextBox.LinesAndActivationAreas;
+import com.petrolpark.destroy.client.gui.stackedtextbox.AbstractStackedTextBox;
+import com.petrolpark.destroy.client.gui.stackedtextbox.AbstractStackedTextBox.LinesAndActivationAreas;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.recipe.ReactionRecipe;
 import com.simibubi.create.foundation.item.TooltipHelper.Palette;

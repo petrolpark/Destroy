@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.chemistry.reactionResult;
+package com.petrolpark.destroy.chemistry.reactionresult;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;

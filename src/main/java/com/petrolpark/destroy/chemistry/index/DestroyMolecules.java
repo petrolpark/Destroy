@@ -185,8 +185,8 @@ public final class DestroyMolecules {
     CARBON_DIOXIDE = builder()
         .id("carbon_dioxide")
         .structure(Formula.deserialize("destroy:linear:O=C=O"))
-        .boilingPoint(-78.4645) // Sublimes, doesn't "boil"
-        .density(1.977) // Gas density
+        .boilingPoint(-78.4645f) // Sublimes, doesn't "boil"
+        .density(1.977f) // Gas density
         .molarHeatCapacity(37.135f)
         .tag(Tags.GREENHOUSE)
         .build(),
@@ -335,10 +335,10 @@ public final class DestroyMolecules {
 
     CYCLOPENTADIENIDE = builder()
         .id("cyclopentadienide")
-        .structure(Formua.deserialize("destroy:cyclopentadienide:,,,"))
+        .structure(Formula.deserialize("destroy:cyclopentadienide:,,,"))
         .charge(-1)
         .tag(Tags.SMOG)
-        .build();
+        .build(),
 
     DICHLORODIFLUOROMETHANE = builder()
         .id("dichlorodifluoromethane")
@@ -349,7 +349,7 @@ public final class DestroyMolecules {
         .tag(Tags.GREENHOUSE)
         .tag(Tags.OZONE_DEPLETER)
         .tag(Tags.REFRIGERANT)
-        .build();
+        .build(),
 
     ETHANOL = builder()
         .id("ethanol")
@@ -538,7 +538,7 @@ public final class DestroyMolecules {
         .id("hydrogen")
         .structure(Formula.atom(Element.HYDROGEN).addAtom(Element.HYDROGEN))
         .boilingPointInKelvins(20.271f)
-        .density(0.08988)
+        .density(0.08988f)
         .molarHeatCapacity(28.84f)
         .build(),
 
@@ -556,7 +556,7 @@ public final class DestroyMolecules {
         .structure(Formula.atom(Element.IODINE).addAtom(Element.HYDROGEN))
         .boilingPoint(-35.36f)
         .density(2850)
-        .heatCapacity(29.2f)
+        .molarHeatCapacity(29.2f)
         .build(),
     
     HYDROGEN_PEROXIDE = builder()
@@ -605,6 +605,15 @@ public final class DestroyMolecules {
         .charge(-1)
         .build(),
 
+    IODINE = builder()
+        .id("iodine")
+        .structure(Formula.deserialize("destroy:linear:II"))
+        .color(0x80AA16A5)
+        .boilingPoint(184.3f)
+        .density(4933f)
+        .molarHeatCapacity(54.44f)
+        .build(),
+
     IODOMETHANE = builder()
         .id("iodomethane")
         .structure(Formula.deserialize("destroy:linear:CI"))
@@ -651,7 +660,7 @@ public final class DestroyMolecules {
         .id("methane")
         .structure(Formula.deserialize("destroy:linear:C"))
         .boilingPoint(-161.5f)
-        .density(0.657)
+        .density(0.657f)
         .molarHeatCapacity(35.7f)
         .tag(Tags.GREENHOUSE)
         .tag(Tags.SMOG)
@@ -1106,7 +1115,7 @@ public final class DestroyMolecules {
         /**
          * This Molecule will increase the world's smog levels if released into the atmosphere.
          */
-        SMOG = new MoleculeTag("smog")
+        SMOG = new MoleculeTag("smog"),
 
         /**
          * This Molecule is ignored when displaying the written contents of a Mixture, and ignored when used in Recipes.
