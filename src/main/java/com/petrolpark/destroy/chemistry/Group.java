@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.petrolpark.destroy.chemistry.genericReaction.GenericReaction;
+import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
 
 /**
  * A functional group in a {@link Molecule}, containing the specific {@link Atom Atoms} within it.

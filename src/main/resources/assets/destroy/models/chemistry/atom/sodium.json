@@ -1,0 +1,21 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "destroy:chemistry/elements",
+		"particle": "destroy:chemistry/elements"
+	},
+	"elements": [
+		{
+			"from": [-7.2, -7.2, -7.2],
+			"to": [7.2, 7.2, 7.2],
+			"faces": {
+				"north": {"uv": [1, 3, 2, 4], "texture": "#0"},
+				"east": {"uv": [1, 3, 2, 4], "texture": "#0"},
+				"south": {"uv": [1, 3, 2, 4], "texture": "#0"},
+				"west": {"uv": [1, 3, 2, 4], "texture": "#0"},
+				"up": {"uv": [1, 3, 2, 4], "texture": "#0"},
+				"down": {"uv": [1, 3, 2, 4], "texture": "#0"}
+			}
+		}
+	]
+}

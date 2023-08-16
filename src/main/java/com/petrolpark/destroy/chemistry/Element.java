@@ -27,12 +27,13 @@ public enum Element {
     COPPER("Cu", 63.55f, 1.9f, 1, 2),
     ZINC("Zn", 65.38f, 1.6f),
     ZIRCONIUM("Zr", 91.22f, 1.4f),
-    RHODIUM("Rh", 102.91f, 2.2f),
-    PALLADIUM("Pd", 106.42f, 2.2f),
+    //RHODIUM("Rh", 102.91f, 2.2f),
+    //PALLADIUM("Pd", 106.42f, 2.2f),
+    IODINE("I", 126.90f, 2.7f),
     PLATINUM("Pt", 195.08f, 2.2f),
     GOLD("Au", 196.97f, 2.4f, 0, 4),
     MERCURY("Hg", 200.59f, 1.9f, 2),
-    LEAD("Pb", 207.20f, 1.8f)
+    //LEAD("Pb", 207.20f, 1.8f)
     ;
 
     private String symbol;

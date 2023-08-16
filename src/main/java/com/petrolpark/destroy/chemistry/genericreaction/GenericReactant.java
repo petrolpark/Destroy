@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.chemistry.genericReaction;
+package com.petrolpark.destroy.chemistry.genericreaction;
 
 import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.Molecule;

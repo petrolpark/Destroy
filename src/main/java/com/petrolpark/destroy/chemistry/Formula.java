@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.Formula.Topology.SideChainInformation;
-import com.petrolpark.destroy.chemistry.genericReaction.GenericReaction;
+import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Node;
 import com.simibubi.create.foundation.utility.Pair;
