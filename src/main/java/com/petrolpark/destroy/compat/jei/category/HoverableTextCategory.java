@@ -49,6 +49,7 @@ public abstract class HoverableTextCategory<T extends Recipe<?>> extends Destroy
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup focuses) {
+        PARAGRAPHS.clear();
         PARAGRAPHS.put(recipe, getHoverableTexts(recipe));
     };
 
@@ -77,7 +78,7 @@ public abstract class HoverableTextCategory<T extends Recipe<?>> extends Destroy
         if (!textBoxStack.isActive()) {
             checkParagraphs: for (LinesAndActivationAreas paragraph : paragraphs) {
                 for (Pair<Area, String> pair : paragraph.areas()) {
-                    if (pair.getFirst().isIn((int)mouseX, (int)mouseY)) {
+                    if (pair.getFirst().isIn((int)mouseX, (int)mouseY + 5)) {
                         textBoxStack = new StackedTextBox(minecraft, (int)mouseX, (int)mouseY, AbstractStackedTextBox.NOTHING)
                             .withActivationArea(pair.getFirst())
                             .withPalette(getPaletteForBoxes())

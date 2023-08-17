@@ -97,7 +97,7 @@ public class StackedTextBox extends AbstractStackedTextBox {
             for (Pair<Area, String> pair : possibleChildActivationAreas) {
                 Area area = pair.getFirst();
                 if (area.isIn(mouseX, mouseY)) {
-                    child = new StackedTextBox(minecraft, mouseX, mouseY + 5, this)
+                    child = new StackedTextBox(minecraft, mouseX, mouseY, this)
                         .withActivationArea(area)
                         .withPalette(palette)
                         .withText(Component.translatable(pair.getSecond()).getString());

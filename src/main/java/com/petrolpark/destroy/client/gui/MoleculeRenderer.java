@@ -94,7 +94,7 @@ public class MoleculeRenderer {
                 Vec3 zig = cyclicAtomsAndLocations.get(bond.getDestinationAtom()).subtract(sourceAtomLocation).normalize();
                 RENDERED_OBJECTS.add(Pair.of(
                    sourceAtomLocation.scale(BOND_LENGTH).add(zig.scale(BOND_LENGTH / 2)),
-                   BondRenderInstance.fromZig(bond.getType(), zig)
+                   BondRenderInstance.fromZig(BondType.SINGLE, zig) //TODO replace with bond.getType()
                 ));
             });
             // Add all side chains

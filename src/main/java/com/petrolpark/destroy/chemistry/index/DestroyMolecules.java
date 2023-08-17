@@ -372,7 +372,7 @@ public final class DestroyMolecules {
 
     ETHYLANTHRAQUINONE = builder()
         .id("ethylanthraquinone")
-        .structure(Formula.deserialize("destroy:anthraquinone:,,,,=O,,,,CC,,,=O,,"))
+        .structure(Formula.deserialize("destroy:anthraquinone:,,,=O,,,CC,,=O,"))
         .boilingPoint(415.4f)
         .density(1231f)
         .molarHeatCapacity(286.6f) // Not accurate, just based off an isomer
@@ -381,7 +381,7 @@ public final class DestroyMolecules {
 
     ETHYLANTHRAHYDROQUINONE = builder()
         .id("ethylanthrahydroquinone")
-        .structure(Formula.deserialize("destroy:anthracene:,,,,O,,,,CC,,,O,,"))
+        .structure(Formula.deserialize("destroy:anthracene:,,,=O,,,CC,,=O,"))
         // No data found so using same as ethylanthraquinone
         .boilingPoint(415.4f)
         .density(1231f)
@@ -504,7 +504,7 @@ public final class DestroyMolecules {
 
     HYDRAZINE = builder()
         .id("hydrazine")
-        .structure(Formula.deserialize("NN"))
+        .structure(Formula.deserialize("destroy:linear:NN"))
         .boilingPoint(114f)
         .density(1021f)
         .molarHeatCapacity(70f) // Estimate: couldn't find heat capacity
@@ -773,7 +773,7 @@ public final class DestroyMolecules {
     OCTASULFUR = builder()
         .id("octasulfur")
         .translationKey("sulfur")
-        .structure(Formula.deserialize("destroy:octasulfur:"))
+        .structure(Formula.deserialize("destroy:octasulfur:hello"))
         .boilingPoint(444.6f) //TODO melting point is 119C
         .density(2070f)
         .molarHeatCapacity(21.64f)
@@ -847,7 +847,7 @@ public final class DestroyMolecules {
     
     PHTHALIC_ANHYDRIDE = builder()
         .id("phthalic_anhydride")
-        .structure(Formula.deserialize("destroy:isohydrobenzofuran:,,,,=O,,=O,,"))
+        .structure(Formula.deserialize("destroy:isohydrobenzofuran:,,,=O,=O,"))
         .boilingPoint(295f)
         .density(1530f)
         .molarHeatCapacity(161.8f)
@@ -857,7 +857,7 @@ public final class DestroyMolecules {
 
     PICRIC_ACID = builder()
         .id("picric_acid")
-        .structure(Formula.deserialize("destroy:benzene:O,N(~O)~O,C,N(~O)~O,,N(~O)~O"))
+        .structure(Formula.deserialize("destroy:benzene:O,N~(~O)O,C,N~(~O)O,,N~(~O)O"))
         .color(0xC0ED7417)
         .boilingPoint(300f) // Detonates before this
         .density(1763f)
@@ -999,7 +999,7 @@ public final class DestroyMolecules {
     
     TRINITROTOLUENE = builder()
         .id("tnt")
-        .structure(Formula.deserialize("destroy:benzene:N(~O)~O,C,N(~O)~O,,N(~O)~O,"))
+        .structure(Formula.deserialize("destroy:benzene:C,N~(~O)O,C,N~(~O)O,,N~(~O)O"))
         .color(0xD0FCF1E8)
         .boilingPoint(240f) // Decomposes
         .density(1654f)
@@ -1023,7 +1023,6 @@ public final class DestroyMolecules {
     WATER = builder()
         .id("water")
         .structure(Formula.deserialize("destroy:linear:O"))
-        .tag(Tags.SOLVENT)
         .boilingPoint(100f)
         .density(1000f)
         .specificHeatCapacity(4160f)

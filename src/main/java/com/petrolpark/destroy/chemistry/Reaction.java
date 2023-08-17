@@ -28,6 +28,8 @@ public class Reaction {
     private String nameSpace;
     private String id;
 
+    private boolean includeInJei;
+
     public static final Float GAS_CONSTANT = 8.3145f;
 
     /**
@@ -115,6 +117,13 @@ public class Reaction {
     };
 
     /**
+     * Whether this Reaction should be displayed in the list of Reactions in JEI.
+     */
+    public boolean includeInJei() {
+        return includeInJei;
+    };
+
+    /**
      * The name space of the mod by which this Reaction was defined.
      * @return {@code "novel"} if this was generated automatically by a {@link com.petrolpark.destroy.chemistry.genericreaction.GenericReaction Reaction generator}.
      */
@@ -161,6 +170,8 @@ public class Reaction {
             reaction.products = new HashMap<>();
             reaction.orders = new HashMap<>();
 
+            reaction.includeInJei = true;
+
             hasForcedPreExponentialFactor = false;
             hasForcedActivationEnergy = false;
         };
@@ -194,6 +205,11 @@ public class Reaction {
 
         public ReactionBuilder addCatalyst(Molecule molecule, int order) {
             reaction.orders.put(molecule, order);
+            return this;
+        };
+
+        public ReactionBuilder dontIncludeInJei() {
+            reaction.includeInJei = false;
             return this;
         };
 

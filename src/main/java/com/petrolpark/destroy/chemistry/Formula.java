@@ -362,6 +362,8 @@ public class Formula implements Cloneable {
                 };
             };
         };
+        
+        //TODO add hydrogens to atoms in side chains as currently this doesn't happen
 
         // Add all the rest of the Hydrogens
         for (Entry<Atom, List<Bond>> entry : structure.entrySet()) {
@@ -504,8 +506,7 @@ public class Formula implements Cloneable {
                 topology = Topology.getTopology(topologyAndFormula[0] + ":" + topologyAndFormula[1]);
                 formulaString = topologyAndFormula[2];
             } else {
-                topology = Topology.LINEAR;
-                formulaString = topologyAndFormula[1];
+                throw new IllegalStateException("Badly formatted FROWNS string '"+FROWNSstring+"'. They should be in the format 'namespace:topology:chains'.");
             };
 
             if (topology == Topology.LINEAR) {
@@ -514,8 +515,10 @@ public class Formula implements Cloneable {
             } else {
                 if (topology.formula == null) throw new IllegalStateException("Missing base formula for Topology "+topology.getID());
                 formula = topology.formula.shallowCopy(); // Gives a null warning which has been accounted for
+                if (topology.getConnections() == 0) return formula.refreshFunctionalGroups();
                 int i = 0;
                 for (String group : formulaString.split(",")) {
+                    if (i > formula.topology.connections.size()) throw new IllegalStateException("Formula '" + FROWNSstring + "' has too many groups for its Topology. There should be " + formula.topology.connections.size() + ".");
                     Formula sideChain;
                     BondType bond = BondType.SINGLE; //start by assuming the Bond will be single
                     if (group.isBlank()) {
@@ -540,7 +543,6 @@ public class Formula implements Cloneable {
                     };
                     formula.addGroupToPosition(sideChain, i, bond);
                     i++;
-                    if (i > formula.topology.connections.size()) throw new IllegalStateException("Formula '" + FROWNSstring + "' has too many groups (" + (i+1) + ") for its Cycle Type (" + formula.topology.connections.size() + ").");
                 };
             };
 
@@ -766,11 +768,13 @@ public class Formula implements Cloneable {
         int i = 0;
         while (i < symbols.size()) {
 
+            if (symbols.get(i).matches(".*\\)")) throw new IllegalArgumentException("Chain bond type symbols must preceed side groups; for example chloroethene must be 'destroy:linear:C=(Cl)C' and not 'destroy:linear:C(Cl)=C'.");
+
             String symbol;
             Map<Formula, BondType> groupsToAdd = new HashMap<>(); //a list of all the Groups to be added, and the Type of Bond by which they should be added
             BondType thisAtomBond = nextAtomBond;
 
-            if (symbols.get(i).contains("(")) { //if this Atom marks the beginning of a side Group (i.e. the next Atom will comprise the start of the side Group)
+            if (symbols.get(i).contains("(")) { //If this Atom marks the beginning of a side Group (i.e. the next Atom will comprise the start of the side Group)
 
                 BondType groupBond = trailingBondType(symbols.get(i)); //get the Bond Type to the Group
 
@@ -980,6 +984,18 @@ public class Formula implements Cloneable {
             };
 
             /**
+             * Add a side chain to the root {@link Atom} of this Topology.
+             * @param bondDirection The direction of the next {@link Bond}
+             * @param branchDirection The direction in which the side-chain should continue (as chains of Atoms zig-zag,
+             * this is the net direction of movement. This information is used in {@link com.petrolpark.destroy.client.gui.MoleculeRenderer rendering})
+             * @return This Topology builder
+             */
+            public Builder sideChain(Vec3 bondDirection, Vec3 branchDirection) {
+                topology.connections.add(new SideChainInformation(topology.atomsAndLocations.get(0).getSecond(), bondDirection, branchDirection));
+                return this;
+            };
+
+            /**
              * Adds an {@link Atom} to a Topology. Call {@link Builder#startWith startWith} first.
              * @param element The Element of the Atom to add (note that this is an Element and not an Atom because Atoms in cyclic {@link Formula structures} are not
              * allowed the same additional detail as regular Atoms, such as {@link Atom#getpKa pKa} and charge)
@@ -1055,15 +1071,16 @@ public class Formula implements Cloneable {
              */
             @SuppressWarnings("null")
             public AttachedAtom withBondTo(int n, BondType bondType) {
-                if (n >= builder.topology.atomsAndLocations.size() || builder.topology.formula == null) throw new IllegalArgumentException("Cannot add Bonds between Atoms that do not exist on the structure");
+                if (n >= builder.topology.atomsAndLocations.size()) throw new IllegalArgumentException("Tried to Bond an Atom back to Atom "+n+" but the "+n+"th atom has not yet been added to the Topology.");
+                if (builder.topology.formula == null) throw new IllegalArgumentException("Cannot add Bonds between Atoms that do not exist on the structure.");
                 Atom atomToWhichToAttach = builder.topology.atomsAndLocations.get(n).getSecond();
                 builder.topology.bonds.add(new Bond(atom, atomToWhichToAttach, bondType));
-                addBondBetweenAtoms(builder.topology.formula.structure, atom, atomToWhichToAttach, bondType);// Gives a null warning, which is accounted for
+                addBondBetweenAtoms(builder.topology.formula.structure, atom, atomToWhichToAttach, bondType); // Gives a null warning, which is accounted for
                 return this;
             };
     
             /**
-             * 
+             * Add a side chain to the current attached {@link Atom}.
              * @param bondDirection The direction of the next {@link Bond}
              * @param branchDirection The direction in which the side-chain should continue (as chains of Atoms zig-zag,
              * this is the net direction of movement. This information is used in {@link com.petrolpark.destroy.client.gui.MoleculeRenderer rendering})

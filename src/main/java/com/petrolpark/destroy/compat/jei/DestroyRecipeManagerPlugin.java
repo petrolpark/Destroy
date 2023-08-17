@@ -65,7 +65,9 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
             switch (focus.getRole()) {
                 case INPUT: {
                     // Add Reaction Recipes
-                    if (recipeCategory instanceof ReactionCategory) molecule.getReactantReactions().forEach(reaction -> recipes.add((T)(ReactionCategory.RECIPES.get(reaction)))); // This is an unchecked conversion but I think it's fine
+                    if (recipeCategory instanceof ReactionCategory) molecule.getReactantReactions().forEach(reaction -> {
+                        if (reaction.includeInJei()) recipes.add((T)(ReactionCategory.RECIPES.get(reaction)));
+                    }); // This is an unchecked conversion but I think it's fine
                     
                     // Add non-Reaction Recipes
                     List<Recipe<?>> recipeUses = DestroyJEI.MOLECULES_INPUT.get(molecule); // Recipes in which a Mixture containing this Molecule is required
@@ -80,7 +82,9 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
                 }
                 case OUTPUT: {
                     // Add Reaction Recipes
-                    if (recipeCategory instanceof ReactionCategory) molecule.getProductReactions().forEach(reaction -> recipes.add((T)(ReactionCategory.RECIPES.get(reaction)))); // This is an unchecked conversion but I think it's fine
+                    if (recipeCategory instanceof ReactionCategory) molecule.getProductReactions().forEach(reaction -> {
+                        if (reaction.includeInJei()) recipes.add((T)(ReactionCategory.RECIPES.get(reaction)));
+                    }); // This is an unchecked conversion but I think it's fine
                 
                     // Add non-Reaction Recipes
                     List<Recipe<?>> recipeProductions = DestroyJEI.MOLECULES_OUTPUT.get(molecule); // Recipes in which a Mixture containing this Molecule is produced
