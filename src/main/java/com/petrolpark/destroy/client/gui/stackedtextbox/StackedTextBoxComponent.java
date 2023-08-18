@@ -66,9 +66,14 @@ public abstract class StackedTextBoxComponent {
         public Definition(String value) {
             super(value);
             String[] s = value.split(",");
-            displayedString = "_"+s[0]+"_";
-            String[] definitionId = s[1].trim().split(":");
-            definitionTranslationKey = definitionId[0] + ".chemistry." + definitionId[1];
+            if (s.length != 2) {
+                displayedString = Component.translatable("destroy.chemistry.unknown_definition").getString();
+                definitionTranslationKey = "destroy.chemistry.unknown_definition";
+            } else {
+                displayedString = "_"+s[0]+"_";
+                String[] definitionId = s[1].trim().split(":");
+                definitionTranslationKey = definitionId[0] + ".chemistry." + definitionId[1];
+            };
         };
 
         @Override

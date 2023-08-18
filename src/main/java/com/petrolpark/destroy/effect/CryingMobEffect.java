@@ -32,7 +32,7 @@ public class CryingMobEffect extends MobEffect {
     };
 
     @Override
-    @SuppressWarnings({"resource", "null"})
+    @SuppressWarnings("resource")
     public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
         RandomSource rand = livingEntity.getRandom();
         if (livingEntity.level().isClientSide() && rand.nextFloat() > 0.8f) {

@@ -56,7 +56,6 @@ public class HyperaccumulatingFertilizerItem extends BoneMealItem {
     };
 
     @Override
-    @SuppressWarnings("null")
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         boolean couldGrow = grow(level, context.getClickedPos()); // Try grow the Crop

@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.chemistry;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,15 @@ import net.minecraft.network.chat.Component;
  * making them useful for GUI displays.
  */
 public class ReadOnlyMixture {
+
+    /**
+     * A Decimal Formatter used for displaying the contents of Mixtures.
+     */
+    private static DecimalFormat df = new DecimalFormat();
+    static {
+        df.setMinimumFractionDigits(1);
+        df.setMinimumFractionDigits(1);
+    };
 
     /**
      * The minimum value below which a {@link Molecule} is considered an impurity and not a significant part of the Mixture.
@@ -197,8 +207,8 @@ public class ReadOnlyMixture {
                 .space().space()
                 .add(entry.getKey().getName(iupac).plainCopy())
                 .add(Component.literal(
-                    entry.getKey().getCharge() == 0 ? "" : " [" + entry.getKey().getSerializedCharge(false) + "]" + // Show charge, if there is one
-                    " ("+entry.getValue()+"M)" // Show concentration
+                    (entry.getKey().getCharge() == 0 ? "" : " [" + entry.getKey().getSerializedCharge(false) + "]") + // Show charge, if there is one
+                    " ("+df.format(entry.getValue())+"M)" // Show concentration
                 ))
                 .style(ChatFormatting.GRAY)
                 .component()

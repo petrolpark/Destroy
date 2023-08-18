@@ -292,7 +292,6 @@ public class DestroyServerEvents {
      * Give the Player Haste/Mining Fatigue if they have Baby Blue High/Withdrawal respectively.
      */
     @SubscribeEvent
-    @SuppressWarnings("null") // Capability is checked for nullness
     public static void changeMiningSpeedWithBabyBlueEffects(PlayerEvent.BreakSpeed event) {
         Player player = event.getEntity();
         if (player.hasEffect(DestroyMobEffects.BABY_BLUE_HIGH.get())) {
@@ -512,13 +511,16 @@ public class DestroyServerEvents {
     };
 
     /**
-     * Add a chance for crop growth failures depending on the level of smog and greenhouse gas.
+     * Add a chance for crop growth failures depending on the level of smog, greenhouse gas and acid rain.
      */
     @SubscribeEvent
     public static void onPlantGrows(CropGrowEvent.Pre event) {
         if (!(event.getLevel() instanceof Level level)) return;
-        if (level.random.nextInt(PollutionType.SMOG.max + PollutionType.GREENHOUSE.max) <= PollutionHelper.getPollution(level, PollutionType.SMOG) + PollutionHelper.getPollution(level, PollutionType.GREENHOUSE)) {
-            event.setResult(Result.DENY);
+        for (PollutionType pollutionType : new PollutionType[]{PollutionType.SMOG, PollutionType.GREENHOUSE, PollutionType.ACID_RAIN}) {
+            if (level.random.nextInt(pollutionType.max) <= PollutionHelper.getPollution(level, pollutionType)) {
+                event.setResult(Result.DENY);
+                return;
+            };
         };
     };
 

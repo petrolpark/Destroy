@@ -159,7 +159,7 @@ public class MoleculeRenderer {
         PoseStack poseStack = graphics.pose();
         poseStack.pushPose();
         poseStack.translate(xPosition + xOffset, yPosition + yOffset, zOffset + 100);
-        TransformStack.cast(poseStack).rotateY(AnimationTickHolder.getRenderTime());
+        TransformStack.cast(poseStack).rotateY(AnimationTickHolder.getRenderTime()); // Rotation
         for (Pair<Vec3, IRenderableMoleculePart> pair : RENDERED_OBJECTS) {
             pair.getSecond().render(graphics, pair.getFirst());
         };

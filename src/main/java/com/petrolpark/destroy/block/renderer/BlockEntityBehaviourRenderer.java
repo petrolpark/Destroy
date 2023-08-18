@@ -32,7 +32,6 @@ import net.minecraft.world.phys.Vec3;
  */
 public class BlockEntityBehaviourRenderer {
     
-    @SuppressWarnings("null")
     public static void tick() {
 		Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;

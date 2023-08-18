@@ -100,7 +100,6 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
     };
 
     @Override
-    @SuppressWarnings("null")
     public void remove() {
         if (!hasLevel() || getLevel().isClientSide()) super.remove();
         removeFromDistillationTower();
@@ -108,7 +107,6 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
     };
 
     @Override
-    @SuppressWarnings("null")
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         if (!hasLevel()) return;
@@ -152,7 +150,6 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
     };
 
     @Override
-    @SuppressWarnings("null")
     public void tick() {
         super.tick();
         if (initializationTicks > 0) initializationTicks--;
@@ -238,7 +235,6 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
         sendData();
     };
 
-    @SuppressWarnings("null")
     public void spawnParticles(FluidStack fluidStack) {
         Vec3 center = VecHelper.getCenterOf(getBlockPos());
         if (!(hasLevel() && getLevel().isClientSide() && isController)) return;
@@ -279,7 +275,6 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
 
     @Nonnull
     @Override
-    @SuppressWarnings("null")
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.FLUID_HANDLER) {
             if (side == pipeFace) {
@@ -303,7 +298,6 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
      * @param shouldSwitch Whether the rotation should prioritise switching faces or staying on the current face
      * @return Whether the Bubble Cap was rotated
      */
-    @SuppressWarnings("null")
     public boolean attemptRotation(boolean shouldSwitch) {
         if (!hasLevel()) {
             return false;

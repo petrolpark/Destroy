@@ -376,6 +376,7 @@
     "destroy.chemistry.subatomic": "'Subatomic' means 'smaller than an {atom, destroy:atom}'.",
     "destroy.chemistry.syngas": "Synthesis gas, or 'syngas' is a mixture of [destroy:carbon_dioxide] and [destroy:hydrogen].",
     "destroy.chemistry.thermal_decomposition": "Thermal decomposition, or pyrolysis, is the spontaneous breakdown of a species when heated.",
+    "destroy.chemistry.unknown_definition": "Unknown definition - report this as a bug.",
 
     "destroy.display_source.pollutometer": "World Pollution Level",
     "destroy.display_source.bubble_cap": "Mixture Contents",
@@ -610,7 +611,7 @@
     "fluid.destroy.undistilled_moonshine": "Undistilled Moonshine",
     "fluid.destroy.urine": "Urine",
     
-    "itemGroup.destroy_tab": "Destroy",
+    "itemGroup.destroy.base": "Destroy",
 
     "item.destroy.abs": "ABS",
     "item.destroy.acetone_peroxide": "TATP",

@@ -87,7 +87,6 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     };
 
     @Override
-    @SuppressWarnings("null")
     protected AABB createRenderBoundingBox() {
 		if (getController() == null) return super.createRenderBoundingBox();
         return getController().wholeVatAABB();
@@ -120,7 +119,6 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     };
 
     @Nullable
-    @SuppressWarnings("null")
     public VatControllerBlockEntity getController() {
         if (!hasLevel() || controllerPosition == null) return null;
         BlockEntity be = getLevel().getBlockEntity(controllerPosition);
@@ -153,7 +151,6 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     };
 
     @Override
-    @SuppressWarnings("null")
     public void tick() {
         super.tick();
  
@@ -224,7 +221,6 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
      * @param client Whether this is client-side
      * @param partialTicks Not required server-side
      */
-    @SuppressWarnings("null")
     public boolean isPipeSubmerged(boolean client, @Nullable Float partialTicks) {
         if (getController() == null) return false;
         if (direction == Direction.DOWN) return true;
@@ -268,7 +264,6 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         sendData();
     };
 
-    @SuppressWarnings("null")
     public void updateDisplayType(BlockPos neighborPos) {
         if (getController() == null) return;
         FluidTransportBehaviour behaviour = BlockEntityBehaviour.get(getLevel(), neighborPos, FluidTransportBehaviour.TYPE);
@@ -292,7 +287,6 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
 	};
 
     @Override
-    @SuppressWarnings("null")
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         if (!getVatOptional().isPresent() || getController() == null) return false;
         switch (getDisplayType()) {

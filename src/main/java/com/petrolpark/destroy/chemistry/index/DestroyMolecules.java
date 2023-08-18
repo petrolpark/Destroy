@@ -774,6 +774,7 @@ public final class DestroyMolecules {
         .id("octasulfur")
         .translationKey("sulfur")
         .structure(Formula.deserialize("destroy:octasulfur:hello"))
+        .color(0xFFD00000)
         .boilingPoint(444.6f) //TODO melting point is 119C
         .density(2070f)
         .molarHeatCapacity(21.64f)

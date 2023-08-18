@@ -78,7 +78,7 @@ public abstract class HoverableTextCategory<T extends Recipe<?>> extends Destroy
         if (!textBoxStack.isActive()) {
             checkParagraphs: for (LinesAndActivationAreas paragraph : paragraphs) {
                 for (Pair<Area, String> pair : paragraph.areas()) {
-                    if (pair.getFirst().isIn((int)mouseX, (int)mouseY + 5)) {
+                    if (pair.getFirst().isIn((int)mouseX, (int)mouseY)) {
                         textBoxStack = new StackedTextBox(minecraft, (int)mouseX, (int)mouseY, AbstractStackedTextBox.NOTHING)
                             .withActivationArea(pair.getFirst())
                             .withPalette(getPaletteForBoxes())
@@ -91,7 +91,7 @@ public abstract class HoverableTextCategory<T extends Recipe<?>> extends Destroy
 
         // Render the current stack of text boxes
         stack.pushPose();
-        stack.translate(10, 10, 0);
+        stack.translate(10, 0, 0);
         textBoxStack.render(graphics, (int)mouseX, (int)mouseY, partialTicks);
         stack.popPose();
     };

@@ -228,6 +228,7 @@ public class DestroyTopologies {
                 .attach()
             .atom(Element.CARBON, new Vec3(cos(30), -sin(30), 0d)) // 13
                 .withSideBranch(new Vec3(0d, -1d, 0d), new Vec3(0d, -1d, 0.5d).normalize())
+                .withBondTo(0, BondType.AROMATIC)
                 .withBondTo(12, BondType.AROMATIC)
                 .attach();
     };

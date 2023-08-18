@@ -65,7 +65,6 @@ public class DestroyScenes {
         redFluid = new FluidStack(PotionFluid.withEffects(500, new Potion(), List.of(new MobEffectInstance(MobEffects.DAMAGE_BOOST))), 1000);
     };
 
-    @SuppressWarnings("null")
     public static void agingBarrel(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("aging_barrel", "This text is defined in a language file.");
         scene.configureBasePlate(0, 0, 3);

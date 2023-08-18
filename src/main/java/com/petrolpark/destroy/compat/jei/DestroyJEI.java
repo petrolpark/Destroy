@@ -174,7 +174,8 @@ public class DestroyJEI implements IModPlugin {
 
     @Override
     public <T> void registerFluidSubtypes(ISubtypeRegistration registration, IPlatformFluidHelper<T> platformFluidHelper) {
-        registration.registerSubtypeInterpreter(ForgeTypes.FLUID_STACK, DestroyFluids.MIXTURE.get(), new MixtureFluidSubtypeInterpreter());
+        registration.registerSubtypeInterpreter(ForgeTypes.FLUID_STACK, DestroyFluids.MIXTURE.get().getSource(), new MixtureFluidSubtypeInterpreter());
+        registration.registerSubtypeInterpreter(ForgeTypes.FLUID_STACK, DestroyFluids.MIXTURE.get().getFlowing(), new MixtureFluidSubtypeInterpreter());
     };
 
     @Override

@@ -1,7 +1,19 @@
 {
     "variants": {
-        "": {
-            "model": "destroy:block/temporary"
+        "facing=north": {
+            "model": "destroy:block/vat_controller"
+        },
+        "facing=east": {
+            "model": "destroy:block/vat_controller",
+            "y": 90
+        },
+        "facing=south": {
+            "model": "destroy:block/vat_controller",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "destroy:block/vat_controller",
+            "y": 270
         }
     }
 }

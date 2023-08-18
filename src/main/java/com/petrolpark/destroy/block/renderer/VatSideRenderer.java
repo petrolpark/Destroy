@@ -38,7 +38,6 @@ public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity>
     public VatSideRenderer(BlockEntityRendererProvider.Context context) {};
 
     @Override
-    @SuppressWarnings("null")
     protected void renderSafe(VatSideBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
         BlockState state = be.getBlockState();
         if (be.getController() == null) return;
@@ -130,6 +129,11 @@ public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity>
 
     @Override
     public boolean shouldRenderOffScreen(VatSideBlockEntity be) {
+        return true;
+    };
+
+    @Override
+    public boolean shouldRender(VatSideBlockEntity vatSide, Vec3 cameraPos) {
         return true;
     };
 };

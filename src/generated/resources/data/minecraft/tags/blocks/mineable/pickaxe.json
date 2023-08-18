@@ -8,6 +8,7 @@
     "destroy:pumpjack",
     "destroy:pumpjack_cam",
     "destroy:pumpjack_structure",
+    "destroy:vat_side",
     "destroy:fluorite_block",
     "destroy:raw_nickel_block",
     "destroy:nickel_block",

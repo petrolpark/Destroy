@@ -34,7 +34,6 @@ public class ReactionInBasinRecipe extends MixingRecipe {
     };
 
     @Nullable
-    @SuppressWarnings("null")
     public static ReactionInBasinRecipe create(Collection<FluidStack> availableFluids, Collection<ItemStack> availableItems, BasinBlockEntity basin) {
         ProcessingRecipeBuilder<ReactionInBasinRecipe> builder = new ProcessingRecipeBuilder<>(ReactionInBasinRecipe::new, Destroy.asResource("reaction_in_basin_"));
 

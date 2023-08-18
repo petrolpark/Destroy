@@ -49,7 +49,6 @@ public class FluidIngredientMixin {
 	 * Molecule Tag ingredients.
 	 */
     @Overwrite
-	@SuppressWarnings("null")
     public static FluidIngredient deserialize(@Nullable JsonElement je) {
 
 		// All copied from Create source code.

@@ -37,7 +37,6 @@ public interface IFluidBlockEntity {
      * @param output Whether this is an output or input
      * @return The new face the output should point to
      */
-    @SuppressWarnings("null")
     public default Direction refreshDirection(SmartBlockEntity be, Direction currentDirection, FluidTank tank, boolean output) {
         if (!be.hasLevel() || currentDirection.getAxis() == Direction.Axis.Y) { // If the level doesn't exist (low-key no idea how this error even occured), or the side is UP or DOWN, fix this
             return Direction.NORTH;

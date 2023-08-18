@@ -47,7 +47,6 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer {
     };
 
     @Override
-    @SuppressWarnings("null")
     protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer, ItemDisplayContext transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         float partialTicks = AnimationTickHolder.getPartialTicks();
         int ticksThroughAnimation = AnimationTickHolder.getTicks(true) % 32;

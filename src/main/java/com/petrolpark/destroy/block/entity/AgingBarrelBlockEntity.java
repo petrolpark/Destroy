@@ -87,7 +87,6 @@ public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGog
     /**
      * Searches for a valid Recipe given the current contents of the Barrel and start processing if there is one.
      */
-    @SuppressWarnings("null")
     public void checkRecipe() {
         if (!hasLevel() || getLevel().isClientSide()) return;
         List<Recipe<?>> allRecipes = RecipeFinder.get(agingRecipeKey, level, r -> r.getType() == DestroyRecipeTypes.AGING.getType());
@@ -162,7 +161,6 @@ public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGog
 
     @Nonnull
     @Override
-    @SuppressWarnings("null")
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.FLUID_HANDLER) {
             return fluidCapability.cast();
@@ -181,7 +179,6 @@ public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGog
         super.tick();
     };
 
-    @SuppressWarnings("null") // It's not null I checked
     public void onTimerChange() {
         if (!hasLevel()) return;
         BlockState oldState = getBlockState();
@@ -209,7 +206,6 @@ public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGog
      * Attempts to open the Aging Barrel.
      * @return Whether opening the Barrel was successful
      */
-    @SuppressWarnings("null")
     public boolean tryOpen() {
         if (!hasLevel() || getLevel().isClientSide()) return false;
         if (timer == 0) {

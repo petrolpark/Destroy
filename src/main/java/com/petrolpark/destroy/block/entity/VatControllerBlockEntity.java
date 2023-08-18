@@ -237,7 +237,6 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     /**
      * Try to make a {@link com.petrolpark.destroy.util.vat.Vat Vat} attached to this Vat Controller.
      */
-    @SuppressWarnings("null")
     public boolean tryMakeVat() {
         if (!hasLevel() || getLevel().isClientSide()) return false;
 
@@ -285,7 +284,6 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         super.destroy();
     };
 
-    @SuppressWarnings("null")
     public void deleteVat(BlockPos posDestroyed) {
         if (underDeconstruction || getLevel().isClientSide()) return;
         underDeconstruction = true;

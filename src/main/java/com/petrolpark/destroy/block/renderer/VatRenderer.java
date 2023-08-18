@@ -31,9 +31,8 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
 
         FluidRenderer.renderFluidBox(fluidStack,
             (float)relativeInternalLowerCorner.x, (float)relativeInternalLowerCorner.y, (float)relativeInternalLowerCorner.z,
-            (float)relativeInternalUpperCorner.x, controller.getRenderedFluidLevel(partialTicks), (float)relativeInternalUpperCorner.z,
-            vbCutout, ms, light, true); // TODO stop light being so dark
-            
+            (float)relativeInternalUpperCorner.x, (float)(relativeInternalLowerCorner.y + controller.getRenderedFluidLevel(partialTicks)), (float)relativeInternalUpperCorner.z,
+            vbCutout, ms, light, true);
     };
 
     @Override

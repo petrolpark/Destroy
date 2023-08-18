@@ -68,7 +68,6 @@ public class PumpjackBlockEntity extends SmartBlockEntity implements IHaveGoggle
     };
 
     @Override
-    @SuppressWarnings("null")
     public void tick() {
         super.tick();
         PumpjackCamBlockEntity cam = getCam();
@@ -156,7 +155,6 @@ public class PumpjackBlockEntity extends SmartBlockEntity implements IHaveGoggle
     };
 
     @Nullable
-    @SuppressWarnings("null")
     public PumpjackCamBlockEntity getCam() {
         PumpjackCamBlockEntity cam = source.get();
         if (cam == null || cam.isRemoved() || !cam.canPower(getBlockPos())) {

@@ -1,5 +1,6 @@
 {
   "values": [
-    "destroy:aging_barrel"
+    "destroy:aging_barrel",
+    "destroy:vat_side"
   ]
 }

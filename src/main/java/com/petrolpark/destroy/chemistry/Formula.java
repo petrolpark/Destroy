@@ -492,7 +492,6 @@ public class Formula implements Cloneable {
      * @param FROWNSstring
      * @return A new Formula instance
      */
-    @SuppressWarnings("null")
     public static Formula deserialize(String FROWNSstring) {
 
         try {
@@ -976,7 +975,6 @@ public class Formula implements Cloneable {
              * @param element The Element of the Atom to add
              * @return This Topology builder
              */
-            @SuppressWarnings("null")
             public Builder startWith(Element element) {
                 topology.formula = Formula.atom(element);
                 topology.atomsAndLocations.add(Pair.of(new Vec3(0f, 0f, 0f), topology.formula.startingAtom)); // This gives a null warning which has been accounted for
@@ -1005,7 +1003,6 @@ public class Formula implements Cloneable {
              * @throws IllegalStateException If {@link Builder#startWith startWith} hasn't been called
              * @see AttachedAtom#attach Adding the Atom to this Topology once it has been modified
              */
-            @SuppressWarnings("null")
             public AttachedAtom atom(Element element, Vec3 location) {
                 // Check the Formula has been initialized
                 if (topology.formula == null) throw new IllegalStateException("Cannot add Atoms to a Topology that hasn't been initialized with startWith(Element)");
@@ -1025,7 +1022,6 @@ public class Formula implements Cloneable {
              * @param id The name under which to register this Topology; it will be saved as {@code <nameSpace>:<id>}
              * @return The newly-built Topology
              */
-            @SuppressWarnings("null")
             public Topology build(String id) {
                 // Set the ID of the Topology
                 topology.id = id;
@@ -1069,7 +1065,6 @@ public class Formula implements Cloneable {
              * @param bondType The {@link Bond.BondType type} of Bond between these two Atoms
              * @return This attached Atom
              */
-            @SuppressWarnings("null")
             public AttachedAtom withBondTo(int n, BondType bondType) {
                 if (n >= builder.topology.atomsAndLocations.size()) throw new IllegalArgumentException("Tried to Bond an Atom back to Atom "+n+" but the "+n+"th atom has not yet been added to the Topology.");
                 if (builder.topology.formula == null) throw new IllegalArgumentException("Cannot add Bonds between Atoms that do not exist on the structure.");

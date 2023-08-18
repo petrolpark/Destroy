@@ -4,7 +4,6 @@ import java.util.function.Supplier;
 
 import com.petrolpark.destroy.capability.level.pollution.ClientLevelPollutionData;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
-import com.petrolpark.destroy.events.DestroyColorHandler;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,7 +32,6 @@ public class LevelPollutionS2CPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             ClientLevelPollutionData.setLevelPollution(levelPollution); // Update the Level Pollution information
-            DestroyColorHandler.refreshSmogLevel(); // Refresh the colors of foliage
         });
         return true;
     };

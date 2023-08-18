@@ -99,7 +99,6 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IFluidB
      * @param shouldSwitch Whether the rotation should prioritise switching faces or staying on the current face
      * @return Whether the Centrifuge was rotated
      */
-    @SuppressWarnings("null")
     public boolean attemptRotation(boolean shouldSwitch) {
         if (!hasLevel()) return false;
         if (getLevel().setBlock(getBlockPos(), getBlockState().setValue(CentrifugeBlock.DENSE_OUTPUT_FACE, refreshDirection(this, shouldSwitch ? denseOutputTankFace.getClockWise() : denseOutputTankFace, getDenseOutputTank(), true)), 6)) { // If the output Direction can be successfully changed
@@ -111,7 +110,6 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IFluidB
     };
 
     @Override
-    @SuppressWarnings("null")
     public void tick() {
         super.tick();
         if (!hasLevel()) return; // Don't do anything if we're not in a Level
@@ -202,7 +200,6 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IFluidB
         notifyUpdate();
     };
 
-    @SuppressWarnings("null") // It's not null; I checked
     public void spawnParticles() {
         FluidStack fluidStack = inputTank.getPrimaryHandler().getFluid();
         if (fluidStack.isEmpty() || !hasLevel()) return;
@@ -222,7 +219,6 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IFluidB
 
     @Nonnull
     @Override
-    @SuppressWarnings("null")
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.FLUID_HANDLER) {
             if (side == Direction.UP) {

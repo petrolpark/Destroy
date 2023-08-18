@@ -20,7 +20,6 @@ public class BabyBlueHighMobEffect extends UncurableMobEffect {
     }
 
     @Override
-    @SuppressWarnings("null") // It's not null; I checked
     public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
         if (!livingEntity.level().isClientSide()) {
             int duration = livingEntity.getEffect(DestroyMobEffects.BABY_BLUE_HIGH.get()).getDuration(); // This is the bit it says is null

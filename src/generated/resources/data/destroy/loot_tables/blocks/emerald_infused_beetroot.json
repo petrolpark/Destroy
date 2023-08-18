@@ -16,5 +16,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "destroy:blocks/emerald_infused_beetroot"
 }

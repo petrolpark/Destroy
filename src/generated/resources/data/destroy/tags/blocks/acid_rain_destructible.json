@@ -1,0 +1,19 @@
+{
+    "values": [
+        "#minecraft:crops",
+        "#minecraft:flowers",
+        "#minecraft:leaves",
+        "#minecraft:saplings",
+        "minecraft:grass",
+        "minecraft:fern",
+        "minecraft:seagrass",
+        "minecraft:tall_seagrass",
+        "minecraft:vine",
+        "minecraft:tall_grass",
+        "minecraft:large_fern",
+        "minecraft:warped_roots",
+        "minecraft:nether_sprouts",
+        "minecraft:crimson_roots",
+        "minecraft:hanging_roots"
+    ]
+}

@@ -16,7 +16,7 @@
                     "Temperature": "388",
                     "Contents": [
                         {
-                            "Molecule": "destroy:sulfur",
+                            "Molecule": "destroy:octasulfur",
                             "Concentration": 56.7
                         }
                     ]
