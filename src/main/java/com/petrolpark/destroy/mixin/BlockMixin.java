@@ -31,7 +31,7 @@ public class BlockMixin {
             if (level.random.nextInt(PollutionType.ACID_RAIN.max) <= PollutionHelper.getPollution(level, PollutionType.ACID_RAIN)) {
                 if (DestroyBlockTags.ACID_RAIN_DESTRUCTIBLE.matches(pair.getFirst().getBlock())) {
                     level.destroyBlock(pair.getSecond(), false);
-                } else if (DestroyBlockTags.ACID_RAIN_DIRT_REPLACEABLE.matches(pair.getFirst().getBlock())) {
+                } else if (DestroyBlockTags.ACID_RAIN_DIRT_REPLACEABLE.matches(pair.getFirst().getBlock()) && level.random.nextInt(10) == 0) {
                     level.setBlockAndUpdate(pair.getSecond(), Blocks.DIRT.defaultBlockState());
                 };
                 if (state == pair.getFirst()) ci.cancel();
