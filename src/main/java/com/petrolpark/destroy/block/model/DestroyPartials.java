@@ -29,6 +29,12 @@ public class DestroyPartials {
     VAT_SIDE_BAROMETER = block("vat_side/barometer"),
     VAT_SIDE_THERMOMETER = block("vat_side/thermometer"),
 
+    // Double Cardan Shaft
+    DCS_CENTER_SHAFT = block("double_cardan_shaft/center_shaft"),
+    DCS_SIDE_SHAFT = block("double_cardan_shaft/side_shaft"),
+    DCS_SIDE_GRIP = block("double_cardan_shaft/side_grip"),
+    DCS_GIMBAL = block("double_cardan_shaft/gimbal"),
+
     // Miscellaneous
     GAS_MASK = block("gas_mask"),
     STRAY_SKULL = block("cooler/skull");

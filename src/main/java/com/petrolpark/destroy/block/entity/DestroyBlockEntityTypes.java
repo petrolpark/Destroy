@@ -4,11 +4,13 @@ import static com.petrolpark.destroy.Destroy.REGISTRATE;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.instance.CentrifugeCogInstance;
+import com.petrolpark.destroy.block.instance.DoubleCardanShaftInstance;
 import com.petrolpark.destroy.block.instance.DynamoCogInstance;
 import com.petrolpark.destroy.block.renderer.AgingBarrelRenderer;
 import com.petrolpark.destroy.block.renderer.BubbleCapRenderer;
 import com.petrolpark.destroy.block.renderer.CentrifugeRenderer;
 import com.petrolpark.destroy.block.renderer.CoolerRenderer;
+import com.petrolpark.destroy.block.renderer.DoubleCardanShaftRenderer;
 import com.petrolpark.destroy.block.renderer.DynamoRenderer;
 import com.petrolpark.destroy.block.renderer.PollutometerRenderer;
 import com.petrolpark.destroy.block.renderer.PumpjackRenderer;
@@ -32,6 +34,12 @@ public class DestroyBlockEntityTypes {
         .instance(() -> CentrifugeCogInstance::new)
         .validBlocks(DestroyBlocks.CENTRIFUGE)
         .renderer(() -> CentrifugeRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<DoubleCardanShaftBlockEntity> DOUBLE_CARDAN_SHAFT = REGISTRATE.blockEntity("double_cardan_shaft", DoubleCardanShaftBlockEntity::new)
+        .instance(() -> DoubleCardanShaftInstance::new)
+        .validBlock(DestroyBlocks.DOUBLE_CARDAN_SHAFT)
+        .renderer(() -> DoubleCardanShaftRenderer::new)
         .register();
 
     public static final BlockEntityEntry<CoolerBlockEntity> COOLER = REGISTRATE.blockEntity("cooler", CoolerBlockEntity::new)

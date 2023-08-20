@@ -11,6 +11,7 @@ import com.petrolpark.destroy.item.PumpjackBlockItem;
 import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.sound.DestroySoundTypes;
 import com.petrolpark.destroy.util.DestroyTags.DestroyBlockTags;
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours;
@@ -58,6 +59,14 @@ public class DestroyBlocks {
         ).onRegister(AllDisplayBehaviours.assignDataBehaviour(BubbleCapBlockEntity.BUBBLE_CAP_DISPLAY_SOURCE, "bubble_cap"))
         .transform(TagGen.pickaxeOnly())
         .item()
+        .transform(customItemModel())
+        .register();
+
+    public static final BlockEntry<DoubleCardanShaftBlock> DOUBLE_CARDAN_SHAFT = REGISTRATE.block("double_cardan_shaft", DoubleCardanShaftBlock::new)
+        .initialProperties(AllBlocks.SHAFT)
+        .properties(p -> p
+            .noOcclusion()
+        ).item()
         .transform(customItemModel())
         .register();
 

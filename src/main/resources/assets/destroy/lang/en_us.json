@@ -100,6 +100,7 @@
     "block.destroy.cordite_block.tooltip.behaviour1": "_Evaporates_ liquids, doesn't drop items and does _minimal damage_ to mobs.",
     "block.destroy.deepslate_fluorite_ore": "Deepslate Fluorite Ore",
     "block.destroy.deepslate_nickel_ore": "Deepslate Nickel Ore",
+    "block.destroy.double_cardan_shaft": "Double Cardan Shaft",
     "block.destroy.dynamite_block": "Dynamite Block",
     "block.destroy.dynamite_block.tooltip": "DYNAMITE_BLOCK",
     "block.destroy.dynamite_block.tooltip.summary": "This explosive is _perfect_ for cleanly _excavating_ areas. The _size_ and _shape_ of the area can be configured.",
