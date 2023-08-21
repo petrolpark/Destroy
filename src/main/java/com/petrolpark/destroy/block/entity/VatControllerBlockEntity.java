@@ -91,7 +91,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     @Override
     protected AABB createRenderBoundingBox() {
 		if (vat.isEmpty()) return super.createRenderBoundingBox();
-        return wholeVatAABB();
+        return wholeVatAABB();//TODO uncomment
+        //return super.createRenderBoundingBox();
 	};
 
     @Override
@@ -379,12 +380,12 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     };
 
     public AABB wholeVatAABB() {
-        return new AABB(vat.get().getInternalLowerCorner(), vat.get().getUpperCorner()).inflate(1d);
+        return new AABB(vat.get().getInternalLowerCorner(), vat.get().getUpperCorner());
     };
 
     private void onTargeted(LocalPlayer player, BlockHitResult blockHitResult) {
         if (vat.isPresent()) {
-            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), wholeVatAABB(), 20)
+            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), wholeVatAABB().inflate(1d), 20)
                 .colored(0xFF_fffec2);
         };
     };

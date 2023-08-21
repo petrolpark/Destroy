@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "AS",
+      "S "
+    ],
+    "key": {
+      "A": {
+        "item": "create:andesite_alloy"
+      },
+      "S": {
+        "item": "create:shaft"
+      }
+    },
+    "result": {
+      "item": "destroy:double_cardan_shaft",
+      "count": 2
+    }
+  }

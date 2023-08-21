@@ -183,6 +183,12 @@
 			}
 		}
 	],
+	"display": {
+		"gui": {
+			"rotation": [30, 225, 0],
+			"translation": [-2, 4, 0]
+		}
+	},
 	"groups": [
 		{
 			"name": "Centre Shaft",
