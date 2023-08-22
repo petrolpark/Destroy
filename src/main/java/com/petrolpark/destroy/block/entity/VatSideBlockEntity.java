@@ -13,8 +13,6 @@ import com.petrolpark.destroy.capability.blockEntity.VatTankCapability;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.vat.IVatHeaterBlock;
 import com.petrolpark.destroy.util.vat.Vat;
-import com.simibubi.create.Create;
-import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
@@ -78,6 +76,11 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         spoutingFluid = FluidStack.EMPTY;
         oldPower = 0f;
     };
+
+    @Override
+    protected AABB createRenderBoundingBox() {
+        return super.createRenderBoundingBox();
+	};
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {

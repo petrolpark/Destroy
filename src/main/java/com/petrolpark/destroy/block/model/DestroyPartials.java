@@ -35,6 +35,11 @@ public class DestroyPartials {
     DCS_SIDE_GRIP = block("double_cardan_shaft/side_grip"),
     DCS_GIMBAL = block("double_cardan_shaft/gimbal"),
 
+    // Planetary Gearset
+    PG_SUN_GEAR = block("planetary_gearset/sun_gear"),
+    PG_PLANET_GEAR = block("planetary_gearset/planet_gear"),
+    PG_RING_GEAR = block("planetary_gearset/ring_gear"),
+
     // Miscellaneous
     GAS_MASK = block("gas_mask"),
     STRAY_SKULL = block("cooler/skull");

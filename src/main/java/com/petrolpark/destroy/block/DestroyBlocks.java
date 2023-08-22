@@ -7,6 +7,7 @@ import com.petrolpark.destroy.block.display.PollutometerDisplaySource;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.block.model.CopycatBlockModel;
 import com.petrolpark.destroy.item.DestroyItems;
+import com.petrolpark.destroy.item.PlanetaryGearsetBlockItem;
 import com.petrolpark.destroy.item.PumpjackBlockItem;
 import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.sound.DestroySoundTypes;
@@ -101,6 +102,14 @@ public class DestroyBlocks {
         ).transform(TagGen.pickaxeOnly())
         .transform(BlockStressDefaults.setImpact(6.0))
         .item(AssemblyOperatorBlockItem::new)
+        .transform(customItemModel())
+        .register();
+
+    public static final BlockEntry<PlanetaryGearsetBlock> PLANETARY_GEARSET = REGISTRATE.block("planetary_gearset", PlanetaryGearsetBlock::new)
+        .initialProperties(AllBlocks.LARGE_COGWHEEL)
+        .properties(p -> p
+            .noOcclusion()
+        ).item(PlanetaryGearsetBlockItem::new)
         .transform(customItemModel())
         .register();
 

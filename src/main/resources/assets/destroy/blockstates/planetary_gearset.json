@@ -1,0 +1,17 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "destroy:block/planetary_gearset/support",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "destroy:block/planetary_gearset/support"
+    },
+    "axis=z": {
+      "model": "destroy:block/planetary_gearset/support",
+      "x": 90,
+      "y": 180
+    }
+  }
+}

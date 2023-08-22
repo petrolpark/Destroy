@@ -6,12 +6,15 @@ import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.instance.CentrifugeCogInstance;
 import com.petrolpark.destroy.block.instance.DoubleCardanShaftInstance;
 import com.petrolpark.destroy.block.instance.DynamoCogInstance;
+import com.petrolpark.destroy.block.instance.PlanetaryGearsetInstance;
+import com.petrolpark.destroy.block.instance.VatSideInstance;
 import com.petrolpark.destroy.block.renderer.AgingBarrelRenderer;
 import com.petrolpark.destroy.block.renderer.BubbleCapRenderer;
 import com.petrolpark.destroy.block.renderer.CentrifugeRenderer;
 import com.petrolpark.destroy.block.renderer.CoolerRenderer;
 import com.petrolpark.destroy.block.renderer.DoubleCardanShaftRenderer;
 import com.petrolpark.destroy.block.renderer.DynamoRenderer;
+import com.petrolpark.destroy.block.renderer.PlanetaryGearsetRenderer;
 import com.petrolpark.destroy.block.renderer.PollutometerRenderer;
 import com.petrolpark.destroy.block.renderer.PumpjackRenderer;
 import com.petrolpark.destroy.block.renderer.VatRenderer;
@@ -57,6 +60,12 @@ public class DestroyBlockEntityTypes {
         .renderer(() -> DynamoRenderer::new)
         .register();
 
+    public static final BlockEntityEntry<PlanetaryGearsetBlockEntity> PLANETARY_GEARSET = REGISTRATE.blockEntity("planetary_gearset", PlanetaryGearsetBlockEntity::new)
+        .instance(() -> PlanetaryGearsetInstance::new)
+        .validBlocks(DestroyBlocks.PLANETARY_GEARSET)
+        .renderer(() -> PlanetaryGearsetRenderer::new)
+        .register();
+
     public static final BlockEntityEntry<PollutometerBlockEntity> POLLUTOMETER = REGISTRATE.blockEntity("pollutometer", PollutometerBlockEntity::new)
         .validBlocks(DestroyBlocks.POLLUTOMETER)
         .renderer(() -> PollutometerRenderer::new)
@@ -82,6 +91,7 @@ public class DestroyBlockEntityTypes {
         .register();
 
     public static final BlockEntityEntry<VatSideBlockEntity> VAT_SIDE = REGISTRATE.blockEntity("vat_side", VatSideBlockEntity::new)
+        .instance(() -> VatSideInstance::new)
         .validBlock(DestroyBlocks.VAT_SIDE)
         .renderer(() -> VatSideRenderer::new)
         .register();

@@ -91,8 +91,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     @Override
     protected AABB createRenderBoundingBox() {
 		if (vat.isEmpty()) return super.createRenderBoundingBox();
-        return wholeVatAABB();//TODO uncomment
-        //return super.createRenderBoundingBox();
+        return wholeVatAABB().inflate(1d);
 	};
 
     @Override
@@ -256,10 +255,10 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             getLevel().setBlockAndUpdate(pos, DestroyBlocks.VAT_SIDE.getDefaultState());
             getLevel().getBlockEntity(pos, DestroyBlockEntityTypes.VAT_SIDE.get()).ifPresent(vatSide -> {
                 // Configure the Vat Side
+                vatSide.direction = newVat.get().whereIsSideFacing(pos);
                 vatSide.setMaterial(oldState);
                 vatSide.setConsumedItem(new ItemStack(oldState.getBlock().asItem())); // Required to co-operate with the Copycat Block's internals
                 vatSide.controllerPosition = getBlockPos();
-                vatSide.direction = newVat.get().whereIsSideFacing(pos);
                 BlockPos adjacentPos = pos.relative(vatSide.direction);
                 vatSide.updateDisplayType(adjacentPos);
                 vatSide.setPowerFromAdjacentBlock(adjacentPos);
@@ -385,7 +384,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     private void onTargeted(LocalPlayer player, BlockHitResult blockHitResult) {
         if (vat.isPresent()) {
-            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), wholeVatAABB().inflate(1d), 20)
+            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), wholeVatAABB(), 20)
                 .colored(0xFF_fffec2);
         };
     };

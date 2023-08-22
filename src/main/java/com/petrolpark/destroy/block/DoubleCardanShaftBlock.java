@@ -17,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -27,16 +28,33 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class DoubleCardanShaftBlock extends DirectionalAxisKineticBlock implements IBE<DoubleCardanShaftBlockEntity> {
+public class DoubleCardanShaftBlock extends DirectionalAxisKineticBlock implements IBE<DoubleCardanShaftBlockEntity>{
 
     public DoubleCardanShaftBlock(Properties properties) {
         super(properties);
     };
 
     @Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		Direction direction1 = context.getClickedFace().getOpposite();
+        Direction direction2;
+        if (direction1.getAxis() == Axis.Y) {
+            direction2 = context.getHorizontalDirection();
+        } else {
+            direction2 = context.getNearestLookingVerticalDirection();
+        };
+        return getBlockstateConnectingDirections(direction1, direction2);
+	};
+
+    @Override
 	public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
         return Arrays.asList(getDirectionsConnectedByState(state)).contains(face);
 	};
+
+    @Override
+    public BlockState getRotatedBlockState(BlockState originalState, Direction targetedFace) {
+        return transform(originalState, new StructureTransform(new BlockPos(0, 0, 0), targetedFace.getAxis(), Rotation.CLOCKWISE_90, Mirror.NONE));
+    };
 
     @Override
 	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
@@ -67,8 +85,8 @@ public class DoubleCardanShaftBlock extends DirectionalAxisKineticBlock implemen
      * XYZXYZ
      * <p>
      * Considering the above list, with the Axis of {@code facing} excluded:<ul>
-     * <li>If {@code axisAlongFirst} is true, the shaft connects {@code facing} and the first Axis in the same direction.</li>
-     * <li>If {@code axisAlongFirst} is false, the shaft connects {@code facing} and the second Axis in the opposite direction.</li>
+     * <li>If {@code axisAlongFirst} is true, the shaft connects {@code facing} and the Axis to the right in the same direction.</li>
+     * <li>If {@code axisAlongFirst} is false, the shaft connects {@code facing} and the Axis to the left in the opposite direction.</li>
      * </ul></p>
      */
     /*
@@ -109,19 +127,20 @@ public class DoubleCardanShaftBlock extends DirectionalAxisKineticBlock implemen
     public static BlockState getBlockstateConnectingDirections(Direction direction1, Direction direction2) {
         boolean axisAlongFirst = (direction1.getAxisDirection() == direction2.getAxisDirection());
         Map<Axis, Direction> directionsForEachAxis = Map.of(direction1.getAxis(), direction1, direction2.getAxis(), direction2);
-        List<Axis> axes = Arrays.asList(Axis.values());
+        List<Axis> axes = new ArrayList<>();
+        axes.addAll(List.of(Axis.values()));
         axes.remove(direction1.getAxis());
-        axes.remove(direction2.getAxis()); // 'axes' now only contains the one Axis with no connection
+        axes.remove(direction2.getAxis());
         Axis primaryAxis;
         switch (axes.get(0)) {
             case X:
-                primaryAxis = axisAlongFirst ? Axis.Z : Axis.Y;
+                primaryAxis = axisAlongFirst ? Axis.Y : Axis.Z;
                 break;
             case Y:
-                primaryAxis = axisAlongFirst ? Axis.X : Axis.Z;
+                primaryAxis = axisAlongFirst ? Axis.Z : Axis.X;
                 break;
             case Z:
-                primaryAxis = axisAlongFirst ? Axis.Y : Axis.X;
+                primaryAxis = axisAlongFirst ? Axis.X : Axis.Y;
                 break;
             default:
                 throw new IllegalStateException("Unknown axis");
@@ -148,7 +167,7 @@ public class DoubleCardanShaftBlock extends DirectionalAxisKineticBlock implemen
     @Override
 	public BlockState transform(BlockState state, StructureTransform transform) {
 		Direction[] directions = getDirectionsConnectedByState(state);
-        return getBlockstateConnectingDirections(transform.rotateFacing(transform.mirrorFacing(directions[0])), transform.rotateFacing(transform.mirrorFacing(directions[1])));
+        return getBlockstateConnectingDirections(transform.mirrorFacing(transform.rotateFacing(directions[0])), transform.mirrorFacing(transform.rotateFacing(directions[1])));
 	};
 
     @Override

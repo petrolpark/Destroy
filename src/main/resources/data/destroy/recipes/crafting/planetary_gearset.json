@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      " S ",
+      "SLS",
+      " S "
+    ],
+    "key": {
+      "S": {
+        "item": "create:cogwheel"
+      },
+      "L": {
+        "item": "create:large_cogwheel"
+      }
+    },
+    "result": {
+      "item": "destroy:planetary_gearset"
+    }
+  }
