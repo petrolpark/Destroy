@@ -1,0 +1,17 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+      {
+        "item": "create:cogwheel"
+      }
+    ],
+    "results": [
+      {
+        "item": "create:shaft"
+      },
+      {
+        "item": "destroy:coaxial_gear"
+      }
+    ],
+    "processingTime": 50
+  }

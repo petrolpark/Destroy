@@ -44,7 +44,10 @@ public class DestroyShapes {
     COOLER = shape(1, -2, 1, 15, 14, 15)
         .build();
 
-    public static final VoxelShaper PLANETARY_GEARSET = shape(0, 4.5, 0, 16, 12.5, 16)
+    public static final VoxelShaper COAXIAL_GEAR = shape(2, 6, 2, 14, 10, 14)
+        .forAxis();
+
+    public static final VoxelShaper PLANETARY_GEARSET = shape(0, 4.5, 0, 16, 11.5, 16)
         .add(5, 0, 5, 11, 16, 11)
         .forAxis();
 

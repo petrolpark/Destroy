@@ -1,0 +1,16 @@
+{
+    "type": "create:deploying",
+    "ingredients": [
+      {
+        "item": "create:shaft"
+      },
+      {
+        "item": "destroy:coaxial_gear"
+      }
+    ],
+    "results": [
+      {
+        "item": "create:cogwheel"
+      }
+    ]
+  }

@@ -6,9 +6,13 @@ import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.simibubi.create.foundation.utility.Lang;
 
+import net.minecraft.resources.ResourceLocation;
+
 public class DestroyPartials {
 
     public static final PartialModel
+
+    AIR = new PartialModel(new ResourceLocation("minecraft", "block/air")),
     
     // Kinetics
     CENTRIFUGE_COG = block("centrifuge/inner"),

@@ -1,0 +1,31 @@
+{
+  "variants": {
+    "axis=x,positive_axis_direction=true": {
+      "model": "destroy:block/long_shaft",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y,positive_axis_direction=true": {
+      "model": "destroy:block/long_shaft"
+    },
+    "axis=z,positive_axis_direction=true": {
+      "model": "destroy:block/long_shaft",
+      "x": 90,
+      "y": 180
+    },
+    "axis=x,positive_axis_direction=false": {
+      "model": "destroy:block/long_shaft",
+      "x": 90,
+      "y": 270
+    },
+    "axis=y,positive_axis_direction=false": {
+      "model": "destroy:block/long_shaft",
+      "x": 180
+    },
+    "axis=z,positive_axis_direction=false": {
+      "model": "destroy:block/long_shaft",
+      "x": 270,
+      "y": 180
+    }
+  }
+}

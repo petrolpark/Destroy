@@ -1,8 +1,12 @@
 {
-    "parent": "minecraft:block/orientable",
+    "parent": "block/cube",
     "textures": {
-      "front": "destroy:block/vat_controller",
-      "side": "create:block/copper_casing",
-      "top": "create:block/copper_casing"
+      "particle": "create:block/copper_casing",
+      "down": "create:block/copper_casing",
+      "up": "create:block/copper_casing",
+      "north": "create:block/copper_casing",
+      "east": "create:block/copper_casing",
+      "south": "destroy:block/vat_controller",
+      "west": "create:block/copper_casing"
     }
   }

@@ -16,7 +16,7 @@ public class PlanetaryGearsetBlockEntity extends SplitShaftBlockEntity {
 
     @Override
     public float propagateRotationTo(KineticBlockEntity target, BlockState stateFrom, BlockState stateTo, BlockPos diff, boolean connectedViaAxes, boolean connectedViaCogs) {
-        return connectedViaAxes ? -2 : 0;
+        return connectedViaAxes ? -2 : super.propagateRotationTo(target, stateFrom, stateTo, diff, connectedViaAxes, connectedViaCogs);
 	};
 
     @Override

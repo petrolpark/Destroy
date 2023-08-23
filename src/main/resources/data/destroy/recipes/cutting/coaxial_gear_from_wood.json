@@ -1,0 +1,14 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+      {
+        "tag": "minecraft:planks"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:coaxial_gear"
+      }
+    ],
+    "processingTime": 50
+  }

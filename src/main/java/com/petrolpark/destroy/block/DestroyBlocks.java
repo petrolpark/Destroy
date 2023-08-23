@@ -13,7 +13,10 @@ import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.sound.DestroySoundTypes;
 import com.petrolpark.destroy.util.DestroyTags.DestroyBlockTags;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllSpriteShifts;
+import com.simibubi.create.content.decoration.encasing.EncasedCTBehaviour;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
+import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockModel;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours;
 import com.simibubi.create.foundation.data.AssetLookup;
@@ -63,12 +66,16 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
-    public static final BlockEntry<DoubleCardanShaftBlock> DOUBLE_CARDAN_SHAFT = REGISTRATE.block("double_cardan_shaft", DoubleCardanShaftBlock::new)
-        .initialProperties(AllBlocks.SHAFT)
+    public static final BlockEntry<CoaxialGearBlock> COAXIAL_GEAR = REGISTRATE.block("coaxial_gear", CoaxialGearBlock::new)
+        .initialProperties(AllBlocks.COGWHEEL)
         .properties(p -> p
+            .sound(SoundType.WOOD)
+		    .mapColor(MapColor.DIRT)
             .noOcclusion()
-        ).item()
-        .transform(customItemModel())
+        ).onRegister(CreateRegistrate.blockModel(() -> BracketedKineticBlockModel::new))
+        .transform(TagGen.axeOrPickaxe())
+        .item()
+        .build()
         .register();
 
     public static final BlockEntry<CentrifugeBlock> CENTRIFUGE = REGISTRATE.block("centrifuge", CentrifugeBlock::new)
@@ -94,6 +101,16 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
+    public static final BlockEntry<DoubleCardanShaftBlock> DOUBLE_CARDAN_SHAFT = REGISTRATE.block("double_cardan_shaft", DoubleCardanShaftBlock::new)
+        .initialProperties(AllBlocks.SHAFT)
+        .properties(p -> p
+            .mapColor(MapColor.METAL)
+            .noOcclusion()
+        ).transform(TagGen.pickaxeOnly())
+        .item()
+        .transform(customItemModel())
+        .register();
+
     public static final BlockEntry<DynamoBlock> DYNAMO = REGISTRATE.block("dynamo", DynamoBlock::new)
         .initialProperties(SharedProperties::softMetal)
         .properties(p -> p
@@ -105,11 +122,19 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
+    public static final BlockEntry<LongShaftBlock> LONG_SHAFT = REGISTRATE.block("long_shaft", LongShaftBlock::new)
+        .initialProperties(AllBlocks.SHAFT)
+        .onRegister(CreateRegistrate.blockModel(() -> BracketedKineticBlockModel::new))
+        .register();
+
     public static final BlockEntry<PlanetaryGearsetBlock> PLANETARY_GEARSET = REGISTRATE.block("planetary_gearset", PlanetaryGearsetBlock::new)
         .initialProperties(AllBlocks.LARGE_COGWHEEL)
         .properties(p -> p
             .noOcclusion()
-        ).item(PlanetaryGearsetBlockItem::new)
+            .sound(SoundType.WOOD)
+		    .mapColor(MapColor.DIRT)
+        ).transform(TagGen.axeOrPickaxe())
+        .item(PlanetaryGearsetBlockItem::new)
         .transform(customItemModel())
         .register();
 
@@ -152,8 +177,7 @@ public class DestroyBlocks {
         ).transform(TagGen.pickaxeOnly())
         .blockstate((c, p) -> p.getVariantBuilder(c.get())
             .forAllStatesExcept(BlockStateGen.mapToAir(p), PumpjackStructuralBlock.FACING)
-        )
-        .register();
+        ).register();
 
     public static final BlockEntry<SandCastleBlock> SAND_CASTLE = REGISTRATE.block("sand_castle", SandCastleBlock::new)
         .initialProperties(() -> Blocks.POPPY)
@@ -169,6 +193,9 @@ public class DestroyBlocks {
         .initialProperties(SharedProperties::copperMetal)
         .properties(p -> p
             .noOcclusion()
+        ).onRegister(CreateRegistrate.connectedTextures(() -> new EncasedCTBehaviour(AllSpriteShifts.COPPER_CASING)))
+        .onRegister(CreateRegistrate.casingConnectivity((block, cc) -> cc.make(block, AllSpriteShifts.COPPER_CASING,
+			(s, f) -> f != s.getValue(VatControllerBlock.FACING)))
         ).item()
         .build()
         .register();
