@@ -6,7 +6,6 @@ import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.instance.CentrifugeCogInstance;
 import com.petrolpark.destroy.block.instance.DoubleCardanShaftInstance;
 import com.petrolpark.destroy.block.instance.DynamoCogInstance;
-import com.petrolpark.destroy.block.instance.LongShaftBlockEntity;
 import com.petrolpark.destroy.block.instance.PlanetaryGearsetInstance;
 import com.petrolpark.destroy.block.instance.VatSideInstance;
 import com.petrolpark.destroy.block.renderer.AgingBarrelRenderer;
@@ -20,7 +19,6 @@ import com.petrolpark.destroy.block.renderer.PollutometerRenderer;
 import com.petrolpark.destroy.block.renderer.PumpjackRenderer;
 import com.petrolpark.destroy.block.renderer.VatRenderer;
 import com.petrolpark.destroy.block.renderer.VatSideRenderer;
-import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntityInstance;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntityRenderer;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
@@ -46,15 +44,8 @@ public class DestroyBlockEntityTypes {
         .renderer(() -> CentrifugeRenderer::new)
         .register();
 
-    public static final BlockEntityEntry<DoubleCardanShaftBlockEntity> DOUBLE_CARDAN_SHAFT = REGISTRATE
-        .blockEntity("double_cardan_shaft", DoubleCardanShaftBlockEntity::new)
-        .instance(() -> DoubleCardanShaftInstance::new)
-        .validBlock(DestroyBlocks.DOUBLE_CARDAN_SHAFT)
-        .renderer(() -> DoubleCardanShaftRenderer::new)
-        .register();
-
-    public static final BlockEntityEntry<BracketedKineticBlockEntity> COAXIAL_GEAR = REGISTRATE
-		.blockEntity("coaxial_gear", BracketedKineticBlockEntity::new)
+    public static final BlockEntityEntry<CoaxialGearBlockEntity> COAXIAL_GEAR = REGISTRATE
+		.blockEntity("coaxial_gear", CoaxialGearBlockEntity::new)
 		.instance(() -> BracketedKineticBlockEntityInstance::new, false)
 		.validBlocks(DestroyBlocks.COAXIAL_GEAR)
 		.renderer(() -> BracketedKineticBlockEntityRenderer::new)
@@ -64,6 +55,13 @@ public class DestroyBlockEntityTypes {
         .blockEntity("cooler", CoolerBlockEntity::new)
         .validBlocks(DestroyBlocks.COOLER)
         .renderer(() -> CoolerRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<DoubleCardanShaftBlockEntity> DOUBLE_CARDAN_SHAFT = REGISTRATE
+        .blockEntity("double_cardan_shaft", DoubleCardanShaftBlockEntity::new)
+        .instance(() -> DoubleCardanShaftInstance::new)
+        .validBlock(DestroyBlocks.DOUBLE_CARDAN_SHAFT)
+        .renderer(() -> DoubleCardanShaftRenderer::new)
         .register();
 
     public static final BlockEntityEntry<DynamiteBlockEntity> DYNAMITE = REGISTRATE
@@ -87,7 +85,7 @@ public class DestroyBlockEntityTypes {
 
     public static final BlockEntityEntry<PlanetaryGearsetBlockEntity> PLANETARY_GEARSET = REGISTRATE
         .blockEntity("planetary_gearset", PlanetaryGearsetBlockEntity::new)
-        .instance(() -> PlanetaryGearsetInstance::new)
+        .instance(() -> PlanetaryGearsetInstance::new, false)
         .validBlocks(DestroyBlocks.PLANETARY_GEARSET)
         .renderer(() -> PlanetaryGearsetRenderer::new)
         .register();

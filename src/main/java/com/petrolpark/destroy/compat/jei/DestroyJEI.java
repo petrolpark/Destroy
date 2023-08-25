@@ -13,6 +13,7 @@ import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.compat.jei.category.AgingCategory;
 import com.petrolpark.destroy.compat.jei.category.CentrifugationCategory;
+import com.petrolpark.destroy.compat.jei.category.ChargingCategory;
 import com.petrolpark.destroy.compat.jei.category.DestroyRecipeCategory;
 import com.petrolpark.destroy.compat.jei.category.DistillationCategory;
 import com.petrolpark.destroy.compat.jei.category.ElectrolysisCategory;
@@ -23,6 +24,7 @@ import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.recipe.AgingRecipe;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
+import com.petrolpark.destroy.recipe.ChargingRecipe;
 import com.petrolpark.destroy.recipe.DestroyMysteriousItemConversions;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.recipe.DistillationRecipe;
@@ -104,6 +106,13 @@ public class DestroyJEI implements IModPlugin {
             .itemIcon(DestroyBlocks.CENTRIFUGE.get())
             .emptyBackground(120, 115)
             .build("centrifugation", CentrifugationCategory::new),
+
+        charging = builder(ChargingRecipe.class)
+			.addTypedRecipes(DestroyRecipeTypes.CHARGING)
+			.catalyst(DestroyBlocks.DYNAMO::get)
+			.itemIcon(DestroyBlocks.DYNAMO)
+			.emptyBackground(177, 70)
+			.build("charging", ChargingCategory::new),
 
         distillation = builder(DistillationRecipe.class)
             .addTypedRecipes(DestroyRecipeTypes.DISTILLATION)

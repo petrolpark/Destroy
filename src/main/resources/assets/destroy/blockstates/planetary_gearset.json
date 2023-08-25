@@ -1,15 +1,28 @@
 {
   "variants": {
-    "axis=x": {
+    "axis=x,support_only=true": {
       "model": "destroy:block/planetary_gearset/support",
       "x": 90,
       "y": 90
     },
-    "axis=y": {
+    "axis=y,support_only=true": {
       "model": "destroy:block/planetary_gearset/support"
     },
-    "axis=z": {
+    "axis=z,support_only=true": {
       "model": "destroy:block/planetary_gearset/support",
+      "x": 90,
+      "y": 180
+    },
+    "axis=x,support_only=false": {
+      "model": "destroy:block/planetary_gearset/all",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y,support_only=false": {
+      "model": "destroy:block/planetary_gearset/all"
+    },
+    "axis=z,support_only=false": {
+      "model": "destroy:block/planetary_gearset/all",
       "x": 90,
       "y": 180
     }

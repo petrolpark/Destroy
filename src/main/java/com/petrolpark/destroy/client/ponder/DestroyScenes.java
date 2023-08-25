@@ -282,6 +282,30 @@ public class DestroyScenes {
         scene.markAsFinished();
     };
 
+    public static void doubleCardanShaft(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("double_cardan_shaft", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 5);
+        scene.showBasePlate();
+
+        BlockPos dcs = new BlockPos(2, 1, 2);
+
+        scene.world.showSection(util.select.position(dcs), Direction.DOWN);
+        scene.idle(10);
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(dcs, Direction.UP));
+        scene.idle(80);
+
+        scene.world.showSection(util.select.fromTo(1, 0, 5, 2, 1, 5), Direction.NORTH);
+        int[][] shafts = new int[][]{new int[]{2, 4}, new int[]{2, 3}, new int[]{3, 2}, new int[]{4, 2}};
+        for (int[] shaft : shafts) {
+            scene.idle(5);
+            scene.world.showSection(util.select.position(shaft[0], 1, shaft[1]), Direction.DOWN);
+        };
+
+        scene.markAsFinished();
+    };  
+
     public static void dynamoRedstone(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("dynamo_redstone", "This text is defined in a language file.");
         scene.configureBasePlate(0, 0, 5);

@@ -26,6 +26,9 @@ public class DestroyPonderIndex {
         // Cooler
         HELPER.forComponents(DestroyBlocks.COOLER)
             .addStoryBoard("cooler", DestroyScenes::cooler);
+
+        HELPER.forComponents(DestroyBlocks.DOUBLE_CARDAN_SHAFT)
+            .addStoryBoard("double_cardan_shaft", DestroyScenes::doubleCardanShaft);
         
         // Dynamo
         HELPER.forComponents(DestroyBlocks.DYNAMO)

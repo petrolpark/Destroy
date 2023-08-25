@@ -87,7 +87,7 @@ public class DoubleCardanShaftInstance extends KineticBlockEntityInstance<Double
         centerShaft = modelMaterial.getModel(DestroyPartials.DCS_CENTER_SHAFT).createInstance();
     };
 
-    private float getSpeed(Direction direction) {
+    public float getSpeed(Direction direction) {
         float speed = blockEntity.getSpeed();
         if (speed != 0 && sourceFacing != null) {
             if (sourceFacing.getAxisDirection() == direction.getAxisDirection() && direction != sourceFacing) speed *= -1;
@@ -110,8 +110,10 @@ public class DoubleCardanShaftInstance extends KineticBlockEntityInstance<Double
         float gimbal1Angle = Mth.PI * ((AnimationTickHolder.getRenderTime() * getSpeed(shaft1Direction) * 3f / 10) % 360) / 180f;
         float gimbal2Angle = Mth.PI * ((AnimationTickHolder.getRenderTime() * getSpeed(shaft2Direction) * 3f / 10) % 360) / 180f;
         float fluctuatingAngle1 = (float)Math.atan2(Mth.sin(gimbal1Angle), Mth.cos(gimbal1Angle) * Mth.sqrt(2) / 2) + (axis == Axis.Z ? Mth.PI / 4 * (facesHaveSameSign() ? 1f : -1f) : 0);
+        float fluctuatingAngle2 = (float)Math.atan2(Mth.sin(gimbal2Angle), Mth.cos(gimbal2Angle) * Mth.sqrt(2) / 2);
+        float fluctuatingAngle3 = (float)Math.atan2(Mth.sin(gimbal1Angle + Mth.PI / 2), Mth.cos(gimbal1Angle + Mth.PI / 2) * Mth.sqrt(2) / 2) + Mth.PI / 2;
         float gimbal1FluctuatingAngle = Mth.sin(fluctuatingAngle1 + (getAxis() == Axis.Z ? -Mth.PI / 4 : 0) + (facesHaveSameSign() ^ (axis == Axis.X && shaft1Direction.getAxis() == Axis.Z) ? Mth.PI : 0) + (axis == Axis.X ? Mth.PI / 2 : 0)) * Mth.PI / 4;
-        float gimbal2FluctuatingAngle = Mth.sin((float)Math.atan2(Mth.sin(gimbal2Angle), Mth.cos(gimbal2Angle) * Mth.sqrt(2) / 2) + (facesHaveSameSign() ^ (axis == Axis.X && shaft2Direction.getAxis() == Axis.Z) ? Mth.PI : 0) + (axis == Axis.Z && !facesHaveSameSign() ? Mth.PI / 2 : 0) + (axis == Axis.X ? Mth.PI / 2 : 0)) * Mth.PI / 4;
+        float gimbal2FluctuatingAngle = Mth.sin(fluctuatingAngle2 + (facesHaveSameSign() ^ (axis == Axis.X && shaft2Direction.getAxis() == Axis.Z) ? Mth.PI : 0) + (axis == Axis.Z && !facesHaveSameSign() ? Mth.PI / 2 : 0) + (axis == Axis.X ? Mth.PI / 2 : 0)) * Mth.PI / 4;
 
         centerShaft.loadIdentity()
             .translate(getInstancePosition())
@@ -123,7 +125,7 @@ public class DoubleCardanShaftInstance extends KineticBlockEntityInstance<Double
             .rotate(facesHaveSameSign() ^ axis != Axis.Y ? 135f : 45f, axis)
             .unCentre()
             .centre()
-            .rotateZRadians(fluctuatingAngle1 * (axis == Axis.X || (axis == Axis.Y ^ facesHaveSameSign()) ? 1f : -1f) * (axis == Axis.X ? -1f : 1f))
+            .rotateZRadians((axis == Axis.X ? fluctuatingAngle3 : fluctuatingAngle1) * (axis == Axis.X || (axis == Axis.Y ^ facesHaveSameSign()) ? 1f : -1f) * (axis == Axis.X ? -1f : 1f))
             .unCentre();
 
         gimbal1.loadIdentity()
@@ -162,7 +164,7 @@ public class DoubleCardanShaftInstance extends KineticBlockEntityInstance<Double
         return shaft1Direction.getAxisDirection() == shaft2Direction.getAxisDirection();
     };
 
-    private static Vec3 gimbalTranslation(Direction face) {
+    public static Vec3 gimbalTranslation(Direction face) {
         switch (face) {
             case NORTH:
                 return new Vec3(8 / 16d, 8 / 16d, 13 / 16d);
@@ -181,7 +183,7 @@ public class DoubleCardanShaftInstance extends KineticBlockEntityInstance<Double
         }
     };
 
-    private static Direction gimbalRotation(Direction direction, boolean isZaxis) {
+    public static Direction gimbalRotation(Direction direction, boolean isZaxis) {
         switch (direction) {
             case NORTH:
                 return Direction.EAST;

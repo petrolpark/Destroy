@@ -6,8 +6,8 @@ import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import com.petrolpark.destroy.block.display.PollutometerDisplaySource;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.block.model.CopycatBlockModel;
+import com.petrolpark.destroy.item.CoaxialGearBlockItem;
 import com.petrolpark.destroy.item.DestroyItems;
-import com.petrolpark.destroy.item.PlanetaryGearsetBlockItem;
 import com.petrolpark.destroy.item.PumpjackBlockItem;
 import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.sound.DestroySoundTypes;
@@ -17,6 +17,7 @@ import com.simibubi.create.AllSpriteShifts;
 import com.simibubi.create.content.decoration.encasing.EncasedCTBehaviour;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockModel;
+import com.simibubi.create.content.kinetics.simpleRelays.CogwheelBlockItem;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours;
 import com.simibubi.create.foundation.data.AssetLookup;
@@ -74,7 +75,7 @@ public class DestroyBlocks {
             .noOcclusion()
         ).onRegister(CreateRegistrate.blockModel(() -> BracketedKineticBlockModel::new))
         .transform(TagGen.axeOrPickaxe())
-        .item()
+        .item(CoaxialGearBlockItem::new)
         .build()
         .register();
 
@@ -134,7 +135,7 @@ public class DestroyBlocks {
             .sound(SoundType.WOOD)
 		    .mapColor(MapColor.DIRT)
         ).transform(TagGen.axeOrPickaxe())
-        .item(PlanetaryGearsetBlockItem::new)
+        .item(CogwheelBlockItem::new)
         .transform(customItemModel())
         .register();
 

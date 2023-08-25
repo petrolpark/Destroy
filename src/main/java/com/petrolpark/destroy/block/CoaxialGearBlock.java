@@ -22,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -35,6 +36,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class CoaxialGearBlock extends CogWheelBlock {
 
     public static final BooleanProperty HAS_SHAFT = BooleanProperty.create("has_shaft");
+
+    public static boolean isCoaxialGear(BlockState state) {
+        return state.getBlock() instanceof CoaxialGearBlock;
+    };
+
+    public static boolean isCoaxialGear(Block block) {
+        return block instanceof CoaxialGearBlock;
+    };
 
     public CoaxialGearBlock(Properties properties) {
         super(false, properties);
@@ -53,8 +62,8 @@ public class CoaxialGearBlock extends CogWheelBlock {
 
     @Override
     public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+        if (state.getValue(HAS_SHAFT)) updatePropagationOfLongShaft(oldState, worldIn, pos);
         super.onPlace(state, worldIn, pos, oldState, isMoving);
-        checkIfLongShaftStillExists(state, worldIn, pos);
     };
 
     @Override
@@ -64,7 +73,7 @@ public class CoaxialGearBlock extends CogWheelBlock {
                 return InteractionResult.SUCCESS;
             } else if (tryRemoveLongShaft(state, context.getLevel(), context.getClickedPos(), false)) {
                 Player player = context.getPlayer();
-                if (!player.isCreative()) player.getInventory().placeItemBackInInventory(AllBlocks.SHAFT.asStack());
+                if (!player.isCreative()) player.getInventory().placeItemBackInInventory(DestroyBlocks.COAXIAL_GEAR.asStack());
                 return InteractionResult.SUCCESS;
             };
         };
@@ -72,34 +81,30 @@ public class CoaxialGearBlock extends CogWheelBlock {
 	};
 
     @Override
-    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
-        super.onNeighborChange(state, level, pos, neighbor);
-        checkIfLongShaftStillExists(state, level, pos);
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+        if (facing.getAxis() == state.getValue(AXIS)) updatePropagationOfLongShaft(state, level, currentPos);
+        return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
     };
 
-    protected void checkIfLongShaftStillExists(BlockState state, LevelReader level, BlockPos pos) {
-        if (state.getValue(HAS_SHAFT) && !level.isClientSide()) {
+    public static void updatePropagationOfLongShaft(BlockState state, LevelReader level, BlockPos pos) {
+        if (isCoaxialGear(state) && state.getValue(HAS_SHAFT) && !level.isClientSide()) {
             Axis axis = state.getValue(AXIS);
-            boolean longShaftExists = false;
             for (AxisDirection axisDirection : AxisDirection.values()) {
+                BlockPos longShaftPos = pos.relative(Direction.get(axisDirection, axis));
                 BlockState longShaftState = level.getBlockState(pos.relative(Direction.get(axisDirection, axis)));
                 if (DestroyBlocks.LONG_SHAFT.has(longShaftState) && longShaftState.getValue(AXIS) == axis && longShaftState.getValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION) == (axisDirection != AxisDirection.POSITIVE)) {
-                    longShaftExists = true;
-                    break;
+                    level.getBlockEntity(longShaftPos, DestroyBlockEntityTypes.LONG_SHAFT.get()).ifPresent(be -> {
+                        be.updateSpeed = true;
+                    });
+                    return;
                 };
-            };
-            if (!longShaftExists) {
-                withBlockEntityDo(level, pos, be -> {
-                    be.getLevel().setBlockAndUpdate(pos, defaultBlockState().setValue(AXIS, axis).setValue(HAS_SHAFT, false));
-                    Block.popResource(be.getLevel(), pos, AllBlocks.SHAFT.asStack());
-                });
             };
         };
     };
 
     @Override
 	public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (state != newState && newState.isAir()) {
+        if (state != newState && newState.isAir() && !isMoving) {
             if (tryRemoveLongShaft(state, world, pos, true)) {
                 Block.popResource(world, pos, AllBlocks.SHAFT.asStack());
             };
@@ -107,7 +112,7 @@ public class CoaxialGearBlock extends CogWheelBlock {
 		super.onRemove(state, world, pos, newState, isMoving);
 	};
 
-    public boolean tryMakeLongShaft(BlockState state, Level level, BlockPos pos, Direction preferredDirection) {
+    public static boolean tryMakeLongShaft(BlockState state, Level level, BlockPos pos, Direction preferredDirection) {
         Axis axis = state.getValue(AXIS);
         if (preferredDirection.getAxis() != axis) return false;
         for (Direction direction : new Direction[]{preferredDirection, preferredDirection.getOpposite()}) {
@@ -118,7 +123,7 @@ public class CoaxialGearBlock extends CogWheelBlock {
             // Creation was successful
             if (!level.isClientSide()) {
                 level.setBlockAndUpdate(shaftPos, DestroyBlocks.LONG_SHAFT.getDefaultState().setValue(AXIS, axis).setValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION, direction.getAxisDirection() != AxisDirection.POSITIVE));
-                level.setBlockAndUpdate(pos, defaultBlockState().setValue(AXIS, axis).setValue(HAS_SHAFT, true));
+                level.setBlockAndUpdate(pos, DestroyBlocks.COAXIAL_GEAR.getDefaultState().setValue(AXIS, axis).setValue(HAS_SHAFT, true));
             };
             return true;
         };
@@ -136,7 +141,7 @@ public class CoaxialGearBlock extends CogWheelBlock {
             if (DestroyBlocks.LONG_SHAFT.has(longShaftState)) {
                 if (longShaftState.getValue(AXIS) == thisAxis && (longShaftState.getValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION) != (axisDirection == AxisDirection.POSITIVE))) {
                     if (!level.isClientSide()) {
-                        if (!removing) level.setBlockAndUpdate(pos, defaultBlockState().setValue(AXIS, thisAxis).setValue(HAS_SHAFT, false));
+                        if (!removing) level.setBlockAndUpdate(pos, AllBlocks.SHAFT.getDefaultState().setValue(AXIS, thisAxis));
                         level.setBlockAndUpdate(longShaftPos, AllBlocks.SHAFT.getDefaultState().setValue(AXIS, thisAxis));
                     };
                     return true;
@@ -150,7 +155,7 @@ public class CoaxialGearBlock extends CogWheelBlock {
 	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray) {
 		if (player.isShiftKeyDown() || !player.mayBuild()) return InteractionResult.PASS;
         ItemStack stack = player.getItemInHand(hand);
-        if (AllBlocks.SHAFT.isIn(stack) && !state.getValue(HAS_SHAFT)) {
+        if (AllBlocks.SHAFT.isIn(stack) && (!state.getValue(HAS_SHAFT))) {
             if (tryMakeLongShaft(state, world, pos, Direction.getFacingAxis(player, state.getValue(AXIS)))) {
                 if (!player.isCreative() && !world.isClientSide()) stack.shrink(1);
                 return InteractionResult.sidedSuccess(world.isClientSide());
@@ -171,5 +176,4 @@ public class CoaxialGearBlock extends CogWheelBlock {
     public BlockEntityType<? extends KineticBlockEntity> getBlockEntityType() {
         return DestroyBlockEntityTypes.COAXIAL_GEAR.get();
     };
-    
 };

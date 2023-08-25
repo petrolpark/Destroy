@@ -1,5 +1,9 @@
 package com.petrolpark.destroy.block.entity;
 
+import java.util.List;
+
+import com.petrolpark.destroy.block.DestroyBlocks;
+import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.transmission.SplitShaftBlockEntity;
 
@@ -16,7 +20,18 @@ public class PlanetaryGearsetBlockEntity extends SplitShaftBlockEntity {
 
     @Override
     public float propagateRotationTo(KineticBlockEntity target, BlockState stateFrom, BlockState stateTo, BlockPos diff, boolean connectedViaAxes, boolean connectedViaCogs) {
-        return connectedViaAxes ? -2 : super.propagateRotationTo(target, stateFrom, stateTo, diff, connectedViaAxes, connectedViaCogs);
+        return connectedViaAxes ? (DestroyBlocks.PLANETARY_GEARSET.has(stateTo) ? 0 : -2) : super.propagateRotationTo(target, stateFrom, stateTo, diff, connectedViaAxes, connectedViaCogs);
+	};
+
+    @Override
+	public List<BlockPos> addPropagationLocations(IRotate block, BlockState state, List<BlockPos> neighbours) {
+	    super.addPropagationLocations(block, state, neighbours);
+		BlockPos.betweenClosedStream(new BlockPos(-1, -1, -1), new BlockPos(1, 1, 1))
+			.forEach(offset -> {
+				if (offset.distSqr(BlockPos.ZERO) == 2)
+					neighbours.add(worldPosition.offset(offset));
+			});
+		return neighbours;
 	};
 
     @Override
@@ -24,6 +39,10 @@ public class PlanetaryGearsetBlockEntity extends SplitShaftBlockEntity {
         return -2;
     };
 
+    @Override
+    protected boolean canPropagateDiagonally(IRotate block, BlockState state) {
+		return true;
+	};
 
     
 };
