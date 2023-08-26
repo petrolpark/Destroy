@@ -6,10 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.client.gui.stackedtextbox.AbstractStackedTextBox;
 import com.petrolpark.destroy.client.gui.stackedtextbox.AbstractStackedTextBox.LinesAndActivationAreas;
-import com.petrolpark.destroy.item.DestroyItems;
+import com.petrolpark.destroy.compat.jei.MoleculeJEIIngredient;
 import com.petrolpark.destroy.recipe.ReactionRecipe;
 import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 
@@ -52,8 +53,8 @@ public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
 
         Minecraft minecraft = Minecraft.getInstance();
         List<LinesAndActivationAreas> paragraphs = new ArrayList<>(2);
-        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getId()).getString(), 2, 2, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE));
-        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getId() + ".description").getString(), 2, 84, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE));
+        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getId()).getString(), 2, 2, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE, false));
+        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getId() + ".description").getString(), 2, 90, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE, false));
         return paragraphs;
     };
 
@@ -65,8 +66,13 @@ public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, ReactionRecipe recipe, IFocusGroup focuses) {
         super.setRecipe(builder, recipe, focuses);
-        builder.addSlot(RecipeIngredientRole.INPUT, 2, 20)
-            .addItemStack(DestroyItems.ABS.asStack());
+        int i = 0;
+        for (Molecule reactant : recipe.getReaction().getReactants()) {
+            if (i == 6) continue;
+            builder.addSlot(RecipeIngredientRole.INPUT, 10 + (16 * (i % 3)), i >= 3 ? 34 : 50)
+                .addIngredient(MoleculeJEIIngredient.TYPE, reactant);
+            i++;
+        };
     };
     
 };

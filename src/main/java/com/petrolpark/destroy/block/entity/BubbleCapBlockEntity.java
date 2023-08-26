@@ -12,6 +12,7 @@ import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.BubbleCapBlock;
 import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.GeniusFluidTankBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
@@ -80,9 +81,9 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-        tank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, TANK_CAPACITY, true)
+        tank = new GeniusFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, TANK_CAPACITY, true)
             .whenFluidUpdates(this::notifyUpdate);
-        internalTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, TANK_CAPACITY, true)
+        internalTank = new GeniusFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, TANK_CAPACITY, true)
             .forbidExtraction()
             .forbidInsertion()
             .whenFluidUpdates(this::notifyUpdate);
@@ -152,6 +153,13 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
     @Override
     public void tick() {
         super.tick();
+        if (!particleFluid.isEmpty()) {
+            if (getLevel().isClientSide()) { // It thinks getLevel() might be null (it can't be).
+                spawnParticles(particleFluid);
+            };
+            particleFluid = FluidStack.EMPTY; // Reset this, we've made them now
+        };
+        if (level.isClientSide()) return;
         if (initializationTicks > 0) initializationTicks--;
         if (ticksToFill > 0) {
             ticksToFill--;
@@ -168,12 +176,6 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
             tower.tick(getLevel());
         };
         sendData();
-        if (!particleFluid.isEmpty()) {
-            if (getLevel().isClientSide()) { // It thinks getLevel() might be null (it can't be).
-                spawnParticles(particleFluid);
-            };
-            particleFluid = FluidStack.EMPTY; // Reset this, we've made them now
-        };
     };
 
     public void onDistill() {

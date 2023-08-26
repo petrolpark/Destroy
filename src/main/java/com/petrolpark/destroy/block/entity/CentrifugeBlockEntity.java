@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.CentrifugeBlock;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.GeniusFluidTankBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
@@ -73,12 +74,12 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IFluidB
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-        inputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, TANK_CAPACITY, true)
+        inputTank = new GeniusFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, TANK_CAPACITY, true)
             .whenFluidUpdates(this::onFluidStackChanged);
-        denseOutputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, TANK_CAPACITY, true)
+        denseOutputTank = new GeniusFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, TANK_CAPACITY, true)
             .whenFluidUpdates(this::onFluidStackChanged)
             .forbidInsertion();
-        lightOutputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, TANK_CAPACITY, true)
+        lightOutputTank = new GeniusFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, TANK_CAPACITY, true)
             .whenFluidUpdates(this::onFluidStackChanged)
             .forbidInsertion();
         behaviours.addAll(List.of(inputTank, denseOutputTank, lightOutputTank));

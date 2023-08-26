@@ -44,7 +44,7 @@ public abstract class AbstractStackedTextBox extends ElementWidget {
 
     };
 
-    public static LinesAndActivationAreas getTextAndActivationAreas(String text, int startX, int startY, int maxWidthPerLine, Screen screen, Font font, Palette palette) {
+    public static LinesAndActivationAreas getTextAndActivationAreas(String text, int startX, int startY, int maxWidthPerLine, Screen screen, Font font, Palette palette, boolean isTextBox) {
 
         if (screen == null) return new LinesAndActivationAreas(List.of(), List.of(), startX, startY, 0, 0);
 
@@ -144,8 +144,8 @@ public abstract class AbstractStackedTextBox extends ElementWidget {
 
                 // Set the current activation area on the offchance there is one
                 currentActivationArea.minX = startX + currentLineWidth;
-                currentActivationArea.minY = startY + 5 + (lines.size()) * font.lineHeight;
-                currentActivationArea.maxY = startY + 5 + (lines.size() + 1) * font.lineHeight;
+                currentActivationArea.minY = startY + (isTextBox ? -3 : 0) +(lines.size()) * font.lineHeight;
+                currentActivationArea.maxY = startY + (isTextBox ? -3 : 0) + (lines.size() + 1) * font.lineHeight;
 
                 currentLineWidth += wordWidth;
                 maxLineWidth = Math.max(maxLineWidth, currentLineWidth);

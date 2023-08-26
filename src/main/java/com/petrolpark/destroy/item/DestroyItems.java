@@ -594,7 +594,7 @@ public class DestroyItems {
         .color(() -> () -> (stack, tintIndex) -> tintIndex == 0 ? 8825802 : -1)
         .register(),
 
-    CISPLATIN_SYRINGE = REGISTRATE.item("cisplatin_syringe", SyringeItem::new)
+    CISPLATIN_SYRINGE = REGISTRATE.item("cisplatin_syringe", CisplatinSyringeItem::new)
         .tag(DestroyItemTags.SYRINGE.tag)
         .color(() -> () -> (stack, tintIndex) -> tintIndex == 0 ? 11459547 : -1)
         .register();

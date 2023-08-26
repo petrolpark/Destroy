@@ -1,11 +1,13 @@
 package com.petrolpark.destroy.util;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
+import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
+import com.petrolpark.destroy.fluid.DestroyFluids;
 
-
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
@@ -71,7 +73,14 @@ public class PollutionHelper {
      * @param fluidStack
      */
     public static void pollute(Level level, FluidStack fluidStack) {
-        Destroy.LOGGER.info("Whoops haven't implement this yet.");
-        //TODO
+        if (DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid()) && fluidStack.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND)) {
+            ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(fluidStack.getOrCreateTag().getCompound("Mixture"));
+            for (Molecule molecule : mixture.getContents(true)) {
+                float pollutionAmount = mixture.getConcentrationOf(molecule) * fluidStack.getAmount() / 1000; // One mole of polluting Molecule = one point of Pollution
+                for (PollutionType pollutionType : PollutionType.values()) {
+                    if (molecule.hasTag(pollutionType.moleculeTag) && level.random.nextFloat() <= pollutionAmount) changePollution(level, pollutionType, (int)pollutionAmount);
+                };
+            };
+        };
     };
 };

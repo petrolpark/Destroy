@@ -313,6 +313,7 @@ public class Mixture extends ReadOnlyMixture {
      * @return The new volume (in mB) of this Mixture
      */
     public int recalculateVolume(int initialVolume) {
+        if (contents.isEmpty()) return 0;
         double initialVolumeInBuckets = (double)initialVolume / 1000d;
         double newVolumeInBuckets = 0d;
         Map<Molecule, Double> molesOfMolecules = new HashMap<>();
@@ -341,7 +342,7 @@ public class Mixture extends ReadOnlyMixture {
 
     /**
      * {@link Mixture#reactForTick React} this Mixture until it reaches {@link Mixture#equilibrium equilibrium}. This is mutative.
-     * @return A {@link com.petrolpark.destroy.recipe.ReactionInBasinRecipe.ReactionInBasinResult ReactionInBasinResult} containing
+     * @return A {@link com.petrolpark.t.recipe.ReactionInBasinRecipe.ReactionInBasinResult ReactionInBasinResult} containing
      * the number of ticks it took to reach equilibrium and the {@link ReactionResult Reaction Results}.
      * @param volume (in mB) of this Reaction
      */

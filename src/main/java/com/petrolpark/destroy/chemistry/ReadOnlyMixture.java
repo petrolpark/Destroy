@@ -250,6 +250,11 @@ public class ReadOnlyMixture {
         boolean iupac = false; //TODO change to use config values
         //boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
 
+        if (contents.size() == 1) {
+            name = contents.entrySet().iterator().next().getKey().getName(iupac);
+            return;
+        };
+
         List<INameableProduct> products = new ArrayList<>();
         List<Molecule> cations = new ArrayList<>();
         List<Molecule> anions = new ArrayList<>();

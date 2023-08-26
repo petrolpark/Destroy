@@ -384,7 +384,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     private void onTargeted(LocalPlayer player, BlockHitResult blockHitResult) {
         if (vat.isPresent()) {
-            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), wholeVatAABB(), 20)
+            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), wholeVatAABB().inflate(1), 20)
                 .colored(0xFF_fffec2);
         };
     };

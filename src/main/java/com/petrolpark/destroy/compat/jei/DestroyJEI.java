@@ -134,6 +134,7 @@ public class DestroyJEI implements IModPlugin {
             // Doesn't accept Mixtures as Reactions involve Molecules, not Mixtures.
             .catalyst(AllBlocks.MECHANICAL_MIXER::get)
             .catalyst(AllBlocks.BASIN::get)
+            .catalyst(DestroyBlocks.VAT_CONTROLLER::get)
             .itemIcon(DestroyItems.MOLECULE_DISPLAY.get())
             .emptyBackground(180, 125)
             .build("reaction", ReactionCategory::new);

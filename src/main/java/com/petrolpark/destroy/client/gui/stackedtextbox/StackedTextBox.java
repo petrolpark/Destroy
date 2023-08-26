@@ -74,7 +74,7 @@ public class StackedTextBox extends AbstractStackedTextBox {
     };
 
     protected void updateTextBoxSize(String text) {
-        LinesAndActivationAreas result = getTextAndActivationAreas(text, getX(), getY(), 200, minecraft.screen, minecraft.font, palette);
+        LinesAndActivationAreas result = getTextAndActivationAreas(text, getX(), getY(), 200, minecraft.screen, minecraft.font, palette, true);
 
         lines.clear();
         lines.addAll(result.lines());

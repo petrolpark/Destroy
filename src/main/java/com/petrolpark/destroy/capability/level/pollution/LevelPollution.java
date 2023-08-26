@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.petrolpark.destroy.chemistry.MoleculeTag;
+import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.client.gui.DestroyIcons;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIconOptions;
 import com.simibubi.create.foundation.gui.AllIcons;
@@ -149,23 +151,25 @@ public class LevelPollution {
 
     public enum PollutionType implements INamedIconOptions {
 
-        GREENHOUSE(DestroyIcons.GREENHOUSE, 65536),
+        GREENHOUSE(DestroyIcons.GREENHOUSE, 65536, DestroyMolecules.Tags.GREENHOUSE),
 
-        OZONE_DEPLETION(DestroyIcons.OZONE_DEPLETION, 65536),
+        OZONE_DEPLETION(DestroyIcons.OZONE_DEPLETION, 65536, DestroyMolecules.Tags.OZONE_DEPLETER),
 
-        SMOG(DestroyIcons.SMOG, 65536),
+        SMOG(DestroyIcons.SMOG, 65536, DestroyMolecules.Tags.SMOG),
 
-        ACID_RAIN(DestroyIcons.ACID_RAIN, 65536),
+        ACID_RAIN(DestroyIcons.ACID_RAIN, 65536, DestroyMolecules.Tags.ACID_RAIN),
 
-        RADIOACTIVITY(DestroyIcons.RADIOACTIVITY, 65536);
+        RADIOACTIVITY(DestroyIcons.RADIOACTIVITY, 65536, null);
 
         private final AllIcons icon;
         // Min is always 0
         public final int max;
+        public final MoleculeTag moleculeTag;
 
-        PollutionType(AllIcons icon, int max) {
+        PollutionType(AllIcons icon, int max, MoleculeTag moleculeTag) {
             this.icon = icon;
             this.max = max;
+            this.moleculeTag = moleculeTag;
         }
 
         @Override

@@ -15,6 +15,7 @@ public class DestroyMobEffects {
 
     public static final RegistryObject<MobEffect> 
 
+    CANCER = MOB_EFFECTS.register("cancer", () -> new DummyMobEffect(MobEffectCategory.NEUTRAL, 0)),
     CRYING = MOB_EFFECTS.register("crying", CryingMobEffect::new),
     FRAGRANCE = MOB_EFFECTS.register("fragrance",
         () -> new DummyMobEffect(MobEffectCategory.BENEFICIAL, 0xF294D9)

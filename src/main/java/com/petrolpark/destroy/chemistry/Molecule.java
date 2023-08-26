@@ -301,6 +301,7 @@ public class Molecule implements INameableProduct {
      * @param tag
      */
     public boolean hasTag(MoleculeTag tag) {
+        if (tag == null) return false;
         return tags.contains(tag);
     };
 
