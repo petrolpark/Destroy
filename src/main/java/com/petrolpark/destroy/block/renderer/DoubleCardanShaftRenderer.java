@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jozufozu.flywheel.backend.Backend;
-import com.jozufozu.flywheel.core.PartialModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.block.DoubleCardanShaftBlock;
@@ -14,7 +13,6 @@ import com.petrolpark.destroy.block.model.DestroyPartials;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -124,7 +122,7 @@ public class DoubleCardanShaftRenderer extends KineticBlockEntityRenderer<Double
             sourceFacing = Direction.getNearest(source.getX(), source.getY(), source.getZ());
         };
         float speed = blockEntity.getSpeed();
-        if (speed != 0 && sourceFacing != null) {
+        if (speed != 0f && sourceFacing != null) {
             if (sourceFacing.getAxisDirection() == face.getAxisDirection() && face != sourceFacing) speed *= -1;
         };
         return speed;

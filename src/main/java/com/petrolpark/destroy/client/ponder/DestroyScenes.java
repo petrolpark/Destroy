@@ -2,9 +2,11 @@ package com.petrolpark.destroy.client.ponder;
 
 import java.util.List;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.AgingBarrelBlock;
+import com.petrolpark.destroy.block.CoaxialGearBlock;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.block.DoubleCardanShaftBlock;
+import com.petrolpark.destroy.block.LongShaftBlock;
 import com.petrolpark.destroy.block.entity.AgingBarrelBlockEntity;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
@@ -16,10 +18,14 @@ import com.petrolpark.destroy.client.particle.data.GasParticleData;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllItems;
 import com.simibubi.create.content.fluids.potion.PotionFluid;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
+import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
 import com.simibubi.create.content.redstone.nixieTube.NixieTubeBlockEntity;
 import com.simibubi.create.foundation.ponder.ElementLink;
+import com.simibubi.create.foundation.ponder.PonderPalette;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.foundation.ponder.Selection;
@@ -33,6 +39,7 @@ import com.simibubi.create.foundation.utility.VecHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -274,6 +281,147 @@ public class DestroyScenes {
         scene.markAsFinished();
     };
 
+    public static void coaxialGearShaftless(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("coaxial_gear_shaftless", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 5);
+        scene.showBasePlate();
+
+        scene.idle(5);
+        scene.world.showSection(util.select.position(2, 0, 5), Direction.NORTH);
+        scene.idle(5);
+        scene.world.showSection(util.select.fromTo(3, 1, 2, 3, 1, 5), Direction.DOWN);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(2, 1, 2), Direction.EAST);
+        scene.idle(5);
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame()
+            .pointAt(util.vector.blockSurface(new BlockPos(2, 1, 2), Direction.WEST));
+        scene.idle(80);
+
+        scene.world.hideSection(util.select.position(3, 1, 4), Direction.EAST);
+        scene.idle(15);
+        ElementLink<WorldSectionElement> belt = scene.world.showIndependentSection(util.select.fromTo(3, 3, 4, 4, 3, 4), Direction.DOWN);
+        scene.world.moveSection(belt, new Vec3(0d, -2d, 0d), 10);
+        scene.idle(10);
+        scene.world.showSection(util.select.fromTo(4, 1, 1, 4, 1, 4), Direction.SOUTH);
+        scene.idle(5);
+
+        int[][] cogs = new int[][]{new int[]{3, 1}, new int[]{2, 1}, new int[]{1, 1}, new int[]{1, 2}};
+        for (int[] cog : cogs) {
+            scene.idle(5);
+            scene.world.showSection(util.select.position(cog[0], 1, cog[1]), Direction.EAST);
+        };
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame()
+            .pointAt(util.vector.blockSurface(new BlockPos(1, 1, 2), Direction.UP));
+        scene.idle(20);
+
+        scene.effects.rotationDirectionIndicator(util.grid.at(1, 1, 1));
+		scene.effects.rotationDirectionIndicator(util.grid.at(1, 1, 2));
+        scene.idle(100);
+
+        scene.markAsFinished();
+    };
+
+    public static void coaxialGearThrough(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("coaxial_gear_through", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 5);
+        scene.showBasePlate();
+
+        Selection verticalShaft1 = util.select.fromTo(3, 2, 2, 3, 3, 2);
+        scene.world.setKineticSpeed(verticalShaft1, 0);
+        scene.world.showSection(verticalShaft1, Direction.DOWN);
+        scene.idle(30);
+
+        BlockPos coaxialGear1 = new BlockPos(3, 2, 2);
+        BlockPos longShaft1 = new BlockPos(3, 3, 2);
+
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame()
+            .pointAt(util.vector.blockSurface(coaxialGear1, Direction.UP));
+        scene.idle(20);
+        scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(coaxialGear1, Direction.NORTH), Pointing.RIGHT)
+            .withItem(DestroyBlocks.COAXIAL_GEAR.asStack())
+        , 60);
+        scene.idle(5);
+        scene.world.setBlock(coaxialGear1, DestroyBlocks.COAXIAL_GEAR.getDefaultState().setValue(CoaxialGearBlock.HAS_SHAFT, true), false);
+        scene.world.setBlock(longShaft1, DestroyBlocks.LONG_SHAFT.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, Axis.Y).setValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION, false), false);
+        scene.idle(55);
+
+        scene.world.showSection(util.select.fromTo(1, 2, 2, 1, 3, 2), Direction.DOWN);
+        scene.idle(20);
+
+        BlockPos coaxialGear2 = new BlockPos(1, 2, 2);
+        BlockPos longShaft2 = new BlockPos(1, 3, 2);
+
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(coaxialGear2, Direction.UP));
+        scene.idle(20);
+        scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(coaxialGear2, Direction.NORTH), Pointing.RIGHT)
+            .withItem(AllBlocks.SHAFT.asStack())
+        , 60);
+        scene.idle(5);
+        scene.world.setBlock(coaxialGear2, DestroyBlocks.COAXIAL_GEAR.getDefaultState().setValue(CoaxialGearBlock.HAS_SHAFT, true), false);
+        scene.world.setBlock(longShaft2, DestroyBlocks.LONG_SHAFT.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, Axis.Y).setValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION, false), false);
+        scene.idle(65);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .placeNearTarget()
+            .attachKeyFrame()
+            .colored(PonderPalette.RED);
+        scene.idle(100);
+
+        scene.world.showSection(util.select.fromTo(1, 0, 5, 3, 1, 5), Direction.NORTH);
+        scene.idle(5);
+        scene.world.showSection(util.select.fromTo(1, 1, 4, 3, 1, 4), Direction.DOWN);
+        scene.idle(5);
+        scene.world.showSection(util.select.fromTo(1, 1, 3, 3, 1, 3), Direction.DOWN);
+        scene.idle(5);
+        scene.world.showSection(util.select.fromTo(1, 1, 2, 3, 1, 2), Direction.SOUTH);
+        scene.world.setKineticSpeed(util.select.position(longShaft1), -32);
+        scene.world.setKineticSpeed(util.select.position(longShaft2), -32);
+        scene.idle(10);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame()
+            .pointAt(util.vector.blockSurface(coaxialGear2, Direction.UP));
+        scene.idle(100);
+
+        BlockPos cogwheel = new BlockPos(2, 2, 2);
+
+        scene.world.showSection(util.select.position(5, 0, 2), Direction.WEST);
+        scene.idle(5);
+        scene.world.showSection(util.select.fromTo(4, 1, 2, 4, 2, 2), Direction.DOWN);
+        scene.world.setKineticSpeed(util.select.position(coaxialGear1), 8);
+        scene.idle(5);
+        scene.world.setKineticSpeed(util.select.position(cogwheel), -8);
+        scene.world.showSection(util.select.position(cogwheel), Direction.DOWN);
+        scene.world.setKineticSpeed(util.select.position(coaxialGear2), 8);
+        scene.idle(25);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame()
+            .pointAt(util.vector.blockSurface(coaxialGear2, Direction.EAST));
+        scene.idle(20);
+
+        scene.effects.rotationDirectionIndicator(coaxialGear1);
+		scene.effects.rotationDirectionIndicator(coaxialGear2);
+        scene.effects.rotationDirectionIndicator(longShaft1);
+		scene.effects.rotationDirectionIndicator(longShaft2);
+
+        scene.idle(80);
+
+        scene.markAsFinished();
+    };
+
     public static void cooler(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("cooler", "This text is defined in a language file.");
         scene.configureBasePlate(0, 0, 5);
@@ -289,19 +437,42 @@ public class DestroyScenes {
 
         BlockPos dcs = new BlockPos(2, 1, 2);
 
-        scene.world.showSection(util.select.position(dcs), Direction.DOWN);
-        scene.idle(10);
-        scene.overlay.showText(60)
-            .text("This text is defined in a language file.")
-            .pointAt(util.vector.blockSurface(dcs, Direction.UP));
-        scene.idle(80);
-
-        scene.world.showSection(util.select.fromTo(1, 0, 5, 2, 1, 5), Direction.NORTH);
-        int[][] shafts = new int[][]{new int[]{2, 4}, new int[]{2, 3}, new int[]{3, 2}, new int[]{4, 2}};
+        scene.world.showSection(util.select.position(1, 0, 5), Direction.NORTH);
+        int[][] shafts = new int[][]{new int[]{2, 5}, new int[]{2, 4}, new int[]{2, 3}, new int[]{2, 2}, new int[]{3, 2}, new int[]{4, 2}};
         for (int[] shaft : shafts) {
             scene.idle(5);
             scene.world.showSection(util.select.position(shaft[0], 1, shaft[1]), Direction.DOWN);
         };
+
+        scene.idle(10);
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.centerOf(dcs))
+            .attachKeyFrame();
+        scene.idle(120);
+
+        Selection secondShaft = util.select.fromTo(0, 1, 2, 1, 1, 2);
+        scene.world.showSection(secondShaft, Direction.DOWN);
+        scene.idle(20);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(20);
+        scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(dcs, Direction.NORTH), Pointing.RIGHT)
+            .withItem(AllItems.WRENCH.asStack())
+        , 20);
+        scene.idle(5);
+        scene.world.setBlock(dcs, DoubleCardanShaftBlock.getBlockstateConnectingDirections(Direction.SOUTH, Direction.UP), false);
+        scene.world.setKineticSpeed(util.select.fromTo(3, 1, 2, 4, 1, 2), 0);
+        scene.idle(25);
+        scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(dcs, Direction.NORTH), Pointing.RIGHT)
+            .withItem(AllItems.WRENCH.asStack())
+        , 20);
+        scene.idle(5);
+        scene.world.setBlock(dcs, DoubleCardanShaftBlock.getBlockstateConnectingDirections(Direction.SOUTH, Direction.WEST), false);
+        scene.world.setKineticSpeed(secondShaft, 16);
+        scene.idle(15);
 
         scene.markAsFinished();
     };  
@@ -396,7 +567,40 @@ public class DestroyScenes {
         scene.markAsFinished();
     };
 
-    @SuppressWarnings({"null", "resource"})
+    public static void planetaryGearset(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("planetary_gearset", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 3);
+        scene.showBasePlate();
+
+        scene.world.showSection(util.select.position(1, 0, 3), Direction.NORTH);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(1, 1, 2), Direction.DOWN);
+        scene.idle(5);
+        scene.world.showSection(util.select.fromTo(1, 2, 0, 1, 2, 1), Direction.DOWN);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(2, 3, 1), Direction.DOWN);
+        scene.idle(5);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame()
+            .pointAt(util.vector.blockSurface(new BlockPos(1, 2, 1), Direction.WEST));
+        scene.idle(120);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame()
+            .pointAt(util.vector.blockSurface(new BlockPos(1, 2, 0), Direction.NORTH));
+        scene.idle(20);
+
+        scene.effects.rotationDirectionIndicator(util.grid.at(1, 2, 1));
+		scene.effects.rotationDirectionIndicator(util.grid.at(1, 2, 0));
+        scene.idle(100);
+
+        scene.markAsFinished();
+    };
+
+    @SuppressWarnings("resource")
     public static void pumpjack(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("pumpjack", "This text is defined in a language file.");
         scene.configureBasePlate(0, 0, 5);
@@ -417,7 +621,6 @@ public class DestroyScenes {
             player.yo = v.y;
             player.zo = v.z;
             player.setInvisible(true);
-            Destroy.LOGGER.info("I am henry");
             return player;
         });
 

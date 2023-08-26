@@ -10,6 +10,7 @@
         "accessor.FluidIngredientAccessor",
         "accessor.ItemRendererAccessor",
         "accessor.ProcessingRecipeParamsAccessor",
+        "accessor.RotationPropagatorAccessor",
         "accessor.TooltipRendererAccessor",
         "accessor.ValueSettingsPacketAccessor",
         "accessor.VillagerAccessor",

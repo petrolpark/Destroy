@@ -79,7 +79,7 @@ public class PlanetaryGearsetInstance extends KineticBlockEntityInstance<Planeta
         };
     };
 
-    private PoseStack rotateToAxis(Direction.Axis axis) {
+    public static PoseStack rotateToAxis(Direction.Axis axis) {
 		Direction facing = Direction.fromAxisAndDirection(axis, AxisDirection.POSITIVE);
 		PoseStack poseStack = new PoseStack();
 		TransformStack.cast(poseStack)

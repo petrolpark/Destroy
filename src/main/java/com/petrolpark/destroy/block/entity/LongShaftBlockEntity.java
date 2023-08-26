@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.petrolpark.destroy.block.CoaxialGearBlock;
 import com.petrolpark.destroy.block.LongShaftBlock;
+import com.petrolpark.destroy.mixin.accessor.RotationPropagatorAccessor;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
@@ -25,6 +26,7 @@ public class LongShaftBlockEntity extends BracketedKineticBlockEntity {
     @Override
     public void tick() {
         super.tick();
+        if (isVirtual() || !hasLevel()) return;
         BlockState coaxialGearState = level.getBlockState(getBlockPos().relative(LongShaftBlockEntity.getDirection(getBlockState())));
         if (!CoaxialGearBlock.isCoaxialGear(coaxialGearState) || coaxialGearState.getValue(RotatedPillarKineticBlock.AXIS) != getBlockState().getValue(RotatedPillarKineticBlock.AXIS) || !coaxialGearState.getValue(CoaxialGearBlock.HAS_SHAFT)) {
             getLevel().setBlockAndUpdate(getBlockPos(), AllBlocks.SHAFT.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, getBlockState().getValue(RotatedPillarKineticBlock.AXIS)));
@@ -33,9 +35,8 @@ public class LongShaftBlockEntity extends BracketedKineticBlockEntity {
 
     @Override
     public float propagateRotationTo(KineticBlockEntity target, BlockState stateFrom, BlockState stateTo, BlockPos diff, boolean connectedViaAxes, boolean connectedViaCogs) {
-		if (!(stateTo.getBlock() instanceof IRotate defTo)) return 0f;
         Direction direction = getDirection(stateFrom);
-        if (BlockPos.ZERO.relative(direction, 2).equals(diff) && defTo.hasShaftTowards(getLevel(), target.getBlockPos(), stateTo, direction.getOpposite())) return 1f;
+        if (connectedToLongShaft(target, this, BlockPos.ZERO.subtract(diff))) return 1 / RotationPropagatorAccessor.invokeGetAxisModifier(target, direction.getOpposite());
         return 0f;
 	};
 
@@ -57,6 +58,21 @@ public class LongShaftBlockEntity extends BracketedKineticBlockEntity {
 
     public static Direction getDirection(BlockState state) {
         return Direction.get(state.getValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION) ? AxisDirection.POSITIVE : AxisDirection.NEGATIVE, state.getValue(RotatedPillarKineticBlock.AXIS));
+    };
+
+    /**
+     * Returns {@code true} if the {@code KineticBlockEntity} at the relative location is a {@code LongShaftBlockEntity} that is pointing in the right direction.
+     * @param be
+     * @param potentialLongShaft
+     * @param diff {@code potentialLongShaft}'s position - {@code be}'s position
+     */
+    public static boolean connectedToLongShaft(KineticBlockEntity be, KineticBlockEntity potentialLongShaft, BlockPos diff) {
+        if (potentialLongShaft instanceof LongShaftBlockEntity longShaft && be.getBlockState().getBlock() instanceof IRotate defFrom) {
+            Direction direction = getDirection(longShaft.getBlockState());
+            return diff.equals(BlockPos.ZERO.relative(direction.getOpposite(), 2)) // If the Long Shaft is in the right orientation and position
+            && defFrom.hasShaftTowards(be.getLevel(), be.getBlockPos(), be.getBlockState(), direction.getOpposite()); // If this has a Shaft in the right direction
+        };
+        return false;
     };
     
 };

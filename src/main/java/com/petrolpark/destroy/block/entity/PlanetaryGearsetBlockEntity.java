@@ -3,6 +3,7 @@ package com.petrolpark.destroy.block.entity;
 import java.util.List;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.mixin.accessor.RotationPropagatorAccessor;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.transmission.SplitShaftBlockEntity;
@@ -20,7 +21,11 @@ public class PlanetaryGearsetBlockEntity extends SplitShaftBlockEntity {
 
     @Override
     public float propagateRotationTo(KineticBlockEntity target, BlockState stateFrom, BlockState stateTo, BlockPos diff, boolean connectedViaAxes, boolean connectedViaCogs) {
-        return connectedViaAxes ? (DestroyBlocks.PLANETARY_GEARSET.has(stateTo) ? 0 : -2) : super.propagateRotationTo(target, stateFrom, stateTo, diff, connectedViaAxes, connectedViaCogs);
+        if (connectedViaAxes || LongShaftBlockEntity.connectedToLongShaft(this, target, diff)) {
+            if (DestroyBlocks.PLANETARY_GEARSET.has(stateTo)) return 0;
+            return RotationPropagatorAccessor.invokeGetAxisModifier(target, CoaxialGearBlockEntity.directionBetween(target.getBlockPos(), getBlockPos())) < 0 ? 2 : -2;
+        };
+        return super.propagateRotationTo(target, stateFrom, stateTo, diff, connectedViaAxes, connectedViaCogs);
 	};
 
     @Override

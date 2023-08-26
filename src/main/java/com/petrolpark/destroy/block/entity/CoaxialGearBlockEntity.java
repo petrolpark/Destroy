@@ -42,7 +42,7 @@ public class CoaxialGearBlockEntity extends BracketedKineticBlockEntity {
     @Override
     public void tick() {
         super.tick();
-        if (!hasLevel()) return;
+        if (isVirtual() || !hasLevel()) return;
         if (getBlockState().getValue(CoaxialGearBlock.HAS_SHAFT) && !level.isClientSide()) {
             Axis axis = getBlockState().getValue(RotatedPillarKineticBlock.AXIS);
             boolean longShaftExists = false;

@@ -23,10 +23,16 @@ public class DestroyPonderIndex {
         HELPER.forComponents(DestroyBlocks.CENTRIFUGE)
             .addStoryBoard("centrifuge", DestroyScenes::centrifuge);
 
+        // Coaxial Gear
+        HELPER.forComponents(DestroyBlocks.COAXIAL_GEAR)
+            .addStoryBoard("coaxial_gear_shaftless", DestroyScenes::coaxialGearShaftless)
+            .addStoryBoard("coaxial_gear_through", DestroyScenes::coaxialGearThrough);
+
         // Cooler
         HELPER.forComponents(DestroyBlocks.COOLER)
             .addStoryBoard("cooler", DestroyScenes::cooler);
 
+        // Double Cardan Shaft
         HELPER.forComponents(DestroyBlocks.DOUBLE_CARDAN_SHAFT)
             .addStoryBoard("double_cardan_shaft", DestroyScenes::doubleCardanShaft);
         
@@ -39,6 +45,10 @@ public class DestroyPonderIndex {
         // Hyperaccumulating Fertilizer
         HELPER.forComponents(DestroyItems.HYPERACCUMULATING_FERTILIZER)
             .addStoryBoard("phytomining", DestroyScenes::phytomining);
+
+        // Planetary Gearset
+        HELPER.forComponents(DestroyBlocks.PLANETARY_GEARSET)
+            .addStoryBoard("planetary_gearset", DestroyScenes::planetaryGearset);
 
         // Pumpjack
         HELPER.forComponents(DestroyBlocks.PUMPJACK)
