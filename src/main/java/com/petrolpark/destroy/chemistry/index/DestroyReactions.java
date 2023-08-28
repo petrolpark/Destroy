@@ -229,8 +229,12 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.PROTON)
         .addProduct(DestroyMolecules.WATER)
         .activationEnergy(0f)
-        .preexponentialFactor(1e14f)
-        .build(),
+        .preexponentialFactor(1.3e11f)
+        .reverseReaction(reaction -> reaction
+            .activationEnergy(52.014f)
+            .preexponentialFactor(1603466f)
+            .setOrder(DestroyMolecules.WATER, 0)
+        ).build(),
 
     HYPOCHLORITE_FORMATION = builder()
         .id("hypochlorite_formation")
@@ -346,6 +350,15 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.CARBON_MONOXIDE)
         .addProduct(DestroyMolecules.HYDROGEN, 3)
         .build(), //TODO add nickel catalyst
+
+    SODIUM_DISSOLUTION = builder()
+        .id("sodium_dissolution")
+        .addReactant(DestroyMolecules.SODIUM_METAL, 2, 1)
+        .addReactant(DestroyMolecules.WATER, 2, 1)
+        .addProduct(DestroyMolecules.SODIUM_ION, 2)
+        .addProduct(DestroyMolecules.HYDROXIDE, 2)
+        .addProduct(DestroyMolecules.HYDROGEN)
+        .build(),
     
     SULFUR_OXIDATION = builder()    
         .id("sulfur_oxidation")

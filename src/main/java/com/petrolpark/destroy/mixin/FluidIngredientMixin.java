@@ -1,6 +1,7 @@
 package com.petrolpark.destroy.mixin;
 
 import java.util.Objects;
+import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
@@ -10,7 +11,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.petrolpark.destroy.fluid.ingredient.MoleculeFluidIngredient;
+import com.petrolpark.destroy.fluid.ingredient.MixtureFluidIngredient;
 import com.petrolpark.destroy.mixin.accessor.FluidIngredientAccessor;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 
@@ -21,9 +22,7 @@ public class FluidIngredientMixin {
 
 	private static final String
 	fluidTagMemberName = "fluidTag",
-	fluidMemberName = "fluid",
-	moleculeFluidMemberName = "moleculeFluid",
-	moleculeTagFluidMemberName = "moleculeTagFluid";
+	fluidMemberName = "fluid";
     
 	/**
 	 * Overwriting of {@link com.simibubi.create.foundation.fluid.FluidIngredient#isFluidIngredient FluidIngredient} to
@@ -37,7 +36,7 @@ public class FluidIngredientMixin {
 		if (!je.isJsonObject())
 			return false;
 		JsonObject json = je.getAsJsonObject();
-		if (json.has(fluidTagMemberName) || json.has(fluidMemberName) || json.has(moleculeFluidMemberName) || json.has(moleculeTagFluidMemberName)) {
+		if (json.has(fluidTagMemberName) || json.has(fluidMemberName) || MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.keySet().stream().anyMatch(json::has)) {
             return true;
         };
 		return false;
@@ -56,7 +55,7 @@ public class FluidIngredientMixin {
 			throw new JsonSyntaxException("Invalid fluid ingredient: " + Objects.toString(je));
 
 		JsonObject json = je.getAsJsonObject(); // It thinks 'je' might be null (it can't be at this point)
-		FluidIngredient ingredient;
+		FluidIngredient ingredient = null;
 		if (json.has(fluidMemberName)) {
 			ingredient = new FluidIngredient.FluidStackIngredient();
 		} else if (json.has(fluidTagMemberName)) {
@@ -64,11 +63,15 @@ public class FluidIngredientMixin {
 		//
 		
 		// Deserialize Molecule-involving ingredients
-		} else if (json.has(moleculeFluidMemberName)) {
-			ingredient = new MoleculeFluidIngredient();
-		} else { // If it's a Molecule Tag Fluid Ingredient
-			ingredient = new FluidIngredient.FluidStackIngredient(); // TODO change to right class
+		} else {
+			for (Entry<String, MixtureFluidIngredient> mixtureFluidIngredient : MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.entrySet()) {
+				if (json.has(mixtureFluidIngredient.getKey())) {
+					ingredient = mixtureFluidIngredient.getValue().getNew();
+				};
+			};
 		};
+
+		if (ingredient == null) throw new IllegalStateException("Unknown Fluid Type");
 
 		// The rest is all copied from the Create Source code
 		((FluidIngredientAccessor)ingredient).invokeReadInternal(json);

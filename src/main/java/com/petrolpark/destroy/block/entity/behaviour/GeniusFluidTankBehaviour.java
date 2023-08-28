@@ -47,21 +47,23 @@ public class GeniusFluidTankBehaviour extends SmartFluidTankBehaviour {
 
         @Override
         public int fill(FluidStack resource, FluidAction action) {
-            if (super.fill(resource, action) == 0 && getSpace() > 0) { // If we wouldn't usually be able to insert, and we're not full (i.e. the Fluids are 'different')
+            int filled = super.fill(resource, action);
+            if (filled == 0 && getSpace() > 0) { // If we wouldn't usually be able to insert, and we're not full (i.e. the Fluids are 'different')
                 if (!DestroyFluids.MIXTURE.get().isSame(resource.getFluid()) || !DestroyFluids.MIXTURE.get().isSame(fluid.getFluid())) return 0;
                 if (!resource.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND) || !fluid.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND)) return 0;
                 Mixture existingMixture = Mixture.readNBT(fluid.getOrCreateTag().getCompound("Mixture"));
                 Mixture addedMixture = Mixture.readNBT(fluid.getOrCreateTag().getCompound("Mixture"));
 
                 int amountOfMixtureAdded = Math.min(getSpace(), resource.getAmount());
+                int existingAmount = fluid.getAmount();
                 if (!action.simulate()) { // We don't need to do anything further if we're just simulating
-                    Mixture newMixture = Mixture.mix(Map.of(existingMixture, (double)fluid.getAmount() / 1000d, addedMixture, (double)amountOfMixtureAdded / 1000d));
-                    setFluid(MixtureFluid.of(fluid.getAmount() + amountOfMixtureAdded, newMixture));
+                    Mixture newMixture = Mixture.mix(Map.of(existingMixture, (double)existingAmount / 1000d, addedMixture, (double)amountOfMixtureAdded / 1000d));
+                    setFluid(MixtureFluid.of(existingAmount + amountOfMixtureAdded, newMixture));
                 };
 
                 return amountOfMixtureAdded; 
             };
-            return super.fill(resource, action);
+            return filled;
         };
 
     };

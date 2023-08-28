@@ -81,6 +81,10 @@ public class DestroyJEI implements IModPlugin {
      * This does not include {@link com.petrolpark.destroy.chemistry.Reaction Reactions}.
      */
     public static final Map<Molecule, List<Recipe<?>>> MOLECULES_OUTPUT = new HashMap<>();
+    /**
+     * Whether Recipes have not yet been added to {@link DestroyJEI#MOLECULES_INPUT} and {@link DestroyJEI#MOLECULES_OUTPUT}.
+     */
+    public static boolean MOLECULE_RECIPES_NEED_PROCESSING = true;
 
     private final List<CreateRecipeCategory<?>> allCategories = new ArrayList<>();
     private static final List<ITickableCategory> tickingCategories = new ArrayList<>();
@@ -137,9 +141,7 @@ public class DestroyJEI implements IModPlugin {
             .catalyst(DestroyBlocks.VAT_CONTROLLER::get)
             .itemIcon(DestroyItems.MOLECULE_DISPLAY.get())
             .emptyBackground(180, 125)
-            .build("reaction", ReactionCategory::new);
-
-        CreateRecipeCategory<?>
+            .build("reaction", ReactionCategory::new),
 
         electrolysis = builder(BasinRecipe.class)
             .addTypedRecipes(DestroyRecipeTypes.ELECTROLYSIS)
@@ -150,6 +152,7 @@ public class DestroyJEI implements IModPlugin {
             .emptyBackground(177, 85)
             .build("electrolysis", (info, helpers) -> new ElectrolysisCategory(info));
 
+        DestroyJEI.MOLECULE_RECIPES_NEED_PROCESSING = false;
     };
 
     @Override
@@ -166,8 +169,6 @@ public class DestroyJEI implements IModPlugin {
 
     @Override
 	public void registerRecipes(IRecipeRegistration registration) {
-        //MOLECULES_INPUT.clear(); //TODO fix because currently all recipes involving mixtrures get re-registered every time the world is loaded
-        //MOLECULES_OUTPUT.clear();
         DestroyMysteriousItemConversions.register();
         allCategories.forEach(c -> c.registerRecipes(registration));
 	};

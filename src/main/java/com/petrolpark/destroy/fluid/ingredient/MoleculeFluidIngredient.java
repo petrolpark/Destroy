@@ -1,30 +1,59 @@
 package com.petrolpark.destroy.fluid.ingredient;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.google.gson.JsonObject;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
-import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
-import com.petrolpark.destroy.fluid.DestroyFluids;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
+import com.petrolpark.destroy.util.DestroyLang;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
-import net.minecraftforge.fluids.FluidStack;
 
-public class MoleculeFluidIngredient extends FluidIngredient {
+public class MoleculeFluidIngredient extends MixtureFluidIngredient {
 
     protected Molecule molecule;
     protected float concentration;
 
     @Override
-    protected boolean testInternal(FluidStack fluidStack) {
-        if (!(fluidStack.getFluid().getFluidType() == DestroyFluids.MIXTURE.getType())) return false; // If it's not a Mixture
-        CompoundTag mixtureTag = fluidStack.getChildTag("Mixture");
-        if (mixtureTag.isEmpty()) return false; // If this Mixture Fluid has no associated Mixture
-        return Mixture.readNBT(mixtureTag).hasUsableMolecule(molecule, concentration);
+    public MixtureFluidIngredient getNew() {
+        return new MoleculeFluidIngredient();
+    };
+
+    @Override
+    protected String getMixtureFluidIngredientSubtype() {
+        return "mixtureFluidWithMolecule";
+    };
+
+    @Override
+    public Collection<Molecule> getRequiredMolecules() {
+        return List.of(molecule);
+    };
+
+    @Override
+    public void addNBT(CompoundTag fluidTag) {
+        fluidTag.putString("MoleculeRequired", molecule.getFullID());
+        fluidTag.putFloat("ConcentrationRequired", concentration);
+    };
+
+    @Override
+    public String getDescription(CompoundTag fluidTag) {
+        String moleculeID = fluidTag.getString("MoleculeRequired");
+        float concentration = fluidTag.getFloat("ConcentrationRequired");
+
+        Molecule molecule = Molecule.getMolecule(moleculeID);
+        Component moleculeName = molecule == null ? DestroyLang.translate("tooltip.unknown_molecule").component() : molecule.getName(DestroyAllConfigs.CLIENT.chemistry.iupacNames.get());
+
+        return DestroyLang.translate("tooltip.mixture_ingredient.molecule", moleculeName, concentration).string();
+    };
+
+    @Override
+    protected boolean testMixture(Mixture mixture) {
+        return mixture.hasUsableMolecule(molecule, concentration, null);
     };
 
     @Override
@@ -53,26 +82,6 @@ public class MoleculeFluidIngredient extends FluidIngredient {
     protected void writeInternal(JsonObject json) {
         json.addProperty("molecule", molecule.getFullID());
         json.addProperty("concentration", concentration);
-    };
-
-    // As far as I can tell this is only used for displaying (e.g. in JEI) so a comprehensive list isn't required.
-    @Override
-    protected List<FluidStack> determineMatchingFluidStacks() {
-        FluidStack fluidStack = new FluidStack(DestroyFluids.MIXTURE.getSource(), amountRequired);
-        CompoundTag fluidTag = fluidStack.getOrCreateTag();
-        // To avoid having to regenerate the Mixture every tick, generate all the information we need here, stick it in the NBT and just read it off when needed.
-        fluidTag.putString("DisplayName", ReadOnlyMixture.readNBT(fluidTag.getCompound("Mixture")).getName().getString());
-        fluidTag.putString("IngredientMolecule", molecule.getFullID());
-        fluidTag.putFloat("IngredientConcentration", concentration);
-        return List.of(fluidStack);
-    };
-
-    /**
-     * Get the Molecule associated with this Molecule ingredient
-     * @return
-     */
-    public Molecule getMolecule() {
-        return molecule;
     };
 
 };

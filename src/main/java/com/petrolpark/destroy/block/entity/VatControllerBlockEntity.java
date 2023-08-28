@@ -109,8 +109,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         energyChange += (LevelPollution.getLocalTemperature(getLevel(), getBlockPos()) - cachedMixture.getTemperature()) * vat.getConductance(); // Fourier's Law (sort of)
         if (Math.abs(energyChange) > 0.0001f) {
             cachedMixture.heat(1000 * energyChange / getTank().getFluidAmount()); // 1000 converts getFluidAmount() in mB to Buckets
+            updateFluidMixture();
         };
-        updateFluidMixture();
         sendData();
     };
 
@@ -305,6 +305,9 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
         //TODO evaporation
 
+        full = false;
+        cachedMixture = new Mixture();
+        getTank().setFluid(FluidStack.EMPTY);
         vat = Optional.empty();
         underDeconstruction = false;
         invalidateRenderBoundingBox(); // Update the render bounding box to be smaller

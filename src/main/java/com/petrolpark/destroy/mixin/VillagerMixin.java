@@ -33,7 +33,7 @@ public class VillagerMixin {
         return (Villager.WANTED_ITEMS.contains(item) 
             || ((VillagerAccessor)this).invokeGetVillagerData().getProfession().requestedItems().contains(item)) && ((AbstractVillagerAccessor)this).invokeGetInventory().canAddItem(pStack)
         //
-            || ((AgeableMobAccessor)this).invokeIsBaby() && DestroyItems.BUCKET_AND_SPADE.isIn(pStack); //TODO replace with all toys (not just bucket and spade)
+            || ((AgeableMobAccessor)this).invokeIsBaby() && DestroyItems.BUCKET_AND_SPADE.isIn(pStack);
     };
 
     /**

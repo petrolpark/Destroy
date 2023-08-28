@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.ibm.icu.text.DecimalFormat;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.BubbleCapBlock;
@@ -47,6 +48,12 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, IFluidBlockEntity {
+
+    private static final DecimalFormat df = new DecimalFormat();
+    static {
+        df.setMinimumFractionDigits(0);
+        df.setMaximumFractionDigits(0);
+    };
 
     private static final int TANK_CAPACITY = 1000;
     private static final int TRANSFER_SPEED = 20; // The rate (mB/tick) at which Fluid is transferred from the internal Tank to the actual Tank
@@ -159,7 +166,6 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
             };
             particleFluid = FluidStack.EMPTY; // Reset this, we've made them now
         };
-        if (level.isClientSide()) return;
         if (initializationTicks > 0) initializationTicks--;
         if (ticksToFill > 0) {
             ticksToFill--;
@@ -168,7 +174,9 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
             };
         };
         if (ticksToFill <= 0 && !internalTank.isEmpty()) {
+            internalTank.allowInsertion();
             FluidStack transferredFluid = getInternalTank().drain(TRANSFER_SPEED, FluidAction.EXECUTE);
+            internalTank.forbidInsertion();
             getTank().fill(transferredFluid, FluidAction.EXECUTE);
         };
         if (!hasLevel()) return;
@@ -319,6 +327,7 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
         if (initializationTicks > 0) return false;
         DistillationTower clientTower = getDistillationTower();
         if (clientTower == null) return false;
+        if (clientTower.getControllerBubbleCap() == null) return false;
 
         // Label this Bubble Cap
         if (isController) {
@@ -340,10 +349,10 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
         DestroyLang.fluidContainerInfoHeader(tooltip);
 
         // Add contents 
-        if (!isController) {
-            DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.bubble_cap.output_tank"), getTank());
-        };
+        if (!isController) DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.bubble_cap.output_tank"), getTank());
         DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.bubble_cap.input_tank"), inputTank);
+
+        if (isController) DestroyLang.translate("tooltip.bubble_cap.reboiler_temperature", df.format(DistillationTower.getTemperatureForDistillationTower(getLevel(), worldPosition))).forGoggles(tooltip); //TODO replace with something that can take multiple temperature units
 
         return true;
     };

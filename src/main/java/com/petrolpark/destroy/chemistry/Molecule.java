@@ -430,7 +430,7 @@ public class Molecule implements INameableProduct {
      * Whether this Molecule's {@link Molecule#getColor color} is completely transparent (its alpha value is {@code 00}).
      */
     public boolean isColorless() {
-        return color == 0 || color == 0xFFFFFF00; // TODO actually split into bits and check the alpha channel
+        return color >> 24 == 0;
     };
 
     /**
@@ -717,7 +717,7 @@ public class Molecule implements INameableProduct {
             };
 
             if (!hasForcedMolarHeatCapacity) {
-                molecule.molarHeatCapacity = 100f; //TODO set default MOLAR heat capacity to ~100
+                molecule.molarHeatCapacity = 100f;
             };
             
             if (molecule.color == 0) {
@@ -747,8 +747,7 @@ public class Molecule implements INameableProduct {
         };
 
         private float calculateBoilingPoint() {
-            //TODO calculate Boiling Point
-            return 0;
+            return Float.MAX_VALUE; //TODO calculate boiling point
         };
 
         private int calculateDipoleMoment() {

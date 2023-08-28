@@ -42,7 +42,7 @@ public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
      */
     static {
         for (Reaction reaction : Reaction.REACTIONS.values()) {
-            RECIPES.put(reaction, ReactionRecipe.create(reaction));
+            if (reaction.includeInJei()) RECIPES.put(reaction, ReactionRecipe.create(reaction));
         };
     };
 

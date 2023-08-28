@@ -21,6 +21,12 @@ import net.minecraftforge.fluids.FluidStack;
 
 public abstract class MixtureContentsDisplaySource extends DisplaySource {
 
+    private static DecimalFormat df = new DecimalFormat();
+    static {
+        df.setMinimumFractionDigits(2);
+        df.setMaximumFractionDigits(2);
+    }
+
     @Override
     public List<MutableComponent> provideText(DisplayLinkContext context, DisplayTargetStats stats) {
 
@@ -41,7 +47,7 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
 
             name = mixture.getName().copy();
             temperature = temperatureUnit.of(mixture.getTemperature());
-            tooltip.addAll(mixture.getContentsTooltip(iupac).stream().map(c -> c.copy()).toList());
+            tooltip.addAll(mixture.getContentsTooltip(iupac, df).stream().map(c -> c.copy()).toList());
         };
 
         tooltip.add(0, name.append(" "+fluidStack.getAmount()).append(Lang.translateDirect("generic.unit.millibuckets")).append(" "+temperature));

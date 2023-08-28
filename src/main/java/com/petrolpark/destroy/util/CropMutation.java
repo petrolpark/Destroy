@@ -73,7 +73,6 @@ public class CropMutation {
         MUTATIONS.get(startCrop.get()).add(this);
     };
 
-    @SuppressWarnings("null") // It's not null; I checked
     public static CropMutation getMutation(BlockState cropBlockState, BlockState blockUnder) {
         Block cropBlock = cropBlockState.getBlock();
         CropMutation mutation = null;

@@ -109,7 +109,6 @@ public class PumpjackBlockEntity extends SmartBlockEntity implements IHaveGoggle
         int amountPumped = tank.getPrimaryHandler().fill(new FluidStack(DestroyFluids.CRUDE_OIL.get(), (int)Math.min(oilAmount, cam.getSpeed() / 16)), FluidAction.EXECUTE);
         tank.forbidInsertion();
         crudeOilOptional.ifPresent(crudeOilCap -> crudeOilCap.decreaseAmount(amountPumped));
-        // TODO stop pumping below a threshold without drilling fluid
     };
 
     @Override

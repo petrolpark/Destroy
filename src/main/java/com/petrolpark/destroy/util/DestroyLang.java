@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
-import com.petrolpark.destroy.chemistry.Molecule;
-import com.petrolpark.destroy.config.DestroyAllConfigs;
+import com.petrolpark.destroy.fluid.ingredient.MixtureFluidIngredient;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.LangBuilder;
@@ -116,13 +115,10 @@ public class DestroyLang {
      */
     public static List<Component> mixtureIngredientTooltip(CompoundTag fluidTag) {
         List<Component> tooltip = new ArrayList<>();
-        String moleculeID = fluidTag.getString("IngredientMolecule");
-        float concentration = fluidTag.getFloat("IngredientConcentration");
 
-        Molecule molecule = Molecule.getMolecule(moleculeID);
-        Component moleculeName = molecule == null ? DestroyLang.translate("tooltip.unknown_molecule").component() : molecule.getName(DestroyAllConfigs.CLIENT.chemistry.iupacNames.get());
+        MixtureFluidIngredient fluidIngredient = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(fluidTag.getString("MixtureFluidIngredientSubtype"));
 
-        tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient", moleculeName.getString(), Float.toString(concentration) + "M").string(), TooltipHelper.Palette.GRAY_AND_WHITE));
+        tooltip.addAll(TooltipHelper.cutStringTextComponent(fluidIngredient.getDescription(fluidTag), TooltipHelper.Palette.GRAY_AND_WHITE));
 
         return tooltip;
     };

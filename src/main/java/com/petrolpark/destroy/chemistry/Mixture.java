@@ -1,12 +1,16 @@
 package com.petrolpark.destroy.chemistry;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.annotation.Nullable;
+
 import java.util.Set;
 
 import com.petrolpark.destroy.Destroy;
@@ -31,12 +35,6 @@ public class Mixture extends ReadOnlyMixture {
      * instance of that Reaction Result was dealt with).
      */
     private Map<ReactionResult, Float> reactionresults;
-
-    /**
-     * {@link Molecule Molecules} which can donate protons.
-     */
-    private List<Molecule> acids;
-
     /**
      * {@link Molecule Molecules} which do not have a name space or ID.
      */
@@ -69,7 +67,6 @@ public class Mixture extends ReadOnlyMixture {
 
         reactionresults = new HashMap<>();
 
-        acids = new ArrayList<>();
         novelMolecules = new ArrayList<>();
 
         possibleReactions = new ArrayList<>();
@@ -122,12 +119,22 @@ public class Mixture extends ReadOnlyMixture {
         if (!reactionresults.isEmpty()) {
             tag.put("Results", NBTHelper.writeCompoundList(reactionresults.entrySet(), entry -> {
                 CompoundTag resultTag = new CompoundTag();
-                resultTag.putString("Result", entry.getKey().getReaction().getFullId()); //TODO
+                resultTag.putString("Result", entry.getKey().getReaction().getFullId());
                 resultTag.putFloat("MolesPerBucket", entry.getValue());
                 return resultTag;
             }));
         };
         return tag;
+    };
+
+    /**
+     * Set the temperature (in kelvins) of this Mixture. This is mutative.
+     * @param temperature in Kelvins
+     * @return This Mixture
+     */
+    public Mixture setTemperature(float temperature) {
+        this.temperature = temperature;
+        return this; 
     };
 
     /**
@@ -193,9 +200,6 @@ public class Mixture extends ReadOnlyMixture {
 
     @Override
     public float getConcentrationOf(Molecule molecule) {
-        if (molecule == DestroyMolecules.PROTON) {
-            return 0f; //TODO determine pH
-        };
         return super.getConcentrationOf(molecule);
     };
 
@@ -204,11 +208,14 @@ public class Mixture extends ReadOnlyMixture {
      * This is used in Recipes.
      * @param molecule Only known (non-novel) Molecules (i.e. those with a name space) will be detected
      * @param concentration
+     * @param ignoreableMolecules Molecules other than solvents and low-concentration impurities that should be ignored; {@code null} for an empty list
      */
-    public boolean hasUsableMolecule(Molecule molecule, float concentration) {
+    public boolean hasUsableMolecule(Molecule molecule, float concentration, @Nullable Collection<Molecule> ignoreableMolecules) {
         if (!contents.containsKey(molecule)) return false;
+        if (ignoreableMolecules == null) ignoreableMolecules = List.of();
         if (Math.abs(concentration - getConcentrationOf(molecule)) > IMPURITY_THRESHOLD) return false; //TODO replace with a more lenient check
         for (Entry<Molecule, Float> otherMolecule : contents.entrySet()) {
+            if (ignoreableMolecules.contains(otherMolecule.getKey())) continue; // If this molecule is specified as ignoreable, ignore it
             if (otherMolecule.getKey() == molecule) continue; // If this is the Molecule we want, ignore it.
             if (otherMolecule.getKey().hasTag(DestroyMolecules.Tags.SOLVENT)) continue; // If this is a solvent, ignore it
             if (otherMolecule.getValue() < IMPURITY_THRESHOLD) continue; // If this impurity is in low-enough concentration, ignore it.
@@ -415,8 +422,6 @@ public class Mixture extends ReadOnlyMixture {
             };
         };
 
-        //TODO check for acids
-
         if (molecule.isNovel()) { // If this is a novel Molecule, it might already match to one of our existing novel Molecules
             boolean found = false; // Start by assuming it's not already in the Mixture
             for (Molecule novelMolecule : novelMolecules) { // Check every novel Molecule
@@ -445,9 +450,6 @@ public class Mixture extends ReadOnlyMixture {
      * @return This Mixture
      */
     private Mixture removeMolecule(Molecule molecule) {
-        if (acids.contains(molecule)) {
-            //TODO remove from acids
-        };
 
         List<Group> functionalGroups = molecule.getFunctionalGroups();
         if (functionalGroups.size() != 0) {
@@ -473,11 +475,6 @@ public class Mixture extends ReadOnlyMixture {
      */
     private Mixture changeConcentrationOf(Molecule molecule, float change, boolean shouldRefreshReactions) {
         Float currentConcentration = getConcentrationOf(molecule);
-
-        if (molecule == DestroyMolecules.PROTON) {
-            Destroy.LOGGER.warn("Attempted to directly change concentration of H+");
-            return this; // Concentration of H+ should never be altered by changing H+ concentration directly - only by changing concentration of acids
-        };
 
         if (currentConcentration == 0f) {
             if (change > 0f) {
@@ -576,7 +573,7 @@ public class Mixture extends ReadOnlyMixture {
         }
     };
 
-    private boolean areVeryClose(Float f1, Float f2) {
-        return Math.abs(f1 - f2) <= 0.00001f;
+    public static boolean areVeryClose(Float f1, Float f2) {
+        return Math.abs(f1 - f2) <= 0.0000001f;
     };
 }

@@ -199,7 +199,7 @@ public class ReadOnlyMixture {
      * The tooltip listing the {@link ReadOnlyMixture#contents contents} of this Mixture.
      * @param iupac Whether to use IUPAC names instead of common names
      */
-    public List<Component> getContentsTooltip(boolean iupac) {
+    public List<Component> getContentsTooltip(boolean iupac, DecimalFormat concentrationFormatter) {
         int i = 0;
         List<Component> tooltip = new ArrayList<>();
         for (Entry<Molecule, Float> entry : contents.entrySet()) {
@@ -208,7 +208,7 @@ public class ReadOnlyMixture {
                 .add(entry.getKey().getName(iupac).plainCopy())
                 .add(Component.literal(
                     (entry.getKey().getCharge() == 0 ? "" : " [" + entry.getKey().getSerializedCharge(false) + "]") + // Show charge, if there is one
-                    " ("+df.format(entry.getValue())+"M)" // Show concentration
+                    " ("+concentrationFormatter.format(entry.getValue())+"M)" // Show concentration
                 ))
                 .style(ChatFormatting.GRAY)
                 .component()
@@ -225,7 +225,7 @@ public class ReadOnlyMixture {
         float totalBlue = 0;
         int totalAlpha = 64;
         for (Entry<Molecule, Float> entry : contents.entrySet()) {
-            if (entry.getKey().isColorless()) continue;
+            //if (entry.getKey().isColorless()) continue;
             Color color = new Color(entry.getKey().getColor());
             float colorContribution = entry.getValue() * color.getAlphaAsFloat();
             totalColorContribution += colorContribution;
@@ -255,6 +255,8 @@ public class ReadOnlyMixture {
             return;
         };
 
+        boolean neutral = Mixture.areVeryClose(getConcentrationOf(DestroyMolecules.PROTON), getConcentrationOf(DestroyMolecules.HYDROXIDE));
+
         List<INameableProduct> products = new ArrayList<>();
         List<Molecule> cations = new ArrayList<>();
         List<Molecule> anions = new ArrayList<>();
@@ -262,6 +264,7 @@ public class ReadOnlyMixture {
         List<Molecule> impurities = new ArrayList<>();
         for (Entry<Molecule, Float> entry : contents.entrySet()) {
             Molecule molecule = entry.getKey();
+            if (neutral && (molecule == DestroyMolecules.HYDROXIDE || molecule == DestroyMolecules.PROTON)) continue;
             if (entry.getValue() < IMPURITY_THRESHOLD) {
                 impurities.add(molecule);
             } else if (molecule.hasTag(DestroyMolecules.Tags.SOLVENT)) {

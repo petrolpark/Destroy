@@ -134,6 +134,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     public void tryInsertFluidInVat() {
         VatControllerBlockEntity vatController = getController();
         if (vatController == null) return;
+        refreshFluidCapability();
         // Attempt to transfer Fluid from this Vat Side Block Entity to the Controller's Tank, which is the main one
         inputBehaviour.allowExtraction();
         // Determine how much Fluid could be added to the main tank (this should usually be everything)
@@ -157,6 +158,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             spoutingTicks--;
             if (!isPipeSubmerged(true, null)) spawnParticles(spoutingFluid, getLevel());
         };
+        tryInsertFluidInVat();
     };
 
     @Override

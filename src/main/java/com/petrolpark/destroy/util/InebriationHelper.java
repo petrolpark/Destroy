@@ -9,7 +9,6 @@ import net.minecraft.world.entity.LivingEntity;
 
 public final class InebriationHelper {
 
-    @SuppressWarnings("null") // I promise I checked to make sure it's not null
     public static void increaseInebriation(LivingEntity entity, int level) {
 
         final MobEffect INEBRIATION = DestroyMobEffects.INEBRIATION.get();

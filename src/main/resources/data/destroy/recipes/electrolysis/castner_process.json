@@ -1,0 +1,66 @@
+{
+    "type": "destroy:electrolysis",
+    "ingredients": [
+      {
+        "mixtureFluidWithMolecule": "destroy:mixture",
+        "molecule": "destroy:mercury",
+        "concentration": 67.5,
+        "amount": 250
+      },
+      {
+        "mixtureFluidWithSalt": "destroy:mixture",
+        "cation": "destroy:sodium_ion",
+        "anion": "destroy:chloride",
+        "concentration": 1.0,
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:mixture",
+        "amount": 250,
+        "nbt": {
+            "Mixture": {
+                "TranslationKey": "fluid.destroy.sodium_amalgam",
+                "Contents": [
+                    {
+                        "Molecule": "destroy:mercury",
+                        "Concentration": 66.825
+                    },
+                    {
+                        "Molecule": "destroy:sodium_metal",
+                        "Concentration": 0.00045
+                    }
+                ]
+            } 
+        }
+      },
+      {
+        "fluid": "destroy:mixture",
+        "amount": 250,
+        "nbt": {
+            "Mixture": {
+                "TranslationKey": "fluid.destroy.chlorine_solution",
+                "Contents": [
+                    {
+                      "Molecule": "destroy:hydrochloric_acid",
+                      "Concentration": 1.0
+                    },
+                    {
+                      "Molecule": "destroy:hypochlorite",
+                      "Concentration": 1.0
+                    },
+                    {
+                      "Molecule": "destroy:proton",
+                      "Concentration": 1.0
+                    },
+                    {
+                      "Molecule": "destroy:water",
+                      "Concentration": 55.5
+                    }
+                ]
+            } 
+        }
+      }
+    ]
+  }

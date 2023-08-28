@@ -2,7 +2,7 @@
     "type": "create:mixing",
     "ingredients": [
       {
-        "moleculeFluid": "destroy:mixture",
+        "mixtureFluidWithMolecule": "destroy:mixture",
         "amount": 100,
         "molecule": "destroy:glycerol",
         "concentration": 1.0

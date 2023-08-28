@@ -14,7 +14,7 @@
             "item": "destroy:unfinished_blacklight"
           },
           {
-            "moleculeFluid": "destroy:mixture",
+            "mixtureFluidWithMolecule": "destroy:mixture",
             "amount": 250,
             "molecule": "destroy:mercury",
             "concentration": 67.5

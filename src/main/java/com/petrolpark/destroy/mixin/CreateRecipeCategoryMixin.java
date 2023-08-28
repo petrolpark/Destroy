@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.mixin;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +42,12 @@ import net.minecraftforge.fluids.FluidStack;
 
 @Mixin(CreateRecipeCategory.class)
 public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
+
+    private static DecimalFormat df = new DecimalFormat();
+    static {
+        df.setMinimumFractionDigits(1);
+        df.setMaximumFractionDigits(1);
+    };
 
     /**
      * A map of the IDs of Create Categories to the classes of Recipe those Categories describe.
@@ -105,14 +112,13 @@ public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
                 List<Component> mixtureTooltip = new ArrayList<>();
 
                 if (view.getRole() == RecipeIngredientRole.INPUT || view.getRole() == RecipeIngredientRole.CATALYST) {
-                    name = Component.literal(fluidTag.getString("DisplayName"));
                     mixtureTooltip = DestroyLang.mixtureIngredientTooltip(fluidTag);
                 } else if (view.getRole() == RecipeIngredientRole.OUTPUT) {
                     CompoundTag mixtureTag = fluidTag.getCompound("Mixture");
                     if (!mixtureTag.isEmpty()) {
                         ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(mixtureTag);
                         name = mixture.getName();
-                        mixtureTooltip = mixture.getContentsTooltip(iupac);
+                        mixtureTooltip = mixture.getContentsTooltip(iupac, new DecimalFormat());
                     } else {
                         mixtureTooltip = List.of(DestroyLang.translate("mixture.empty").component());
                     };

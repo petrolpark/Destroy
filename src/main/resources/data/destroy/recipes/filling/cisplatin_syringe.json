@@ -5,7 +5,7 @@
         "item": "destroy:syringe"
       },
       {
-        "moleculeFluid": "destroy:mixture",
+        "mixtureFluidWithMolecule": "destroy:mixture",
         "amount": 250,
         "molecule": "destroy:cisplatin",
         "concentration": 1.0
