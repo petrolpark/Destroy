@@ -1,3 +1,17 @@
 {
-    "parent": "destroy:block/vat_controller"
-  }
+    "parent": "destroy:block/vat_controller",
+    "display": {
+      "firstperson_righthand": {
+        "rotation": [0, 180, 0],
+        "scale": [0.4, 0.4, 0.4]
+      },
+      "firstperson_lefthand": {
+        "rotation": [0, 45, 0],
+        "scale": [0.4, 0.4, 0.4]
+      },
+      "gui": {
+        "rotation": [30, 45, 0],
+        "scale": [0.625, 0.625, 0.625]
+      }
+    }
+}

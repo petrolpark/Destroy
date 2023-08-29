@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.joml.Math;
 import org.joml.Quaternionf;
 
 import com.google.common.collect.ImmutableList;
@@ -19,6 +20,7 @@ import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.Formula.Topology.SideChainInformation;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
+import com.petrolpark.destroy.chemistry.serializer.Edge;
 import com.petrolpark.destroy.chemistry.serializer.Node;
 
 import com.simibubi.create.foundation.gui.ILightingSettings;
@@ -94,7 +96,7 @@ public class MoleculeRenderer {
                 Vec3 zig = cyclicAtomsAndLocations.get(bond.getDestinationAtom()).subtract(sourceAtomLocation).normalize();
                 RENDERED_OBJECTS.add(Pair.of(
                    sourceAtomLocation.scale(BOND_LENGTH).add(zig.scale(BOND_LENGTH / 2)),
-                   BondRenderInstance.fromZig(BondType.SINGLE, zig) //TODO replace with bond.getType()
+                   BondRenderInstance.fromZig(bond.getType(), zig) //TODO replace with bond.getType()
                 ));
             });
             // Add all side chains
@@ -158,11 +160,14 @@ public class MoleculeRenderer {
     public void render(int xPosition, int yPosition, GuiGraphics graphics) {
         PoseStack poseStack = graphics.pose();
         poseStack.pushPose();
-        poseStack.translate(xPosition + xOffset, yPosition + yOffset, zOffset + 100);
-        TransformStack.cast(poseStack).rotateY(AnimationTickHolder.getRenderTime()); // Rotation
+        poseStack.translate(xPosition + ((float)width / 2f), yPosition + yOffset, zOffset + 100);
+        TransformStack.cast(poseStack)
+            .rotateY(AnimationTickHolder.getRenderTime()); // Rotation
+        poseStack.translate(-((float)width) / 2f + xOffset, 0f, 0f);
         for (Pair<Vec3, IRenderableMoleculePart> pair : RENDERED_OBJECTS) {
             pair.getSecond().render(graphics, pair.getFirst());
         };
+        poseStack.popPose();
         poseStack.popPose();
     };
 
@@ -212,7 +217,7 @@ public class MoleculeRenderer {
 
                 Branch sideBranch = sideBranchAndBondType.getKey();
                 Vec3 newPlane = confinedGeometry.getZig().cross(sideZag);
-                RENDERED_OBJECTS.add(Pair.of(location.add(sideZag.scale(0.5d * BOND_LENGTH)), BondRenderInstance.fromZig(BondType.SINGLE,  sideZag)));
+                RENDERED_OBJECTS.add(Pair.of(location.add(sideZag.scale(0.5d * BOND_LENGTH)), BondRenderInstance.fromZig(sideBranchAndBondType.getValue(),  sideZag)));
                 generateBranch(sideBranch, location.add(sideZag.scale(BOND_LENGTH)), rotate(sideZag, newPlane, 90d), newPlane, sideZag, false);
                 j++;
             };
@@ -220,8 +225,13 @@ public class MoleculeRenderer {
             // If that was the last Atom, there is no need to render the next bond or determine the position of the next Atom
             if (i >= branch.getNodes().size()) break;
 
+            BondType bondType = BondType.SINGLE;
+            for (Edge edge : node.getEdges()) {
+                if (edge.getSourceNode() == branch.getNodes().get(i - 1)) bondType = edge.bondType;
+            };
+
             // Mark the Bond for rendering at this location
-            RENDERED_OBJECTS.add(Pair.of(location.add(zag.scale(0.5d * BOND_LENGTH)), BondRenderInstance.fromZig(BondType.SINGLE, zag)));
+            RENDERED_OBJECTS.add(Pair.of(location.add(zag.scale(0.5d * BOND_LENGTH)), BondRenderInstance.fromZig(bondType, zag)));
 
             // Get the position of the next Atom in the chain
             location = location.add(zag.scale(BOND_LENGTH));

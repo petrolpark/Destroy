@@ -1,0 +1,33 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "destroy:chemistry/bonds",
+		"particle": "destroy:chemistry/bonds"
+	},
+	"elements": [
+		{
+			"from": [-4, -0.5, -1.5],
+			"to": [4, 0.5, -0.5],
+			"faces": {
+				"north": {"uv": [0, 0, 10, 1], "texture": "#0"},
+				"east": {"uv": [0, 0, 1, 1], "texture": "#0"},
+				"south": {"uv": [0, 0, 10, 1], "rotation": 180, "texture": "#0"},
+				"west": {"uv": [9, 0, 10, 1], "texture": "#0"},
+				"up": {"uv": [0, 0, 10, 1], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [0, 0, 10, 1], "rotation": 180, "texture": "#0"}
+			}
+		},
+		{
+			"from": [-4, -0.5, 0.5],
+			"to": [4, 0.5, 1.5],
+			"faces": {
+				"north": {"uv": [0, 0, 10, 1], "texture": "#0"},
+				"east": {"uv": [0, 0, 1, 1], "texture": "#0"},
+				"south": {"uv": [0, 0, 10, 1], "rotation": 180, "texture": "#0"},
+				"west": {"uv": [9, 0, 10, 1], "texture": "#0"},
+				"up": {"uv": [0, 0, 10, 1], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [0, 0, 10, 1], "rotation": 180, "texture": "#0"}
+			}
+		}
+	]
+}

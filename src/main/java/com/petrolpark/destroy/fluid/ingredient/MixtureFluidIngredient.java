@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
@@ -37,7 +38,9 @@ public abstract class MixtureFluidIngredient extends FluidIngredient {
 
     @Override
     protected List<FluidStack> determineMatchingFluidStacks() {
-        FluidStack stack = MixtureFluid.of(amountRequired, new Mixture());
+        Mixture mixture = new Mixture();
+        mixture.addMolecule(DestroyMolecules.WATER, 55.56f);
+        FluidStack stack = MixtureFluid.of(amountRequired, mixture);
         stack.getOrCreateTag().putString("MixtureFluidIngredientSubtype", getMixtureFluidIngredientSubtype());
         addNBT(stack.getOrCreateTag());
         return List.of(stack);

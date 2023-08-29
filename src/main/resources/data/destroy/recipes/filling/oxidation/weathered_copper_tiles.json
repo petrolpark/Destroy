@@ -1,0 +1,19 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "create:weathered_copper_tiles"
+      },
+      {
+        "mixtureFluidWithMolecule": "destroy:mixture",
+        "amount": 50,
+        "molecule": "destroy:acetic_acid",
+        "concentration": 1.0
+      }
+    ],
+    "results": [
+      {
+        "item": "create:oxidized_copper_tiles"
+      }
+    ]
+  }

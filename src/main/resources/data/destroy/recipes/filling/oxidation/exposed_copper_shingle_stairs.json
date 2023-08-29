@@ -1,0 +1,19 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "create:exposed_copper_shingle_stairs"
+      },
+      {
+        "mixtureFluidWithMolecule": "destroy:mixture",
+        "amount": 50,
+        "molecule": "destroy:acetic_acid",
+        "concentration": 1.0
+      }
+    ],
+    "results": [
+      {
+        "item": "create:weathered_copper_shingle_stairs"
+      }
+    ]
+  }

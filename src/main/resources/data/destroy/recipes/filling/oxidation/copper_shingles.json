@@ -1,0 +1,19 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "create:copper_shingles"
+      },
+      {
+        "mixtureFluidWithMolecule": "destroy:mixture",
+        "amount": 50,
+        "molecule": "destroy:acetic_acid",
+        "concentration": 1.0
+      }
+    ],
+    "results": [
+      {
+        "item": "create:exposed_copper_shingles"
+      }
+    ]
+  }

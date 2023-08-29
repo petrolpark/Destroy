@@ -127,7 +127,7 @@ public class DestroyTopologies {
             .withSideBranch(new Vec3(0d, 1d, 0d), new Vec3(0d, 1d, 0d))
             .withBondTo(1, BondType.AROMATIC)
             .attach()
-        .atom(Element.CARBON, new Vec3(2 * cos(30), 0d, 0d)) // 3
+        .atom(Element.CARBON, new Vec3(2 * cos(30), 1d, 0d)) // 3
             .withBondTo(2, BondType.AROMATIC)
             .attach()
         .atom(Element.CARBON, new Vec3(2 * cos(30) + cos(18), 1d + sin(18), 0d)) // 4

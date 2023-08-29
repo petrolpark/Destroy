@@ -9,6 +9,8 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import org.joml.Math;
+
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Formula.Topology.SideChainInformation;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;

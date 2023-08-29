@@ -22,7 +22,6 @@ public class Node {
         sideBranches = new HashMap<>();
     };
 
-    @SuppressWarnings("null") // It's not null I checked
     public String serialize() {
         String string = getAtom().getElement().getSymbol();
         Boolean isTerminal = true;
