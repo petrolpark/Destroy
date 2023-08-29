@@ -7,7 +7,6 @@ import com.petrolpark.destroy.block.instance.CentrifugeCogInstance;
 import com.petrolpark.destroy.block.instance.DoubleCardanShaftInstance;
 import com.petrolpark.destroy.block.instance.DynamoCogInstance;
 import com.petrolpark.destroy.block.instance.PlanetaryGearsetInstance;
-import com.petrolpark.destroy.block.instance.VatSideInstance;
 import com.petrolpark.destroy.block.renderer.AgingBarrelRenderer;
 import com.petrolpark.destroy.block.renderer.BubbleCapRenderer;
 import com.petrolpark.destroy.block.renderer.CentrifugeRenderer;
@@ -121,7 +120,6 @@ public class DestroyBlockEntityTypes {
 
     public static final BlockEntityEntry<VatSideBlockEntity> VAT_SIDE = REGISTRATE
         .blockEntity("vat_side", VatSideBlockEntity::new)
-        .instance(() -> VatSideInstance::new)
         .validBlock(DestroyBlocks.VAT_SIDE)
         .renderer(() -> VatSideRenderer::new)
         .register();

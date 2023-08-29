@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Math;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.capability.blockEntity.VatTankCapability;
@@ -18,6 +19,7 @@ import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.fluids.FluidFX;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
+import com.simibubi.create.content.fluids.FluidTransportBehaviour.AttachmentTypes;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.item.TooltipHelper;
@@ -26,6 +28,7 @@ import com.simibubi.create.foundation.utility.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -268,12 +271,22 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     public void updateDisplayType(BlockPos neighborPos) {
         if (getController() == null) return;
         FluidTransportBehaviour behaviour = BlockEntityBehaviour.get(getLevel(), neighborPos, FluidTransportBehaviour.TYPE);
-        boolean nextToPipe = behaviour == null ? false : behaviour.canHaveFlowToward(getBlockState(), direction) || behaviour.canPullFluidFrom(getController().getTank().getFluid(), getBlockState(), direction);
-        if (getDisplayType() == DisplayType.NORMAL && nextToPipe) {
-            setDisplayType(DisplayType.PIPE);
-        } else if (getDisplayType() == DisplayType.PIPE && !nextToPipe) {
-            setDisplayType(DisplayType.NORMAL);
+        boolean nextToPipe = false;
+        if (behaviour != null) {
+            AttachmentTypes attachment = behaviour.getRenderedRimAttachment(getLevel(), neighborPos, behaviour.blockEntity.getBlockState(), direction.getOpposite());
+            if (attachment == AttachmentTypes.DRAIN || attachment == AttachmentTypes.PARTIAL_DRAIN) nextToPipe = true;
         };
+        boolean nextToAir = getLevel().getBlockState(neighborPos).isAir();
+        
+        if (nextToPipe) {
+            setDisplayType(DisplayType.PIPE);
+        } else if (!nextToAir) {
+            setDisplayType(DisplayType.NORMAL);
+        } else {
+            if (getDisplayType() == DisplayType.PIPE) setDisplayType(DisplayType.NORMAL);
+            if (direction.getAxis() == Axis.Y && (getDisplayType() != DisplayType.NORMAL)) setDisplayType(DisplayType.NORMAL);
+        };
+
         invalidateRenderBoundingBox();
     };
 

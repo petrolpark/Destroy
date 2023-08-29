@@ -21,6 +21,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -50,8 +51,9 @@ public class VatSideBlock extends CopycatBlock {
         return onBlockEntityUse(context.getLevel(), context.getClickedPos(), be -> {
             if (!(be instanceof VatSideBlockEntity vatSide)) return InteractionResult.PASS;
             switch (vatSide.getDisplayType()) {
-                case PIPE:
-                case NORMAL: {
+                case PIPE: {
+                    return InteractionResult.PASS;
+                } case NORMAL: {
                     vatSide.setDisplayType(DisplayType.THERMOMETER);
                     return InteractionResult.SUCCESS;
                 } case THERMOMETER: {
@@ -67,12 +69,25 @@ public class VatSideBlock extends CopycatBlock {
     };
 
     @Override
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+        withBlockEntityDo(level, currentPos, be -> {
+            if (!(be instanceof VatSideBlockEntity vatSide)) return;
+            if (facing != vatSide.direction) return;
+            vatSide.updateDisplayType(facingPos); //TODO change to use correct neighbour
+            vatSide.setPowerFromAdjacentBlock(facingPos);   
+        });
+        return state;
+    };
+
+    @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
         withBlockEntityDo(level, pos, be -> {
             if (!(be instanceof VatSideBlockEntity vatSide)) return;
-            vatSide.updateDisplayType(neighbor);
+            if (!pos.relative(vatSide.direction).equals(neighbor)) return;
+            vatSide.updateDisplayType(neighbor); //TODO change to use correct neighbour
             vatSide.setPowerFromAdjacentBlock(neighbor);   
         });
+        super.onNeighborChange(state, level, pos, neighbor);
     };
 
     @Override
