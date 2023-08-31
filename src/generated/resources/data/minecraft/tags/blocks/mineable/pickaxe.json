@@ -1,9 +1,12 @@
 {
   "values": [
     "destroy:bubble_cap",
+    "destroy:coaxial_gear",
     "destroy:centrifuge",
     "destroy:cooler",
+    "destroy:double_cardan_shaft",
     "destroy:dynamo",
+    "destroy:planetary_gearset",
     "destroy:pollutometer",
     "destroy:pumpjack",
     "destroy:pumpjack_cam",

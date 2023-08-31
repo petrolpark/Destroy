@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.block.entity;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -7,7 +8,6 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.ibm.icu.text.DecimalFormat;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.BubbleCapBlock;
@@ -17,9 +17,11 @@ import com.petrolpark.destroy.block.entity.behaviour.GeniusFluidTankBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DistillationTower;
+import com.petrolpark.destroy.util.DestroyLang.TemperatureUnit;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -352,7 +354,8 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
         if (!isController) DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.bubble_cap.output_tank"), getTank());
         DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.bubble_cap.input_tank"), inputTank);
 
-        if (isController) DestroyLang.translate("tooltip.bubble_cap.reboiler_temperature", df.format(DistillationTower.getTemperatureForDistillationTower(getLevel(), worldPosition))).forGoggles(tooltip); //TODO replace with something that can take multiple temperature units
+        TemperatureUnit unit = DestroyAllConfigs.CLIENT.chemistry.temperatureUnit.get();
+        if (isController) DestroyLang.translate("tooltip.bubble_cap.reboiler_temperature", unit.of(DistillationTower.getTemperatureForDistillationTower(getLevel(), worldPosition), df)).forGoggles(tooltip); //TODO replace with something that can take multiple temperature units
 
         return true;
     };

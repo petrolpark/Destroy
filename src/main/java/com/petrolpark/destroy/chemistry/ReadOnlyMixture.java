@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import com.jozufozu.flywheel.util.Color;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.NBTHelper;
@@ -246,9 +247,8 @@ public class ReadOnlyMixture {
             name = Component.translatable(translationKey);
             return;
         };
-
-        boolean iupac = false; //TODO change to use config values
-        //boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
+        
+        boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
 
         if (contents.size() == 1) {
             name = contents.entrySet().iterator().next().getKey().getName(iupac);

@@ -11,7 +11,9 @@ import org.joml.Math;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.capability.blockEntity.VatTankCapability;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.util.DestroyLang;
+import com.petrolpark.destroy.util.DestroyLang.TemperatureUnit;
 import com.petrolpark.destroy.util.vat.IVatHeaterBlock;
 import com.petrolpark.destroy.util.vat.Vat;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
@@ -306,8 +308,9 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         if (!getVatOptional().isPresent() || getController() == null) return false;
         switch (getDisplayType()) {
             case THERMOMETER: {
-                DestroyLang.translate("tooltip.vat.temperature", df.format(getController().getTemperature())).style(ChatFormatting.WHITE).forGoggles(tooltip);
-                DestroyLang.builder().add(Component.literal(Float.toString(getController().heatingPower))).forGoggles(tooltip); // Temporary
+                TemperatureUnit unit = DestroyAllConfigs.CLIENT.chemistry.temperatureUnit.get();
+                DestroyLang.translate("tooltip.vat.temperature", unit.of(getController().getTemperature(), df)).style(ChatFormatting.WHITE).forGoggles(tooltip);
+                if (DestroyAllConfigs.CLIENT.chemistry.nerdMode.get()) DestroyLang.translate("tooltip.vat.power", df.format(getController().heatingPower)).forGoggles(tooltip);
                 break;
             } case BAROMETER: {
                 Vat vat = getVatOptional().get();

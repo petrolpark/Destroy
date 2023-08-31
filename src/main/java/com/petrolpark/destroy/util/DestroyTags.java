@@ -26,6 +26,7 @@ public class DestroyTags {
         DIRTY_SILICA,
         FERTILIZER,
         HEFTY_BEETROOT,
+        LIABLE_TO_CHANGE,
         PAPER_PULPABLE,
         PLASTIC,
         PRILL,

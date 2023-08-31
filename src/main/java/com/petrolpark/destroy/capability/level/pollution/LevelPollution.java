@@ -7,6 +7,8 @@ import java.util.Map;
 import com.petrolpark.destroy.chemistry.MoleculeTag;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.client.gui.DestroyIcons;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
+import com.petrolpark.destroy.util.PollutionHelper;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIconOptions;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.utility.Lang;
@@ -130,9 +132,11 @@ public class LevelPollution {
     };
 
     public void updateTemperature() {
-        outdoorTemperature = 289f
-            + (levels.get(PollutionType.GREENHOUSE) / PollutionType.GREENHOUSE.max) * 20f
-            + (levels.get(PollutionType.OZONE_DEPLETION) / PollutionType.OZONE_DEPLETION.max) * 4f;
+        outdoorTemperature = 289f;
+        if (!PollutionHelper.pollutionEnabled() || !DestroyAllConfigs.COMMON.pollution.temperatureAffected.get()) return;
+        outdoorTemperature +=
+            (levels.get(PollutionType.GREENHOUSE) / PollutionType.GREENHOUSE.max) * 20f
+          + (levels.get(PollutionType.OZONE_DEPLETION) / PollutionType.OZONE_DEPLETION.max) * 4f;
     };
 
     /**

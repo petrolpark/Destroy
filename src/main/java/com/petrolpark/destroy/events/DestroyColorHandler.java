@@ -70,6 +70,7 @@ public class DestroyColorHandler {
 
     private static int withSmogTint(int color) {
         // Refresh the Smog Level
+        if (!DestroyClientEvents.smogEnabled()) return color;
         LevelPollution levelPollution = ClientLevelPollutionData.getLevelPollution();
         smogProportion = levelPollution == null ? 0f : (float) levelPollution.get(PollutionType.SMOG) / PollutionType.SMOG.max;
         return Color.mixColors(color, brown, smogProportion);

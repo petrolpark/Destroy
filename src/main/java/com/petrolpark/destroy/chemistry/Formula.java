@@ -371,14 +371,44 @@ public class Formula implements Cloneable {
             List<Bond> bonds = entry.getValue();
             int totalBonds = getTotalBonds(bonds);
             //if (totalBonds > atom.getElement().getMaxValency()) throw new IllegalStateException(atom.getElement()+" Atom has invalid number of bonds");
+
             for (int i = 0; i < atom.getElement().getNextLowestValency(totalBonds) - totalBonds; i++) {
-                addAtomToStructure(newStructure, atom, new Atom(Element.HYDROGEN), BondType.SINGLE); 
+                Atom hydrogen = new Atom(Element.HYDROGEN);
+                addAtomToStructure(newStructure, atom, hydrogen, BondType.SINGLE);
             };
         };
         structure = newStructure;
         return this;
     };
 
+    /**
+     * Each {@link Formula#sideChains side chain} entry contains a {@link Formula} which references {@link Atom Atoms} and {@link Bond Bonds} in the
+     * main {@link Formula#structure structure}. When new Atoms are added to the main Formula, the Formulae of the side chains need to be updated.
+     * <p>I don't know who needs to hear this but for the record this was a really complicated thing I had to do and it worked basically first try. Well done me.</p>
+     */
+    private void updateSideChainStructures() {
+        if (topology == Topology.LINEAR) return;
+        List<Pair<SideChainInformation, Formula>> newSideChains = new ArrayList<>();
+        for (Pair<SideChainInformation, Formula> sideChain : sideChains) {
+            Formula sideChainFormula = sideChain.getSecond();
+            SideChainInformation info = sideChain.getFirst();
+            Formula newSideChainFormula = sideChainFormula.shallowCopy();
+            checkAllAtomsInSideChain: for (Atom atom : sideChainFormula.structure.keySet()) { // For every Atom in the side chain Formula, update it so it has all the same Bonds it has in the main structure
+                List<Bond> bonds = new ArrayList<>();
+                if (structure.get(atom) == null) continue checkAllAtomsInSideChain; // If this Atom has no Bonds, don't do anything
+                addAllBondsForAtom: for (Bond bond : structure.get(atom)) {
+                    Atom potentialNewAtom = bond.getDestinationAtom();
+                    if (topology.formula.structure.keySet().contains(potentialNewAtom)) continue addAllBondsForAtom; // Don't add Bonds to Atoms which are part of the Topology (and therefore not part of the side branch)
+                    if (!sideChainFormula.structure.keySet().contains(potentialNewAtom)) newSideChainFormula.structure.put(potentialNewAtom, structure.get(potentialNewAtom)); // Add any as-of-yet unknown Atoms to the side branch's structure
+                    bonds.add(bond);
+                };
+                newSideChainFormula.structure.put(atom, bonds);
+            };
+            newSideChains.add(Pair.of(info, newSideChainFormula));
+        };
+        sideChains = newSideChains;
+    };
+ 
     /**
      * The Set of every {@link Atom} in this Formula - essentially its molecular formula.
      */
@@ -545,7 +575,9 @@ public class Formula implements Cloneable {
                 };
             };
 
-            return formula.addAllHydrogens().refreshFunctionalGroups();
+            formula.addAllHydrogens().refreshFunctionalGroups();
+            formula.updateSideChainStructures(); // Update this so the side chain structures which copy the Atoms in the overall structure also contain all newly-added Hydrogens
+            return formula;
 
         } catch(Exception e) {
             throw new IllegalArgumentException("Could not parse FROWNS String '" + FROWNSstring + "'", e);

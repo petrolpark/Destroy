@@ -8,6 +8,8 @@ import com.petrolpark.destroy.chemistry.MoleculeTag;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.Molecule.MoleculeBuilder;
 
+import net.minecraft.ChatFormatting;
+
 public final class DestroyMolecules {
 
     public static final Molecule 
@@ -381,7 +383,7 @@ public final class DestroyMolecules {
 
     ETHYLANTHRAHYDROQUINONE = builder()
         .id("ethylanthrahydroquinone")
-        .structure(Formula.deserialize("destroy:anthracene:,,,=O,,,CC,,=O,"))
+        .structure(Formula.deserialize("destroy:anthracene:,,,O,,,CC,,O,"))
         // No data found so using same as ethylanthraquinone
         .boilingPoint(415.4f)
         .density(1231f)
@@ -1055,72 +1057,86 @@ public final class DestroyMolecules {
         /**
          * This Molecule automatically has a very high 'concentration' when in open Vats and Basins, and can be used up as much as necessary without depleting.
          */
-        ABUNDANT_IN_AIR = new MoleculeTag("abundant_in_air"),
+        ABUNDANT_IN_AIR = new MoleculeTag("destroy", "abundant_in_air")
+            .withColor(0xFFFFFF),
 
         /**
          * This Molecule will cause damage to Players exposed to it.
          */
-        ACUTELY_TOXIC = new MoleculeTag("acutely_toxic"),
+        ACUTELY_TOXIC = new MoleculeTag("destroy", "acutely_toxic")
+            .withColor(ChatFormatting.RED.getColor()),
 
         /**
          * This Molecule will increase the world's acid rain levels if released into the environment.
          */
-        ACID_RAIN = new MoleculeTag("acid_rain"),
+        ACID_RAIN = new MoleculeTag("destroy", "acid_rain")
+            .withColor(ChatFormatting.DARK_GREEN.getColor()),
 
         /**
          * This Molecule can be used as a bleach in recipes.
          */
-        BLEACH = new MoleculeTag("bleach"),
+        BLEACH = new MoleculeTag("destroy", "bleach")
+            .withColor(0x8CFFC6),
 
         /**
          * This Molecule is a carcinogen.
          */
-        CARCINOGEN = new MoleculeTag("carcinogen"),
+        CARCINOGEN = new MoleculeTag("destroy", "carcinogen")
+            .withColor(0xFF85EB),
 
         /**
          * This Molecule can be used to make perfume.
          */
-        FRAGRANT = new MoleculeTag("fragrant"),
+        FRAGRANT = new MoleculeTag("destroy", "fragrant")
+            .withColor(0xF01D63),
     
         /**
          * This Molecule will increase the world's greenhouse gas level if released into the atmosphere.
          */
-        GREENHOUSE = new MoleculeTag("greenhouse"),
+        GREENHOUSE = new MoleculeTag("destroy", "greenhouse")
+            .withColor(0x00AD34),
 
         /**
          * This Molecule cannot partake in Reactions.
          */
-        HYPOTHETICAL = new MoleculeTag("hypothetical"),
+        HYPOTHETICAL = new MoleculeTag("destroy", "hypothetical")
+            .withColor(0xFAFFC4),
 
         /**
          * This Molecule will increase the world's ozone depletion level if released into the atmosphere.
          */
-        OZONE_DEPLETER = new MoleculeTag("ozone_depleter"),
+        OZONE_DEPLETER = new MoleculeTag("destroy", "ozone_depleter")
+            .withColor(0xC7FFFD),
 
         /**
          * This Molecule can be used as a plasticizer for making plastics.
          */
-        PLASTICIZER = new MoleculeTag("plasticizer"),
+        PLASTICIZER = new MoleculeTag("destroy", "plasticizer")
+            .withColor(ChatFormatting.YELLOW.getColor()),
 
         /**
          * This Molecule can be used as 'fuel' for the Cooler.
          */
-        REFRIGERANT = new MoleculeTag("refrigerant"),
+        REFRIGERANT = new MoleculeTag("destroy", "refrigerant")
+            .withColor(ChatFormatting.AQUA.getColor()),
 
         /**
          * This Molecule is nauseous if the Player is not wearing perfume.
          */
-        SMELLY = new MoleculeTag("smelly"),
+        SMELLY = new MoleculeTag("destroy", "smelly")
+            .withColor(ChatFormatting.GREEN.getColor()),
 
         /**
          * This Molecule will increase the world's smog levels if released into the atmosphere.
          */
-        SMOG = new MoleculeTag("smog"),
+        SMOG = new MoleculeTag("destroy", "smog")
+            .withColor(ChatFormatting.GOLD.getColor()),
 
         /**
          * This Molecule is ignored when displaying the written contents of a Mixture, and ignored when used in Recipes.
          */
-        SOLVENT = new MoleculeTag("solvent");
+        SOLVENT = new MoleculeTag("destroy", "solvent")
+            .withColor(ChatFormatting.BLUE.getColor());
     };
 
     public static void register() {};

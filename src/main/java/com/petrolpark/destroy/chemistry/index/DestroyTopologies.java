@@ -97,6 +97,7 @@ public class DestroyTopologies {
         .build("cyclopentadiene"),
 
     CYCLOPENTADIENIDE = create(Element.CARBON) // 0
+        .sideChain(new Vec3(cos(144), -sin(144), 0d), new Vec3(-cos(72), sin(72), 0d))
         .atom(Element.CARBON, new Vec3(0d, 1d, 0d)) // 1
             .withSideBranch(new Vec3(cos(144), sin(144), 0d), new Vec3(-1d, 0d, 0d))
             .withBondTo(0, BondType.AROMATIC)
@@ -109,7 +110,7 @@ public class DestroyTopologies {
             .withSideBranch(new Vec3(1d, 0d, 0d), new Vec3(cos(36), sin(36), 0d))
             .withBondTo(2, BondType.AROMATIC)
             .attach()
-        .atom(Element.CARBON, new Vec3(cos(18), 1 + sin(18), 0d)) // 4
+        .atom(Element.CARBON, new Vec3(cos(18), -sin(18), 0d)) // 4
             .withSideBranch(new Vec3(cos(72), -sin(72), 0d), new Vec3(cos(36), -sin(36), 0d))
             .withBondTo(0, BondType.AROMATIC)
             .withBondTo(3, BondType.AROMATIC)

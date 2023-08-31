@@ -392,12 +392,12 @@ public class Reaction {
         private String reactionString() {
             String reactionString = "";
             for (Molecule reactant : reaction.reactants.keySet()) {
-                reactionString += reactant.getSerlializedMolecularFormula();
+                reactionString += reactant.getSerlializedMolecularFormula(false);
                 reactionString += " + ";
             };
             reactionString = reactionString.substring(0, reactionString.length() - 3) + " => ";
             for (Molecule product : reaction.products.keySet()) {
-                reactionString += product.getSerlializedMolecularFormula();
+                reactionString += product.getSerlializedMolecularFormula(false);
                 reactionString += " + ";
             };
             reactionString = reactionString.substring(0, reactionString.length() - 3);

@@ -5,7 +5,9 @@ import com.petrolpark.destroy.block.renderer.BlockEntityBehaviourRenderer;
 import com.petrolpark.destroy.capability.level.pollution.ClientLevelPollutionData;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.item.renderer.SeismometerItemRenderer;
+import com.petrolpark.destroy.util.PollutionHelper;
 
 import net.minecraft.world.level.material.FogType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,6 +33,7 @@ public class DestroyClientEvents {
 
     @SubscribeEvent
     public static void renderFog(RenderFog event) {
+        if (!DestroyClientEvents.smogEnabled()) return;
         if (event.getType() == FogType.NONE) {
             LevelPollution levelPollution = ClientLevelPollutionData.getLevelPollution();
             event.scaleNearPlaneDistance(1f - (0.8f * (float)levelPollution.get(PollutionType.SMOG) / (float)PollutionType.SMOG.max));
@@ -41,6 +44,7 @@ public class DestroyClientEvents {
 
     @SubscribeEvent
     public static void colorFog(ComputeFogColor event) {
+        if (!DestroyClientEvents.smogEnabled()) return;
         if (event.getCamera().getFluidInCamera() == FogType.NONE) {
             LevelPollution levelPollution = ClientLevelPollutionData.getLevelPollution();
             Color existing = new Color(event.getRed(), event.getGreen(), event.getBlue(), 1f);
@@ -49,5 +53,9 @@ public class DestroyClientEvents {
             event.setGreen(color.getGreenAsFloat());
             event.setBlue(color.getBlueAsFloat());
         };
+    };
+
+    public static boolean smogEnabled() {
+        return PollutionHelper.pollutionEnabled() && DestroyAllConfigs.COMMON.pollution.smog.get();
     };
 };

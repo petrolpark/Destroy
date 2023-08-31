@@ -12,6 +12,7 @@ import com.petrolpark.destroy.item.PumpjackBlockItem;
 import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.sound.DestroySoundTypes;
 import com.petrolpark.destroy.util.DestroyTags.DestroyBlockTags;
+import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllSpriteShifts;
 import com.simibubi.create.content.decoration.encasing.EncasedCTBehaviour;
@@ -120,6 +121,7 @@ public class DestroyBlocks {
         ).transform(TagGen.pickaxeOnly())
         .transform(BlockStressDefaults.setImpact(6.0))
         .item(AssemblyOperatorBlockItem::new)
+        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .transform(customItemModel())
         .register();
 
@@ -227,6 +229,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_PINK)
         ).item()
+        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .build()
         .register();
 
@@ -235,6 +238,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_ORANGE)
         ).item()
+        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .build()
         .register();
 
@@ -251,6 +255,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_LIGHT_GREEN)
         ).item()
+        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .build()
         .register();
 
@@ -259,6 +264,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_YELLOW)
         ).item()
+        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .build()
         .register();
 
@@ -302,6 +308,7 @@ public class DestroyBlocks {
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
         .transform(TagGen.tagBlockAndItem("storage_blocks/nickel"))
+        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register();
@@ -357,6 +364,7 @@ public class DestroyBlocks {
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
         .transform(TagGen.tagBlockAndItem("storage_blocks/zirconium"))
+        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register();
@@ -437,6 +445,7 @@ public class DestroyBlocks {
     YEAST_MUSHROOM = REGISTRATE.block("yeast_mushroom", YeastMushroomBlock::new)
         .initialProperties(() -> Blocks.BROWN_MUSHROOM)
         .item()
+        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .build()
         .register();
 
@@ -558,6 +567,7 @@ public class DestroyBlocks {
     public static final BlockEntry<HalfTransparentBlock> YEAST_COVERED_AGAR_BLOCK = REGISTRATE.block("yeast_covered_agar_block", HalfTransparentBlock::new)
         .initialProperties(AGAR_BLOCK)
         .item()
+        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .build()
         .register();
 

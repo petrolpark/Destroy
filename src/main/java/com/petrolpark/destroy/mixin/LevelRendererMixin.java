@@ -13,6 +13,8 @@ import com.petrolpark.destroy.capability.level.pollution.ClientLevelPollutionDat
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
 import com.petrolpark.destroy.client.particle.TintedSplashParticle;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
+import com.petrolpark.destroy.util.PollutionHelper;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -37,6 +39,7 @@ public class LevelRendererMixin {
     // Tint the rain according to the rain acidity
     @Inject(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture*", ordinal = 0))
     public void inRenderSnowAndRainDrawRain(LightTexture lightTexture, float partialTick, double camX, double camY, double camZ, CallbackInfo ci) {
+        if (!rainColorAffected()) return;
         Color color = getRainColor();
         RenderSystem.setShaderColor(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), 1f);
     };
@@ -56,6 +59,7 @@ public class LevelRendererMixin {
     // Add tinted splash particles 
     @Inject(method = "tickRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;addParticle"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     public void inTickRain(Camera pCamera, CallbackInfo ci, float f, RandomSource randomsource, LevelReader levelreader, BlockPos blockpos, BlockPos blockpos1, int i, int j, int k, int l, BlockPos blockpos2, Biome biome, double d0, double d1, BlockState blockstate, FluidState fluidstate, VoxelShape voxelshape, double d2, double d3, double d4, ParticleOptions particleoptions) {
+        if (!rainColorAffected()) return;
         if (particleoptions == ParticleTypes.SMOKE) return;
         Color color = getRainColor();
         ((LevelRenderer)(Object)this).minecraft.level.addParticle(new TintedSplashParticle.Data(), (double)blockpos1.getX() + d0, (double)blockpos1.getY() + d4, (double)blockpos1.getZ() + d1, color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat());
@@ -64,11 +68,15 @@ public class LevelRendererMixin {
     // Don't add the original untinted splash particles, but do add smoke
     @Redirect(method = "tickRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;addParticle"))
     public void ignoreAddParticle(ClientLevel level, ParticleOptions particleData, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-        if (particleData == ParticleTypes.SMOKE) level.addParticle(particleData, x, y, z, xSpeed, ySpeed, zSpeed);
+        if (particleData == ParticleTypes.SMOKE || !rainColorAffected()) level.addParticle(particleData, x, y, z, xSpeed, ySpeed, zSpeed);
     };
 
     private Color getRainColor() {
         LevelPollution levelPollution = ClientLevelPollutionData.getLevelPollution();
         return new Color(Color.mixColors(0xFF3E5EB8, 0xFF00FF00, (float)levelPollution.get(PollutionType.ACID_RAIN) / (float)PollutionType.ACID_RAIN.max));
+    };
+
+    private static boolean rainColorAffected() {
+        return PollutionHelper.pollutionEnabled() && DestroyAllConfigs.COMMON.pollution.rainColorChanges.get();
     };
 };

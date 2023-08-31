@@ -1,15 +1,19 @@
 package com.petrolpark.destroy.item;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-import com.ibm.icu.text.DecimalFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.MoleculeTag;
 import com.petrolpark.destroy.client.gui.MoleculeRenderer;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.item.tooltip.DestroyTooltipComponent;
 import com.petrolpark.destroy.util.DestroyLang;
+import com.petrolpark.destroy.util.DestroyLang.TemperatureUnit;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
@@ -26,7 +30,7 @@ public class MoleculeDisplayItem extends Item {
 
     static {
         df.setMinimumFractionDigits(1);
-        df.setMinimumFractionDigits(1);
+        df.setMaximumFractionDigits(1);
     };
 
     public MoleculeDisplayItem(Properties properties) {
@@ -54,9 +58,29 @@ public class MoleculeDisplayItem extends Item {
     public static List<Component> getLore(Molecule molecule) {
         List<Component> tooltip = new ArrayList<>();
         if (molecule == null) return tooltip;
-        if (molecule.getCharge() != 0) tooltip.add(DestroyLang.translate("tooltip.molecule.charge", molecule.getSerializedCharge(true)).component().withStyle(ChatFormatting.GRAY));
-        tooltip.add(DestroyLang.translate("tooltip.molecule.mass", df.format(molecule.getMass())).component().withStyle(ChatFormatting.GRAY));
-        if (molecule.getCharge() == 0) tooltip.add(DestroyLang.translate("tooltip.molecule.density", df.format(molecule.getDensity())).component().withStyle(ChatFormatting.GRAY));
+
+        boolean novel = molecule.isNovel();
+        boolean charged = molecule.getCharge() != 0;
+        boolean hypothetical = molecule.isHypothetical();
+        boolean nerdMode = DestroyAllConfigs.CLIENT.chemistry.nerdMode.get();
+
+        TemperatureUnit unit = DestroyAllConfigs.CLIENT.chemistry.temperatureUnit.get();
+        
+        if (nerdMode && !novel) tooltip.add(DestroyLang.translate("tooltip.molecule.formula", molecule.getSerlializedMolecularFormula(true) + DestroyLang.toSuperscript(molecule.getSerializedCharge(false))).component().withStyle(ChatFormatting.GRAY));
+        if (charged && (!nerdMode || novel)) tooltip.add(DestroyLang.translate("tooltip.molecule.charge", molecule.getSerializedCharge(true)).component().withStyle(ChatFormatting.GRAY));
+        if (!hypothetical) tooltip.add(DestroyLang.translate("tooltip.molecule.mass", df.format(molecule.getMass())).component().withStyle(ChatFormatting.GRAY));
+        if (!charged && !hypothetical) {
+            tooltip.add(DestroyLang.translate("tooltip.molecule.boiling_point", unit.of(molecule.getBoilingPoint(), df)).component().withStyle(ChatFormatting.GRAY));
+            tooltip.add(DestroyLang.translate("tooltip.molecule.density", df.format(molecule.getDensity())).component().withStyle(ChatFormatting.GRAY));
+            if (nerdMode) tooltip.add(DestroyLang.translate("tooltip.molecule.heat_capacity", df.format(molecule.getMolarHeatCapacity())).component().withStyle(ChatFormatting.GRAY));
+        };
+
+        Set<MoleculeTag> tags = molecule.getTags();
+        if (!tags.isEmpty()) tooltip.add(Component.literal(" "));
+        for (MoleculeTag tag : tags) {
+            tooltip.add(tag.getFormattedName());
+        };
+
         return tooltip;
     };
 

@@ -3,12 +3,12 @@ package com.petrolpark.destroy.block.display;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.util.DestroyLang;
+import com.petrolpark.destroy.util.DestroyLang.TemperatureUnit;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.displayLink.source.DisplaySource;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
@@ -83,26 +83,5 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
             si.forOptions(List.of(DestroyLang.translate("display_source.mixture.molecule_name_type.iupac").component(), DestroyLang.translate("display_source.mixture.molecule_name_type.common").component()))
             .titled(DestroyLang.translate("display_source.mixture.molecule_name_type").component());
         }, "MoleculeNameType");
-    };
-    
-    protected enum TemperatureUnit {
-        KELVINS(t -> t, "K"),
-        DEGREES_CELCIUS(t -> t - 273f, "\u00B0C"),
-        DEGREES_FARENHEIT(t -> (t - 273f) * 9/5 + 32, "\u00B0F");
-
-        private Function<Float, Float> conversionFromKelvins;
-        private String symbol;
-
-        TemperatureUnit(Function<Float, Float> conversionFromKelvins, String symbol) {
-            this.conversionFromKelvins = conversionFromKelvins;
-            this.symbol = symbol;
-        };
-
-        public String of(float temperature) {
-            DecimalFormat df = new DecimalFormat();
-            df.setMinimumFractionDigits(1);
-            df.setMinimumFractionDigits(1);
-            return df.format(conversionFromKelvins.apply(temperature)) + symbol;
-        };
     };
 };

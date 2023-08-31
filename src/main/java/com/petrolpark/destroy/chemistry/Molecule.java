@@ -11,11 +11,13 @@ import javax.annotation.Nullable;
 
 import org.joml.Math;
 
+import com.google.common.collect.ImmutableSet;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Formula.Topology.SideChainInformation;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.client.gui.MoleculeRenderer;
+import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.client.resources.language.I18n;
@@ -299,6 +301,14 @@ public class Molecule implements INameableProduct {
     };
 
     /**
+     * Get all the {@link MoleculeTag tags} this Molecule has.
+     * @return
+     */
+    public ImmutableSet<MoleculeTag> getTags() {
+        return ImmutableSet.copyOf(tags);
+    };
+
+    /**
      * Whether this Molecule has the given {@link MoleculeTag tag}.
      * @param tag
      */
@@ -336,14 +346,17 @@ public class Molecule implements INameableProduct {
     /**
      * Gives all {@link Atom Atoms} in this Molecule, and their quantities, in the format {@code AaBbCc...}, where {@code a} = number of Atoms of A, etc.
      * Elements are given in the order in which they are declared in {@link Element the Element Enum}.
+     * @param subscript If {@code true}, Unicode subscript numbers will be used rather than ASCII numbers
      */
-    public String getSerlializedMolecularFormula() {
+    @SuppressWarnings("unicode")
+    public String getSerlializedMolecularFormula(boolean subscript) {
         Map<Element, Integer> formulaMap = getMolecularFormula();
         List<Element> elements = new ArrayList<>(formulaMap.keySet());
         elements.sort(Comparator.naturalOrder()); //sort Elements based on their order of declaration
         String formula = "";
         for (Element element : elements) {
-            String number = formulaMap.get(element) == 1 ? "" : formulaMap.get(element).toString(); //if there is only one then don't print the number
+            int count = formulaMap.get(element);
+            String number = count == 1 ? "" : (subscript ? DestroyLang.toSubscript(count) : String.valueOf(count)); //if there is only one then don't print the number
             formula += element.getSymbol() + number;
         };
         return formula;
@@ -628,7 +641,7 @@ public class Molecule implements INameableProduct {
          * @return This Molecule Builder
          */
         public MoleculeBuilder specificHeatCapacity(float specificHeatCapacity) {
-            molecule.molarHeatCapacity = specificHeatCapacity * 1000 / molecule.getMass();
+            molecule.molarHeatCapacity = specificHeatCapacity * 1000 / calculateMass();
             hasForcedMolarHeatCapacity = true;
             return this;
         };

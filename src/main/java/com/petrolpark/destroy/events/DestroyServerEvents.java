@@ -496,6 +496,7 @@ public class DestroyServerEvents {
      */
     @SubscribeEvent
     public static void onBabyBirthed(BabyEntitySpawnEvent event) {
+        if (!PollutionHelper.pollutionEnabled() || !DestroyAllConfigs.COMMON.pollution.breedingAffected.get()) return;
         Level level = event.getParentA().level();
         RandomSource random = event.getParentA().getRandom();
         if (event.getParentA().getRandom().nextInt(PollutionType.SMOG.max) <= PollutionHelper.getPollution(level, PollutionType.SMOG)) { // 0% chance of failure for 0 smog, 100% chance for full smog
@@ -515,6 +516,7 @@ public class DestroyServerEvents {
      */
     @SubscribeEvent
     public static void onPlantGrows(CropGrowEvent.Pre event) {
+        if (!PollutionHelper.pollutionEnabled() || !DestroyAllConfigs.COMMON.pollution.growingAffected.get()) return;
         if (!(event.getLevel() instanceof Level level)) return;
         for (PollutionType pollutionType : new PollutionType[]{PollutionType.SMOG, PollutionType.GREENHOUSE, PollutionType.ACID_RAIN}) {
             if (level.random.nextInt(pollutionType.max) <= PollutionHelper.getPollution(level, pollutionType)) {

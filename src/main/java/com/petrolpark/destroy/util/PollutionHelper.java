@@ -5,6 +5,7 @@ import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 
 import net.minecraft.nbt.Tag;
@@ -14,6 +15,13 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 
 public class PollutionHelper {
+
+    /**
+     * Whether Pollution is enabled in this world.
+     */
+    public static boolean pollutionEnabled() {
+        return DestroyAllConfigs.COMMON.pollution.enablePollution.get();
+    };
 
     /**
      * Gets the level of pollution of the given Type in the given Level.

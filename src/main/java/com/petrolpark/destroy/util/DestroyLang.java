@@ -1,7 +1,9 @@
 package com.petrolpark.destroy.util;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.fluid.ingredient.MixtureFluidIngredient;
@@ -19,6 +21,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class DestroyLang {
+
+    private static String[] subscriptNumbers = new String[]{"\u2080", "\u2081", "\u2082", "\u2083", "\u2084", "\u2085", "\u2086", "\u2087", "\u2088", "\u2089"};
+    private static String[] superscriptNumbers = new String[]{"\u2070", "\u00b9", "\u00b2", "\u00b3", "\u2074", "\u2075", "\u2076", "\u2077", "\u2078", "\u2079"};
 
     public static LangBuilder builder() {
         return new LangBuilder(Destroy.MOD_ID);
@@ -121,5 +126,63 @@ public class DestroyLang {
         tooltip.addAll(TooltipHelper.cutStringTextComponent(fluidIngredient.getDescription(fluidTag), TooltipHelper.Palette.GRAY_AND_WHITE));
 
         return tooltip;
+    };
+
+    /**
+     * Converts a number to Unicode subscript.
+     * @param value
+     */
+    public static String toSubscript(int value) {
+        String string = "";
+        for (char c : String.valueOf(value).toCharArray()) {
+            if (c == '-') string += "\u208b";
+            string += subscriptNumbers[Integer.valueOf(String.valueOf(c))];
+        };
+        return string;
+    };
+
+    /**
+     * Converts a number to Unicode superscript.
+     * @param value Should only be passed strings containing numbers, {@code +} and {@code -}.
+     */
+    public static String toSuperscript(String value) {
+        String string = "";
+        for (char c : value.toCharArray()) {
+            if (c == '-') string += "\u207b";
+            if (c == '+') string += "\u207a";
+            try {
+                string += superscriptNumbers[Integer.valueOf(String.valueOf(c))];
+            } catch (Throwable e) {};
+        };
+        return string;
+    };
+
+    public static enum TemperatureUnit {
+
+        KELVINS(t -> t, "K"),
+        DEGREES_CELCIUS(t -> t - 273f, "\u00B0C"),
+        DEGREES_FARENHEIT(t -> (t - 273f) * 9/5 + 32, "\u00B0F");
+
+        private static final DecimalFormat df = new DecimalFormat();
+        static {
+            df.setMinimumFractionDigits(1);
+            df.setMaximumFractionDigits(1);
+        };
+
+        private Function<Float, Float> conversionFromKelvins;
+        private String symbol;
+
+        TemperatureUnit(Function<Float, Float> conversionFromKelvins, String symbol) {
+            this.conversionFromKelvins = conversionFromKelvins;
+            this.symbol = symbol;
+        };
+
+        public String of(float temperature) {
+            return df.format(conversionFromKelvins.apply(temperature)) + symbol;
+        };
+
+        public String of(float temperature, DecimalFormat df) {
+            return df.format(conversionFromKelvins.apply(temperature)) + symbol;
+        };
     };
 }
