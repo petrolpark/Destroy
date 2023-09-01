@@ -6,6 +6,8 @@ import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
 import com.petrolpark.destroy.chemistry.reactionresult.PrecipitateReactionResult;
 import com.petrolpark.destroy.item.DestroyItems;
 
+import net.minecraft.world.item.Items;
+
 public class DestroyReactions {
 
     public static final Reaction
@@ -189,7 +191,7 @@ public class DestroyReactions {
 
     GOLD_DISSOLUTION = builder()
         .id("gold_dissolution")
-        //TODO add gold carrot item
+        .addSimpleItemReactant(Items.GOLDEN_CARROT, 1f)
         .addReactant(DestroyMolecules.NITRIC_ACID)
         .addReactant(DestroyMolecules.HYDROCHLORIC_ACID, 4, 1)
         .addProduct(DestroyMolecules.CHLOROAURATE)
@@ -233,7 +235,7 @@ public class DestroyReactions {
         .reverseReaction(reaction -> reaction
             .activationEnergy(52.014f)
             .preexponentialFactor(1603466f)
-            .setOrder(DestroyMolecules.WATER, 0)
+            .setOrder(DestroyMolecules.WATER, 2)
         ).build(),
 
     HYPOCHLORITE_FORMATION = builder()

@@ -39,7 +39,7 @@ public abstract class MixtureFluidIngredient extends FluidIngredient {
     @Override
     protected List<FluidStack> determineMatchingFluidStacks() {
         Mixture mixture = new Mixture();
-        mixture.addMolecule(DestroyMolecules.WATER, 55.56f);
+        mixture.addMolecule(DestroyMolecules.WATER, 55.56f); //TODO get generated Mixture
         FluidStack stack = MixtureFluid.of(amountRequired, mixture);
         stack.getOrCreateTag().putString("MixtureFluidIngredientSubtype", getMixtureFluidIngredientSubtype());
         addNBT(stack.getOrCreateTag());

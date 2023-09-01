@@ -23,6 +23,7 @@ import com.simibubi.create.foundation.fluid.FluidIngredient;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
 
 public class ReactionInBasinRecipe extends MixingRecipe {
@@ -36,6 +37,8 @@ public class ReactionInBasinRecipe extends MixingRecipe {
     @Nullable
     public static ReactionInBasinRecipe create(Collection<FluidStack> availableFluids, Collection<ItemStack> availableItems, BasinBlockEntity basin) {
         ProcessingRecipeBuilder<ReactionInBasinRecipe> builder = new ProcessingRecipeBuilder<>(ReactionInBasinRecipe::new, Destroy.asResource("reaction_in_basin_"));
+
+        List<ItemStack> availableItemsCopy = availableItems.stream().map(ItemStack::copy).toList();
 
         boolean canReact = true; // Start by assuming we will be able to React
 
@@ -64,18 +67,30 @@ public class ReactionInBasinRecipe extends MixingRecipe {
         if (canReact) {
             // TODO modify temp according to Heat Level
             Mixture mixture = Mixture.mix(mixtures);
-            ReactionInBasinResult result = mixture.reactInBasin(totalAmount); // Mutably react the Mixture 
+            ReactionInBasinResult result = mixture.reactInBasin(totalAmount, availableItemsCopy); // Mutably react the Mixture and change the Item Stacks
 
             int duration = Mth.clamp(result.ticks(), 40, 600); // Ensure this takes at least 2 seconds and less than 30 seconds
 
             // Set the duration of the Recipe to the time it took to React
             builder.duration(duration);
+
             // Add the resultant Mixture to the results for this Recipe
-            FluidStack outputMixtureStack = MixtureFluid.of(result.amount(), mixture, "");
+            FluidStack outputMixtureStack = MixtureFluid.of(result.amount(), mixture);
             builder.output(outputMixtureStack);
 
+            // Add the resultant Item Stacks to the results for this Recipe
+            availableItemsCopy.stream().forEach(stack -> {
+                if (stack.isEmpty()) return;
+                builder.output(stack);
+            });
+
             // Add all the given Fluid Stacks as "required ingredients"
-            availableFluids.stream().map(fluidStack -> FluidIngredient.fromFluidStack(fluidStack)).forEach(fluidIngredient -> builder.require(fluidIngredient));
+            availableFluids.stream().map(FluidIngredient::fromFluidStack).forEach(builder::require);
+            // Add all the given Item Stacks as "required ingredients"
+            availableItems.stream().forEach(stack -> {
+                if (stack.isEmpty()) return;
+                builder.require(Ingredient.of(stack));
+            });
 
             for (ReactionResult reactionresult : result.reactionresults()) {
                 if (reactionresult instanceof PrecipitateReactionResult precipitationResult) {

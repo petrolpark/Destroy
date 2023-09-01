@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
 
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
@@ -24,6 +25,7 @@ import com.simibubi.create.foundation.utility.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ItemStack;
 
 public class Mixture extends ReadOnlyMixture {
 
@@ -233,11 +235,11 @@ public class Mixture extends ReadOnlyMixture {
 
     /**
      * Reacts the contents of this Mixture for one tick, if it is not already at {@link Mixture#equilibrium equilibrium}.
+     * @param context
      */
-    public Set<ReactionResult> reactForTick() {
+    public void reactForTick(ReactionContext context) {
 
-        Set<ReactionResult> results = new HashSet<>();
-        if (equilibrium) return results; // If we have already reached equilibrium, nothing more is going to happen, so don't bother reacting
+        if (equilibrium) return; // If we have already reached equilibrium, nothing more is going to happen, so don't bother reacting
 
         equilibrium = true; // Start by assuming we have reached equilibrium
         boolean shouldRefreshPossibleReactions = false; // Rather than refreshing the possible Reactions every time a new Molecule is added or removed, start by assuming we won't need to, and flag for refreshing if we ever do
@@ -246,7 +248,20 @@ public class Mixture extends ReadOnlyMixture {
         Map<Reaction, Float> reactionRates = new HashMap<>(); // Rates of all Reactions
         List<Reaction> orderedReactions = new ArrayList<>(); // A list of Reactions in the order of their current rate, fastest first
 
-        for (Reaction possibleReaction : possibleReactions) {
+        orderEachReaction: for (Reaction possibleReaction : possibleReactions) {
+            if (possibleReaction.consumesItem()) continue orderEachReaction; // Don't include Reactions which CONSUME Items at this stage
+
+            for (IItemReactant itemReactant : possibleReaction.getItemReactants()) { // Check all Reactions have the necessary Item catalysts
+                boolean validStackFound = false; // Start by assuming we won't have the required Item Stack...
+                checkAllItems: for (ItemStack stack : context.getItemStacks()) {
+                    if (itemReactant.isItemValid(stack)) {
+                        validStackFound = true; // ...If we do, correct this assumption
+                        break checkAllItems;
+                    };
+                };
+                if (!validStackFound) continue orderEachReaction; // If we don't have the requesite Item Stacks, don't do this Reaction
+            };
+
             reactionRates.put(possibleReaction, calculateReactionRate(possibleReaction)); // Calculate the Reaction data for this tick
             orderedReactions.add(possibleReaction); // Add the Reaction to the rate-ordered list, which is currently not sorted
         };
@@ -267,25 +282,7 @@ public class Mixture extends ReadOnlyMixture {
 
             if (molesOfReaction <= 0f) continue doEachReaction; // Don't bother going any further if this Reaction won't happen
 
-            doReaction(reaction, molesOfReaction); // Increment the amount of this Reaction which has occured
-
-            for (Molecule reactant : reaction.getReactants()) {
-                changeConcentrationOf(reactant, - (molesOfReaction * reaction.getReactantMolarRatio(reactant)), false); // Use up the right amount of all the reagents
-            };
-
-            addEachProduct: for (Molecule product : reaction.getProducts()) {
-                if (product.isNovel() && getConcentrationOf(product) == 0f) { // If we have a novel Molecule that we don't think currently exists in the Mixture...
-                    if (internalAddMolecule(product, molesOfReaction * reaction.getProductMolarRatio(product), false)) { // ...add it with this method, as this automatically checks for pre-existing novel Molecules, and if it was actually a brand new Molecule...
-                        shouldRefreshPossibleReactions = true; // ...flag this
-                    }; 
-                    continue addEachProduct;
-                };
-
-                if (getConcentrationOf(product) == 0f) { // If we are adding a new product, the possible Reactions will change
-                    shouldRefreshPossibleReactions = true;
-                };
-                changeConcentrationOf(product, molesOfReaction * reaction.getProductMolarRatio(product), false); // Increase the concentration of the product
-            };
+            shouldRefreshPossibleReactions |= doReaction(reaction, molesOfReaction); // Increment the amount of this Reaction which has occured, add all products and remove all reactants
         };
 
         // Check now if we have actually reached equilibrium or if that was a false assumption at the start
@@ -300,8 +297,6 @@ public class Mixture extends ReadOnlyMixture {
         };
 
         updateName();
-
-        return results;
     };
 
     /**
@@ -311,6 +306,80 @@ public class Mixture extends ReadOnlyMixture {
     public void heat(float energyDensity) {
         // We have assumed that the latent heat of all substances is 0
         temperature += energyDensity / getVolumetricHeatCapacity();
+    };
+
+    /**
+     * Enact all {@link Reactions} that {@link Reaction#getItemReactants involve Item Stacks}. This does not just
+     * include dissolutions, but Item-catalyzed Reactions too.
+     * @param availableStacks The Item Stacks available to this Mixture. This Stacks in this List will be modified
+     * @param volume The amount of this Mixture there is, in buckets
+     */
+    public void dissolveItems(List<ItemStack> availableStacks, double volume) {
+        if (availableStacks.isEmpty()) return;
+        boolean shouldRefreshReactions = false;
+
+        List<Reaction> orderedReactions = new ArrayList<>();
+
+        for (Reaction possibleReaction : possibleReactions) {
+            if (!possibleReaction.consumesItem()) continue; // Ignore Reactions which don't consume Items
+            orderedReactions.add(possibleReaction); // Add the Reaction to the list of possible Reactions, which is currently not ordered
+        };
+
+        Collections.sort(possibleReactions, (r1, r2) -> ((Float)calculateReactionRate(r1)).compareTo(calculateReactionRate(r2))); // Order the list of Item-consuming Reactions by rate, in case multiple of them want the same Item
+
+        tryEachReaction: for (Reaction reaction : orderedReactions) {
+
+            /*
+             * Copies of available Stacks mapped to their real counterparts.
+             * When simulating, check the copies, as multiple different Item Reactants for one Reaction might want the same Item Stack
+             * and we want to make sure a Stack doesn't get used twice. If a Stack's copy is successfully used, its original is added
+             * to the second Map so if the simulation is successful, the Item Reactant can easily find the Item Stack it is to consume.
+             * This is still not perfect as if Reactant A wants Stacks A or B, and Reactant B only wants Stack A, and Reactant A gets
+             * Stack A before Reactant B can, it will fail. Therefore you should be careful about what Item Stacks your Reaction wants.
+             */
+            Map<ItemStack, ItemStack> copiesAndStacks = new HashMap<>(availableStacks.size());
+            /*
+             * Item Reactants mapped to the actual Stacks they will consume.
+             */
+            Map<IItemReactant, ItemStack> reactantsAndStacks = new HashMap<>(reaction.getItemReactants().size());
+
+            for (ItemStack stack : availableStacks) { // Fill the map
+                if (!stack.isEmpty()) copiesAndStacks.put(stack.copy(), stack); // Check if the Item Stack has since been emptied by another Reaction
+            };
+
+            while (true) { // Go on dissolving Items until we run out
+
+                for (Molecule reactant : reaction.getReactants()) { // Check we have enough non-Item reactants
+                    if (getConcentrationOf(reactant) < (float)reaction.getReactantMolarRatio(reactant) * reaction.getMolesPerItem() / (float)volume) continue tryEachReaction; // If there is not enough Reactant to use up the Item Stacks, give up now
+                };
+                
+                for (IItemReactant itemReactant : reaction.getItemReactants()) {
+                    boolean validItemFound = false; // Start by assuming we haven't yet come across the right Stack
+                    for (ItemStack stackCopy : copiesAndStacks.keySet()) {
+                        if (itemReactant.isItemValid(stackCopy)) {
+                            validItemFound = true; // We have now found the right Stack
+                            if (!itemReactant.isCatalyst()) { // If this Item gets used up
+                                itemReactant.consume(stackCopy); // Consume the Stack copy so we know for future simulations that it can't be used
+                                reactantsAndStacks.put(itemReactant, copiesAndStacks.get(stackCopy)); // Store the actual Item Stack to be consumed later
+                            };
+                        };
+                    };
+                    if (!validItemFound) continue tryEachReaction; // If the simulation was a failure, move onto the next Reaction.
+                };
+
+                // If we've gotten to this point, all Items can be successfully consumed
+
+                for (IItemReactant itemReactant : reaction.getItemReactants()) {
+                    if (!itemReactant.isCatalyst()) itemReactant.consume(reactantsAndStacks.get(itemReactant)); // Consume each actual Item Stack
+                };
+
+                equilibrium = false;
+                shouldRefreshReactions |= doReaction(reaction, reaction.getMolesPerItem() / (float)volume); // Add all Molecular products and remove Molecular reactants
+            }
+        };
+
+        updateName();
+        if (shouldRefreshReactions) refreshPossibleReactions();
     };
 
     /**
@@ -337,28 +406,55 @@ public class Mixture extends ReadOnlyMixture {
     };
 
     /**
-     * Increase the number of moles of Reaction which have occured.
+     * Increase the number of moles of Reaction which have occured, add all products, and remove all reactants.
      * @param reaction
      * @param molesPerBucket Moles (per Bucket) of Reaction
+     * @return Whether the possible Reactions for this Mixture should be updated
      */
-    protected void doReaction(Reaction reaction, float molesPerBucket) {
-        if (!reaction.hasResult()) return;
+    protected boolean doReaction(Reaction reaction, float molesPerBucket) {
+
+        boolean shouldRefreshPossibleReactions = false;
+
+        for (Molecule reactant : reaction.getReactants()) {
+            changeConcentrationOf(reactant, - (molesPerBucket * reaction.getReactantMolarRatio(reactant)), false); // Use up the right amount of all the reagents
+        };
+
+        addEachProduct: for (Molecule product : reaction.getProducts()) {
+            if (product.isNovel() && getConcentrationOf(product) == 0f) { // If we have a novel Molecule that we don't think currently exists in the Mixture...
+                if (internalAddMolecule(product, molesPerBucket * reaction.getProductMolarRatio(product), false)) { // ...add it with this method, as this automatically checks for pre-existing novel Molecules, and if it was actually a brand new Molecule...
+                    shouldRefreshPossibleReactions = true; // ...flag this
+                }; 
+                continue addEachProduct;
+            };
+
+            if (getConcentrationOf(product) == 0f) { // If we are adding a new product, the possible Reactions will change
+                shouldRefreshPossibleReactions = true;
+            };
+            changeConcentrationOf(product, molesPerBucket * reaction.getProductMolarRatio(product), false); // Increase the concentration of the product
+        };
+
+        if (!reaction.hasResult()) return shouldRefreshPossibleReactions;
         ReactionResult result = reaction.getResult();
         reactionresults.merge(result, molesPerBucket, (f1, f2) -> f1 + f2);
+
+        return shouldRefreshPossibleReactions;
     };
 
     /**
      * {@link Mixture#reactForTick React} this Mixture until it reaches {@link Mixture#equilibrium equilibrium}. This is mutative.
-     * @return A {@link com.petrolpark.t.recipe.ReactionInBasinRecipe.ReactionInBasinResult ReactionInBasinResult} containing
-     * the number of ticks it took to reach equilibrium and the {@link ReactionResult Reaction Results}.
+     * @return A {@link com.petrolpark.destroy.recipe.ReactionInBasinRecipe.ReactionInBasinResult ReactionInBasinResult} containing
+     * the number of ticks it took to reach equilibrium, the {@link ReactionResult Reaction Results} and the new volume of Mixture.
      * @param volume (in mB) of this Reaction
+     * @param availableStacks Item Stacks available for reacting. This List and its contents will be modified.
      */
-    public ReactionInBasinResult reactInBasin(int volume) {
+    public ReactionInBasinResult reactInBasin(int volume, List<ItemStack> availableStacks) {
         float volumeInBuckets = (float)volume / 1000f;
         int ticks = 0;
 
-        while (!equilibrium) {
-            reactForTick();
+        dissolveItems(availableStacks, volumeInBuckets); // Dissolve all Items
+        ReactionContext context = new ReactionContext(availableStacks); // React the Mixture
+        while (!equilibrium && ticks < 600) {
+            reactForTick(context);
             ticks++;
         };
 
@@ -429,6 +525,7 @@ public class Mixture extends ReadOnlyMixture {
                     found = true;
                     newMoleculeAdded = false; // We haven't actually added a brand new Molecule so flag this
                     changeConcentrationOf(molecule, concentration, true);
+                    equilibrium = false;
                 };
             };
             if (!found) novelMolecules.add(molecule); // If it was actually a brand new Molecule, add it to the novel list
@@ -438,7 +535,7 @@ public class Mixture extends ReadOnlyMixture {
             refreshPossibleReactions();
         };
 
-        equilibrium = false; // Now that there's a new Molecule we cannot guarantee equilibrium
+        if (newMoleculeAdded) equilibrium = false;
 
         return newMoleculeAdded; // Return whether or not we actually added a brand new Molecule
     };
@@ -574,6 +671,23 @@ public class Mixture extends ReadOnlyMixture {
     };
 
     public static boolean areVeryClose(Float f1, Float f2) {
-        return Math.abs(f1 - f2) <= 0.0000001f;
+        return Math.abs(f1 - f2) <= 0.0001f;
     };
-}
+
+    /**
+     * The context for the {@link Mixture#reactForTick reaction} of a {@link Mixture}.
+     * <strong>Do not modify its fields, or anything contained within them.</em>
+     */
+    public static class ReactionContext {
+
+        private final ImmutableList<ItemStack> availableItemStacks;
+
+        public ReactionContext(List<ItemStack> availableItemStacks) {
+            this.availableItemStacks = ImmutableList.copyOf(availableItemStacks);
+        };
+
+        public List<ItemStack> getItemStacks() {
+            return availableItemStacks;
+        };
+    };
+};
