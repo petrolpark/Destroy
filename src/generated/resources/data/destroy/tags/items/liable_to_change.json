@@ -45,6 +45,7 @@
     "destroy:paper_pulp",
     "destroy:sawdust",
     "destroy:voltaic_pile",
-    "destroy:chalk"
+    "destroy:chalk",
+    "destroy:zirconium_ingot"
   ]
 }

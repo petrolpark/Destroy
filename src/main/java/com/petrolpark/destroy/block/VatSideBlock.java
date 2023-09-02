@@ -82,9 +82,9 @@ public class VatSideBlock extends CopycatBlock {
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
         withBlockEntityDo(level, pos, be -> {
-            if (!(be instanceof VatSideBlockEntity vatSide)) return;
+            if (!(be instanceof VatSideBlockEntity vatSide) || vatSide.direction == null) return;
             if (!pos.relative(vatSide.direction).equals(neighbor)) return;
-            vatSide.updateDisplayType(neighbor); //TODO change to use correct neighbour
+            vatSide.updateDisplayType(neighbor);
             vatSide.setPowerFromAdjacentBlock(neighbor);   
         });
         super.onNeighborChange(state, level, pos, neighbor);

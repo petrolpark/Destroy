@@ -4,19 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Map.Entry;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import com.petrolpark.destroy.Destroy;
-import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.tags.ITag;
 
 /**
  * A Reaction takes place between specific {@link Molecule Molecules}, and produces specific Molecules.
@@ -53,14 +50,20 @@ public class Reaction {
      */
     private ReactionResult result;
 
+    // THERMODYNAMICS
+
     /**
      * {@code A} in {@code k = Aexp(-E/RT)}.
      */
     private float preexponentialFactor;
     /**
-     * {@code E} in {@code k = Aexp(-E/RT)}.
+     * {@code E} in {@code k = Aexp(-E/RT)}, in kJ/mol/s.
      */
     private float activationEnergy;
+    /**
+     * The change in enthalpy (in kJ/mol) for this Reaction.
+     */
+    private float enthalpyChange;
 
     /**
      * The namespace of the mod by which this Reaction was declared, or {@code novel} if this was generated
@@ -78,25 +81,21 @@ public class Reaction {
     // JEI DISPLAY INFORMATION
 
     /**
-     * A List of Pairs of Lists of Item Stacks and booleans. Each entry in this List represents a slot on the JEI
-     * screen. The List of Item Stacks in each Pair represents the Item Stacks through which the slot will cycle,
-     * and the boolean is {@code true} if the slot should be displayed under the arrow (as a catalyst), and {@code
-     * false} if it should be displayed as a reactant.
-     */
-    private List<Pair<List<ItemStack>, Boolean>> displayedRequiredItemStacks;
-
-    /**
      * Whether this Reaction should be shown in JEI. Examples of Reactions which shouldn't be shown are {@link
      * com.petrolpark.destroy.chemistry.genericreaction.GenericReaction generated Reactions}, and reverse Reactions
      * whose corresponding Reactions are already shown in JEI.
      */
     private boolean includeInJei;
-
     /**
      * Whether this Reaction should use an equilibrium arrow when displayed in JEI, rather than the normal one. This
      * is just for display, and has no effect on the behaviour of the Reaction in a {@link Mixture}.
      */
     private boolean displayAsReversible;
+    /**
+     * If this is the 'forward' half of a reversible Reaction, this points to the reverse Reaction. This is so JEI
+     * knows the products of the forward Reaction are the reactants of the reverse, and vice versa.
+     */
+    private Reaction reverseReaction;
 
     /**
      * Get the Reaction with the given {@link Reaction#getFullId ID}.
@@ -165,11 +164,34 @@ public class Reaction {
     };
 
     /**
+     * Get the {@link Reaction#activationEnergy activation energy} for this Reaction, in kJ.
+     * @see Reaction#getRateConstant Arrhenius equation
+     */
+    public float getActivationEnergy() {
+        return activationEnergy;
+    };
+
+    /**
+     * Get the {@link Reaction#preexponentialFactor preexponential} for this Reaction, in mol/B/s.
+     * @see Reaction#getRateConstant Arrhenius equation
+     */
+    public float getPreexponentialFactor() {
+        return preexponentialFactor;
+    };
+
+    /**
      * The rate constant of this Reaction at the given temperature.
      * @param temperature (in kelvins).
      */
     public float getRateConstant(float temperature) {
         return preexponentialFactor * (float)Math.exp(-((activationEnergy * 1000) / (GAS_CONSTANT * temperature)));
+    };
+
+    /**
+     * The {@link Reaction#enthalpyChange enthalpy change} for this Reaction, in kJ/mol.
+     */
+    public float getEnthalpyChange() {
+        return enthalpyChange;
     };
 
     /**
@@ -219,6 +241,16 @@ public class Reaction {
      */
     public boolean displayAsReversible() {
         return displayAsReversible;
+    };
+
+    /**
+     * If this is the 'forward' half of a reversible Reaction, this contains the reverse Reaction. This is so JEI
+     * knows the products of the forward Reaction are the reactants of the reverse, and vice versa. If this is not
+     * part of a reversible Reaction, this is empty. This is just for display; if a Reaction has a reverse and is needed
+     * for logic (e.g. Reacting in a Mixture) it should not be accessed in this way.
+     */
+    public Optional<Reaction> getReverseReactionForDisplay() {
+        return Optional.ofNullable(reverseReaction);
     };
 
     /**
@@ -283,6 +315,7 @@ public class Reaction {
 
         private boolean hasForcedPreExponentialFactor;
         private boolean hasForcedActivationEnergy;
+        private boolean hasForcedEnthalpyChange;
 
         private ReactionBuilder(Reaction reaction, boolean generated) {
             this.generated = generated;
@@ -296,11 +329,11 @@ public class Reaction {
             reaction.molesPerItem = 0f;
 
             reaction.includeInJei = !generated;
-            reaction.displayedRequiredItemStacks = new ArrayList<>();
             reaction.displayAsReversible = false;
 
             hasForcedPreExponentialFactor = false;
             hasForcedActivationEnergy = false;
+            hasForcedEnthalpyChange = false;
         };
 
         public ReactionBuilder(String namespace) {
@@ -361,20 +394,16 @@ public class Reaction {
         /**
          * Adds an {@link IItemReactant Item Reactant} (or catalyst) to this {@link Reaction}.
          * @param itemReactant The Item Reactant
-         * @param displayedItemStacks The List of Stacks which will be shown as the "ingredients" for this Reaction in JEI. For example if the Item
-         * Reactant accepts any Items with a specific Item Tag, this will be a List of Stacks of all Items with that Tag
-         * @param displayAsCatalyst Whether this should show under the Reaction arrow in JEI, rather than with all the usual reactants
          * @param moles The {@link Reaction#getMolesPerItem moles of Reaction} which will occur if all necessary Item Reactants are present. If this
          * Reaction has multiple Item Reactants, this must be the same each time.
          * @return This Reaction Builder
          * @see ReactionBuilder#addSimpleItemReactant Adding a single Item as a Reactant
          * @see ReactionBuilder#addSimpleItemTagReactant Adding an Item Tag as a Reactant
          */
-        public ReactionBuilder addItemReactant(IItemReactant itemReactant, List<ItemStack> displayedItemStacks, boolean displayAsCatalyst, float moles) {
+        public ReactionBuilder addItemReactant(IItemReactant itemReactant, float moles) {
             if (reaction.molesPerItem != 0f && reaction.molesPerItem != moles) throw molesPerItemError;
             reaction.molesPerItem = moles;
             reaction.itemReactants.add(itemReactant);
-            reaction.displayedRequiredItemStacks.add(Pair.of(displayedItemStacks, displayAsCatalyst));
             return this;
         };
 
@@ -389,7 +418,7 @@ public class Reaction {
          * @return This Reaction Builder
          */
         public ReactionBuilder addSimpleItemReactant(Item item, float moles) {
-            return addItemReactant(new IItemReactant.SimpleItemReactant(item), List.of(new ItemStack(item)), false, moles);
+            return addItemReactant(new IItemReactant.SimpleItemReactant(item), moles);
         };
 
         /**
@@ -401,12 +430,7 @@ public class Reaction {
          * @return This Reaction Builder
          */
         public ReactionBuilder addSimpleItemTagReactant(TagKey<Item> tag, float moles) {
-            if (reaction.molesPerItem != 0f && reaction.molesPerItem != moles) throw molesPerItemError;
-            reaction.molesPerItem = moles;
-            ITag<Item> tagIterable = ForgeRegistries.ITEMS.tags().getTag(tag);
-            List<ItemStack> displayedStacks = new ArrayList<>(tagIterable.size());
-            tagIterable.forEach(item -> displayedStacks.add(new ItemStack(item)));
-            return addItemReactant(new IItemReactant.SimpleItemTagReactant(tag), displayedStacks, false, moles);
+            return addItemReactant(new IItemReactant.SimpleItemTagReactant(tag), moles);
         };
 
         /**
@@ -472,13 +496,26 @@ public class Reaction {
         };
 
         /**
-         * Set the activation energy (in kJ/mol) for this Reaction.
-         * If no activation energy is given, defaults to 100kJ/mol.
+         * Set the activation energy (in kJ) for this Reaction.
+         * If no activation energy is given, defaults to 100kJ.
          * @param activationEnergy
+         * @return This Reaction Builder
          */
         public ReactionBuilder activationEnergy(float activationEnergy) {
             reaction.activationEnergy = activationEnergy;
             hasForcedActivationEnergy = true;
+            return this;
+        };
+
+        /**
+         * Set the enthalpy change (in kJ/mol) for this Reaction.
+         * If no enthalpy change is given, defaults to 0kJ.
+         * @param enthalpyChange
+         * @return This Reaction Builder
+         */
+        public ReactionBuilder enthalpyChange(float enthalpyChange) {
+            reaction.enthalpyChange = enthalpyChange;
+            hasForcedEnthalpyChange = true;
             return this;
         };
 
@@ -500,7 +537,9 @@ public class Reaction {
          * the original Reaction will include the reverse symbol.</p>
          * <p>The reverse Reaction does not automatically add Item Stack reactants, products or catalysts.</p>
          * @param reverseReactionModifier A consumer which gets passed the Builder of the reverse Reaction once its reactants, products and catalysts
-         * have been added. This allows you to add {@link ReactionBuilder#setOrder orders with respect to the new reactants}, and {@link ReactionBuilder#withResult 
+         * have been added, and the {@link ReactionBuilder#enthalpyChange enthalpy change} and {@link ReactionBuilder#activationEnergy activation energy}
+         * have been set, if applicable. This allows you to add {@link ReactionBuilder#setOrder orders with respect to the new reactants}, and {@link
+         * ReactionBuilder#withResult 
          * Reaction results}.
          * @return This Reaction Builder (not the reverse Reaction Builder)
          */
@@ -518,10 +557,27 @@ public class Reaction {
                 if (reaction.reactants.keySet().contains(rateAffecter.getKey())) continue; // Ignore reactants, only add catalysts
                 reverseBuilder.addCatalyst(rateAffecter.getKey(), rateAffecter.getValue());
             };
+            reaction.reverseReaction = reverseBuilder.reaction; // Set this so JEI knows
+
             reverseBuilder
                 .id(reaction.id + ".reverse")
                 .dontIncludeInJei();
-            reverseReactionModifier.accept(reverseBuilder);
+
+            if (hasForcedEnthalpyChange && hasForcedActivationEnergy) { // If we've set the enthalpy change and activation energy for this Reaction, the values for the reverse are set in stone
+                reverseBuilder
+                    .activationEnergy(reaction.activationEnergy - reaction.enthalpyChange)
+                    .enthalpyChange(-reaction.enthalpyChange);
+            };
+
+            reverseReactionModifier.accept(reverseBuilder); // Allow the user to manipulate the reverse Reaction
+
+            if ( // Check thermodynamics are correct
+                reaction.activationEnergy - reaction.enthalpyChange != reverseBuilder.reaction.activationEnergy
+                || reaction.enthalpyChange != -reverseBuilder.reaction.enthalpyChange
+            ) { 
+                throw new IllegalStateException("Activation energies and enthalpy changes for reversible Reactions must obey Hess' Law");
+            };
+
             reverseBuilder.build();
             return this;
         };
@@ -534,13 +590,15 @@ public class Reaction {
 
             if (!hasForcedActivationEnergy || reaction.activationEnergy <= 0f) {
                 reaction.activationEnergy = 50f;
-                Destroy.LOGGER.warn("Activation energy of reaction '"+reactionString()+"' was missing or invalid, so estimated as 100kJ.");
+                Destroy.LOGGER.warn("Activation energy of reaction '"+reactionString()+"' was missing or invalid, so estimated as 50kJ.");
             };
 
             if (!hasForcedPreExponentialFactor || reaction.preexponentialFactor <= 0f) {
                 reaction.preexponentialFactor = 1e8f;
-                Destroy.LOGGER.warn("Pre-exponential factor of reaction '"+reactionString()+"' was missing or invalid, so was estimated as 1e6.");
+                Destroy.LOGGER.warn("Pre-exponential factor of reaction '"+reactionString()+"' was missing or invalid, so was estimated as 1e8.");
             };
+
+            if (!hasForcedEnthalpyChange) reaction.enthalpyChange = 0f;
 
             if (reaction.consumesItem() && reaction.molesPerItem == 0f) {
                 Destroy.LOGGER.warn("Reaction '"+reactionString()+"' does not do anything when its required Items are consumed.");

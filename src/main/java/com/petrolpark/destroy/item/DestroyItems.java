@@ -95,7 +95,7 @@ public class DestroyItems {
         .tag(DestroyItemTags.DESTROY_INGOTS.tag, Tags.Items.INGOTS, ItemTags.PIGLIN_LOVED)
         .register(),
     ZIRCONIUM_INGOT = REGISTRATE.item("zirconium_ingot", Item::new)
-        .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/zirconium"), Tags.Items.INGOTS)
+        .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/zirconium"), Tags.Items.INGOTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
     SULFUR = REGISTRATE.item("sulfur", Item::new)
         .tag(forgeItemTag("raw_materials/sulfur"))

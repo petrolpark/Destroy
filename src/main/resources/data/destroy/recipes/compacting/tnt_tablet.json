@@ -5,7 +5,7 @@
         "mixtureFluidWithMolecule": "destroy:mixture",
         "amount": 1000,
         "molecule": "destroy:tnt",
-        "concentration": 1.0
+        "concentration": 6.6
       },
       {
         "tag": "minecraft:sand"

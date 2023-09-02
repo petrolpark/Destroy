@@ -7,6 +7,7 @@ import java.util.List;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 
 public abstract class StackedTextBoxComponent {
@@ -54,7 +55,10 @@ public abstract class StackedTextBoxComponent {
         public Molecule(String value) {
             super(value);
             String[] nameSpaceAndId = value.split(":");
-            String moleculeName = Component.translatable(nameSpaceAndId[0] + ".chemical." + nameSpaceAndId[1] + (DestroyAllConfigs.CLIENT.chemistry.iupacNames.get() ? ".iupac" : "")).getString();
+            String key = nameSpaceAndId[0] + ".chemical." + nameSpaceAndId[1];
+            String iupacKey = key + ".iupac";
+            if (DestroyAllConfigs.CLIENT.chemistry.iupacNames.get() && I18n.exists(iupacKey)) key = iupacKey;
+            String moleculeName = Component.translatable(key).getString();
             setWords(moleculeName);
         };
     

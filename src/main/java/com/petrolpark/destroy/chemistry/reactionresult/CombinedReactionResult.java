@@ -31,6 +31,10 @@ public class CombinedReactionResult extends ReactionResult {
         return this;
     };
 
+    public List<ReactionResult> getChildren() {
+        return childResults;
+    };
+
     @Override
     public void onBasinReaction(Level level, BasinBlockEntity basin, Mixture mixture) {
         for (ReactionResult childResult : childResults) {

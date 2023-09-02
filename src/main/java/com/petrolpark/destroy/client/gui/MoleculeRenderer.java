@@ -69,7 +69,7 @@ public class MoleculeRenderer {
         moleculeID = molecule.getFullID();
         width = 0;
         height = 0;
-        xOffset = 5;
+        xOffset = 0;
         yOffset = 0;
         zOffset = 0;
         RENDERED_OBJECTS = new ArrayList<>();
@@ -160,7 +160,7 @@ public class MoleculeRenderer {
     public void render(int xPosition, int yPosition, GuiGraphics graphics) {
         PoseStack poseStack = graphics.pose();
         poseStack.pushPose();
-        poseStack.translate(xPosition + ((float)width / 2f), yPosition + yOffset, zOffset + 100);
+        poseStack.translate(xPosition + ((float)width / 2f), yPosition + yOffset, -200);
         TransformStack.cast(poseStack)
             .rotateY(AnimationTickHolder.getRenderTime()); // Rotation
         poseStack.translate(-((float)width) / 2f + xOffset, 0f, 0f);

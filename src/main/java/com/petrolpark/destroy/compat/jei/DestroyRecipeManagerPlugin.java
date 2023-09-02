@@ -2,6 +2,7 @@ package com.petrolpark.destroy.compat.jei;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.compat.jei.category.ReactionCategory;
@@ -66,7 +67,7 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
                 case INPUT: {
                     // Add Reaction Recipes
                     if (recipeCategory instanceof ReactionCategory) molecule.getReactantReactions().forEach(reaction -> {
-                        if (reaction.includeInJei()) recipes.add((T)(ReactionCategory.RECIPES.get(reaction)));
+                        Optional.ofNullable((T)(ReactionCategory.RECIPES.get(reaction))).ifPresent(recipes::add);
                     }); // This is an unchecked conversion but I think it's fine
                     
                     // Add non-Reaction Recipes
@@ -83,7 +84,7 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
                 case OUTPUT: {
                     // Add Reaction Recipes
                     if (recipeCategory instanceof ReactionCategory) molecule.getProductReactions().forEach(reaction -> {
-                        if (reaction.includeInJei()) recipes.add((T)(ReactionCategory.RECIPES.get(reaction)));
+                        Optional.ofNullable((T)(ReactionCategory.RECIPES.get(reaction))).ifPresent(recipes::add);
                     }); // This is an unchecked conversion but I think it's fine
                 
                     // Add non-Reaction Recipes

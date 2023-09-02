@@ -126,7 +126,7 @@ public class MoleculeDisplayItem extends Item {
         public void renderImage(Font font, int mouseX, int mouseY, GuiGraphics graphics) {
             PoseStack poseStack = graphics.pose();
             poseStack.pushPose(); 
-            poseStack.translate(0, 0, 401);
+            poseStack.translate(0, 0, 250);
             renderer.render(mouseX + 10, mouseY + 5, graphics);
             poseStack.popPose();
         };

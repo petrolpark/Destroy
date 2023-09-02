@@ -13,6 +13,7 @@ import com.petrolpark.destroy.block.entity.behaviour.WhenTargetedBehaviour;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Reaction;
+import com.petrolpark.destroy.chemistry.Mixture.ReactionContext;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -104,6 +105,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             initializationTicks--;
         };
 
+        boolean shouldUpdateFluidMixture = false;
+
         if (getVatOptional().isEmpty()) return;
         Vat vat = getVatOptional().get();
         if (tankBehaviour.isEmpty()) return;
@@ -111,8 +114,13 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         energyChange += (LevelPollution.getLocalTemperature(getLevel(), getBlockPos()) - cachedMixture.getTemperature()) * vat.getConductance(); // Fourier's Law (sort of)
         if (Math.abs(energyChange) > 0.0001f) {
             cachedMixture.heat(1000 * energyChange / getTank().getFluidAmount()); // 1000 converts getFluidAmount() in mB to Buckets
-            updateFluidMixture();
+            shouldUpdateFluidMixture = true;
         };
+        if (!cachedMixture.isAtEquilibrium()) {
+            cachedMixture.reactForTick(new ReactionContext(List.of())); //TODO items in vats
+        };
+
+        if (shouldUpdateFluidMixture) updateFluidMixture();
         sendData();
     };
 

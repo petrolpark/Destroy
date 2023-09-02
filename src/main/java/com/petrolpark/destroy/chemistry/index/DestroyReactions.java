@@ -232,9 +232,10 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.WATER)
         .activationEnergy(0f)
         .preexponentialFactor(1.3e11f)
+        .enthalpyChange(-52.014f)
         .reverseReaction(reaction -> reaction
             .activationEnergy(52.014f)
-            .preexponentialFactor(1603466f)
+            .preexponentialFactor(519.5f)
             .setOrder(DestroyMolecules.WATER, 2)
         ).build(),
 

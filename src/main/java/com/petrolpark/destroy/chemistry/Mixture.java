@@ -1,13 +1,13 @@
 package com.petrolpark.destroy.chemistry;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -75,6 +75,25 @@ public class Mixture extends ReadOnlyMixture {
         groupIDsAndMolecules = new HashMap<>();
 
         equilibrium = false;
+    };
+
+    /**
+     * Get a Mixture containing only the given Molecule, unless it is charged, in which case get a Mixture
+     * containing the sodium salt or chloride of the ion.
+     * @param molecule
+     */
+    public static Mixture pure(Molecule molecule) {
+        Mixture mixture = new Mixture();
+        if (molecule.getCharge() == 0) {
+            mixture.addMolecule(molecule, molecule.getPureConcentration());
+            return mixture;
+        };
+        Molecule otherIon = molecule.getCharge() < 0 ? DestroyMolecules.SODIUM_ION : DestroyMolecules.CHLORIDE;
+        int chargeMagnitude = Math.abs(molecule.getCharge());
+        mixture.addMolecule(molecule, 1f);
+        mixture.addMolecule(otherIon, chargeMagnitude);
+        mixture.recalculateVolume(1000);
+        return mixture;
     };
 
     public static Mixture readNBT(CompoundTag compound) {
@@ -156,6 +175,7 @@ public class Mixture extends ReadOnlyMixture {
 
         // If we're not adding a pre-existing Molecule
         internalAddMolecule(molecule, concentration, true);
+        equilibrium = false;
         return this;
     };
 
@@ -189,13 +209,12 @@ public class Mixture extends ReadOnlyMixture {
         };
 
         for (Entry<ReactionResult, Double> reactionresultAndMoles : reactionresultsAndMoles.entrySet()) {
-            resultMixture.doReaction(reactionresultAndMoles.getKey().getReaction(), (float)(reactionresultAndMoles.getValue() / totalAmount)); // Add all Reaction Results to the new Mixture
+            resultMixture.incrementReactionResults(reactionresultAndMoles.getKey().getReaction(), (float)(reactionresultAndMoles.getValue() / totalAmount)); // Add all Reaction Results to the new Mixture
         };
 
         resultMixture.refreshPossibleReactions();
         resultMixture.updateName();
         //TODO determine temperature
-        //TODO combine Reaction results
 
         return resultMixture;
     };
@@ -210,14 +229,14 @@ public class Mixture extends ReadOnlyMixture {
      * This is used in Recipes.
      * @param molecule Only known (non-novel) Molecules (i.e. those with a name space) will be detected
      * @param concentration
-     * @param ignoreableMolecules Molecules other than solvents and low-concentration impurities that should be ignored; {@code null} for an empty list
+     * @param ignoreableMolecules Molecules other than solvents and low-concentration impurities that should be ignored should return {@code true}. The predicate can be {@code null} if there are no other Molecules that can be ignored
      */
-    public boolean hasUsableMolecule(Molecule molecule, float concentration, @Nullable Collection<Molecule> ignoreableMolecules) {
+    public boolean hasUsableMolecule(Molecule molecule, float concentration, @Nullable Predicate<Molecule> ignore) {
         if (!contents.containsKey(molecule)) return false;
-        if (ignoreableMolecules == null) ignoreableMolecules = List.of();
+        if (ignore == null) ignore = (m) -> false;
         if (Math.abs(concentration - getConcentrationOf(molecule)) > IMPURITY_THRESHOLD) return false; //TODO replace with a more lenient check
         for (Entry<Molecule, Float> otherMolecule : contents.entrySet()) {
-            if (ignoreableMolecules.contains(otherMolecule.getKey())) continue; // If this molecule is specified as ignoreable, ignore it
+            if (ignore.test(molecule)) continue; // If this molecule is specified as ignoreable, ignore it
             if (otherMolecule.getKey() == molecule) continue; // If this is the Molecule we want, ignore it.
             if (otherMolecule.getKey().hasTag(DestroyMolecules.Tags.SOLVENT)) continue; // If this is a solvent, ignore it
             if (otherMolecule.getValue() < IMPURITY_THRESHOLD) continue; // If this impurity is in low-enough concentration, ignore it.
@@ -245,6 +264,7 @@ public class Mixture extends ReadOnlyMixture {
         boolean shouldRefreshPossibleReactions = false; // Rather than refreshing the possible Reactions every time a new Molecule is added or removed, start by assuming we won't need to, and flag for refreshing if we ever do
 
         Map<Molecule, Float> oldContents = new HashMap<>(contents); // Copy all the old concentrations of everything
+
         Map<Reaction, Float> reactionRates = new HashMap<>(); // Rates of all Reactions
         List<Reaction> orderedReactions = new ArrayList<>(); // A list of Reactions in the order of their current rate, fastest first
 
@@ -274,8 +294,9 @@ public class Mixture extends ReadOnlyMixture {
 
             for (Molecule reactant : reaction.getReactants()) {
                 int reactantMolarRatio = reaction.getReactantMolarRatio(reactant);
-                if (contents.get(reactant) < reactantMolarRatio * molesOfReaction) { // Determine the limiting reagent, if there is one
-                    molesOfReaction = contents.get(reactant) / (float) reactantMolarRatio; // If there is a new limiting reagent, alter the moles of reaction which will take place
+                float reactantConcentration = getConcentrationOf(reactant);
+                if (reactantConcentration < reactantMolarRatio * molesOfReaction) { // Determine the limiting reagent, if there is one
+                    molesOfReaction = reactantConcentration / (float) reactantMolarRatio; // If there is a new limiting reagent, alter the moles of reaction which will take place
                     shouldRefreshPossibleReactions = true; // If there is a new limiting reagent, one Molecule is going to be used up, so the possible Reactions will change
                 };
             };
@@ -433,11 +454,21 @@ public class Mixture extends ReadOnlyMixture {
             changeConcentrationOf(product, molesPerBucket * reaction.getProductMolarRatio(product), false); // Increase the concentration of the product
         };
 
-        if (!reaction.hasResult()) return shouldRefreshPossibleReactions;
-        ReactionResult result = reaction.getResult();
-        reactionresults.merge(result, molesPerBucket, (f1, f2) -> f1 + f2);
+        heat(-reaction.getEnthalpyChange() * 1000 * molesPerBucket);
+        incrementReactionResults(reaction, molesPerBucket);
 
         return shouldRefreshPossibleReactions;
+    };
+
+    /**
+     * Increase the number of moles of this Reaction which have occured in this Mixture.
+     * @param reaction
+     * @param molesPerBucket Moles (per Bucket) of this Reaction
+     */
+    protected void incrementReactionResults(Reaction reaction, float molesPerBucket) {
+        if (!reaction.hasResult()) return;
+        ReactionResult result = reaction.getResult();
+        reactionresults.merge(result, molesPerBucket, (f1, f2) -> f1 + f2);
     };
 
     /**
@@ -503,9 +534,14 @@ public class Mixture extends ReadOnlyMixture {
      */
     private boolean internalAddMolecule(Molecule molecule, float concentration, Boolean shouldRefreshReactions) {
 
-        super.addMolecule(molecule, concentration);
-
         boolean newMoleculeAdded = true; // Start by assuming we're adding a brand new Molecule to this solution
+
+        if (getConcentrationOf(molecule) != 0f) { // Just in case this Molecule is already in the Mixture, increase its concentration
+            changeConcentrationOf(molecule, concentration, shouldRefreshReactions);
+            return false;
+        };
+
+        super.addMolecule(molecule, concentration); //TODO not do this if it turns out to already be in solution
 
         List<Group> functionalGroups = molecule.getFunctionalGroups();
         if (functionalGroups.size() != 0) {
@@ -535,7 +571,7 @@ public class Mixture extends ReadOnlyMixture {
             refreshPossibleReactions();
         };
 
-        if (newMoleculeAdded) equilibrium = false;
+        equilibrium = false;
 
         return newMoleculeAdded; // Return whether or not we actually added a brand new Molecule
     };
@@ -558,14 +594,14 @@ public class Mixture extends ReadOnlyMixture {
         };
 
         contents.remove(molecule);
-        equilibrium = false; // Now that a Molecule has been removed we cannot guarantee equilibrium
+        equilibrium = false; // As we have removed a Molecule the position equilibrium is likely to change
 
         return this;
     };
 
     /**
      * Alters the concentration of a {@link Molecule} in a Mixture.
-     * This does not update the {@link ReadOnlyMixture#getName name} of the Mixture.
+     * This does not update the {@link ReadOnlyMixture#getName name} or equilibrium status of the Mixture.
      * @param molecule If not present in the Mixture, will be added to the Mixture
      * @param change The <em>change</em> in concentration, not the new value (can be positive or negative)
      * @param shouldRefreshReactions Whether to alter the possible {@link Reaction Reactions} in the case that a new Molecule is added to the Mixture (should almost always be {@code true})
@@ -629,6 +665,12 @@ public class Mixture extends ReadOnlyMixture {
             newPossibleReactions.addAll(possibleReactant.getReactantReactions());
         };
         for (Reaction reaction : newPossibleReactions) {
+            //possibleReactions.add(reaction);
+
+            /* 
+             * This checks if all necessary Reactants were present before proceeding, however this leads to some infinite loops
+             * where one half of a reversible Reaction would happen one tick, then the other one the next, etc.
+             */ 
             Boolean reactionHasAllReactants = true;
             for (Molecule necessaryReactantOrCatalyst : reaction.getOrders().keySet()) {
                 if (getConcentrationOf(necessaryReactantOrCatalyst) == 0) {

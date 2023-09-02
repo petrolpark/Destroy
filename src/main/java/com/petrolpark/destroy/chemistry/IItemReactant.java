@@ -1,8 +1,13 @@
 package com.petrolpark.destroy.chemistry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.ITag;
 
 public interface IItemReactant {
     
@@ -21,6 +26,12 @@ public interface IItemReactant {
     public default void consume(ItemStack stack) {
         stack.shrink(1);
     };
+
+    /**
+     * Get the List of Item Stacks through which the JEI slot should cycle. For Tag Reactants for 
+     * example, this should be a List of all Item Stacks in that Tag.
+     */
+    public List<ItemStack> getDisplayedItemStacks();
 
     /**
      * Whether this Item Reactant is a catalyst. If so, it will not be consumed, but just required
@@ -43,6 +54,11 @@ public interface IItemReactant {
             return stack.is(item);
         };
 
+        @Override
+        public List<ItemStack> getDisplayedItemStacks() {
+            return List.of(new ItemStack(item));
+        };
+
     };
 
     public class SimpleItemTagReactant implements IItemReactant {
@@ -56,6 +72,14 @@ public interface IItemReactant {
         @Override
         public boolean isItemValid(ItemStack stack) {
             return stack.is(tag);
+        };
+
+        @Override
+        public List<ItemStack> getDisplayedItemStacks() {
+            ITag<Item> tagIterable = ForgeRegistries.ITEMS.tags().getTag(tag);
+            List<ItemStack> displayedStacks = new ArrayList<>(tagIterable.size());
+            tagIterable.forEach(item -> displayedStacks.add(new ItemStack(item)));
+            return displayedStacks;
         };
 
     };

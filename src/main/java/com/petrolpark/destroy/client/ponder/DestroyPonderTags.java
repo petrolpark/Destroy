@@ -2,10 +2,13 @@ package com.petrolpark.destroy.client.ponder;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.block.VatControllerBlock;
 import com.petrolpark.destroy.item.DestroyItems;
+import com.petrolpark.destroy.util.vat.VatMaterial;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
 import com.simibubi.create.foundation.ponder.PonderTag;
+import com.simibubi.create.foundation.ponder.PonderTagRegistry.TagBuilder;
 import com.simibubi.create.infrastructure.ponder.AllPonderTags;
 
 public class DestroyPonderTags {
@@ -17,8 +20,11 @@ public class DestroyPonderTags {
         .addToIndex(),
     
     DESTROY = new PonderTag(Destroy.asResource("destroy"))
-        .item(DestroyItems.LOGO.get())
-        .addToIndex();
+        .item(DestroyItems.LOGO)
+        .addToIndex(),
+
+    VAT_SIDE_BLOCKS = new PonderTag(Destroy.asResource("vat_side_blocks"))
+        .item(DestroyBlocks.VAT_CONTROLLER);
 
     public static void register() {
 
@@ -30,7 +36,8 @@ public class DestroyPonderTags {
             .add(DestroyBlocks.CENTRIFUGE)
             .add(DestroyBlocks.COOLER)
             .add(AllBlocks.MECHANICAL_MIXER)
-            .add(DestroyBlocks.VAT_CONTROLLER);
+            .add(DestroyBlocks.VAT_CONTROLLER)
+        ;
         
         PonderRegistry.TAGS.forTag(DestroyPonderTags.DESTROY)
             .add(DestroyBlocks.AGING_BARREL)
@@ -46,6 +53,9 @@ public class DestroyPonderTags {
             .add(DestroyItems.SEISMOMETER)
             .add(DestroyBlocks.VAT_CONTROLLER)
         ;
+
+        TagBuilder vatSideBlockBuilder = PonderRegistry.TAGS.forTag(DestroyPonderTags.VAT_SIDE_BLOCKS);
+        VatMaterial.BLOCK_MATERIALS.forEach((block, material) -> {if (!(block instanceof VatControllerBlock)) vatSideBlockBuilder.add(block);});
 
         PonderRegistry.TAGS.forTag(AllPonderTags.FLUIDS)
             .add(DestroyBlocks.BUBBLE_CAP)

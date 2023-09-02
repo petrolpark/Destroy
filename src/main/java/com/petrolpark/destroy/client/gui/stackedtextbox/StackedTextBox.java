@@ -115,6 +115,7 @@ public class StackedTextBox extends AbstractStackedTextBox {
 
         PoseStack ms = guiGraphics.pose();
         ms.pushPose();
+        ms.translate(0, 0, 300);
 
         // Render the text
         Screen screen = minecraft.screen;

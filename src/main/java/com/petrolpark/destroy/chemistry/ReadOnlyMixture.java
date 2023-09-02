@@ -172,7 +172,7 @@ public class ReadOnlyMixture {
 
         contents.put(molecule, concentration);
 
-        updateName();
+        //updateName(); //TODO check if needed
         return this;
     };
 

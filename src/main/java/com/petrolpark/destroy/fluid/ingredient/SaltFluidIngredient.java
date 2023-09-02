@@ -60,7 +60,7 @@ public class SaltFluidIngredient extends MixtureFluidIngredient {
 
     @Override
     protected boolean testMixture(Mixture mixture) {
-        return mixture.hasUsableMolecule(cation, concentration * cation.getCharge(), List.of(anion)) && mixture.hasUsableMolecule(anion, concentration * -anion.getCharge(), List.of(cation));
+        return mixture.hasUsableMolecule(cation, concentration * cation.getCharge(), anion::equals) && mixture.hasUsableMolecule(anion, concentration * -anion.getCharge(), cation::equals);
     };
 
     @Override
