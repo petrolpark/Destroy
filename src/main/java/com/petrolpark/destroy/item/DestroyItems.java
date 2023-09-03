@@ -98,7 +98,7 @@ public class DestroyItems {
         .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/zirconium"), Tags.Items.INGOTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
     SULFUR = REGISTRATE.item("sulfur", Item::new)
-        .tag(forgeItemTag("raw_materials/sulfur"))
+        .tag(forgeItemTag("raw_materials/sulfur"), DestroyItemTags.VULCANIZER.tag)
         .register(),
     ZINC_DUST = REGISTRATE.item("zinc_dust", Item::new)
         .tag(forgeItemTag("dusts/zinc"), Tags.Items.DUSTS)
@@ -213,14 +213,8 @@ public class DestroyItems {
 
     // TOOLS AND ARMOR
 
-    // static {
-    //     REGISTRATE.startSection(AllSections.KINETICS);
-    // };
-
     public static final ItemEntry<Item>
 
-    DIAMOND_DRILL_BIT = REGISTRATE.item("diamond_drill_bit", Item::new)
-        .register(),
     GAS_FLITER = REGISTRATE.item("gas_filter", Item::new)
         .register();
 

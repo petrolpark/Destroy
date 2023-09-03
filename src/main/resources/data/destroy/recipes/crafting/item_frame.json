@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "SSS",
+      "SPS",
+      "SSS"
+    ],
+    "key": {
+      "S": {
+        "tag": "forge:rods/wooden"
+      },
+      "P": {
+        "tag": "destroy:plastic"
+      }
+    },
+    "result": {
+      "item": "minecraft:item_frame"
+    }
+  }

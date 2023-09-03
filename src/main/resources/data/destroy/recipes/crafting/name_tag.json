@@ -1,14 +1,17 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-      "NN"
+      "PPN"
     ],
     "key": {
+      "P": {
+        "item": "destroy:polyvinyl_chloride"
+      },
       "N": {
         "item": "destroy:nylon"
       }
     },
     "result": {
-      "item": "minecraft:lead"
+      "item": "minecraft:name_tag"
     }
   }

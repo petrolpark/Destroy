@@ -1,6 +1,7 @@
 package com.petrolpark.destroy.block.entity;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
@@ -8,15 +9,16 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.CentrifugeBlock;
+import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.GeniusFluidTankBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
-import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.content.fluids.FluidFX;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
@@ -47,7 +49,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 public class CentrifugeBlockEntity extends KineticBlockEntity implements IFluidBlockEntity {
 
     private static final Object centrifugationRecipeKey = new Object();
-    private static final int TANK_CAPACITY = DestroyAllConfigs.SERVER.contraptions.centrifugeCapacity.get();
+    private static final int TANK_CAPACITY = 1000;
 
     private SmartFluidTankBehaviour inputTank, denseOutputTank, lightOutputTank;
     protected LazyOptional<IFluidHandler> allFluidCapability;
@@ -58,7 +60,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IFluidB
     private Direction denseOutputTankFace;
 
     private int lubricationLevel;
-    private static final int MAX_LUBRICATION_LEVEL = DestroyAllConfigs.SERVER.contraptions.centrifugeMaxLubricationLevel.get();
+    private static final int MAX_LUBRICATION_LEVEL = 10;
 
     public int timer;
     private CentrifugationRecipe lastRecipe;
@@ -175,7 +177,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IFluidB
     };
 
     public int getProcessingSpeed() {
-        float lubricationMultiplier = MAX_LUBRICATION_LEVEL != 0 ? lubricationLevel / MAX_LUBRICATION_LEVEL : 1;
+        float lubricationMultiplier = lubricationLevel / MAX_LUBRICATION_LEVEL;
         return Mth.clamp((int) Math.abs(getSpeed() * lubricationMultiplier / 16f), 1, 512);
     };
 
@@ -242,7 +244,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IFluidB
     };
 
     public int getEachTankCapacity() {
-        return DestroyAllConfigs.SERVER.contraptions.centrifugeCapacity.get();
+        return TANK_CAPACITY;
     };
 
     private void onFluidStackChanged() {
@@ -277,5 +279,33 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IFluidB
         return true;
     };
 
+    public static class CentrifugeDisplaySource extends MixtureContentsDisplaySource {
+
+        private final Function<CentrifugeBlockEntity, SmartFluidTank> tankGetter;
+        private final String tankId;
+
+        private CentrifugeDisplaySource(String tankId, Function<CentrifugeBlockEntity, SmartFluidTank> tankGetter) {
+            this.tankId = tankId;
+            this.tankGetter = tankGetter;
+        };
+
+        @Override
+        public FluidStack getFluidStack(DisplayLinkContext context) {
+            if (context.getSourceBlockEntity() instanceof CentrifugeBlockEntity centrifuge) {
+                return tankGetter.apply(centrifuge).getFluid();
+            };
+            return FluidStack.EMPTY;
+        };
+
+        @Override
+        public Component getName() {
+            return DestroyLang.translate("display_source.centrifuge."+tankId).component();
+        };
+    };
+ 
+    public static CentrifugeDisplaySource INPUT_DISPLAY_SOURCE = new CentrifugeDisplaySource("input", CentrifugeBlockEntity::getInputTank);
+    public static CentrifugeDisplaySource DENSE_OUTPUT_DISPLAY_SOURCE = new CentrifugeDisplaySource("dense_output", CentrifugeBlockEntity::getDenseOutputTank);
+    public static CentrifugeDisplaySource LIGHT_OUTPIT_DISPLAY_SOURCE = new CentrifugeDisplaySource("light_output", CentrifugeBlockEntity::getLightOutputTank);
+
     
-}
+};

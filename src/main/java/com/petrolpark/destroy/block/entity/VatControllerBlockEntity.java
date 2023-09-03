@@ -9,6 +9,7 @@ import org.joml.Math;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.VatControllerBlock;
+import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
 import com.petrolpark.destroy.block.entity.behaviour.WhenTargetedBehaviour;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.chemistry.Mixture;
@@ -20,6 +21,7 @@ import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.vat.Vat;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
@@ -118,6 +120,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         };
         if (!cachedMixture.isAtEquilibrium()) {
             cachedMixture.reactForTick(new ReactionContext(List.of())); //TODO items in vats
+            getTank().getFluid().setAmount(cachedMixture.recalculateVolume(getTank().getFluid().getAmount()));
+            shouldUpdateFluidMixture = true;
         };
 
         if (shouldUpdateFluidMixture) updateFluidMixture();
@@ -418,6 +422,23 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         Lang.translate("gui.goggles.fluid_container")
 			.forGoggles(tooltip);
         DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.vat.contents"), vatController.getTank().getFluid(), vatController.getCapacity());
+    };
+
+    public static MixtureContentsDisplaySource DISPLAY_SOURCE = new MixtureContentsDisplaySource() {
+
+        @Override
+        public FluidStack getFluidStack(DisplayLinkContext context) {
+            if (context.getSourceBlockEntity() instanceof VatControllerBlockEntity controller) {
+                if (controller.getVatOptional().isPresent()) return controller.getTank().getFluid();
+            };
+            return FluidStack.EMPTY;
+        };
+
+        @Override
+        public Component getName() {
+            return DestroyLang.translate("display_source.vat").component();
+        };
+
     };
     
 };

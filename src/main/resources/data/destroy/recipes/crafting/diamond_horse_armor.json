@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "  D",
+      "DLD",
+      "DND"
+    ],
+    "key": {
+      "N": {
+        "item": "destroy:nylon"
+      },
+      "L": {
+        "tag": "forge:leather"
+      },
+      "D": {
+        "tag": "forge:diamond"
+      }
+    },
+    "result": {
+      "item": "minecraft:diamond_horse_armor"
+    }
+  }

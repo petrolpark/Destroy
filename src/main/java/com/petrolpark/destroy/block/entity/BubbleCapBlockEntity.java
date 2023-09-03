@@ -360,7 +360,7 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
         return true;
     };
 
-    public static MixtureContentsDisplaySource BUBBLE_CAP_DISPLAY_SOURCE = new MixtureContentsDisplaySource() {
+    public static MixtureContentsDisplaySource DISPLAY_SOURCE = new MixtureContentsDisplaySource() {
 
         @Override
         public FluidStack getFluidStack(DisplayLinkContext context) {

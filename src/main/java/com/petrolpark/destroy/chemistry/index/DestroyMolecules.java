@@ -401,9 +401,8 @@ public final class DestroyMolecules {
         .tag(Tags.SMOG)
         .build(),
     
-    FLUORIDE_ION = builder()
-        .id("fluoride_ion")
-        .translationKey("fluoride")
+    FLUORIDE = builder()
+        .id("fluoride")
         .structure(Formula.atom(Element.FLUORINE))
         .charge(-1)
         .build(),
@@ -600,9 +599,8 @@ public final class DestroyMolecules {
         .tag(Tags.OZONE_DEPLETER)
         .build(),
 
-    IODIDE_ION = builder()
-        .id("iodide_ion")
-        .translationKey("iodide")
+    IODIDE = builder()
+        .id("iodide")
         .structure(Formula.atom(Element.IODINE))
         .charge(-1)
         .build(),

@@ -231,7 +231,7 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.PROTON)
         .addProduct(DestroyMolecules.WATER)
         .activationEnergy(0f)
-        .preexponentialFactor(1.3e11f)
+        .preexponentialFactor(6.5e4f) //TODO fiddle with values because currently Water is the most acidic substance in the mod
         .enthalpyChange(-52.014f)
         .reverseReaction(reaction -> reaction
             .activationEnergy(52.014f)
@@ -378,6 +378,19 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.VINYL_ACETATE, 2)
         .addProduct(DestroyMolecules.WATER, 2)
         .build(); //TODO add palladium catalyst
+
+    // Acids
+    static {
+        builder().acid(DestroyMolecules.ACETIC_ACID, DestroyMolecules.ACETATE, 4.76f);
+        builder().acid(DestroyMolecules.AMMONIUM, DestroyMolecules.AMMONIA, 9.25f);
+        builder().acid(DestroyMolecules.HYDROCHLORIC_ACID, DestroyMolecules.CHLORIDE, -6.3f);
+        builder().acid(DestroyMolecules.HYDROFLUORIC_ACID, DestroyMolecules.FLUORIDE, 3.17f);
+        builder().acid(DestroyMolecules.HYDROGEN_CYANIDE, DestroyMolecules.CYANIDE, 9.2f);
+        builder().acid(DestroyMolecules.HYDROGEN_IODIDE, DestroyMolecules.IODIDE, -9.3f);
+        builder().acid(DestroyMolecules.HYDROGENSULFATE, DestroyMolecules.SULFATE, 1.99f);
+        builder().acid(DestroyMolecules.NITRIC_ACID, DestroyMolecules.NITRATE, -1.3f);
+        builder().acid(DestroyMolecules.SULFURIC_ACID, DestroyMolecules.HYDROGENSULFATE, -2.18f);
+    };
 
     private static ReactionBuilder builder() {
         return new ReactionBuilder(Destroy.MOD_ID);

@@ -382,8 +382,10 @@
     "destroy.chemistry.thermal_decomposition": "Thermal decomposition, or pyrolysis, is the spontaneous breakdown of a species when heated.",
     "destroy.chemistry.unknown_definition": "Unknown definition - report this as a bug.",
 
-    "destroy.display_source.pollutometer": "World Pollution Level",
     "destroy.display_source.bubble_cap": "Mixture Contents",
+    "destroy.display_source.centrifuge.input": "Input Mixture Contents",
+    "destroy.display_source.centrifuge.dense_output": "Dense Output Mixture Contents",
+    "destroy.display_source.centrifuge.light_output": "Light Output Mixture Contents",
     "destroy.display_source.mixture.temperature_unit": "Temperature Unit",
     "destroy.display_source.mixture.temperature_unit.kelvin": "Kelvins",
     "destroy.display_source.mixture.temperature_unit.celcius": "Degrees Celcius",
@@ -391,6 +393,8 @@
     "destroy.display_source.mixture.molecule_name_type": "Molecule Names",
     "destroy.display_source.mixture.molecule_name_type.iupac": "IUPAC Names",
     "destroy.display_source.mixture.molecule_name_type.common": "Common Names",
+    "destroy.display_source.pollutometer": "World Pollution Level",
+    "destroy.display_source.vat": "Vat Contents",
 
     "destroy.generic.direction.north": "North",
     "destroy.generic.direction.south": "South",

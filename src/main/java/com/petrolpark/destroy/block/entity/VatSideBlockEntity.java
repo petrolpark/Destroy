@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
 import com.petrolpark.destroy.capability.blockEntity.VatTankCapability;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -22,6 +23,7 @@ import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.fluids.FluidFX;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour.AttachmentTypes;
+import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.item.TooltipHelper;
@@ -333,5 +335,24 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             tooltip.add(Component.literal(""));
         };
         return false;
+    };
+
+    public static MixtureContentsDisplaySource DISPLAY_SOURCE = new MixtureContentsDisplaySource() {
+
+        @Override
+        public FluidStack getFluidStack(DisplayLinkContext context) {
+            if (context.getSourceBlockEntity() instanceof VatSideBlockEntity vatSide) {
+                VatControllerBlockEntity controller = vatSide.getController();
+                if (controller != null && controller.getVatOptional().isPresent());
+                return controller.getTank().getFluid();
+            };
+            return FluidStack.EMPTY;
+        };
+
+        @Override
+        public Component getName() {
+            return DestroyLang.translate("display_source.vat").component();
+        };
+
     };
 };

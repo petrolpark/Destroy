@@ -185,6 +185,7 @@ public class Mixture extends ReadOnlyMixture {
      * @return A new Mixture instance
      */
     public static Mixture mix(Map<Mixture, Double> mixtures) {
+        if (mixtures.size() == 1) return mixtures.keySet().iterator().next();
         Mixture resultMixture = new Mixture();
         Map<Molecule, Double> moleculesAndMoles = new HashMap<>(); // A Map of all Molecules to their quantity in moles (not their concentration)
         Map<ReactionResult, Double> reactionresultsAndMoles = new HashMap<>(); // A Map of all Reaction Results to their quantity in moles
@@ -346,6 +347,8 @@ public class Mixture extends ReadOnlyMixture {
             orderedReactions.add(possibleReaction); // Add the Reaction to the list of possible Reactions, which is currently not ordered
         };
 
+        if (orderedReactions.isEmpty()) return; // Don't go any further if there aren't any items to dissolve
+
         Collections.sort(possibleReactions, (r1, r2) -> ((Float)calculateReactionRate(r1)).compareTo(calculateReactionRate(r2))); // Order the list of Item-consuming Reactions by rate, in case multiple of them want the same Item
 
         tryEachReaction: for (Reaction reaction : orderedReactions) {
@@ -488,6 +491,8 @@ public class Mixture extends ReadOnlyMixture {
             reactForTick(context);
             ticks++;
         };
+
+        if (ticks == 0) return new ReactionInBasinResult(0, List.of(), volume); // If no reactions occured (because we were already at equilibrium), cancel early
 
         List<ReactionResult> results = new ArrayList<>();
         for (ReactionResult result : reactionresults.keySet()) {

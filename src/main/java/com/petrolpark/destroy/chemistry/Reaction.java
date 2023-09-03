@@ -11,6 +11,8 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
+import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -341,6 +343,10 @@ public class Reaction {
             this.namespace = namespace;
         };
 
+        private void checkNull(Molecule molecule) {
+            if (molecule == null) throw new IllegalStateException("Molecules cannot be null");
+        };
+
         /**
          * Add a {@link Molecule} of which one mole will be consumed per mole of Reaction.
          * By default, the order of rate of reaction with respect to this Molecule will be one.
@@ -373,6 +379,7 @@ public class Reaction {
          * @return This Reaction Builder
          */
         public ReactionBuilder addReactant(Molecule molecule, int ratio, int order) {
+            checkNull(molecule);
             reaction.reactants.put(molecule, ratio);
             reaction.orders.put(molecule, order);
             return this;
@@ -450,6 +457,7 @@ public class Reaction {
          * @see ReactionBuilder#addProduct(Molecule, int) Adding a different stoichometric ratio
          */
         public ReactionBuilder addProduct(Molecule molecule, int ratio) {
+            checkNull(molecule);
             reaction.products.put(molecule, ratio);
             return this;
         };
@@ -461,6 +469,7 @@ public class Reaction {
          * @return This Reaction Builder
          */
         public ReactionBuilder addCatalyst(Molecule molecule, int order) {
+            checkNull(molecule);
             reaction.orders.put(molecule, order);
             return this;
         };
@@ -528,6 +537,45 @@ public class Reaction {
             if (reaction.result != null) throw new IllegalStateException("Reaction already has a Reaction Result. Use a CombinedReactionResult to have multiple.");
             reaction.result = reactionresultFactory.apply(moles, reaction);
             return this;
+        };
+
+        /**
+         * Registers an acid. This automatially registers two {@link Reaction Reactions} (one for the association,
+         * one for the dissociation). The pKa is assumed to be temperature-independent - if this is not wanted, manually register
+         * the two Reactions.
+         * @param acid
+         * @param conjugateBase This should have a charge one less than the acid and should ideally conserve Atoms
+         * @param pKa
+         * @return The dissociation Reaction
+         */
+        public Reaction acid(Molecule acid, Molecule conjugateBase, float pKa) {
+
+            if (conjugateBase.getCharge() + 1 != acid.getCharge()) throw new IllegalStateException("Acids must not violate the conservation of charge.");
+
+            // Dissociation
+            Reaction dissociationReaction = this
+                .id(acid.getFullID().split(":")[1] + ".dissociation")
+                .addReactant(acid)
+                .addCatalyst(DestroyMolecules.WATER, 0)
+                .addProduct(DestroyMolecules.PROTON)
+                .addProduct(conjugateBase)
+                .activationEnergy(0)
+                .preexponentialFactor((float)Math.pow(10, -pKa))
+                //.dontIncludeInJei()
+                .build();
+
+            // Association
+            new ReactionBuilder(namespace)
+                .id(acid.getFullID().split(":")[1] + ".association")
+                .addReactant(conjugateBase)
+                .addReactant(DestroyMolecules.PROTON)
+                .addProduct(acid)
+                .activationEnergy(0)
+                .preexponentialFactor(1f)
+                //.dontIncludeInJei()
+                .build();
+
+            return dissociationReaction;
         };
 
         /**

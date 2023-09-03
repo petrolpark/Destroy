@@ -7,6 +7,7 @@ import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.model.DestroyPartials;
+import com.petrolpark.destroy.block.movementbehaviour.DestroyMovementBehaviours;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.DestroyReactions;
 import com.petrolpark.destroy.chemistry.index.DestroyTopologies;
@@ -115,6 +116,9 @@ public class Destroy {
 
         // Config
         DestroyAllConfigs.register(modLoadingContext);
+
+        // Other
+        DestroyMovementBehaviours.register();
 
         // Initiation Events
         modEventBus.addListener(Destroy::init);

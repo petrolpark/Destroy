@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "axis=x": {
+            "model": "destroy:block/extrusion_die",
+            "y": 90
+        },
+        "axis=y": {
+            "model": "destroy:block/extrusion_die",
+            "x": 90
+        },
+        "axis=z": {
+            "model": "destroy:block/extrusion_die"
+        }
+    }
+}

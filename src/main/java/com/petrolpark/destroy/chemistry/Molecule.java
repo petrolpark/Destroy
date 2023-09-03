@@ -9,8 +9,6 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import org.joml.Math;
-
 import com.google.common.collect.ImmutableSet;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Formula.Topology.SideChainInformation;
@@ -636,8 +634,9 @@ public class Molecule implements INameableProduct {
         };
 
         /**
-         * Set the {@link Molecule#specificHeatCapacity specific heat capacity} of this Molecule,
-         * in joules per kilogram-kelvin.
+         * Set the specific heat capacity of this Molecule, in joules per kilogram-kelvin.
+         * This method is just for ease of input - Molecules work with {@link Molecule#molarHeatCapacity}
+         * and the specific heat capacity given here will be converted to this.
          * @return This Molecule Builder
          */
         public MoleculeBuilder specificHeatCapacity(float specificHeatCapacity) {
@@ -646,6 +645,11 @@ public class Molecule implements INameableProduct {
             return this;
         };
 
+        /**
+         * Set the {@link Molecule#molarHeatCapacity molar heat capacity} for this Molecule,
+         * in joules per mole-kelvin.
+         * @param molarHeatCapacity
+         */
         public MoleculeBuilder molarHeatCapacity(float molarHeatCapacity) {
             molecule.molarHeatCapacity = molarHeatCapacity;
             hasForcedMolarHeatCapacity = true;

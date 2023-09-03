@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "  P",
+      "PLP",
+      "PNP"
+    ],
+    "key": {
+      "N": {
+        "item": "destroy:nylon"
+      },
+      "L": {
+        "tag": "forge:leather"
+      },
+      "P": {
+        "tag": "forge:plates/iron"
+      }
+    },
+    "result": {
+      "item": "minecraft:iron_horse_armor"
+    }
+  }

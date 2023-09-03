@@ -57,26 +57,38 @@ public class ReactionInBasinRecipe extends MixingRecipe {
             int amount = fluidStack.getAmount();
             totalAmount += amount;
             Mixture mixture = Mixture.readNBT(fluidStack.getOrCreateTag().getCompound("Mixture"));
-            if (mixture.isAtEquilibrium() && availableFluids.size() == 1) { // Don't do anything if there is only one Mixture and it is already at equilibrium
-                canReact = false;
-                break;
-            };
+            // if (mixture.isAtEquilibrium() && availableFluids.size() == 1) { // Don't do anything if there is only one Mixture and it is already at equilibrium
+            //     canReact = false;
+            //     break;
+            // };
             mixtures.put(mixture, (double)amount / 1000d);
         };
 
-        if (canReact) {
+        tryReact: if (canReact) {
             // TODO modify temp according to Heat Level
             Mixture mixture = Mixture.mix(mixtures);
             ReactionInBasinResult result = mixture.reactInBasin(totalAmount, availableItemsCopy); // Mutably react the Mixture and change the Item Stacks
+
+            // If equilibrium was not disturbed, don't do anything else
+            if (result.ticks() == 0) {
+                canReact = false;
+                break tryReact;
+            }; 
+
+            // Add the resultant Mixture to the results for this Recipe
+            FluidStack outputMixtureStack = MixtureFluid.of(result.amount(), mixture);
+            builder.output(outputMixtureStack);
+
+            // Let the Player know if the Reaction cannot occur because the output Fluid will not fit
+            if (outputMixtureStack.getAmount() > BASIN_MAX_OUTPUT) {
+                isBasinTooFullToReact = true;
+                canReact = false;
+            };
 
             int duration = Mth.clamp(result.ticks(), 40, 600); // Ensure this takes at least 2 seconds and less than 30 seconds
 
             // Set the duration of the Recipe to the time it took to React
             builder.duration(duration);
-
-            // Add the resultant Mixture to the results for this Recipe
-            FluidStack outputMixtureStack = MixtureFluid.of(result.amount(), mixture);
-            builder.output(outputMixtureStack);
 
             // Add the resultant Item Stacks to the results for this Recipe
             availableItemsCopy.stream().forEach(stack -> {
@@ -97,12 +109,6 @@ public class ReactionInBasinRecipe extends MixingRecipe {
                     builder.output(precipitationResult.getPrecipitate());
                 };
                 // TODO other Reaction Results
-            };
-
-            // Let the Player know if the Reaction cannot occur because the output Fluid will not fit
-            if (outputMixtureStack.getAmount() > BASIN_MAX_OUTPUT) {
-                isBasinTooFullToReact = true;
-                canReact = false;
             };
         };
 

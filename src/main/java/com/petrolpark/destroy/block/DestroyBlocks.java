@@ -5,6 +5,9 @@ import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 
 import com.petrolpark.destroy.block.display.PollutometerDisplaySource;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
+import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
+import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
+import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
 import com.petrolpark.destroy.block.model.CopycatBlockModel;
 import com.petrolpark.destroy.item.CoaxialGearBlockItem;
 import com.petrolpark.destroy.item.DestroyItems;
@@ -62,7 +65,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_ORANGE)
             .noOcclusion()
-        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(BubbleCapBlockEntity.BUBBLE_CAP_DISPLAY_SOURCE, "bubble_cap"))
+        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(BubbleCapBlockEntity.DISPLAY_SOURCE, "bubble_cap"))
         .transform(TagGen.pickaxeOnly())
         .item()
         .transform(customItemModel())
@@ -85,7 +88,10 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_ORANGE)
             .noOcclusion()
-        ).blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
+        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(CentrifugeBlockEntity.INPUT_DISPLAY_SOURCE, "centrifuge_input"))
+        .onRegister(AllDisplayBehaviours.assignDataBehaviour(CentrifugeBlockEntity.DENSE_OUTPUT_DISPLAY_SOURCE, "centrifuge_dense_output"))
+        .onRegister(AllDisplayBehaviours.assignDataBehaviour(CentrifugeBlockEntity.LIGHT_OUTPIT_DISPLAY_SOURCE, "centrifuge_light_output"))
+        .blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
         .transform(TagGen.pickaxeOnly())
         .transform(BlockStressDefaults.setImpact(5.0))
         .item()
@@ -124,6 +130,12 @@ public class DestroyBlocks {
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .transform(customItemModel())
         .register();
+
+    public static final BlockEntry<ExtrusionDieBlock> EXTRUSION_DIE = REGISTRATE.block("extrusion_die", ExtrusionDieBlock::new)
+        .initialProperties(SharedProperties::softMetal)
+        .properties(p -> p
+            .noCollission()
+        ).register();
 
     public static final BlockEntry<LongShaftBlock> LONG_SHAFT = REGISTRATE.block("long_shaft", LongShaftBlock::new)
         .initialProperties(AllBlocks.SHAFT)
@@ -199,13 +211,15 @@ public class DestroyBlocks {
         ).onRegister(CreateRegistrate.connectedTextures(() -> new EncasedCTBehaviour(AllSpriteShifts.COPPER_CASING)))
         .onRegister(CreateRegistrate.casingConnectivity((block, cc) -> cc.make(block, AllSpriteShifts.COPPER_CASING,
 			(s, f) -> f != s.getValue(VatControllerBlock.FACING)))
-        ).item()
+        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.DISPLAY_SOURCE, "vat_controller"))
+        .item()
         .build()
         .register();
 
     public static final BlockEntry<VatSideBlock> VAT_SIDE = REGISTRATE.block("vat_side", VatSideBlock::new)
         .transform(BuilderTransformers.copycat())
         .onRegister(CreateRegistrate.blockModel(() -> CopycatBlockModel::new))
+        .onRegister(AllDisplayBehaviours.assignDataBehaviour(VatSideBlockEntity.DISPLAY_SOURCE, "vat_side"))
         .register();
 
     public static final BlockEntry<UrineCauldronBlock> URINE_CAULDRON = REGISTRATE.block("urine_cauldron", p -> new UrineCauldronBlock(p, DestroyCauldronInteractions.URINE))
