@@ -44,6 +44,7 @@ public class PlanetaryGearsetBlock extends CogWheelBlock {
         super.onPlace(state, level, pos, oldState, isMoving);
     };
 
+    @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return DestroyShapes.PLANETARY_GEARSET.get(state.getValue(RotatedPillarKineticBlock.AXIS));
     };

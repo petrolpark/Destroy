@@ -75,6 +75,11 @@ public class DestroyBlockEntityTypes {
         .renderer(() -> DynamoRenderer::new)
         .register();
 
+    public static final BlockEntityEntry<ExtrusionDieBlockEntity> EXTRUSION_DIE = REGISTRATE
+        .blockEntity("extrusion_die", ExtrusionDieBlockEntity::new)
+        .validBlocks(DestroyBlocks.EXTRUSION_DIE)
+        .register();
+
     public static final BlockEntityEntry<LongShaftBlockEntity> LONG_SHAFT = REGISTRATE
         .blockEntity("long_shaft", LongShaftBlockEntity::new)
         .instance(() -> BracketedKineticBlockEntityInstance::new, false)

@@ -65,7 +65,7 @@ public class DoubleCardanShaftRenderer extends KineticBlockEntityRenderer<Double
         shaft2.renderInto(ms, vbSolid);
 
         SuperByteBuffer grip1 = CachedBufferer.partialFacing(DestroyPartials.DCS_SIDE_GRIP, state, shaft1Direction);
-        kineticRotationTransform(grip1, doubleCardanShaftBlockEntity, shaft1Direction.getAxis(), gimbal1Angle + (axis == Axis.Z ? 90f : 0f), light);
+        kineticRotationTransform(grip1, doubleCardanShaftBlockEntity, shaft1Direction.getAxis(), gimbal1Angle + (axis == Axis.Z ? Mth.PI / 2 : 0f), light);
         grip1.renderInto(ms, vbSolid);
 
         SuperByteBuffer grip2 = CachedBufferer.partialFacing(DestroyPartials.DCS_SIDE_GRIP, state, shaft2Direction);

@@ -135,7 +135,9 @@ public class DestroyBlocks {
         .initialProperties(SharedProperties::softMetal)
         .properties(p -> p
             .noCollission()
-        ).register();
+        ).item()
+        .transform(customItemModel())
+        .register();
 
     public static final BlockEntry<LongShaftBlock> LONG_SHAFT = REGISTRATE.block("long_shaft", LongShaftBlock::new)
         .initialProperties(AllBlocks.SHAFT)

@@ -2,6 +2,7 @@ package com.petrolpark.destroy.item;
 
 import java.util.function.Consumer;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.item.renderer.SyringeItemRenderer;
 import com.petrolpark.destroy.world.DestroyDamageTypes;
 import com.simibubi.create.foundation.item.CustomUseEffectsItem;
@@ -88,7 +89,8 @@ public class SyringeItem extends Item implements CustomUseEffectsItem {
 
     @Override
     public boolean triggerUseEffects(ItemStack stack, LivingEntity entity, int count, RandomSource random) {
-        if (count == 8 && !entity.level().isClientSide()) {
+        Destroy.LOGGER.info("pee "+entity.getTicksUsingItem());
+        if (entity.getTicksUsingItem() == 24 && !entity.level().isClientSide()) {
             entity.hurt(DestroyDamageTypes.SELF_NEEDLE.source(entity.level()), 1f);
         };
         return true;

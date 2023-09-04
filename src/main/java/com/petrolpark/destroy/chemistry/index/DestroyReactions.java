@@ -96,6 +96,15 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.HYDROCHLORIC_ACID, 3)
         .build(), //TODO eventually replace with generic halogen substitution reaction
 
+    CELLULOSE_NITRATION = builder()
+        .id("cellulose_nitration")
+        .addReactant(DestroyMolecules.NITRONIUM)
+        .addSimpleItemReactant(DestroyItems.PAPER_PULP.get(), 2f)
+        .addProduct(DestroyMolecules.PROTON)
+        .addProduct(DestroyMolecules.WATER) //TODO in future add oxalic acid side product
+        .withResult(2f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.NITROCELLULOSE.asStack()))
+        .build(),
+
     CHLORINE_HALOFORM_REACTION = builder()
         .id("chlorine_haloform_reaction")
         .addReactant(DestroyMolecules.HYPOCHLORITE, 3, 0)

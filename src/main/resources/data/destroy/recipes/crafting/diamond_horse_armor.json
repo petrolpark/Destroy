@@ -13,7 +13,7 @@
         "tag": "forge:leather"
       },
       "D": {
-        "tag": "forge:diamond"
+        "item": "minecraft:diamond"
       }
     },
     "result": {

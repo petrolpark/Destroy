@@ -561,7 +561,7 @@ public class Reaction {
                 .addProduct(conjugateBase)
                 .activationEnergy(0)
                 .preexponentialFactor((float)Math.pow(10, -pKa))
-                //.dontIncludeInJei()
+                .dontIncludeInJei()
                 .build();
 
             // Association
@@ -572,7 +572,7 @@ public class Reaction {
                 .addProduct(acid)
                 .activationEnergy(0)
                 .preexponentialFactor(1f)
-                //.dontIncludeInJei()
+                .dontIncludeInJei()
                 .build();
 
             return dissociationReaction;

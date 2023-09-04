@@ -1,3 +1,9 @@
 {
-  "values": []
+  "replace": false,
+    "values": [
+      "destroy:mashed_potato",
+      "minecraft:paper",
+      "minecraft:sugar",
+      "#minecraft:logs"
+    ]
 }

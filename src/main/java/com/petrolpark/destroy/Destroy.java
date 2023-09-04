@@ -7,7 +7,6 @@ import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.model.DestroyPartials;
-import com.petrolpark.destroy.block.movementbehaviour.DestroyMovementBehaviours;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.DestroyReactions;
 import com.petrolpark.destroy.chemistry.index.DestroyTopologies;
@@ -27,6 +26,7 @@ import com.petrolpark.destroy.item.tooltip.IDynamicItemDescription;
 import com.petrolpark.destroy.item.tooltip.TempramentalItemDescription;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.recipe.DestroyCropMutations;
+import com.petrolpark.destroy.recipe.DestroyExtrusions;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.util.DestroyTags;
 import com.petrolpark.destroy.util.vat.VatMaterial;
@@ -118,7 +118,7 @@ public class Destroy {
         DestroyAllConfigs.register(modLoadingContext);
 
         // Other
-        DestroyMovementBehaviours.register();
+        DestroyExtrusions.register();
 
         // Initiation Events
         modEventBus.addListener(Destroy::init);

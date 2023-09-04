@@ -23,6 +23,7 @@ public enum DestroyAdvancements {
     DISTILL("distill"),
     CHARGE_WITH_DYNAMO("charge_with_dynamo"),
     ELECTROLYZE_WITH_DYNAMO("electrolyze_with_dynamo"),
+    EXTRUDE("use_extrusion_die"),
     UNPOLLUTE("unpollute"),
     HANGOVER("hangover"),
     CURE_HANGOVER("cure_hangover"),

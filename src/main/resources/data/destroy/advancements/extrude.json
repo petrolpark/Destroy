@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:pumpjack",
+    "criteria": {
+      "extrude": {
+        "conditions": {},
+        "trigger": "destroy:use_extrusion_die"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.extrude.description"
+      },
+      "icon": {
+        "item": "destroy:extrusion_die"
+      },
+      "title": {
+        "translate": "advancement.destroy.root"
+      }
+    },
+    "requirements": [
+      [
+        "extrude"
+      ]
+    ]
+  }

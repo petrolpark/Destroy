@@ -51,6 +51,9 @@ public class DestroyShapes {
         .add(5, 0, 5, 11, 16, 11)
         .forAxis();
 
+    public static final VoxelShaper EXTRUSION_DIE = shape(0, 0, 7, 16, 16, 9)
+        .forDirectional(Direction.SOUTH);
+
     public static final VoxelShaper POLLUTOMETER = shape(6, 0, 6, 10, 12, 10)
         .add(5, 3, 3, 11, 9, 6)
         .forDirectional(Direction.NORTH);

@@ -1,14 +1,16 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-      "NN"
+      "MMM",
+      "MMM",
+      "MMM"
     ],
     "key": {
       "N": {
-        "item": "destroy:nylon"
+        "item": "destroy:mashed_potato"
       }
     },
     "result": {
-      "item": "minecraft:lead"
+      "item": "destroy:mashed_potato_block"
     }
   }
