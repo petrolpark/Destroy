@@ -14,6 +14,7 @@ import com.google.common.collect.ImmutableList;
 import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Molecule;
@@ -109,7 +110,7 @@ public class MoleculeRenderer {
                 Vec3 startPlane = sideChainInfo.bondDirection().cross(sideChainInfo.branchDirection());
                 RENDERED_OBJECTS.add(Pair.of(
                     cyclicAtomLocation.add(zig.scale(BOND_LENGTH / 2)),
-                    BondRenderInstance.fromZig(BondType.SINGLE, zig) //TODO change to use correct Bond Type
+                    BondRenderInstance.fromZig(sideChainInfo.bondType(), zig)
                 ));
 
                 generateBranch(pair.getSecond(), startLocation, startDirection, startPlane, zig, true);
@@ -239,28 +240,18 @@ public class MoleculeRenderer {
     };
 
     private Geometry getGeometry(Node node, boolean addOne) {
-        // TODO replace with interfaces in the Element enum so Atoms properly consider lone pairs
-        switch (node.getEdges().size() + node.getSideBranches().size() + (addOne ? 1 : 0)) {
-            case 1:
-                return Geometry.LINEAR;
-            case 2:
-                return Geometry.LINEAR;
-            case 3:
-                return Geometry.TRIGONAL_PLANAR;
-            case 4:
-                return Geometry.TETRAHEDRAL;
-            case 5:
-                // TODO add trigonal bipyramidal geometry
-            case 6:
-                return Geometry.OCTAHEDRAL;
-        };
-        return Geometry.OCTAHEDRAL;
+        Destroy.LOGGER.info("edges: "+node.getEdges().size());
+        Destroy.LOGGER.info("side chains: "+node.getSideBranches().size());
+        int connections = node.getEdges().size() + node.getSideBranches().size() + (addOne ? 1 : 0);
+        return node.getAtom().getElement().getGeometry(connections);
     };
 
     public static enum Geometry {
 
         LINEAR(new Vec3(1d, 0d, 0d)),
+        V_SHAPE(new Vec3(0.333333d, -0.942809d, 0d).normalize()),
         TRIGONAL_PLANAR(new Vec3(0.5d, 0.86602540378d, 0d).normalize(), new Vec3(0.5d, -0.86602540378d, 0d).normalize()),
+        TRIGONAL_PYRAMIDAL(new Vec3(0.333333d, -0.942809d, 0d).normalize(), new Vec3(0.333333d, 0.471405d, 0.816497d).normalize()),
         TETRAHEDRAL(new Vec3(0.333333d, -0.942809d, 0d).normalize(), new Vec3(0.333333d, 0.471405d, 0.816497d).normalize(), new Vec3(0.333333d, 0.471405d, -0.816497d).normalize()),
         OCTAHEDRAL(new Vec3(1d, 0d, 0d), new Vec3(0d, 1d, 0d), new Vec3(0d, -1d, 0d), new Vec3(0d, 0d, 1d), new Vec3(0d, 0d, -1d));
 

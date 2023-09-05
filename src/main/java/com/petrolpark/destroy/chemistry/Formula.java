@@ -356,7 +356,7 @@ public class Formula implements Cloneable {
         if (topology != Topology.LINEAR) {
             for (int i = 0; i < sideChains.size(); i++) {
                 Atom atom = sideChains.get(i).getFirst().atom();
-                int totalBonds = getTotalBonds(newStructure.get(atom));
+                double totalBonds = getTotalBonds(newStructure.get(atom));
                 if (atom.getElement().getNextLowestValency(totalBonds) - totalBonds > 0) {
                     sideChains.get(i).setSecond(Formula.atom(Element.HYDROGEN));
                 };
@@ -369,7 +369,7 @@ public class Formula implements Cloneable {
         for (Entry<Atom, List<Bond>> entry : structure.entrySet()) {
             Atom atom = entry.getKey();
             List<Bond> bonds = entry.getValue();
-            int totalBonds = getTotalBonds(bonds);
+            double totalBonds = getTotalBonds(bonds);
             //if (totalBonds > atom.getElement().getMaxValency()) throw new IllegalStateException(atom.getElement()+" Atom has invalid number of bonds");
 
             for (int i = 0; i < atom.getElement().getNextLowestValency(totalBonds) - totalBonds; i++) {
@@ -423,12 +423,12 @@ public class Formula implements Cloneable {
      * {@link GenericReaction Reactions} so shouldn't be used for weirdly behaving inorganic things.
      * @param bonds
      */
-    public int getTotalBonds(List<Bond> bonds) {
+    public double getTotalBonds(List<Bond> bonds) {
         float total = 0;
         for (Bond bond : bonds) {
             total += bond.getType().getEquivalent();
         };
-        return (int)total;
+        return total;
     };
 
     /**
@@ -549,28 +549,12 @@ public class Formula implements Cloneable {
                 for (String group : formulaString.split(",")) {
                     if (i > formula.topology.connections.size()) throw new IllegalStateException("Formula '" + FROWNSstring + "' has too many groups for its Topology. There should be " + formula.topology.connections.size() + ".");
                     Formula sideChain;
-                    BondType bond = BondType.SINGLE; //start by assuming the Bond will be single
                     if (group.isBlank()) {
                         sideChain = new Formula(new Atom(Element.HYDROGEN));
                     } else {
-                        Boolean stripBond = true; //start by assuming by a =/#/~ will have to be taken off the start of the group
-                        switch (group.charAt(0)) {
-                            case '=':
-                                bond = BondType.DOUBLE;
-                                break;
-                            case '#':
-                                bond = BondType.TRIPLE;
-                                break;
-                            case '~':
-                                bond = BondType.AROMATIC;
-                                break;
-                            default: //if there is no =/#/~, then don't actually take anything off
-                                stripBond = false;
-                        };
-                        if (stripBond) group = group.substring(1);
                         sideChain = groupFromString(Arrays.stream(group.split("(?=\\p{Upper})")).toList());
                     };
-                    formula.addGroupToPosition(sideChain, i, bond);
+                    formula.addGroupToPosition(sideChain, i, formula.topology.connections.get(i).bondType());
                     i++;
                 };
             };
@@ -1014,14 +998,27 @@ public class Formula implements Cloneable {
             };
 
             /**
+             * Add a single-bonded side chain to the root {@link Atom} of this Topology.
+             * @param bondDirection The direction of the next {@link Bond}
+             * @param branchDirection The direction in which the side-chain should continue (as chains of Atoms zig-zag,
+             * this is the net direction of movement. This information is used in {@link com.petrolpark.destroy.client.gui.MoleculeRenderer rendering})
+             * @param bondType The {@link BondType type} of Bond connecting the side chain to the Topology
+             * @return This Topology builder
+             */
+            public Builder sideChain(Vec3 bondDirection, Vec3 branchDirection) {
+                return sideChain(bondDirection, branchDirection, BondType.SINGLE);
+            };
+
+            /**
              * Add a side chain to the root {@link Atom} of this Topology.
              * @param bondDirection The direction of the next {@link Bond}
              * @param branchDirection The direction in which the side-chain should continue (as chains of Atoms zig-zag,
              * this is the net direction of movement. This information is used in {@link com.petrolpark.destroy.client.gui.MoleculeRenderer rendering})
+             * @param bondType The {@link BondType type} of Bond connecting the side chain to the Topology
              * @return This Topology builder
              */
-            public Builder sideChain(Vec3 bondDirection, Vec3 branchDirection) {
-                topology.connections.add(new SideChainInformation(topology.atomsAndLocations.get(0).getSecond(), bondDirection, branchDirection));
+            public Builder sideChain(Vec3 bondDirection, Vec3 branchDirection, BondType bondType) {
+                topology.connections.add(new SideChainInformation(topology.atomsAndLocations.get(0).getSecond(), bondDirection, branchDirection, bondType));
                 return this;
             };
 
@@ -1105,16 +1102,28 @@ public class Formula implements Cloneable {
                 addBondBetweenAtoms(builder.topology.formula.structure, atom, atomToWhichToAttach, bondType); // Gives a null warning, which is accounted for
                 return this;
             };
-    
+
             /**
-             * Add a side chain to the current attached {@link Atom}.
+             * Add a singly-bonded side chain to the current attached {@link Atom}.
              * @param bondDirection The direction of the next {@link Bond}
              * @param branchDirection The direction in which the side-chain should continue (as chains of Atoms zig-zag,
              * this is the net direction of movement. This information is used in {@link com.petrolpark.destroy.client.gui.MoleculeRenderer rendering})
              * @return This attached Atom
              */
             public AttachedAtom withSideBranch(Vec3 bondDirection, Vec3 branchDirection) {
-                builder.topology.connections.add(new SideChainInformation(atom, bondDirection, branchDirection));
+                return withSideBranch(bondDirection, branchDirection, BondType.SINGLE);
+            };
+    
+            /**
+             * Add a side chain to the current attached {@link Atom}.
+             * @param bondDirection The direction of the next {@link Bond}
+             * @param branchDirection The direction in which the side-chain should continue (as chains of Atoms zig-zag,
+             * this is the net direction of movement. This information is used in {@link com.petrolpark.destroy.client.gui.MoleculeRenderer rendering})
+             * @param bondType The {@link BondType type} of Bond connecting the side chain to the Topology
+             * @return This attached Atom
+             */
+            public AttachedAtom withSideBranch(Vec3 bondDirection, Vec3 branchDirection, BondType bondType) {
+                builder.topology.connections.add(new SideChainInformation(atom, bondDirection, branchDirection, bondType));
                 return this;
             };
     
@@ -1131,8 +1140,9 @@ public class Formula implements Cloneable {
          * @param atom The Atom in the Topology to which the side-chain connects
          * @param bondDirection The direction of the first {@link Bond} in the side-chain
          * @param branchDirection The general direction of propagation of the side-chain
+         * @param bondType The {@link BondType type} of {@link Bond} connecting the Atom to the first Atom in the side chain
          */
-        public static record SideChainInformation(Atom atom, Vec3 bondDirection, Vec3 branchDirection) {};
+        public static record SideChainInformation(Atom atom, Vec3 bondDirection, Vec3 branchDirection, BondType bondType) {};
     };
 
 };

@@ -117,7 +117,6 @@ public class DestroyTopologies {
             .attach()
         .build("cyclopentadienide"),
 
-    //TODO fix
     ISOHYDROBENZOFURAN = create(Element.CARBON) // 0
         .sideChain(new Vec3(-cos(30), -sin(30), 0d), new Vec3(-cos(60), -sin(60), 0d))
         .atom(Element.CARBON, new Vec3(0d, 1d, 0d)) // 1
@@ -132,14 +131,14 @@ public class DestroyTopologies {
             .withBondTo(2, BondType.AROMATIC)
             .attach()
         .atom(Element.CARBON, new Vec3(2 * cos(30) + cos(18), 1d + sin(18), 0d)) // 4
-            .withSideBranch(new Vec3(cos(72), sin(72), 0d), new Vec3(cos(72), sin(72), 0d))
+            .withSideBranch(new Vec3(cos(72), sin(72), 0d), new Vec3(cos(72), sin(72), 0d), BondType.DOUBLE)
             .withBondTo(3, BondType.SINGLE)
             .attach()
         .atom(Element.OXYGEN, new Vec3(2 * cos(30) + cos(18) + sin(36), 0.5d, 0d)) // 5
             .withBondTo(4, BondType.SINGLE)
             .attach()
         .atom(Element.CARBON, new Vec3(2 * cos(30) + cos(18), -sin(18), 0d)) // 6
-            .withSideBranch(new Vec3(cos(72), -sin(72), 0d), new Vec3(cos(72), -sin(72), 0d))
+            .withSideBranch(new Vec3(cos(72), -sin(72), 0d), new Vec3(cos(72), -sin(72), 0d), BondType.DOUBLE)
             .withBondTo(5, BondType.SINGLE)
             .attach()
         .atom(Element.CARBON, new Vec3(2 * cos(30), 0d, 0d)) // 7
@@ -179,7 +178,7 @@ public class DestroyTopologies {
         .build("octasulfur");
 
     public static Topology.Builder anthracene(boolean quinone) {
-        return create(Element.CARBON) // 0§
+        return create(Element.CARBON) // 0
             .sideChain(new Vec3(-cos(30), -sin(30), 0d), new Vec3(-cos(30), -sin(30), -0.5d))
             .atom(Element.CARBON, new Vec3(0d, 1d, 0d)) // 1
                 .withSideBranch(new Vec3(-cos(30), sin(30), 0d), new Vec3(-cos(30), sin(30), 0.5d).normalize())
@@ -193,7 +192,7 @@ public class DestroyTopologies {
                 .withBondTo(2, BondType.AROMATIC)
                 .attach()
             .atom(Element.CARBON, new Vec3(3 * cos(30), 1 + sin(30), 0d)) // 4
-                .withSideBranch(new Vec3(0d, 1d, 0d), new Vec3(0d, 1d, 0.5d).normalize())
+                .withSideBranch(new Vec3(0d, 1d, 0d), new Vec3(0d, 1d, 0.5d).normalize(), quinone ? BondType.DOUBLE : BondType.SINGLE)
                 .withBondTo(3, quinone ? BondType.SINGLE : BondType.AROMATIC)
                 .attach()
             .atom(Element.CARBON, new Vec3(4 * cos(30), 1d, 0d)) // 5
@@ -220,7 +219,7 @@ public class DestroyTopologies {
                 .withBondTo(9, BondType.AROMATIC)
                 .attach()
             .atom(Element.CARBON, new Vec3(3 * cos(30), -sin(30), 0d)) // 11
-                .withSideBranch(new Vec3(0d, -1d, 0d), new Vec3(0d, -1d, -0.5d).normalize())
+                .withSideBranch(new Vec3(0d, -1d, 0d), new Vec3(0d, -1d, -0.5d).normalize(), quinone ? BondType.DOUBLE : BondType.SINGLE)
                 .withBondTo(10, quinone ? BondType.SINGLE : BondType.AROMATIC)
                 .attach()
             .atom(Element.CARBON, new Vec3(2 * cos(30), 0d, 0d)) // 12

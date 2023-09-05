@@ -374,7 +374,7 @@ public final class DestroyMolecules {
 
     ETHYLANTHRAQUINONE = builder()
         .id("ethylanthraquinone")
-        .structure(Formula.deserialize("destroy:anthraquinone:,,,=O,,,CC,,=O,"))
+        .structure(Formula.deserialize("destroy:anthraquinone:,,,O,,,CC,,O,"))
         .boilingPoint(415.4f)
         .density(1231f)
         .molarHeatCapacity(286.6f) // Not accurate, just based off an isomer
@@ -848,7 +848,7 @@ public final class DestroyMolecules {
     
     PHTHALIC_ANHYDRIDE = builder()
         .id("phthalic_anhydride")
-        .structure(Formula.deserialize("destroy:isohydrobenzofuran:,,,=O,=O,"))
+        .structure(Formula.deserialize("destroy:isohydrobenzofuran:,,,O,O,"))
         .boilingPoint(295f)
         .density(1530f)
         .molarHeatCapacity(161.8f)
