@@ -81,9 +81,14 @@ public class Molecule implements INameableProduct {
      */
     private float dipoleMoment;
     /**
-     * The specific heat capacity in joules per kilogram-kelvin of this Molecule.
+     * The molara heat capacity in joules per mole-kelvin of this Molecule.
      */
     private float molarHeatCapacity;
+    /**
+     * The latent heat of vaporisation of this Molecule, in joules per mole.
+     */
+    private float latentHeat;
+
     /**
      * The {@link Formula} of this Molecule.
      */
@@ -264,6 +269,13 @@ public class Molecule implements INameableProduct {
      */
     public float getMolarHeatCapacity() {
         return molarHeatCapacity;
+    };
+
+    /**
+     * The energy required to change one mole of this Molecule from liquid to gas.
+     */
+    public float getLatentHeat() {
+        return latentHeat;
     };
 
     /**
@@ -535,6 +547,7 @@ public class Molecule implements INameableProduct {
         private Boolean hasForcedBoilingPoint = false; // Whether this molecule has a custom boiling point or it should be calculated
         private Boolean hasForcedDipoleMoment = false; // Whether this molecule has a forced dipole moment or it should be calculated
         private Boolean hasForcedMolarHeatCapacity = false; // Whether this molecule has a forced specific heat capacity or it should be calculated
+        private Boolean hasForcedLatentHeat = false; // Whether this molecule has a forced latent heat of fusion or it should be calculated
 
         private String translationKey;
 
@@ -649,10 +662,23 @@ public class Molecule implements INameableProduct {
          * Set the {@link Molecule#molarHeatCapacity molar heat capacity} for this Molecule,
          * in joules per mole-kelvin.
          * @param molarHeatCapacity
+         * @return This Molecule Builder
          */
         public MoleculeBuilder molarHeatCapacity(float molarHeatCapacity) {
             molecule.molarHeatCapacity = molarHeatCapacity;
             hasForcedMolarHeatCapacity = true;
+            return this;
+        };
+
+        /**
+         * Set the {@link Molecule#latentHeat latent heat of fusion} of this Molecule,
+         * in joules per mole.
+         * @param latentHeat
+         * @return This Molecule Builder
+         */
+        public MoleculeBuilder latentHeat(float latentHeat) {
+            molecule.latentHeat = latentHeat;
+            hasForcedLatentHeat = true;
             return this;
         };
 
@@ -737,6 +763,10 @@ public class Molecule implements INameableProduct {
 
             if (!hasForcedMolarHeatCapacity) {
                 molecule.molarHeatCapacity = 100f;
+            };
+
+            if (!hasForcedLatentHeat) {
+                molecule.latentHeat = 20000f;
             };
             
             if (molecule.color == 0) {

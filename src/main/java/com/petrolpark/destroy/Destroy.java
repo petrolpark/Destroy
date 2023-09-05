@@ -104,13 +104,6 @@ public class Destroy {
         // DestroyBadges.register(modEventBus);
         DestroyLoot.register(modEventBus);
 
-        // Chemistry
-        // DestroyGroupFinder.register();
-        DestroyTopologies.register();
-        DestroyMolecules.register();
-        DestroyReactions.register();
-        // DestroyGenericReactions.register();
-
         // Events
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -146,6 +139,13 @@ public class Destroy {
         OpenEndedPipe.registerEffectHandler(new MixtureOpenEndedPipeEffectHandler());
         DestroyAdvancements.register();
         DestroyPotatoCannonProjectileTypes.register();
+
+        // Chemistry
+        // DestroyGroupFinder.register();
+        DestroyTopologies.register();
+        DestroyMolecules.register();
+        DestroyReactions.register();
+        // DestroyGenericReactions.register();
     };
 
     public static void clientInit(final FMLClientSetupEvent event) {

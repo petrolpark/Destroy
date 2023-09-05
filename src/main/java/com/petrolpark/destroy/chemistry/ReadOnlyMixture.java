@@ -63,12 +63,22 @@ public class ReadOnlyMixture {
      */
     protected Map<Molecule, Float> contents;
 
+
+    /**
+     * The {@link Molecule Molecules} in this Mixture, mapped to the proportion of which are gaseous. For example, {@code 0}
+     * means this Molecule is entirely liquid or aqueous, {@code 0.5} means they are half liquid and half gaseous, and {@code 1}
+     * means the Molecule is entirely gaseous in this Mixture.
+     */
+    protected Map<Molecule, Float> states;
+
     public ReadOnlyMixture() {
         translationKey = "";
     
         contents = new HashMap<>();
         
         temperature = 298f;
+
+        states = new HashMap<>();
     };
 
     /**
@@ -84,6 +94,7 @@ public class ReadOnlyMixture {
             CompoundTag moleculeTag = new CompoundTag();
             moleculeTag.putString("Molecule", entry.getKey().getFullID());
             moleculeTag.putFloat("Concentration", entry.getValue());
+            moleculeTag.putFloat("Gaseous", states.get(entry.getKey()));
             return moleculeTag;
         }));
         return compound;
@@ -101,7 +112,9 @@ public class ReadOnlyMixture {
         ListTag contents = compound.getList("Contents", 10);
         contents.forEach(tag -> {
             CompoundTag moleculeTag = (CompoundTag) tag;
-            mixture.addMolecule(Molecule.getMolecule(moleculeTag.getString("Molecule")), moleculeTag.getFloat("Concentration"));
+            Molecule molecule = Molecule.getMolecule(moleculeTag.getString("Molecule"));
+            mixture.addMolecule(molecule, moleculeTag.getFloat("Concentration"));
+            mixture.states.put(molecule, moleculeTag.getFloat("Gaseous"));
         });
         mixture.updateName();
         return mixture;
@@ -171,6 +184,7 @@ public class ReadOnlyMixture {
         };
 
         contents.put(molecule, concentration);
+        states.put(molecule, molecule.getBoilingPoint() > temperature ? 1f : 0f);
 
         //updateName(); //TODO check if needed
         return this;

@@ -6,7 +6,7 @@
       },
       {
         "mixtureFluidWithSalt": "destroy:mixture",
-        "cation": "destroy:sodium",
+        "cation": "destroy:sodium_ion",
         "anion": "destroy:hydroxide",
         "amount": 500,
         "concentration": 5.0

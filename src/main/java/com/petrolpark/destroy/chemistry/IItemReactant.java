@@ -2,10 +2,12 @@ package com.petrolpark.destroy.chemistry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.util.NonNullSupplier;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITag;
 
@@ -43,20 +45,20 @@ public interface IItemReactant {
 
     public class SimpleItemReactant implements IItemReactant {
 
-        protected final Item item;
+        protected final Supplier<Item> item;
 
-        public SimpleItemReactant(Item item) {
+        public SimpleItemReactant(Supplier<Item> item) {
             this.item = item;
         };
 
         @Override
         public boolean isItemValid(ItemStack stack) {
-            return stack.is(item);
+            return stack.is(item.get());
         };
 
         @Override
         public List<ItemStack> getDisplayedItemStacks() {
-            return List.of(new ItemStack(item));
+            return List.of(new ItemStack(item.get()));
         };
 
     };

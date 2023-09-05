@@ -312,7 +312,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             case THERMOMETER: {
                 TemperatureUnit unit = DestroyAllConfigs.CLIENT.chemistry.temperatureUnit.get();
                 DestroyLang.translate("tooltip.vat.temperature", unit.of(getController().getTemperature(), df)).style(ChatFormatting.WHITE).forGoggles(tooltip);
-                if (DestroyAllConfigs.CLIENT.chemistry.nerdMode.get()) DestroyLang.translate("tooltip.vat.power", df.format(getController().heatingPower)).forGoggles(tooltip);
+                if (DestroyAllConfigs.CLIENT.chemistry.nerdMode.get()) DestroyLang.translate("tooltip.vat.power", df.format(getController().heatingPower / 1000f)).forGoggles(tooltip);
                 break;
             } case BAROMETER: {
                 Vat vat = getVatOptional().get();

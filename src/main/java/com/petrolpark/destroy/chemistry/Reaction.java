@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
@@ -424,7 +425,7 @@ public class Reaction {
          * Reaction has multiple Item Reactants, this must be the same each time.
          * @return This Reaction Builder
          */
-        public ReactionBuilder addSimpleItemReactant(Item item, float moles) {
+        public ReactionBuilder addSimpleItemReactant(Supplier<Item> item, float moles) {
             return addItemReactant(new IItemReactant.SimpleItemReactant(item), moles);
         };
 

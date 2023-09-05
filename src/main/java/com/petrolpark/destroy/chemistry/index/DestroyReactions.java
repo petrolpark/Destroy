@@ -99,7 +99,7 @@ public class DestroyReactions {
     CELLULOSE_NITRATION = builder()
         .id("cellulose_nitration")
         .addReactant(DestroyMolecules.NITRONIUM)
-        .addSimpleItemReactant(DestroyItems.PAPER_PULP.get(), 2f)
+        .addSimpleItemReactant(DestroyItems.PAPER_PULP, 2f)
         .addProduct(DestroyMolecules.PROTON)
         .addProduct(DestroyMolecules.WATER) //TODO in future add oxalic acid side product
         .withResult(2f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.NITROCELLULOSE.asStack()))
@@ -200,7 +200,7 @@ public class DestroyReactions {
 
     GOLD_DISSOLUTION = builder()
         .id("gold_dissolution")
-        .addSimpleItemReactant(Items.GOLDEN_CARROT, 1f)
+        .addSimpleItemReactant(() -> Items.GOLDEN_CARROT, 1f)
         .addReactant(DestroyMolecules.NITRIC_ACID)
         .addReactant(DestroyMolecules.HYDROCHLORIC_ACID, 4, 1)
         .addProduct(DestroyMolecules.CHLOROAURATE)

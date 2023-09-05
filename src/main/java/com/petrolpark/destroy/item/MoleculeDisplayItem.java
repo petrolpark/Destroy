@@ -72,7 +72,10 @@ public class MoleculeDisplayItem extends Item {
         if (!charged && !hypothetical) {
             tooltip.add(DestroyLang.translate("tooltip.molecule.boiling_point", unit.of(molecule.getBoilingPoint(), df)).component().withStyle(ChatFormatting.GRAY));
             tooltip.add(DestroyLang.translate("tooltip.molecule.density", df.format(molecule.getDensity())).component().withStyle(ChatFormatting.GRAY));
-            if (nerdMode) tooltip.add(DestroyLang.translate("tooltip.molecule.heat_capacity", df.format(molecule.getMolarHeatCapacity())).component().withStyle(ChatFormatting.GRAY));
+            if (nerdMode) {
+                tooltip.add(DestroyLang.translate("tooltip.molecule.heat_capacity", df.format(molecule.getMolarHeatCapacity())).component().withStyle(ChatFormatting.GRAY));
+                tooltip.add(DestroyLang.translate("tooltip.molecule.latent_heat", df.format(molecule.getLatentHeat() / 1000f)).component().withStyle(ChatFormatting.GRAY));
+            };
         };
 
         Set<MoleculeTag> tags = molecule.getTags();

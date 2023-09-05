@@ -21,6 +21,7 @@ import com.petrolpark.destroy.chemistry.genericreaction.SingleGroupGenericReacti
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.recipe.ReactionInBasinRecipe.ReactionInBasinResult;
 import com.simibubi.create.foundation.utility.NBTHelper;
+import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -29,31 +30,31 @@ import net.minecraft.world.item.ItemStack;
 
 public class Mixture extends ReadOnlyMixture {
 
-    private static final int TICKS_PER_SECOND = 20;
+    protected static final int TICKS_PER_SECOND = 20;
 
     /**
      * A Map of all {@link ReactionResult Results} of {@link Reaction Reactions} generated in this Mixture, mapped
      * to their 'concentrations' (moles of the Reaction which have occured per Bucket of this Mixture, since the last
      * instance of that Reaction Result was dealt with).
      */
-    private Map<ReactionResult, Float> reactionresults;
+    protected Map<ReactionResult, Float> reactionresults;
     /**
      * {@link Molecule Molecules} which do not have a name space or ID.
      */
-    private List<Molecule> novelMolecules;
+    protected List<Molecule> novelMolecules;
 
     /**
      * All {@link Reaction Reactions} with specific Reactants and specified {@link GenericReaction Generic Reactions}
      * which are possible given the {@link Molecule Molecules} in this Mixture.
      */
-    private List<Reaction> possibleReactions;
+    protected List<Reaction> possibleReactions;
 
     /**
      * Every {@link Molecule} in this Mixture that has a {@link Group functional Group}, indexed by the {@link Group#getID ID} of that Group.
      * Molecules are stored as {@link com.petrolpark.destroy.chemistry.genericreaction.GenericReactant Generic Reactants}.
      * Molecules which have multiple of the same Group are indexed for each occurence of the Group.
      */
-    private Map<String, List<GenericReactant<?>>> groupIDsAndMolecules;
+    protected Map<String, List<GenericReactant<?>>> groupIDsAndMolecules;
 
     /**
      * Whether this Mixture has reached equilibrium. This means either:
@@ -62,7 +63,19 @@ public class Mixture extends ReadOnlyMixture {
      * <li>Any further Reactions that occur will balance each other out and there will be no change in concentration of any {@link Molecule}.</li>
      * </ul>
      */
-    private boolean equilibrium;
+    protected boolean equilibrium;
+
+    /**
+     * The Molecule which has the boiling point which is closest to the current temperature of the Mixture, but higher.
+     * Either value may be {@code null}.
+     */
+    Pair<Float, Molecule> nextHigherBoilingPoint;
+    
+    /**
+     * The Molecule which has the boiling point which is closest to the current temperature of the Mixture, but lower.
+     * Either value may be {@code null}.
+     */
+    Pair<Float, Molecule> nextLowerBoilingPoint;
 
     public Mixture() {
         super();
@@ -73,6 +86,9 @@ public class Mixture extends ReadOnlyMixture {
 
         possibleReactions = new ArrayList<>();
         groupIDsAndMolecules = new HashMap<>();
+
+        nextHigherBoilingPoint = Pair.of(Float.MAX_VALUE, null);
+        nextLowerBoilingPoint = Pair.of(0f, null);
 
         equilibrium = false;
     };
@@ -111,7 +127,9 @@ public class Mixture extends ReadOnlyMixture {
         ListTag contents = compound.getList("Contents", Tag.TAG_COMPOUND);
         contents.forEach(tag -> {
             CompoundTag moleculeTag = (CompoundTag) tag;
-            mixture.addMolecule(Molecule.getMolecule(moleculeTag.getString("Molecule")), moleculeTag.getFloat("Concentration"));
+            Molecule molecule = Molecule.getMolecule(moleculeTag.getString("Molecule"));
+            mixture.internalAddMolecule(molecule, moleculeTag.getFloat("Concentration"), false);
+            mixture.states.put(molecule, moleculeTag.getFloat("Gaseous"));
         });
 
         mixture.equilibrium = compound.getBoolean("AtEquilibrium");
@@ -127,7 +145,8 @@ public class Mixture extends ReadOnlyMixture {
         };
 
         mixture.updateName();
-        if (!mixture.equilibrium) mixture.refreshPossibleReactions();
+        mixture.refreshPossibleReactions();
+        mixture.updateNextBoilingPoints();
 
         return mixture;
     };
@@ -155,6 +174,14 @@ public class Mixture extends ReadOnlyMixture {
      */
     public Mixture setTemperature(float temperature) {
         this.temperature = temperature;
+        // Ensure everything has the right temperature
+        for (Molecule molecule : contents.keySet()) {
+            if (molecule.getBoilingPoint() > temperature) {
+                states.put(molecule, 1f);
+            } else {
+                states.put(molecule, 0f);
+            };
+        };
         return this; 
     };
 
@@ -190,6 +217,7 @@ public class Mixture extends ReadOnlyMixture {
         Map<Molecule, Double> moleculesAndMoles = new HashMap<>(); // A Map of all Molecules to their quantity in moles (not their concentration)
         Map<ReactionResult, Double> reactionresultsAndMoles = new HashMap<>(); // A Map of all Reaction Results to their quantity in moles
         double totalAmount = 0d;
+        float totalEnergy = 0f;
 
         for (Entry<Mixture, Double> mixtureAndAmount : mixtures.entrySet()) {
             Mixture mixture = mixtureAndAmount.getKey();
@@ -197,7 +225,11 @@ public class Mixture extends ReadOnlyMixture {
             totalAmount += amount;
 
             for (Entry<Molecule, Float> entry : mixture.contents.entrySet()) {
-                moleculesAndMoles.merge(entry.getKey(), entry.getValue() * amount, (m1, m2) -> m1 + m2); // Add the Molecule to the map if it's a new one, or increase the existing molar quantity otherwise
+                Molecule molecule = entry.getKey();
+                float concentration = entry.getValue();
+                moleculesAndMoles.merge(molecule, concentration * amount, (m1, m2) -> m1 + m2); // Add the Molecule to the map if it's a new one, or increase the existing molar quantity otherwise
+                totalEnergy += molecule.getMolarHeatCapacity() * concentration * mixture.temperature * amount; // Add all the energy that would be required to raise this Molecule from 0K to its current temperature
+                totalEnergy += molecule.getLatentHeat() * concentration * mixture.states.get(molecule) * amount; // Add all the energy that would be required to vaporise this Molecule, if necessary
             };
 
             for (Entry<ReactionResult, Float> entry : mixture.reactionresults.entrySet()) {
@@ -206,16 +238,22 @@ public class Mixture extends ReadOnlyMixture {
         };
 
         for (Entry<Molecule, Double> moleculeAndMoles : moleculesAndMoles.entrySet()) {
-            resultMixture.internalAddMolecule(moleculeAndMoles.getKey(), (float)(moleculeAndMoles.getValue() / totalAmount), false); // Add all these Molecules to the new Mixture
+            Molecule molecule = moleculeAndMoles.getKey();
+            resultMixture.internalAddMolecule(molecule, (float)(moleculeAndMoles.getValue() / totalAmount), false); // Add all these Molecules to the new Mixture
+            resultMixture.states.put(molecule, 0f); // Set it to entirely liquid as we will soon be reheating the Mixture from 0K
         };
 
         for (Entry<ReactionResult, Double> reactionresultAndMoles : reactionresultsAndMoles.entrySet()) {
             resultMixture.incrementReactionResults(reactionresultAndMoles.getKey().getReaction(), (float)(reactionresultAndMoles.getValue() / totalAmount)); // Add all Reaction Results to the new Mixture
         };
 
+        resultMixture.updateNextBoilingPoints();
+        resultMixture.temperature = 0f; // Initially set the temperature of the new Mixture to 0K
+        resultMixture.heat(totalEnergy / (float)totalAmount); // Now heat it up with the total internal energy of all component Mixtures
+
         resultMixture.refreshPossibleReactions();
         resultMixture.updateName();
-        //TODO determine temperature
+        resultMixture.updateNextBoilingPoints();
 
         return resultMixture;
     };
@@ -322,12 +360,64 @@ public class Mixture extends ReadOnlyMixture {
     };
 
     /**
-     * Add or take heat from this Mixture.
+     * Add or take heat from this Mixture. This will boil/condense Molecules and change the temperature.
      * @param energy In joules per bucket
      */
     public void heat(float energyDensity) {
-        // We have assumed that the latent heat of all substances is 0
-        temperature += energyDensity / getVolumetricHeatCapacity();
+        float volumetricHeatCapacity = getVolumetricHeatCapacity();
+
+        float temperatureChange = energyDensity / volumetricHeatCapacity; // The theoretical temperature change if no boiling or condensation occurs
+
+        if (temperatureChange == 0f) {
+            return;
+        } else if (temperatureChange > 0f) { // If the temperature would be increasing
+            if (nextHigherBoilingPoint.getSecond() != null && temperature + temperatureChange >= nextHigherBoilingPoint.getFirst()) { // If a Molecule needs to boil before the temperature can change
+
+                temperatureChange = nextHigherBoilingPoint.getFirst() - temperature; // Only increase the temperature by enough to get to the next BP
+                temperature += temperatureChange; // Raise the Mixture to the boiling point
+                energyDensity -= temperatureChange * getVolumetricHeatCapacity(); // Energy leftover once the Mixture has been raised to the boiling point
+
+                Molecule molecule = nextHigherBoilingPoint.getSecond();
+                float liquidConcentration = getConcentrationOf(molecule) * (1f - states.get(molecule)); // The moles per bucket of liquid Molecules
+                float energyRequiredToFullyBoil = liquidConcentration * molecule.getLatentHeat(); // The energy density required to boil all remaining liquid
+
+                if (energyDensity > energyRequiredToFullyBoil) { // If there is leftover energy once the Molecule has been boiled
+                    states.put(molecule, 1f); // Convert the Molecule fully to gas
+                    temperature += 0.01f; // Increase the temperature slightly so the new next higher Molecule isn't the one we just finished boiling
+                    updateNextBoilingPoints();
+                    heat(energyDensity - energyRequiredToFullyBoil); // Continue heating
+                } else { // If there is no leftover energy and the Molecule is still boiling
+                    float boiled = energyDensity / (molecule.getLatentHeat() * getConcentrationOf(molecule)); // The proportion of all of the Molecule which is additionally boiled
+                    states.merge(molecule, boiled, Float::sum);
+                };
+            } else {
+                temperature += temperatureChange;
+            };
+        } else { // If the temperature would be decreasing
+            if (nextLowerBoilingPoint.getSecond() != null && temperature + temperatureChange < nextLowerBoilingPoint.getFirst()) { // If a Molecule needs to condense before the temperature can change
+
+                temperatureChange = nextLowerBoilingPoint.getFirst() - temperature; // Only decrease the temperature by enough to get to the next condensation point
+                temperature += temperatureChange; // Decrease the Mixture to the boiling point
+                energyDensity -= temperatureChange * getVolumetricHeatCapacity(); // Additional energy once the Mixture has been lowered to the condensation point
+
+                Molecule molecule = nextLowerBoilingPoint.getSecond();
+                float gasConcentration = getConcentrationOf(molecule) * states.get(molecule);
+                float energyReleasedWhenFullyCondensed = gasConcentration * molecule.getLatentHeat(); // The energy density which could be released when all remaining gas is condensed
+
+                if (energyDensity < -energyReleasedWhenFullyCondensed) { // If there is more energy that needs to be released than the condensation can supply
+                    states.put(molecule, 0f); // Convert the Molecule fully to liquid
+                    temperature -= 0.01f; // Decrease the temperature slightly so the new next lower Molecule isn't the one we just finished condensing
+                    updateNextBoilingPoints();
+                    heat(energyDensity + energyReleasedWhenFullyCondensed); // Continue cooling
+                } else {
+                    float condensed = -energyDensity / (molecule.getLatentHeat() * getConcentrationOf(molecule));
+                    states.merge(molecule, 1f - condensed, (f1, f2) -> f1 + f2 - 1f);
+                };
+
+            } else {
+                temperature += temperatureChange;
+            };
+        };
     };
 
     /**
@@ -426,7 +516,7 @@ public class Mixture extends ReadOnlyMixture {
         for (Entry<Molecule, Double> entry : molesOfMolecules.entrySet()) {
             contents.replace(entry.getKey(), (float)(entry.getValue() / newVolumeInBuckets));
         };
-        return (int)(newVolumeInBuckets * 1000);
+        return (int)((newVolumeInBuckets * 1000) + 0.5);
     };
 
     /**
@@ -525,6 +615,23 @@ public class Mixture extends ReadOnlyMixture {
     };
 
     /**
+     * Set the Molecules which will be next to be condense or boil if the temperature of this Mixture changes.
+     */
+    protected void updateNextBoilingPoints() {
+        nextHigherBoilingPoint = Pair.of(Float.MAX_VALUE, null);
+        nextLowerBoilingPoint = Pair.of(0f, null);
+        for (Molecule molecule : contents.keySet()) {
+            float bp = molecule.getBoilingPoint();
+            if (bp <= temperature) {
+                if (bp > nextLowerBoilingPoint.getFirst()) nextLowerBoilingPoint = Pair.of(bp, molecule);
+            }
+            if (bp >= temperature) { // If the boiling point is higher than the current temperture.
+                if (bp < nextHigherBoilingPoint.getFirst()) nextHigherBoilingPoint = Pair.of(bp, molecule);
+            };
+        };
+    };
+
+    /**
      * Adds a {@link Molecule} to this Mixture.
      * If a novel Molecule is being added, it is checked against pre-existing novel Molecules
      * and if a matching one already exists, the concentration of it is increased.
@@ -600,6 +707,7 @@ public class Mixture extends ReadOnlyMixture {
 
         contents.remove(molecule);
         equilibrium = false; // As we have removed a Molecule the position equilibrium is likely to change
+        updateNextBoilingPoints();
 
         return this;
     };

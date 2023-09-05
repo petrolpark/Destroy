@@ -612,6 +612,7 @@
     "destroy.tooltip.molecule.density": "Density: %1$sgB\u207b\u00b9",
     "destroy.tooltip.molecule.formula": "Chemical Formula: %1$s",
     "destroy.tooltip.molecule.heat_capacity": "Heat Capacity: %1$sJK\u207b\u00b9mol\u207b\u00b9",
+    "destroy.tooltip.molecule.latent_heat": "Latent Heat of Vaporisation: %1$skJmol\u207b\u00b9",
     "destroy.tooltip.molecule.mass": "Mass: %1$sgmol\u207b\u00b9",
     "destroy.tooltip.pollutometer.pollution_type": "Type of Pollution Monitored:",
     "destroy.tooltip.reaction.activation_energy": "Activation Energy: %1$skJ",
@@ -635,7 +636,7 @@
     "destroy.tooltip.vat.pressure.header": "Vat Pressure:",
     "destroy.tooltip.vat.pressure.max": "Maximum: %1$skPa (%2$s)",
     "destroy.tooltip.vat.temperature": "Vat Temperature: %1$s",
-    "destroy.tooltip.vat.power": "Power Supplied: %1$sW",
+    "destroy.tooltip.vat.power": "Power Supplied: %1$skW",
 
     "effect.destroy.cancer": "Cancer Awareness",
     "effect.destroy.cancer.description": "Has no effect in-game. Many things in the Destroy Mod are jokes, but cancer is not one of them. This is here to raise awareness of the increase in cancer risk associated with occupational exposure, and with harm to the ozone layer. Please see a professional source like 'cancerresearchuk.org'.",
