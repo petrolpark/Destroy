@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.fluid.ingredient;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.util.DestroyLang;
+import com.simibubi.create.foundation.item.TooltipHelper;
+import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -31,11 +34,6 @@ public class SaltFluidIngredient extends MixtureFluidIngredient {
     };
 
     @Override
-    public Collection<Molecule> getRequiredMolecules() {
-        return List.of(cation, anion);
-    };
-
-    @Override
     public void addNBT(CompoundTag fluidTag) {
         fluidTag.putString("RequiredCation", cation.getFullID());
         fluidTag.putString("RequiredAnion", anion.getFullID());
@@ -43,7 +41,7 @@ public class SaltFluidIngredient extends MixtureFluidIngredient {
     };
 
     @Override
-    public String getDescription(CompoundTag fluidTag) {
+    public List<Component> getDescription(CompoundTag fluidTag) {
         String cationID = fluidTag.getString("RequiredCation");
         String anionID = fluidTag.getString("RequiredAnion");
         float concentration = fluidTag.getFloat("RequiredConcentration");
@@ -55,7 +53,19 @@ public class SaltFluidIngredient extends MixtureFluidIngredient {
             DestroyLang.translate("mixture.simple_salt", cation.getName(iupac).getString(), anion.getName(iupac).getString()).component()
         ;
 
-        return DestroyLang.translate("tooltip.mixture_ingredient.molecule", compoundName, concentration).string();
+        return TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule", compoundName, concentration).string(), Palette.GRAY_AND_WHITE);
+    };
+
+    @Override
+    public Collection<Molecule> getContainedMolecules(CompoundTag fluidTag) {
+        String cationID = fluidTag.getString("RequiredCation");
+        String anionID = fluidTag.getString("RequiredAnion");
+        Molecule cation = Molecule.getMolecule(cationID);
+        Molecule anion = Molecule.getMolecule(anionID);
+        List<Molecule> molecules = new ArrayList<>(2);
+        if (cation != null) molecules.add(cation);
+        if (anion != null) molecules.add(anion);
+        return molecules;
     };
 
     @Override

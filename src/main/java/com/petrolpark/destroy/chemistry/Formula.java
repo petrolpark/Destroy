@@ -472,31 +472,25 @@ public class Formula implements Cloneable {
         String body = "";
         String prefix = topology.getID();
 
-        //Map<Atom, List<Bond>> newStructure = stripHydrogens(shallowCopyStructure(structure));
-
         if (topology == Topology.LINEAR) {
 
-            //TODO fix so serialized Molecules are deterministic
+            Map<Atom, List<Bond>> newStructure = stripHydrogens(structure);
 
-            // Map<Atom, List<Bond>> newStructure = stripHydrogens(structure);
+            List<Atom> terminalAtoms = new ArrayList<>();
+            for (Atom atom : newStructure.keySet()) {
+                if (newStructure.get(atom).size() == 1) {
+                    terminalAtoms.add(atom);
+                };
+            };
 
-            // List<Atom> terminalAtoms = new ArrayList<>();
-            // for (Atom atom : newStructure.keySet()) {
-            //     if (newStructure.get(atom).size() == 1) {
-            //         terminalAtoms.add(atom);
-            //     };
-            // };
+            Collections.sort(terminalAtoms, (a1, a2) -> {
+                return a2.getElement().getMass().compareTo(a1.getElement().getMass());
+            });
+            Collections.sort(terminalAtoms, (a1, a2) -> {
+                return getMaximumBranch(a2, newStructure).getMassOfLongestChain().compareTo(getMaximumBranch(a1, newStructure).getMassOfLongestChain()); // Put in descending order of chain length
+            });
 
-            // Collections.sort(terminalAtoms, (a1, a2) -> {
-            //     return a2.getElement().getMass().compareTo(a1.getElement().getMass());
-            // });
-            // Collections.sort(terminalAtoms, (a1, a2) -> {
-            //     return getMaximumBranch(a2, newStructure).getMassOfLongestChain().compareTo(getMaximumBranch(a1, newStructure).getMassOfLongestChain()); //put in descending order of chain length
-            // });
-
-            // body = getMaximumBranch(terminalAtoms.get(0), newStructure).serialize();
-
-            body = serializeStartingWithAtom(startingAtom);
+            body = getMaximumBranch(terminalAtoms.get(0), newStructure).serialize();
 
         } else {
             for (int i = 0; i < topology.getConnections(); i++) {

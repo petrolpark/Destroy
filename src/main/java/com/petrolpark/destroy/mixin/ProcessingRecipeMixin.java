@@ -18,6 +18,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.Pro
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
@@ -35,7 +36,9 @@ public abstract class ProcessingRecipeMixin {
         if (!DestroyJEI.MOLECULE_RECIPES_NEED_PROCESSING) return;
         for (FluidIngredient ingredient : ((ProcessingRecipeParamsAccessor)params).getFluidIngredients()) {
             if (ingredient instanceof MixtureFluidIngredient mixtureFluidIngredient) {
-                for (Molecule molecule : mixtureFluidIngredient.getRequiredMolecules()) {
+                CompoundTag fluidTag = new CompoundTag();
+                mixtureFluidIngredient.addNBT(fluidTag);
+                for (Molecule molecule : mixtureFluidIngredient.getContainedMolecules(fluidTag)) {
                     DestroyJEI.MOLECULES_INPUT.putIfAbsent(molecule, new ArrayList<>()); // Create the List if it's not there
                     DestroyJEI.MOLECULES_INPUT.get(molecule).add((ProcessingRecipe<RecipeWrapper>)(Object)this); // Unchecked conversion (fine because this is a Mixin)
                 };

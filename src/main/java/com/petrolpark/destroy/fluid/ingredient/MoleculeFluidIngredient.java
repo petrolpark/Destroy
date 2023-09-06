@@ -8,6 +8,8 @@ import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.util.DestroyLang;
+import com.simibubi.create.foundation.item.TooltipHelper;
+import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -30,25 +32,28 @@ public class MoleculeFluidIngredient extends MixtureFluidIngredient {
     };
 
     @Override
-    public Collection<Molecule> getRequiredMolecules() {
-        return List.of(molecule);
-    };
-
-    @Override
     public void addNBT(CompoundTag fluidTag) {
         fluidTag.putString("MoleculeRequired", molecule.getFullID());
         fluidTag.putFloat("ConcentrationRequired", concentration);
     };
 
     @Override
-    public String getDescription(CompoundTag fluidTag) {
+    public List<Component> getDescription(CompoundTag fluidTag) {
         String moleculeID = fluidTag.getString("MoleculeRequired");
         float concentration = fluidTag.getFloat("ConcentrationRequired");
 
         Molecule molecule = Molecule.getMolecule(moleculeID);
         Component moleculeName = molecule == null ? DestroyLang.translate("tooltip.unknown_molecule").component() : molecule.getName(DestroyAllConfigs.CLIENT.chemistry.iupacNames.get());
 
-        return DestroyLang.translate("tooltip.mixture_ingredient.molecule", moleculeName, concentration).string();
+        return TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule", moleculeName, concentration).string(), Palette.GRAY_AND_WHITE);
+    };
+
+    @Override
+    public Collection<Molecule> getContainedMolecules(CompoundTag fluidTag) {
+        String moleculeID = fluidTag.getString("MoleculeRequired");
+        Molecule molecule = Molecule.getMolecule(moleculeID);
+        if (molecule == null) return List.of();
+        return List.of(molecule);
     };
 
     @Override

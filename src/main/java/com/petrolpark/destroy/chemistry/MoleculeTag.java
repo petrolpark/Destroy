@@ -1,7 +1,9 @@
 package com.petrolpark.destroy.chemistry;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -17,6 +19,7 @@ public class MoleculeTag {
     private int color;
 
     public static final Map<String, MoleculeTag> MOLECULE_TAGS = new HashMap<>();
+    public static final Map<MoleculeTag, Set<Molecule>> MOLECULES_WITH_TAGS = new HashMap<>();
 
     public MoleculeTag(String nameSpace, String id) { //TODO replace with proper registry
         this.nameSpace = nameSpace;
@@ -28,6 +31,15 @@ public class MoleculeTag {
     public MoleculeTag withColor(int color) {
         this.color = color;
         return this;
+    };
+
+    public static void registerMoleculeToTag(Molecule molecule, MoleculeTag moleculeTag) {
+        MOLECULES_WITH_TAGS.putIfAbsent(moleculeTag, new HashSet<>());
+        MOLECULES_WITH_TAGS.get(moleculeTag).add(molecule);
+    };
+
+    public String getId() {
+        return nameSpace + ":" + id;
     };
 
     public Component getFormattedName() {

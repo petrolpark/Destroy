@@ -285,6 +285,28 @@ public class Mixture extends ReadOnlyMixture {
     };
 
     /**
+     * Checks that this Mixture contains a suitable concentration of {@link Molecule Molecules} with the given {@link MoleculeTag}, and that all other substances present are solvents
+     * or low-concentration impurities. This is used in Recipes.
+     * @param tag
+     * @param concentration
+     * @param ignore Molecules other than solvents and low-concentration impurities that should be ignored should return {@code true}. The predicate can be {@code null} if there are no other Molecules that can be ignored
+     */
+    public boolean hasUsableTaggedMolecules(MoleculeTag tag, float concentration, @Nullable Predicate<Molecule> ignore) {
+        if (ignore == null) ignore = (m) -> false;
+        float combinedConcentration = 0f;
+        for (Entry<Molecule, Float> entry : contents.entrySet()) {
+            if (ignore.test(entry.getKey())) continue; // If this Molecule is specified as ignoreable, ignore it.
+            if (entry.getKey().hasTag(tag)) {
+                combinedConcentration += entry.getValue(); // If this has the Tag, add it to the total
+                continue; // Then move on
+            };
+            if (entry.getKey().hasTag(DestroyMolecules.Tags.SOLVENT)) continue; // If this is a solvent, ignore it
+            if (entry.getValue() > IMPURITY_THRESHOLD) return false; // If this illegal impurity is in high-enough concentration, this Mixture is unsuitable
+        };
+        return (Math.abs(combinedConcentration - concentration) < IMPURITY_THRESHOLD); //TODO replace with a more lenient check
+    };
+
+    /**
      * Whether this Mixture will {@link Mixture#equilibrium react any further}.
      */
     public boolean isAtEquilibrium() {

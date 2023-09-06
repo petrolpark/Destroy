@@ -120,9 +120,10 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.CHLORINE)
         .addReactant(DestroyMolecules.WATER)
         .addProduct(DestroyMolecules.HYDROCHLORIC_ACID)
-        .addProduct(DestroyMolecules.PROTON)
-        .addProduct(DestroyMolecules.HYPOCHLORITE)
-        .build(), //TODO add UV catalyst and reverse reaction
+        .addProduct(DestroyMolecules.HYPOCHLOROUS_ACID)
+        .requireUV()
+        .reverseReaction(reaction -> {})
+        .build(),
 
     //TODO add fluorine/chlorine substitution
     //TODO add UV chlorination with Chlorine gas
@@ -224,7 +225,8 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.HYDROGEN)
         .addReactant(DestroyMolecules.CHLORINE)
         .addProduct(DestroyMolecules.HYDROCHLORIC_ACID, 2)
-        .build(), //TODO add UV catalyst
+        .requireUV()
+        .build(),
     
     HYDROGEN_IODIDE_SYNTHESIS = builder()
         .id("hydrogen_iodide_synthesis")
@@ -256,6 +258,7 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.CHLORIDE)
         .addProduct(DestroyMolecules.HYPOCHLORITE)
         .addProduct(DestroyMolecules.WATER)
+        .requireUV() //TODO add reverse reaction
         .build(),
 
     KOLBE_SCHMITT_REACTION = builder()
@@ -397,6 +400,7 @@ public class DestroyReactions {
         builder().acid(DestroyMolecules.HYDROGEN_CYANIDE, DestroyMolecules.CYANIDE, 9.2f);
         builder().acid(DestroyMolecules.HYDROGEN_IODIDE, DestroyMolecules.IODIDE, -9.3f);
         builder().acid(DestroyMolecules.HYDROGENSULFATE, DestroyMolecules.SULFATE, 1.99f);
+        builder().acid(DestroyMolecules.HYPOCHLOROUS_ACID, DestroyMolecules.HYPOCHLORITE, 7.53f);
         builder().acid(DestroyMolecules.NITRIC_ACID, DestroyMolecules.NITRATE, -1.3f);
         builder().acid(DestroyMolecules.SULFURIC_ACID, DestroyMolecules.HYDROGENSULFATE, -2.18f);
     };

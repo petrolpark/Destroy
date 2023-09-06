@@ -590,12 +590,20 @@ public final class DestroyMolecules {
         .charge(-1)
         .build(),
 
+    HYPOCHLOROUS_ACID = builder()
+        .id("hypochlorous_acid")
+        .structure(Formula.deserialize("destroy:linear:OCl"))
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.BLEACH)
+        .tag(Tags.OZONE_DEPLETER)
+        .tag(Tags.BLEACH)
+        .build(),
+
     HYPOCHLORITE = builder()
         .id("hypochlorite")
         .structure(Formula.atom(Element.OXYGEN).addAtom(Element.CHLORINE))
         .charge(-1)
         .tag(Tags.ACUTELY_TOXIC)
-        .tag(Tags.BLEACH)
         .tag(Tags.OZONE_DEPLETER)
         .build(),
 

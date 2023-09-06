@@ -1,8 +1,6 @@
 package com.petrolpark.destroy.test;
 
 import com.petrolpark.destroy.chemistry.Formula;
-import com.petrolpark.destroy.chemistry.Molecule;
-import com.petrolpark.destroy.chemistry.Molecule.MoleculeBuilder;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 //import com.petrolpark.destroy.chemistry.index.DestroyReactions;
 import com.petrolpark.destroy.chemistry.index.DestroyTopologies;
@@ -14,13 +12,9 @@ public class ChemistryTest {
         DestroyTopologies.register();
         DestroyMolecules.register();
         
-        MoleculeBuilder builder = new MoleculeBuilder("test");
-        Molecule HENRYANE = builder.id("henryane")
-            .structure(Formula.deserialize("destroy:benzene:C,C,C,C,C,C"))
-            .build();
-        
-        System.out.println(HENRYANE.getMass());
-        System.out.println(HENRYANE.getStructuralFormula());
+        System.out.println(Formula.deserialize("destroy:linear:CCC(=C)C").serialize());
+        System.out.println(Formula.deserialize("destroy:linear:O=C(C)C").serialize());
+        System.out.println(Formula.deserialize("destroy:linear:C(=O)(C)C").serialize());
         
     };
 };

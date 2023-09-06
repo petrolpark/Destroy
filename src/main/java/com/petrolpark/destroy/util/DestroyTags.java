@@ -36,7 +36,6 @@ public class DestroyTags {
         SECONDARY_EXPLOSIVE("explosive/secondary"),
         SPRAY_BOTTLE,
         SYRINGE,
-        VULCANIZER,
         YEAST
         ;
 

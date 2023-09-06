@@ -27,6 +27,7 @@ import com.petrolpark.destroy.item.tooltip.TempramentalItemDescription;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.recipe.DestroyCropMutations;
 import com.petrolpark.destroy.recipe.DestroyExtrusions;
+import com.petrolpark.destroy.recipe.DestroyMysteriousItemConversions;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.util.DestroyTags;
 import com.petrolpark.destroy.util.vat.VatMaterial;
@@ -139,6 +140,7 @@ public class Destroy {
         OpenEndedPipe.registerEffectHandler(new MixtureOpenEndedPipeEffectHandler());
         DestroyAdvancements.register();
         DestroyPotatoCannonProjectileTypes.register();
+        DestroyMysteriousItemConversions.register();
 
         // Chemistry
         // DestroyGroupFinder.register();

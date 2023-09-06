@@ -3,7 +3,6 @@ package com.petrolpark.destroy.chemistry;
 import java.util.function.Function;
 
 import com.jozufozu.flywheel.core.PartialModel;
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.client.gui.MoleculeRenderer.Geometry;
 
 /**
@@ -17,8 +16,8 @@ public enum Element {
     CARBON("C", 12.01f, 2.5f, new double[]{4}),
     HYDROGEN("H", 1.01f, 2.1f, new double[]{1}),
     SULFUR("S", 32.07f, 2.5f, new double[]{2, 0, 4, 6}),
-    NITROGEN("N", 14.01f, 3.0f, new double[]{3, 5}, ((i) -> {return i == 3 ? Geometry.TRIGONAL_PYRAMIDAL : null;})),
-    OXYGEN("O", 16.00f, 3.5f, new double[]{2}, ((i) -> {return i == 2 ? Geometry.V_SHAPE : null;})),
+    NITROGEN("N", 14.01f, 3.0f, new double[]{3, 4, 5}, ((i) -> {return i == 3 ? Geometry.TRIGONAL_PYRAMIDAL : null;})),
+    OXYGEN("O", 16.00f, 3.5f, new double[]{1.5d, 2}, ((i) -> {return i == 2 ? Geometry.V_SHAPE : null;})),
     FLUORINE("F", 19.00f, 4.0f, new double[]{1}),
     SODIUM("Na", 23.00f, 0.9f, new double[]{1}),
     CHLORINE("Cl", 35.45f, 3.0f, new double[]{1}),

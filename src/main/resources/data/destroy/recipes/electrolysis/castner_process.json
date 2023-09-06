@@ -47,11 +47,7 @@
                       "Concentration": 1.0
                     },
                     {
-                      "Molecule": "destroy:hypochlorite",
-                      "Concentration": 1.0
-                    },
-                    {
-                      "Molecule": "destroy:proton",
+                      "Molecule": "destroy:hypochlorous_acid",
                       "Concentration": 1.0
                     },
                     {

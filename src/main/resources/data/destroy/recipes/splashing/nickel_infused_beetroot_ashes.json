@@ -21,7 +21,7 @@
         "chance": 0.05
       },
       {
-        "item": "create:crushed_copper_ore",
+        "item": "create:crushed_raw_copper",
         "count": 1,
         "chance": 0.02
       }

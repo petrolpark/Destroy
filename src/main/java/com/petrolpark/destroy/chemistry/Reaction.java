@@ -49,6 +49,11 @@ public class Reaction {
     private float molesPerItem;
 
     /**
+     * Whether this Reaction needs UV light to proceed.
+     */
+    private boolean isCatalysedByUV;
+
+    /**
      * The {@link ReactionResult Reaction Result} of this Reaction, if there is one.
      */
     private ReactionResult result;
@@ -157,6 +162,13 @@ public class Reaction {
      */
     public float getMolesPerItem() {
         return molesPerItem;
+    };
+
+    /**
+     * Whether this Reaction needs UV light to proceed.
+     */
+    public boolean needsUV() {
+        return isCatalysedByUV;
     };
 
     /**
@@ -442,6 +454,16 @@ public class Reaction {
         };
 
         /**
+         * Set this Reaction as requiring ultraviolet light, from the sun or a Blacklight.
+         * If {@code true}, the rate of this Reaction will be multiplied by {@code 0} to {@code 1} depending on the amount of incident UV.
+         * @return This Reaction Builder
+         */
+        public ReactionBuilder requireUV() {
+            reaction.isCatalysedByUV = true;
+            return this;
+        };
+
+        /**
          * Add a {@link Molecule} of which one mole will be produced per mole of Reaction.
          * @param molecule
          * @return This Reaction Builder
@@ -584,7 +606,7 @@ public class Reaction {
          * <p>This reverse Reaction will have opposite {@link ReactionBuilder#addReactant reactants} and {@link ReactionBuilder#addProduct products},
          * but all the same {@link ReactionBuilder#addCatalyst catalysts}. It will {@link ReactionBuilder#dontIncludeInJei not be shown in JEI}, but
          * the original Reaction will include the reverse symbol.</p>
-         * <p>The reverse Reaction does not automatically add Item Stack reactants, products or catalysts.</p>
+         * <p>The reverse Reaction does not automatically add Item Stack reactants, products or catalysts, or UV requirements.</p>
          * @param reverseReactionModifier A consumer which gets passed the Builder of the reverse Reaction once its reactants, products and catalysts
          * have been added, and the {@link ReactionBuilder#enthalpyChange enthalpy change} and {@link ReactionBuilder#activationEnergy activation energy}
          * have been set, if applicable. This allows you to add {@link ReactionBuilder#setOrder orders with respect to the new reactants}, and {@link
@@ -617,6 +639,8 @@ public class Reaction {
                     .activationEnergy(reaction.activationEnergy - reaction.enthalpyChange)
                     .enthalpyChange(-reaction.enthalpyChange);
             };
+
+            if (reaction.needsUV()) reverseBuilder.requireUV();
 
             reverseReactionModifier.accept(reverseBuilder); // Allow the user to manipulate the reverse Reaction
 

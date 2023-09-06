@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joml.Vector2i;
+
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.IItemReactant;
 import com.petrolpark.destroy.chemistry.Molecule;
@@ -22,6 +24,7 @@ import com.petrolpark.destroy.compat.jei.animation.DestroyGuiTextureDrawable;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.recipe.ReactionRecipe;
+import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 
@@ -42,6 +45,7 @@ public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
 
     public static final Palette DARK_GRAY_AND_BLUE = Palette.ofColors(ChatFormatting.DARK_GRAY, ChatFormatting.BLUE);
     public static final Palette WHITE_AND_AQUA = Palette.ofColors(ChatFormatting.WHITE, ChatFormatting.AQUA);
+    public static final Palette WHITE_AND_WHITE = Palette.ofColors(ChatFormatting.WHITE, ChatFormatting.WHITE);
 
     public static RecipeType<ReactionRecipe> TYPE;
 
@@ -74,6 +78,10 @@ public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
         List<LinesAndActivationAreas> paragraphs = new ArrayList<>(2);
         paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getId()).getString(), 2, 2, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE, false));
         paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getId() + ".description").getString(), 2, 90, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE, false));
+        if (reaction.needsUV()) {
+            Vector2i pos = getCatalystRenderPosition(0, getNumberOfCatalysts(reaction));
+            paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(DestroyLang.translate("tooltip.reaction.ultraviolet").string(), pos.x + 3, pos.y + 4, 100, minecraft.screen, minecraft.font, WHITE_AND_WHITE, false));
+        };
         return paragraphs;
     };
 
@@ -173,12 +181,60 @@ public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
             j++;
         };
 
+        int numberOfCatalysts = getNumberOfCatalysts(reaction);
+        int m = 0;
+        if (reaction.needsUV()) m++; // If there is UV catalyst, this is already drawn
+
+        for (Molecule catalyst : reaction.getOrders().keySet()) {
+            if (reaction.getReactants().contains(catalyst)) continue;
+            Vector2i pos = getCatalystRenderPosition(m, numberOfCatalysts);
+            builder.addSlot(RecipeIngredientRole.CATALYST, pos.x, pos.y)
+                .addIngredient(MoleculeJEIIngredient.TYPE, catalyst)
+                .addTooltipCallback(ReactionTooltipHelper.catalystTooltip(reaction, catalyst))
+                .setBackground(getRenderedSlot(), -1, -1);
+            m++;
+        };
+
+        for (IItemReactant itemReactant : reaction.getItemReactants()) {
+            if (!itemReactant.isCatalyst()) continue;
+            Vector2i pos = getCatalystRenderPosition(m, numberOfCatalysts);
+            builder.addSlot(RecipeIngredientRole.CATALYST, pos.x, pos.y)
+                .addItemStacks(itemReactant.getDisplayedItemStacks())
+                .addTooltipCallback(ReactionTooltipHelper.itemReactantTooltip(reaction, itemReactant))
+                .setBackground(getRenderedSlot(), -1, -1);
+            m++;
+        };
+
         if (DestroyAllConfigs.CLIENT.chemistry.nerdMode.get()) {
             builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 163, 68)
                 .setOverlay(DestroyGuiTextureDrawable.of(DestroyGuiTextures.NERD_EMOJI), 0, 1)
                 .addItemStack(DestroyItems.ABS.asStack()) // Dummy item so we actually get something generated
                 .addTooltipCallback(ReactionTooltipHelper.nerdModeTooltip(reaction));
         };
+    };
+
+    protected Vector2i getCatalystRenderPosition(int position, int numberOfCatalysts) {
+        if (position >= numberOfCatalysts) return new Vector2i(0, 0);
+        int y = position >= 2 ? 24 : 58;
+        int x;
+        if (numberOfCatalysts % 2 == 0 || (numberOfCatalysts == 3 && position <= 1)) {
+            x = 70 + ((position % 2) * 19);
+        } else {
+            x = 78;
+        };
+        return new Vector2i(x, y);
+    };
+
+    protected int getNumberOfCatalysts(Reaction reaction) {
+        int number = 0;
+        for (Molecule molecule : reaction.getOrders().keySet()) {
+            if (!reaction.getReactants().contains(molecule)) number++;
+        };
+        for (IItemReactant itemReactant : reaction.getItemReactants()) {
+            if (itemReactant.isCatalyst()) number++;
+        };
+        if (reaction.needsUV()) number++;
+        return number;
     };
 
     @Override

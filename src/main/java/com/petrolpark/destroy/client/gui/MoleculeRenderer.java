@@ -14,7 +14,6 @@ import com.google.common.collect.ImmutableList;
 import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Molecule;
@@ -240,8 +239,6 @@ public class MoleculeRenderer {
     };
 
     private Geometry getGeometry(Node node, boolean addOne) {
-        Destroy.LOGGER.info("edges: "+node.getEdges().size());
-        Destroy.LOGGER.info("side chains: "+node.getSideBranches().size());
         int connections = node.getEdges().size() + node.getSideBranches().size() + (addOne ? 1 : 0);
         return node.getAtom().getElement().getGeometry(connections);
     };

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -25,7 +26,6 @@ import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.recipe.AgingRecipe;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
 import com.petrolpark.destroy.recipe.ChargingRecipe;
-import com.petrolpark.destroy.recipe.DestroyMysteriousItemConversions;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.recipe.DistillationRecipe;
 import com.petrolpark.destroy.recipe.ElectrolysisRecipe;
@@ -56,6 +56,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
+import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -65,6 +66,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @JeiPlugin
 public class DestroyJEI implements IModPlugin {
+
+    public static Optional<IJeiRuntime> jeiRuntime = Optional.empty();
 
     /**
      * All Create and Destroy {@link mezz.jei.api.recipe.RecipeType Recipe Types} which can produce or consume Mixtures, mapped to the class of Recipe which those Recipe Types describe.
@@ -169,7 +172,6 @@ public class DestroyJEI implements IModPlugin {
 
     @Override
 	public void registerRecipes(IRecipeRegistration registration) {
-        DestroyMysteriousItemConversions.register();
         allCategories.forEach(c -> c.registerRecipes(registration));
 	};
 
@@ -192,6 +194,11 @@ public class DestroyJEI implements IModPlugin {
     @Override
     public void registerAdvanced(IAdvancedRegistration registration) {
         registration.addRecipeManagerPlugin(new DestroyRecipeManagerPlugin(registration.getJeiHelpers()));
+    };
+
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime runtime) {
+        jeiRuntime = Optional.of(runtime);
     };
 
     public static void tick() {

@@ -13,6 +13,7 @@ import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.fluids.FluidStack;
 
 public abstract class MixtureFluidIngredient extends FluidIngredient {
@@ -53,11 +54,6 @@ public abstract class MixtureFluidIngredient extends FluidIngredient {
     protected abstract String getMixtureFluidIngredientSubtype();
 
     /**
-     * Get Molecules which can or are used by this ingredient, so JEI knows that this recipe is a use for the Molecule.
-     */
-    public abstract Collection<Molecule> getRequiredMolecules();
-
-    /**
      * Add data to the NBT of the Fluid Ingredient when it is displayed in JEI. The only use of this is to control the
      * {@link MixtureFluidIngredient#getDescription description}. Careful not to overwite the tags {@code Mixture} or 
      * {@code MixtureFluidIngredientSubtype}.
@@ -66,11 +62,19 @@ public abstract class MixtureFluidIngredient extends FluidIngredient {
     public abstract void addNBT(CompoundTag fluidTag);
 
     /**
-     * Generate a String to act as the description of an ingredient in JEI. This method should be effectively static.
+     * Generate a tooltip to act as the description of an ingredient in JEI. This method should be effectively static.
      * Do not call any local variables; all data should come from {@code fluidTag}. You should add this data {@link
      * MixtureFluidIngredient#addNBT here}.
      * @param fluidTag
      */
-    public abstract String getDescription(CompoundTag fluidTag);
+    public abstract List<Component> getDescription(CompoundTag fluidTag);
+
+    /**
+     * Get the Molecules which this ingredient could contain, so if this Ingredient is clicked in JEI, it knows
+     * which Molecules to look up. This method should be effectively static. Do not call any local variables; all
+     * data should come from {@code fluidTag}. You should add this data {@link MixtureFluidIngredient#addNBT here}.
+     * @param fluidTag
+     */
+    public abstract Collection<Molecule> getContainedMolecules(CompoundTag fluidTag);
     
 };

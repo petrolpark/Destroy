@@ -715,6 +715,7 @@ public class Molecule implements INameableProduct {
          * @return This Molecule Builder
          */
         public MoleculeBuilder tag(MoleculeTag ...tags) {
+            for (MoleculeTag tag : tags) MoleculeTag.registerMoleculeToTag(molecule, tag);
             molecule.tags.addAll(List.of(tags));
             return this;
         };

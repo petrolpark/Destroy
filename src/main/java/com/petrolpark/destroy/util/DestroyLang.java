@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.function.Function;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.fluid.ingredient.MixtureFluidIngredient;
+import com.petrolpark.destroy.util.vat.VatMaterial;
 import com.simibubi.create.foundation.item.TooltipHelper;
+import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.LangBuilder;
 import com.simibubi.create.foundation.utility.LangNumberFormat;
@@ -17,10 +20,19 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class DestroyLang {
+
+    private static DecimalFormat df = new DecimalFormat();
+    static {
+        df.setMaximumFractionDigits(2);
+        df.setMinimumFractionDigits(2);
+    };
 
     private static String[] subscriptNumbers = new String[]{"\u2080", "\u2081", "\u2082", "\u2083", "\u2084", "\u2085", "\u2086", "\u2087", "\u2088", "\u2089"};
     private static String[] superscriptNumbers = new String[]{"\u2070", "\u00b9", "\u00b2", "\u00b3", "\u2074", "\u2075", "\u2076", "\u2077", "\u2078", "\u2079"};
@@ -123,9 +135,73 @@ public class DestroyLang {
 
         MixtureFluidIngredient fluidIngredient = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(fluidTag.getString("MixtureFluidIngredientSubtype"));
 
-        tooltip.addAll(TooltipHelper.cutStringTextComponent(fluidIngredient.getDescription(fluidTag), TooltipHelper.Palette.GRAY_AND_WHITE));
+        tooltip.addAll(fluidIngredient.getDescription(fluidTag));
 
         return tooltip;
+    };
+
+    private static final float pressureMin = 0f;
+    private static final float pressureMax = 100000f;
+    private static final float conductivityMin = 0f;
+    private static final float conductivityMax = 100f;
+
+    private static final Palette GRAYS = Palette.ofColors(ChatFormatting.DARK_GRAY, ChatFormatting.GRAY);
+
+    public static List<Component> vatMaterialTooltip(ItemStack stack) {
+        List<Component> tooltip = new ArrayList<>();
+        tooltip.add(stack.getHoverName());
+
+        if (!(stack.getItem() instanceof BlockItem blockItem) || !VatMaterial.isValid(blockItem.getBlock())) return tooltip;
+        tooltip.add(Component.literal(""));
+        boolean nerdMode = DestroyAllConfigs.CLIENT.chemistry.nerdMode.get();
+        VatMaterial material = VatMaterial.BLOCK_MATERIALS.get(blockItem.getBlock());
+
+        float conductivityPercent = Mth.clamp((material.thermalConductivity() - conductivityMin) / (conductivityMax - conductivityMin), 0f, 1f);
+        float pressurePercent = Mth.clamp((material.maxPressure() - pressureMin) / (pressureMax - pressureMin), 0f, 1f);
+
+        tooltip.add(
+            DestroyLang.translate("tooltip.vat_material.pressure").style(ChatFormatting.WHITE)
+            .space()
+            .add(Component.literal(TooltipHelper.makeProgressBar(5, (int)(5 * pressurePercent + 0.5f))).withStyle(getStatColor(pressurePercent, false)))
+            .component()
+        );
+        if (nerdMode) tooltip.add(DestroyLang.translate("tooltip.vat_material.pressure.nerd_mode", material.maxPressure() / 1000f).component());
+        tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.vat_material.pressure.description").string(), GRAYS));
+        tooltip.add(Component.literal("")); 
+
+        tooltip.add(
+            DestroyLang.translate("tooltip.vat_material.conductivity").style(ChatFormatting.WHITE)
+            .space()
+            .add(Component.literal(TooltipHelper.makeProgressBar(5, (int)(5 * conductivityPercent + 0.5f))).withStyle(getStatColor(conductivityPercent, true)))
+            .component()
+        );
+        if (nerdMode) tooltip.add(DestroyLang.translate("tooltip.vat_material.conductivity.nerd_mode", material.thermalConductivity()).component());
+        tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.vat_material.conductivity.description").string(), GRAYS));
+        tooltip.add(Component.literal(""));
+
+        tooltip.add(
+            DestroyLang.translate("tooltip.vat_material.transparent").style(ChatFormatting.WHITE)
+            .space()
+            .add(material.transparent() ? tick() : cross())
+            .component()
+        );
+        tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.vat_material.transparent.description").string(), GRAYS));
+
+        return tooltip;
+    };
+
+    public static MutableComponent tick() {
+        return Component.literal("\u2714").withStyle(ChatFormatting.GREEN).copy();
+    };
+
+    public static MutableComponent cross() {
+        return Component.literal("\u2718").withStyle(ChatFormatting.RED).copy();
+    };
+
+    public static ChatFormatting getStatColor(float stat, boolean inverted) {
+        if (stat > 0.67f) return inverted ? ChatFormatting.RED : ChatFormatting.GREEN;
+        if (stat > 0.33f) return ChatFormatting.YELLOW;
+        return inverted ? ChatFormatting.GREEN : ChatFormatting.RED;
     };
 
     /**

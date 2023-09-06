@@ -49,6 +49,7 @@ public abstract class HoverableTextCategory<T extends Recipe<?>> extends Destroy
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup focuses) {
+        textBoxStack = AbstractStackedTextBox.NOTHING;
         PARAGRAPHS.clear();
         PARAGRAPHS.put(recipe, getHoverableTexts(recipe));
     };

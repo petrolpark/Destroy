@@ -70,9 +70,6 @@ public class DestroyItems {
     POLYSTYRENE_BUTADIENE = REGISTRATE.item("polystyrene_butadiene", Item::new)
         .tag(DestroyItemTags.PLASTIC.tag)
         .register(),
-    RUBBER = REGISTRATE.item("rubber", Item::new)
-        .tag(DestroyItemTags.PLASTIC.tag)
-        .register(),
 
     // INGOTS ETC
 
@@ -98,7 +95,7 @@ public class DestroyItems {
         .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/zirconium"), Tags.Items.INGOTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
     SULFUR = REGISTRATE.item("sulfur", Item::new)
-        .tag(forgeItemTag("raw_materials/sulfur"), DestroyItemTags.VULCANIZER.tag)
+        .tag(forgeItemTag("raw_materials/sulfur"))
         .register(),
     ZINC_DUST = REGISTRATE.item("zinc_dust", Item::new)
         .tag(forgeItemTag("dusts/zinc"), Tags.Items.DUSTS)
@@ -204,7 +201,7 @@ public class DestroyItems {
         .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(), 
     ZINC_OXIDE = REGISTRATE.item("zinc_oxide", Item::new)
-        .tag(DestroyItemTags.SALT.tag, DestroyItemTags.VULCANIZER.tag, Tags.Items.DUSTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
+        .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register();
     
     public static final ItemEntry<IodineItem> IODINE = REGISTRATE.item("iodine", IodineItem::new)
