@@ -609,7 +609,7 @@
     "destroy.tooltip.liable_to_change": "This feature is likely to be _removed_ or _heavily modified_ in the full release of Destroy.",
     "destroy.tooltip.mixture_ingredient.molecule": "Must contain _%1$s_ at a concentration of approximately _%2$sM_. All other molecules must be _solvents_ or _low in concentration_.",
     "destroy.tooltip.mixture_ingredient.molecule_tag_1": "Must contain molecules with the following tag:",
-    "destroy.tooltip.mixture_ingredient.molecule_tag_2": "The _combined concentration_ of these Molecules must be _%1$s_. All other molecules must be _solvents_ or _low in concentration_.",
+    "destroy.tooltip.mixture_ingredient.molecule_tag_2": "The _combined concentration_ of these Molecules must be _%1$s_. All other molecules must be _solvents_ or _low in concentration_. Remember you can _search_ for the tag in JEI.",
     "destroy.tooltip.molecule.boiling_point": "Boiling Point: %1$s",
     "destroy.tooltip.molecule.charge": "Charge: %1$s",
     "destroy.tooltip.molecule.density": "Density: %1$sgB\u207b\u00b9",

@@ -2,7 +2,7 @@
     "sources": [
       {
         "type": "single",
-        "resource": "destroy:fluid/chorus_wine"
+        "resource": "destroy:fluid/swirling"
       },
       {
         "type": "single",

@@ -8,12 +8,12 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidStack;
 
-public class ColoredWaterFluidType extends TintedFluidType {
+public class ColoredFluidType extends TintedFluidType {
 
     private final int color;
 
-    public ColoredWaterFluidType(Properties properties, int color) {
-        super(properties, new ResourceLocation("minecraft", "block/water_still"), new ResourceLocation("minecraft", "block/water_flowing"));
+    public ColoredFluidType(Properties properties, ResourceLocation stillTexture, ResourceLocation flowingTexture, int color) {
+        super(properties, stillTexture, flowingTexture);
         this.color = color;
     };
 

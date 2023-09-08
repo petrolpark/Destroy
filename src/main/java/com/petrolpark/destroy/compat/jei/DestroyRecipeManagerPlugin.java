@@ -52,8 +52,8 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
         // Mixtures
         // For Mixture inputs (which have a single Molecule required), simply replace this lookup with the lookup for that Molecule
         focus.checkedCast(ForgeTypes.FLUID_STACK).ifPresent(fluidFocus -> { // Check to see if it's a Fluid ingredient
-            //if (!(focus.getRole() == RecipeIngredientRole.INPUT || focus.getRole() == RecipeIngredientRole.CATALYST)) return; // Ignore this if it's not an input (as outputs can have multiple Molecules)
             FluidStack fluidStack = fluidFocus.getTypedValue().getIngredient();
+            if (!DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid())) return;
             MixtureFluidIngredient ingredient = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(fluidStack.getOrCreateTag().getString("MixtureFluidIngredientSubtype")).getNew();
             if (ingredient == null) return;
             ingredient.getContainedMolecules(fluidStack.getOrCreateTag()).forEach(molecule -> {

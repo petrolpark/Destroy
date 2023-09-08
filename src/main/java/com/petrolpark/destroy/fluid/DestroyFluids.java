@@ -21,12 +21,13 @@ public class DestroyFluids {
     )
         .lang("Mixture")
         .register();
+        
 
     public static final FluidEntry<VirtualFluid>
     
     URINE = virtualFluid("urine")
         .register(),
-    CHORUS_WINE = virtualFluid("chorus_wine")
+    CHORUS_WINE = REGISTRATE.virtualFluid("chorus_wine", new ResourceLocation("destroy", "fluid/swirling"), new ResourceLocation("destroy", "fluid/swirling"), (properties, stillTexture, flowingTexture) -> new ColoredFluidType(properties, stillTexture, flowingTexture, 0x808000c0), VirtualFluid::new)
         .register(),
     CREAM = virtualFluid("cream")
         .register(),
@@ -64,7 +65,7 @@ public class DestroyFluids {
     };
 
     private static FluidBuilder<VirtualFluid, CreateRegistrate> coloredWaterFluid(String name, int color) {
-        return REGISTRATE.virtualFluid(name, (properties, stillTexture, flowingTexture) -> new ColoredWaterFluidType(properties, color), VirtualFluid::new);
+        return REGISTRATE.virtualFluid(name, (properties, stillTexture, flowingTexture) -> new ColoredFluidType(properties, new ResourceLocation("minecraft", "block/water_still"), new ResourceLocation("minecraft", "block/water_flowing"), color), VirtualFluid::new);
     };
 
     public static void register() {}
