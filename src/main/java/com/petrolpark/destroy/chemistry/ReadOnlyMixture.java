@@ -297,7 +297,11 @@ public class ReadOnlyMixture {
         // Check for salts
         if (cations.size() != 0 || anions.size() != 0) {
             if (cations.size() == 1 && anions.size() == 1) { // Single simple salt (one cation, one anion)
-                products.add(b -> DestroyLang.translate("mixture.simple_salt", cations.get(0).getName(b).getString(), anions.get(0).getName(b).getString()).component());
+                if (cations.get(0) == DestroyMolecules.PROTON) { // If it's a proton 'salt'
+                    products.add(b -> DestroyLang.translate("mixture.acid").component());
+                } else {
+                    products.add(b -> DestroyLang.translate("mixture.simple_salt", cations.get(0).getName(b).getString(), anions.get(0).getName(b).getString()).component());
+                };
             } else { // Multiple salts
                 products.add(b -> DestroyLang.translate("mixture.salts").component());
             };

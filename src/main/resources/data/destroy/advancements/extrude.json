@@ -15,7 +15,7 @@
         "item": "destroy:extrusion_die"
       },
       "title": {
-        "translate": "advancement.destroy.root"
+        "translate": "advancement.destroy.extrude"
       }
     },
     "requirements": [

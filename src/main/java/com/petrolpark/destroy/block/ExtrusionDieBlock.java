@@ -4,13 +4,16 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.entity.ExtrusionDieBlockEntity;
+import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.petrolpark.destroy.world.DestroyDamageTypes;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -22,7 +25,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ExtrusionDieBlock extends RotatedPillarBlock implements IBE<ExtrusionDieBlockEntity> {
+public class ExtrusionDieBlock extends RotatedPillarBlock implements IBE<ExtrusionDieBlockEntity>, IWrenchable {
 
     public ExtrusionDieBlock(Properties properties) {
         super(properties);
@@ -37,6 +40,12 @@ public class ExtrusionDieBlock extends RotatedPillarBlock implements IBE<Extrusi
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return DestroyShapes.EXTRUSION_DIE.get(state.getValue(AXIS));
+    };
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        DestroyAdvancementBehaviour.setPlacedBy(level, pos, placer);
+        super.setPlacedBy(level, pos, state, placer, stack);
     };
 
     /**

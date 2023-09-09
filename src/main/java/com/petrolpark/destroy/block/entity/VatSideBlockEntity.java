@@ -44,11 +44,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+import net.minecraftforge.items.IItemHandler;
 
 public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggleInformation, IHaveHoveringInformation {
 
@@ -62,6 +62,8 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
 
     protected SmartFluidTankBehaviour inputBehaviour;
     protected LazyOptional<IFluidHandler> fluidCapability;
+
+    protected LazyOptional<IItemHandler> itemCapability;
 
     /**
      * The power in/output from a {@link com.petrolpark.destroy.util.vat.IVatHeaterBlock heater or cooler} this
@@ -82,6 +84,9 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         spoutingTicks = 0;
         spoutingFluid = FluidStack.EMPTY;
         oldPower = 0f;
+        fluidCapability = LazyOptional.empty();
+        itemCapability = LazyOptional.empty();
+        refreshItemCapability();
     };
 
     @Override
@@ -95,6 +100,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             .whenFluidUpdates(this::tryInsertFluidInVat)
             .forbidExtraction();
         behaviours.add(inputBehaviour);
+        fluidCapability = LazyOptional.empty(); // Temporarily set this to an empty optional
         refreshFluidCapability();
     };
 
@@ -106,6 +112,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     };
 
     protected void refreshFluidCapability() {
+        if (fluidCapability.isPresent()) return;
         fluidCapability = LazyOptional.of(() -> {
             // Allow inserting into this side tank (which is then mixed into the main tank)
             LazyOptional<? extends IFluidHandler> inputCap = inputBehaviour.getCapability();
@@ -119,9 +126,20 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         });
     };
 
+    protected void refreshItemCapability() {
+        if (itemCapability.isPresent()) return;
+        VatControllerBlockEntity vatController = getController();
+        if (vatController != null) {
+            itemCapability = vatController.itemCapability;
+        } else {
+            itemCapability = LazyOptional.empty();
+        };
+    };
+
     @Override
     public void invalidateCaps() {
         fluidCapability.invalidate();
+        itemCapability.invalidate();
     };
 
     @Nullable
@@ -200,8 +218,13 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
 
     @Override
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.FLUID_HANDLER && side == direction && (displayType == DisplayType.NORMAL || displayType == DisplayType.PIPE)) {
+        if (side != direction) return LazyOptional.empty();
+        if (isFluidHandlerCap(cap) && (displayType == DisplayType.NORMAL || displayType == DisplayType.PIPE)) {
             return fluidCapability.cast();
+        };
+        if (isItemHandlerCap(cap)) {
+            refreshItemCapability();
+            return itemCapability.cast();
         };
         return super.getCapability(cap, side);
     };

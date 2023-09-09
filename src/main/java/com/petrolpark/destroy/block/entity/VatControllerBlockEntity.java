@@ -45,6 +45,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 
@@ -59,6 +61,9 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     protected SmartFluidTankBehaviour tankBehaviour;
     protected LazyOptional<IFluidHandler> fluidCapability;
+
+    public ItemStackHandler inventory;
+    protected LazyOptional<IItemHandler> itemCapability;
 
     protected boolean full;
 
@@ -76,6 +81,11 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         full = false;
         initializationTicks = 3;
         underDeconstruction = false;
+
+        fluidCapability = LazyOptional.empty();
+
+        inventory = new ItemStackHandler(9);
+		itemCapability = LazyOptional.of(() -> inventory);
     };
 
     @Override
@@ -96,7 +106,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     @Override
     protected AABB createRenderBoundingBox() {
 		if (vat.isEmpty()) return super.createRenderBoundingBox();
-        return wholeVatAABB().inflate(1d);
+        return wholeVatAABB();
 	};
 
     @Override
@@ -140,6 +150,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             vat = Optional.empty();
         };
         underDeconstruction = tag.getBoolean("UnderDeconstruction");
+        inventory.deserializeNBT(tag.getCompound("Inventory"));
         updateCachedMixture();
     };
 
@@ -154,6 +165,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             tag.put("Vat", vatTag);
         };
         tag.putBoolean("UnderDeconstruction", underDeconstruction);
+        tag.put("Inventory", inventory.serializeNBT());
     };
 
     /**
@@ -256,7 +268,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
         // Create the Vat starting with the Block behind the Controller
         BlockPos vatInternalStartPos = new BlockPos(getBlockPos().relative(getLevel().getBlockState(getBlockPos()).getValue(VatControllerBlock.FACING).getOpposite()));
-        Optional<Vat> newVat = Vat.tryConstruct(getLevel(), vatInternalStartPos);
+        Optional<Vat> newVat = Vat.tryConstruct(getLevel(), vatInternalStartPos, getBlockPos());
         if (!newVat.isPresent()) return false;
 
         // Once the Vat has been successfully created...
@@ -274,8 +286,10 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                 vatSide.setConsumedItem(new ItemStack(oldState.getBlock().asItem())); // Required to co-operate with the Copycat Block's internals
                 vatSide.controllerPosition = getBlockPos();
                 BlockPos adjacentPos = pos.relative(vatSide.direction);
+                vatSide.refreshFluidCapability();
                 vatSide.updateDisplayType(adjacentPos);
                 vatSide.setPowerFromAdjacentBlock(adjacentPos);
+                vatSide.refreshItemCapability();
                 vatSide.notifyUpdate();
             });
         });
@@ -341,6 +355,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     public void invalidateCaps() {
         super.invalidateCaps();
         fluidCapability.invalidate();
+        itemCapability.invalidate();
     };
 
     /**
@@ -396,12 +411,12 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     };
 
     public AABB wholeVatAABB() {
-        return new AABB(vat.get().getInternalLowerCorner(), vat.get().getUpperCorner());
+        return new AABB(vat.get().getInternalLowerCorner(), vat.get().getUpperCorner()).inflate(1);
     };
 
     private void onTargeted(LocalPlayer player, BlockHitResult blockHitResult) {
         if (vat.isPresent()) {
-            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), wholeVatAABB().inflate(1), 20)
+            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), wholeVatAABB(), 20)
                 .colored(0xFF_fffec2);
         };
     };

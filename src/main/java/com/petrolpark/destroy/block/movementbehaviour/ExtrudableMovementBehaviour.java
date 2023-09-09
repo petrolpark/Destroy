@@ -79,7 +79,8 @@ public class ExtrudableMovementBehaviour implements MovementBehaviour {
                 context.contraption.getBlocks().put(context.localPos, new StructureBlockInfo(context.localPos, getBlockState(context), null));
                 if (!context.world.isClientSide()) {
                     DestroyAdvancementBehaviour advancementBehaviour = BlockEntityBehaviour.get(context.world, diePos, DestroyAdvancementBehaviour.TYPE);
-                    if (advancementBehaviour != null) advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.EXTRUDE);
+                    if (advancementBehaviour != null) 
+                        advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.EXTRUDE);
                 };
                 data.putBoolean("Extruded", true);
             };

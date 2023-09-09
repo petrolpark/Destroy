@@ -9,6 +9,7 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
+import com.petrolpark.destroy.block.VatControllerBlock;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.utility.Pair;
 
@@ -20,6 +21,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -84,7 +86,7 @@ public class Vat {
      * @param level
      * @param pos The position of the first space in the Vat
      */
-    public static Optional<Vat> tryConstruct(Level level, BlockPos pos) {
+    public static Optional<Vat> tryConstruct(Level level, BlockPos pos, BlockPos controllerPos) {
 
         boolean successful = true;
 
@@ -137,7 +139,8 @@ public class Vat {
                         allWalls = false;
                     } else {
                         allAir = false;
-                        if (!VatMaterial.isValid(state.getBlock())) allWalls = false;
+                        Block block = state.getBlock();
+                        if (!VatMaterial.isValid(block) || (block instanceof VatControllerBlock && !blockPos.equals(controllerPos))) allWalls = false;
                     }
                 };
 

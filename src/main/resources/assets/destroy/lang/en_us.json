@@ -268,6 +268,7 @@
     "destroy.chemical.hydrogen": "Hydrogen",
     "destroy.chemical.hydroxide": "Hydroxide",
     "destroy.chemical.hypochlorite": "Hypochlorite",
+    "destroy.chemical.hypochlorous_acid": "Hypochlorous Acid",
     "destroy.chemical.iodide": "Iodide",
     "destroy.chemical.iodine": "Iodine",
     "destroy.chemical.iodomethane": "Iodomethane",
@@ -407,6 +408,7 @@
     "destroy.generic.direction.up": "Up",
     "destroy.generic.direction.down": "Down",
 
+    "destroy.mixture.acid": "Acid",
     "destroy.mixture.and": "%1$s and %2$s",
     "destroy.mixture.dirty": "Dirty",
     "destroy.mixture.empty": "Empty",
