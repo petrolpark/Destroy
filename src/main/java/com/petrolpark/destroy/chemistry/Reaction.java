@@ -454,6 +454,30 @@ public class Reaction {
         };
 
         /**
+         * Adds an Item as a {@link IItemReactant catalyst} for this {@link Reaction}. An Item Stack containing the Item
+         * must be present for the Reaction to occur.
+         * @param item
+         * @param moles The {@link Reaction#getMolesPerItem moles of Reaction} which will occur if all necessary Item Reactants are present. If this
+         * Reaction has multiple Item Reactants, this must be the same each time.
+         * @return This Reaction Builder
+         */
+        public ReactionBuilder addSimpleItemCatalyst(Supplier<Item> item, float moles) {
+            return addItemReactant(new IItemReactant.SimpleItemCatalyst(item), moles);
+        };
+
+        /**
+         * Adds an Item Ta as a {@link IItemReactant catalyst} for this {@link Reaction}. An Item Stack containing Items with the tag
+         * must be present for the Reaction to occur.
+         * @param item
+         * @param moles The {@link Reaction#getMolesPerItem moles of Reaction} which will occur if all necessary Item Reactants are present. If this
+         * Reaction has multiple Item Reactants, this must be the same each time.
+         * @return This Reaction Builder
+         */
+        public ReactionBuilder addSimpleItemTagCatalyst(TagKey<Item> tag, float moles) {
+            return addItemReactant(new IItemReactant.SimpleItemTagCatalyst(tag), moles);
+        };
+
+        /**
          * Set this Reaction as requiring ultraviolet light, from the sun or a Blacklight.
          * If {@code true}, the rate of this Reaction will be multiplied by {@code 0} to {@code 1} depending on the amount of incident UV.
          * @return This Reaction Builder

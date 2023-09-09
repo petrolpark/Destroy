@@ -362,6 +362,9 @@ public class DestroyItems {
     DIRTY_ZEIGLER_NATTA = REGISTRATE.item("dirty_ziegler-natta", Item::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
+    MAGIC_OXIDANT = REGISTRATE.item("magic_oxidant", Item::new)
+        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+        .register(),
 
     // FOOD AND DRINK
 

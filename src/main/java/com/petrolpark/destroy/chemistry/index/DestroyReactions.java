@@ -5,8 +5,11 @@ import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
 import com.petrolpark.destroy.chemistry.reactionresult.PrecipitateReactionResult;
 import com.petrolpark.destroy.item.DestroyItems;
+import com.simibubi.create.AllItems;
+import com.simibubi.create.AllTags;
 
 import net.minecraft.world.item.Items;
+import net.minecraftforge.common.Tags;
 
 public class DestroyReactions {
 
@@ -38,9 +41,11 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.METHANE, 2, 1)
         .addReactant(DestroyMolecules.AMMONIA, 2, 1)
         .addReactant(DestroyMolecules.OXYGEN, 3, 1)
+        .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/platinum"), 1f)
         .addProduct(DestroyMolecules.HYDROGEN_CYANIDE, 2)
         .addProduct(DestroyMolecules.WATER, 6)
-        .build(), //TODO add platinum catalyst and require ~1200 degrees
+        .activationEnergy(1000) //TODO tweak to make Reaction require very high temperatures
+        .build(),
 
     ANTHRAQUINONE_PROCESS = builder()
         .id("anthraquinone_process")
@@ -54,8 +59,9 @@ public class DestroyReactions {
         .id("anthraquinone_reduction")
         .addReactant(DestroyMolecules.ETHYLANTHRAQUINONE)
         .addReactant(DestroyMolecules.HYDROGEN)
+        .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/palladium"), 1f)
         .addProduct(DestroyMolecules.ETHYLANTHRAHYDROQUINONE)
-        .build(), //TODO add palladium catalyst
+        .build(),
 
     BENZENE_ETHYLATION = builder()
         .id("benzene_ethylation")
@@ -69,8 +75,9 @@ public class DestroyReactions {
         .id("benzene_hydrogenation")
         .addReactant(DestroyMolecules.BENZENE)
         .addReactant(DestroyMolecules.HYDROGEN, 2, 1)
+        .addSimpleItemCatalyst(DestroyItems.NICKEL_INGOT::get, 1f)
         .addProduct(DestroyMolecules.CYCLOHEXENE)
-        .build(), //TODO add nickel catalyst
+        .build(),
 
     BUTADIENE_CARBONYLATION = builder()
         .id("butadiene_carbonylation")
@@ -143,6 +150,24 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.HYDROCHLORIC_ACID, 2)
         .build(),
 
+    CISPLATIN_SYNTHESIS = builder()
+        .id("cisplatin_synthesis")
+        .addReactant(DestroyMolecules.CHLORIDE)
+        .addReactant(DestroyMolecules.AMMONIA)
+        .addSimpleItemReactant(DestroyItems.CRUSHED_RAW_PLATINUM::get, 2f)
+        .addProduct(DestroyMolecules.CISPLATIN)
+        .addProduct(DestroyMolecules.HYDROXIDE) //TODO change as this is not quite right
+        .build(),
+
+    CONTACT_PROCESS = builder()
+        .id("contact_process")
+        .addReactant(DestroyMolecules.SULFUR_DIOXIDE, 2, 1)
+        .addReactant(DestroyMolecules.OXYGEN)
+        .addReactant(DestroyMolecules.WATER, 2, 1)
+        .addSimpleItemCatalyst(DestroyItems.MAGIC_OXIDANT::get, 1f)
+        .addProduct(DestroyMolecules.SULFURIC_ACID, 2)
+        .build(),
+
     CUMENE_PROCESS = builder()
         .id("cumene_process")
         .addReactant(DestroyMolecules.BENZENE)
@@ -162,8 +187,6 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.WATER, 2)
         .build(), //TODO add "tungsten" catalyst. This reaction also has as phase-transfer catalyst but I have chosen to ignore it.
     
-    //TODO contact process
-    //TODO cisplatin synthesis
     //TODO possible cyclopentanone/cyclopentadiene interconversion
     //TODO cyclopentanone synthesis from adipic acid
 
@@ -178,8 +201,9 @@ public class DestroyReactions {
         .id("ethylanthraquinone_synthesis")
         .addReactant(DestroyMolecules.PHTHALIC_ANHYDRIDE)
         .addReactant(DestroyMolecules.ETHYLBENZENE)
+        .addSimpleItemCatalyst(DestroyItems.ZEOLITE::get, 1f)
         .addProduct(DestroyMolecules.WATER)
-        .addProduct(DestroyMolecules.ETHYLANTHRAQUINONE) //TODO add zeolite catalyst
+        .addProduct(DestroyMolecules.ETHYLANTHRAQUINONE)
         .build(),
 
     ETHYLBENZENE_DEHYDROGENATION = builder()
@@ -216,8 +240,9 @@ public class DestroyReactions {
         .id("haber_process")
         .addReactant(DestroyMolecules.NITROGEN)
         .addReactant(DestroyMolecules.HYDROGEN, 3, 0)
+        .addSimpleItemTagCatalyst(Tags.Items.INGOTS_IRON, 1f)
         .addProduct(DestroyMolecules.AMMONIA, 2)
-        .build(), //TODO add iron catalyst and reversibility
+        .build(), //TODO add reversibility and appropriate rate constants
     //TODO add oxidation of nitrogen in air so this is more difficult
         
     HYDROGEN_CHLORIDE_SYNTHESIS = builder()
@@ -287,15 +312,18 @@ public class DestroyReactions {
         .id("methanol_synthesis")
         .addReactant(DestroyMolecules.CARBON_MONOXIDE)
         .addReactant(DestroyMolecules.HYDROGEN, 2, 1) //TODO check rate exponent of hydrogen
+        .addSimpleItemCatalyst(AllItems.CRUSHED_COPPER::get, 1f)
+        .addSimpleItemCatalyst(AllItems.CRUSHED_ZINC::get, 1f)
         .addProduct(DestroyMolecules.METHANOL)
-        .build(), //TODO zinc/copper oxide catalyst and ensure high pressure is used
+        .build(), //TODO ensure high pressure is used
 
     METHYL_ACETATE_CARBONYLATION = builder()
         .id("methyl_acetate_carbonylation")
         .addReactant(DestroyMolecules.METHANOL)
         .addReactant(DestroyMolecules.CARBON_MONOXIDE)
+        .addSimpleItemCatalyst(DestroyItems.SILICA::get, 1f)
         .addProduct(DestroyMolecules.ACETIC_ACID)
-        .build(), //TODO silica catalyst
+        .build(),
 
     NHN_SYNTHESIS = builder()
         .id("nhn_synthesis")
@@ -333,9 +361,10 @@ public class DestroyReactions {
         .id("ostwald_process")
         .addReactant(DestroyMolecules.AMMONIA)
         .addReactant(DestroyMolecules.OXYGEN, 2)
+        .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/rhodium"), 1f)
         .addProduct(DestroyMolecules.WATER)
         .addProduct(DestroyMolecules.NITRIC_ACID)
-        .build(), //TODO add platinum/rhodium catalyst, potentially split into multiple equations and add side reactions
+        .build(), //TODO potentially split into multiple equations, and add side reactions
 
     //TODO phenylacetic acid synthesis, either from benzyl chloride or benzyl cyanide
     //TODO dissolution of prussian blue to make cyanide (or just remove prussian blue)
@@ -362,9 +391,10 @@ public class DestroyReactions {
         .id("steam_reformation")
         .addReactant(DestroyMolecules.WATER)
         .addReactant(DestroyMolecules.METHANE)
+        .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/nickel"), 1f)
         .addProduct(DestroyMolecules.CARBON_MONOXIDE)
         .addProduct(DestroyMolecules.HYDROGEN, 3)
-        .build(), //TODO add nickel catalyst
+        .build(),
 
     SODIUM_DISSOLUTION = builder()
         .id("sodium_dissolution")
@@ -387,9 +417,10 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.ETHENE, 2, 1)
         .addReactant(DestroyMolecules.ACETIC_ACID, 2, 1)
         .addReactant(DestroyMolecules.OXYGEN)
+        .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/palladium"), 1f)
         .addProduct(DestroyMolecules.VINYL_ACETATE, 2)
         .addProduct(DestroyMolecules.WATER, 2)
-        .build(); //TODO add palladium catalyst
+        .build();
 
     // Acids
     static {

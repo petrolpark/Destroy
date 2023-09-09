@@ -62,6 +62,22 @@ public interface IItemReactant {
 
     };
 
+    public class SimpleItemCatalyst extends SimpleItemReactant {
+
+        public SimpleItemCatalyst(Supplier<Item> item) {
+            super(item);
+        };
+
+        @Override
+        public boolean isCatalyst() {
+            return true;
+        };
+
+        @Override
+        public void consume(ItemStack stack) {};
+
+    };
+ 
     public class SimpleItemTagReactant implements IItemReactant {
         
         protected final TagKey<Item> tag;
@@ -82,6 +98,22 @@ public interface IItemReactant {
             tagIterable.forEach(item -> displayedStacks.add(new ItemStack(item)));
             return displayedStacks;
         };
+
+    };
+
+    public class SimpleItemTagCatalyst extends SimpleItemTagReactant {
+
+        public SimpleItemTagCatalyst(TagKey<Item> tag) {
+            super(tag);
+        };
+
+        @Override
+        public boolean isCatalyst() {
+            return true;
+        };
+
+        @Override
+        public void consume(ItemStack stack) {};
 
     };
 };
