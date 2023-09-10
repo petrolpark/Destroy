@@ -1,0 +1,6 @@
+{
+    "type": "forge:add_features",
+    "biomes": "#minecraft:is_overworld",
+    "features": "destroy:fluorite_ore",
+    "step": "underground_ores"
+}

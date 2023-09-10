@@ -168,7 +168,6 @@ public class MoleculeRenderer {
             pair.getSecond().render(graphics, pair.getFirst());
         };
         poseStack.popPose();
-        poseStack.popPose();
     };
 
     /**

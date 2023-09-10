@@ -1,0 +1,6 @@
+{
+    "type": "forge:add_features",
+    "biomes": "#minecraft:is_end",
+    "features": "destroy:end_fluorite_ore",
+    "step": "underground_ores"
+}

@@ -112,7 +112,5 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer {
         renderer.render(NEEDLE.get(), light);
         ms.popPose();
         ms.popPose();
-
-        ms.popPose();
     };
 };
