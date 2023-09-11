@@ -53,5 +53,9 @@ public class DestroyPonderIndex {
         // Pumpjack
         HELPER.forComponents(DestroyBlocks.PUMPJACK)
             .addStoryBoard("pumpjack", DestroyScenes::pumpjack);
+
+        // Vat Controller
+        HELPER.forComponents(DestroyBlocks.VAT_CONTROLLER)
+            .addStoryBoard("vat/construction", DestroyScenes::vatConstruction);
     };
 };

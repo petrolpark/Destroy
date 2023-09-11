@@ -24,6 +24,8 @@ public class PonderTagScreenMixin {
     
     /**
      * Mostly copied from the {@link com.simibubi.create.foundation.ponder.ui.PonderTagScreen Create source code}.
+     * This replaces the Tooltips of Blocks and Items in the Vat Materials category to show their Vat Material
+     * properties.
      * @param graphics
      * @param mouseX
      * @param mouseY

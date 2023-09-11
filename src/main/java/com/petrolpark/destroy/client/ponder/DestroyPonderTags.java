@@ -2,7 +2,6 @@ package com.petrolpark.destroy.client.ponder;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;
-import com.petrolpark.destroy.block.VatControllerBlock;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.util.vat.VatMaterial;
 import com.simibubi.create.AllBlocks;
@@ -55,7 +54,7 @@ public class DestroyPonderTags {
         ;
 
         TagBuilder vatSideBlockBuilder = PonderRegistry.TAGS.forTag(DestroyPonderTags.VAT_SIDE_BLOCKS);
-        VatMaterial.BLOCK_MATERIALS.forEach((block, material) -> {if (!(block instanceof VatControllerBlock)) vatSideBlockBuilder.add(block);});
+        VatMaterial.BLOCK_MATERIALS.forEach((block, material) -> vatSideBlockBuilder.add(block));
 
         PonderRegistry.TAGS.forTag(AllPonderTags.FLUIDS)
             .add(DestroyBlocks.BUBBLE_CAP)
