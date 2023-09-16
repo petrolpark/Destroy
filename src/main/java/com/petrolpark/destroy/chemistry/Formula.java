@@ -386,7 +386,7 @@ public class Formula implements Cloneable {
      * main {@link Formula#structure structure}. When new Atoms are added to the main Formula, the Formulae of the side chains need to be updated.
      * <p>I don't know who needs to hear this but for the record this was a really complicated thing I had to do and it worked basically first try. Well done me.</p>
      */
-    private void updateSideChainStructures() {
+    public void updateSideChainStructures() {
         if (topology == Topology.LINEAR) return;
         List<Pair<SideChainInformation, Formula>> newSideChains = new ArrayList<>();
         for (Pair<SideChainInformation, Formula> sideChain : sideChains) {
@@ -586,6 +586,7 @@ public class Formula implements Cloneable {
         try {
 
             Formula newFormula = (Formula) super.clone();
+            newFormula.optimumFROWNSCode = null; // Let the FROWNS code be reset
             newFormula.structure = new HashMap<>();
             newFormula.structure = shallowCopyStructure(structure); // Shallow copy the Structure
             newFormula.groups = new ArrayList<>(groups); // Shallow copy the Groups

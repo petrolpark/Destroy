@@ -7,6 +7,8 @@ import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.model.DestroyPartials;
+import com.petrolpark.destroy.chemistry.index.DestroyGenericReactions;
+import com.petrolpark.destroy.chemistry.index.DestroyGroupFinder;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.DestroyReactions;
 import com.petrolpark.destroy.chemistry.index.DestroyTopologies;
@@ -98,9 +100,7 @@ public class Destroy {
         DestroyRecipeTypes.register(modEventBus);
         DestroyParticleTypes.register(modEventBus);
         DestroyFluids.register();
-        //DestroyOreFeatureConfigEntries.init();
         DestroyCropMutations.register();
-        //DestroyWorldGen.register(modEventBus);
         DestroyVillagers.register(modEventBus);
         // DestroyBadges.register(modEventBus);
         DestroyLoot.register(modEventBus);
@@ -143,11 +143,11 @@ public class Destroy {
         DestroyMysteriousItemConversions.register();
 
         // Chemistry
-        // DestroyGroupFinder.register();
+        DestroyGroupFinder.register();
         DestroyTopologies.register();
         DestroyMolecules.register();
         DestroyReactions.register();
-        // DestroyGenericReactions.register();
+        DestroyGenericReactions.register();
     };
 
     public static void clientInit(final FMLClientSetupEvent event) {

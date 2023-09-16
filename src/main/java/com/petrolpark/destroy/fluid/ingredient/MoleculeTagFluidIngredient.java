@@ -19,8 +19,15 @@ import net.minecraft.util.GsonHelper;
 
 public class MoleculeTagFluidIngredient extends MixtureFluidIngredient {
 
-    private MoleculeTag tag;
-    private float concentration;
+    protected MoleculeTag tag;
+    protected float concentration;
+
+    public MoleculeTagFluidIngredient() {};
+
+    public MoleculeTagFluidIngredient(MoleculeTag tag, float concentration) {
+        this.tag = tag;
+        this.concentration = concentration;
+    };
 
     @Override
     public MixtureFluidIngredient getNew() {
@@ -54,7 +61,7 @@ public class MoleculeTagFluidIngredient extends MixtureFluidIngredient {
         List<Component> tooltip = new ArrayList<>();
         tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule_tag_1").string(), Palette.GRAY_AND_WHITE));
         tooltip.add(tag.getFormattedName());
-        tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule_tag.2", concentration).string(), Palette.GRAY_AND_WHITE));
+        tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule_tag_2", concentration).string(), Palette.GRAY_AND_WHITE));
 
         return tooltip;
     };

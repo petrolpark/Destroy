@@ -1,8 +1,8 @@
 package com.petrolpark.destroy.chemistry.reactionresult;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
 import com.petrolpark.destroy.chemistry.Mixture;
@@ -21,13 +21,8 @@ public class CombinedReactionResult extends ReactionResult {
         childResults = new ArrayList<>();
     };
 
-    public CombinedReactionResult with(ReactionResult result) {
-        childResults.add(result);
-        return this;
-    };
-
-    public CombinedReactionResult with(Collection<ReactionResult> results) {
-        childResults.addAll(results);
+    public CombinedReactionResult with(BiFunction<Float, Reaction, ReactionResult> result) {
+        childResults.add(result.apply(moles, reaction));
         return this;
     };
 

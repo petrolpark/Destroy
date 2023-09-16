@@ -25,13 +25,13 @@ public class DestroyAdvancementReactionResult extends ReactionResult {
 
     @Override
     public void onBasinReaction(Level level, BasinBlockEntity basin, Mixture mixture) {
-        basin.getBehaviour(DestroyAdvancementBehaviour.TYPE).awardDestroyAdvancement(advancement);
+        // At the moment Advancements don't work in Basins
+        //basin.getBehaviour(DestroyAdvancementBehaviour.TYPE).awardDestroyAdvancement(advancement);
     };
 
     @Override
     public void onVatReaction(Level level, VatControllerBlockEntity vatController, Mixture mixture) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onVatReaction'");
+        vatController.getBehaviour(DestroyAdvancementBehaviour.TYPE).awardDestroyAdvancement(advancement);
     };
     
 };

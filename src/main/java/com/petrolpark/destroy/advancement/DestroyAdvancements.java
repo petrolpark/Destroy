@@ -1,6 +1,9 @@
 package com.petrolpark.destroy.advancement;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.chemistry.Reaction;
+import com.petrolpark.destroy.chemistry.ReactionResult;
+import com.petrolpark.destroy.chemistry.reactionresult.DestroyAdvancementReactionResult;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,7 +32,7 @@ public enum DestroyAdvancements {
     CURE_HANGOVER("cure_hangover"),
     HYPERACCUMULATE("hyperaccumulate"),
     MECHANICAL_HANDS("mechanical_hands"),
-    OTSWALD_PROCESS("otswald_process"),
+    OSTWALD_PROCESS("ostwald_process"),
     FULLY_POLLUTE("fully_pollute"),
     USE_PUMPJACK("use_pumpjack"),
     JUMP_ON_SAND_CASTLE("jump_on_sand_castle"),
@@ -53,6 +56,10 @@ public enum DestroyAdvancements {
         } else {
             Destroy.LOGGER.warn("Could not award Destroy Advancement "+id+" to client-side Player.");
         };
+    };
+
+    public ReactionResult asReactionResult(float moles, Reaction reaction) {
+        return new DestroyAdvancementReactionResult(moles, reaction, this);
     };
 
     public static void register() {

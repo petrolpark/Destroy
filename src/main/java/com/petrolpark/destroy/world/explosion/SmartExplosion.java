@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.world.loot.DestroyLootContextParams;
 
 import net.minecraft.core.BlockPos;
@@ -65,8 +66,9 @@ public class SmartExplosion extends Explosion {
      * @param source The Entity that caused the Explosion (e.g. a Primed TNT or Creeper)
      * @param damageSource The type of damage this Explosion should deal (defaults to {@code minecraft:explosion})
      * @param damageCalculator The class to calculate the damage done to Blocks (defaults to that of vanilla TNT)
-     * @param pos The center (global co-ordinates) of this Explosion
+     * @param position The center (global co-ordinates) of this Explosion
      * @param radius How large this Explosion should be
+     * @param smoothness How uniform this explosion is ({@code 1f} is spherical)
      */
     public SmartExplosion(Level level, @Nullable Entity source, @Nullable DamageSource damageSource, @Nullable ExplosionDamageCalculator damageCalculator, Vec3 position, float radius, float smoothness) {
         super(level, source, damageSource, damageCalculator, position.x, position.y, position.z, radius, false, Explosion.BlockInteraction.KEEP);
@@ -95,6 +97,8 @@ public class SmartExplosion extends Explosion {
 
     @Override
     public void finalizeExplosion(boolean spawnParticles) {
+
+        Destroy.LOGGER.info(""+position);
 
         boolean createExperience = getDirectSourceEntity() instanceof Player || shouldAlwaysDropExperience();
 
@@ -269,11 +273,11 @@ public class SmartExplosion extends Explosion {
         };
 
         // Particles
-        if (spawnParticles && level instanceof ServerLevel serverLevel) {
+        if (spawnParticles) {
             if (radius > 2.0f) {
-               level.addParticle(ParticleTypes.EXPLOSION_EMITTER, position.x, position.y, position.z, 0d, 0d, 0d);
+               level.addParticle(ParticleTypes.EXPLOSION_EMITTER, position.x, position.y, position.z, 1d, 0d, 0d);
             } else {
-               level.addParticle(ParticleTypes.EXPLOSION, position.x, position.y, position.z, 0d, 0d, 0d);
+               level.addParticle(ParticleTypes.EXPLOSION, position.x, position.y, position.z, 1d, 0d, 0d);
             };
         };
     };

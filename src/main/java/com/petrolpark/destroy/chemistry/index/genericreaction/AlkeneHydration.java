@@ -11,7 +11,6 @@ public class AlkeneHydration extends SingleGroupGenericReaction<AlkeneGroup> {
 
     public AlkeneHydration(Supplier<AlkeneGroup> supplier) {
         super(supplier);
-        //TODO Auto-generated constructor stub
     };
 
     @Override

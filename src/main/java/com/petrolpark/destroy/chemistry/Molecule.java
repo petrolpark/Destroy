@@ -161,6 +161,9 @@ public class Molecule implements INameableProduct {
     @Nullable
     public static Molecule getMolecule(String id) {
         String[] idComponents = id.split(":");
+
+        Molecule molecule = MOLECULES.get(id);
+        if (molecule != null) return molecule;
         if (idComponents.length == 3) {
             return new MoleculeBuilder("novel")
                 .structure(Formula.deserialize(id))
@@ -432,6 +435,7 @@ public class Molecule implements INameableProduct {
      */
     @Override
     public Component getName(boolean iupac) {
+        if (isNovel()) return Component.literal(getSerlializedMolecularFormula(true));
         if (name == null) {
             String key = nameSpace + ".chemical." + translationKey;
             String iupacKey = key + ".iupac";
@@ -564,6 +568,7 @@ public class Molecule implements INameableProduct {
             };
             NAMESPACES.add(nameSpace);
             molecule.charge = 0; //default
+            molecule.density = 1000; //default
         };
 
         /**
@@ -775,6 +780,7 @@ public class Molecule implements INameableProduct {
             };
 
             molecule.refreshFunctionalGroups();
+            molecule.structure.updateSideChainStructures();
 
             if (molecule.nameSpace != "novel") {
                 if (molecule.id == null) {

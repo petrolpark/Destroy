@@ -24,13 +24,14 @@ public class HydroxideSubstitutions extends SingleGroupGenericReaction<ChlorideG
             .moveTo(chlorideGroup.getCarbon())
             .addGroup(Formula.alcohol())
             .remove(chlorideGroup.getChlorine())
-        ).build();
+        )
+        .build();
         return Reaction.generatedReactionBuilder()
             .addReactant(reactantMolecule)
             .addReactant(DestroyMolecules.HYDROXIDE, 1, chlorideGroup.getDegree() == 3 ? 0 : 1) //if this is a tertiary chloride, the mechanism is SN1 so hydroxide does not appear in the rate equation
             .addProduct(productMolecule)
             .addProduct(DestroyMolecules.CHLORIDE)
-            .preexponentialFactor(1e6f * (float)Math.pow(10, chlorideGroup.getDegree()) * reactantMolecule.getCarbocationStability(chlorideGroup.getCarbon(), false))
+            //.preexponentialFactor(1e6f * (float)Math.pow(10, chlorideGroup.getDegree()) * reactantMolecule.getCarbocationStability(chlorideGroup.getCarbon(), false))
             .activationEnergy(100f)
             .build();
     };

@@ -6,6 +6,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.destroy.block.CoolerBlock;
+import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
+import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.PollutionHelper;
 import com.simibubi.create.AllBlocks;
@@ -35,7 +39,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -79,24 +82,45 @@ public class CoolerBlockEntity extends SmartBlockEntity implements IHaveGoggleIn
      */
     private void consumeFluid() {
         if (!hasLevel()) return;
+
         FluidStack fluidStack = tank.getPrimaryHandler().getFluid();
-        if (fluidStack.getFluid() == Fluids.WATER) { //TODO replace with check for actual coolants
+        if (fluidStack.getFluid().isSame(DestroyFluids.MIXTURE.get())) {
 
-            // Begin cooling
-            setColdnessOfBlock(ColdnessLevel.FROSTING);
-            coolingTicks += fluidStack.getAmount();
+            int amount = fluidStack.getAmount();
+            ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(fluidStack.getOrCreateChildTag("Mixture"));
 
-            // Stop insertion if necessary
-            if (coolingTicks >= MAX_COOLING_TICKS) {
-                tank.forbidInsertion();
+            float totalMolesPerBucket = 0f;
+            float totalRefrigerantMolesPerBucket = 0f;
+            float coolingPower = 0f;
+            for (Molecule molecule : mixture.getContents(true)) {
+                float concentration = mixture.getConcentrationOf(molecule);
+                totalMolesPerBucket += concentration;
+                if (molecule.hasTag(DestroyMolecules.Tags.REFRIGERANT)) {
+                    totalRefrigerantMolesPerBucket += concentration;
+                    coolingPower += concentration * amount * molecule.getMolarHeatCapacity() / 100;
+                };
             };
 
-            // Discard the Fluid
-            tank.getPrimaryHandler().drain(TANK_CAPACITY, FluidAction.EXECUTE);
-            PollutionHelper.pollute(getLevel(), fluidStack);
+            coolingPower *= totalRefrigerantMolesPerBucket / totalMolesPerBucket; // Scale the effectiveness of the refrigerant with its purity
 
-            notifyUpdate();
+            if (coolingPower > 0f) {
+
+                // Begin cooling
+                setColdnessOfBlock(ColdnessLevel.FROSTING);
+                coolingTicks += coolingPower;
+
+                // Stop insertion if necessary
+                if (coolingTicks >= MAX_COOLING_TICKS) {
+                    tank.forbidInsertion();
+                };
+            };
         };
+
+        // Discard the Fluid
+        tank.getPrimaryHandler().drain(TANK_CAPACITY, FluidAction.EXECUTE);
+        PollutionHelper.pollute(getLevel(), fluidStack);
+
+        notifyUpdate();
     };
 
     @Override
@@ -200,7 +224,7 @@ public class CoolerBlockEntity extends SmartBlockEntity implements IHaveGoggleIn
 		Vec3 v = c.add(VecHelper.offsetRandomly(Vec3.ZERO, r, .125f)
 			.multiply(1, 0, 1));
 		
-		if (r.nextInt(coldnessLevel == ColdnessLevel.IDLE ? 32 : 8) != 0) return; // Spawn more Particles if we're Frosting vs not doing anything
+		if (r.nextInt(coldnessLevel == ColdnessLevel.IDLE ? 32 : 2) != 0) return; // Spawn more Particles if we're Frosting vs not doing anything
 
 		boolean empty = level.getBlockState(getBlockPos().above()) // If the Block above is occupied we want to spawn fewer Particles
 			.getCollisionShape(getLevel(), getBlockPos().above())

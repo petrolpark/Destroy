@@ -5,7 +5,7 @@ import java.util.List;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
-import com.petrolpark.destroy.block.entity.behaviour.BasinTooFullBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.ExtendedBasinBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.capability.chunk.ChunkCrudeOil;
@@ -199,9 +199,8 @@ public class DestroyServerEvents {
     @SubscribeEvent
     public static void attachBasinBehaviours(BlockEntityBehaviourEvent<BasinBlockEntity> event) {
         BasinBlockEntity basin = event.getBlockEntity();
-        event.attach(new DestroyAdvancementBehaviour(basin));
         event.attach(new PollutingBehaviour(basin));
-        event.attach(new BasinTooFullBehaviour(basin));
+        event.attach(new ExtendedBasinBehaviour(basin));
     };
 
     @SubscribeEvent

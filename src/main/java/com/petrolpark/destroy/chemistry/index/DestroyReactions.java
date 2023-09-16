@@ -1,8 +1,11 @@
 package com.petrolpark.destroy.chemistry.index;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
+import com.petrolpark.destroy.chemistry.reactionresult.CombinedReactionResult;
+import com.petrolpark.destroy.chemistry.reactionresult.ExplosionReactionResult;
 import com.petrolpark.destroy.chemistry.reactionresult.PrecipitateReactionResult;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.AllItems;
@@ -325,6 +328,14 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.ACETIC_ACID)
         .build(),
 
+    NAUGHTY_REACTION = builder()
+        .id("naughty_reaction")
+        .addReactant(DestroyMolecules.PHENYLACETONE)
+        .addReactant(DestroyMolecules.METHYLAMINE)
+        .withResult(1f, (m, r) -> new CombinedReactionResult(m, r)
+            .with(ExplosionReactionResult::small)
+        ).build(),
+
     NHN_SYNTHESIS = builder()
         .id("nhn_synthesis")
         .addReactant(DestroyMolecules.NICKEL_ION)
@@ -364,6 +375,7 @@ public class DestroyReactions {
         .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/rhodium"), 1f)
         .addProduct(DestroyMolecules.WATER)
         .addProduct(DestroyMolecules.NITRIC_ACID)
+        .withResult(0.0001f, DestroyAdvancements.OSTWALD_PROCESS::asReactionResult)
         .build(), //TODO potentially split into multiple equations, and add side reactions
 
     //TODO phenylacetic acid synthesis, either from benzyl chloride or benzyl cyanide

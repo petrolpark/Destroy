@@ -577,7 +577,7 @@ public class Reaction {
 
         /**
          * Set the {@link ReactionResult Reaction Result} for this Reaction.
-         * Use a {@link com.petrolpark.destroy.chemistry.reactionresult.CombinedReactionResult CombinedReactionResult} to set multiple]
+         * Use a {@link com.petrolpark.destroy.chemistry.reactionresult.CombinedReactionResult CombinedReactionResult} to set multiple
          * @return This Reaction Builder
          */
         public ReactionBuilder withResult(float moles, BiFunction<Float, Reaction, ReactionResult> reactionresultFactory)  {
@@ -692,7 +692,6 @@ public class Reaction {
 
             if (!hasForcedPreExponentialFactor || reaction.preexponentialFactor <= 0f) {
                 reaction.preexponentialFactor = 1e8f;
-                Destroy.LOGGER.warn("Pre-exponential factor of reaction '"+reactionString()+"' was missing or invalid, so was estimated as 1e8.");
             };
 
             if (!hasForcedEnthalpyChange) reaction.enthalpyChange = 0f;

@@ -204,6 +204,7 @@ public class ReadOnlyMixture {
      */
     public String getContentsString() {
         String string = "";
+        if (contents.isEmpty()) return string;
         for (Entry<Molecule, Float> entry : contents.entrySet()) {
             string += entry.getKey().getFullID() + " (" + entry.getValue() + "M), ";
         };

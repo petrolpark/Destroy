@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.recipe;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -8,22 +9,27 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.Destroy;
-import com.petrolpark.destroy.block.entity.behaviour.BasinTooFullBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.ExtendedBasinBehaviour;
+import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReactionResult;
+import com.petrolpark.destroy.chemistry.reactionresult.CombinedReactionResult;
 import com.petrolpark.destroy.chemistry.reactionresult.PrecipitateReactionResult;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
+import com.petrolpark.destroy.util.vat.IVatHeaterBlock;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 
 public class ReactionInBasinRecipe extends MixingRecipe {
@@ -43,7 +49,11 @@ public class ReactionInBasinRecipe extends MixingRecipe {
         boolean canReact = true; // Start by assuming we will be able to React
 
         boolean isBasinTooFullToReact = false;
-        HeatLevel heatLevel = BasinBlockEntity.getHeatLevelOf(basin.getLevel().getBlockState(basin.getBlockPos().below())); // It thinks basin.getLevel() might be null
+        
+        Level level = basin.getLevel();
+        BlockPos pos = basin.getBlockPos();
+        float heatingPower = IVatHeaterBlock.getHeatingPower(level, pos.below(), Direction.UP);
+        float outsideTemperature = LevelPollution.getLocalTemperature(level, pos);
 
         Map<Mixture, Double> mixtures = new HashMap<>(availableFluids.size()); // A Map of all available Mixtures to the volume of them available (in Buckets)
         int totalAmount = 0; // How much Mixture there is
@@ -57,17 +67,13 @@ public class ReactionInBasinRecipe extends MixingRecipe {
             int amount = fluidStack.getAmount();
             totalAmount += amount;
             Mixture mixture = Mixture.readNBT(fluidStack.getOrCreateTag().getCompound("Mixture"));
-            // if (mixture.isAtEquilibrium() && availableFluids.size() == 1) { // Don't do anything if there is only one Mixture and it is already at equilibrium
-            //     canReact = false;
-            //     break;
-            // };
             mixtures.put(mixture, (double)amount / 1000d);
         };
 
         tryReact: if (canReact) {
             // TODO modify temp according to Heat Level
             Mixture mixture = Mixture.mix(mixtures);
-            ReactionInBasinResult result = mixture.reactInBasin(totalAmount, availableItemsCopy); // Mutably react the Mixture and change the Item Stacks
+            ReactionInBasinResult result = mixture.reactInBasin(totalAmount, availableItemsCopy, heatingPower, outsideTemperature); // Mutably react the Mixture and change the Item Stacks
 
             // If equilibrium was not disturbed, don't do anything else
             if (result.ticks() == 0) {
@@ -104,15 +110,15 @@ public class ReactionInBasinRecipe extends MixingRecipe {
                 builder.require(Ingredient.of(stack));
             });
 
-            for (ReactionResult reactionresult : result.reactionresults()) {
-                if (reactionresult instanceof PrecipitateReactionResult precipitationResult) {
-                    builder.output(precipitationResult.getPrecipitate());
-                };
-                // TODO other Reaction Results
-            };
+            List<ReactionResult> reactionResults = new ArrayList<>();
+
+            gatherReactionResults(result.reactionresults(), reactionResults, builder); // Gather all 
+
+            ExtendedBasinBehaviour behaviour = basin.getBehaviour(ExtendedBasinBehaviour.TYPE);
+            behaviour.setReactionResults(reactionResults, mixture, duration); // Schedule the Reaction Results to occur once the Mixing has finished
         };
 
-        basin.getBehaviour(BasinTooFullBehaviour.TYPE).tooFullToReact = isBasinTooFullToReact;
+        basin.getBehaviour(ExtendedBasinBehaviour.TYPE).tooFullToReact = isBasinTooFullToReact;
         basin.sendData();
 
         if (!canReact) {
@@ -120,6 +126,18 @@ public class ReactionInBasinRecipe extends MixingRecipe {
         };
 
         return builder.build();
+    };
+
+    private static void gatherReactionResults(List<ReactionResult> resultsOfReaction, List<ReactionResult> resultsToEnact, ProcessingRecipeBuilder<ReactionInBasinRecipe> builder) {
+        for (ReactionResult reactionresult : resultsOfReaction) {
+            if (reactionresult instanceof CombinedReactionResult combinedResult) {
+                gatherReactionResults(combinedResult.getChildren(), resultsToEnact, builder);
+            } else if (reactionresult instanceof PrecipitateReactionResult precipitationResult) {
+                builder.output(precipitationResult.getPrecipitate());
+            } else { // Don't deal with precipitations in the normal way
+                resultsToEnact.add(reactionresult);
+            };
+        };
     };
 
     @Override

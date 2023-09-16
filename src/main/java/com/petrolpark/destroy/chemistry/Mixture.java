@@ -440,6 +440,8 @@ public class Mixture extends ReadOnlyMixture {
                 temperature += temperatureChange;
             };
         };
+
+        temperature = Math.max(temperature, 0f);
     };
 
     /**
@@ -592,14 +594,21 @@ public class Mixture extends ReadOnlyMixture {
      * the number of ticks it took to reach equilibrium, the {@link ReactionResult Reaction Results} and the new volume of Mixture.
      * @param volume (in mB) of this Reaction
      * @param availableStacks Item Stacks available for reacting. This List and its contents will be modified.
+     * @param heatingPower The power being supplied to this Basin by the {@link com.petrolpark.destroy.util.vat.IVatHeaterBlock heater} below it.
+     * @param outsideTemperature The {@link com.petrolpark.destroy.capability.level.pollution.LevelPollution#getLocalTemperature temperature} outside the Basin.
      */
-    public ReactionInBasinResult reactInBasin(int volume, List<ItemStack> availableStacks) {
+    public ReactionInBasinResult reactInBasin(int volume, List<ItemStack> availableStacks, float heatingPower, float outsideTemperature) {
         float volumeInBuckets = (float)volume / 1000f;
         int ticks = 0;
 
         dissolveItems(availableStacks, volumeInBuckets); // Dissolve all Items
         ReactionContext context = new ReactionContext(availableStacks); // React the Mixture
         while (!equilibrium && ticks < 600) {
+            float energyChange = heatingPower / TICKS_PER_SECOND;
+            energyChange += (outsideTemperature - temperature) * 100f / TICKS_PER_SECOND; // Fourier's Law (sort of), the Basin has a fixed conductance of 100 andthe divide by 20 is for 20 ticks per second
+            if (Math.abs(energyChange) > 0.0001f) {
+                heat(1000 * energyChange / volume); // 1000 converts getFluidAmount() in mB to Buckets
+            };
             reactForTick(context);
             ticks++;
         };
@@ -675,7 +684,7 @@ public class Mixture extends ReadOnlyMixture {
             return false;
         };
 
-        super.addMolecule(molecule, concentration); //TODO not do this if it turns out to already be in solution
+        if (!molecule.isNovel()) super.addMolecule(molecule, concentration); //TODO not do this if it turns out to already be in solution
 
         List<Group> functionalGroups = molecule.getFunctionalGroups();
         if (functionalGroups.size() != 0) {
@@ -694,11 +703,14 @@ public class Mixture extends ReadOnlyMixture {
                 if (novelMolecule.getFullID().equals(molecule.getFullID())) {
                     found = true;
                     newMoleculeAdded = false; // We haven't actually added a brand new Molecule so flag this
-                    changeConcentrationOf(molecule, concentration, true);
+                    changeConcentrationOf(novelMolecule, concentration, true);
                     equilibrium = false;
                 };
             };
-            if (!found) novelMolecules.add(molecule); // If it was actually a brand new Molecule, add it to the novel list
+            if (!found) {
+                super.addMolecule(molecule, concentration);
+                novelMolecules.add(molecule); // If it was actually a brand new Molecule, add it to the novel list
+            }; 
         };
 
         if (shouldRefreshReactions && newMoleculeAdded) {
@@ -726,6 +738,7 @@ public class Mixture extends ReadOnlyMixture {
                 });
             };
         };
+        if (molecule.isNovel()) novelMolecules.remove(molecule);
 
         contents.remove(molecule);
         equilibrium = false; // As we have removed a Molecule the position equilibrium is likely to change
