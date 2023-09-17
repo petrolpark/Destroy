@@ -2,10 +2,12 @@ package com.petrolpark.destroy.chemistry.index.group;
 
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Group;
+import com.petrolpark.destroy.chemistry.GroupType;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
-public class AcylChlorideGroup extends Group {
+public class AcylChlorideGroup extends Group<AcylChlorideGroup> {
 
     private Atom carbon;
     private Atom oxygen;
@@ -34,10 +36,10 @@ public class AcylChlorideGroup extends Group {
     public Molecule getExampleMolecule() {
         return DestroyMolecules.GENERIC_ACYL_CHLORIDE;
     };
-    
+
     @Override
-    public String getID() {
-        return "ACYL_CHLORIDE";
+    public GroupType<AcylChlorideGroup> getType() {
+        return DestroyGroupTypes.ACYL_CHLORIDE;
     };
     
 };

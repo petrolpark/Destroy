@@ -1,14 +1,23 @@
 package com.petrolpark.destroy.chemistry.genericreaction;
 
-import java.util.function.Supplier;
-
+import com.petrolpark.destroy.chemistry.Atom;
+import com.petrolpark.destroy.chemistry.Element;
+import com.petrolpark.destroy.chemistry.Formula;
 import com.petrolpark.destroy.chemistry.Group;
+import com.petrolpark.destroy.chemistry.GroupType;
+import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Reaction;
 
-public abstract class SingleGroupGenericReaction<T extends Group> extends GenericReaction {
+import net.minecraft.resources.ResourceLocation;
 
-    public SingleGroupGenericReaction(Supplier<T> supplier) {
-        Group.groupIDsAndReactions.get(supplier.get().getID()).add(this);
+public abstract class SingleGroupGenericReaction<G extends Group<G>> extends GenericReaction {
+
+    private final GroupType<G> type;
+
+    public SingleGroupGenericReaction(ResourceLocation id, GroupType<G> type) {
+        super(id);
+        this.type = type;;
+        Group.groupIDsAndReactions.get(type).add(this);
         GENERIC_REACTIONS.add(this);
     };
 
@@ -16,11 +25,43 @@ public abstract class SingleGroupGenericReaction<T extends Group> extends Generi
      * Generates a Reaction (with non-abstract Reactant and Products) based on the given Molecule which has this Group.
      * @return The whole Reaction, including the defined structures of the product(s).
      */
-    public abstract Reaction generateReaction(GenericReactant<T> reactant);
+    public abstract Reaction generateReaction(GenericReactant<G> reactant);
+
+    public final GroupType<G> getGroupType() {
+        return type;
+    };
 
     @Override
     public final Boolean involvesSingleGroup() {
         return true;
     };
 
-}
+    /**
+     * Get the Reaction of the {@link GroupType#getExampleMolecule example Molecule} of the {@link SingleGroupGenericReaction#getGroupType Group Type} of this 
+     * generic Reaction. This re-generates the Reaction each time, so use this method minimally or cache the result.
+     */
+    @SuppressWarnings("unchecked")
+    public Reaction getExampleReaction() {
+        Molecule exampleMolecule = getGroupType().getExampleMolecule();
+        int i = 1;
+        Formula copiedStructure = exampleMolecule.shallowCopyStructure();
+        for (Atom atom : exampleMolecule.getAtoms()) {
+            if (atom.getElement() == Element.R_GROUP) {
+                Atom newAtom = new Atom(Element.R_GROUP);
+                newAtom.rGroupNumber = i;
+                copiedStructure.replace(atom, newAtom);
+                i++;
+            };
+        };
+        Molecule copiedExampleMolecule = moleculeBuilder()
+            .structure(copiedStructure)
+            .build();
+        for (Group<?> group : copiedExampleMolecule.getFunctionalGroups()) { // Just in case the example Molecule has multiple functional groups (which it shouldn't ideally)
+            if (group.getType() == getGroupType()) {
+                return generateReaction(new GenericReactant<>(copiedExampleMolecule, (G)group)); // Unchecked conversion
+            };
+        };
+        throw new IllegalStateException("Couldn't generate example Reaction for Generic Reaction "+id.toString());
+    };
+
+};

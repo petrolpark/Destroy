@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
@@ -60,7 +61,14 @@ public class MoleculeJEIIngredient {
 
         @Override
         public ResourceLocation getResourceLocation(Molecule ingredient) {
+            if (ingredient.isNovel()) return Destroy.asResource("novel_molecule");
             return new ResourceLocation(ingredient.getFullID());
+        };
+
+        @Override
+        public String getDisplayModId(Molecule ingredient) {
+            if (ingredient.isNovel()) return "Destroy";
+            return IIngredientHelper.super.getDisplayModId(ingredient);
         };
 
         @Override

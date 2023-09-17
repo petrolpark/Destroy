@@ -14,15 +14,15 @@ import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
  * <p>Groups are identified within Molecule with {@link GroupFinder Group Finders}.</p>
  * <p>See the <a href="https://github.com/petrolpark/Destroy/wiki/Custom-Groups">Destroy Wiki</a> for more detail.</p>
  */
-public abstract class Group {
+public abstract class Group<G extends Group<G>> {
 
     /**
-     * All {@link GenericReaction Generic Reactions} in which {@link Molecule Molecules} with certain functional Groups can participate, indexed by the {@link Group#getID IDs} of those functional Groups.
+     * All {@link GenericReaction Generic Reactions} in which {@link Molecule Molecules} with certain functional Groups can participate, indexed by the {@link Group#getType Group Types} of those functional Groups.
      */
-    public static Map<String, Set<GenericReaction>> groupIDsAndReactions = new HashMap<>();
+    public static Map<GroupType<?>, Set<GenericReaction>> groupIDsAndReactions = new HashMap<>();
 
     public Group() {
-        groupIDsAndReactions.putIfAbsent(getID(), new HashSet<>());
+        groupIDsAndReactions.putIfAbsent(getType(), new HashSet<>());
     };
 
     /**
@@ -32,24 +32,20 @@ public abstract class Group {
     public abstract Molecule getExampleMolecule();
 
     /**
-     * The unique String used to represent this type of functional Group.
-     * This should be an effectively static method.
-     */
-    public abstract String getID();
-
-    /**
      * Get the {@link GenericReaction Generic Reactions} in which the given functional Group participates.
      * @param group
      */
-    public static final Set<GenericReaction> getReactionsOf(Group group) {
-        return groupIDsAndReactions.get(group.getID());
+    public static final Set<GenericReaction> getReactionsOf(Group<?> group) {
+        return groupIDsAndReactions.get(group.getType());
     };
+
+    public abstract GroupType<G> getType();
 
     /**
      * Get the {@link GenericReaction Generic Reactions} which the functional Group identified by the given ID participates in.
      * @param ID The {@link Group#getID String ID} of the functional Group.
      */
-    public static final Set<GenericReaction> getReactionsOfGroupByID(String ID) {
-        return groupIDsAndReactions.get(ID);
+    public static final Set<GenericReaction> getReactionsOfGroupByID(GroupType<?> type) {
+        return groupIDsAndReactions.get(type);
     };
 };

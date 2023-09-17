@@ -33,9 +33,6 @@ public class Node {
                 break;
             };
         };
-        if (atom.isAcidicProton()) {
-            string += "+"+atom.getpKa();
-        };
         if (!isTerminal) {
             string += nextEdge.bondType.getFROWNSCode(); // It thinks 'nextEdge' can be null
         };

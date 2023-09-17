@@ -3,11 +3,12 @@ package com.petrolpark.destroy.chemistry.genericreaction;
 import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.Molecule;
 
-public class GenericReactant<T extends Group> {
-    private Molecule molecule;
-    private T group;
+public class GenericReactant<G extends Group<G>> {
 
-    public GenericReactant(Molecule molecule, T group) {
+    private Molecule molecule;
+    private G group;
+
+    public GenericReactant(Molecule molecule, G group) {
         this.molecule = molecule;
         this.group = group;
     };
@@ -16,7 +17,7 @@ public class GenericReactant<T extends Group> {
         return this.molecule;
     };
 
-    public T getGroup() {
+    public G getGroup() {
         return this.group;
     };
 }

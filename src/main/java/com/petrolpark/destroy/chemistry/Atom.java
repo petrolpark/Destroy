@@ -1,5 +1,8 @@
 package com.petrolpark.destroy.chemistry;
 
+import com.jozufozu.flywheel.core.PartialModel;
+import com.petrolpark.destroy.block.model.DestroyPartials;
+
 /**
  * A specific Atom in a specific {@link Molecule}.
  * Atoms can be rearranged and added to {@link Formula Formulae}, but <strong>never modify Atoms themselves</strong>.
@@ -10,21 +13,16 @@ public class Atom {
     /**
      * The {@link Element specific isotope} of this Atom.
      */
-    private Element element;
+    private final Element element;
 
     /**
-     * The pKa of the dissociation of this proton.
-     * If this Atom is not an acidic proton, then this will be 0.
+     * If this 'Atom' is an {@link Element#R_GROUP R-Group} used to display a generic Reaction,
+     * this number indicates which one it is.
      */
-    private float pKa;
+    public int rGroupNumber;
 
-    /**
-     * A specific Atom in a specific {@link Molecule}.
-     * @param element The {@link Element specific isotope} of this Atom.
-     */
     public Atom(Element element) {
         this.element = element;
-        this.pKa = 0f;
     };
 
     /**
@@ -34,37 +32,22 @@ public class Atom {
         return this.element;
     };
 
-    /**
-     * Turns this Atom into an acidic proton (if the Atom already has an {@link Element}, this is disregarded).
-     * @param pKa The pKa of the dissociation of this proton
-     * @return This Atom
-     */
-    public Atom setpKa(float pKa) {
-        if (pKa == 0f) return this;
-        element = Element.HYDROGEN;
-        this.pKa = pKa;
-        return this;
+    public PartialModel getPartial() {
+        if (element == Element.R_GROUP) {
+            if (rGroupNumber < 10 && rGroupNumber >= 1) {
+                return DestroyPartials.rGroups.get(rGroupNumber);
+            };
+            return DestroyPartials.R_GROUP;
+        } else {
+            return element.getPartial();
+        }
     };
 
     /**
-     * Whether this Atom is a proton and can dissociate (i.e. its {@link Atom#pKa pKa} is 0).
+     * Whether this is Atom is a {@link Element#HYDROGEN Hydrogen}.
      */
-    public Boolean isAcidicProton() {
-        return this.pKa != 0f;
+    public Boolean isHydrogen() {
+        return element == Element.HYDROGEN;
     };
 
-    /**
-     * Whether this is Atom is both {@link Element#HYDROGEN Hydrogen} and not {@link Atom#isAcidicProton acidic}.
-     */
-    public Boolean isNonAcidicHydrogen() {
-        return !isAcidicProton() && element == Element.HYDROGEN;
-    };
-
-    /**
-     * The pKa of the dissociation of this proton.
-     * If this Atom is not an acidic proton, then this will be 0.
-     */
-    public float getpKa() {
-        return pKa;
-    };
-}
+};

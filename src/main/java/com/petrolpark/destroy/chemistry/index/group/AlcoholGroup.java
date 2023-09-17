@@ -2,10 +2,12 @@ package com.petrolpark.destroy.chemistry.index.group;
 
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Group;
+import com.petrolpark.destroy.chemistry.GroupType;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
-public class AlcoholGroup extends Group {
+public class AlcoholGroup extends Group<AlcoholGroup> {
 
     private Atom carbon;
     private Atom oxygen;
@@ -47,8 +49,8 @@ public class AlcoholGroup extends Group {
     };
 
     @Override
-    public String getID() {
-        return "ALCOHOL";
+    public GroupType<AlcoholGroup> getType() {
+        return DestroyGroupTypes.ALCOHOL;
     };
     
 };

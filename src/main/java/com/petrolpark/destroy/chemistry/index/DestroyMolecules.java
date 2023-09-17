@@ -43,7 +43,7 @@ public final class DestroyMolecules {
 
     ACETIC_ACID = builder()
         .id("acetic_acid")
-        .structure(Formula.deserialize("destroy:linear:CC(=O)OH+4.756"))
+        .structure(Formula.deserialize("destroy:linear:CC(=O)OH"))
         .boilingPoint(118.5f)
         .density(1049f)
         .molarHeatCapacity(123.1f)
@@ -96,7 +96,7 @@ public final class DestroyMolecules {
 
     ADIPIC_ACID = builder()
         .id("adipic_acid")
-        .structure(Formula.deserialize("destroy:linear:O=C(OH+4.43f)CCCCC(=O)OH+5.41f"))
+        .structure(Formula.deserialize("destroy:linear:O=C(OH)CCCCC(=O)OH"))
         .boilingPoint(337.5f)
         .density(1360f)
         .molarHeatCapacity(196.5f)
@@ -138,7 +138,7 @@ public final class DestroyMolecules {
 
     ASPIRIN = builder()
         .id("aspirin")
-        .structure(Formula.deserialize("destroy:benzene:OC(=O)C,C(=O)OH+3.5f,,,,"))
+        .structure(Formula.deserialize("destroy:benzene:OC(=O)C,C(=O)OH,,,,"))
         .boilingPoint(140f)
         .density(1400f)
         // Couldn't find heat capacity
@@ -423,7 +423,7 @@ public final class DestroyMolecules {
 
     GENERIC_ALCOHOL = builder()
         .id("generic_alcohol")
-        .structure(Formula.deserialize("destroy:linear:RO"))
+        .structure(Formula.deserialize("destroy:linear:RC(R)(R)O"))
         .hypothetical()
         .translationKey("alcohol")
         .build(),
@@ -444,7 +444,7 @@ public final class DestroyMolecules {
     
     GENERIC_AMINE = builder()
         .id("generic_amine")
-        .structure(Formula.deserialize("destroy:linear:RN"))
+        .structure(Formula.deserialize("destroy:linear:RC(R)(R)N"))
         .hypothetical()
         .translationKey("amine")
         .build(),
@@ -465,7 +465,7 @@ public final class DestroyMolecules {
     
     GENERIC_CHLORIDE = builder()
         .id("generic_chloride")
-        .structure(Formula.deserialize("destroy:linear:RCl"))
+        .structure(Formula.deserialize("destroy:linear:RC(R)(R)Cl"))
         .hypothetical()
         .translationKey("chloride")
         .build(),
@@ -479,7 +479,7 @@ public final class DestroyMolecules {
 
     GENERIC_NITRILE = builder()
         .id("generic_nitrile")
-        .structure(Formula.deserialize("destroy:linear:R#N"))
+        .structure(Formula.deserialize("destroy:linear:RC#N"))
         .hypothetical()
         .translationKey("nitrile")
         .build(),
@@ -517,7 +517,7 @@ public final class DestroyMolecules {
 
     HYDROCHLORIC_ACID = builder()
         .id("hydrochloric_acid")
-        .structure(Formula.deserialize("destroy:linear:ClH+-5.9"))
+        .structure(Formula.deserialize("destroy:linear:ClH"))
         .boilingPoint(-85.05f)
         .density(1490f)
         .specificHeatCapacity(798.1f)
@@ -527,7 +527,7 @@ public final class DestroyMolecules {
 
     HYDROFLUORIC_ACID = builder()
         .id("hydrofluoric_acid")
-        .structure(Formula.deserialize("destroy:linear:FH+3.17"))
+        .structure(Formula.deserialize("destroy:linear:FH"))
         .density(1.15f)
         .boilingPoint(19.5f)
         // Heat capacity unknown

@@ -1,5 +1,8 @@
 package com.petrolpark.destroy.block.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.jozufozu.flywheel.core.PartialModel;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Element;
@@ -51,7 +54,7 @@ public class DestroyPartials {
     // Atoms
     static {
         for (Element element : Element.values()) {
-            element.setPartial(atom(Lang.asId(element.name())));
+            if (element != Element.R_GROUP) element.setPartial(atom(Lang.asId(element.name())));
         };
     };
 
@@ -61,6 +64,16 @@ public class DestroyPartials {
             bondType.setPartial(bond(Lang.asId(bondType.name())));
         };
     }
+
+    // R-Groups
+    public static final PartialModel R_GROUP = rGroup("generic");
+    public static final List<PartialModel> rGroups = new ArrayList<>(10);
+    static {
+        rGroups.add(R_GROUP);
+        for (int i = 1; i < 10; i++) {
+            rGroups.add(rGroup(String.valueOf(i)));
+        };
+    };
 
     private static PartialModel block(String path) { //copied from Create source code
         return new PartialModel(Destroy.asResource("block/"+path));
@@ -72,6 +85,10 @@ public class DestroyPartials {
 
     private static PartialModel bond(String path) {
         return new PartialModel(Destroy.asResource("chemistry/bond/"+path));
+    };
+
+    private static PartialModel rGroup(String path) {
+        return new PartialModel(Destroy.asResource("chemistry/r_group/"+path));
     };
 
     public static void init() {};

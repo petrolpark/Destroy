@@ -365,6 +365,9 @@ public class DestroyItems {
     MAGIC_OXIDANT = REGISTRATE.item("magic_oxidant", Item::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
+    MAGIC_REDUCTANT = REGISTRATE.item("magic_reductant", Item::new)
+        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+        .register(),
 
     // FOOD AND DRINK
 
@@ -645,6 +648,8 @@ public class DestroyItems {
         .register(),
     CHALK = REGISTRATE.item("chalk", Item::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+        .register(),
+    NANODIAMONDS = REGISTRATE.item("nanodiamonds", Item::new)
         .register();
 
     public static final ItemEntry<HyperaccumulatingFertilizerItem> HYPERACCUMULATING_FERTILIZER = REGISTRATE.item("hyperaccumulating_fertilizer", HyperaccumulatingFertilizerItem::new)

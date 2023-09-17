@@ -1,19 +1,19 @@
 package com.petrolpark.destroy.chemistry.index.genericreaction;
 
-import java.util.function.Supplier;
-
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Formula;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
 import com.petrolpark.destroy.chemistry.genericreaction.SingleGroupGenericReaction;
+import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.group.ChlorideGroup;
 
 public class HydroxideSubstitutions extends SingleGroupGenericReaction<ChlorideGroup> {
 
-    public HydroxideSubstitutions(Supplier<ChlorideGroup> supplier) {
-        super(supplier);
+    public HydroxideSubstitutions() {
+        super(Destroy.asResource("hydroxide_substitution"), DestroyGroupTypes.CHLORIDE);
     };
 
     @Override
@@ -36,4 +36,4 @@ public class HydroxideSubstitutions extends SingleGroupGenericReaction<ChlorideG
             .build();
     };
     
-}
+};

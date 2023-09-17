@@ -52,7 +52,7 @@ public class Formula implements Cloneable {
      * The {@link Group functional Groups} this Formula contains.
      * Each Group is specific to a set of {@link Atom Atoms}, so for each instance of the same type of Group there is a separate entry.
      */
-    private List<Group> groups;
+    private List<Group<?>> groups;
     
     /**
      * The {@link Topology Topology} (3D structure) of this Formula if it is cyclic.
@@ -145,15 +145,6 @@ public class Formula implements Cloneable {
     };
 
     /**
-     * An acidic -OH group.
-     * @param pKa The {@link Atom#getpKa pKa} of the proton
-     * @return A new Formula instance, with the oxygen as the {@link Formula#startingAtom starting} {@link Atom}.
-     */
-    public static Formula acidicAlcohol(float pKa) {
-        return Formula.atom(Element.OXYGEN).addAcidicProton(pKa);
-    };
-
-    /**
      * Adds a singly-{@link Bond bonded} {@link Atom} of an {@link Element} onto the {@link Formula#currentAtom current Atom}, staying on the current Atom.
      * @param element The Element of the Atom to be added
      * @return This Formula
@@ -193,15 +184,6 @@ public class Formula implements Cloneable {
     public Formula addAtom(Atom atom, BondType bondType) {
         addAtomToStructure(structure, currentAtom, atom, bondType);
         return this;
-    };
-
-    /**
-     * Adds an acidic proton to the {@link Formula#currentAtom current Atom}, staying on that {@link Atom}.
-     * @param pKa The {@link Atom#getpKa pKa} of the proton to add.
-     * @return This Formula
-     */
-    public Formula addAcidicProton(float pKa) {
-        return addAtom((new Atom(Element.HYDROGEN)).setpKa(pKa));
     };
 
     /**
@@ -320,7 +302,7 @@ public class Formula implements Cloneable {
             throw new IllegalStateException("Cannot remove the currently selected Atom from a structure being built.");
         };
         if (topology.atomsAndLocations.stream().anyMatch(pair -> pair.getSecond() == atom)) {
-            throw new IllegalStateException("Cannot remove Atoms in a cyclic Molecule ");
+            throw new IllegalStateException("Cannot remove Atoms in the cyclic part of a cyclic Molecule ");
         };
         
         for (Bond bondToOtherAtom : structure.get(atom)) {
@@ -329,6 +311,43 @@ public class Formula implements Cloneable {
             });
         };
         structure.remove(atom);
+        return this;
+    };
+
+    /**
+     * Replaces one {@link Atom} with another, without moving the currently selected Atom.
+     * <p><b>To modify existing Formulae, {@link Formula#shallowCopy copy} them first.</b></p>
+     * @param oldAtom This must exist in the structure
+     * @param newAtom
+     */
+    public Formula replace(Atom oldAtom, Atom newAtom) {
+        if (!structure.containsKey(oldAtom)) {
+            throw new IllegalStateException("Cannot replace "+oldAtom.getElement().getSymbol()+" atom (does not exist).");
+        };
+        if (oldAtom == currentAtom) {
+            currentAtom = newAtom;
+        };
+        if (topology.atomsAndLocations.stream().anyMatch(pair -> pair.getSecond() == oldAtom)) {
+            throw new IllegalStateException("Cannot replace Atoms in the cyclic part of a cyclic Molecule ");
+        };
+
+        // Replace all Bonds to the old Atom with Bonds to the new Atom
+        for (Bond bondToOtherAtom : structure.get(oldAtom)) {
+            structure.get(bondToOtherAtom.getDestinationAtom()).replaceAll(bond -> {
+                if (bond.getDestinationAtom() == oldAtom) {
+                    return new Bond(bond.getSourceAtom(), newAtom, bond.getType());
+                };
+                return bond;
+            });
+        };
+
+        // Replace Bonds from the old Atom with bonds from the new Atom
+        List<Bond> oldBonds = structure.get(oldAtom);
+        structure.put(newAtom, oldBonds);
+
+        // Remove the old Atom
+        structure.remove(oldAtom);
+
         return this;
     };
 
@@ -435,7 +454,7 @@ public class Formula implements Cloneable {
      * Get all the {@link Group functional Groups} in this Formula.
      * @see Formula#groups Groups stored in Formulae
      */
-    public List<Group> getFunctionalGroups() {
+    public List<Group<?>> getFunctionalGroups() {
         return groups;
     };
 
@@ -836,17 +855,13 @@ public class Formula implements Cloneable {
             };
             if (stripBond) symbol = symbol.substring(0, symbol.length() - 1);
 
-            if (symbol.startsWith("H+")) { //if this is an acidic proton
-                formula.addAcidicProton(Float.valueOf(symbol.substring(2)));
-            } else { //if this is not an acidic proton (i.e. a normal Atom)
-                Element element = Element.fromSymbol(symbol);
+            Element element = Element.fromSymbol(symbol);
 
-                if (hasFormulaBeenInstantiated) { //if this is not the first Atom
-                    formula.addGroup(Formula.atom(element), false, thisAtomBond);
-                } else {
-                    formula = Formula.atom(element);
-                    hasFormulaBeenInstantiated  = true;
-                };
+            if (hasFormulaBeenInstantiated) { //if this is not the first Atom
+                formula.addGroup(Formula.atom(element), false, thisAtomBond);
+            } else {
+                formula = Formula.atom(element);
+                hasFormulaBeenInstantiated = true;
             };
 
             for (Formula group : groupsToAdd.keySet()) { //add all side Groups to the current Atom
@@ -877,11 +892,11 @@ public class Formula implements Cloneable {
         for (Atom atom : structure.keySet()) {
             List<Bond> bondsToAdd = new ArrayList<>();
             for (Bond bond : structure.get(atom)) {
-                if (!bond.getDestinationAtom().isNonAcidicHydrogen()) {
+                if (!bond.getDestinationAtom().isHydrogen()) {
                     bondsToAdd.add(bond);
                 };
             };
-            if (!atom.isNonAcidicHydrogen()) {
+            if (!atom.isHydrogen()) {
                 newStructure.put(atom, bondsToAdd);
             };
         };

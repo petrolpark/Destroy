@@ -18,6 +18,7 @@ import com.petrolpark.destroy.compat.jei.category.ChargingCategory;
 import com.petrolpark.destroy.compat.jei.category.DestroyRecipeCategory;
 import com.petrolpark.destroy.compat.jei.category.DistillationCategory;
 import com.petrolpark.destroy.compat.jei.category.ElectrolysisCategory;
+import com.petrolpark.destroy.compat.jei.category.GenericReactionCategory;
 import com.petrolpark.destroy.compat.jei.category.ITickableCategory;
 import com.petrolpark.destroy.compat.jei.category.MutationCategory;
 import com.petrolpark.destroy.compat.jei.category.ReactionCategory;
@@ -145,6 +146,16 @@ public class DestroyJEI implements IModPlugin {
             .itemIcon(DestroyItems.MOLECULE_DISPLAY.get())
             .emptyBackground(180, 125)
             .build("reaction", ReactionCategory::new),
+
+        genericReaction = builder(ReactionRecipe.class)
+            .addRecipes(GenericReactionCategory.RECIPES::values)
+            // Doesn't accept Mixtures as Generic Reactions involve Molecules, not Mixtures.
+            .catalyst(AllBlocks.MECHANICAL_MIXER::get)
+            .catalyst(AllBlocks.BASIN::get)
+            .catalyst(DestroyBlocks.VAT_CONTROLLER::get)
+            .itemIcon(DestroyItems.MOLECULE_DISPLAY.get())
+            .emptyBackground(180, 125)
+            .build("generic_reaction", GenericReactionCategory::new),
 
         electrolysis = builder(BasinRecipe.class)
             .addTypedRecipes(DestroyRecipeTypes.ELECTROLYSIS)

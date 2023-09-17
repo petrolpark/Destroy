@@ -2,10 +2,12 @@ package com.petrolpark.destroy.chemistry.index.group;
 
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Group;
+import com.petrolpark.destroy.chemistry.GroupType;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
-public class AcidAnhydrideGroup extends Group {
+public class AcidAnhydrideGroup extends Group<AcidAnhydrideGroup> {
 
     private Atom firstCarbon;
     private Atom firstOxygen;
@@ -49,11 +51,11 @@ public class AcidAnhydrideGroup extends Group {
     @Override
     public Molecule getExampleMolecule() {
         return DestroyMolecules.GENERIC_ACID_ANHYDRIDE;
-    };
+    }
 
     @Override
-    public String getID() {
-        return "ACID_ANHYDRIDE";
+    public GroupType<AcidAnhydrideGroup> getType() {
+        return DestroyGroupTypes.ACID_ANHYDRIDE;
     };
     
 };

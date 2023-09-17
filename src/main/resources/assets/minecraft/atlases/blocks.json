@@ -66,6 +66,10 @@
       },
       {
         "type": "single",
+        "resource": "destroy:chemistry/r_groups"
+      },
+      {
+        "type": "single",
         "resource": "minecraft:entity/skeleton/stray"
       },
       {

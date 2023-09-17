@@ -38,7 +38,7 @@ public abstract class GroupFinder {
      * @param structure A Map of {@link Atom Atoms} to all {@link Bond Bonds} that Atom has (see the {@code structure} property of {@link Formula})
      * @return The list of Groups which this Group Finder has identified as being contained within the given structure
      */
-    public abstract List<Group> findGroups(Map<Atom, List<Bond>> structure);
+    public abstract List<Group<?>> findGroups(Map<Atom, List<Bond>> structure);
 
     /**
      * A convenience method that gives all {@link Atom Atoms} of the given {@link Element} {@link Bonded bonded} (with any {@link Bond.BondType type}) to the given Atom in the given structure.

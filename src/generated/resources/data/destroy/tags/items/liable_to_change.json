@@ -46,6 +46,7 @@
     "destroy:sawdust",
     "destroy:voltaic_pile",
     "destroy:chalk",
-    "destroy:zirconium_ingot"
+    "destroy:zirconium_ingot",
+    "destroy:magic_reductant"
   ]
 }

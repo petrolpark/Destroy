@@ -22,9 +22,9 @@ import com.petrolpark.destroy.chemistry.index.group.EsterGroup;
 public class DestroyGroupFinder extends GroupFinder {
 
     @Override
-    public List<Group> findGroups(Map<Atom, List<Bond>> structure) {
+    public List<Group<?>> findGroups(Map<Atom, List<Bond>> structure) {
 
-        List<Group> groups = new ArrayList<>();
+        List<Group<?>> groups = new ArrayList<>();
 
         List<Atom> carbonsToIgnore = new ArrayList<>();
 

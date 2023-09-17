@@ -50,11 +50,11 @@ public class Mixture extends ReadOnlyMixture {
     protected List<Reaction> possibleReactions;
 
     /**
-     * Every {@link Molecule} in this Mixture that has a {@link Group functional Group}, indexed by the {@link Group#getID ID} of that Group.
+     * Every {@link Molecule} in this Mixture that has a {@link Group functional Group}, indexed by the {@link Group#getType Type} of that Group.
      * Molecules are stored as {@link com.petrolpark.destroy.chemistry.genericreaction.GenericReactant Generic Reactants}.
      * Molecules which have multiple of the same Group are indexed for each occurence of the Group.
      */
-    protected Map<String, List<GenericReactant<?>>> groupIDsAndMolecules;
+    protected Map<GroupType<?>, List<GenericReactant<?>>> groupIDsAndMolecules;
 
     /**
      * Whether this Mixture has reached equilibrium. This means either:
@@ -675,6 +675,7 @@ public class Mixture extends ReadOnlyMixture {
      * @see Mixture#addMolecule The wrapper for this method
      * @see Mixture#changeConcentrationOf Modifying the concentration of pre-existing Molecule
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private boolean internalAddMolecule(Molecule molecule, float concentration, Boolean shouldRefreshReactions) {
 
         boolean newMoleculeAdded = true; // Start by assuming we're adding a brand new Molecule to this solution
@@ -686,14 +687,10 @@ public class Mixture extends ReadOnlyMixture {
 
         if (!molecule.isNovel()) super.addMolecule(molecule, concentration); //TODO not do this if it turns out to already be in solution
 
-        List<Group> functionalGroups = molecule.getFunctionalGroups();
+        List<Group<?>> functionalGroups = molecule.getFunctionalGroups();
         if (functionalGroups.size() != 0) {
-            for (Group group : functionalGroups) {
-                String groupID = group.getID();
-                if (!groupIDsAndMolecules.containsKey(groupID)) {
-                    groupIDsAndMolecules.put(groupID, new ArrayList<>());
-                };
-                groupIDsAndMolecules.get(groupID).add(new GenericReactant<>(molecule, group));
+            for (Group group : functionalGroups) { // Unparameterised raw type
+                addGroupToMixture(molecule, group); // Unchecked conversion
             };
         };
 
@@ -722,6 +719,14 @@ public class Mixture extends ReadOnlyMixture {
         return newMoleculeAdded; // Return whether or not we actually added a brand new Molecule
     };
 
+    private <G extends Group<G>> void addGroupToMixture(Molecule molecule, G group) {
+        GroupType<G> groupType = group.getType();
+        if (!groupIDsAndMolecules.containsKey(groupType)) {
+            groupIDsAndMolecules.put(groupType, new ArrayList<>());
+        };
+        groupIDsAndMolecules.get(groupType).add(new GenericReactant<>(molecule, group));
+    };
+
     /**
      * Removes the given {@link Molecule} from this Mixture, if that Molecule is already in it.
      * This does not refresh possible {@link Reaction Reactions}.
@@ -730,10 +735,10 @@ public class Mixture extends ReadOnlyMixture {
      */
     private Mixture removeMolecule(Molecule molecule) {
 
-        List<Group> functionalGroups = molecule.getFunctionalGroups();
+        List<Group<?>> functionalGroups = molecule.getFunctionalGroups();
         if (functionalGroups.size() != 0) {
-            for (Group group : functionalGroups) {
-                groupIDsAndMolecules.get(group.getID()).removeIf((reactant) -> {
+            for (Group<?> group : functionalGroups) {
+                groupIDsAndMolecules.get(group.getType()).removeIf((reactant) -> {
                     return reactant.getMolecule() == molecule;
                 });
             };
@@ -797,10 +802,10 @@ public class Mixture extends ReadOnlyMixture {
         Set<Reaction> newPossibleReactions = new HashSet<>();
 
         // Generate specific Generic Reactions
-        for (String id : groupIDsAndMolecules.keySet()) {
-            for (GenericReaction genericreaction : Group.getReactionsOfGroupByID(id)) {
+        for (GroupType<?> groupType : groupIDsAndMolecules.keySet()) {
+            for (GenericReaction genericreaction : Group.getReactionsOfGroupByID(groupType)) {
                 if (genericreaction.involvesSingleGroup()) { // Generic Reactions involving only one functional Group
-                    newPossibleReactions.addAll(specifySingleGroupGenericReactions(genericreaction, groupIDsAndMolecules.get(id)));
+                    newPossibleReactions.addAll(specifySingleGroupGenericReactions(genericreaction, groupIDsAndMolecules.get(groupType)));
                 } else { // Generic Reactions involving two functional Groups
                     //TODO
                     //TODO check for polymerisation
@@ -847,7 +852,7 @@ public class Mixture extends ReadOnlyMixture {
      * @return A Collection of all specified Reactions.
      */
     @SuppressWarnings("unchecked")
-    private <G extends Group> List<Reaction> specifySingleGroupGenericReactions(GenericReaction genericreaction, List<GenericReactant<?>> reactants) {
+    private <G extends Group<G>> List<Reaction> specifySingleGroupGenericReactions(GenericReaction genericreaction, List<GenericReactant<?>> reactants) {
         try {
             SingleGroupGenericReaction<G> singleGroupGenericReaction = (SingleGroupGenericReaction<G>) genericreaction; // Unchecked conversion
             List<Reaction> reactions = new ArrayList<>();
