@@ -206,7 +206,6 @@ public class Molecule implements INameableProduct {
      * @return A pre-existing Molecule object if there is a match, or this Molecule otherwise
      */
     public Molecule getEquivalent() {
-        if (getAtoms().stream().anyMatch(atom -> atom.rGroupNumber != 0)) return this; // If the Molecule contains numbered R Groups, it has no equivalents
         for (Molecule molecule : MOLECULES.values()) {
             if (Math.abs(getMass() - molecule.getMass()) < 0.001) { // Initially just check the masses match
                 if (structure.serialize().equals(molecule.structure.serialize())) { // Ceck the structures match

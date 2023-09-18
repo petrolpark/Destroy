@@ -324,9 +324,8 @@ public class Formula implements Cloneable {
         if (!structure.containsKey(oldAtom)) {
             throw new IllegalStateException("Cannot replace "+oldAtom.getElement().getSymbol()+" atom (does not exist).");
         };
-        if (oldAtom == currentAtom) {
-            currentAtom = newAtom;
-        };
+        if (oldAtom == currentAtom) currentAtom = newAtom;
+        if (oldAtom == startingAtom) startingAtom = newAtom;
         if (topology.atomsAndLocations.stream().anyMatch(pair -> pair.getSecond() == oldAtom)) {
             throw new IllegalStateException("Cannot replace Atoms in the cyclic part of a cyclic Molecule ");
         };
@@ -495,21 +494,7 @@ public class Formula implements Cloneable {
 
             Map<Atom, List<Bond>> newStructure = stripHydrogens(structure);
 
-            List<Atom> terminalAtoms = new ArrayList<>();
-            for (Atom atom : newStructure.keySet()) {
-                if (newStructure.get(atom).size() == 1) {
-                    terminalAtoms.add(atom);
-                };
-            };
-
-            Collections.sort(terminalAtoms, (a1, a2) -> {
-                return a2.getElement().getMass().compareTo(a1.getElement().getMass());
-            });
-            Collections.sort(terminalAtoms, (a1, a2) -> {
-                return getMaximumBranch(a2, newStructure).getMassOfLongestChain().compareTo(getMaximumBranch(a1, newStructure).getMassOfLongestChain()); // Put in descending order of chain length
-            });
-
-            body = getMaximumBranch(terminalAtoms.get(0), newStructure).serialize();
+            body = getMaximumBranchWithHighestMass(newStructure).serialize();
 
         } else {
             for (int i = 0; i < topology.getConnections(); i++) {
@@ -529,6 +514,24 @@ public class Formula implements Cloneable {
 
     };
 
+    private static Branch getMaximumBranchWithHighestMass(Map<Atom, List<Bond>> structure) {
+        List<Atom> terminalAtoms = new ArrayList<>();
+        for (Atom atom : structure.keySet()) {
+            if (structure.get(atom).size() == 1) {
+                terminalAtoms.add(atom);
+            };
+        };
+
+        Collections.sort(terminalAtoms, (a1, a2) -> {
+            return Branch.getMassForComparisonInSerialization(a1).compareTo(Branch.getMassForComparisonInSerialization(a2));
+        });
+        Collections.sort(terminalAtoms, (a1, a2) -> {
+            return getMaximumBranch(a2, structure).getMassOfLongestChain().compareTo(getMaximumBranch(a1, structure).getMassOfLongestChain()); // Put in descending order of chain length
+        });
+
+        return getMaximumBranch(terminalAtoms.get(0), structure);
+    };
+
     /**
      * Creates a Formula from a <a href="https://github.com/petrolpark/Destroy/wiki/FROWNS">FROWNS</a> code.
      * Hydrogens will be {@link Formula#addAllHydrogens added automatically}.
@@ -536,7 +539,6 @@ public class Formula implements Cloneable {
      * @return A new Formula instance
      */
     public static Formula deserialize(String FROWNSstring) {
-
         try {
             Formula formula;
 
@@ -639,7 +641,8 @@ public class Formula implements Cloneable {
      * Get the directed form of this structure, for use in {@link com.petrolpark.destroy.client.gui.MoleculeRenderer rendering}.
      */
     public Branch getRenderBranch() {
-        return getMaximumBranch(startingAtom, structure);
+        if (topology != Topology.LINEAR) throw new IllegalStateException("Cannot get a Render branch for a cyclic Molecule.");
+        return getMaximumBranchWithHighestMass(structure);
     };
 
     //INTERNAL METHODS
@@ -855,12 +858,21 @@ public class Formula implements Cloneable {
             };
             if (stripBond) symbol = symbol.substring(0, symbol.length() - 1);
 
-            Element element = Element.fromSymbol(symbol);
+            // Check if this is a numbered R-Group
+            char lastChar = symbol.charAt(symbol.length() - 1);
+            int rGroupNumber = 0;
+            if (Character.isDigit(lastChar)) {
+                symbol = symbol.substring(0, symbol.length() - 1);
+                rGroupNumber = Integer.valueOf(lastChar - '0');
+            };
+            Atom atom = new Atom(Element.fromSymbol(symbol));
+            atom.rGroupNumber = rGroupNumber;
 
+            // Add the Atom to the Formula
             if (hasFormulaBeenInstantiated) { //if this is not the first Atom
-                formula.addGroup(Formula.atom(element), false, thisAtomBond);
+                formula.addGroup(new Formula(atom), false, thisAtomBond);
             } else {
-                formula = Formula.atom(element);
+                formula = new Formula(atom);
                 hasFormulaBeenInstantiated = true;
             };
 

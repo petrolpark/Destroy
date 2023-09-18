@@ -500,7 +500,7 @@
     "destroy.reaction.andrussow_process": "Andrussow Process",
     "destroy.reaction.andrussow_process.description": "A high-temperature platinum-{catalyzed, destroy:catalyst} method for the production of [destroy:hydrogen_cyanide].",
     "destroy.reaction.anthraquinone_process": "Anthraquinone Process",
-    "destroy.reaction.anthraquinone_process.description": "The second step in the production of [destroy:hydrogen_peroxide] by the reduction of [destroy:oxygen] by [destroy:ethylanthrahydroquinone].",
+    "destroy.reaction.anthraquinone_process.description": "The second step in the production of [destroy:hydrogen_peroxide] by the {reduction, destroy:reduction} of [destroy:oxygen] by [destroy:ethylanthrahydroquinone].",
     "destroy.reaction.anthraquinone_reduction": "Anthraquinone Reduction",
     "destroy.reaction.anthraquinone_reduction.description": "The first step in the production of [destroy:hydrogen_peroxide] - {hydrogenating, destroy:hydrogenation} [destroy:ethylanthraquinone].",
     "destroy.reaction.basic_diels_alder_reaction": "Diels-Alder Reaction",

@@ -14,6 +14,7 @@ import com.google.common.collect.ImmutableList;
 import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
@@ -75,7 +76,6 @@ public class MoleculeRenderer {
 
         // Monatomic Molecules
         if (molecule.getAtoms().size() == 1) {
-
             RENDERED_OBJECTS.add(Pair.of(Vec3.ZERO, new AtomRenderInstance(molecule.getAtoms().iterator().next())));
 
         // Cyclic Molecules
@@ -204,7 +204,7 @@ public class MoleculeRenderer {
 
             // Render side chains
             int j = 1;
-            for (Entry<Branch, BondType> sideBranchAndBondType : node.getSideBranches().entrySet()) {
+            for (Entry<Branch, BondType> sideBranchAndBondType : node.getOrderedSideBranches()) {
 
                 Vec3 sideZag; // The zag which will connect the side chain
                 if (j == geometry.connections.size()) { // This occurs if we're adding side chains on the first Node in the branch: if so, we need to add the side chain 'behind' it

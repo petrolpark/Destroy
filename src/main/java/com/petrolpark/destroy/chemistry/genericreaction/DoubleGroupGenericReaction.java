@@ -15,8 +15,8 @@ public abstract class DoubleGroupGenericReaction<FirstGroup extends Group<FirstG
         super(id);
         this.firstType = firstType;
         this.secondType = secondType;
-        Group.groupIDsAndReactions.get(firstType).add(this);
-        Group.groupIDsAndReactions.get(secondType).add(this);
+        Group.groupTypesAndReactions.get(firstType).add(this);
+        Group.groupTypesAndReactions.get(secondType).add(this);
         GENERIC_REACTIONS.add(this);
     };
     

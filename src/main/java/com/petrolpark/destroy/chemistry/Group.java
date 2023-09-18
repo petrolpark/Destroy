@@ -19,10 +19,10 @@ public abstract class Group<G extends Group<G>> {
     /**
      * All {@link GenericReaction Generic Reactions} in which {@link Molecule Molecules} with certain functional Groups can participate, indexed by the {@link Group#getType Group Types} of those functional Groups.
      */
-    public static Map<GroupType<?>, Set<GenericReaction>> groupIDsAndReactions = new HashMap<>();
+    public static Map<GroupType<?>, Set<GenericReaction>> groupTypesAndReactions = new HashMap<>();
 
     public Group() {
-        groupIDsAndReactions.putIfAbsent(getType(), new HashSet<>());
+        groupTypesAndReactions.putIfAbsent(getType(), new HashSet<>());
     };
 
     /**
@@ -36,7 +36,7 @@ public abstract class Group<G extends Group<G>> {
      * @param group
      */
     public static final Set<GenericReaction> getReactionsOf(Group<?> group) {
-        return groupIDsAndReactions.get(group.getType());
+        return groupTypesAndReactions.get(group.getType());
     };
 
     public abstract GroupType<G> getType();
@@ -46,6 +46,6 @@ public abstract class Group<G extends Group<G>> {
      * @param ID The {@link Group#getID String ID} of the functional Group.
      */
     public static final Set<GenericReaction> getReactionsOfGroupByID(GroupType<?> type) {
-        return groupIDsAndReactions.get(type);
+        return groupTypesAndReactions.get(type);
     };
 };

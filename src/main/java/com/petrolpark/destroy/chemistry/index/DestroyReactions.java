@@ -334,7 +334,8 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.METHYLAMINE)
         .withResult(1f, (m, r) -> new CombinedReactionResult(m, r)
             .with(ExplosionReactionResult::small)
-        ).build(),
+        ).dontIncludeInJei()
+        .build(),
 
     NHN_SYNTHESIS = builder()
         .id("nhn_synthesis")

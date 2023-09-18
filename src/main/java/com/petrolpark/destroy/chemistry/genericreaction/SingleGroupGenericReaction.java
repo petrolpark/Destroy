@@ -17,8 +17,8 @@ public abstract class SingleGroupGenericReaction<G extends Group<G>> extends Gen
     public SingleGroupGenericReaction(ResourceLocation id, GroupType<G> type) {
         super(id);
         this.type = type;;
-        Group.groupIDsAndReactions.get(type).add(this);
-        GENERIC_REACTIONS.add(this);
+        Group.groupTypesAndReactions.get(type).add(this);
+        GENERIC_REACTIONS.add(this); // Add this to the list of all known Generic Reaction
     };
 
     /**
@@ -40,8 +40,9 @@ public abstract class SingleGroupGenericReaction<G extends Group<G>> extends Gen
      * Get the Reaction of the {@link GroupType#getExampleMolecule example Molecule} of the {@link SingleGroupGenericReaction#getGroupType Group Type} of this 
      * generic Reaction. This re-generates the Reaction each time, so use this method minimally or cache the result.
      */
+    @Override
     @SuppressWarnings("unchecked")
-    public Reaction getExampleReaction() {
+    public Reaction generateExampleReaction() {
         Molecule exampleMolecule = getGroupType().getExampleMolecule();
         int i = 1;
         Formula copiedStructure = exampleMolecule.shallowCopyStructure();
@@ -58,9 +59,11 @@ public abstract class SingleGroupGenericReaction<G extends Group<G>> extends Gen
             .build();
         for (Group<?> group : copiedExampleMolecule.getFunctionalGroups()) { // Just in case the example Molecule has multiple functional groups (which it shouldn't ideally)
             if (group.getType() == getGroupType()) {
-                return generateReaction(new GenericReactant<>(copiedExampleMolecule, (G)group)); // Unchecked conversion
+                Reaction reaction = generateReaction(new GenericReactant<>(copiedExampleMolecule, (G)group)); // Unchecked conversion
+                return reaction;
             };
         };
+        //TODO cache these generated Molecules as currently they get regenerated every frame
         throw new IllegalStateException("Couldn't generate example Reaction for Generic Reaction "+id.toString());
     };
 
