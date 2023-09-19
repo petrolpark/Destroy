@@ -10,6 +10,7 @@ import com.petrolpark.destroy.chemistry.index.group.CarbonylGroup;
 import com.petrolpark.destroy.chemistry.index.group.CarboxylicAcidGroup;
 import com.petrolpark.destroy.chemistry.index.group.ChlorideGroup;
 import com.petrolpark.destroy.chemistry.index.group.EsterGroup;
+import com.petrolpark.destroy.chemistry.index.group.NitrileGroup;
 
 public class DestroyGroupTypes {
     
@@ -22,4 +23,5 @@ public class DestroyGroupTypes {
     public static GroupType<CarboxylicAcidGroup> CARBOXYLIC_ACID = new GroupType<>(() -> DestroyMolecules.GENERIC_CARBOXYLIC_ACID);
     public static GroupType<ChlorideGroup> CHLORIDE = new GroupType<>(() -> DestroyMolecules.GENERIC_CHLORIDE);
     public static GroupType<EsterGroup> ESTER = new GroupType<>(() -> DestroyMolecules.GENERIC_ESTER);
+    public static GroupType<NitrileGroup> NITRILE = new GroupType<>(() -> DestroyMolecules.GENERIC_NITRILE);
 };

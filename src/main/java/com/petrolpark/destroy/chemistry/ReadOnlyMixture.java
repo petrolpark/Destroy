@@ -2,6 +2,7 @@ package com.petrolpark.destroy.chemistry;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -218,13 +219,16 @@ public class ReadOnlyMixture {
     public List<Component> getContentsTooltip(boolean iupac, DecimalFormat concentrationFormatter) {
         int i = 0;
         List<Component> tooltip = new ArrayList<>();
-        for (Entry<Molecule, Float> entry : contents.entrySet()) {
+        List<Molecule> molecules = new ArrayList<>(contents.keySet());
+        Collections.sort(molecules, (m1, m2) -> contents.get(m2).compareTo(contents.get(m1)));
+        for (Molecule molecule : molecules) {
             tooltip.add(i, DestroyLang.builder()
                 .space().space()
-                .add(entry.getKey().getName(iupac).plainCopy())
+                .add(Component.literal(String.format("%1$6s", concentrationFormatter.format(contents.get(molecule))+"M"))) // Show concentration
+                .space()
+                .add(molecule.getName(iupac).plainCopy())
                 .add(Component.literal(
-                    (entry.getKey().getCharge() == 0 ? "" : " [" + entry.getKey().getSerializedCharge(false) + "]") + // Show charge, if there is one
-                    " ("+concentrationFormatter.format(entry.getValue())+"M)" // Show concentration
+                    (molecule.getCharge() == 0 ? "" : " [" + molecule.getSerializedCharge(false) + "]") // Show charge, if there is one
                 ))
                 .style(ChatFormatting.GRAY)
                 .component()
@@ -336,6 +340,7 @@ public class ReadOnlyMixture {
                 .component();
             return;
         } else if (products.size() == 2) { // Two products
+            Collections.sort(products, (p1, p2) -> p1.getName(iupac).getString().compareTo(p2.getName(iupac).getString()));
             name = (thereAreImpurities ? DestroyLang.translate("mixture.impure").space() : DestroyLang.builder())
                 .add(DestroyLang.translate("mixture.and", 
                     products.get(0).getName(iupac).getString(), products.get(1).getName(iupac).getString()

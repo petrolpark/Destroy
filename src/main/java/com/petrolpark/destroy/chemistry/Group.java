@@ -26,12 +26,6 @@ public abstract class Group<G extends Group<G>> {
     };
 
     /**
-     * A {@link Molecule} that contains nothing but this type of functional Group and {@link Element#R_GROUP R-Groups}.
-     * This should be an effectively static method. It is used for conveying {@link GenericReaction Generic Reactions} in JEI.
-     */
-    public abstract Molecule getExampleMolecule();
-
-    /**
      * Get the {@link GenericReaction Generic Reactions} in which the given functional Group participates.
      * @param group
      */

@@ -3,9 +3,7 @@ package com.petrolpark.destroy.chemistry.index.group;
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.GroupType;
-import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
-import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
 public class ChlorideGroup extends Group<ChlorideGroup> {
 
@@ -35,11 +33,6 @@ public class ChlorideGroup extends Group<ChlorideGroup> {
     public int getDegree() {
         return degree;
     };
-
-    @Override
-    public Molecule getExampleMolecule() {
-        return DestroyMolecules.GENERIC_CHLORIDE;
-    }
 
     @Override
     public GroupType<ChlorideGroup> getType() {

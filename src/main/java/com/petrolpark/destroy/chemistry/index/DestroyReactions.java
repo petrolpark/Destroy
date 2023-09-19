@@ -18,14 +18,6 @@ public class DestroyReactions {
 
     public static final Reaction
 
-    ACETONE_CYANOHYDRIN_SYNTHESIS = builder()
-        .id("acetone_cyanohydrin_synthesis")
-        .addReactant(DestroyMolecules.CYANIDE)
-        .addReactant(DestroyMolecules.ACETONE)
-        .addReactant(DestroyMolecules.PROTON)
-        .addProduct(DestroyMolecules.ACETONE_CYANOHYDRIN)
-        .build(), // This is a generic Cyanide addition-elimination and will be removed in place of the automatically generated reaction
-
     AIBN_SYNTHESIS = builder()
         .id("aibn_synthesis")
         .addReactant(DestroyMolecules.ACETONE_CYANOHYDRIN, 2)
@@ -390,6 +382,14 @@ public class DestroyReactions {
         .addCatalyst(DestroyMolecules.PROTON, 0)
         .addProduct(DestroyMolecules.HYDRAZINE)
         .addProduct(DestroyMolecules.WATER, 2)
+        .build(),
+
+    PHOSGENE_FORMATION = builder()
+        .id("phosgene_formation")
+        .addReactant(DestroyMolecules.CARBON_MONOXIDE)
+        .addReactant(DestroyMolecules.CHLORINE)
+        .addProduct(DestroyMolecules.PHOSGENE)
+        .enthalpyChange(-107.6f)
         .build(),
 
     TATP = builder()

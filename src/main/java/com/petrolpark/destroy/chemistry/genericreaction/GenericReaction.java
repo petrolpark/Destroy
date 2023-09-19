@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.Molecule.MoleculeBuilder;
+import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
 
 import net.minecraft.resources.ResourceLocation;
 
@@ -20,7 +21,7 @@ public abstract class GenericReaction {
     /**
      * The identifier for this Generic Reaction, which JEI uses to find the title and description.
      */
-    protected final ResourceLocation id;
+    public final ResourceLocation id;
 
     /**
      * The example Reaction to be displayed in JEI.
@@ -33,6 +34,10 @@ public abstract class GenericReaction {
 
     protected static MoleculeBuilder moleculeBuilder() {
         return new MoleculeBuilder("novel");
+    };
+
+    protected static ReactionBuilder reactionBuilder() {
+        return Reaction.generatedReactionBuilder();
     };
 
     public abstract Boolean involvesSingleGroup();

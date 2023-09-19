@@ -85,7 +85,7 @@ public class Branch {
     public Float getMass() {
         float total = 0f;
         for (Node node : nodes) {
-            total += node.getAtom().getElement().getMass();
+            total += getMassForComparisonInSerialization(node.getAtom());
             for (Branch branch : node.getSideBranches().keySet()) {
                 total += branch.getMass();
             };

@@ -104,12 +104,30 @@ public class Formula implements Cloneable {
 
     /**
      * Moves the {@link Formula#currentAtom currently selected} {@link Atom Atom} to the one given.
-     * @param atom If this does not exist in the Formula, the current Atom is not changed
+     * @param atom If this does not exist in the Formula, en error is raised
      * @return This Formula
      */
     public Formula moveTo(Atom atom) {
         if (structure.containsKey(atom)) {
             currentAtom = atom;
+        } else {
+            throw new IllegalArgumentException("Can't set the current Atom to an Atom not in the Formula");
+        };
+        return this;
+    };
+
+    /**
+     * Change the {@link Formula#startingAtom starting} {@link Atom} to the one given.
+     * This is useful when {@link Formula#addGroup attaching side-groups}, as they are always
+     * joined by the starting Atom of the side group.
+     * @param atom If this does not exist in the Formula, an error is raised
+     * @return This Formula
+     */
+    public Formula setStartingAtom(Atom atom) {
+        if (structure.containsKey(atom)) {
+            startingAtom = atom;
+        } else {
+            throw new IllegalArgumentException("Can't set the starting Atom to an Atom not in the Formula");
         };
         return this;
     };
@@ -195,19 +213,19 @@ public class Formula implements Cloneable {
      * @see Formula#addGroup(Formula, Boolean, BondType) Adding a non-single Bond
      */
     public Formula addGroup(Formula group) {
-        return this.addGroup(group, false);
+        return this.addGroup(group, true);
     };
 
     /**
      * Adds a singly-{@link Bond bonded} sub-Formula to the {@link Formula#currentAtom current} {@link Atom}.
      * @param group The sub-Formula to add
      * @param isSideGroup Whether to stay on the current Atom to which the sub-Formula is being added,
-     * or move to the current Atom of the sub-Formula (defaults to false if not supplied)
+     * or move to the current Atom of the sub-Formula (defaults to {@code} if not supplied)
      * @return This Formula
      * @see Formula#startingAtom How sub-Formulae are added
      * @see Formula#addGroup(Formula, Boolean, BondType) Adding a non-single Bond
      */
-    public Formula addGroup(Formula group, Boolean isSideGroup) {
+    public Formula addGroup(Formula group, boolean isSideGroup) {
         return this.addGroup(group, isSideGroup, BondType.SINGLE);
     };
 
@@ -523,10 +541,10 @@ public class Formula implements Cloneable {
         };
 
         Collections.sort(terminalAtoms, (a1, a2) -> {
-            return Branch.getMassForComparisonInSerialization(a1).compareTo(Branch.getMassForComparisonInSerialization(a2));
+            return getMaximumBranch(a2, structure).getMassOfLongestChain().compareTo(getMaximumBranch(a1, structure).getMassOfLongestChain()); // Put in descending order of chain length
         });
         Collections.sort(terminalAtoms, (a1, a2) -> {
-            return getMaximumBranch(a2, structure).getMassOfLongestChain().compareTo(getMaximumBranch(a1, structure).getMassOfLongestChain()); // Put in descending order of chain length
+            return Branch.getMassForComparisonInSerialization(a1).compareTo(Branch.getMassForComparisonInSerialization(a2));
         });
 
         return getMaximumBranch(terminalAtoms.get(0), structure);
@@ -699,7 +717,7 @@ public class Formula implements Cloneable {
                 Map<Branch, BondType> connectedBranchesAndTheirBondTypes = new HashMap<>();
                 for (Node node : connectedUnvisitedNodesAndTheirBondTypes.keySet()) {
 
-                    Map<Atom, List<Bond>> newStructure = shallowCopyStructure(structure); //create a new Structure which does not include the current Node
+                    Map<Atom, List<Bond>> newStructure = shallowCopyStructure(structure); // Create a new Structure which does not include the current Node
                     Bond bondToRemove = null;
                     for (Bond bond : structure.get(node.getAtom())) {
                         if (bond.getDestinationAtom() == currentNode.getAtom()) {
@@ -768,7 +786,10 @@ public class Formula implements Cloneable {
         if (group.topology != Topology.LINEAR) {
             Destroy.LOGGER.warn("Cannot add Cycles as side-groups - to create a Cyclic Molecule, start with the Cycle and use addGroupAtPosition()");
         };
-        structureToMutate.putAll(group.structure);
+        for (Entry<Atom, List<Bond>> entry : group.structure.entrySet()) {
+            if (structureToMutate.containsKey(entry.getKey())) throw new IllegalStateException("Cannot add a derivative of a Formula to itself.");
+            structureToMutate.put(entry.getKey(), entry.getValue());
+        };
         addBondBetweenAtoms(structureToMutate, rootAtom, group.startingAtom, bondType);
     };
 

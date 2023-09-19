@@ -15,6 +15,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.chemistry.genericreaction.DoubleGroupGenericReaction;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
 import com.petrolpark.destroy.chemistry.genericreaction.SingleGroupGenericReaction;
@@ -51,7 +52,7 @@ public class Mixture extends ReadOnlyMixture {
 
     /**
      * Every {@link Molecule} in this Mixture that has a {@link Group functional Group}, indexed by the {@link Group#getType Type} of that Group.
-     * Molecules are stored as {@link com.petrolpark.destroy.chemistry.genericreaction.GenericReactant Generic Reactants}.
+     * Molecules are stored as {@link com.petrolpark.destroy.chemistry.genericReaction.GenericReactant Generic Reactants}.
      * Molecules which have multiple of the same Group are indexed for each occurence of the Group.
      */
     protected Map<GroupType<?>, List<GenericReactant<?>>> groupIDsAndMolecules;
@@ -795,20 +796,34 @@ public class Mixture extends ReadOnlyMixture {
     /**
      * Determine all {@link Reaction Reactions} - including {@link GenericReactions Generic Reactions} that are possible with the {@link Molecule Molecules} in this Mixture,
      * and update the {@link Mixture#possibleReactions stored possible Reactions} accordingly.
-     * This should be called whenever new Molecules have been {@link Mixture#addMolecule added} to the Mixture, or a Molecule has been removed entirely.
+     * This should be called whenever new Molecules have been {@link Mixture#addMolecule added} to the Mixture, or a Molecule has been removed entirely, but rarely otherwise.
      */
     private void refreshPossibleReactions() {
         possibleReactions = new ArrayList<>();
         Set<Reaction> newPossibleReactions = new HashSet<>();
 
         // Generate specific Generic Reactions
-        for (GroupType<?> groupType : groupIDsAndMolecules.keySet()) {
-            for (GenericReaction genericreaction : Group.getReactionsOfGroupByID(groupType)) {
-                if (genericreaction.involvesSingleGroup()) { // Generic Reactions involving only one functional Group
-                    newPossibleReactions.addAll(specifySingleGroupGenericReactions(genericreaction, groupIDsAndMolecules.get(groupType)));
+        for (GroupType<?> groupType : groupIDsAndMolecules.keySet()) { // Only search for Generic Reactions of Groups present in this Molecule
+            checkEachGenericReaction: for (GenericReaction genericReaction : Group.getReactionsOfGroupByID(groupType)) {
+
+                if (genericReaction.involvesSingleGroup()) { // Generic Reactions involving only one functional Group
+                    newPossibleReactions.addAll(specifySingleGroupGenericReactions(genericReaction, groupIDsAndMolecules.get(groupType)));
+                
                 } else { // Generic Reactions involving two functional Groups
-                    //TODO
-                    //TODO check for polymerisation
+                    if (!(genericReaction instanceof DoubleGroupGenericReaction<?, ?> dggr)) continue checkEachGenericReaction; // This check should never fail
+                    if (groupType != dggr.getFirstGroupType()) continue checkEachGenericReaction; // Only generate Reactions when we're dealing with the first Group type
+                    
+                    GroupType<?> secondGroupType = dggr.getSecondGroupType();
+                    if (!groupIDsAndMolecules.keySet().contains(secondGroupType)) continue checkEachGenericReaction; // We can't do this generic reaction if we only have one group type
+                    
+                    List<Pair<GenericReactant<?>, GenericReactant<?>>> reactantPairs = new ArrayList<>();
+                    for (GenericReactant<?> firstGenericReactant : groupIDsAndMolecules.get(groupType)) {
+                        for (GenericReactant<?> secondGenericReactant : groupIDsAndMolecules.get(secondGroupType)) {
+                            reactantPairs.add(Pair.of(firstGenericReactant, secondGenericReactant));
+                        };
+                    };
+
+                    newPossibleReactions.addAll(specifyDoubleGroupGenericReactions(dggr, reactantPairs));
                 };
             };
         };
@@ -844,24 +859,53 @@ public class Mixture extends ReadOnlyMixture {
      * 
      * <p>For example, if the Generic Reaction supplied is the {@link com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydration hydration of an alkene},
      * and <b>reactants</b> includes {@code destroy:ethene}, the returned collection will include a Reaction with {@code destroy:ethene} and {@code destroy:water} as reactants,
-     * {@code destroy:ethanol} as a product, and all the appropriate rate constants and catalysts as defined in the {@link com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydration#generateReaction generator}.</p>
+     * {@code destroy:ethanol} as a product, and all the appropriate rate constants and catalysts as defined in the {@link com.petrolpark.destroy.chemistry.index.genericReaction.AlkeneHydration#generateReaction generator}.</p>
      * 
      * @param <G> <b>G</b> The Group to which this Generic Reaction applies
-     * @param genericreaction
-     * @param reactants All {@link GenericReactant Reactants} that have the Group.
-     * @return A Collection of all specified Reactions.
+     * @param genericReaction
+     * @param reactants All {@link GenericReactant Reactants} that have the Group
+     * @return A Collection of all specified Reactions
      */
     @SuppressWarnings("unchecked")
-    private <G extends Group<G>> List<Reaction> specifySingleGroupGenericReactions(GenericReaction genericreaction, List<GenericReactant<?>> reactants) {
+    private <G extends Group<G>> List<Reaction> specifySingleGroupGenericReactions(GenericReaction genericReaction, List<GenericReactant<?>> reactants) {
         try {
-            SingleGroupGenericReaction<G> singleGroupGenericReaction = (SingleGroupGenericReaction<G>) genericreaction; // Unchecked conversion
+            SingleGroupGenericReaction<G> singleGroupGenericReaction = (SingleGroupGenericReaction<G>) genericReaction; // Unchecked conversion
             List<Reaction> reactions = new ArrayList<>();
             for (GenericReactant<?> reactant : reactants) {
                 reactions.add(singleGroupGenericReaction.generateReaction((GenericReactant<G>)reactant)); // Unchecked conversion
             };
             return reactions;
-        } catch(Error e) {
+        } catch(Throwable e) {
             throw new IllegalStateException("Wasn't able to generate Single-Group Reaction: " + e);
+        }
+    };
+
+    /**
+     * Given a {@link DoubleGroupGenericReaction Generic Reaction} involving two {@link Group functional Groups},
+     * generates the specified {@link Reaction Reactions} that apply to this Mixture.
+     * 
+     * <p>For example, if the Generic Reaction supplied is {@link com.petrolpark.destroy.chemistry.index.genericreaction.AcylChlorideEsterification esterification},
+     * and this this Mixture contains methanoyl chloride, ethanoyl chloride, and ethanol, the returned collection will include two Reactions, one of which makes 
+     * ethyl ethanoate and the other ethyl methanoate.</p>
+     * 
+     * @param <G1> <b>G1</b> The first Group to which this Generic Reaction applies
+     * @param <G2> <b>G2</b> The second Group to which this Generic Reaction applies
+     * @param genericReaction
+     * @param reactantPairs All possible pairs of {@link GenericReactant Reactants} in this Mixture
+     * @return A Collection of specified Reactions
+     * @see Mixture#specifySingleGroupGenericReactions A more in-depth description
+     */
+    @SuppressWarnings("unchecked")
+    private <G1 extends Group<G1>, G2 extends Group<G2>> List<Reaction> specifyDoubleGroupGenericReactions(GenericReaction genericReaction, List<Pair<GenericReactant<?>, GenericReactant<?>>> reactantPairs) {
+        try {
+            DoubleGroupGenericReaction<G1, G2> doubleGroupGenericReaction = (DoubleGroupGenericReaction<G1, G2>) genericReaction; // Unchecked conversion
+            List<Reaction> reactions = new ArrayList<>();
+            for (Pair<GenericReactant<?>, GenericReactant<?>> reactantPair : reactantPairs) {
+                reactions.add(doubleGroupGenericReaction.generateReaction((GenericReactant<G1>)reactantPair.getFirst(), (GenericReactant<G2>)reactantPair.getSecond())); // Unchecked conversions
+            };
+            return reactions;
+        } catch(Throwable e) {
+            throw new IllegalStateException("Wasn't able to generate Double-Group Reaction: " + e);
         }
     };
 

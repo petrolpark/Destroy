@@ -2,6 +2,7 @@ package com.petrolpark.destroy.recipe;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Reaction;
+import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
@@ -13,7 +14,7 @@ public class ReactionRecipe extends ProcessingRecipe<RecipeWrapper> {
 
     private static int counter;
 
-    private Reaction reaction; // The Reaction associated with this Recipe
+    protected Reaction reaction; // The Reaction associated with this Recipe
 
     public ReactionRecipe(ProcessingRecipeParams params) {
         super(DestroyRecipeTypes.REACTION, params);
@@ -42,6 +43,26 @@ public class ReactionRecipe extends ProcessingRecipe<RecipeWrapper> {
     @Override
     protected int getMaxOutputCount() {
         return 0;
+    };
+
+    public static class GenericReactionRecipe extends ReactionRecipe {
+
+        protected GenericReaction genericReaction;
+
+        public GenericReactionRecipe(ProcessingRecipeParams params) {
+            super(params);
+        };
+
+        public static GenericReactionRecipe create(GenericReaction genericReaction) {
+            GenericReactionRecipe recipe = new ProcessingRecipeBuilder<>(GenericReactionRecipe::new, Destroy.asResource("generic_reaction_"+counter++)).build();
+            recipe.reaction = genericReaction.getExampleReaction();
+            recipe.genericReaction = genericReaction;
+            return recipe;
+        };
+
+        public GenericReaction getGenericReaction() {
+            return genericReaction;
+        };
     };
      
 };

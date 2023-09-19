@@ -3,9 +3,7 @@ package com.petrolpark.destroy.chemistry.index.group;
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.GroupType;
-import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
-import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
 public class AcidAnhydrideGroup extends Group<AcidAnhydrideGroup> {
 
@@ -47,11 +45,6 @@ public class AcidAnhydrideGroup extends Group<AcidAnhydrideGroup> {
     public Atom getBridgingOxygen() {
         return bridgingOxygen;
     };
-
-    @Override
-    public Molecule getExampleMolecule() {
-        return DestroyMolecules.GENERIC_ACID_ANHYDRIDE;
-    }
 
     @Override
     public GroupType<AcidAnhydrideGroup> getType() {

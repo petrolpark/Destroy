@@ -479,7 +479,7 @@ public final class DestroyMolecules {
 
     GENERIC_NITRILE = builder()
         .id("generic_nitrile")
-        .structure(Formula.deserialize("destroy:linear:RC#N"))
+        .structure(Formula.deserialize("destroy:linear:RC(R)(R)C#N"))
         .hypothetical()
         .translationKey("nitrile")
         .build(),
@@ -852,6 +852,17 @@ public final class DestroyMolecules {
         .molarHeatCapacity(250f) // Estimate based on isomers
         .tag(Tags.ACUTELY_TOXIC)
         .tag(Tags.SMOG)
+        .build(),
+
+    PHOSGENE = builder()
+        .id("phosgene")
+        .structure(Formula.deserialize("destroy:linear:ClC(=O)Cl"))
+        .boilingPoint(8.3f)
+        .density(1432f)
+        .molarHeatCapacity(101f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.OZONE_DEPLETER)
+        .tag(Tags.SMELLY)
         .build(),
     
     PHTHALIC_ANHYDRIDE = builder()

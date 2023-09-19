@@ -18,6 +18,7 @@ import com.petrolpark.destroy.chemistry.index.group.CarbonylGroup;
 import com.petrolpark.destroy.chemistry.index.group.CarboxylicAcidGroup;
 import com.petrolpark.destroy.chemistry.index.group.ChlorideGroup;
 import com.petrolpark.destroy.chemistry.index.group.EsterGroup;
+import com.petrolpark.destroy.chemistry.index.group.NitrileGroup;
 
 public class DestroyGroupFinder extends GroupFinder {
 
@@ -40,6 +41,8 @@ public class DestroyGroupFinder extends GroupFinder {
             List<Atom> nitrogens = bondedAtomsOfElementTo(structure, carbon, Element.NITROGEN, BondType.SINGLE);
             List<Atom> hydrogens = bondedAtomsOfElementTo(structure, carbon, Element.HYDROGEN, BondType.SINGLE);
             List<Atom> carbons = bondedAtomsOfElementTo(structure, carbon, Element.CARBON, BondType.SINGLE);
+            List<Atom> nitrileNitrogens = bondedAtomsOfElementTo(structure, carbon, Element.NITROGEN, BondType.TRIPLE);
+            List<Atom> rGroups = bondedAtomsOfElementTo(structure, carbon, Element.R_GROUP);
 
             if (carbonylOxygens.size() == 1) { // Ketones, aldehydes, esters, acids, acid anhydrides, acyl chlorides, amides
                 Atom carbonylOxygen = carbonylOxygens.get(0);
@@ -68,12 +71,12 @@ public class DestroyGroupFinder extends GroupFinder {
                      } else {
                         if (carbons.size() == 2) {
                             groups.add(new CarbonylGroup(carbon, carbonylOxygen, true));
-                        } else if (carbons.size() + hydrogens.size() == 2) {
+                        } else if (carbons.size() + hydrogens.size() + rGroups.size() == 2) {
                             groups.add(new CarbonylGroup(carbon, carbonylOxygen, false));
                         };
                      }
                 };
-            } else { // Alcohols, chlorides
+            } else { // Alcohols, chlorides, nitriles
                 for (Atom chlorine : chlorines) {
                     groups.add(new ChlorideGroup(carbon, chlorine, carbons.size()));
                 };
@@ -81,6 +84,11 @@ public class DestroyGroupFinder extends GroupFinder {
                     if (bondedAtomsOfElementTo(structure, oxygen, Element.HYDROGEN).size() == 1) {
                         groups.add(new AlcoholGroup(carbon, oxygen, bondedAtomsOfElementTo(structure, oxygen, Element.HYDROGEN).get(0), carbons.size()));
                     };
+                };
+
+                // Nitriles
+                if (nitrileNitrogens.size() == 1 && carbons.size() == 1) {
+                    groups.add(new NitrileGroup(carbon, nitrileNitrogens.get(0)));
                 };
             };
 

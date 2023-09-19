@@ -11,9 +11,11 @@ import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
 import com.petrolpark.destroy.recipe.ReactionRecipe;
+import com.petrolpark.destroy.recipe.ReactionRecipe.GenericReactionRecipe;
 
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.resources.ResourceLocation;
 
 public class GenericReactionCategory extends ReactionCategory {
 
@@ -37,6 +39,15 @@ public class GenericReactionCategory extends ReactionCategory {
         TYPE = info.recipeType();
     };
 
+    @Override
+    protected String getTranslationKey(ReactionRecipe recipe) {
+        if (recipe instanceof GenericReactionRecipe gRecipe) {
+            ResourceLocation id = gRecipe.getGenericReaction().id;
+            return id.getNamespace() + ".generic_reaction." + id.getPath();
+        };
+        return "";
+    };
+
     /**
      * Generate every Generic Reaction's recipe to go in JEI.
      */
@@ -45,7 +56,7 @@ public class GenericReactionCategory extends ReactionCategory {
             Reaction reaction = genericReaction.getExampleReaction();
             if (reaction != null) {
                 // Add the Generic Reaction to JEI.
-                RECIPES.put(genericReaction, ReactionRecipe.create(reaction));
+                RECIPES.put(genericReaction, GenericReactionRecipe.create(genericReaction));
                 for (Molecule product : reaction.getProducts()) {
                     if (product.isNovel()) {
                         // Determine what functional groups this Generic Reaction can produce

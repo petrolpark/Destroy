@@ -185,6 +185,8 @@ public class MoleculeRenderer {
         // Total number of Atoms rendered
         int i = 0;
 
+        Destroy.LOGGER.info("pee "+branch.getNodes().get(0).serialize());
+
         for (Node node : branch.getNodes()) {
             // Mark the Atom for rendering at this location
             RENDERED_OBJECTS.add(Pair.of(new Vec3(location.x, location.y, location.z), new AtomRenderInstance(node.getAtom())));
