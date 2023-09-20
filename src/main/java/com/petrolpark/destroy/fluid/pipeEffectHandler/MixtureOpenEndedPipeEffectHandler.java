@@ -23,7 +23,7 @@ public class MixtureOpenEndedPipeEffectHandler implements IEffectHandler {
     @Override
     public void applyEffects(OpenEndedPipe pipe, FluidStack fluid) {
         PollutionHelper.pollute(pipe.getWorld(), fluid);
-        if (random.nextInt(5) == 0) DestroyMessages.sendToAllClients(new EvaporatingFluidS2CPacket(pipe.getOutputPos(), fluid));
+        if (random.nextInt(20) == 0) DestroyMessages.sendToAllClients(new EvaporatingFluidS2CPacket(pipe.getOutputPos(), fluid));
     };
     
 };

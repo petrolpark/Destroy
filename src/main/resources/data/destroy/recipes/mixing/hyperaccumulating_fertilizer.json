@@ -1,0 +1,27 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "item": "minecraft:rooted_dirt"
+      },
+      {
+        "item": "minecraft:bone_meal"
+      },
+      {
+        "item": "minecraft:bone_meal"
+      },
+      {
+        "mixtureFluidWithSalt": "destroy:mixture",
+        "cation": "destroy:ammonium",
+        "anion": "destroy:nitrate",
+        "concentration": 3.0,
+        "amount": 200
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:hyperaccumulating_fertilizer",
+        "count": 4
+      }
+    ]
+  }

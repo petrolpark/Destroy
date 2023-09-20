@@ -14,7 +14,6 @@ import com.google.common.collect.ImmutableList;
 import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
@@ -184,8 +183,6 @@ public class MoleculeRenderer {
 
         // Total number of Atoms rendered
         int i = 0;
-
-        Destroy.LOGGER.info("pee "+branch.getNodes().get(0).serialize());
 
         for (Node node : branch.getNodes()) {
             // Mark the Atom for rendering at this location

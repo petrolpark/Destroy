@@ -66,6 +66,7 @@ public class MoleculeDisplayItem extends Item {
 
         TemperatureUnit unit = DestroyAllConfigs.CLIENT.chemistry.temperatureUnit.get();
         
+        if (hypothetical) tooltip.add(DestroyLang.translate("tooltip.molecule.r_group").style(ChatFormatting.DARK_GRAY).component());
         if (nerdMode && !novel) tooltip.add(DestroyLang.translate("tooltip.molecule.formula", molecule.getSerlializedMolecularFormula(true) + DestroyLang.toSuperscript(molecule.getSerializedCharge(false))).component().withStyle(ChatFormatting.GRAY));
         if (charged && (!nerdMode || novel)) tooltip.add(DestroyLang.translate("tooltip.molecule.charge", molecule.getSerializedCharge(true)).component().withStyle(ChatFormatting.GRAY));
         if (!hypothetical) tooltip.add(DestroyLang.translate("tooltip.molecule.mass", df.format(molecule.getMass())).component().withStyle(ChatFormatting.GRAY));

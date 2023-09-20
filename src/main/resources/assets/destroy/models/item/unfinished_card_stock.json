@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:item/copper_coated_silica"
+      "layer0": "destroy:item/unprocessed_card_stock"
     }
   }

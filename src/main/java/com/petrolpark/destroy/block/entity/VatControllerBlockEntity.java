@@ -126,7 +126,6 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         energyChange += (LevelPollution.getLocalTemperature(getLevel(), getBlockPos()) - cachedMixture.getTemperature()) * vat.getConductance() / 20; // Fourier's Law (sort of), the divide by 20 is for 20 ticks per second
         if (Math.abs(energyChange) > 0.0001f) {
             cachedMixture.heat(1000 * energyChange / getTank().getFluidAmount()); // 1000 converts getFluidAmount() in mB to Buckets
-            shouldUpdateFluidMixture = true;
         };
         if (!cachedMixture.isAtEquilibrium()) {
             cachedMixture.reactForTick(new ReactionContext(List.of())); //TODO items in vats
@@ -220,7 +219,6 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         } else {
             full = false;
         };
-        updateCachedMixture();
         sendData();
     };
 

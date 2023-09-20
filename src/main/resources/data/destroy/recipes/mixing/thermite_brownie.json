@@ -5,7 +5,7 @@
         "item": "create:crushed_raw_iron"
       },
       {
-        "tag": "forge:dusts/zinc"
+        "item": "destroy:polytetrafluoroethene"
       },
       {
         "item": "minecraft:cocoa_beans"

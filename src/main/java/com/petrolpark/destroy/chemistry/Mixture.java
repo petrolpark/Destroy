@@ -276,7 +276,7 @@ public class Mixture extends ReadOnlyMixture {
         if (ignore == null) ignore = (m) -> false;
         if (Math.abs(concentration - getConcentrationOf(molecule)) > IMPURITY_THRESHOLD) return false; //TODO replace with a more lenient check
         for (Entry<Molecule, Float> otherMolecule : contents.entrySet()) {
-            if (ignore.test(molecule)) continue; // If this molecule is specified as ignoreable, ignore it
+            if (ignore.test(otherMolecule.getKey())) continue; // If this molecule is specified as ignoreable, ignore it
             if (otherMolecule.getKey() == molecule) continue; // If this is the Molecule we want, ignore it.
             if (otherMolecule.getKey().hasTag(DestroyMolecules.Tags.SOLVENT)) continue; // If this is a solvent, ignore it
             if (otherMolecule.getValue() < IMPURITY_THRESHOLD) continue; // If this impurity is in low-enough concentration, ignore it.
@@ -901,6 +901,7 @@ public class Mixture extends ReadOnlyMixture {
             DoubleGroupGenericReaction<G1, G2> doubleGroupGenericReaction = (DoubleGroupGenericReaction<G1, G2>) genericReaction; // Unchecked conversion
             List<Reaction> reactions = new ArrayList<>();
             for (Pair<GenericReactant<?>, GenericReactant<?>> reactantPair : reactantPairs) {
+                if (reactantPair.getFirst().getMolecule() == reactantPair.getSecond().getMolecule()) continue; // Cannot React Molecules with themselves
                 reactions.add(doubleGroupGenericReaction.generateReaction((GenericReactant<G1>)reactantPair.getFirst(), (GenericReactant<G2>)reactantPair.getSecond())); // Unchecked conversions
             };
             return reactions;

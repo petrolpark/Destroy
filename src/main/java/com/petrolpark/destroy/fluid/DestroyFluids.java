@@ -51,6 +51,8 @@ public class DestroyFluids {
         .register(),
     PETROL = virtualFluid("petrol")
         .register(),
+    PERFUME = REGISTRATE.virtualFluid("perfume", new ResourceLocation("destroy", "fluid/swirling"), new ResourceLocation("destroy", "fluid/swirling"), (properties, stillTexture, flowingTexture) -> new ColoredFluidType(properties, stillTexture, flowingTexture, 0x80ffcff7), VirtualFluid::new)
+        .register(),
     SKIMMED_MILK = coloredWaterFluid("skimmed_milk", 0xE0FFFFFF)
         .register(),
     THRICE_DISTILLED_MOONSHINE = coloredWaterFluid("thrice_distilled_moonshine", 0xC0A18666)

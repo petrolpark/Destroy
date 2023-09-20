@@ -3,6 +3,7 @@ package com.petrolpark.destroy.item.creativeModeTab;
 import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
@@ -39,14 +40,29 @@ public class DestroyCreativeModeTabs {
 	public static class DestroyDisplayItemsGenerator implements DisplayItemsGenerator {
 
 		private static List<ItemProviderEntry<?>> excludedItems = List.of(
+			// Meta
 			DestroyItems.LOGO,
 			DestroyItems.MOLECULE_DISPLAY,
+
+			// Temporary Items
 			DestroyItems.UNFINISHED_BLACKLIGHT,
 			DestroyItems.UNFINISHED_VOLTAIC_PILE,
 			DestroyItems.UNPROCESSED_CONVERSION_CATALYST,
 			DestroyItems.UNPROCESSED_MASHED_POTATO,
 			DestroyItems.UNPROCESSED_NAPALM_SUNDAE,
-			DestroyItems.UNPROCESSED_SUPER_GLUE
+			DestroyItems.UNFINISHED_CARD_STOCK,
+
+			// Removal
+			DestroyItems.BIFURICATED_CARROT,
+			DestroyItems.POTATE_O,
+			DestroyItems.WHITE_WHEAT,
+			DestroyItems.AGAR,
+
+			// Blocks
+			DestroyBlocks.YEAST_MUSHROOM,
+			DestroyBlocks.YEAST_COVERED_AGAR_BLOCK,
+			DestroyBlocks.AGAR_BLOCK
+
 		);
 
 		@Override

@@ -3,21 +3,6 @@
         "": [
             {
                 "model": "destroy:block/mashed_potato_block"
-            },
-            {
-                "model": "destroy:block/mashed_potato_block",
-                "x": 90,
-                "y": 90
-            },
-            {
-                "model": "destroy:block/mashed_potato_block",
-                "x": 180,
-                "y": 180
-            },
-            {
-                "model": "destroy:block/mashed_potato_block",
-                "x": 270,
-                "y": 270
             }
         ]
     }

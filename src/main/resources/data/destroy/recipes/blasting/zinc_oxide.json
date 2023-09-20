@@ -1,8 +1,0 @@
-{
-    "type": "minecraft:blasting",
-    "ingredient": {
-      "tag": "forge:dusts/zinc"
-    },
-    "result": "destroy:zinc_oxide",
-    "cookingtime": 100
-  }
