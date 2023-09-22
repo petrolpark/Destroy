@@ -151,7 +151,7 @@ public class DestroyItems {
     ANFO = REGISTRATE.item("anfo", Item::new)
         .tag(DestroyItemTags.SECONDARY_EXPLOSIVE.tag, Tags.Items.DUSTS)
         .register(),
-    CORDITE = REGISTRATE.item("cordite", Item::new)
+    CORDITE = REGISTRATE.item("cordite_rods", Item::new)
         .tag(DestroyItemTags.SECONDARY_EXPLOSIVE.tag)
         .register(),
     DYNAMITE = REGISTRATE.item("dynamite", Item::new)

@@ -249,7 +249,7 @@ public class DestroyBlocks {
         .build()
         .register();
 
-    public static final BlockEntry<Block> CORDITE_BLOCK = REGISTRATE.block("cordite_block", Block::new)
+    public static final BlockEntry<Block> CORDITE = REGISTRATE.block("cordite", Block::new)
         .initialProperties(() -> Blocks.TNT)
         .properties(p -> p
             .mapColor(MapColor.COLOR_ORANGE)
@@ -291,6 +291,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
+            .strength(6f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -305,6 +306,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.SAND)
             .requiresCorrectToolForDrops()
+            .strength(5f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_STONE_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -319,6 +321,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.SAND)
             .requiresCorrectToolForDrops()
+            .strength(5f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_STONE_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -334,6 +337,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.DIRT)
             .requiresCorrectToolForDrops()
+            .strength(6f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_DIAMOND_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -347,6 +351,7 @@ public class DestroyBlocks {
         .initialProperties(() -> Blocks.DIAMOND_BLOCK)
         .properties(p -> p
             .requiresCorrectToolForDrops()
+            .strength(6f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -361,6 +366,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.TERRACOTTA_LIGHT_BLUE)
             .requiresCorrectToolForDrops()
+            .strength(6f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_DIAMOND_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -375,6 +381,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.STONE)
             .requiresCorrectToolForDrops()
+            .strength(6f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_DIAMOND_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -392,6 +399,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
+            .strength(3f, 3f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
@@ -406,6 +414,7 @@ public class DestroyBlocks {
             .mapColor(MapColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
             .sound(SoundType.DEEPSLATE)
+            .strength(4.5f, 3f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
@@ -419,6 +428,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
+            .strength(4f, 9f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
@@ -432,6 +442,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.SAND)
             .requiresCorrectToolForDrops()
+            .strength(3f, 3f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
@@ -446,6 +457,7 @@ public class DestroyBlocks {
             .mapColor(MapColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
             .sound(SoundType.DEEPSLATE)
+            .strength(4.5f, 3f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
@@ -551,7 +563,9 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_YELLOW)
             .sound(SoundType.SLIME_BLOCK)
-        ).item()
+            .strength(0.2f)
+        ).tag(BlockTags.MINEABLE_WITH_SHOVEL)
+        .item()
         .build()
         .register();
 
@@ -560,14 +574,34 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_YELLOW)
             .sound(SoundType.SLIME_BLOCK)
-        ).blockstate((c, p) -> p.axisBlock(c.get(), p.modLoc("block/raw_fries_block_side"), p.modLoc("block/raw_fries_block_end")))
+            .strength(0.2f)
+        ).tag(BlockTags.MINEABLE_WITH_SHOVEL)
         .register();
 
-    // static {
-    //     REGISTRATE.startSection(AllSections.UNASSIGNED);
-    // };
-
     // UNCATEGORISED
+
+    public static final BlockEntry<Block> CORDITE_BLOCK = REGISTRATE.block("cordite_block", Block::new)
+        .initialProperties(() -> Blocks.CLAY)
+        .properties(p -> p
+            .mapColor(MapColor.COLOR_ORANGE)
+            .sound(SoundType.SLIME_BLOCK)
+            .strength(0.2f)
+        ).tag(BlockTags.MINEABLE_WITH_SHOVEL)
+        .tag(BlockTags.MINEABLE_WITH_HOE)
+        .item()
+        .build()
+        .register();
+
+    public static final BlockEntry<RotatedPillarBlock> EXTRUDED_CORDITE_BLOCK = REGISTRATE.block("extruded_cordite_block", RotatedPillarBlock::new)
+        .initialProperties(() -> Blocks.CLAY)
+        .properties(p -> p
+            .mapColor(MapColor.COLOR_ORANGE)
+            .sound(SoundType.SLIME_BLOCK)
+            .strength(0.2f)
+        ).tag(BlockTags.MINEABLE_WITH_SHOVEL)
+        .tag(BlockTags.MINEABLE_WITH_HOE).item()
+        .build()
+        .register();
 
     public static final BlockEntry<HalfTransparentBlock> AGAR_BLOCK = REGISTRATE.block("agar_block", HalfTransparentBlock::new)
         .initialProperties(() -> Blocks.CLAY)
@@ -576,6 +610,7 @@ public class DestroyBlocks {
             .friction(1.1f)
             .noOcclusion()
             .sound(SoundType.SLIME_BLOCK)
+            .strength(0.1f)
         ).transform(TagGen.tagBlockAndItem("storage_blocks/fluorite"))
         .build()
         .register();

@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:block/cube_column",
+    "textures": {
+      "end": "destroy:block/extruded_cordite_block_end",
+      "side": "destroy:block/extruded_cordite_block_side"
+    }
+  }

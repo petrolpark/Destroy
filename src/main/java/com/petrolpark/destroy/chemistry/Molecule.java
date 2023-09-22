@@ -208,12 +208,16 @@ public class Molecule implements INameableProduct {
     public Molecule getEquivalent() {
         for (Molecule molecule : MOLECULES.values()) {
             if (Math.abs(getMass() - molecule.getMass()) < 0.001) { // Initially just check the masses match
-                if (structure.serialize().equals(molecule.structure.serialize())) { // Ceck the structures match
+                if (structure.serialize().equals(molecule.structure.serialize())) { // Check the structures match
                     return molecule;
                 };
             };
         };
         return this;
+    };
+
+    public String getFROWNSCode() {
+        return structure.serialize();
     };
 
     /**

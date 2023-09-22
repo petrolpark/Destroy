@@ -18,11 +18,11 @@
         "tag": "destroy:explosive/primary"
       },
       "C": {
-        "item": "destroy:cordite"
+        "item": "destroy:cordite_rods"
       }
     },
     "result": {
-      "item": "destroy:cordite_block",
+      "item": "destroy:cordite",
       "count": 3
     },
     "acceptMirrored": false

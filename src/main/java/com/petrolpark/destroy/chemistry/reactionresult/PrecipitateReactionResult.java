@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.chemistry.reactionresult;
 
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
@@ -14,6 +15,10 @@ import net.minecraft.world.level.Level;
 public class PrecipitateReactionResult extends ReactionResult {
     
     private final Supplier<ItemStack> precipitate;
+
+    public static BiFunction<Float, Reaction, ReactionResult> of(Supplier<ItemStack> precipitate) {
+        return (m, r) -> new PrecipitateReactionResult(m, r, precipitate);
+    };
 
     public PrecipitateReactionResult(float moles, Reaction reaction, Supplier<ItemStack> precipitate) {
         super(moles, reaction);

@@ -44,7 +44,7 @@ public class ReactionInBasinRecipe extends MixingRecipe {
     public static ReactionInBasinRecipe create(Collection<FluidStack> availableFluids, Collection<ItemStack> availableItems, BasinBlockEntity basin) {
         ProcessingRecipeBuilder<ReactionInBasinRecipe> builder = new ProcessingRecipeBuilder<>(ReactionInBasinRecipe::new, Destroy.asResource("reaction_in_basin_"));
 
-        List<ItemStack> availableItemsCopy = availableItems.stream().map(ItemStack::copy).toList();
+        List<ItemStack> availableItemsCopy = availableItems.stream().map(ItemStack::copy).filter(stack -> !stack.isEmpty()).toList();
 
         boolean canReact = true; // Start by assuming we will be able to React
 
@@ -107,7 +107,7 @@ public class ReactionInBasinRecipe extends MixingRecipe {
             // Add all the given Item Stacks as "required ingredients"
             availableItems.stream().forEach(stack -> {
                 if (stack.isEmpty()) return;
-                builder.require(Ingredient.of(stack));
+                for (int i = 0; i < stack.getCount(); i++) builder.require(Ingredient.of(stack.getItem()));
             });
 
             List<ReactionResult> reactionResults = new ArrayList<>();

@@ -1,0 +1,19 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "destroy:syringe"
+      },
+      {
+        "mixtureFluidWithMolecule": "destroy:mixture",
+        "amount": 200,
+        "molecule": "destroy:aspirin",
+        "concentration": 1.0
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:aspirin_syringe"
+      }
+    ]
+  }

@@ -1,8 +1,7 @@
 package com.petrolpark.destroy.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.petrolpark.destroy.block.movementbehaviour.ExtrudableMovementBehaviour;
 import com.simibubi.create.AllMovementBehaviours;
 
@@ -13,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 @FunctionalInterface
 public interface BlockExtrusion {
 
-    public static Map<Block, BlockExtrusion> EXTRUSIONS = new HashMap<>();
+    public static BiMap<Block, BlockExtrusion> EXTRUSIONS = HashBiMap.create();
 
     /**
      * Get the Block State a Block will produce when pushed through an Extrusion Die in the given Direction.

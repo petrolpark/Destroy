@@ -2,6 +2,7 @@ package com.petrolpark.destroy.chemistry.index;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
+import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
 import com.petrolpark.destroy.chemistry.reactionresult.CombinedReactionResult;
@@ -56,6 +57,13 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.HYDROGEN)
         .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/palladium"), 1f)
         .addProduct(DestroyMolecules.ETHYLANTHRAHYDROQUINONE)
+        .build(),
+
+    BABY_BLUE_PRECIPITATION = builder()
+        .id("baby_blue_precipitation")
+        .addReactant(DestroyMolecules.METHYL_SALICYLATE)
+        .addCatalyst(DestroyMolecules.SODIUM_ION, 0)
+        .withResult(0.9f, PrecipitateReactionResult.of(DestroyItems.BABY_BLUE_CRYSTAL::asStack))
         .build(),
 
     BENZENE_ETHYLATION = builder()
@@ -161,6 +169,14 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.WATER, 2, 1)
         .addSimpleItemCatalyst(DestroyItems.MAGIC_OXIDANT::get, 1f)
         .addProduct(DestroyMolecules.SULFURIC_ACID, 2)
+        .build(),
+
+    CORDITE_PRECIPITATION = builder()
+        .id("cordite_precipitation")
+        .addReactant(DestroyMolecules.ACETONE)
+        .addReactant(DestroyMolecules.NITROGLYCERINE)
+        .addSimpleItemReactant(DestroyItems.NITROCELLULOSE::get, 1f)
+        .withResult(2.99f, PrecipitateReactionResult.of(DestroyBlocks.CORDITE_BLOCK::asStack))
         .build(),
 
     CUMENE_PROCESS = builder()

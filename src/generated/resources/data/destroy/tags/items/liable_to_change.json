@@ -2,7 +2,7 @@
   "values": [
     "destroy:dynamo",
     "destroy:anfo_block",
-    "destroy:cordite_block",
+    "destroy:cordite",
     "destroy:nitrocellulose_block",
     "destroy:sodium_picrate_block",
     "destroy:nickel_block",

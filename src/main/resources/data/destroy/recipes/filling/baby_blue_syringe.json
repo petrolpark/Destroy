@@ -1,0 +1,19 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "destroy:syringe"
+      },
+      {
+        "mixtureFluidWithMolecule": "destroy:mixture",
+        "amount": 200,
+        "molecule": "destroy:methyl_salicylate",
+        "concentration": 5.0
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:baby_blue_syringe"
+      }
+    ]
+  }

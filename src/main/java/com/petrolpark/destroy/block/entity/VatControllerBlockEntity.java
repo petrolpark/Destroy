@@ -150,7 +150,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         };
         underDeconstruction = tag.getBoolean("UnderDeconstruction");
         inventory.deserializeNBT(tag.getCompound("Inventory"));
-        updateCachedMixture();
+        if (!clientPacket) updateCachedMixture();
     };
 
     @Override

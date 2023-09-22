@@ -32,7 +32,7 @@ public enum DestroyRecipeTypes implements IRecipeTypeInfo {
     CENTRIFUGATION(CentrifugationRecipe::new),
     DISTILLATION(DistillationRecipe::new),
     ELECTROLYSIS(ElectrolysisRecipe::new),
-    //EXTRUSION(ExtrusionRecipe::new),
+    EXTRUSION(ExtrusionRecipe::new),
     MUTATION(MutationRecipe::new),
     REACTION(ReactionRecipe::new);
     //VAPORIZATION(VaporizationRecipe::new);

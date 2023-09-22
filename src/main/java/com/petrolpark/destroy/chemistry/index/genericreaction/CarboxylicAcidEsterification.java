@@ -4,6 +4,7 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Formula;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Reaction;
+import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.genericreaction.DoubleGroupGenericReaction;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
 import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
@@ -24,16 +25,14 @@ public class CarboxylicAcidEsterification extends DoubleGroupGenericReaction<Car
         Formula alcoholStructureCopy = secondReactant.getMolecule().shallowCopyStructure();
         AlcoholGroup alcoholGroup = secondReactant.getGroup();
 
-        alcoholStructureCopy.moveTo(alcoholGroup.getCarbon());
-        alcoholStructureCopy.remove(alcoholGroup.getOxygen());
+        alcoholStructureCopy.moveTo(alcoholGroup.getOxygen());
         alcoholStructureCopy.remove(alcoholGroup.getHydrogen());
-        alcoholStructureCopy.setStartingAtom(alcoholGroup.getCarbon());
 
-        acidStructureCopy.moveTo(acidGroup.getAlcoholOxygen());
+        acidStructureCopy.moveTo(acidGroup.getCarbon());
         acidStructureCopy.remove(acidGroup.getProton());
-        acidStructureCopy.addGroup(alcoholStructureCopy);
+        acidStructureCopy.remove(acidGroup.getAlcoholOxygen());
 
-        Molecule ester = moleculeBuilder().structure(acidStructureCopy).build();
+        Molecule ester = moleculeBuilder().structure(Formula.joinFormulae(acidStructureCopy, alcoholStructureCopy, BondType.SINGLE)).build();
 
         return reactionBuilder()
             .addReactant(firstReactant.getMolecule())

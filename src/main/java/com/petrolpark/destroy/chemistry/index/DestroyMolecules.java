@@ -138,7 +138,7 @@ public final class DestroyMolecules {
 
     ASPIRIN = builder()
         .id("aspirin")
-        .structure(Formula.deserialize("destroy:benzene:OC(=O)C,C(=O)OH,,,,"))
+        .structure(Formula.deserialize("destroy:benzene:OC(=O)C,C(=O)O,,,,"))
         .boilingPoint(140f)
         .density(1400f)
         // Couldn't find heat capacity
@@ -704,6 +704,16 @@ public final class DestroyMolecules {
         .tag(Tags.SMOG)
         .tag(Tags.SOLVENT)
         .build(),
+
+    METHYL_SALICYLATE = builder()
+        .id("methyl_salicylate")
+        .structure(Formula.deserialize("destroy:benzene:C(=O)OC,O,,,,"))
+        .boilingPoint(222f)
+        .density(1174f)
+        .molarHeatCapacity(248.9f)
+        .tag(Tags.FRAGRANT)
+        .tag(Tags.SMOG)
+        .build(),
     
     NICKEL_ION = builder()
         .id("nickel_ion")
@@ -903,7 +913,7 @@ public final class DestroyMolecules {
 
     SALICYLIC_ACID = builder()
         .id("salicylic_acid")
-        .structure(Formula.deserialize("destroy:benzene:CC(=O)O,O,,,,"))
+        .structure(Formula.deserialize("destroy:benzene:C(=O)O,O,,,,"))
         .boilingPoint(200f)
         .density(1443f)
         .molarHeatCapacity(159.4f)

@@ -531,6 +531,8 @@ public class Mixture extends ReadOnlyMixture {
         if (contents.isEmpty()) return 0;
         double initialVolumeInBuckets = (double)initialVolume / 1000d;
         double newVolumeInBuckets = 0d;
+
+        // Molecules
         Map<Molecule, Double> molesOfMolecules = new HashMap<>();
         for (Entry<Molecule, Float> entry : contents.entrySet()) {
             Molecule molecule = entry.getKey();
@@ -541,6 +543,13 @@ public class Mixture extends ReadOnlyMixture {
         for (Entry<Molecule, Double> entry : molesOfMolecules.entrySet()) {
             contents.replace(entry.getKey(), (float)(entry.getValue() / newVolumeInBuckets));
         };
+
+        // Results
+        Map<ReactionResult, Float> resultsCopy = new HashMap<>(reactionresults);
+        for (Entry<ReactionResult, Float> entry : resultsCopy.entrySet()) {
+            reactionresults.replace(entry.getKey(), (float)(entry.getValue() * initialVolumeInBuckets / newVolumeInBuckets));
+        };
+
         return (int)((newVolumeInBuckets * 1000) + 0.5);
     };
 
@@ -906,8 +915,9 @@ public class Mixture extends ReadOnlyMixture {
             };
             return reactions;
         } catch(Throwable e) {
-            throw new IllegalStateException("Wasn't able to generate Double-Group Reaction: " + e);
+            throw new IllegalStateException("Wasn't able to generate Double-Group Reaction", e);
         }
+        //return List.of();
     };
 
     public static boolean areVeryClose(Float f1, Float f2) {

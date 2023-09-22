@@ -211,6 +211,7 @@ public class Formula implements Cloneable {
      * @see Formula#startingAtom How sub-Formulae are added
      * @see Formula#addGroup(Formula, Boolean) Moving to the sub-Formula
      * @see Formula#addGroup(Formula, Boolean, BondType) Adding a non-single Bond
+     * @see Formula#joinFormulae Connecting Formulae of which you are unaware of the specific structure of each Formula, such as in {@link GenericReaction Generic Reactions}
      */
     public Formula addGroup(Formula group) {
         return this.addGroup(group, true);
@@ -220,13 +221,42 @@ public class Formula implements Cloneable {
      * Adds a singly-{@link Bond bonded} sub-Formula to the {@link Formula#currentAtom current} {@link Atom}.
      * @param group The sub-Formula to add
      * @param isSideGroup Whether to stay on the current Atom to which the sub-Formula is being added,
-     * or move to the current Atom of the sub-Formula (defaults to {@code} if not supplied)
+     * or move to the current Atom of the sub-Formula (defaults to {@code true} if not supplied)
      * @return This Formula
      * @see Formula#startingAtom How sub-Formulae are added
      * @see Formula#addGroup(Formula, Boolean, BondType) Adding a non-single Bond
+     * @see Formula#joinFormulae Connecting Formulae of which you are unaware of the specific structure of each Formula, such as in {@link GenericReaction Generic Reactions}
      */
     public Formula addGroup(Formula group, boolean isSideGroup) {
         return this.addGroup(group, isSideGroup, BondType.SINGLE);
+    };
+
+    /**
+     * Join two Formula between their {@link Formula#currentAtom currently-selected} {@link Atom Atoms} with the given {@link BondType type} of {@link Bond}.
+     * <p><strong>This will mutate one or both of the two Formulae. </strong> You should not refer to either of them after they have been joined.
+     * Instead, store the return value of this method and use that if it needs further modifying. For example:</p>
+     * <p><blockquote><pre>
+     * Formula joinedStructure = Formula.joinFormulae(oldFormula1, oldFormula2, BondType.SINGLE)
+     * // Now I no longer refer to oldFormula1 or oldFormula2 because I'm such a well-behaved developer
+     * </pre></blockquote></p>
+     * @param formula1 The current Atom will move to the currently selected Atom of this Formula. Otherwise, the two are indistuinguisable
+     * @param formula2
+     * @param bondType
+     * @return A new Formula which consists of the joined structure of both Formulae
+     */
+    public static Formula joinFormulae(Formula formula1, Formula formula2, BondType bondType) {
+        Formula formula;
+        if (formula2.isCyclic()) {
+            if (formula1.isCyclic()) throw new IllegalStateException("Cannot join two cyclic structures.");
+            formula1.startingAtom = formula1.currentAtom;
+            formula2.addGroup(formula1, false, bondType);
+            formula = formula2;
+        } else {
+            formula2.startingAtom = formula2.currentAtom;
+            formula1.addGroup(formula2, true, bondType);
+            formula = formula1;
+        }
+        return formula.shallowCopy();
     };
 
     /**
@@ -237,8 +267,12 @@ public class Formula implements Cloneable {
      * @param bondType The {@link BondType type of Bond} the sub-Formula should have to the current Atom - defaults to a single {@link Bond} if not supplied
      * @return This Formula
      * @see Formula#startingAtom How sub-Formulae are added
+     * @see Formula#joinFormulae Connecting Formulae of which you are unaware of the specific structure of each Formula, such as in {@link GenericReaction Generic Reactions}
      */
     public Formula addGroup(Formula group, Boolean isSideGroup, BondType bondType) {
+        if (topology.atomsAndLocations.stream().anyMatch(pair -> pair.getSecond() == currentAtom)) {
+            throw new IllegalStateException("Cannot modify Atoms in cycle");
+        };
         addGroupToStructure(structure, currentAtom, group, bondType);
         if (!isSideGroup) currentAtom = group.currentAtom;
         return this;
@@ -398,8 +432,6 @@ public class Formula implements Cloneable {
                 };
             };
         };
-        
-        //TODO add hydrogens to atoms in side chains as currently this doesn't happen
 
         // Add all the rest of the Hydrogens
         for (Entry<Atom, List<Bond>> entry : structure.entrySet()) {
@@ -480,18 +512,13 @@ public class Formula implements Cloneable {
      * The {@link Topology} of this Formula is not included, and in fact this will quietly fail for cyclic {@link Molecule Molecules}.
      * @param atom
      */
-    public String serializeStartingWithAtom(Atom atom) {
-
+    private Branch getStrippedBranchStartingWithAtom(Atom atom) {
         Map<Atom, List<Bond>> newStructure = stripHydrogens(structure);
-
-        String body = "";
         if (topology == Topology.LINEAR) {
-            body = getMaximumBranch(atom, newStructure).serialize();
+            return getMaximumBranch(atom, newStructure);
         } else {
-            Destroy.LOGGER.warn("Cannot serialize branch if it is cyclic.");
-        };
-
-        return body;
+            throw new IllegalStateException("Cannot serialize branch if it is cyclic.");
+        }
     };
 
     /**
@@ -515,21 +542,55 @@ public class Formula implements Cloneable {
             body = getMaximumBranchWithHighestMass(newStructure).serialize();
 
         } else {
+            updateSideChainStructures();
+            List<Branch> identity = new ArrayList<>(topology.getConnections());
+
             for (int i = 0; i < topology.getConnections(); i++) {
                 Formula sideChain = sideChains.get(i).getSecond();
-                if (sideChain.getAllAtoms().size() != 0 && !(sideChain.getAllAtoms().size() == 1 && sideChain.getAllAtoms().stream().anyMatch(atom -> atom.getElement() == Element.HYDROGEN))) { // If there's actually a chain to add and not just a hydrogen
-                    body += sideChain.serializeStartingWithAtom(sideChain.startingAtom);
+                if (sideChain.getAllAtoms().size() == 0 || (sideChain.startingAtom.isHydrogen())) { // If there is nothing or just a hydrogen
+                    identity.add(new Branch(new Node(new Atom(Element.HYDROGEN))));
+                } else {
+                    identity.add(sideChain.getStrippedBranchStartingWithAtom(sideChain.startingAtom));
+                };
+            };
+            
+            List<List<Branch>> possibleReflections = new ArrayList<>(topology.getReflections().length + 1);
+            possibleReflections.add(identity);
+
+            // Add all possible rearrangements of the same Branches that are still the same isomer
+            for (int[] reflectionOrder : topology.getReflections()) {
+                List<Branch> reflection = new ArrayList<>(topology.getConnections());
+                for (int reflectedBranchPosition : reflectionOrder) {
+                    reflection.add(identity.get(reflectedBranchPosition));
+                };
+                possibleReflections.add(reflection);
+            };
+
+            // Sort the possible reflections so the first element is the reflection that gives the highest mass branch in position 0, the next highest in position 1, etc.
+            Collections.sort(possibleReflections, (r1, r2) -> getReflectionComparison(r1).compareTo(getReflectionComparison(r2)));
+
+            List<Branch> bestReflection = possibleReflections.get(0);
+            for (int i = 0; i < topology.getConnections(); i++) {
+                Branch branch = bestReflection.get(i);
+                if (!branch.getStartNode().getAtom().isHydrogen()) { // If there's actually a chain to add and not just a hydrogen
+                    body += branch.serialize();
                 };
                 body += ",";
-                //TODO ensure this gives the same thing every time for symmetrical Topologies
             };
             body = body.substring(0, body.length() - 1); // The -1 removes the final comma
         };
 
-
         optimumFROWNSCode = prefix + ":" + body;
         return optimumFROWNSCode;
 
+    };
+
+    private static Float getReflectionComparison(List<Branch> reflection) {
+        float total = 0f;
+        for (int i = 0; i < reflection.size(); i++) {
+            total += i * reflection.get(i).getMassOfLongestChain();
+        };
+        return total;
     };
 
     private static Branch getMaximumBranchWithHighestMass(Map<Atom, List<Bond>> structure) {
@@ -608,7 +669,13 @@ public class Formula implements Cloneable {
     public Formula refreshFunctionalGroups() {
         this.groups = new ArrayList<>();
         for (GroupFinder finder : GroupFinder.allGroupFinders()) {
-            groups.addAll(finder.findGroups(structure));
+            if (topology == Topology.LINEAR) {
+                groups.addAll(finder.findGroups(structure));
+            } else {
+                for (Pair<SideChainInformation, Formula> sideChain : sideChains) {
+                    groups.addAll(finder.findGroups(sideChain.getSecond().structure)); // Don't include cyclic Atoms in Groups
+                };
+            };
         };
         return this;
     };
@@ -630,8 +697,9 @@ public class Formula implements Cloneable {
             newFormula.structure = shallowCopyStructure(structure); // Shallow copy the Structure
             newFormula.groups = new ArrayList<>(groups); // Shallow copy the Groups
             newFormula.topology = this.topology; // Shallow copy the Topology
+            updateSideChainStructures();
             newFormula.sideChains = sideChains.stream().map(pair -> Pair.of(pair.getFirst(), pair.getSecond().shallowCopy())).toList();
-            newFormula.optimumFROWNSCode = null; // Delete the FROWNS Code, as copies are typically going to be modified
+            newFormula.optimumFROWNSCode = null; // Delete the FROWNS Code again, as copies are typically going to be modified
 
             return newFormula;
 
@@ -784,7 +852,7 @@ public class Formula implements Cloneable {
      */
     private static void addGroupToStructure(Map<Atom, List<Bond>> structureToMutate, Atom rootAtom, Formula group, BondType bondType) {
         if (group.topology != Topology.LINEAR) {
-            Destroy.LOGGER.warn("Cannot add Cycles as side-groups - to create a Cyclic Molecule, start with the Cycle and use addGroupAtPosition()");
+            throw new IllegalArgumentException("Cannot add Cycles as side-groups - to create a Cyclic Molecule, start with the Cycle and use addGroupAtPosition(), or use Formula.joinFormulae if this is in a Generic Reaction");
         };
         for (Entry<Atom, List<Bond>> entry : group.structure.entrySet()) {
             if (structureToMutate.containsKey(entry.getKey())) throw new IllegalStateException("Cannot add a derivative of a Formula to itself.");
@@ -976,6 +1044,8 @@ public class Formula implements Cloneable {
          * The {@link SideChainInformation side-chains} this Topology can accomodate.
          */
         private final List<SideChainInformation> connections;
+
+        private int[][] reflections = null;
     
         private Topology(String nameSpace) {
             this.nameSpace = nameSpace;
@@ -1007,6 +1077,10 @@ public class Formula implements Cloneable {
          */
         public int getConnections() {
             return connections.size();
+        };
+
+        public int[][] getReflections() {
+            return reflections;
         };
     
         /**
@@ -1061,6 +1135,7 @@ public class Formula implements Cloneable {
              * @return This Topology builder
              */
             public Builder sideChain(Vec3 bondDirection, Vec3 branchDirection, BondType bondType) {
+                if (topology.reflections != null) throw new IllegalStateException("Cannot add more side chains once the reflections have been declared.");
                 topology.connections.add(new SideChainInformation(topology.atomsAndLocations.get(0).getSecond(), bondDirection, branchDirection, bondType));
                 return this;
             };
@@ -1086,6 +1161,24 @@ public class Formula implements Cloneable {
                 topology.atomsAndLocations.add(Pair.of(location, atom));
                 AttachedAtom attachedAtom = new AttachedAtom(this, atom);
                 return attachedAtom;
+            };
+
+            /**
+             * The array of all group orders which can be mapped from {@code [0, 1, 2, 3, 4, 5]} and will be the same isomer.
+             * E.g. {@code destroy:benzene:A,B,C,D,E,F} is chemically the same isomer as {@code destroy:benzene:A,F,E,D,C,B}, so for
+             * benzene this array should include the array {@code [0, 5, 4, 3, 2, 1]}.
+             * @param reflections
+             * @return This Topology builder
+             */
+            public Topology.Builder reflections(int[][] reflections) {
+                int connections = topology.getConnections();
+                for (int[] reflection : reflections) {
+                    int sum = 0;
+                    for (int i : reflection) sum += Math.pow(2, i);
+                    if (sum != (int)Math.pow(2, connections) - 1 || reflection.length != connections) throw new IllegalStateException("Isomer configurations must match the number of side chains this Topology has.");
+                };
+                topology.reflections = reflections;
+                return this;
             };
 
             /**
@@ -1166,6 +1259,7 @@ public class Formula implements Cloneable {
              * @return This attached Atom
              */
             public AttachedAtom withSideBranch(Vec3 bondDirection, Vec3 branchDirection, BondType bondType) {
+                if (builder.topology.reflections != null) throw new IllegalStateException("Cannot add more side chains once the reflections have been declared.");
                 builder.topology.connections.add(new SideChainInformation(atom, bondDirection, branchDirection, bondType));
                 return this;
             };

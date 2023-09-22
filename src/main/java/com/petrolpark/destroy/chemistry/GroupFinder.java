@@ -50,8 +50,9 @@ public abstract class GroupFinder {
     public static List<Atom> bondedAtomsOfElementTo(Map<Atom, List<Bond>> structure, Atom atom, Element element) {
         List<Atom> atoms = new ArrayList<>();
         for (Bond bond : structure.get(atom)) {
-            if (bond.getDestinationAtom().getElement() == element) {
-                atoms.add(bond.getDestinationAtom());
+            Atom destAtom = bond.getDestinationAtom();
+            if (destAtom.getElement() == element && structure.containsKey(destAtom)) {
+                atoms.add(destAtom);
             };
         };
         return atoms;
@@ -68,8 +69,9 @@ public abstract class GroupFinder {
     public static List<Atom> bondedAtomsOfElementTo(Map<Atom, List<Bond>> structure, Atom atom, Element element, BondType bondType) {
         List<Atom> atoms = new ArrayList<>();
         for (Bond bond : structure.get(atom)) {
-            if (bond.getDestinationAtom().getElement() == element && bond.getType() == bondType) {
-                atoms.add(bond.getDestinationAtom());
+            Atom destAtom = bond.getDestinationAtom();
+            if (destAtom.getElement() == element && bond.getType() == bondType && structure.containsKey(destAtom)) {
+                atoms.add(destAtom);
             };
         };
         return atoms;

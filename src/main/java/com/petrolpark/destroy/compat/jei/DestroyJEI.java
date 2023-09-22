@@ -18,6 +18,7 @@ import com.petrolpark.destroy.compat.jei.category.ChargingCategory;
 import com.petrolpark.destroy.compat.jei.category.DestroyRecipeCategory;
 import com.petrolpark.destroy.compat.jei.category.DistillationCategory;
 import com.petrolpark.destroy.compat.jei.category.ElectrolysisCategory;
+import com.petrolpark.destroy.compat.jei.category.ExtrusionCategory;
 import com.petrolpark.destroy.compat.jei.category.GenericReactionCategory;
 import com.petrolpark.destroy.compat.jei.category.ITickableCategory;
 import com.petrolpark.destroy.compat.jei.category.MutationCategory;
@@ -30,6 +31,7 @@ import com.petrolpark.destroy.recipe.ChargingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.recipe.DistillationRecipe;
 import com.petrolpark.destroy.recipe.ElectrolysisRecipe;
+import com.petrolpark.destroy.recipe.ExtrusionRecipe;
 import com.petrolpark.destroy.recipe.MutationRecipe;
 import com.petrolpark.destroy.recipe.ReactionRecipe;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -129,6 +131,13 @@ public class DestroyJEI implements IModPlugin {
             .itemIcon(DestroyBlocks.BUBBLE_CAP.get())
             .emptyBackground(123, 125)
             .build("distillation", DistillationCategory::new),
+
+        extrusion = builder(ExtrusionRecipe.class)
+            .addRecipes(() -> ExtrusionRecipe.RECIPES)
+            .catalyst(DestroyBlocks.EXTRUSION_DIE::get)
+            .itemIcon(DestroyBlocks.EXTRUSION_DIE.get())
+            .emptyBackground(177, 55)
+            .build("extrusion", ExtrusionCategory::new),
         
         mutation = builder(MutationRecipe.class)
             .addRecipes(() -> MutationCategory.RECIPES)

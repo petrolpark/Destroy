@@ -111,9 +111,6 @@ public class Destroy {
         // Config
         DestroyAllConfigs.register(modLoadingContext);
 
-        // Other
-        DestroyExtrusions.register();
-
         // Initiation Events
         modEventBus.addListener(Destroy::init);
         modEventBus.addListener(Destroy::clientInit);
@@ -141,6 +138,7 @@ public class Destroy {
         DestroyAdvancements.register();
         DestroyPotatoCannonProjectileTypes.register();
         DestroyMysteriousItemConversions.register();
+        DestroyExtrusions.register();
 
         // Chemistry
         DestroyGroupFinder.register();
