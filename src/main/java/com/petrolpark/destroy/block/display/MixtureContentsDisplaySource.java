@@ -41,7 +41,7 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
         if (mixtureTag.isEmpty()) { // If this is not a Mixture
             name = fluidStack.getDisplayName().copy();
         } else { // If this is a Mixture
-            boolean iupac = context.sourceConfig().getBoolean("MoleculeNameType");
+            boolean iupac = !context.sourceConfig().getBoolean("MoleculeNameType");
             TemperatureUnit temperatureUnit = TemperatureUnit.values()[context.sourceConfig().getInt("TemperatureUnit")];
             ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(mixtureTag);
 

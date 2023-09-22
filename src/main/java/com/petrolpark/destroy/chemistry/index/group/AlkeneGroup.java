@@ -9,12 +9,8 @@ public class AlkeneGroup extends Group<AlkeneGroup> {
 
     //TODO alkenes
 
-    private Atom highDegreeCarbon;
-    private Atom lowDegreeCarbon;
-
-    public AlkeneGroup() {
-        super();
-    };
+    public final Atom highDegreeCarbon;
+    public final Atom lowDegreeCarbon;
 
     public AlkeneGroup(Atom highDegreeCarbon, Atom lowDegreeCarbon) {
         super();

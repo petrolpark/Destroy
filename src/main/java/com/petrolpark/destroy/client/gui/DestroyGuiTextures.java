@@ -24,6 +24,7 @@ public enum DestroyGuiTextures implements ScreenElement {
 	JEI_DISTILLATION_TOWER_MIDDLE("jei/widgets", 0, 40, 20, 12),
 	JEI_DISTILLATION_TOWER_TOP("jei/widgets", 0, 38, 12, 2),
 	JEI_DISTILLATION_TOWER_BRANCH("jei/widgets", 20, 45, 20, 2),
+	JEI_EXPLOSION("jei/widgets", 169, 0, 18, 21),
 
 	//MISC
 	NERD_EMOJI("jei/widgets", 115, 19, 16, 14);

@@ -122,11 +122,11 @@ public class Molecule implements INameableProduct {
      * </pre></blockquote></p>
      */
     private String translationKey;
-    /**
-     * The display name of this Molecule. For non-novel Molecules this should be {@link Molecule#translationKey defined in a language file} -
-     * for novel Molecules this will be their {@link Molecule#getSerlializedMolecularFormula molecular formula}.
-     */
-    private Component name;
+    // /**
+    //  * The display name of this Molecule. For non-novel Molecules this should be {@link Molecule#translationKey defined in a language file} -
+    //  * for novel Molecules this will be their {@link Molecule#getSerlializedMolecularFormula molecular formula}.
+    //  */
+    // private Component name;
     /**
      * The color this Molecule adds to a {@link Mixture}.
      */
@@ -432,15 +432,12 @@ public class Molecule implements INameableProduct {
     @Override
     public Component getName(boolean iupac) {
         if (isNovel()) return Component.literal(getSerlializedMolecularFormula(true));
-        if (name == null) {
-            String key = nameSpace + ".chemical." + translationKey;
-            String iupacKey = key + ".iupac";
-            if (iupac && I18n.exists(iupacKey)) {
-                key = iupacKey;
-            };
-            name = Component.translatable(key);
+        String key = nameSpace + ".chemical." + translationKey;
+        String iupacKey = key + ".iupac";
+        if (iupac && I18n.exists(iupacKey)) {
+            key = iupacKey;
         };
-        return name;
+        return Component.translatable(key);
     };
 
     /**

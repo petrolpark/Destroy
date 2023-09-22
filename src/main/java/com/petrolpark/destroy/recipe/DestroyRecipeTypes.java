@@ -34,8 +34,8 @@ public enum DestroyRecipeTypes implements IRecipeTypeInfo {
     ELECTROLYSIS(ElectrolysisRecipe::new),
     EXTRUSION(ExtrusionRecipe::new),
     MUTATION(MutationRecipe::new),
+    OBLITERATION(ObliterationRecipe::new),
     REACTION(ReactionRecipe::new);
-    //VAPORIZATION(VaporizationRecipe::new);
 
     // This is alllllll copied from Create source code
     private final ResourceLocation id;

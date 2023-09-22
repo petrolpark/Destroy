@@ -18,6 +18,7 @@ import com.petrolpark.destroy.client.ponder.DestroyPonderTags;
 import com.petrolpark.destroy.compat.jei.DestroyJEI;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
+import com.petrolpark.destroy.entity.DestroyEntityTypes;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.pipeEffectHandler.MixtureOpenEndedPipeEffectHandler;
 import com.petrolpark.destroy.item.DestroyItems;
@@ -101,6 +102,7 @@ public class Destroy {
         DestroyParticleTypes.register(modEventBus);
         DestroyFluids.register();
         DestroyCropMutations.register();
+        DestroyEntityTypes.register();
         DestroyVillagers.register(modEventBus);
         // DestroyBadges.register(modEventBus);
         DestroyLoot.register(modEventBus);

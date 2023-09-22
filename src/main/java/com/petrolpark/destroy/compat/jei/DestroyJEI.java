@@ -22,6 +22,7 @@ import com.petrolpark.destroy.compat.jei.category.ExtrusionCategory;
 import com.petrolpark.destroy.compat.jei.category.GenericReactionCategory;
 import com.petrolpark.destroy.compat.jei.category.ITickableCategory;
 import com.petrolpark.destroy.compat.jei.category.MutationCategory;
+import com.petrolpark.destroy.compat.jei.category.ObliterationCategory;
 import com.petrolpark.destroy.compat.jei.category.ReactionCategory;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
@@ -33,6 +34,7 @@ import com.petrolpark.destroy.recipe.DistillationRecipe;
 import com.petrolpark.destroy.recipe.ElectrolysisRecipe;
 import com.petrolpark.destroy.recipe.ExtrusionRecipe;
 import com.petrolpark.destroy.recipe.MutationRecipe;
+import com.petrolpark.destroy.recipe.ObliterationRecipe;
 import com.petrolpark.destroy.recipe.ReactionRecipe;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.AllBlocks;
@@ -145,6 +147,12 @@ public class DestroyJEI implements IModPlugin {
             .itemIcon(DestroyItems.HYPERACCUMULATING_FERTILIZER.get())
             .emptyBackground(120, 125)
             .build("mutation", MutationCategory::new),
+
+        obliteration = builder(ObliterationRecipe.class)
+            .addTypedRecipes(DestroyRecipeTypes.OBLITERATION)
+            .itemIcon(DestroyBlocks.NITROCELLULOSE_BLOCK.get())
+            .emptyBackground(177, 70)
+            .build("obliteration", ObliterationCategory::new),
 
         reaction = builder(ReactionRecipe.class)
             .addRecipes(ReactionCategory.RECIPES::values)

@@ -322,8 +322,7 @@ public class DestroyItems {
     MASHED_POTATO = REGISTRATE.item("mashed_potato", Item::new)
         .properties(p -> p
             .food(DestroyFoods.MASHED_POTATO)
-        ).tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
+        ).register(),
     WHITE_WHEAT = REGISTRATE.item("white_wheat", Item::new)
         .tag(Tags.Items.CROPS)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)

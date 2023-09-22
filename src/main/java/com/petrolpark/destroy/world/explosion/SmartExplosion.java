@@ -12,7 +12,6 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.world.loot.DestroyLootContextParams;
 
 import net.minecraft.core.BlockPos;
@@ -28,7 +27,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.ProtectionEnchantment;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
@@ -97,8 +95,6 @@ public class SmartExplosion extends Explosion {
 
     @Override
     public void finalizeExplosion(boolean spawnParticles) {
-
-        Destroy.LOGGER.info(""+position);
 
         boolean createExperience = getDirectSourceEntity() instanceof Player || shouldAlwaysDropExperience();
 
@@ -318,16 +314,6 @@ public class SmartExplosion extends Explosion {
         public ExplosionResult {
             Objects.requireNonNullElse(blocksToDestroy, List.of());
             Objects.requireNonNullElse(entities, Map.of());
-        };
-    };
-
-    public static final ExplosionDamageCalculator IGNORE_FLUID_DAMAGE_CALCULATOR = new ExplosionDamageCalculator() {
-        public Optional<Float> getBlockExplosionResistance(Explosion explosion, BlockGetter reader, BlockPos pos, BlockState state, FluidState fluid) {
-            return state.isAir() ? Optional.empty() : Optional.of(state.getExplosionResistance(reader, pos, explosion));
-        };
-      
-        public boolean shouldBlockExplode(Explosion explosion, BlockGetter reader, BlockPos pos, BlockState state, float power) {
-            return true;
         };
     };
 };

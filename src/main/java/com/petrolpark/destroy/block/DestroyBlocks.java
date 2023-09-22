@@ -9,6 +9,7 @@ import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
 import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
 import com.petrolpark.destroy.block.model.CopycatBlockModel;
+import com.petrolpark.destroy.entity.PrimedBomb;
 import com.petrolpark.destroy.item.CoaxialGearBlockItem;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.PumpjackBlockItem;
@@ -240,7 +241,7 @@ public class DestroyBlocks {
 
     // EXPLOSIVES
 
-    public static final BlockEntry<Block> ANFO_BLOCK = REGISTRATE.block("anfo_block", Block::new)
+    public static final BlockEntry<PrimeableBombBlock> ANFO_BLOCK = REGISTRATE.block("anfo_block", p -> new PrimeableBombBlock(p, PrimedBomb.Anfo::new))
         .initialProperties(() -> Blocks.TNT)
         .properties(p -> p
             .mapColor(MapColor.COLOR_PINK)
@@ -249,7 +250,7 @@ public class DestroyBlocks {
         .build()
         .register();
 
-    public static final BlockEntry<Block> CORDITE = REGISTRATE.block("cordite", Block::new)
+    public static final BlockEntry<PrimeableBombBlock> CORDITE = REGISTRATE.block("cordite", p -> new PrimeableBombBlock(p, PrimedBomb.Cordite::new))
         .initialProperties(() -> Blocks.TNT)
         .properties(p -> p
             .mapColor(MapColor.COLOR_ORANGE)
@@ -261,21 +262,22 @@ public class DestroyBlocks {
     public static final BlockEntry<DynamiteBlock> DYNAMITE_BLOCK = REGISTRATE.block("dynamite_block", DynamiteBlock::new)
         .initialProperties(() -> Blocks.TNT)
         .properties(p -> p
-            .mapColor(MapColor.COLOR_ORANGE)
+            .mapColor(MapColor.COLOR_MAGENTA)
         ).item()
         .build()
         .register();
 
-    public static final BlockEntry<Block> NITROCELLULOSE_BLOCK = REGISTRATE.block("nitrocellulose_block", Block::new)
+    public static final BlockEntry<PrimeableBombBlock> NITROCELLULOSE_BLOCK = REGISTRATE.block("nitrocellulose_block", p -> new PrimeableBombBlock(p, PrimedBomb.Nitrocellulose::new))
         .initialProperties(() -> Blocks.TNT)
         .properties(p -> p
             .mapColor(MapColor.COLOR_LIGHT_GREEN)
         ).item()
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+        .tag(DestroyItemTags.OBLITERATION_EXPLOSIVE.tag)
         .build()
         .register();
 
-    public static final BlockEntry<Block> SODIUM_PICRATE_BLOCK = REGISTRATE.block("sodium_picrate_block", Block::new)
+    public static final BlockEntry<PrimeableBombBlock> SODIUM_PICRATE_BLOCK = REGISTRATE.block("sodium_picrate_block", (p) -> new PrimeableBombBlock(p, PrimedBomb.SodiumPicrate::new))
         .initialProperties(() -> Blocks.TNT)
         .properties(p -> p
             .mapColor(MapColor.COLOR_YELLOW)
