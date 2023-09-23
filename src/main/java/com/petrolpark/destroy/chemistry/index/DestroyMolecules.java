@@ -819,7 +819,7 @@ public final class DestroyMolecules {
         .id("oxygen")
         .structure(Formula.deserialize("destroy:linear:O=O"))
         .boilingPointInKelvins(90.188f)
-        .density(1.429f)
+        .density(1141f)
         .molarHeatCapacity(29.378f)
         .tag(Tags.ABUNDANT_IN_AIR)
         .build(),

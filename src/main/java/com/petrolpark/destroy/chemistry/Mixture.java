@@ -38,7 +38,7 @@ public class Mixture extends ReadOnlyMixture {
      * to their 'concentrations' (moles of the Reaction which have occured per Bucket of this Mixture, since the last
      * instance of that Reaction Result was dealt with).
      */
-    protected Map<ReactionResult, Float> reactionresults;
+    protected Map<ReactionResult, Float> reactionResults;
     /**
      * {@link Molecule Molecules} which do not have a name space or ID.
      */
@@ -81,7 +81,7 @@ public class Mixture extends ReadOnlyMixture {
     public Mixture() {
         super();
 
-        reactionresults = new HashMap<>();
+        reactionResults = new HashMap<>();
 
         novelMolecules = new ArrayList<>();
 
@@ -141,7 +141,7 @@ public class Mixture extends ReadOnlyMixture {
                 CompoundTag resultTag = (CompoundTag) tag;
                 ReactionResult result = Reaction.get(resultTag.getString("Result")).getResult();
                 if (result == null) return;
-                mixture.reactionresults.put(result, resultTag.getFloat("MolesPerBucket"));
+                mixture.reactionResults.put(result, resultTag.getFloat("MolesPerBucket"));
             });
         };
 
@@ -157,8 +157,8 @@ public class Mixture extends ReadOnlyMixture {
         CompoundTag tag = super.writeNBT();
         tag.putBoolean("AtEquilibrium", equilibrium);
 
-        if (!reactionresults.isEmpty()) {
-            tag.put("Results", NBTHelper.writeCompoundList(reactionresults.entrySet(), entry -> {
+        if (!reactionResults.isEmpty()) {
+            tag.put("Results", NBTHelper.writeCompoundList(reactionResults.entrySet(), entry -> {
                 CompoundTag resultTag = new CompoundTag();
                 resultTag.putString("Result", entry.getKey().getReaction().getFullId());
                 resultTag.putFloat("MolesPerBucket", entry.getValue());
@@ -177,7 +177,7 @@ public class Mixture extends ReadOnlyMixture {
         this.temperature = temperature;
         // Ensure everything has the right temperature
         for (Molecule molecule : contents.keySet()) {
-            if (molecule.getBoilingPoint() > temperature) {
+            if (molecule.getBoilingPoint() < temperature) {
                 states.put(molecule, 1f);
             } else {
                 states.put(molecule, 0f);
@@ -216,7 +216,7 @@ public class Mixture extends ReadOnlyMixture {
         if (mixtures.size() == 1) return mixtures.keySet().iterator().next();
         Mixture resultMixture = new Mixture();
         Map<Molecule, Double> moleculesAndMoles = new HashMap<>(); // A Map of all Molecules to their quantity in moles (not their concentration)
-        Map<ReactionResult, Double> reactionresultsAndMoles = new HashMap<>(); // A Map of all Reaction Results to their quantity in moles
+        Map<ReactionResult, Double> reactionResultsAndMoles = new HashMap<>(); // A Map of all Reaction Results to their quantity in moles
         double totalAmount = 0d;
         float totalEnergy = 0f;
 
@@ -233,8 +233,8 @@ public class Mixture extends ReadOnlyMixture {
                 totalEnergy += molecule.getLatentHeat() * concentration * mixture.states.get(molecule) * amount; // Add all the energy that would be required to vaporise this Molecule, if necessary
             };
 
-            for (Entry<ReactionResult, Float> entry : mixture.reactionresults.entrySet()) {
-                reactionresultsAndMoles.merge(entry.getKey(), entry.getValue() * amount, (r1, r2) -> r1 + r2); // Same for Reaction Results
+            for (Entry<ReactionResult, Float> entry : mixture.reactionResults.entrySet()) {
+                reactionResultsAndMoles.merge(entry.getKey(), entry.getValue() * amount, (r1, r2) -> r1 + r2); // Same for Reaction Results
             };
         };
 
@@ -244,8 +244,8 @@ public class Mixture extends ReadOnlyMixture {
             resultMixture.states.put(molecule, 0f); // Set it to entirely liquid as we will soon be reheating the Mixture from 0K
         };
 
-        for (Entry<ReactionResult, Double> reactionresultAndMoles : reactionresultsAndMoles.entrySet()) {
-            resultMixture.incrementReactionResults(reactionresultAndMoles.getKey().getReaction(), (float)(reactionresultAndMoles.getValue() / totalAmount)); // Add all Reaction Results to the new Mixture
+        for (Entry<ReactionResult, Double> reactionResultAndMoles : reactionResultsAndMoles.entrySet()) {
+            resultMixture.incrementReactionResults(reactionResultAndMoles.getKey().getReaction(), (float)(reactionResultAndMoles.getValue() / totalAmount)); // Add all Reaction Results to the new Mixture
         };
 
         resultMixture.updateNextBoilingPoints();
@@ -526,7 +526,9 @@ public class Mixture extends ReadOnlyMixture {
      * 1M water and nothing else (which is physically impossible). This is mutative.
      * @param initialVolume The initial volume (in mB)
      * @return The new volume (in mB) of this Mixture
+     * @deprecated This doesn't account for the space occupied by gases
      */
+    @Deprecated
     public int recalculateVolume(int initialVolume) {
         if (contents.isEmpty()) return 0;
         double initialVolumeInBuckets = (double)initialVolume / 1000d;
@@ -545,12 +547,84 @@ public class Mixture extends ReadOnlyMixture {
         };
 
         // Results
-        Map<ReactionResult, Float> resultsCopy = new HashMap<>(reactionresults);
+        Map<ReactionResult, Float> resultsCopy = new HashMap<>(reactionResults);
         for (Entry<ReactionResult, Float> entry : resultsCopy.entrySet()) {
-            reactionresults.replace(entry.getKey(), (float)(entry.getValue() * initialVolumeInBuckets / newVolumeInBuckets));
+            reactionResults.replace(entry.getKey(), (float)(entry.getValue() * initialVolumeInBuckets / newVolumeInBuckets));
         };
 
         return (int)((newVolumeInBuckets * 1000) + 0.5);
+    };
+
+    /**
+     * Adjust the concentrations of this Mixture so the number of moles is conserved if the volume is changed. The change is isothermic.
+     * @param volumeIncreaseFactor The multiplicative factor which has been applied to the volume.
+     */
+    public void scale(float volumeIncreaseFactor) {
+        contents.replaceAll((molecule, concentration) -> concentration / volumeIncreaseFactor);
+        reactionResults.replaceAll((reactionResult, molesPerBucket) -> molesPerBucket / volumeIncreaseFactor);
+    };
+
+    public static record Phases(Mixture gasMixture, Double gasVolume, Mixture liquidMixture, Double liquidVolume) {};
+
+    /**
+     * Get two new Mixtures from one - one containing all gas, one containing all liquid.
+     * This doesn't mutate this Mixture.
+     * @param initialVolume The initial volume of this Mixture from which to scale, ideally in buckets.
+     * @return A {@link Phases} record containing:<ul>
+     * <li>{@code gasMixture} A new Mixture containing all gases</li>
+     * <li>{@code gasVolume} This is always {@code 1d}, allowing it to be rescaled later.</li>
+     * <li>{@code liquidMixture} A new Mixture containing all liquids.</li>
+     * <li>{@code liquidVolume} A volume of liquid in the same units as {@code initialVolume}.</li></ul>
+     */
+    public Phases separatePhases(double initialVolume) {
+        Map<Molecule, Double> liquidMoles = new HashMap<>();
+        Map<Molecule, Double> gasMoles = new HashMap<>();
+
+        double newLiquidVolume = 0d;
+        double newGasVolume = 1d;
+
+        Mixture liquidMixture = new Mixture();
+        Mixture gasMixture = new Mixture();
+
+        for (Entry<Molecule, Float> entry : contents.entrySet()) {
+            Molecule molecule = entry.getKey();
+            float concentration = entry.getValue();
+            float proportionGaseous = states.get(molecule);
+
+            // Liquid
+            double molesOfLiquidMolecule = concentration * (1f - proportionGaseous) * initialVolume;
+            liquidMoles.put(molecule, molesOfLiquidMolecule);
+            newLiquidVolume += molesOfLiquidMolecule / molecule.getPureConcentration();
+
+            // Gas
+            gasMoles.put(molecule, concentration * proportionGaseous * initialVolume);
+        };
+
+        // Put Molecules in new Mixtures
+        for (Entry<Molecule, Double> entry : liquidMoles.entrySet()) {
+            double moles = entry.getValue();
+            if (moles == 0d) continue;
+            liquidMixture.internalAddMolecule(entry.getKey(), (float)(moles / newLiquidVolume), false);
+            liquidMixture.states.put(entry.getKey(), 0f);
+        };
+        for (Entry<Molecule, Double> entry : gasMoles.entrySet()) {
+            double moles = entry.getValue();
+            if (moles == 0d) continue;
+            gasMixture.internalAddMolecule(entry.getKey(), (float)(moles / newGasVolume), false);
+            gasMixture.states.put(entry.getKey(), 1f);
+        };
+
+        // Add Reaction Results to new Mixtures
+        for (Entry<ReactionResult, Float> entry : reactionResults.entrySet()) {
+            double resultMoles = entry.getValue() * initialVolume;
+            liquidMixture.reactionResults.put(entry.getKey(), (float)(resultMoles / newLiquidVolume));
+            gasMixture.reactionResults.put(entry.getKey(), (float)(resultMoles / newGasVolume));
+        };
+
+        liquidMixture.refreshPossibleReactions();
+        gasMixture.refreshPossibleReactions();
+
+        return new Phases(gasMixture, newGasVolume, liquidMixture, newLiquidVolume);
     };
 
     /**
@@ -595,7 +669,7 @@ public class Mixture extends ReadOnlyMixture {
     protected void incrementReactionResults(Reaction reaction, float molesPerBucket) {
         if (!reaction.hasResult()) return;
         ReactionResult result = reaction.getResult();
-        reactionresults.merge(result, molesPerBucket, (f1, f2) -> f1 + f2);
+        reactionResults.merge(result, molesPerBucket, (f1, f2) -> f1 + f2);
     };
 
     /**
@@ -626,12 +700,12 @@ public class Mixture extends ReadOnlyMixture {
         if (ticks == 0) return new ReactionInBasinResult(0, List.of(), volume); // If no reactions occured (because we were already at equilibrium), cancel early
 
         List<ReactionResult> results = new ArrayList<>();
-        for (ReactionResult result : reactionresults.keySet()) {
-            Float molesPerBucketOfReaction = reactionresults.get(result);
+        for (ReactionResult result : reactionResults.keySet()) {
+            Float molesPerBucketOfReaction = reactionResults.get(result);
             int numberOfResult = (int) (volumeInBuckets * molesPerBucketOfReaction / result.getRequiredMoles());
 
             // Decrease the amount of Reaction that has happened
-            reactionresults.replace(result, molesPerBucketOfReaction - numberOfResult * result.getRequiredMoles() / volumeInBuckets);
+            reactionResults.replace(result, molesPerBucketOfReaction - numberOfResult * result.getRequiredMoles() / volumeInBuckets);
 
             // Add the Reaction Result the required number of times
             for (int i = 0; i < numberOfResult; i++) {
@@ -695,7 +769,7 @@ public class Mixture extends ReadOnlyMixture {
             return false;
         };
 
-        if (!molecule.isNovel()) super.addMolecule(molecule, concentration); //TODO not do this if it turns out to already be in solution
+        if (!molecule.isNovel()) super.addMolecule(molecule, concentration);
 
         List<Group<?>> functionalGroups = molecule.getFunctionalGroups();
         if (functionalGroups.size() != 0) {

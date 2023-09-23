@@ -185,9 +185,8 @@ public class ReadOnlyMixture {
         };
 
         contents.put(molecule, concentration);
-        states.put(molecule, molecule.getBoilingPoint() > temperature ? 1f : 0f);
+        states.put(molecule, molecule.getBoilingPoint() < temperature ? 1f : 0f);
 
-        //updateName(); //TODO check if needed
         return this;
     };
 

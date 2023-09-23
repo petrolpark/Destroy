@@ -214,7 +214,7 @@ public class DestroyBlocks {
         ).onRegister(CreateRegistrate.connectedTextures(() -> new EncasedCTBehaviour(AllSpriteShifts.COPPER_CASING)))
         .onRegister(CreateRegistrate.casingConnectivity((block, cc) -> cc.make(block, AllSpriteShifts.COPPER_CASING,
 			(s, f) -> f != s.getValue(VatControllerBlock.FACING)))
-        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.DISPLAY_SOURCE, "vat_controller"))
+        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.LIQUID_DISPLAY_SOURCE, "vat_controller"))
         .item()
         .build()
         .register();

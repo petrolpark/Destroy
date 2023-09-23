@@ -69,7 +69,7 @@ public class Molecule implements INameableProduct {
     private float mass;
 
     /**
-     * The density of this Molecule, in grams per Bucket
+     * The density of this Molecule when it is liquid or in solution, in grams per Bucket.
      */
     private float density;
     /**

@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.block.entity.behaviour;
+package com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public class GeniusFluidTankBehaviour extends SmartFluidTankBehaviour {
-
+    
     /**
      * Mostly copied from the {@link com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour Create source code}, 
      * switching the {@link com.simibubi.create.foundation.fluid.SmartFluidTank SmartFluidTanks} for {@link GeniusFluidTank GeniusFluidTanks},
@@ -39,6 +39,19 @@ public class GeniusFluidTankBehaviour extends SmartFluidTankBehaviour {
         capability = LazyOptional.of(() -> new InternalFluidHandler(handlers, enforceVariety));
     };
 
+    public class GeniusTankSegment extends TankSegment {
+
+        public GeniusTankSegment(int capacity) {
+            super(capacity);
+            tank = new GeniusFluidTank(capacity, f -> onFluidStackChanged());
+        };
+
+        protected GeniusFluidTank getTank() {
+            return (GeniusFluidTank)tank;  
+        };
+
+    };
+
     public static class GeniusFluidTank extends SmartFluidTank {
 
         public GeniusFluidTank(int capacity, Consumer<FluidStack> updateCallback) {
@@ -52,7 +65,7 @@ public class GeniusFluidTankBehaviour extends SmartFluidTankBehaviour {
                 if (!DestroyFluids.MIXTURE.get().isSame(resource.getFluid()) || !DestroyFluids.MIXTURE.get().isSame(fluid.getFluid())) return 0;
                 if (!resource.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND) || !fluid.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND)) return 0;
                 Mixture existingMixture = Mixture.readNBT(fluid.getOrCreateTag().getCompound("Mixture"));
-                Mixture addedMixture = Mixture.readNBT(fluid.getOrCreateTag().getCompound("Mixture"));
+                Mixture addedMixture = Mixture.readNBT(resource.getOrCreateTag().getCompound("Mixture"));
 
                 int amountOfMixtureAdded = Math.min(getSpace(), resource.getAmount());
                 int existingAmount = fluid.getAmount();
@@ -64,19 +77,6 @@ public class GeniusFluidTankBehaviour extends SmartFluidTankBehaviour {
                 return amountOfMixtureAdded; 
             };
             return filled;
-        };
-
-    };
-
-    public class GeniusTankSegment extends TankSegment {
-
-        public GeniusTankSegment(int capacity) {
-            super(capacity);
-            tank = new GeniusFluidTank(capacity, f -> onFluidStackChanged());
-        };
-
-        protected SmartFluidTank getTank() {
-            return tank;  
         };
 
     };

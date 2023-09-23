@@ -97,8 +97,14 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
             };
         };
 
-        FluidStack fluidStack = controller.getTank().getFluid();
-        if (fluidStack.isEmpty()) return;
+        // Fluid
+        FluidStack fluidStack = controller.getLiquidTank().getFluid();
+        if (!fluidStack.isEmpty()) {
+            FluidRenderer.renderFluidBox(fluidStack,
+                (float)relativeInternalLowerCorner.x, (float)relativeInternalLowerCorner.y, (float)relativeInternalLowerCorner.z,
+                (float)relativeInternalUpperCorner.x, relativeFluidLevel, (float)relativeInternalUpperCorner.z,
+                bufferSource, ms, light, true);
+        };
 
         // Items
         int itemCount = 0;
@@ -130,12 +136,6 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
                 };
             };
         };
-
-        // Fluid
-        FluidRenderer.renderFluidBox(fluidStack,
-            (float)relativeInternalLowerCorner.x, (float)relativeInternalLowerCorner.y, (float)relativeInternalLowerCorner.z,
-            (float)relativeInternalUpperCorner.x, relativeFluidLevel, (float)relativeInternalUpperCorner.z,
-            bufferSource, ms, light, true);
     };
 
     protected void renderItem(PoseStack ms, MultiBufferSource buffer, int light, int overlay, ItemStack stack) {
