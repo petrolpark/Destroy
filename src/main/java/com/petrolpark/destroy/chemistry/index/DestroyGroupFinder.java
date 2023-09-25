@@ -13,6 +13,7 @@ import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.index.group.AcidAnhydrideGroup;
 import com.petrolpark.destroy.chemistry.index.group.AcylChlorideGroup;
 import com.petrolpark.destroy.chemistry.index.group.AlcoholGroup;
+import com.petrolpark.destroy.chemistry.index.group.AlkeneGroup;
 import com.petrolpark.destroy.chemistry.index.group.AmideGroup;
 import com.petrolpark.destroy.chemistry.index.group.CarbonylGroup;
 import com.petrolpark.destroy.chemistry.index.group.CarboxylicAcidGroup;
@@ -28,6 +29,7 @@ public class DestroyGroupFinder extends GroupFinder {
         List<Group<?>> groups = new ArrayList<>();
 
         List<Atom> carbonsToIgnore = new ArrayList<>();
+        List<Atom> carbonsToIgnoreForAlkenes = new ArrayList<>();
 
         for (Atom carbon : structure.keySet()) {
 
@@ -41,6 +43,7 @@ public class DestroyGroupFinder extends GroupFinder {
             List<Atom> nitrogens = bondedAtomsOfElementTo(structure, carbon, Element.NITROGEN, BondType.SINGLE);
             List<Atom> hydrogens = bondedAtomsOfElementTo(structure, carbon, Element.HYDROGEN, BondType.SINGLE);
             List<Atom> carbons = bondedAtomsOfElementTo(structure, carbon, Element.CARBON, BondType.SINGLE);
+            List<Atom> alkeneCarbons = bondedAtomsOfElementTo(structure, carbon, Element.CARBON, BondType.DOUBLE);
             List<Atom> nitrileNitrogens = bondedAtomsOfElementTo(structure, carbon, Element.NITROGEN, BondType.TRIPLE);
             List<Atom> rGroups = bondedAtomsOfElementTo(structure, carbon, Element.R_GROUP);
 
@@ -90,6 +93,20 @@ public class DestroyGroupFinder extends GroupFinder {
                 if (nitrileNitrogens.size() == 1 && carbons.size() == 1) {
                     groups.add(new NitrileGroup(carbon, nitrileNitrogens.get(0)));
                 };
+            };
+
+            addAllAlkenes: for (Atom alkeneCarbon : alkeneCarbons) {
+                if (carbonsToIgnoreForAlkenes.contains(alkeneCarbon)) continue addAllAlkenes;
+                int firstCarbonDegree = bondedAtomsOfElementTo(structure, carbon, Element.CARBON).size() - 1;
+                int secondCarbonDegree = bondedAtomsOfElementTo(structure, alkeneCarbon, Element.CARBON).size() - 1;
+                // If the two Carbons have the same degree, then there are two alkene Groups
+                if (firstCarbonDegree >= secondCarbonDegree) {
+                    groups.add(new AlkeneGroup(carbon, alkeneCarbon));
+                };
+                if (secondCarbonDegree >= firstCarbonDegree) {
+                    groups.add(new AlkeneGroup(alkeneCarbon, carbon));
+                };
+                carbonsToIgnoreForAlkenes.add(carbon);
             };
 
         };

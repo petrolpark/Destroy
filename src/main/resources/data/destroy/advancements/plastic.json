@@ -1,5 +1,5 @@
 {
-    "parent": "destroy:distillation",
+    "parent": "destroy:vat",
     "criteria": {
       "hold": {
         "trigger": "minecraft:inventory_changed",

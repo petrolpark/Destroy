@@ -1,5 +1,5 @@
 {
-    "parent": "destroy:drunk",
+    "parent": "destroy:vat",
     "criteria": {
       "take": {
         "conditions": {},

@@ -1,0 +1,125 @@
+{
+    "parent": "destroy:plastic",
+    "criteria": {
+      "abs": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "destroy:abs"
+              ]
+            }
+          ]
+        }
+      },
+      "polyethene": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "destroy:polyethene"
+              ]
+            }
+          ]
+        }
+      },
+      "polypropene": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "destroy:polypropene"
+              ]
+            }
+          ]
+        }
+      },
+      "polystyrene": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "destroy:polystyrene"
+              ]
+            }
+          ]
+        }
+      },
+      "nylon": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "destroy:nylon"
+              ]
+            }
+          ]
+        }
+      },
+      "ptfe": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "destroy:polytetrafluoroethene"
+              ]
+            }
+          ]
+        }
+      },
+      "sbr": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "destroy:polystyrene_butadiene"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.every_plastic.description"
+      },
+      "icon": {
+        "item": "destroy:polystyrene"
+      },
+      "frame": "goal",
+      "title": {
+        "translate": "advancement.destroy.every_plastic"
+      }
+    },
+    "requirements": [
+      [
+        "abs"
+      ],
+      [
+        "polyethene"
+      ],
+      [
+        "polypropene"
+      ],
+      [
+        "polystyrene"
+      ],
+      [
+        "nylon"
+      ],
+      [
+        "ptfe"
+      ],
+      [
+        "sbr"
+      ]
+    ]
+  }

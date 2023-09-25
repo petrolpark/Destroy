@@ -1,5 +1,5 @@
 {
-    "parent": "destroy:pumpjack",
+    "parent": "destroy:explosive",
     "criteria": {
       "extrude": {
         "conditions": {},

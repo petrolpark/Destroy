@@ -167,7 +167,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         inputBehaviour.allowExtraction();
         // Determine how much Fluid could be added to the main tank (this should usually be everything)
         FluidStack drainedFluid = inputBehaviour.getPrimaryHandler().drain(BUFFER_TANK_CAPACITY, FluidAction.SIMULATE);
-        int drainedAmount = vatController.addFluid(drainedFluid);
+        int drainedAmount = vatController.addFluid(drainedFluid, FluidAction.EXECUTE);
         // Drain that amount from this Vat Side Block Entity's Tank
         inputBehaviour.getPrimaryHandler().drain(drainedAmount, FluidAction.EXECUTE);
         if (drainedAmount > 0) { // Let the renderer know we should animate Fluid being dispensed

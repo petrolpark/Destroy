@@ -64,6 +64,13 @@ public class Bond {
     };
 
     /**
+     * Set the {@link BondType type} of this Bond.
+     */
+    public void setType(BondType type) {
+        this.type = type;
+    };
+
+    /**
      * As Bonds are directed, this returns a Bond in the other direction. The Bond will be of the same {@link BondType type}.
      * <p>This method instantiates a new Bond. Therefore, if the Bond is already part of a {@link Formula structure}, this will not return the pre-existing mirror Bond.
      * Strictly this pre-existing Bond should never be required, except when {@link Formula#remove removing} an Atom from a structure. </p>

@@ -25,8 +25,8 @@ public class DestroyAdvancementReactionResult extends ReactionResult {
 
     @Override
     public void onBasinReaction(Level level, BasinBlockEntity basin, Mixture mixture) {
-        // At the moment Advancements don't work in Basins
-        //basin.getBehaviour(DestroyAdvancementBehaviour.TYPE).awardDestroyAdvancement(advancement);
+        DestroyAdvancementBehaviour behaviour = basin.getBehaviour(DestroyAdvancementBehaviour.TYPE);
+        if (behaviour != null) behaviour.awardDestroyAdvancement(advancement);
     };
 
     @Override

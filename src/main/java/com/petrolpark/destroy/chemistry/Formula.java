@@ -403,6 +403,27 @@ public class Formula implements Cloneable {
     };
 
     /**
+     * Exchange the {@link Bond} between the given {@link Atom} and the {@link Formula#currentAtom current} one.
+     * @param otherAtom If there is not an existing Bond to this Atom, an error will be thrown
+     * @param bondType
+     * @return This Formula
+     */
+    public Formula replaceBondTo(Atom otherAtom, BondType bondType) {
+        for (Bond bond : structure.get(currentAtom)) {
+            if (bond.getDestinationAtom() == otherAtom) {
+                bond.setType(bondType);
+                for (Bond reverseBond : structure.get(otherAtom)) {
+                    if (reverseBond.getDestinationAtom() == currentAtom) {
+                        bond.setType(bondType);
+                        return this;
+                    };
+                };
+            };
+        };
+        throw new IllegalStateException("Cannot modify bond between two Atoms if they do not already have a Bond");
+    };
+
+    /**
      * Adds an =O Group to the {@link Formula#currentAtom current Atom}, staying on the {@link Atom}.
      * @return This Formula
      */

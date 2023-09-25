@@ -55,7 +55,4 @@ public abstract class HeatConditionMixin {
             ci.setReturnValue(heatLevel.name() == "FROSTING");
         };
     };
-
-
-
 };

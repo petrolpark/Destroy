@@ -27,11 +27,14 @@ public enum DestroyAdvancements {
     CHARGE_WITH_DYNAMO("charge_with_dynamo"),
     ELECTROLYZE_WITH_DYNAMO("electrolyze_with_dynamo"),
     EXTRUDE("use_extrusion_die"),
+    DETONATE("detonate"),
     UNPOLLUTE("unpollute"),
     HANGOVER("hangover"),
     CURE_HANGOVER("cure_hangover"),
     HYPERACCUMULATE("hyperaccumulate"),
     MECHANICAL_HANDS("mechanical_hands"),
+    TRY_TO_MAKE_METH("try_to_make_meth"),
+    OBLITERATE("detonate_obliteration_explosive"),
     OSTWALD_PROCESS("ostwald_process"),
     FULLY_POLLUTE("fully_pollute"),
     USE_PUMPJACK("use_pumpjack"),
@@ -39,6 +42,7 @@ public enum DestroyAdvancements {
     USE_SEISMOMETER("use_seismometer"),
     COLLECT_TEARS("collect_tears"),
     URINATE("urinate"),
+    USE_VAT("use_vat"),
     VERY_DRUNK("very_drunk");
 
     private String id;

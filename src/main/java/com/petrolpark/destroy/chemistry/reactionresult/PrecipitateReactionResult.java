@@ -11,6 +11,7 @@ import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 public class PrecipitateReactionResult extends ReactionResult {
     
@@ -36,8 +37,7 @@ public class PrecipitateReactionResult extends ReactionResult {
 
     @Override
     public void onVatReaction(Level level, VatControllerBlockEntity vatController, Mixture mixture) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onVatReaction'");
+        ItemHandlerHelper.insertItemStacked(vatController.inventory, precipitate.get(), false);
     };
 
 };

@@ -167,6 +167,18 @@ public class ReadOnlyMixture {
     };
 
     /**
+     * Get the combined concentration of every Molecule in this Mixture.
+     * @return in moles per bucket
+     */
+    public float getTotalConcentration() {
+        float total = 0f;
+        for (Float concentration : contents.values()) {
+            total += concentration;
+        };
+        return total;
+    };
+
+    /**
      * Adds the given {@link Molecule} to this Read-Only Mixture with the given concentration.
      * If the Read-Only Mixture already contained the Molecule its concentration will be replaced,
      * thought this should not happen - to modify the contents of existing Mixtures, use a {@link Mixture} and not a Read-Only Mixture.

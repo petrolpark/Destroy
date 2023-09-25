@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.world.loot.DestroyLootContextParams;
 
 import net.minecraft.core.BlockPos;
@@ -118,6 +119,8 @@ public class SmartExplosion extends Explosion {
                 };
             };
         };
+
+        if (getIndirectSourceEntity() instanceof Player player) DestroyAdvancements.DETONATE.award(level, player);
         
         // Do effects
         effects(spawnParticles);

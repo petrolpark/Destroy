@@ -248,8 +248,8 @@ public class Mixture extends ReadOnlyMixture {
             resultMixture.incrementReactionResults(reactionResultAndMoles.getKey().getReaction(), (float)(reactionResultAndMoles.getValue() / totalAmount)); // Add all Reaction Results to the new Mixture
         };
 
-        resultMixture.updateNextBoilingPoints();
         resultMixture.temperature = 0f; // Initially set the temperature of the new Mixture to 0K
+        resultMixture.updateNextBoilingPoints();
         resultMixture.heat(totalEnergy / (float)totalAmount); // Now heat it up with the total internal energy of all component Mixtures
 
         resultMixture.refreshPossibleReactions();
@@ -312,6 +312,13 @@ public class Mixture extends ReadOnlyMixture {
      */
     public boolean isAtEquilibrium() {
         return equilibrium;
+    };
+
+    /**
+     * Let this Mixture know it should no longer be at {@link Mixture#equilibrium}.
+     */
+    public void disturbEquilibrium() {
+        equilibrium = false;
     };
 
     /**
@@ -413,6 +420,8 @@ public class Mixture extends ReadOnlyMixture {
                     float boiled = energyDensity / (molecule.getLatentHeat() * getConcentrationOf(molecule)); // The proportion of all of the Molecule which is additionally boiled
                     states.merge(molecule, boiled, Float::sum);
                 };
+
+                equilibrium = false; // Equilibrium is broken when a Molecule evaporates
             } else {
                 temperature += temperatureChange;
             };
@@ -436,6 +445,8 @@ public class Mixture extends ReadOnlyMixture {
                     float condensed = -energyDensity / (molecule.getLatentHeat() * getConcentrationOf(molecule));
                     states.merge(molecule, 1f - condensed, (f1, f2) -> f1 + f2 - 1f);
                 };
+
+                equilibrium = false; // Equilibrium is broken when a Molecule condenses
 
             } else {
                 temperature += temperatureChange;
@@ -621,6 +632,8 @@ public class Mixture extends ReadOnlyMixture {
             gasMixture.reactionResults.put(entry.getKey(), (float)(resultMoles / newGasVolume));
         };
 
+        liquidMixture.temperature = temperature;
+        gasMixture.temperature = temperature;
         liquidMixture.refreshPossibleReactions();
         gasMixture.refreshPossibleReactions();
 
@@ -697,25 +710,42 @@ public class Mixture extends ReadOnlyMixture {
             ticks++;
         };
 
-        if (ticks == 0) return new ReactionInBasinResult(0, List.of(), volume); // If no reactions occured (because we were already at equilibrium), cancel early
-
-        List<ReactionResult> results = new ArrayList<>();
-        for (ReactionResult result : reactionResults.keySet()) {
-            Float molesPerBucketOfReaction = reactionResults.get(result);
-            int numberOfResult = (int) (volumeInBuckets * molesPerBucketOfReaction / result.getRequiredMoles());
-
-            // Decrease the amount of Reaction that has happened
-            reactionResults.replace(result, molesPerBucketOfReaction - numberOfResult * result.getRequiredMoles() / volumeInBuckets);
-
-            // Add the Reaction Result the required number of times
-            for (int i = 0; i < numberOfResult; i++) {
-                results.add(result);
-            };
-        };
+        if (ticks == 0) return new ReactionInBasinResult(0, Map.of(), volume); // If no reactions occured (because we were already at equilibrium), cancel early
 
         int amount = recalculateVolume(volume);
 
-        return new ReactionInBasinResult(ticks, results, amount);
+        return new ReactionInBasinResult(ticks, getCompletedResults(volumeInBuckets), amount);
+    };
+
+    /**
+     * If any {@link Mixture#reactionResults results} have had enough moles to have occured, remove them from the Mixture and return them here.
+     * This is mutative.
+     * @param volumeInBuckets The amount of Mixture
+     * @return A Set of Reaction Results mapped to the number of times that Reaction result occurs
+     */
+    public Map<ReactionResult, Integer> getCompletedResults(double volumeInBuckets) {
+        Map<ReactionResult, Integer> results = new HashMap<>();
+        if (reactionResults.isEmpty()) return results;
+        for (ReactionResult result : reactionResults.keySet()) {
+
+            if (result.isOneOff()) {
+                results.put(result, 1);
+                continue;
+            };
+
+            Float molesPerBucketOfReaction = reactionResults.get(result);
+            int numberOfResult = (int) (volumeInBuckets * molesPerBucketOfReaction / result.getRequiredMoles());
+            if (numberOfResult == 0) continue;
+
+            // Decrease the amount of Reaction that has happened
+            reactionResults.replace(result, molesPerBucketOfReaction - numberOfResult * result.getRequiredMoles() / (float)volumeInBuckets);
+
+            results.put(result, numberOfResult);
+        };
+        // reactionResults.keySet().removeIf(result -> { // Remove any one-off Results and Results which have run out
+        //     return result.isOneOff() || areVeryClose(reactionResults.get(result), 0f);
+        // }); 
+        return results;
     };
 
     /**

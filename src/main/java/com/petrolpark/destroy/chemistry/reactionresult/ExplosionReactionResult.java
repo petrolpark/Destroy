@@ -35,7 +35,7 @@ public class ExplosionReactionResult extends ReactionResult {
 
     @Override
     public void onVatReaction(Level level, VatControllerBlockEntity vatController, Mixture mixture) {
-        //TODO Vat explosions
+        vatController.explode(); //TODO swap to use explosive factory
     };
     
 };

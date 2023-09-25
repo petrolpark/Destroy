@@ -355,7 +355,7 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
         DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.bubble_cap.input_tank"), inputTank);
 
         TemperatureUnit unit = DestroyAllConfigs.CLIENT.chemistry.temperatureUnit.get();
-        if (isController) DestroyLang.translate("tooltip.bubble_cap.reboiler_temperature", unit.of(DistillationTower.getTemperatureForDistillationTower(getLevel(), worldPosition), df)).forGoggles(tooltip); //TODO replace with something that can take multiple temperature units
+        if (isController) DestroyLang.translate("tooltip.bubble_cap.reboiler_temperature", unit.of(DistillationTower.getTemperatureForDistillationTower(getLevel(), worldPosition), df)).forGoggles(tooltip);
 
         return true;
     };

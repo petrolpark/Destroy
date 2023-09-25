@@ -13,6 +13,7 @@ import com.petrolpark.destroy.util.vat.Vat;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
+import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 import com.simibubi.create.foundation.utility.VecHelper;
@@ -30,7 +31,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntity> {
 
@@ -45,7 +45,7 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
         BlockState state = controller.getBlockState();
         VertexConsumer vbSolid = bufferSource.getBuffer(RenderType.solid());
         VertexConsumer vbCutout = bufferSource.getBuffer(RenderType.cutout());
-        ItemStackHandler inv = controller.inventory;
+        SmartInventory inv = controller.inventory;
 
         Vec3 relativeInternalLowerCorner = Vec3.atLowerCornerOf(vat.getInternalLowerCorner().subtract(controller.getBlockPos()));
         Vec3 relativeInternalUpperCorner = Vec3.atLowerCornerOf(vat.getUpperCorner().subtract(controller.getBlockPos()));
@@ -81,7 +81,7 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
                         .unCentre()
                         .translate(2 / 16f, 0, 0)
                         .translate(0, dialPivot, dialPivot)
-                        .rotateX(-90 * controller.getPercentagePressure())
+                        .rotateX(-90 * controller.getClientPressure(partialTicks) / controller.getVatOptional().get().getMaxPressure())
                         .translate(0, -dialPivot, -dialPivot)
                         .light(light)
                         .renderInto(ms, vbSolid);

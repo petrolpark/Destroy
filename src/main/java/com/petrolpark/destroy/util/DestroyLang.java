@@ -141,7 +141,7 @@ public class DestroyLang {
     };
 
     private static final float pressureMin = 0f;
-    private static final float pressureMax = 100000f;
+    private static final float pressureMax = 1000000f;
     private static final float conductivityMin = 0f;
     private static final float conductivityMax = 100f;
 

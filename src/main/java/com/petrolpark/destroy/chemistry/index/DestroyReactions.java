@@ -112,7 +112,7 @@ public class DestroyReactions {
         .addSimpleItemReactant(DestroyItems.PAPER_PULP, 2f)
         .addProduct(DestroyMolecules.PROTON)
         .addProduct(DestroyMolecules.WATER) //TODO in future add oxalic acid side product
-        .withResult(2f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.NITROCELLULOSE.asStack()))
+        .withResult(2f, PrecipitateReactionResult.of(DestroyItems.NITROCELLULOSE::asStack))
         .build(),
 
     CHLORINE_HALOFORM_REACTION = builder()
@@ -316,7 +316,7 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.CARBON_DIOXIDE, 2)
         .addProduct(DestroyMolecules.WATER, 18)
         .addProduct(DestroyMolecules.NITROGEN_DIOXIDE, 6)
-        .withResult(1f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.FULMINATED_MERCURY.asStack())) //TODO figure out actual molar ratios
+        .withResult(1f, PrecipitateReactionResult.of(DestroyItems.FULMINATED_MERCURY::asStack)) //TODO figure out actual molar ratios
         .build(),
 
     METHANOL_SYNTHESIS = builder()
@@ -340,8 +340,9 @@ public class DestroyReactions {
         .id("naughty_reaction")
         .addReactant(DestroyMolecules.PHENYLACETONE)
         .addReactant(DestroyMolecules.METHYLAMINE)
-        .withResult(1f, (m, r) -> new CombinedReactionResult(m, r)
+        .withResult(0f, (m, r) -> new CombinedReactionResult(m, r)
             .with(ExplosionReactionResult::small)
+            .with(DestroyAdvancements.TRY_TO_MAKE_METH::asReactionResult)
         ).dontIncludeInJei()
         .build(),
 
@@ -350,7 +351,7 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.NICKEL_ION)
         .addReactant(DestroyMolecules.NITRATE, 2, 0)
         .addReactant(DestroyMolecules.HYDRAZINE, 3)
-        .withResult(3f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.NICKEL_HYDRAZINE_NITRATE.asStack())) //TODO figure out actual molar ratios
+        .withResult(3f, PrecipitateReactionResult.of(DestroyItems.NICKEL_HYDRAZINE_NITRATE::asStack)) //TODO figure out actual molar ratios
         .build(),
 
     NITRONIUM_FORMATION = builder()
@@ -366,7 +367,7 @@ public class DestroyReactions {
         .id("nylon_polymerisation")
         .addReactant(DestroyMolecules.ADIPIC_ACID)
         .addReactant(DestroyMolecules.HEXANEDIAMINE)
-        .withResult(3f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.NYLON.asStack())) //TODO work out proportions
+        .withResult(3f, PrecipitateReactionResult.of(DestroyItems.NYLON::asStack)) //TODO work out proportions
         .build(),
 
     ORTHOXYLENE_OXIDATION = builder()
@@ -384,7 +385,7 @@ public class DestroyReactions {
         .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/rhodium"), 1f)
         .addProduct(DestroyMolecules.WATER)
         .addProduct(DestroyMolecules.NITRIC_ACID)
-        .withResult(0.0001f, DestroyAdvancements.OSTWALD_PROCESS::asReactionResult)
+        .withResult(0f, DestroyAdvancements.OSTWALD_PROCESS::asReactionResult)
         .build(), //TODO potentially split into multiple equations, and add side reactions
 
     //TODO phenylacetic acid synthesis, either from benzyl chloride or benzyl cyanide
@@ -413,7 +414,7 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.ACETONE)
         .addReactant(DestroyMolecules.HYDROGEN_PEROXIDE)
         // TODO acid catalyst
-        .withResult(3f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.ACETONE_PEROXIDE.asStack()))
+        .withResult(3f, PrecipitateReactionResult.of(DestroyItems.ACETONE_PEROXIDE::asStack))
         .build(),
 
     STEAM_REFORMATION = builder()

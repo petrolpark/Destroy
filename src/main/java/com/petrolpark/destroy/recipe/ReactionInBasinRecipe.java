@@ -1,6 +1,5 @@
 package com.petrolpark.destroy.recipe;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -110,7 +109,7 @@ public class ReactionInBasinRecipe extends MixingRecipe {
                 for (int i = 0; i < stack.getCount(); i++) builder.require(Ingredient.of(stack.getItem()));
             });
 
-            List<ReactionResult> reactionResults = new ArrayList<>();
+            Map<ReactionResult, Integer> reactionResults = new HashMap<>();
 
             gatherReactionResults(result.reactionresults(), reactionResults, builder); // Gather all 
 
@@ -128,14 +127,18 @@ public class ReactionInBasinRecipe extends MixingRecipe {
         return builder.build();
     };
 
-    private static void gatherReactionResults(List<ReactionResult> resultsOfReaction, List<ReactionResult> resultsToEnact, ProcessingRecipeBuilder<ReactionInBasinRecipe> builder) {
-        for (ReactionResult reactionresult : resultsOfReaction) {
+    private static void gatherReactionResults(Map<ReactionResult, Integer> resultsOfReaction, Map<ReactionResult, Integer> resultsToEnact, ProcessingRecipeBuilder<ReactionInBasinRecipe> builder) {
+        for (ReactionResult reactionresult : resultsOfReaction.keySet()) {
             if (reactionresult instanceof CombinedReactionResult combinedResult) {
-                gatherReactionResults(combinedResult.getChildren(), resultsToEnact, builder);
+                Map<ReactionResult, Integer> childMap = new HashMap<>();
+                for (ReactionResult childResult : combinedResult.getChildren()) {
+                    childMap.put(childResult, resultsOfReaction.get(combinedResult));
+                };
+                gatherReactionResults(childMap, resultsToEnact, builder);
             } else if (reactionresult instanceof PrecipitateReactionResult precipitationResult) {
                 builder.output(precipitationResult.getPrecipitate());
             } else { // Don't deal with precipitations in the normal way
-                resultsToEnact.add(reactionresult);
+                resultsToEnact.put(reactionresult, resultsOfReaction.get(reactionresult));
             };
         };
     };
@@ -151,6 +154,6 @@ public class ReactionInBasinRecipe extends MixingRecipe {
      * @param reactionresults The {@link com.petrolpark.destroy.chemistry.ReactionResult results} of Reacting this Mixture
      * @param amount The amount (in mB) of resultant Mixture
      */
-    public static record ReactionInBasinResult(int ticks, List<ReactionResult> reactionresults, int amount) {};
+    public static record ReactionInBasinResult(int ticks, Map<ReactionResult, Integer> reactionresults, int amount) {};
     
 };

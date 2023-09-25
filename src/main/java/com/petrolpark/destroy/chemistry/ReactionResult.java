@@ -10,13 +10,16 @@ public abstract class ReactionResult {
     protected final Reaction reaction;
     protected final float moles;
 
+    private final boolean oneOff;
+
     /**
-     * @param moles How many moles of {@link Reaction} must take place before this Reaction Result occurs
+     * @param moles How many moles of {@link Reaction} must take place before this Reaction Result occurs. If this is {@code 0f}, then any amount of Reaction occuring will trigger the result once.
      * @param reaction The Reaction which results in this
      */
     public ReactionResult(float moles, Reaction reaction) {
         this.moles = moles;
         this.reaction = reaction;
+        oneOff = moles == 0f;
     };
 
     /**
@@ -28,6 +31,13 @@ public abstract class ReactionResult {
 
     public Reaction getReaction() {
         return reaction;
+    };
+
+    /**
+     * Whether this Reaction Result occurs when <em>any</em> amount of Reaction occurs.
+     */
+    public boolean isOneOff() {
+        return oneOff;
     };
 
     /**
