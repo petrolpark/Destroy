@@ -42,6 +42,10 @@ public class DestroyPonderIndex {
             .addStoryBoard("dynamo/charging", DestroyScenes::dynamoCharging)
             .addStoryBoard("dynamo/electrolysis", DestroyScenes::dynamoElectrolysis);
 
+        // Extrusion Die
+        HELPER.forComponents(DestroyBlocks.EXTRUSION_DIE)
+            .addStoryBoard("extrusion_die", DestroyScenes::extrusionDie);
+
         // Hyperaccumulating Fertilizer
         HELPER.forComponents(DestroyItems.HYPERACCUMULATING_FERTILIZER)
             .addStoryBoard("phytomining", DestroyScenes::phytomining);

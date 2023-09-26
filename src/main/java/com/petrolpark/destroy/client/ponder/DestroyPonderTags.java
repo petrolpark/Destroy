@@ -46,6 +46,7 @@ public class DestroyPonderTags {
             .add(DestroyBlocks.COOLER)
             .add(DestroyBlocks.DOUBLE_CARDAN_SHAFT)
             .add(DestroyBlocks.DYNAMO)
+            .add(DestroyBlocks.EXTRUSION_DIE)
             .add(DestroyItems.HYPERACCUMULATING_FERTILIZER)
             .add(DestroyBlocks.PLANETARY_GEARSET)
             .add(DestroyBlocks.PUMPJACK)
@@ -87,6 +88,10 @@ public class DestroyPonderTags {
             .add(DestroyBlocks.CENTRIFUGE)
             .add(DestroyBlocks.POLLUTOMETER)
             .add(DestroyBlocks.VAT_CONTROLLER)
+        ;
+
+        PonderRegistry.TAGS.forTag(AllPonderTags.CONTRAPTION_ACTOR)
+            .add(DestroyBlocks.EXTRUSION_DIE)
         ;
     };
     

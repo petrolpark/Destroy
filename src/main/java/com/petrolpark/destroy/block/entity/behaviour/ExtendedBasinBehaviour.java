@@ -3,9 +3,9 @@ package com.petrolpark.destroy.block.entity.behaviour;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.ReactionResult;
+import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
@@ -15,6 +15,9 @@ import com.simibubi.create.foundation.utility.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.fluids.FluidStack;
 
 public class ExtendedBasinBehaviour extends BlockEntityBehaviour {
 
@@ -22,38 +25,47 @@ public class ExtendedBasinBehaviour extends BlockEntityBehaviour {
 
     public boolean tooFullToReact;
     private Map<ReactionResult, Integer> reactionResults;
-    private Mixture mixture;
-    private int ticksToResults;
+    public FluidStack evaporatedFluid;
 
     public ExtendedBasinBehaviour(SmartBlockEntity be) {
         super(be);
         tooFullToReact = false;
         reactionResults = new HashMap<>();
-        ticksToResults = -1;
+        evaporatedFluid = FluidStack.EMPTY;
     };
 
-    public void setReactionResults(Map<ReactionResult, Integer> results, Mixture mixture, int time) {
+    public void setReactionResults(Map<ReactionResult, Integer> results) {
         this.reactionResults = results;
-        this.mixture = mixture;
-        ticksToResults = time;
     };
 
     @Override
     public void tick() {
-        if (!(blockEntity instanceof BasinBlockEntity basin) || mixture == null || basin.getLevel().isClientSide() || reactionResults.isEmpty() || ticksToResults == -1) return;
-        ticksToResults--;
-        if (ticksToResults == 0) {
-            enactReactionResults(basin);
+        if (!(blockEntity instanceof BasinBlockEntity basin) || basin.getLevel().isClientSide()) return;
+
+        BlockEntity potentialOperator = getWorld().getBlockEntity(getPos().above(2));
+        if (potentialOperator instanceof MechanicalMixerBlockEntity mixer) {
+            if (mixer.processingTicks == 1) enactReactionResults(basin);
         };
+        
     };
 
     public void enactReactionResults(BasinBlockEntity basin) {
+        
         for (ReactionResult result : reactionResults.keySet()) {
-            for (int i = 0; i < reactionResults.get(result); i++) result.onBasinReaction(basin.getLevel(), basin, mixture);
+            for (int i = 0; i < reactionResults.get(result); i++) result.onBasinReaction(basin.getLevel(), basin);
         };
         reactionResults.clear();
-        mixture = null;
-        ticksToResults = -1;
+
+        PollutingBehaviour.pollute(basin.getLevel(), basin.getBlockPos(), evaporatedFluid);
+        evaporatedFluid = FluidStack.EMPTY;
+    };
+
+    /**
+	 * Block destroyed or removed. Requires block to call ITE::onRemove
+	 */
+	public void destroy() {
+        if (!evaporatedFluid.isEmpty() && blockEntity.getLevel() instanceof ServerLevel serverLevel) PollutingBehaviour.pollute(serverLevel, blockEntity.getBlockPos(), evaporatedFluid);
+        evaporatedFluid = FluidStack.EMPTY;
     };
 
     @Override
@@ -74,11 +86,8 @@ public class ExtendedBasinBehaviour extends BlockEntityBehaviour {
             if (result == null) return;
             reactionResults.put(result, number);
         });
-        
-        mixture = null;
-        if (nbt.contains("MixtureForResults", Tag.TAG_COMPOUND)) mixture = Mixture.readNBT(nbt.getCompound("MixtureForResults"));
 
-        ticksToResults = nbt.getInt("TicksUntilResults");
+        evaporatedFluid = FluidStack.loadFluidStackFromNBT(nbt.getCompound("EvaporatedFluidStack"));
 	};
 
     @Override
@@ -92,9 +101,9 @@ public class ExtendedBasinBehaviour extends BlockEntityBehaviour {
             return resultTag;
         }));
 
-        if (mixture != null) nbt.put("MixtureForResults", mixture.writeNBT());
-
-        nbt.putInt("TicksUntilResults", ticksToResults);
+        CompoundTag fluidTag = new CompoundTag();
+        evaporatedFluid.writeToNBT(fluidTag);
+        nbt.put("EvaporatedFluid", fluidTag);
 	};
     
 };

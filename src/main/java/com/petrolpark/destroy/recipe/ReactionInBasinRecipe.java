@@ -12,6 +12,7 @@ import com.petrolpark.destroy.block.entity.behaviour.ExtendedBasinBehaviour;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReactionResult;
+import com.petrolpark.destroy.chemistry.Mixture.Phases;
 import com.petrolpark.destroy.chemistry.reactionresult.CombinedReactionResult;
 import com.petrolpark.destroy.chemistry.reactionresult.PrecipitateReactionResult;
 import com.petrolpark.destroy.fluid.DestroyFluids;
@@ -78,10 +79,12 @@ public class ReactionInBasinRecipe extends MixingRecipe {
             if (result.ticks() == 0) {
                 canReact = false;
                 break tryReact;
-            }; 
+            };
+
+            Phases phases = mixture.separatePhases(result.amount());
 
             // Add the resultant Mixture to the results for this Recipe
-            FluidStack outputMixtureStack = MixtureFluid.of(result.amount(), mixture);
+            FluidStack outputMixtureStack = MixtureFluid.of((int)Math.round(phases.liquidVolume()), phases.liquidMixture());
             builder.output(outputMixtureStack);
 
             // Let the Player know if the Reaction cannot occur because the output Fluid will not fit
@@ -114,7 +117,8 @@ public class ReactionInBasinRecipe extends MixingRecipe {
             gatherReactionResults(result.reactionresults(), reactionResults, builder); // Gather all 
 
             ExtendedBasinBehaviour behaviour = basin.getBehaviour(ExtendedBasinBehaviour.TYPE);
-            behaviour.setReactionResults(reactionResults, mixture, duration); // Schedule the Reaction Results to occur once the Mixing has finished
+            behaviour.setReactionResults(reactionResults); // Schedule the Reaction Results to occur once the Mixing has finished
+            behaviour.evaporatedFluid = MixtureFluid.of((int)Math.round(phases.gasVolume()), phases.gasMixture());
         };
 
         basin.getBehaviour(ExtendedBasinBehaviour.TYPE).tooFullToReact = isBasinTooFullToReact;

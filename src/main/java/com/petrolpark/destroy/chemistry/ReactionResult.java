@@ -46,12 +46,12 @@ public abstract class ReactionResult {
      * @param basin The Block Entity associated with the Basin
      * @param mixture The Mixture at the time when this Reaction Result occurs
      */
-    public abstract void onBasinReaction(Level level, BasinBlockEntity basin, Mixture mixture);
+    public abstract void onBasinReaction(Level level, BasinBlockEntity basin);
 
     /**
      * Do something when the Reaction finishes in a Vat.
      * @param level The Level in which the Vat is
      * @param mixture The Mixture at the time when this Reaction Result occurs
      */
-    public abstract void onVatReaction(Level level, VatControllerBlockEntity vatController, Mixture mixture);
+    public abstract void onVatReaction(Level level, VatControllerBlockEntity vatController);
 };

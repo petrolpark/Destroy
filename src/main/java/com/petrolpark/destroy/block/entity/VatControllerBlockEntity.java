@@ -199,7 +199,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             if (shouldUpdateFluidMixture) {
                 // Enact Reaction Results
                 cachedMixture.getCompletedResults(fluidAmount).entrySet().forEach(entry -> {
-                    for (int i = 0; i < entry.getValue(); i++) entry.getKey().onVatReaction(getLevel(), this, cachedMixture);
+                    for (int i = 0; i < entry.getValue(); i++) entry.getKey().onVatReaction(getLevel(), this);
                 });
                 updateFluidMixture();
             };

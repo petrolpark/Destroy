@@ -3,7 +3,6 @@ package com.petrolpark.destroy.chemistry.reactionresult;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
-import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.ReactionResult;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
@@ -24,13 +23,13 @@ public class DestroyAdvancementReactionResult extends ReactionResult {
     };
 
     @Override
-    public void onBasinReaction(Level level, BasinBlockEntity basin, Mixture mixture) {
+    public void onBasinReaction(Level level, BasinBlockEntity basin) {
         DestroyAdvancementBehaviour behaviour = basin.getBehaviour(DestroyAdvancementBehaviour.TYPE);
         if (behaviour != null) behaviour.awardDestroyAdvancement(advancement);
     };
 
     @Override
-    public void onVatReaction(Level level, VatControllerBlockEntity vatController, Mixture mixture) {
+    public void onVatReaction(Level level, VatControllerBlockEntity vatController) {
         vatController.getBehaviour(DestroyAdvancementBehaviour.TYPE).awardDestroyAdvancement(advancement);
     };
     

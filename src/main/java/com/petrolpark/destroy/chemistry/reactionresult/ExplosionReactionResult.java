@@ -3,7 +3,6 @@ package com.petrolpark.destroy.chemistry.reactionresult;
 import java.util.function.BiFunction;
 
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
-import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.ReactionResult;
 import com.petrolpark.destroy.util.ExplosionHelper;
@@ -29,12 +28,12 @@ public class ExplosionReactionResult extends ReactionResult {
     };
 
     @Override
-    public void onBasinReaction(Level level, BasinBlockEntity basin, Mixture mixture) {
+    public void onBasinReaction(Level level, BasinBlockEntity basin) {
         if (level instanceof ServerLevel serverLevel) ExplosionHelper.explode(serverLevel, explosionFactory.apply(serverLevel, VecHelper.getCenterOf(basin.getBlockPos())));
     };
 
     @Override
-    public void onVatReaction(Level level, VatControllerBlockEntity vatController, Mixture mixture) {
+    public void onVatReaction(Level level, VatControllerBlockEntity vatController) {
         vatController.explode(); //TODO swap to use explosive factory
     };
     

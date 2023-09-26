@@ -1,5 +1,5 @@
 {
-    "parent": "destroy:squeeze",
+    "parent": "destroy:extrude",
     "criteria": {
       "anfo": {
         "trigger": "minecraft:inventory_changed",

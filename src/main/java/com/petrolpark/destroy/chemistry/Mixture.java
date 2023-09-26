@@ -636,6 +636,8 @@ public class Mixture extends ReadOnlyMixture {
         gasMixture.temperature = temperature;
         liquidMixture.refreshPossibleReactions();
         gasMixture.refreshPossibleReactions();
+        liquidMixture.equilibrium = equilibrium;
+        gasMixture.equilibrium = equilibrium;
 
         return new Phases(gasMixture, newGasVolume, liquidMixture, newLiquidVolume);
     };

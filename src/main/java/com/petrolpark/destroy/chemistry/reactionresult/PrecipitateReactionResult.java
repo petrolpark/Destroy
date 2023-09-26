@@ -4,7 +4,6 @@ import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
-import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.ReactionResult;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
@@ -31,12 +30,12 @@ public class PrecipitateReactionResult extends ReactionResult {
     };
 
     @Override
-    public void onBasinReaction(Level level, BasinBlockEntity basin, Mixture mixture) {
+    public void onBasinReaction(Level level, BasinBlockEntity basin) {
         // Do nothing, this is handled in ReactionInBasinRecipe
     };
 
     @Override
-    public void onVatReaction(Level level, VatControllerBlockEntity vatController, Mixture mixture) {
+    public void onVatReaction(Level level, VatControllerBlockEntity vatController) {
         ItemHandlerHelper.insertItemStacked(vatController.inventory, precipitate.get(), false);
     };
 

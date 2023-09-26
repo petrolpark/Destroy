@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
-import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.ReactionResult;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
@@ -31,16 +30,16 @@ public class CombinedReactionResult extends ReactionResult {
     };
 
     @Override
-    public void onBasinReaction(Level level, BasinBlockEntity basin, Mixture mixture) {
+    public void onBasinReaction(Level level, BasinBlockEntity basin) {
         for (ReactionResult childResult : childResults) {
-            childResult.onBasinReaction(level, basin, mixture);
+            childResult.onBasinReaction(level, basin);
         };
     };
 
     @Override
-    public void onVatReaction(Level level, VatControllerBlockEntity vatController, Mixture mixture) {
+    public void onVatReaction(Level level, VatControllerBlockEntity vatController) {
         for (ReactionResult childResult : childResults) {
-            childResult.onVatReaction(level, vatController, mixture);
+            childResult.onVatReaction(level, vatController);
         };
     };
     
