@@ -17,7 +17,8 @@ public class DestroyPonderIndex {
 
         // Bubble Cap
         HELPER.forComponents(DestroyBlocks.BUBBLE_CAP)
-            .addStoryBoard("bubble_cap", DestroyScenes::bubbleCap);
+            .addStoryBoard("bubble_cap/generic", DestroyScenes::bubbleCapGeneric)
+            .addStoryBoard("bubble_cap/mixtures", DestroyScenes::bubbleCapMixtures);
 
         // Centrifuge
         HELPER.forComponents(DestroyBlocks.CENTRIFUGE)

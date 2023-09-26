@@ -3,6 +3,7 @@ package com.petrolpark.destroy.client.ponder;
 import java.util.List;
 
 import com.petrolpark.destroy.block.AgingBarrelBlock;
+import com.petrolpark.destroy.block.BubbleCapBlock;
 import com.petrolpark.destroy.block.CoaxialGearBlock;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.DoubleCardanShaftBlock;
@@ -13,9 +14,13 @@ import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
 import com.petrolpark.destroy.block.entity.DynamoBlockEntity;
 import com.petrolpark.destroy.block.entity.PumpjackBlockEntity;
 import com.petrolpark.destroy.block.entity.behaviour.ChargingBehaviour;
+import com.petrolpark.destroy.chemistry.Mixture;
+import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
+import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
 import com.petrolpark.destroy.fluid.DestroyFluids;
+import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
 import com.simibubi.create.AllBlocks;
@@ -74,6 +79,11 @@ public class DestroyScenes {
         purpleFluid = new FluidStack(PotionFluid.withEffects(1000, new Potion(), List.of(new MobEffectInstance(MobEffects.REGENERATION))), 1000);
         blueFluid = new FluidStack(PotionFluid.withEffects(500, new Potion(), List.of(new MobEffectInstance(MobEffects.NIGHT_VISION))), 1000);
         redFluid = new FluidStack(PotionFluid.withEffects(500, new Potion(), List.of(new MobEffectInstance(MobEffects.DAMAGE_BOOST))), 1000);
+    };
+
+    private static FluidStack clearMixture(int amount) {
+        ReadOnlyMixture mixture = Mixture.pure(DestroyMolecules.WATER);
+        return MixtureFluid.of(amount, mixture);
     };
 
     public static void agingBarrel(SceneBuilder scene, SceneBuildingUtil util) {
@@ -221,8 +231,8 @@ public class DestroyScenes {
         // TODO lubrication
     };
 
-    public static void bubbleCap(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("bubble_cap", "This text is defined in a language file.");
+    public static void bubbleCapGeneric(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("bubble_cap_generic", "This text is defined in a language file.");
         scene.configureBasePlate(0, 0, 5);
         scene.showBasePlate();
 
@@ -282,6 +292,127 @@ public class DestroyScenes {
             .attachKeyFrame()
             .pointAt(util.vector.blockSurface(bottomBubbleCap, Direction.WEST));
         scene.idle(120);
+        scene.markAsFinished();
+    };
+
+    public static void bubbleCapMixtures(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("bubble_cap_mixtures", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 3);
+        scene.showBasePlate();
+
+        BlockPos reboiler = util.grid.at(1, 1, 1);
+        Vec3 reboilerFront = util.vector.blockSurface(reboiler, Direction.NORTH);
+
+        GasParticleData particleData = new GasParticleData(DestroyParticleTypes.DISTILLATION.get(), clearMixture(1000), 2.4f);
+
+        scene.idle(10);
+        scene.world.modifyBlockEntity(reboiler, BubbleCapBlockEntity.class, be -> {
+            be.getTank().fill(clearMixture(1000), FluidAction.EXECUTE);
+        });
+        scene.idle(20);
+        ElementLink<WorldSectionElement> tower = scene.world.showIndependentSection(util.select.fromTo(1, 1, 1, 1, 4, 1), Direction.DOWN);
+        scene.idle(20);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .pointAt(reboilerFront)
+            .attachKeyFrame();
+        scene.idle(40);
+
+        scene.world.modifyBlockEntity(reboiler, BubbleCapBlockEntity.class, be -> {
+            be.getTank().drain(800, FluidAction.EXECUTE);
+        });
+        scene.effects.emitParticles(VecHelper.getCenterOf(reboiler), Emitter.simple(particleData, new Vec3(0f, 0f, 0f)), 1.0f, 10);
+        scene.world.modifyBlockEntity(util.grid.at(1, 2, 1), BubbleCapBlockEntity.class, be -> {
+            be.getInternalTank().fill(clearMixture(400), FluidAction.EXECUTE);
+        });
+        scene.world.modifyBlockEntity(util.grid.at(1, 3, 1), BubbleCapBlockEntity.class, be -> {
+            be.getInternalTank().fill(clearMixture(150), FluidAction.EXECUTE);
+            be.setTicksToFill(BubbleCapBlockEntity.getTankCapacity() / BubbleCapBlockEntity.getTransferRate());
+        });
+        scene.world.modifyBlockEntity(util.grid.at(1, 4, 1), BubbleCapBlockEntity.class, be -> {
+            be.getInternalTank().fill(clearMixture(250), FluidAction.EXECUTE);
+            be.setTicksToFill(2 * BubbleCapBlockEntity.getTankCapacity() / BubbleCapBlockEntity.getTransferRate());
+        });
+        scene.idle(80);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .pointAt(reboilerFront)
+            .attachKeyFrame();
+        scene.overlay.showControls(new InputWindowElement(reboilerFront, Pointing.RIGHT)
+            .withItem(AllItems.GOGGLES.asStack())
+        , 80);
+        scene.idle(100);
+
+        scene.world.moveSection(tower, new Vec3(0, 1, 0), 10);
+        scene.idle(20);
+        ElementLink<WorldSectionElement> burner = scene.world.showIndependentSection(util.select.position(2, 1, 1), Direction.WEST);
+        scene.world.moveSection(burner, new Vec3(-1, 0, 0), 0);
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.")
+            .pointAt(reboilerFront);
+        scene.idle(80);
+
+        BlockPos topCap = util.grid.at(1, 5, 1);
+        scene.overlay.showText(160)
+            .text("This text is defined in a lamguage file.")
+            .colored(PonderPalette.RED)
+            .pointAt(util.vector.blockSurface(util.grid.at(1, 2, 1), Direction.WEST))
+            .attachKeyFrame();
+        scene.idle(80);
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.RED)
+            .pointAt(util.vector.blockSurface(topCap, Direction.WEST));
+        scene.idle(100);
+        
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.GREEN)
+            .attachKeyFrame()
+            .pointAt(util.vector.blockSurface(util.grid.at(1, 2, 1), Direction.UP));
+        scene.idle(80);
+
+        scene.scaleSceneView(0.75f);
+        scene.idle(10);
+        scene.world.showSection(util.select.fromTo(1, 5, 1, 1, 7, 1), Direction.DOWN);
+        scene.idle(10);
+        scene.world.setBlock(util.grid.at(1, 4, 1), DestroyBlocks.BUBBLE_CAP
+            .getDefaultState()
+            .setValue(BubbleCapBlock.BOTTOM, false)
+            .setValue(BubbleCapBlock.TOP, false)
+            .setValue(BubbleCapBlock.PIPE_FACE, Direction.EAST)
+        , false);
+        scene.world.setBlock(util.grid.at(1, 6, 1), DestroyBlocks.BUBBLE_CAP
+            .getDefaultState()
+            .setValue(BubbleCapBlock.BOTTOM, false)
+            .setValue(BubbleCapBlock.TOP, false)
+            .setValue(BubbleCapBlock.PIPE_FACE, Direction.EAST)
+        , false);
+        scene.idle(20);
+
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame()
+            .pointAt(util.vector.blockSurface(util.grid.at(1, 6, 1), Direction.WEST));
+        scene.idle(80);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(100);
+
+        BlockPos displayLink = util.grid.at(0, 4, 1);
+
+        scene.world.showSection(util.select.position(displayLink), Direction.EAST);
+        scene.idle(10);
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(displayLink, Direction.SOUTH))
+            .attachKeyFrame();
+        scene.idle(100);
+
         scene.markAsFinished();
     };
 
@@ -709,7 +840,7 @@ public class DestroyScenes {
             .text("This text is defined in a language file.")
             .colored(PonderPalette.RED)
             .attachKeyFrame()
-            .pointAt(util.vector.blockSurface(extrusionDie, Direction.NORTH));
+            .pointAt(util.vector.centerOf(extrusionDie));
         scene.idle(80);
 
         scene.markAsFinished();
