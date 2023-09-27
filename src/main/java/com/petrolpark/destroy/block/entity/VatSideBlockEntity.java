@@ -355,10 +355,13 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
 
     @Override
     public boolean addToTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        if (getDisplayType() == DisplayType.PIPE && !isPipeSubmerged(false, null)) {
-            DestroyLang.translate("tooltip.vat.not_submerged.header").style(ChatFormatting.GOLD).forGoggles(tooltip);
-            TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.vat.not_submerged").component(), TooltipHelper.Palette.GRAY_AND_WHITE).forEach(component -> DestroyLang.builder().add(component.copy()).forGoggles(tooltip));
-            tooltip.add(Component.literal(""));
+        if (getDisplayType() == DisplayType.PIPE) {
+            if (!isPipeSubmerged(false, null)) {
+                DestroyLang.translate("tooltip.vat.not_submerged.header").style(ChatFormatting.GOLD).forGoggles(tooltip);
+                TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.vat.not_submerged").component(), TooltipHelper.Palette.GRAY_AND_WHITE).forEach(component -> DestroyLang.builder().add(component.copy()).forGoggles(tooltip));
+                tooltip.add(Component.literal(""));
+            };
+            VatControllerBlockEntity controller = getController();
         };
         return false;
     };

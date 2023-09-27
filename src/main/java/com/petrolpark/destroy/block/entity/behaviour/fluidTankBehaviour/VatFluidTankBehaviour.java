@@ -151,7 +151,7 @@ public class VatFluidTankBehaviour extends GeniusFluidTankBehaviour {
             };
 
             // Add liquid - as this is a child of Genius Fluid Tank the mixing-in of the Mixture to the existing Mixture Fluid is already handled
-            getLiquidHandler().fill(MixtureFluid.of((int)(phases.liquidVolume() * amountScale), phases.liquidMixture(), ""), action);
+            getLiquidHandler().fill(MixtureFluid.of((int)(phases.liquidVolume() * amountScale + 0.5d), phases.liquidMixture(), ""), action);
 
             // Add gas
             if (!simulate) {
@@ -223,6 +223,11 @@ public class VatFluidTankBehaviour extends GeniusFluidTankBehaviour {
             public void setFluid(FluidStack stack) {
                 super.setFluid(stack);
                 if (stack.getAmount() < getCapacity() && !isForGas) liquidFull = false;
+            };
+
+            @Override
+            public FluidStack drain(int maxDrain, FluidAction action) {
+                return super.drain(maxDrain, action);
             };
         };
     };

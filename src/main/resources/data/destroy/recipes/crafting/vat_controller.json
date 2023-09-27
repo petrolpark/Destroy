@@ -1,19 +1,15 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-      "P",
-      "C",
-      "G"
+      "G",
+      "C"
     ],
     "key": {
-      "P": {
-        "tag": "destroy:plastic"
-      },
       "C": {
         "item": "create:copper_casing"
       },
       "G": {
-        "destroy": "gas_filter"
+        "item": "destroy:gas_filter"
       }
     },
     "result": {

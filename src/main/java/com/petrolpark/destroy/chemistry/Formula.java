@@ -690,13 +690,13 @@ public class Formula implements Cloneable {
     public Formula refreshFunctionalGroups() {
         this.groups = new ArrayList<>();
         for (GroupFinder finder : GroupFinder.allGroupFinders()) {
-            if (topology == Topology.LINEAR) {
+            //if (topology == Topology.LINEAR) {
                 groups.addAll(finder.findGroups(structure));
-            } else {
-                for (Pair<SideChainInformation, Formula> sideChain : sideChains) {
-                    groups.addAll(finder.findGroups(sideChain.getSecond().structure)); // Don't include cyclic Atoms in Groups
-                };
-            };
+            // } else {
+            //     for (Pair<SideChainInformation, Formula> sideChain : sideChains) {
+            //         groups.addAll(finder.findGroups(sideChain.getSecond().structure)); // Don't include cyclic Atoms in Groups
+            //     };
+            // };
         };
         return this;
     };

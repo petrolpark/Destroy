@@ -5,11 +5,12 @@ import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Formula;
 import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.simibubi.create.AllTags;
 
-public class AlkeneHydration extends AlkeneAddition {
+public class AlkeneHydrogenation extends AlkeneAddition {
 
-    public AlkeneHydration() {
-        super(Destroy.asResource("alkene_hydration"));
+    public AlkeneHydrogenation() {
+        super(Destroy.asResource("alkene_hydrogenation"));
     };
 
     @Override
@@ -19,14 +20,13 @@ public class AlkeneHydration extends AlkeneAddition {
 
     @Override
     public Formula getHighDegreeGroup() {
-        return Formula.alcohol();
+        return Formula.atom(Element.HYDROGEN);
     };
 
     @Override
     public void transform(ReactionBuilder builder) {
-        builder.addReactant(DestroyMolecules.WATER, 1, 0)
-            .addCatalyst(DestroyMolecules.SULFURIC_ACID, 1);
+        builder.addReactant(DestroyMolecules.HYDROGEN)
+            .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/nickel"), 1f);
     };
-
     
 };

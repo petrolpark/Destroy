@@ -1012,18 +1012,18 @@ public class Mixture extends ReadOnlyMixture {
      */
     @SuppressWarnings("unchecked")
     private <G1 extends Group<G1>, G2 extends Group<G2>> List<Reaction> specifyDoubleGroupGenericReactions(GenericReaction genericReaction, List<Pair<GenericReactant<?>, GenericReactant<?>>> reactantPairs) {
-        try {
             DoubleGroupGenericReaction<G1, G2> doubleGroupGenericReaction = (DoubleGroupGenericReaction<G1, G2>) genericReaction; // Unchecked conversion
             List<Reaction> reactions = new ArrayList<>();
             for (Pair<GenericReactant<?>, GenericReactant<?>> reactantPair : reactantPairs) {
                 if (reactantPair.getFirst().getMolecule() == reactantPair.getSecond().getMolecule()) continue; // Cannot React Molecules with themselves
-                reactions.add(doubleGroupGenericReaction.generateReaction((GenericReactant<G1>)reactantPair.getFirst(), (GenericReactant<G2>)reactantPair.getSecond())); // Unchecked conversions
+                try {
+                    reactions.add(doubleGroupGenericReaction.generateReaction((GenericReactant<G1>)reactantPair.getFirst(), (GenericReactant<G2>)reactantPair.getSecond())); // Unchecked conversions {
+                } catch(Throwable e) {
+                    Destroy.LOGGER.info("Wasn't able to generate Double-Group Reaction '"+genericReaction.id.toString()+"' between '"+reactantPair.getFirst().getMolecule().getFullID() +"' and '"+reactantPair.getSecond().getMolecule().getFullID() +"': ");
+                    e.printStackTrace();
+                }
             };
             return reactions;
-        } catch(Throwable e) {
-            throw new IllegalStateException("Wasn't able to generate Double-Group Reaction", e);
-        }
-        //return List.of();
     };
 
     public static boolean areVeryClose(Float f1, Float f2) {

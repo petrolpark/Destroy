@@ -29,9 +29,6 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.HYDROCHLORIC_ACID, 2)
         .build(),
 
-    //TODO generic reaction hydrocyanation
-    //TODO generic reaction ammonia methylation
-
     ANDRUSSOW_PROCESS = builder()
         .id("andrussow_process")
         .addReactant(DestroyMolecules.METHANE, 2, 1)
@@ -183,6 +180,7 @@ public class DestroyReactions {
         .id("cumene_process")
         .addReactant(DestroyMolecules.BENZENE)
         .addReactant(DestroyMolecules.PROPENE)
+        .addReactant(DestroyMolecules.OXYGEN)
         .addCatalyst(DestroyMolecules.AIBN, 0)
         .addCatalyst(DestroyMolecules.PROTON, 1)
         //TODO add Lewis acid catalyst
@@ -225,6 +223,14 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.STYRENE)
         .addProduct(DestroyMolecules.HYDROGEN)
         .build(), //TODO ensure superheated and carefully balance rate constant with that of hydrogenation of styrene
+
+    FLUORITE_DISSOLUTION = builder()
+        .id("fluorite_dissolution")
+        .addReactant(DestroyMolecules.PROTON, 2, 1)
+        .addSimpleItemReactant(DestroyItems.FLUORITE::get, 5f)
+        .addProduct(DestroyMolecules.CALCIUM_ION)
+        .addProduct(DestroyMolecules.HYDROFLUORIC_ACID, 2)
+        .build(),
 
     GLYCEROL_NITRATION = builder()
         .id("glycerol_nitration")
@@ -295,6 +301,23 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.HYPOCHLORITE)
         .addProduct(DestroyMolecules.WATER)
         .requireUV() //TODO add reverse reaction
+        .build(),
+
+    IODINE_DISSOLUTION = builder()
+        .id("iodine_dissolution")
+        .addReactant(DestroyMolecules.WATER, 0)
+        .addSimpleItemReactant(DestroyItems.IODINE::get, 3f)
+        .addProduct(DestroyMolecules.IODINE)
+        .reverseReaction(reaction -> reaction
+            .withResult(2f, PrecipitateReactionResult.of(DestroyItems.IODINE::asStack))
+        ).build(),
+
+    KELP_DISSOLUTION = builder()
+        .id("kelp_dissolution")
+        .addSimpleItemReactant(() -> Items.DRIED_KELP, 1f)
+        .addReactant(DestroyMolecules.ETHANOL, 0)
+        .addProduct(DestroyMolecules.POTASSIUM_ION)
+        .addProduct(DestroyMolecules.IODIDE)
         .build(),
 
     KOLBE_SCHMITT_REACTION = builder()

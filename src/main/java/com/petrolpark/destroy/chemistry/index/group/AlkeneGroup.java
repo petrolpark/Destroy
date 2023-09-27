@@ -20,7 +20,7 @@ public class AlkeneGroup extends Group<AlkeneGroup> {
 
     @Override
     public GroupType<AlkeneGroup> getType() {
-        return DestroyGroupTypes.ALKENE_GROUP;
+        return DestroyGroupTypes.ALKENE;
     };
 
 };

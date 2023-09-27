@@ -118,7 +118,7 @@ public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
                     if (!mixtureTag.isEmpty()) {
                         ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(mixtureTag);
                         name = mixture.getName();
-                        mixtureTooltip = mixture.getContentsTooltip(iupac, new DecimalFormat());
+                        mixtureTooltip = mixture.getContentsTooltip(iupac, false, new DecimalFormat());
                     } else {
                         mixtureTooltip = List.of(DestroyLang.translate("mixture.empty").component());
                     };

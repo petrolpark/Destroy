@@ -17,7 +17,7 @@ import com.petrolpark.destroy.chemistry.index.group.AlkeneGroup;
 import com.petrolpark.destroy.chemistry.index.group.AmideGroup;
 import com.petrolpark.destroy.chemistry.index.group.CarbonylGroup;
 import com.petrolpark.destroy.chemistry.index.group.CarboxylicAcidGroup;
-import com.petrolpark.destroy.chemistry.index.group.ChlorideGroup;
+import com.petrolpark.destroy.chemistry.index.group.HalideGroup;
 import com.petrolpark.destroy.chemistry.index.group.EsterGroup;
 import com.petrolpark.destroy.chemistry.index.group.NitrileGroup;
 
@@ -40,6 +40,8 @@ public class DestroyGroupFinder extends GroupFinder {
             List<Atom> carbonylOxygens = bondedAtomsOfElementTo(structure, carbon, Element.OXYGEN, BondType.DOUBLE);
             List<Atom> singleBondOxygens = bondedAtomsOfElementTo(structure, carbon, Element.OXYGEN, BondType.SINGLE);
             List<Atom> chlorines = bondedAtomsOfElementTo(structure, carbon, Element.CHLORINE, BondType.SINGLE);
+            List<Atom> halogens = new ArrayList<>(chlorines);
+            halogens.addAll(bondedAtomsOfElementTo(structure, carbon, Element.IODINE, BondType.SINGLE));
             List<Atom> nitrogens = bondedAtomsOfElementTo(structure, carbon, Element.NITROGEN, BondType.SINGLE);
             List<Atom> hydrogens = bondedAtomsOfElementTo(structure, carbon, Element.HYDROGEN, BondType.SINGLE);
             List<Atom> carbons = bondedAtomsOfElementTo(structure, carbon, Element.CARBON, BondType.SINGLE);
@@ -80,8 +82,8 @@ public class DestroyGroupFinder extends GroupFinder {
                      }
                 };
             } else { // Alcohols, chlorides, nitriles
-                for (Atom chlorine : chlorines) {
-                    groups.add(new ChlorideGroup(carbon, chlorine, carbons.size()));
+                for (Atom halogen : halogens) {
+                    groups.add(new HalideGroup(carbon, halogen, carbons.size()));
                 };
                 for (Atom oxygen : singleBondOxygens) {
                     if (bondedAtomsOfElementTo(structure, oxygen, Element.HYDROGEN).size() == 1) {

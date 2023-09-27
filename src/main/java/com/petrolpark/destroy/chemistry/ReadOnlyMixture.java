@@ -226,8 +226,10 @@ public class ReadOnlyMixture {
     /**
      * The tooltip listing the {@link ReadOnlyMixture#contents contents} of this Mixture.
      * @param iupac Whether to use IUPAC names instead of common names
+     * @param monospace Whether to add extra whitespace so all Molecule names line up
+     * @param concentrationFormatter The formatter that determines the number of decimals places for concentration to display
      */
-    public List<Component> getContentsTooltip(boolean iupac, DecimalFormat concentrationFormatter) {
+    public List<Component> getContentsTooltip(boolean iupac, boolean monospace, DecimalFormat concentrationFormatter) {
         int i = 0;
         List<Component> tooltip = new ArrayList<>();
         List<Molecule> molecules = new ArrayList<>(contents.keySet());
@@ -235,7 +237,7 @@ public class ReadOnlyMixture {
         for (Molecule molecule : molecules) {
             tooltip.add(i, DestroyLang.builder()
                 .space().space()
-                .add(Component.literal(String.format("%1$6s", concentrationFormatter.format(contents.get(molecule))+"M"))) // Show concentration
+                .add(Component.literal(monospace ? String.format("%1$6s", concentrationFormatter.format(contents.get(molecule))+"M") : concentrationFormatter.format(contents.get(molecule))+"M")) // Show concentration
                 .space()
                 .add(molecule.getName(iupac).plainCopy())
                 .add(Component.literal(

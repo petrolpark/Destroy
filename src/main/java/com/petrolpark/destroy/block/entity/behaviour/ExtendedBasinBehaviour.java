@@ -56,16 +56,20 @@ public class ExtendedBasinBehaviour extends BlockEntityBehaviour {
         };
         reactionResults.clear();
 
-        PollutingBehaviour.pollute(basin.getLevel(), basin.getBlockPos(), evaporatedFluid);
-        evaporatedFluid = FluidStack.EMPTY;
+        if (!evaporatedFluid.isEmpty()) {
+            PollutingBehaviour.pollute(basin.getLevel(), basin.getBlockPos(), evaporatedFluid);
+            evaporatedFluid = FluidStack.EMPTY;
+        };
     };
 
     /**
 	 * Block destroyed or removed. Requires block to call ITE::onRemove
 	 */
 	public void destroy() {
-        if (!evaporatedFluid.isEmpty() && blockEntity.getLevel() instanceof ServerLevel serverLevel) PollutingBehaviour.pollute(serverLevel, blockEntity.getBlockPos(), evaporatedFluid);
-        evaporatedFluid = FluidStack.EMPTY;
+        if (!evaporatedFluid.isEmpty() && blockEntity.getLevel() instanceof ServerLevel serverLevel) {
+            PollutingBehaviour.pollute(serverLevel, blockEntity.getBlockPos(), evaporatedFluid);
+            evaporatedFluid = FluidStack.EMPTY;
+        };
     };
 
     @Override

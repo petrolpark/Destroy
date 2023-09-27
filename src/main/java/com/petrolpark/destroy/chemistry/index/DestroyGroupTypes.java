@@ -8,7 +8,7 @@ import com.petrolpark.destroy.chemistry.index.group.AlkeneGroup;
 import com.petrolpark.destroy.chemistry.index.group.AmideGroup;
 import com.petrolpark.destroy.chemistry.index.group.CarbonylGroup;
 import com.petrolpark.destroy.chemistry.index.group.CarboxylicAcidGroup;
-import com.petrolpark.destroy.chemistry.index.group.ChlorideGroup;
+import com.petrolpark.destroy.chemistry.index.group.HalideGroup;
 import com.petrolpark.destroy.chemistry.index.group.EsterGroup;
 import com.petrolpark.destroy.chemistry.index.group.NitrileGroup;
 
@@ -17,11 +17,11 @@ public class DestroyGroupTypes {
     public static GroupType<AcidAnhydrideGroup> ACID_ANHYDRIDE = new GroupType<>(() -> DestroyMolecules.GENERIC_ACID_ANHYDRIDE);
     public static GroupType<AcylChlorideGroup> ACYL_CHLORIDE = new GroupType<>(() -> DestroyMolecules.GENERIC_ACYL_CHLORIDE);
     public static GroupType<AlcoholGroup> ALCOHOL = new GroupType<>(() -> DestroyMolecules.GENERIC_ALCOHOL);
-    public static GroupType<AlkeneGroup> ALKENE_GROUP = new GroupType<>(() -> DestroyMolecules.GENERIC_ALKENE);
+    public static GroupType<AlkeneGroup> ALKENE = new GroupType<>(() -> DestroyMolecules.GENERIC_ALKENE);
     public static GroupType<AmideGroup> AMIDE = new GroupType<>(() -> DestroyMolecules.GENERIC_AMIDE);
     public static GroupType<CarbonylGroup> CARBONYL = new GroupType<>(() -> DestroyMolecules.GENERIC_CARBONYL);
     public static GroupType<CarboxylicAcidGroup> CARBOXYLIC_ACID = new GroupType<>(() -> DestroyMolecules.GENERIC_CARBOXYLIC_ACID);
-    public static GroupType<ChlorideGroup> CHLORIDE = new GroupType<>(() -> DestroyMolecules.GENERIC_CHLORIDE);
     public static GroupType<EsterGroup> ESTER = new GroupType<>(() -> DestroyMolecules.GENERIC_ESTER);
+    public static GroupType<HalideGroup> HALIDE = new GroupType<>(() -> DestroyMolecules.GENERIC_CHLORIDE);
     public static GroupType<NitrileGroup> NITRILE = new GroupType<>(() -> DestroyMolecules.GENERIC_NITRILE);
 };

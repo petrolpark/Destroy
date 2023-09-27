@@ -103,7 +103,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         fluidCapability = LazyOptional.empty();
 
         inventory = new SmartInventory(9, this)
-            .whenContentsChanged(i -> inventoryChanged = true);
+            .whenContentsChanged(i -> setInventoryChanged());
 		itemCapability = LazyOptional.of(() -> inventory);
     };
 
@@ -133,6 +133,10 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         } else {
             fluidCapability = LazyOptional.empty();
         };
+    };
+
+    public void setInventoryChanged() {
+        inventoryChanged = true;
     };
 
     @Override
@@ -172,27 +176,28 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                 ItemStack stack = inventory.getStackInSlot(slot);
                 if (!stack.isEmpty()) availableItemStacks.add(stack.copy());
             };
-            inventory.clearContent();
 
             // Dissolve new Items
             if (inventoryChanged) {
                 cachedMixture.dissolveItems(availableItemStacks, fluidAmount);
                 cachedMixture.disturbEquilibrium(); // Disturb the equilibrium anyway as even if an Item Stack is not dissolved, it may still be a new catalyst
-                inventoryChanged = false;
             };
+            inventory.clearContent(); // Clear all Items as they may get re-inserted
 
             // Reacting
             if (!cachedMixture.isAtEquilibrium()) {
                 cachedMixture.reactForTick(new ReactionContext(availableItemStacks));
                 shouldUpdateFluidMixture = true;
 
-                if (cachedMixture.isAtEquilibrium()) advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.USE_VAT);
+                if (!cachedMixture.isAtEquilibrium()) advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.USE_VAT);
             };
 
             // Put all Items back in the Inventory
             for (ItemStack itemStack : availableItemStacks) {
                 ItemHandlerHelper.insertItemStacked(inventory, itemStack, false);
             };
+
+            inventoryChanged = false;
 
             //TODO reaction results
 

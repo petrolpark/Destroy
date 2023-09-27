@@ -468,7 +468,7 @@ public class Reaction {
         /**
          * Adds an Item Ta as a {@link IItemReactant catalyst} for this {@link Reaction}. An Item Stack containing Items with the tag
          * must be present for the Reaction to occur.
-         * @param item
+         * @param tag
          * @param moles The {@link Reaction#getMolesPerItem moles of Reaction} which will occur if all necessary Item Reactants are present. If this
          * Reaction has multiple Item Reactants, this must be the same each time.
          * @return This Reaction Builder
