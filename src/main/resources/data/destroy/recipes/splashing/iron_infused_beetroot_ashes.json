@@ -24,11 +24,6 @@
         "item": "create:crushed_raw_nickel",
         "count": 1,
         "chance": 0.03
-      },
-      {
-        "item": "destroy:prussian_blue",
-        "count": 1,
-        "chance": 0.05
       }
     ],
     "processingTime": 50

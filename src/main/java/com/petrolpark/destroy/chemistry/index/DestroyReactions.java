@@ -1,8 +1,12 @@
 package com.petrolpark.destroy.chemistry.index;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
+import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
+import com.petrolpark.destroy.chemistry.reactionresult.CombinedReactionResult;
+import com.petrolpark.destroy.chemistry.reactionresult.ExplosionReactionResult;
 import com.petrolpark.destroy.chemistry.reactionresult.PrecipitateReactionResult;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.AllItems;
@@ -15,14 +19,6 @@ public class DestroyReactions {
 
     public static final Reaction
 
-    ACETONE_CYANOHYDRIN_SYNTHESIS = builder()
-        .id("acetone_cyanohydrin_synthesis")
-        .addReactant(DestroyMolecules.CYANIDE)
-        .addReactant(DestroyMolecules.ACETONE)
-        .addReactant(DestroyMolecules.PROTON)
-        .addProduct(DestroyMolecules.ACETONE_CYANOHYDRIN)
-        .build(), // This is a generic Cyanide addition-elimination and will be removed in place of the automatically generated reaction
-
     AIBN_SYNTHESIS = builder()
         .id("aibn_synthesis")
         .addReactant(DestroyMolecules.ACETONE_CYANOHYDRIN, 2)
@@ -32,9 +28,6 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.WATER, 2)
         .addProduct(DestroyMolecules.HYDROCHLORIC_ACID, 2)
         .build(),
-
-    //TODO generic reaction hydrocyanation
-    //TODO generic reaction ammonia methylation
 
     ANDRUSSOW_PROCESS = builder()
         .id("andrussow_process")
@@ -61,6 +54,13 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.HYDROGEN)
         .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/palladium"), 1f)
         .addProduct(DestroyMolecules.ETHYLANTHRAHYDROQUINONE)
+        .build(),
+
+    BABY_BLUE_PRECIPITATION = builder()
+        .id("baby_blue_precipitation")
+        .addReactant(DestroyMolecules.METHYL_SALICYLATE)
+        .addCatalyst(DestroyMolecules.SODIUM_ION, 0)
+        .withResult(0.9f, PrecipitateReactionResult.of(DestroyItems.BABY_BLUE_CRYSTAL::asStack))
         .build(),
 
     BENZENE_ETHYLATION = builder()
@@ -109,7 +109,7 @@ public class DestroyReactions {
         .addSimpleItemReactant(DestroyItems.PAPER_PULP, 2f)
         .addProduct(DestroyMolecules.PROTON)
         .addProduct(DestroyMolecules.WATER) //TODO in future add oxalic acid side product
-        .withResult(2f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.NITROCELLULOSE.asStack()))
+        .withResult(2f, PrecipitateReactionResult.of(DestroyItems.NITROCELLULOSE::asStack))
         .build(),
 
     CHLORINE_HALOFORM_REACTION = builder()
@@ -168,10 +168,19 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.SULFURIC_ACID, 2)
         .build(),
 
+    CORDITE_PRECIPITATION = builder()
+        .id("cordite_precipitation")
+        .addReactant(DestroyMolecules.ACETONE)
+        .addReactant(DestroyMolecules.NITROGLYCERINE)
+        .addSimpleItemReactant(DestroyItems.NITROCELLULOSE::get, 1f)
+        .withResult(2.99f, PrecipitateReactionResult.of(DestroyBlocks.CORDITE_BLOCK::asStack))
+        .build(),
+
     CUMENE_PROCESS = builder()
         .id("cumene_process")
         .addReactant(DestroyMolecules.BENZENE)
         .addReactant(DestroyMolecules.PROPENE)
+        .addReactant(DestroyMolecules.OXYGEN)
         .addCatalyst(DestroyMolecules.AIBN, 0)
         .addCatalyst(DestroyMolecules.PROTON, 1)
         //TODO add Lewis acid catalyst
@@ -214,6 +223,14 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.STYRENE)
         .addProduct(DestroyMolecules.HYDROGEN)
         .build(), //TODO ensure superheated and carefully balance rate constant with that of hydrogenation of styrene
+
+    FLUORITE_DISSOLUTION = builder()
+        .id("fluorite_dissolution")
+        .addReactant(DestroyMolecules.PROTON, 2, 1)
+        .addSimpleItemReactant(DestroyItems.FLUORITE::get, 5f)
+        .addProduct(DestroyMolecules.CALCIUM_ION)
+        .addProduct(DestroyMolecules.HYDROFLUORIC_ACID, 2)
+        .build(),
 
     GLYCEROL_NITRATION = builder()
         .id("glycerol_nitration")
@@ -286,6 +303,23 @@ public class DestroyReactions {
         .requireUV() //TODO add reverse reaction
         .build(),
 
+    IODINE_DISSOLUTION = builder()
+        .id("iodine_dissolution")
+        .addReactant(DestroyMolecules.WATER, 0)
+        .addSimpleItemReactant(DestroyItems.IODINE::get, 3f)
+        .addProduct(DestroyMolecules.IODINE)
+        .reverseReaction(reaction -> reaction
+            .withResult(2f, PrecipitateReactionResult.of(DestroyItems.IODINE::asStack))
+        ).build(),
+
+    KELP_DISSOLUTION = builder()
+        .id("kelp_dissolution")
+        .addSimpleItemReactant(() -> Items.DRIED_KELP, 1f)
+        .addReactant(DestroyMolecules.ETHANOL, 0)
+        .addProduct(DestroyMolecules.POTASSIUM_ION)
+        .addProduct(DestroyMolecules.IODIDE)
+        .build(),
+
     KOLBE_SCHMITT_REACTION = builder()
         .id("kolbe_schmitt_reaction")
         .addReactant(DestroyMolecules.CARBON_DIOXIDE)
@@ -305,7 +339,7 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.CARBON_DIOXIDE, 2)
         .addProduct(DestroyMolecules.WATER, 18)
         .addProduct(DestroyMolecules.NITROGEN_DIOXIDE, 6)
-        .withResult(1f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.FULMINATED_MERCURY.asStack())) //TODO figure out actual molar ratios
+        .withResult(1f, PrecipitateReactionResult.of(DestroyItems.FULMINATED_MERCURY::asStack)) //TODO figure out actual molar ratios
         .build(),
 
     METHANOL_SYNTHESIS = builder()
@@ -325,12 +359,22 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.ACETIC_ACID)
         .build(),
 
+    NAUGHTY_REACTION = builder()
+        .id("naughty_reaction")
+        .addReactant(DestroyMolecules.PHENYLACETONE)
+        .addReactant(DestroyMolecules.METHYLAMINE)
+        .withResult(0f, (m, r) -> new CombinedReactionResult(m, r)
+            .with(ExplosionReactionResult::small)
+            .with(DestroyAdvancements.TRY_TO_MAKE_METH::asReactionResult)
+        ).dontIncludeInJei()
+        .build(),
+
     NHN_SYNTHESIS = builder()
         .id("nhn_synthesis")
         .addReactant(DestroyMolecules.NICKEL_ION)
         .addReactant(DestroyMolecules.NITRATE, 2, 0)
         .addReactant(DestroyMolecules.HYDRAZINE, 3)
-        .withResult(3f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.NICKEL_HYDRAZINE_NITRATE.asStack())) //TODO figure out actual molar ratios
+        .withResult(3f, PrecipitateReactionResult.of(DestroyItems.NICKEL_HYDRAZINE_NITRATE::asStack)) //TODO figure out actual molar ratios
         .build(),
 
     NITRONIUM_FORMATION = builder()
@@ -346,7 +390,7 @@ public class DestroyReactions {
         .id("nylon_polymerisation")
         .addReactant(DestroyMolecules.ADIPIC_ACID)
         .addReactant(DestroyMolecules.HEXANEDIAMINE)
-        .withResult(3f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.NYLON.asStack())) //TODO work out proportions
+        .withResult(3f, PrecipitateReactionResult.of(DestroyItems.NYLON::asStack)) //TODO work out proportions
         .build(),
 
     ORTHOXYLENE_OXIDATION = builder()
@@ -364,6 +408,7 @@ public class DestroyReactions {
         .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/rhodium"), 1f)
         .addProduct(DestroyMolecules.WATER)
         .addProduct(DestroyMolecules.NITRIC_ACID)
+        .withResult(0f, DestroyAdvancements.OSTWALD_PROCESS::asReactionResult)
         .build(), //TODO potentially split into multiple equations, and add side reactions
 
     //TODO phenylacetic acid synthesis, either from benzyl chloride or benzyl cyanide
@@ -379,12 +424,20 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.WATER, 2)
         .build(),
 
+    PHOSGENE_FORMATION = builder()
+        .id("phosgene_formation")
+        .addReactant(DestroyMolecules.CARBON_MONOXIDE)
+        .addReactant(DestroyMolecules.CHLORINE)
+        .addProduct(DestroyMolecules.PHOSGENE)
+        .enthalpyChange(-107.6f)
+        .build(),
+
     TATP = builder()
         .id("tatp")
         .addReactant(DestroyMolecules.ACETONE)
         .addReactant(DestroyMolecules.HYDROGEN_PEROXIDE)
         // TODO acid catalyst
-        .withResult(3f, (m, r) -> new PrecipitateReactionResult(m, r, () -> DestroyItems.ACETONE_PEROXIDE.asStack()))
+        .withResult(3f, PrecipitateReactionResult.of(DestroyItems.ACETONE_PEROXIDE::asStack))
         .build(),
 
     STEAM_REFORMATION = builder()

@@ -5,13 +5,12 @@ import java.util.List;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
-import com.petrolpark.destroy.block.entity.behaviour.BasinTooFullBehaviour;
-import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.ExtendedBasinBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.capability.chunk.ChunkCrudeOil;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
-import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
+import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
 import com.petrolpark.destroy.capability.player.PlayerCrouching;
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddiction;
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
@@ -37,7 +36,6 @@ import com.petrolpark.destroy.world.entity.goal.BuildSandCastleGoal;
 import com.petrolpark.destroy.world.village.DestroyTrades;
 import com.petrolpark.destroy.world.village.DestroyVillageAddition;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.Create;
 import com.simibubi.create.api.event.BlockEntityBehaviourEvent;
@@ -67,7 +65,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Stray;
@@ -94,12 +91,11 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.level.BlockEvent.CropGrowEvent;
 import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.event.level.SleepFinishedTimeEvent;
-import net.minecraftforge.event.level.BlockEvent.CropGrowEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
@@ -199,9 +195,8 @@ public class DestroyServerEvents {
     @SubscribeEvent
     public static void attachBasinBehaviours(BlockEntityBehaviourEvent<BasinBlockEntity> event) {
         BasinBlockEntity basin = event.getBlockEntity();
-        event.attach(new DestroyAdvancementBehaviour(basin));
         event.attach(new PollutingBehaviour(basin));
-        event.attach(new BasinTooFullBehaviour(basin));
+        event.attach(new ExtendedBasinBehaviour(basin));
     };
 
     @SubscribeEvent
@@ -378,17 +373,17 @@ public class DestroyServerEvents {
         livingAttacker.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(DestroyItems.SYRINGE.get()));
     };
 
-    /**
-     * Award the silly little Tally Hall reference Advancement.
-     */
-    @SubscribeEvent
-    public static void onMechanicalHandAttack(LivingDeathEvent event) {
-        if (!(event.getSource().getEntity() instanceof Player player)) return;
-        if (AllBlocks.MECHANICAL_ARM.isIn(player.getMainHandItem()) && DestroyItems.ZIRCONIUM_PANTS.isIn(player.getItemBySlot(EquipmentSlot.LEGS))) {
-            event.getEntity().spawnAtLocation(new ItemStack(DestroyItems.CHALK_DUST.get()));
-            DestroyAdvancements.MECHANICAL_HANDS.award(player.level(), player);
-        };
-    };
+    // /**
+    //  * Award the silly little Tally Hall reference Advancement.
+    //  */
+    // @SubscribeEvent
+    // public static void onMechanicalHandAttack(LivingDeathEvent event) {
+    //     if (!(event.getSource().getEntity() instanceof Player player)) return;
+    //     if (AllBlocks.MECHANICAL_ARM.isIn(player.getMainHandItem()) && DestroyItems.ZIRCONIUM_PANTS.isIn(player.getItemBySlot(EquipmentSlot.LEGS))) {
+    //         event.getEntity().spawnAtLocation(new ItemStack(DestroyItems.CHALK_DUST.get()));
+    //         DestroyAdvancements.MECHANICAL_HANDS.award(player.level(), player);
+    //     };
+    // };
 
     /**
      * Award an Advancement for shooting Hefty Beetroots and allow Baby Villagers to build sandcastles.

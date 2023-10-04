@@ -38,7 +38,7 @@ public abstract class GroupFinder {
      * @param structure A Map of {@link Atom Atoms} to all {@link Bond Bonds} that Atom has (see the {@code structure} property of {@link Formula})
      * @return The list of Groups which this Group Finder has identified as being contained within the given structure
      */
-    public abstract List<Group> findGroups(Map<Atom, List<Bond>> structure);
+    public abstract List<Group<?>> findGroups(Map<Atom, List<Bond>> structure);
 
     /**
      * A convenience method that gives all {@link Atom Atoms} of the given {@link Element} {@link Bonded bonded} (with any {@link Bond.BondType type}) to the given Atom in the given structure.
@@ -50,8 +50,9 @@ public abstract class GroupFinder {
     public static List<Atom> bondedAtomsOfElementTo(Map<Atom, List<Bond>> structure, Atom atom, Element element) {
         List<Atom> atoms = new ArrayList<>();
         for (Bond bond : structure.get(atom)) {
-            if (bond.getDestinationAtom().getElement() == element) {
-                atoms.add(bond.getDestinationAtom());
+            Atom destAtom = bond.getDestinationAtom();
+            if (destAtom.getElement() == element && structure.containsKey(destAtom)) {
+                atoms.add(destAtom);
             };
         };
         return atoms;
@@ -68,8 +69,9 @@ public abstract class GroupFinder {
     public static List<Atom> bondedAtomsOfElementTo(Map<Atom, List<Bond>> structure, Atom atom, Element element, BondType bondType) {
         List<Atom> atoms = new ArrayList<>();
         for (Bond bond : structure.get(atom)) {
-            if (bond.getDestinationAtom().getElement() == element && bond.getType() == bondType) {
-                atoms.add(bond.getDestinationAtom());
+            Atom destAtom = bond.getDestinationAtom();
+            if (destAtom.getElement() == element && bond.getType() == bondType && structure.containsKey(destAtom)) {
+                atoms.add(destAtom);
             };
         };
         return atoms;

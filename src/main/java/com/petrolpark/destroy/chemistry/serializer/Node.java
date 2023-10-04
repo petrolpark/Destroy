@@ -1,11 +1,14 @@
 package com.petrolpark.destroy.chemistry.serializer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.petrolpark.destroy.chemistry.Atom;
+import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 
 public class Node {
@@ -33,14 +36,14 @@ public class Node {
                 break;
             };
         };
-        if (atom.isAcidicProton()) {
-            string += "+"+atom.getpKa();
+        if (atom.rGroupNumber != 0 && atom.getElement() == Element.R_GROUP) {
+            string += atom.rGroupNumber;
         };
         if (!isTerminal) {
             string += nextEdge.bondType.getFROWNSCode(); // It thinks 'nextEdge' can be null
         };
-        for (Branch branch : sideBranches.keySet()) {
-            string += "(" + sideBranches.get(branch).getFROWNSCode() + branch.serialize() + ")"; // It thinks "nextEdge" is null
+        for (Entry<Branch, BondType> entry : getSideBranches().entrySet()) {
+            string += "(" + entry.getValue().getFROWNSCode() + entry.getKey().serialize() + ")"; // It thinks "nextEdge" is null
         };
         if (!isTerminal) {
             string += nextEdge.getDestinationNode().serialize();
@@ -82,5 +85,11 @@ public class Node {
 
     public Map<Branch, BondType> getSideBranches() {
         return sideBranches;
+    };
+
+    public List<Entry<Branch, BondType>> getOrderedSideBranches() {
+        List<Entry<Branch, BondType>> sideBranchesAndBondTypes = new ArrayList<>(getSideBranches().entrySet());
+        Collections.sort(sideBranchesAndBondTypes, (entry1, entry2) -> entry1.getKey().getMassOfLongestChain().compareTo(entry2.getKey().getMassOfLongestChain()));
+        return sideBranchesAndBondTypes;
     };
 };

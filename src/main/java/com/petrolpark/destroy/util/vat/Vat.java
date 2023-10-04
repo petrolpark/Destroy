@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableList;
 import com.petrolpark.destroy.block.VatControllerBlock;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.utility.Pair;
+import com.simibubi.create.foundation.utility.VecHelper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -265,6 +267,10 @@ public class Vat {
      */
     public int getVolume() {
         return getInternalHeight() * getInternalWidth() * getInternalLength();
+    };
+
+    public Vec3 getCenter() {
+        return VecHelper.getCenterOf(getInternalLowerCorner()).add(VecHelper.getCenterOf(getInternalUpperCorner())).scale(0.5d);
     };
 
     public Collection<BlockPos> getSideBlockPositions() {

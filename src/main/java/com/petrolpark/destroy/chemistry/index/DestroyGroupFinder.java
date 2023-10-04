@@ -13,20 +13,23 @@ import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.index.group.AcidAnhydrideGroup;
 import com.petrolpark.destroy.chemistry.index.group.AcylChlorideGroup;
 import com.petrolpark.destroy.chemistry.index.group.AlcoholGroup;
+import com.petrolpark.destroy.chemistry.index.group.AlkeneGroup;
 import com.petrolpark.destroy.chemistry.index.group.AmideGroup;
 import com.petrolpark.destroy.chemistry.index.group.CarbonylGroup;
 import com.petrolpark.destroy.chemistry.index.group.CarboxylicAcidGroup;
-import com.petrolpark.destroy.chemistry.index.group.ChlorideGroup;
+import com.petrolpark.destroy.chemistry.index.group.HalideGroup;
 import com.petrolpark.destroy.chemistry.index.group.EsterGroup;
+import com.petrolpark.destroy.chemistry.index.group.NitrileGroup;
 
 public class DestroyGroupFinder extends GroupFinder {
 
     @Override
-    public List<Group> findGroups(Map<Atom, List<Bond>> structure) {
+    public List<Group<?>> findGroups(Map<Atom, List<Bond>> structure) {
 
-        List<Group> groups = new ArrayList<>();
+        List<Group<?>> groups = new ArrayList<>();
 
         List<Atom> carbonsToIgnore = new ArrayList<>();
+        List<Atom> carbonsToIgnoreForAlkenes = new ArrayList<>();
 
         for (Atom carbon : structure.keySet()) {
 
@@ -37,9 +40,14 @@ public class DestroyGroupFinder extends GroupFinder {
             List<Atom> carbonylOxygens = bondedAtomsOfElementTo(structure, carbon, Element.OXYGEN, BondType.DOUBLE);
             List<Atom> singleBondOxygens = bondedAtomsOfElementTo(structure, carbon, Element.OXYGEN, BondType.SINGLE);
             List<Atom> chlorines = bondedAtomsOfElementTo(structure, carbon, Element.CHLORINE, BondType.SINGLE);
+            List<Atom> halogens = new ArrayList<>(chlorines);
+            halogens.addAll(bondedAtomsOfElementTo(structure, carbon, Element.IODINE, BondType.SINGLE));
             List<Atom> nitrogens = bondedAtomsOfElementTo(structure, carbon, Element.NITROGEN, BondType.SINGLE);
             List<Atom> hydrogens = bondedAtomsOfElementTo(structure, carbon, Element.HYDROGEN, BondType.SINGLE);
             List<Atom> carbons = bondedAtomsOfElementTo(structure, carbon, Element.CARBON, BondType.SINGLE);
+            List<Atom> alkeneCarbons = bondedAtomsOfElementTo(structure, carbon, Element.CARBON, BondType.DOUBLE);
+            List<Atom> nitrileNitrogens = bondedAtomsOfElementTo(structure, carbon, Element.NITROGEN, BondType.TRIPLE);
+            List<Atom> rGroups = bondedAtomsOfElementTo(structure, carbon, Element.R_GROUP);
 
             if (carbonylOxygens.size() == 1) { // Ketones, aldehydes, esters, acids, acid anhydrides, acyl chlorides, amides
                 Atom carbonylOxygen = carbonylOxygens.get(0);
@@ -68,20 +76,39 @@ public class DestroyGroupFinder extends GroupFinder {
                      } else {
                         if (carbons.size() == 2) {
                             groups.add(new CarbonylGroup(carbon, carbonylOxygen, true));
-                        } else if (carbons.size() + hydrogens.size() == 2) {
+                        } else if (carbons.size() + hydrogens.size() + rGroups.size() == 2) {
                             groups.add(new CarbonylGroup(carbon, carbonylOxygen, false));
                         };
                      }
                 };
-            } else { // Alcohols, chlorides
-                for (Atom chlorine : chlorines) {
-                    groups.add(new ChlorideGroup(carbon, chlorine, carbons.size()));
+            } else { // Alcohols, chlorides, nitriles
+                for (Atom halogen : halogens) {
+                    groups.add(new HalideGroup(carbon, halogen, carbons.size()));
                 };
                 for (Atom oxygen : singleBondOxygens) {
                     if (bondedAtomsOfElementTo(structure, oxygen, Element.HYDROGEN).size() == 1) {
                         groups.add(new AlcoholGroup(carbon, oxygen, bondedAtomsOfElementTo(structure, oxygen, Element.HYDROGEN).get(0), carbons.size()));
                     };
                 };
+
+                // Nitriles
+                if (nitrileNitrogens.size() == 1 && carbons.size() == 1) {
+                    groups.add(new NitrileGroup(carbon, nitrileNitrogens.get(0)));
+                };
+            };
+
+            addAllAlkenes: for (Atom alkeneCarbon : alkeneCarbons) {
+                if (carbonsToIgnoreForAlkenes.contains(alkeneCarbon)) continue addAllAlkenes;
+                int firstCarbonDegree = bondedAtomsOfElementTo(structure, carbon, Element.CARBON).size() - 1;
+                int secondCarbonDegree = bondedAtomsOfElementTo(structure, alkeneCarbon, Element.CARBON).size() - 1;
+                // If the two Carbons have the same degree, then there are two alkene Groups
+                if (firstCarbonDegree >= secondCarbonDegree) {
+                    groups.add(new AlkeneGroup(carbon, alkeneCarbon));
+                };
+                if (secondCarbonDegree >= firstCarbonDegree) {
+                    groups.add(new AlkeneGroup(alkeneCarbon, carbon));
+                };
+                carbonsToIgnoreForAlkenes.add(carbon);
             };
 
         };

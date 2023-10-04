@@ -1,57 +1,70 @@
 package com.petrolpark.destroy.block.entity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
-import org.joml.Math;
-
+import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.VatControllerBlock;
 import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
+import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.WhenTargetedBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour.VatFluidTankBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour.VatFluidTankBehaviour.VatTankSegment.VatFluidTank;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Reaction;
+import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.chemistry.Mixture.ReactionContext;
-import com.petrolpark.destroy.fluid.DestroyFluids;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.petrolpark.destroy.util.DestroyLang;
+import com.petrolpark.destroy.util.ExplosionHelper;
 import com.petrolpark.destroy.util.vat.Vat;
+import com.petrolpark.destroy.world.explosion.SmartExplosion;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
-import com.simibubi.create.foundation.fluid.SmartFluidTank;
+import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.Pair;
+import com.simibubi.create.foundation.utility.animation.LerpedFloat;
+import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 
     protected Optional<Vat> vat;
 
+    /**
+     * Server-side only storage of the Mixture so it doesn't have to be de/serialized every tick.
+     * This Mixture belongs to an imaginary Fluid Stack with a size equal to the capacity of the Vat.
+     */
     protected Mixture cachedMixture;
     /**
      * The power (in W) being supplied to this Vat. This can be positive (if the Vat is
@@ -59,15 +72,21 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
      */
     protected float heatingPower;
 
-    protected SmartFluidTankBehaviour tankBehaviour;
+    /**
+     * As the client side doesn't have access to the cached Mixture, store the pressure and temperature.
+     */
+    protected LerpedFloat pressure = LerpedFloat.linear();
+    protected LerpedFloat temperature = LerpedFloat.linear();
+
+    protected VatFluidTankBehaviour tankBehaviour;
     protected LazyOptional<IFluidHandler> fluidCapability;
 
-    public ItemStackHandler inventory;
+    public SmartInventory inventory;
     protected LazyOptional<IItemHandler> itemCapability;
-
-    protected boolean full;
+    protected boolean inventoryChanged;
 
     protected WhenTargetedBehaviour targetedBehaviour;
+    protected DestroyAdvancementBehaviour advancementBehaviour;
 
     protected int initializationTicks;
     /**
@@ -78,29 +97,46 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     public VatControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         vat = Optional.empty();
-        full = false;
         initializationTicks = 3;
         underDeconstruction = false;
 
         fluidCapability = LazyOptional.empty();
 
-        inventory = new ItemStackHandler(9);
+        inventory = new SmartInventory(9, this)
+            .whenContentsChanged(i -> setInventoryChanged());
 		itemCapability = LazyOptional.of(() -> inventory);
     };
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+        // Targeted behaviour
         targetedBehaviour = new WhenTargetedBehaviour(this, this::onTargeted);
         behaviours.add(targetedBehaviour);
 
-        tankBehaviour = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.TYPE, this, 1, 1000000, false) // Tank capacity is set very high but is not this high in effect
-            .whenFluidUpdates(this::onFluidStackChanged)
+        // Fluid behaviour
+        tankBehaviour = new VatFluidTankBehaviour(this, 1000000); // Tank capacity is set very high but is not this high in effect
+        tankBehaviour.whenFluidUpdates(this::onFluidStackChanged)
             .forbidExtraction() // Forbid extraction until the Vat is initialized
             .forbidInsertion(); // Forbid insertion no matter what
-        fluidCapability = LazyOptional.of(() -> {
-            return new CombinedTankWrapper(tankBehaviour.getCapability().orElse(null));
-        });
+        fluidCapability = LazyOptional.empty();
         behaviours.add(tankBehaviour);
+
+        // Advancement behaviour
+        advancementBehaviour = new DestroyAdvancementBehaviour(this);
+        behaviours.add(advancementBehaviour);
+    };
+
+    protected void updateFluidCapability() {
+        if (fluidCapability.isPresent()) return;
+        if (vat != null && vat.isPresent()) {
+            fluidCapability = LazyOptional.of(() -> tankBehaviour.getCapability().orElse(null));
+        } else {
+            fluidCapability = LazyOptional.empty();
+        };
+    };
+
+    public void setInventoryChanged() {
+        inventoryChanged = true;
     };
 
     @Override
@@ -117,32 +153,85 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             initializationTicks--;
         };
 
-        boolean shouldUpdateFluidMixture = false;
+        if (getLevel().isClientSide()) {
+            pressure.tickChaser();
+            temperature.tickChaser();
+        } else {
+            if (getVatOptional().isEmpty()) return;
+            boolean shouldUpdateFluidMixture = false;
+            Vat vat = getVatOptional().get();
+            if (tankBehaviour.isEmpty()) return;
+            double fluidAmount = getCapacity() / 1000; // 1000 converts getFluidAmount() in mB to Buckets
 
-        if (getVatOptional().isEmpty()) return;
-        Vat vat = getVatOptional().get();
-        if (tankBehaviour.isEmpty()) return;
-        float energyChange = heatingPower;
-        energyChange += (LevelPollution.getLocalTemperature(getLevel(), getBlockPos()) - cachedMixture.getTemperature()) * vat.getConductance(); // Fourier's Law (sort of)
-        if (Math.abs(energyChange) > 0.0001f) {
-            cachedMixture.heat(1000 * energyChange / getTank().getFluidAmount()); // 1000 converts getFluidAmount() in mB to Buckets
-            shouldUpdateFluidMixture = true;
-        };
-        if (!cachedMixture.isAtEquilibrium()) {
-            cachedMixture.reactForTick(new ReactionContext(List.of())); //TODO items in vats
-            getTank().getFluid().setAmount(cachedMixture.recalculateVolume(getTank().getFluid().getAmount()));
-            shouldUpdateFluidMixture = true;
-        };
+            // Heating
+            float energyChange = heatingPower / 20;
+            energyChange += (LevelPollution.getLocalTemperature(getLevel(), getBlockPos()) - cachedMixture.getTemperature()) * vat.getConductance() / 20; // Fourier's Law (sort of), the divide by 20 is for 20 ticks per second
+            if (Math.abs(energyChange) > 0.0001f) {
+                cachedMixture.heat(energyChange / (float)fluidAmount); 
+            };
 
-        if (shouldUpdateFluidMixture) updateFluidMixture();
-        sendData();
+            // Take all Items out of the Inventory
+            List<ItemStack> availableItemStacks = new ArrayList<>();
+            for (int slot = 0; slot < inventory.getSlots(); slot++) {
+                ItemStack stack = inventory.getStackInSlot(slot);
+                if (!stack.isEmpty()) availableItemStacks.add(stack.copy());
+            };
+
+            // Dissolve new Items
+            if (inventoryChanged) {
+                cachedMixture.dissolveItems(availableItemStacks, fluidAmount);
+                cachedMixture.disturbEquilibrium(); // Disturb the equilibrium anyway as even if an Item Stack is not dissolved, it may still be a new catalyst
+            };
+            inventory.clearContent(); // Clear all Items as they may get re-inserted
+
+            // Reacting
+            if (!cachedMixture.isAtEquilibrium()) {
+                cachedMixture.reactForTick(new ReactionContext(availableItemStacks));
+                shouldUpdateFluidMixture = true;
+
+                if (!cachedMixture.isAtEquilibrium()) advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.USE_VAT);
+            };
+
+            // Put all Items back in the Inventory
+            for (ItemStack itemStack : availableItemStacks) {
+                ItemHandlerHelper.insertItemStacked(inventory, itemStack, false);
+            };
+
+            inventoryChanged = false;
+
+            //TODO reaction results
+
+            if (shouldUpdateFluidMixture) {
+                // Enact Reaction Results
+                cachedMixture.getCompletedResults(fluidAmount).entrySet().forEach(entry -> {
+                    for (int i = 0; i < entry.getValue(); i++) entry.getKey().onVatReaction(getLevel(), this);
+                });
+                updateFluidMixture();
+            };
+
+            // Check for Explosion
+            if (DestroyAllConfigs.SERVER.contraptions.vatExplodesAtHighPressure.get() && getPercentagePressure() >= 1f) explode();
+
+            sendData();
+        };
+    };
+
+    public void explode() {
+        if (!(getLevel() instanceof ServerLevel serverLevel)) return;
+        getVatOptional().ifPresent(vat -> {
+            Vec3 center = vat.getCenter();
+            deleteVat(getBlockPos());
+            ExplosionHelper.explode(serverLevel, new SmartExplosion(serverLevel, null, null, null, center, 5, 0.6f));
+        });
     };
 
     @Override
     protected void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
-        full = tag.getBoolean("Full");
+
         heatingPower = tag.getFloat("HeatingPower");
+
+        // Vat
         if (tag.contains("Vat", Tag.TAG_COMPOUND)) {
             vat = Vat.read(tag.getCompound("Vat"));
             finalizeVatConstruction();
@@ -150,82 +239,74 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             vat = Optional.empty();
         };
         underDeconstruction = tag.getBoolean("UnderDeconstruction");
+
+        // Inventory
         inventory.deserializeNBT(tag.getCompound("Inventory"));
-        updateCachedMixture();
+        inventoryChanged = tag.getBoolean("InventoryChanged");
+
+        // Mixture
+        if (clientPacket) {
+            pressure.chase(tag.getFloat("Pressure"), 0.125f, Chaser.EXP);
+            temperature.chase(tag.getFloat("Temperature"), 0.125f, Chaser.EXP);
+        } else {
+            updateCachedMixture();
+        };
     };
 
     @Override
     protected void write(CompoundTag tag, boolean clientPacket) {
         super.write(tag, clientPacket);
-        tag.putBoolean("Full", full);
+
         tag.putFloat("HeatingPower", heatingPower);
+
+        // Vat
         if (vat.isPresent()) {
             CompoundTag vatTag = new CompoundTag();
             vat.get().write(vatTag);
             tag.put("Vat", vatTag);
         };
         tag.putBoolean("UnderDeconstruction", underDeconstruction);
+
+        // Inventory
         tag.put("Inventory", inventory.serializeNBT());
-    };
-
-    /**
-     * Mix a new Fluid Stack into the Vat.
-     * @param fluid If not containing a {@link com.petrolpark.destroy.chemistry.Mixture Mixture}, no Fluid will be inserted
-     * @return The amount (in mB) of Fluid actually added
-     */
-    public int addFluid(FluidStack fluidStack) {
-        // Don't mix in anything if there's no Vat
-        if (!vat.isPresent() || full) return 0;
-        // Don't mix in anything that's not a Mixture
-        if (!DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid())) return 0;
-
-        // If we need to, shrink the Fluid Stack we're trying to insert
-        int remainingSpace = getCapacity() - getTank().getFluidAmount();
-        int fluidAmountInserted = fluidStack.getAmount(); // Assume we insert the entire Fluid Stack
-        FluidStack newFluidStack = fluidStack.copy();
-        if (fluidStack.getAmount() > remainingSpace) {
-            newFluidStack.setAmount(remainingSpace);
-            fluidAmountInserted = remainingSpace; // Set the actual amount of Fluid inserted
-            full = true;
+        tag.putBoolean("InventoryChanged", inventoryChanged);
+        
+        // Mixture
+        if (!level.isClientSide()) {
+            tag.putFloat("Pressure", getPressure());
+            tag.putFloat("Temperature", getTemperature());  
         };
-
-        FluidStack existingFluid = getTank().getFluid();
-        Mixture newMixture;
-
-        if (getTank().isEmpty()) { // If this is the first Mixture to be added to the Tank
-            // Set the 'new' Mixture to the one in this Fluid Stack
-            newMixture = Mixture.readNBT(newFluidStack.getOrCreateTag().getCompound("Mixture"));
-        } else { // If we're mixing in new Fluid
-            // Create the new Mixture
-            newMixture = Mixture.mix(Map.of(
-                Mixture.readNBT(existingFluid.getOrCreateTag().getCompound("Mixture")), (double)existingFluid.getAmount(),
-                Mixture.readNBT(newFluidStack.getOrCreateTag().getCompound("Mixture")), (double)newFluidStack.getAmount()
-            ));
-        };
-
-        // Replace the Fluid in the Tank
-        tankBehaviour.allowInsertion();
-        getTank().setFluid(MixtureFluid.of(existingFluid.getAmount() + newFluidStack.getAmount(), newMixture, null));
-        tankBehaviour.forbidInsertion();
-
-        updateCachedMixture();
-
-        return fluidAmountInserted;
     };
 
     private void onFluidStackChanged() {
         if (!vat.isPresent()) return;
-        if (getTank().getFluidAmount() >= getVatOptional().get().getCapacity()) {
-            full = true;
-        } else {
-            full = false;
-        };
-        updateCachedMixture();
         sendData();
     };
 
     public Optional<Vat> getVatOptional() {
         return vat;
+    };
+
+    /**
+     * Whether this Vat is able to accomodate Fluid, considering its fullness and whether or not the Vat has been initialized yet.
+     */
+    public boolean canFitFluid() {
+        return vat.map(v -> !tankBehaviour.isFull()).orElse(false);
+    };
+
+    /**
+     * Add Mixture to this Vat. This should only be done on the server side.
+     * @param stack Only Mixtures can be added
+     * @return The amount (in mB) of Fluid which could be or was added
+     */
+    public int addFluid(FluidStack stack, FluidAction action) {
+        int amountAdded = fluidCapability.map(fh -> fh.fill(stack, action)).orElse(0);
+        if (amountAdded != 0 && action == FluidAction.EXECUTE) {
+            updateCachedMixture();
+            updateGasVolume();
+            sendData();
+        };
+        return amountAdded;
     };
 
     public int getCapacity() {
@@ -234,7 +315,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     };
 
     /**
-     * Set the cached Mixture to the Mixture stored in the NBT of the contained Fluid.
+     * Set the cached Mixture to the Mixture stored in the NBT of the contained Fluids.
      * @see VatControllerBlockEntity#updateFluidMixture Doing the opposite
      */
     private void updateCachedMixture() {
@@ -243,21 +324,25 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             cachedMixture = emptyMixture;
             return;
         };
-        FluidStack containedFluid = getTank().getFluid();
-        if (containedFluid.isEmpty() || !containedFluid.getOrCreateTag().contains("Mixture")) {
-            cachedMixture = emptyMixture;
-            return;
-        };
-        cachedMixture = Mixture.readNBT(getTank().getFluid().getOrCreateTag().getCompound("Mixture"));
+        cachedMixture = tankBehaviour.getCombinedMixture();
     };
 
     /**
-     * Set the Mixture stored in the NBT of the contained Fluid to the cached Mixture.
+     * Set the Mixture stored in the NBT of the contained Fluids to the cached Mixture.
      * @see VatControllerBlockEntity#updateCachedMixture Doing the opposite
      */
     private void updateFluidMixture() {
-        int amount = getTank().getFluidAmount();
-        getTank().setFluid(MixtureFluid.of(amount, cachedMixture, ""));
+        if (getVatOptional().isEmpty()) return;
+        tankBehaviour.setMixture(cachedMixture, vat.get().getCapacity()); //TODO swap Fluid to not use entire vat capacity
+        updateGasVolume();
+        sendData();
+    };
+
+    /**
+     * Ensure the gas contained in this Vat takes up all space left by the liquid.
+     */
+    public void updateGasVolume() {
+        tankBehaviour.updateGasVolume();
     };
 
     /**
@@ -302,6 +387,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     private void finalizeVatConstruction() {
         tankBehaviour.allowExtraction(); // Enable extraction from the Vat now it actually exists
+        tankBehaviour.setVatCapacity(vat.get().getCapacity());
+        updateFluidCapability();
         invalidateRenderBoundingBox(); // Update the render box to be larger
         notifyUpdate();
     };
@@ -316,7 +403,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         if (underDeconstruction || getLevel().isClientSide()) return;
         underDeconstruction = true;
 
-        getTank().drain(getTank().getCapacity(), FluidAction.EXECUTE);
+        getLiquidTank().setFluid(FluidStack.EMPTY);
+        getGasTank().setFluid(FluidStack.EMPTY);
 
         tankBehaviour.forbidExtraction(); // Forbid Fluid extraction now this Vat no longer exists
         if (!vat.isPresent()) return;
@@ -333,9 +421,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
         //TODO evaporation
 
-        full = false;
         cachedMixture = new Mixture();
-        getTank().setFluid(FluidStack.EMPTY);
         vat = Optional.empty();
         underDeconstruction = false;
         invalidateRenderBoundingBox(); // Update the render bounding box to be smaller
@@ -343,12 +429,12 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     };
 
     // Nullable, just not annotated so VSC stops giving me ugly yellow lines
-    public SmartFluidTank getTank() {
-        return tankBehaviour.getPrimaryHandler();
+    public VatFluidTank getLiquidTank() {
+        return tankBehaviour.getLiquidHandler();
     };
 
-    public boolean isFull() {
-        return full;
+    public VatFluidTank getGasTank() {
+        return tankBehaviour.getGasHandler();
     };
 
     @Override
@@ -365,7 +451,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
      */
     public float getFluidLevel() {
         if (vat.isPresent()) {
-            return (float)vat.get().getInternalHeight() * (float)getTank().getFluidAmount() / (float)getCapacity();
+            return (float)vat.get().getInternalHeight() * (float)getLiquidTank().getFluidAmount() / (float)getCapacity();
         } else {
             return 0f;
         }
@@ -378,7 +464,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
      */
     public float getRenderedFluidLevel(float partialTicks) {
         if (vat.isPresent()) {
-            return (float)vat.get().getInternalHeight() * (float)tankBehaviour.getPrimaryTank().getTotalUnits(partialTicks) / (float)getCapacity();
+            return (float)vat.get().getInternalHeight() * (float)tankBehaviour.getLiquidTank().getTotalUnits(partialTicks) / (float)getCapacity();
         } else {
             return 0f;
         }
@@ -389,15 +475,24 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         sendData();
     };
 
+    public float getClientTemperature(float partialTicks) {
+        return temperature.getValue(partialTicks);
+    };
+
+    public float getClientPressure(float partialTicks) {
+        return pressure.getValue(partialTicks);
+    };
+
     public float getTemperature() {
+        if (getLevel().isClientSide()) return temperature.getChaseTarget();
         if (getVatOptional().isEmpty() || cachedMixture == null) return LevelPollution.getLocalTemperature(getLevel(), getBlockPos());
         return cachedMixture.getTemperature();
     };
 
     public float getPressure() {
-        if (!getVatOptional().isPresent()) return 0f;
-        float moles = 1f; // TODO calculate moles of gas
-        return moles * Reaction.GAS_CONSTANT * cachedMixture.getTemperature() / vat.get().getVolume();
+        if (getLevel().isClientSide()) return pressure.getChaseTarget();
+        if (!getVatOptional().isPresent() || getGasTank().isEmpty()) return 0f;
+        return Reaction.GAS_CONSTANT * getTemperature() * ReadOnlyMixture.readNBT(getGasTank().getFluid().getOrCreateChildTag("Mixture")).getTotalConcentration();
     };
 
     /**
@@ -436,24 +531,38 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     public static void vatFluidTooltip(VatControllerBlockEntity vatController, List<Component> tooltip) {
         Lang.translate("gui.goggles.fluid_container")
 			.forGoggles(tooltip);
-        DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.vat.contents"), vatController.getTank().getFluid(), vatController.getCapacity());
+        DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.vat.contents_liquid"), vatController.getLiquidTank().getFluid(), vatController.getCapacity());
+        DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.vat.contents_gas"), vatController.getGasTank().getFluid(), vatController.getCapacity());
     };
 
-    public static MixtureContentsDisplaySource DISPLAY_SOURCE = new MixtureContentsDisplaySource() {
+    public static class VatDisplaySource extends MixtureContentsDisplaySource {
+
+        private final Function<VatControllerBlockEntity, FluidStack> fluidGetter;
+        private final String tankId;
+
+        private VatDisplaySource(String tankId, Function<VatControllerBlockEntity, FluidStack> fluidGetter) {
+            this.tankId = tankId;
+            this.fluidGetter = fluidGetter;
+        };
 
         @Override
         public FluidStack getFluidStack(DisplayLinkContext context) {
-            if (context.getSourceBlockEntity() instanceof VatControllerBlockEntity controller) {
-                if (controller.getVatOptional().isPresent()) return controller.getTank().getFluid();
-            };
-            return FluidStack.EMPTY;
+            VatControllerBlockEntity controller = null;
+            BlockEntity be = context.getSourceBlockEntity();
+            if (be instanceof VatControllerBlockEntity) controller = (VatControllerBlockEntity)be;
+            if (be instanceof VatSideBlockEntity vatSide) controller = vatSide.getController();
+            if (controller == null) return FluidStack.EMPTY;
+            return fluidGetter.apply(controller);
         };
 
         @Override
         public Component getName() {
-            return DestroyLang.translate("display_source.vat").component();
+            return DestroyLang.translate("display_source.vat."+tankId).component();
         };
-
     };
+
+    public static final VatDisplaySource GAS_DISPLAY_SOURCE = new VatDisplaySource("gas", v -> v.getGasTank().getFluid());
+    public static final VatDisplaySource SOLUTION_DISPLAY_SOURCE = new VatDisplaySource("solution", v -> v.getLiquidTank().getFluid());
+    public static final VatDisplaySource ALL_DISPLAY_SOURCE = new VatDisplaySource("all", v -> MixtureFluid.of(v.getCapacity(), v.cachedMixture)); //TODO swap out if we decide not to use the whole vat capacity
     
 };

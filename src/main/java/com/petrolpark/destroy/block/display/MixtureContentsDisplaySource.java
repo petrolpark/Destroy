@@ -41,13 +41,13 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
         if (mixtureTag.isEmpty()) { // If this is not a Mixture
             name = fluidStack.getDisplayName().copy();
         } else { // If this is a Mixture
-            boolean iupac = context.sourceConfig().getBoolean("MoleculeNameType");
+            boolean iupac = !context.sourceConfig().getBoolean("MoleculeNameType");
             TemperatureUnit temperatureUnit = TemperatureUnit.values()[context.sourceConfig().getInt("TemperatureUnit")];
             ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(mixtureTag);
 
             name = mixture.getName().copy();
             temperature = temperatureUnit.of(mixture.getTemperature());
-            tooltip.addAll(mixture.getContentsTooltip(iupac, df).stream().map(c -> c.copy()).toList());
+            tooltip.addAll(mixture.getContentsTooltip(iupac, true, df).stream().map(c -> c.copy()).toList());
         };
 
         tooltip.add(0, name.append(" "+fluidStack.getAmount()).append(Lang.translateDirect("generic.unit.millibuckets")).append(" "+temperature));

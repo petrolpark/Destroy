@@ -11,7 +11,7 @@ import org.joml.Math;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
-import com.petrolpark.destroy.capability.blockEntity.VatTankCapability;
+import com.petrolpark.destroy.capability.blockEntity.VatSideTankCapability;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DestroyLang.TemperatureUnit;
@@ -87,6 +87,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         fluidCapability = LazyOptional.empty();
         itemCapability = LazyOptional.empty();
         refreshItemCapability();
+        refreshFluidCapability();
     };
 
     @Override
@@ -117,12 +118,14 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             // Allow inserting into this side tank (which is then mixed into the main tank)
             LazyOptional<? extends IFluidHandler> inputCap = inputBehaviour.getCapability();
             // Allow withdrawing from the main tank
-            LazyOptional<? extends IFluidHandler> outputCap = LazyOptional.empty();
+            LazyOptional<? extends IFluidHandler> liquidOutputCap = LazyOptional.empty();
+            LazyOptional<? extends IFluidHandler> gasOutputCap = LazyOptional.empty();
             VatControllerBlockEntity vatController = getController();
             if (vatController != null) {
-                outputCap = vatController.getBehaviour(SmartFluidTankBehaviour.TYPE).getCapability();
+                liquidOutputCap = LazyOptional.of(() -> vatController.getLiquidTank());
+                gasOutputCap = LazyOptional.of(() -> vatController.getGasTank());
             };
-			return new VatTankCapability(this, outputCap.orElse(null), inputCap.orElse(null));
+			return new VatSideTankCapability(this, liquidOutputCap.orElse(null), gasOutputCap.orElse(null), inputCap.orElse(null));
         });
     };
 
@@ -158,13 +161,13 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
 
     public void tryInsertFluidInVat() {
         VatControllerBlockEntity vatController = getController();
-        if (vatController == null) return;
+        if (vatController == null || inputBehaviour.getPrimaryHandler().isEmpty()) return;
         refreshFluidCapability();
         // Attempt to transfer Fluid from this Vat Side Block Entity to the Controller's Tank, which is the main one
         inputBehaviour.allowExtraction();
         // Determine how much Fluid could be added to the main tank (this should usually be everything)
         FluidStack drainedFluid = inputBehaviour.getPrimaryHandler().drain(BUFFER_TANK_CAPACITY, FluidAction.SIMULATE);
-        int drainedAmount = vatController.addFluid(drainedFluid);
+        int drainedAmount = vatController.addFluid(drainedFluid, FluidAction.EXECUTE);
         // Drain that amount from this Vat Side Block Entity's Tank
         inputBehaviour.getPrimaryHandler().drain(drainedAmount, FluidAction.EXECUTE);
         if (drainedAmount > 0) { // Let the renderer know we should animate Fluid being dispensed
@@ -255,7 +258,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     public boolean isPipeSubmerged(boolean client, @Nullable Float partialTicks) {
         if (getController() == null) return false;
         if (direction == Direction.DOWN) return true;
-        if (direction == Direction.UP) return getController().full;
+        if (direction == Direction.UP) return !getController().canFitFluid();
         return pipeHeightAboveVatBase() < (client ? getController().getRenderedFluidLevel(partialTicks == null ? 0f : partialTicks) : getController().getFluidLevel());
     };
 
@@ -352,10 +355,13 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
 
     @Override
     public boolean addToTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        if (getDisplayType() == DisplayType.PIPE && !isPipeSubmerged(false, null)) {
-            DestroyLang.translate("tooltip.vat.not_submerged.header").style(ChatFormatting.GOLD).forGoggles(tooltip);
-            TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.vat.not_submerged").component(), TooltipHelper.Palette.GRAY_AND_WHITE).forEach(component -> DestroyLang.builder().add(component.copy()).forGoggles(tooltip));
-            tooltip.add(Component.literal(""));
+        if (getDisplayType() == DisplayType.PIPE) {
+            if (!isPipeSubmerged(false, null)) {
+                DestroyLang.translate("tooltip.vat.not_submerged.header").style(ChatFormatting.GOLD).forGoggles(tooltip);
+                TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.vat.not_submerged").component(), TooltipHelper.Palette.GRAY_AND_WHITE).forEach(component -> DestroyLang.builder().add(component.copy()).forGoggles(tooltip));
+                tooltip.add(Component.literal(""));
+            };
+            VatControllerBlockEntity controller = getController();
         };
         return false;
     };
@@ -367,7 +373,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             if (context.getSourceBlockEntity() instanceof VatSideBlockEntity vatSide) {
                 VatControllerBlockEntity controller = vatSide.getController();
                 if (controller != null && controller.getVatOptional().isPresent());
-                return controller.getTank().getFluid();
+                return controller.getLiquidTank().getFluid(); //TODO not just use liquid
             };
             return FluidStack.EMPTY;
         };

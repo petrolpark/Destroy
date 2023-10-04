@@ -14,6 +14,7 @@
       "icon": {
         "item": "destroy:tear_bottle"
       },
+      "frame": "goal",
       "title": {
         "translate": "advancement.destroy.tear_bottle"
       }

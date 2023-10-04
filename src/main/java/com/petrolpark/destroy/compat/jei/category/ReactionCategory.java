@@ -24,6 +24,7 @@ import com.petrolpark.destroy.compat.jei.animation.DestroyGuiTextureDrawable;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.recipe.ReactionRecipe;
+import com.petrolpark.destroy.recipe.ReactionRecipe.GenericReactionRecipe;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.TooltipHelper.Palette;
@@ -72,17 +73,22 @@ public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
     @Override
     public Collection<LinesAndActivationAreas> getHoverableTexts(ReactionRecipe recipe) {
         Reaction reaction = recipe.getReaction();
-        if (reaction.getId() == null) return List.of();
+        if (reaction.getId() == null && !(recipe instanceof GenericReactionRecipe)) return List.of();
 
         Minecraft minecraft = Minecraft.getInstance();
         List<LinesAndActivationAreas> paragraphs = new ArrayList<>(2);
-        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getId()).getString(), 2, 2, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE, false));
-        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(reaction.getNameSpace() + ".reaction." + reaction.getId() + ".description").getString(), 2, 90, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE, false));
+        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(getTranslationKey(recipe)).getString(), 2, 2, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE, false));
+        paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(Component.translatable(getTranslationKey(recipe) + ".description").getString(), 2, 90, 176, minecraft.screen, minecraft.font, DARK_GRAY_AND_BLUE, false));
         if (reaction.needsUV()) {
             Vector2i pos = getCatalystRenderPosition(0, getNumberOfCatalysts(reaction));
             paragraphs.add(AbstractStackedTextBox.getTextAndActivationAreas(DestroyLang.translate("tooltip.reaction.ultraviolet").string(), pos.x + 3, pos.y + 4, 100, minecraft.screen, minecraft.font, WHITE_AND_WHITE, false));
         };
         return paragraphs;
+    };
+
+    protected String getTranslationKey(ReactionRecipe recipe) {
+        Reaction reaction = recipe.getReaction();
+        return reaction.getNameSpace() + ".reaction." + reaction.getId();
     };
 
     @Override

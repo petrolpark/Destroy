@@ -19,7 +19,7 @@ public class ExplosionHelper {
         Vec3 pos = explosion.getPosition();
 
         for(ServerPlayer player : level.getPlayers(player -> player.distanceToSqr(explosion.getPosition()) < 4096d)) {
-            player.connection.send(new ClientboundExplodePacket(pos.x, pos.y, pos.y, explosion.getRadius(), explosion.getToBlow(), explosion.getHitPlayers().get(player)));
+            player.connection.send(new ClientboundExplodePacket(pos.x, pos.y, pos.z, explosion.getRadius(), explosion.getToBlow(), explosion.getHitPlayers().get(player)));
         };
 
         return explosion;

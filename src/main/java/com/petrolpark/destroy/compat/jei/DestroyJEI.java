@@ -18,8 +18,11 @@ import com.petrolpark.destroy.compat.jei.category.ChargingCategory;
 import com.petrolpark.destroy.compat.jei.category.DestroyRecipeCategory;
 import com.petrolpark.destroy.compat.jei.category.DistillationCategory;
 import com.petrolpark.destroy.compat.jei.category.ElectrolysisCategory;
+import com.petrolpark.destroy.compat.jei.category.ExtrusionCategory;
+import com.petrolpark.destroy.compat.jei.category.GenericReactionCategory;
 import com.petrolpark.destroy.compat.jei.category.ITickableCategory;
 import com.petrolpark.destroy.compat.jei.category.MutationCategory;
+import com.petrolpark.destroy.compat.jei.category.ObliterationCategory;
 import com.petrolpark.destroy.compat.jei.category.ReactionCategory;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
@@ -29,7 +32,9 @@ import com.petrolpark.destroy.recipe.ChargingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.recipe.DistillationRecipe;
 import com.petrolpark.destroy.recipe.ElectrolysisRecipe;
+import com.petrolpark.destroy.recipe.ExtrusionRecipe;
 import com.petrolpark.destroy.recipe.MutationRecipe;
+import com.petrolpark.destroy.recipe.ObliterationRecipe;
 import com.petrolpark.destroy.recipe.ReactionRecipe;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.AllBlocks;
@@ -128,6 +133,13 @@ public class DestroyJEI implements IModPlugin {
             .itemIcon(DestroyBlocks.BUBBLE_CAP.get())
             .emptyBackground(123, 125)
             .build("distillation", DistillationCategory::new),
+
+        extrusion = builder(ExtrusionRecipe.class)
+            .addRecipes(() -> ExtrusionRecipe.RECIPES)
+            .catalyst(DestroyBlocks.EXTRUSION_DIE::get)
+            .itemIcon(DestroyBlocks.EXTRUSION_DIE.get())
+            .emptyBackground(177, 55)
+            .build("extrusion", ExtrusionCategory::new),
         
         mutation = builder(MutationRecipe.class)
             .addRecipes(() -> MutationCategory.RECIPES)
@@ -135,6 +147,12 @@ public class DestroyJEI implements IModPlugin {
             .itemIcon(DestroyItems.HYPERACCUMULATING_FERTILIZER.get())
             .emptyBackground(120, 125)
             .build("mutation", MutationCategory::new),
+
+        obliteration = builder(ObliterationRecipe.class)
+            .addTypedRecipes(DestroyRecipeTypes.OBLITERATION)
+            .itemIcon(DestroyBlocks.NITROCELLULOSE_BLOCK.get())
+            .emptyBackground(177, 70)
+            .build("obliteration", ObliterationCategory::new),
 
         reaction = builder(ReactionRecipe.class)
             .addRecipes(ReactionCategory.RECIPES::values)
@@ -145,6 +163,16 @@ public class DestroyJEI implements IModPlugin {
             .itemIcon(DestroyItems.MOLECULE_DISPLAY.get())
             .emptyBackground(180, 125)
             .build("reaction", ReactionCategory::new),
+
+        genericReaction = builder(ReactionRecipe.class)
+            .addRecipes(GenericReactionCategory.RECIPES::values)
+            // Doesn't accept Mixtures as Generic Reactions involve Molecules, not Mixtures.
+            .catalyst(AllBlocks.MECHANICAL_MIXER::get)
+            .catalyst(AllBlocks.BASIN::get)
+            .catalyst(DestroyBlocks.VAT_CONTROLLER::get)
+            .itemIcon(DestroyItems.MOLECULE_DISPLAY.get())
+            .emptyBackground(180, 125)
+            .build("generic_reaction", GenericReactionCategory::new),
 
         electrolysis = builder(BasinRecipe.class)
             .addTypedRecipes(DestroyRecipeTypes.ELECTROLYSIS)

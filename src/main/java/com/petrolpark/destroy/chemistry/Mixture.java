@@ -15,6 +15,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.chemistry.genericreaction.DoubleGroupGenericReaction;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
 import com.petrolpark.destroy.chemistry.genericreaction.SingleGroupGenericReaction;
@@ -37,7 +38,7 @@ public class Mixture extends ReadOnlyMixture {
      * to their 'concentrations' (moles of the Reaction which have occured per Bucket of this Mixture, since the last
      * instance of that Reaction Result was dealt with).
      */
-    protected Map<ReactionResult, Float> reactionresults;
+    protected Map<ReactionResult, Float> reactionResults;
     /**
      * {@link Molecule Molecules} which do not have a name space or ID.
      */
@@ -50,11 +51,11 @@ public class Mixture extends ReadOnlyMixture {
     protected List<Reaction> possibleReactions;
 
     /**
-     * Every {@link Molecule} in this Mixture that has a {@link Group functional Group}, indexed by the {@link Group#getID ID} of that Group.
-     * Molecules are stored as {@link com.petrolpark.destroy.chemistry.genericreaction.GenericReactant Generic Reactants}.
+     * Every {@link Molecule} in this Mixture that has a {@link Group functional Group}, indexed by the {@link Group#getType Type} of that Group.
+     * Molecules are stored as {@link com.petrolpark.destroy.chemistry.genericReaction.GenericReactant Generic Reactants}.
      * Molecules which have multiple of the same Group are indexed for each occurence of the Group.
      */
-    protected Map<String, List<GenericReactant<?>>> groupIDsAndMolecules;
+    protected Map<GroupType<?>, List<GenericReactant<?>>> groupIDsAndMolecules;
 
     /**
      * Whether this Mixture has reached equilibrium. This means either:
@@ -80,7 +81,7 @@ public class Mixture extends ReadOnlyMixture {
     public Mixture() {
         super();
 
-        reactionresults = new HashMap<>();
+        reactionResults = new HashMap<>();
 
         novelMolecules = new ArrayList<>();
 
@@ -140,7 +141,7 @@ public class Mixture extends ReadOnlyMixture {
                 CompoundTag resultTag = (CompoundTag) tag;
                 ReactionResult result = Reaction.get(resultTag.getString("Result")).getResult();
                 if (result == null) return;
-                mixture.reactionresults.put(result, resultTag.getFloat("MolesPerBucket"));
+                mixture.reactionResults.put(result, resultTag.getFloat("MolesPerBucket"));
             });
         };
 
@@ -156,8 +157,8 @@ public class Mixture extends ReadOnlyMixture {
         CompoundTag tag = super.writeNBT();
         tag.putBoolean("AtEquilibrium", equilibrium);
 
-        if (!reactionresults.isEmpty()) {
-            tag.put("Results", NBTHelper.writeCompoundList(reactionresults.entrySet(), entry -> {
+        if (!reactionResults.isEmpty()) {
+            tag.put("Results", NBTHelper.writeCompoundList(reactionResults.entrySet(), entry -> {
                 CompoundTag resultTag = new CompoundTag();
                 resultTag.putString("Result", entry.getKey().getReaction().getFullId());
                 resultTag.putFloat("MolesPerBucket", entry.getValue());
@@ -176,7 +177,7 @@ public class Mixture extends ReadOnlyMixture {
         this.temperature = temperature;
         // Ensure everything has the right temperature
         for (Molecule molecule : contents.keySet()) {
-            if (molecule.getBoilingPoint() > temperature) {
+            if (molecule.getBoilingPoint() < temperature) {
                 states.put(molecule, 1f);
             } else {
                 states.put(molecule, 0f);
@@ -215,7 +216,7 @@ public class Mixture extends ReadOnlyMixture {
         if (mixtures.size() == 1) return mixtures.keySet().iterator().next();
         Mixture resultMixture = new Mixture();
         Map<Molecule, Double> moleculesAndMoles = new HashMap<>(); // A Map of all Molecules to their quantity in moles (not their concentration)
-        Map<ReactionResult, Double> reactionresultsAndMoles = new HashMap<>(); // A Map of all Reaction Results to their quantity in moles
+        Map<ReactionResult, Double> reactionResultsAndMoles = new HashMap<>(); // A Map of all Reaction Results to their quantity in moles
         double totalAmount = 0d;
         float totalEnergy = 0f;
 
@@ -232,8 +233,8 @@ public class Mixture extends ReadOnlyMixture {
                 totalEnergy += molecule.getLatentHeat() * concentration * mixture.states.get(molecule) * amount; // Add all the energy that would be required to vaporise this Molecule, if necessary
             };
 
-            for (Entry<ReactionResult, Float> entry : mixture.reactionresults.entrySet()) {
-                reactionresultsAndMoles.merge(entry.getKey(), entry.getValue() * amount, (r1, r2) -> r1 + r2); // Same for Reaction Results
+            for (Entry<ReactionResult, Float> entry : mixture.reactionResults.entrySet()) {
+                reactionResultsAndMoles.merge(entry.getKey(), entry.getValue() * amount, (r1, r2) -> r1 + r2); // Same for Reaction Results
             };
         };
 
@@ -243,12 +244,12 @@ public class Mixture extends ReadOnlyMixture {
             resultMixture.states.put(molecule, 0f); // Set it to entirely liquid as we will soon be reheating the Mixture from 0K
         };
 
-        for (Entry<ReactionResult, Double> reactionresultAndMoles : reactionresultsAndMoles.entrySet()) {
-            resultMixture.incrementReactionResults(reactionresultAndMoles.getKey().getReaction(), (float)(reactionresultAndMoles.getValue() / totalAmount)); // Add all Reaction Results to the new Mixture
+        for (Entry<ReactionResult, Double> reactionResultAndMoles : reactionResultsAndMoles.entrySet()) {
+            resultMixture.incrementReactionResults(reactionResultAndMoles.getKey().getReaction(), (float)(reactionResultAndMoles.getValue() / totalAmount)); // Add all Reaction Results to the new Mixture
         };
 
-        resultMixture.updateNextBoilingPoints();
         resultMixture.temperature = 0f; // Initially set the temperature of the new Mixture to 0K
+        resultMixture.updateNextBoilingPoints();
         resultMixture.heat(totalEnergy / (float)totalAmount); // Now heat it up with the total internal energy of all component Mixtures
 
         resultMixture.refreshPossibleReactions();
@@ -275,7 +276,7 @@ public class Mixture extends ReadOnlyMixture {
         if (ignore == null) ignore = (m) -> false;
         if (Math.abs(concentration - getConcentrationOf(molecule)) > IMPURITY_THRESHOLD) return false; //TODO replace with a more lenient check
         for (Entry<Molecule, Float> otherMolecule : contents.entrySet()) {
-            if (ignore.test(molecule)) continue; // If this molecule is specified as ignoreable, ignore it
+            if (ignore.test(otherMolecule.getKey())) continue; // If this molecule is specified as ignoreable, ignore it
             if (otherMolecule.getKey() == molecule) continue; // If this is the Molecule we want, ignore it.
             if (otherMolecule.getKey().hasTag(DestroyMolecules.Tags.SOLVENT)) continue; // If this is a solvent, ignore it
             if (otherMolecule.getValue() < IMPURITY_THRESHOLD) continue; // If this impurity is in low-enough concentration, ignore it.
@@ -311,6 +312,13 @@ public class Mixture extends ReadOnlyMixture {
      */
     public boolean isAtEquilibrium() {
         return equilibrium;
+    };
+
+    /**
+     * Let this Mixture know it should no longer be at {@link Mixture#equilibrium}.
+     */
+    public void disturbEquilibrium() {
+        equilibrium = false;
     };
 
     /**
@@ -412,6 +420,8 @@ public class Mixture extends ReadOnlyMixture {
                     float boiled = energyDensity / (molecule.getLatentHeat() * getConcentrationOf(molecule)); // The proportion of all of the Molecule which is additionally boiled
                     states.merge(molecule, boiled, Float::sum);
                 };
+
+                equilibrium = false; // Equilibrium is broken when a Molecule evaporates
             } else {
                 temperature += temperatureChange;
             };
@@ -436,10 +446,14 @@ public class Mixture extends ReadOnlyMixture {
                     states.merge(molecule, 1f - condensed, (f1, f2) -> f1 + f2 - 1f);
                 };
 
+                equilibrium = false; // Equilibrium is broken when a Molecule condenses
+
             } else {
                 temperature += temperatureChange;
             };
         };
+
+        temperature = Math.max(temperature, 0f);
     };
 
     /**
@@ -523,11 +537,15 @@ public class Mixture extends ReadOnlyMixture {
      * 1M water and nothing else (which is physically impossible). This is mutative.
      * @param initialVolume The initial volume (in mB)
      * @return The new volume (in mB) of this Mixture
+     * @deprecated This doesn't account for the space occupied by gases
      */
+    @Deprecated
     public int recalculateVolume(int initialVolume) {
         if (contents.isEmpty()) return 0;
         double initialVolumeInBuckets = (double)initialVolume / 1000d;
         double newVolumeInBuckets = 0d;
+
+        // Molecules
         Map<Molecule, Double> molesOfMolecules = new HashMap<>();
         for (Entry<Molecule, Float> entry : contents.entrySet()) {
             Molecule molecule = entry.getKey();
@@ -538,7 +556,90 @@ public class Mixture extends ReadOnlyMixture {
         for (Entry<Molecule, Double> entry : molesOfMolecules.entrySet()) {
             contents.replace(entry.getKey(), (float)(entry.getValue() / newVolumeInBuckets));
         };
+
+        // Results
+        Map<ReactionResult, Float> resultsCopy = new HashMap<>(reactionResults);
+        for (Entry<ReactionResult, Float> entry : resultsCopy.entrySet()) {
+            reactionResults.replace(entry.getKey(), (float)(entry.getValue() * initialVolumeInBuckets / newVolumeInBuckets));
+        };
+
         return (int)((newVolumeInBuckets * 1000) + 0.5);
+    };
+
+    /**
+     * Adjust the concentrations of this Mixture so the number of moles is conserved if the volume is changed. The change is isothermic.
+     * @param volumeIncreaseFactor The multiplicative factor which has been applied to the volume.
+     */
+    public void scale(float volumeIncreaseFactor) {
+        contents.replaceAll((molecule, concentration) -> concentration / volumeIncreaseFactor);
+        reactionResults.replaceAll((reactionResult, molesPerBucket) -> molesPerBucket / volumeIncreaseFactor);
+    };
+
+    public static record Phases(Mixture gasMixture, Double gasVolume, Mixture liquidMixture, Double liquidVolume) {};
+
+    /**
+     * Get two new Mixtures from one - one containing all gas, one containing all liquid.
+     * This doesn't mutate this Mixture.
+     * @param initialVolume The initial volume of this Mixture from which to scale, ideally in buckets.
+     * @return A {@link Phases} record containing:<ul>
+     * <li>{@code gasMixture} A new Mixture containing all gases</li>
+     * <li>{@code gasVolume} This is always {@code 1d}, allowing it to be rescaled later.</li>
+     * <li>{@code liquidMixture} A new Mixture containing all liquids.</li>
+     * <li>{@code liquidVolume} A volume of liquid in the same units as {@code initialVolume}.</li></ul>
+     */
+    public Phases separatePhases(double initialVolume) {
+        Map<Molecule, Double> liquidMoles = new HashMap<>();
+        Map<Molecule, Double> gasMoles = new HashMap<>();
+
+        double newLiquidVolume = 0d;
+        double newGasVolume = 1d;
+
+        Mixture liquidMixture = new Mixture();
+        Mixture gasMixture = new Mixture();
+
+        for (Entry<Molecule, Float> entry : contents.entrySet()) {
+            Molecule molecule = entry.getKey();
+            float concentration = entry.getValue();
+            float proportionGaseous = states.get(molecule);
+
+            // Liquid
+            double molesOfLiquidMolecule = concentration * (1f - proportionGaseous) * initialVolume;
+            liquidMoles.put(molecule, molesOfLiquidMolecule);
+            newLiquidVolume += molesOfLiquidMolecule / molecule.getPureConcentration();
+
+            // Gas
+            gasMoles.put(molecule, concentration * proportionGaseous * initialVolume);
+        };
+
+        // Put Molecules in new Mixtures
+        for (Entry<Molecule, Double> entry : liquidMoles.entrySet()) {
+            double moles = entry.getValue();
+            if (moles == 0d) continue;
+            liquidMixture.internalAddMolecule(entry.getKey(), (float)(moles / newLiquidVolume), false);
+            liquidMixture.states.put(entry.getKey(), 0f);
+        };
+        for (Entry<Molecule, Double> entry : gasMoles.entrySet()) {
+            double moles = entry.getValue();
+            if (moles == 0d) continue;
+            gasMixture.internalAddMolecule(entry.getKey(), (float)(moles / newGasVolume), false);
+            gasMixture.states.put(entry.getKey(), 1f);
+        };
+
+        // Add Reaction Results to new Mixtures
+        for (Entry<ReactionResult, Float> entry : reactionResults.entrySet()) {
+            double resultMoles = entry.getValue() * initialVolume;
+            liquidMixture.reactionResults.put(entry.getKey(), (float)(resultMoles / newLiquidVolume));
+            gasMixture.reactionResults.put(entry.getKey(), (float)(resultMoles / newGasVolume));
+        };
+
+        liquidMixture.temperature = temperature;
+        gasMixture.temperature = temperature;
+        liquidMixture.refreshPossibleReactions();
+        gasMixture.refreshPossibleReactions();
+        liquidMixture.equilibrium = equilibrium;
+        gasMixture.equilibrium = equilibrium;
+
+        return new Phases(gasMixture, newGasVolume, liquidMixture, newLiquidVolume);
     };
 
     /**
@@ -583,7 +684,7 @@ public class Mixture extends ReadOnlyMixture {
     protected void incrementReactionResults(Reaction reaction, float molesPerBucket) {
         if (!reaction.hasResult()) return;
         ReactionResult result = reaction.getResult();
-        reactionresults.merge(result, molesPerBucket, (f1, f2) -> f1 + f2);
+        reactionResults.merge(result, molesPerBucket, (f1, f2) -> f1 + f2);
     };
 
     /**
@@ -592,37 +693,61 @@ public class Mixture extends ReadOnlyMixture {
      * the number of ticks it took to reach equilibrium, the {@link ReactionResult Reaction Results} and the new volume of Mixture.
      * @param volume (in mB) of this Reaction
      * @param availableStacks Item Stacks available for reacting. This List and its contents will be modified.
+     * @param heatingPower The power being supplied to this Basin by the {@link com.petrolpark.destroy.util.vat.IVatHeaterBlock heater} below it.
+     * @param outsideTemperature The {@link com.petrolpark.destroy.capability.level.pollution.LevelPollution#getLocalTemperature temperature} outside the Basin.
      */
-    public ReactionInBasinResult reactInBasin(int volume, List<ItemStack> availableStacks) {
+    public ReactionInBasinResult reactInBasin(int volume, List<ItemStack> availableStacks, float heatingPower, float outsideTemperature) {
         float volumeInBuckets = (float)volume / 1000f;
         int ticks = 0;
 
         dissolveItems(availableStacks, volumeInBuckets); // Dissolve all Items
         ReactionContext context = new ReactionContext(availableStacks); // React the Mixture
         while (!equilibrium && ticks < 600) {
+            float energyChange = heatingPower / TICKS_PER_SECOND;
+            energyChange += (outsideTemperature - temperature) * 100f / TICKS_PER_SECOND; // Fourier's Law (sort of), the Basin has a fixed conductance of 100 andthe divide by 20 is for 20 ticks per second
+            if (Math.abs(energyChange) > 0.0001f) {
+                heat(1000 * energyChange / volume); // 1000 converts getFluidAmount() in mB to Buckets
+            };
             reactForTick(context);
             ticks++;
         };
 
-        if (ticks == 0) return new ReactionInBasinResult(0, List.of(), volume); // If no reactions occured (because we were already at equilibrium), cancel early
-
-        List<ReactionResult> results = new ArrayList<>();
-        for (ReactionResult result : reactionresults.keySet()) {
-            Float molesPerBucketOfReaction = reactionresults.get(result);
-            int numberOfResult = (int) (volumeInBuckets * molesPerBucketOfReaction / result.getRequiredMoles());
-
-            // Decrease the amount of Reaction that has happened
-            reactionresults.replace(result, molesPerBucketOfReaction - numberOfResult * result.getRequiredMoles() / volumeInBuckets);
-
-            // Add the Reaction Result the required number of times
-            for (int i = 0; i < numberOfResult; i++) {
-                results.add(result);
-            };
-        };
+        if (ticks == 0) return new ReactionInBasinResult(0, Map.of(), volume); // If no reactions occured (because we were already at equilibrium), cancel early
 
         int amount = recalculateVolume(volume);
 
-        return new ReactionInBasinResult(ticks, results, amount);
+        return new ReactionInBasinResult(ticks, getCompletedResults(volumeInBuckets), amount);
+    };
+
+    /**
+     * If any {@link Mixture#reactionResults results} have had enough moles to have occured, remove them from the Mixture and return them here.
+     * This is mutative.
+     * @param volumeInBuckets The amount of Mixture
+     * @return A Set of Reaction Results mapped to the number of times that Reaction result occurs
+     */
+    public Map<ReactionResult, Integer> getCompletedResults(double volumeInBuckets) {
+        Map<ReactionResult, Integer> results = new HashMap<>();
+        if (reactionResults.isEmpty()) return results;
+        for (ReactionResult result : reactionResults.keySet()) {
+
+            if (result.isOneOff()) {
+                results.put(result, 1);
+                continue;
+            };
+
+            Float molesPerBucketOfReaction = reactionResults.get(result);
+            int numberOfResult = (int) (volumeInBuckets * molesPerBucketOfReaction / result.getRequiredMoles());
+            if (numberOfResult == 0) continue;
+
+            // Decrease the amount of Reaction that has happened
+            reactionResults.replace(result, molesPerBucketOfReaction - numberOfResult * result.getRequiredMoles() / (float)volumeInBuckets);
+
+            results.put(result, numberOfResult);
+        };
+        // reactionResults.keySet().removeIf(result -> { // Remove any one-off Results and Results which have run out
+        //     return result.isOneOff() || areVeryClose(reactionResults.get(result), 0f);
+        // }); 
+        return results;
     };
 
     /**
@@ -666,6 +791,7 @@ public class Mixture extends ReadOnlyMixture {
      * @see Mixture#addMolecule The wrapper for this method
      * @see Mixture#changeConcentrationOf Modifying the concentration of pre-existing Molecule
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private boolean internalAddMolecule(Molecule molecule, float concentration, Boolean shouldRefreshReactions) {
 
         boolean newMoleculeAdded = true; // Start by assuming we're adding a brand new Molecule to this solution
@@ -675,16 +801,12 @@ public class Mixture extends ReadOnlyMixture {
             return false;
         };
 
-        super.addMolecule(molecule, concentration); //TODO not do this if it turns out to already be in solution
+        if (!molecule.isNovel()) super.addMolecule(molecule, concentration);
 
-        List<Group> functionalGroups = molecule.getFunctionalGroups();
+        List<Group<?>> functionalGroups = molecule.getFunctionalGroups();
         if (functionalGroups.size() != 0) {
-            for (Group group : functionalGroups) {
-                String groupID = group.getID();
-                if (!groupIDsAndMolecules.containsKey(groupID)) {
-                    groupIDsAndMolecules.put(groupID, new ArrayList<>());
-                };
-                groupIDsAndMolecules.get(groupID).add(new GenericReactant<>(molecule, group));
+            for (Group group : functionalGroups) { // Unparameterised raw type
+                addGroupToMixture(molecule, group); // Unchecked conversion
             };
         };
 
@@ -694,11 +816,14 @@ public class Mixture extends ReadOnlyMixture {
                 if (novelMolecule.getFullID().equals(molecule.getFullID())) {
                     found = true;
                     newMoleculeAdded = false; // We haven't actually added a brand new Molecule so flag this
-                    changeConcentrationOf(molecule, concentration, true);
+                    changeConcentrationOf(novelMolecule, concentration, true);
                     equilibrium = false;
                 };
             };
-            if (!found) novelMolecules.add(molecule); // If it was actually a brand new Molecule, add it to the novel list
+            if (!found) {
+                super.addMolecule(molecule, concentration);
+                novelMolecules.add(molecule); // If it was actually a brand new Molecule, add it to the novel list
+            }; 
         };
 
         if (shouldRefreshReactions && newMoleculeAdded) {
@@ -710,6 +835,14 @@ public class Mixture extends ReadOnlyMixture {
         return newMoleculeAdded; // Return whether or not we actually added a brand new Molecule
     };
 
+    private <G extends Group<G>> void addGroupToMixture(Molecule molecule, G group) {
+        GroupType<G> groupType = group.getType();
+        if (!groupIDsAndMolecules.containsKey(groupType)) {
+            groupIDsAndMolecules.put(groupType, new ArrayList<>());
+        };
+        groupIDsAndMolecules.get(groupType).add(new GenericReactant<>(molecule, group));
+    };
+
     /**
      * Removes the given {@link Molecule} from this Mixture, if that Molecule is already in it.
      * This does not refresh possible {@link Reaction Reactions}.
@@ -718,14 +851,15 @@ public class Mixture extends ReadOnlyMixture {
      */
     private Mixture removeMolecule(Molecule molecule) {
 
-        List<Group> functionalGroups = molecule.getFunctionalGroups();
+        List<Group<?>> functionalGroups = molecule.getFunctionalGroups();
         if (functionalGroups.size() != 0) {
-            for (Group group : functionalGroups) {
-                groupIDsAndMolecules.get(group.getID()).removeIf((reactant) -> {
+            for (Group<?> group : functionalGroups) {
+                groupIDsAndMolecules.get(group.getType()).removeIf((reactant) -> {
                     return reactant.getMolecule() == molecule;
                 });
             };
         };
+        if (molecule.isNovel()) novelMolecules.remove(molecule);
 
         contents.remove(molecule);
         equilibrium = false; // As we have removed a Molecule the position equilibrium is likely to change
@@ -777,20 +911,34 @@ public class Mixture extends ReadOnlyMixture {
     /**
      * Determine all {@link Reaction Reactions} - including {@link GenericReactions Generic Reactions} that are possible with the {@link Molecule Molecules} in this Mixture,
      * and update the {@link Mixture#possibleReactions stored possible Reactions} accordingly.
-     * This should be called whenever new Molecules have been {@link Mixture#addMolecule added} to the Mixture, or a Molecule has been removed entirely.
+     * This should be called whenever new Molecules have been {@link Mixture#addMolecule added} to the Mixture, or a Molecule has been removed entirely, but rarely otherwise.
      */
     private void refreshPossibleReactions() {
         possibleReactions = new ArrayList<>();
         Set<Reaction> newPossibleReactions = new HashSet<>();
 
         // Generate specific Generic Reactions
-        for (String id : groupIDsAndMolecules.keySet()) {
-            for (GenericReaction genericreaction : Group.getReactionsOfGroupByID(id)) {
-                if (genericreaction.involvesSingleGroup()) { // Generic Reactions involving only one functional Group
-                    newPossibleReactions.addAll(specifySingleGroupGenericReactions(genericreaction, groupIDsAndMolecules.get(id)));
+        for (GroupType<?> groupType : groupIDsAndMolecules.keySet()) { // Only search for Generic Reactions of Groups present in this Molecule
+            checkEachGenericReaction: for (GenericReaction genericReaction : Group.getReactionsOfGroupByID(groupType)) {
+
+                if (genericReaction.involvesSingleGroup()) { // Generic Reactions involving only one functional Group
+                    newPossibleReactions.addAll(specifySingleGroupGenericReactions(genericReaction, groupIDsAndMolecules.get(groupType)));
+                
                 } else { // Generic Reactions involving two functional Groups
-                    //TODO
-                    //TODO check for polymerisation
+                    if (!(genericReaction instanceof DoubleGroupGenericReaction<?, ?> dggr)) continue checkEachGenericReaction; // This check should never fail
+                    if (groupType != dggr.getFirstGroupType()) continue checkEachGenericReaction; // Only generate Reactions when we're dealing with the first Group type
+                    
+                    GroupType<?> secondGroupType = dggr.getSecondGroupType();
+                    if (!groupIDsAndMolecules.keySet().contains(secondGroupType)) continue checkEachGenericReaction; // We can't do this generic reaction if we only have one group type
+                    
+                    List<Pair<GenericReactant<?>, GenericReactant<?>>> reactantPairs = new ArrayList<>();
+                    for (GenericReactant<?> firstGenericReactant : groupIDsAndMolecules.get(groupType)) {
+                        for (GenericReactant<?> secondGenericReactant : groupIDsAndMolecules.get(secondGroupType)) {
+                            reactantPairs.add(Pair.of(firstGenericReactant, secondGenericReactant));
+                        };
+                    };
+
+                    newPossibleReactions.addAll(specifyDoubleGroupGenericReactions(dggr, reactantPairs));
                 };
             };
         };
@@ -826,25 +974,56 @@ public class Mixture extends ReadOnlyMixture {
      * 
      * <p>For example, if the Generic Reaction supplied is the {@link com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydration hydration of an alkene},
      * and <b>reactants</b> includes {@code destroy:ethene}, the returned collection will include a Reaction with {@code destroy:ethene} and {@code destroy:water} as reactants,
-     * {@code destroy:ethanol} as a product, and all the appropriate rate constants and catalysts as defined in the {@link com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydration#generateReaction generator}.</p>
+     * {@code destroy:ethanol} as a product, and all the appropriate rate constants and catalysts as defined in the {@link com.petrolpark.destroy.chemistry.index.genericReaction.AlkeneHydration#generateReaction generator}.</p>
      * 
      * @param <G> <b>G</b> The Group to which this Generic Reaction applies
-     * @param genericreaction
-     * @param reactants All {@link GenericReactant Reactants} that have the Group.
-     * @return A Collection of all specified Reactions.
+     * @param genericReaction
+     * @param reactants All {@link GenericReactant Reactants} that have the Group
+     * @return A Collection of all specified Reactions
      */
     @SuppressWarnings("unchecked")
-    private <G extends Group> List<Reaction> specifySingleGroupGenericReactions(GenericReaction genericreaction, List<GenericReactant<?>> reactants) {
+    private <G extends Group<G>> List<Reaction> specifySingleGroupGenericReactions(GenericReaction genericReaction, List<GenericReactant<?>> reactants) {
         try {
-            SingleGroupGenericReaction<G> singleGroupGenericReaction = (SingleGroupGenericReaction<G>) genericreaction; // Unchecked conversion
+            SingleGroupGenericReaction<G> singleGroupGenericReaction = (SingleGroupGenericReaction<G>) genericReaction; // Unchecked conversion
             List<Reaction> reactions = new ArrayList<>();
             for (GenericReactant<?> reactant : reactants) {
                 reactions.add(singleGroupGenericReaction.generateReaction((GenericReactant<G>)reactant)); // Unchecked conversion
             };
             return reactions;
-        } catch(Error e) {
+        } catch(Throwable e) {
             throw new IllegalStateException("Wasn't able to generate Single-Group Reaction: " + e);
         }
+    };
+
+    /**
+     * Given a {@link DoubleGroupGenericReaction Generic Reaction} involving two {@link Group functional Groups},
+     * generates the specified {@link Reaction Reactions} that apply to this Mixture.
+     * 
+     * <p>For example, if the Generic Reaction supplied is {@link com.petrolpark.destroy.chemistry.index.genericreaction.AcylChlorideEsterification esterification},
+     * and this this Mixture contains methanoyl chloride, ethanoyl chloride, and ethanol, the returned collection will include two Reactions, one of which makes 
+     * ethyl ethanoate and the other ethyl methanoate.</p>
+     * 
+     * @param <G1> <b>G1</b> The first Group to which this Generic Reaction applies
+     * @param <G2> <b>G2</b> The second Group to which this Generic Reaction applies
+     * @param genericReaction
+     * @param reactantPairs All possible pairs of {@link GenericReactant Reactants} in this Mixture
+     * @return A Collection of specified Reactions
+     * @see Mixture#specifySingleGroupGenericReactions A more in-depth description
+     */
+    @SuppressWarnings("unchecked")
+    private <G1 extends Group<G1>, G2 extends Group<G2>> List<Reaction> specifyDoubleGroupGenericReactions(GenericReaction genericReaction, List<Pair<GenericReactant<?>, GenericReactant<?>>> reactantPairs) {
+            DoubleGroupGenericReaction<G1, G2> doubleGroupGenericReaction = (DoubleGroupGenericReaction<G1, G2>) genericReaction; // Unchecked conversion
+            List<Reaction> reactions = new ArrayList<>();
+            for (Pair<GenericReactant<?>, GenericReactant<?>> reactantPair : reactantPairs) {
+                if (reactantPair.getFirst().getMolecule() == reactantPair.getSecond().getMolecule()) continue; // Cannot React Molecules with themselves
+                try {
+                    reactions.add(doubleGroupGenericReaction.generateReaction((GenericReactant<G1>)reactantPair.getFirst(), (GenericReactant<G2>)reactantPair.getSecond())); // Unchecked conversions {
+                } catch(Throwable e) {
+                    Destroy.LOGGER.info("Wasn't able to generate Double-Group Reaction '"+genericReaction.id.toString()+"' between '"+reactantPair.getFirst().getMolecule().getFullID() +"' and '"+reactantPair.getSecond().getMolecule().getFullID() +"': ");
+                    e.printStackTrace();
+                }
+            };
+            return reactions;
     };
 
     public static boolean areVeryClose(Float f1, Float f2) {

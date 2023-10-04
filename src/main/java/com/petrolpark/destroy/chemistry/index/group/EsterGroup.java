@@ -2,10 +2,10 @@ package com.petrolpark.destroy.chemistry.index.group;
 
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Group;
-import com.petrolpark.destroy.chemistry.Molecule;
-import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.petrolpark.destroy.chemistry.GroupType;
+import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 
-public class EsterGroup extends Group {
+public class EsterGroup extends Group<EsterGroup> {
 
     private Atom carbonylCarbon;
     private Atom alcoholCarbon;
@@ -41,13 +41,8 @@ public class EsterGroup extends Group {
     };
 
     @Override
-    public Molecule getExampleMolecule() {
-        return DestroyMolecules.GENERIC_ESTER;
-    };
-
-    @Override
-    public String getID() {
-        return "ESTER";
+    public GroupType<EsterGroup> getType() {
+        return DestroyGroupTypes.ESTER;
     };
     
 };

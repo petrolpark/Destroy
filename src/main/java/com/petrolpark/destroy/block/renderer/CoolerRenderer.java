@@ -48,7 +48,7 @@ public class CoolerRenderer extends SafeBlockEntityRenderer<CoolerBlockEntity> {
         float time = AnimationTickHolder.getRenderTime(level);
         float renderTick = time + (hashCode % 13) * 16f;
         float bobbing = Mth.sin((float) ((renderTick / 16f) % (2 * Math.PI))) / 64; // Displacement of the head due to bobbing
-        float shivering = coldnessLevel == ColdnessLevel.FROSTING ? Mth.sin((float) ((renderTick * 2) % (2 * Math.PI))) / 24f : 0f; // Rotation of the head due to shivering
+        float shivering = (coldnessLevel == ColdnessLevel.FROSTING ? Mth.sin((float) ((renderTick * 3) % (2 * Math.PI))) / 24f : 0f) * Mth.sin((renderTick / 8) % (2 * Mth.PI)); // Rotation of the head due to shivering
         float headY = bobbing - (headAnimation * .75f); // Where to render the head
         headAngle += shivering;
 

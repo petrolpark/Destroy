@@ -1,3 +1,6 @@
 {
-  "values": []
+  "values": [
+    "#destroy:explosive/primary",
+    "#destroy:explosive/secondary"
+  ]
 }

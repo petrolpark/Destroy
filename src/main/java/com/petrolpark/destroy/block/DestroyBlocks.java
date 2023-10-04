@@ -7,8 +7,8 @@ import com.petrolpark.destroy.block.display.PollutometerDisplaySource;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
-import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
 import com.petrolpark.destroy.block.model.CopycatBlockModel;
+import com.petrolpark.destroy.entity.PrimedBomb;
 import com.petrolpark.destroy.item.CoaxialGearBlockItem;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.PumpjackBlockItem;
@@ -213,7 +213,9 @@ public class DestroyBlocks {
         ).onRegister(CreateRegistrate.connectedTextures(() -> new EncasedCTBehaviour(AllSpriteShifts.COPPER_CASING)))
         .onRegister(CreateRegistrate.casingConnectivity((block, cc) -> cc.make(block, AllSpriteShifts.COPPER_CASING,
 			(s, f) -> f != s.getValue(VatControllerBlock.FACING)))
-        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.DISPLAY_SOURCE, "vat_controller"))
+        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.ALL_DISPLAY_SOURCE, "vat_controller_all_contents"))
+        .onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.SOLUTION_DISPLAY_SOURCE, "vat_controller_solution_contents"))
+        .onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.GAS_DISPLAY_SOURCE, "vat_controller_gas_contents"))
         .item()
         .build()
         .register();
@@ -221,7 +223,9 @@ public class DestroyBlocks {
     public static final BlockEntry<VatSideBlock> VAT_SIDE = REGISTRATE.block("vat_side", VatSideBlock::new)
         .transform(BuilderTransformers.copycat())
         .onRegister(CreateRegistrate.blockModel(() -> CopycatBlockModel::new))
-        .onRegister(AllDisplayBehaviours.assignDataBehaviour(VatSideBlockEntity.DISPLAY_SOURCE, "vat_side"))
+        .onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.ALL_DISPLAY_SOURCE, "vat_side_all_contents"))
+        .onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.SOLUTION_DISPLAY_SOURCE, "vat_side_solution_contents"))
+        .onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.GAS_DISPLAY_SOURCE, "vat_side_gas_contents"))
         .register();
 
     public static final BlockEntry<UrineCauldronBlock> URINE_CAULDRON = REGISTRATE.block("urine_cauldron", p -> new UrineCauldronBlock(p, DestroyCauldronInteractions.URINE))
@@ -240,7 +244,7 @@ public class DestroyBlocks {
 
     // EXPLOSIVES
 
-    public static final BlockEntry<Block> ANFO_BLOCK = REGISTRATE.block("anfo_block", Block::new)
+    public static final BlockEntry<PrimeableBombBlock> ANFO_BLOCK = REGISTRATE.block("anfo_block", p -> new PrimeableBombBlock(p, PrimedBomb.Anfo::new))
         .initialProperties(() -> Blocks.TNT)
         .properties(p -> p
             .mapColor(MapColor.COLOR_PINK)
@@ -249,7 +253,7 @@ public class DestroyBlocks {
         .build()
         .register();
 
-    public static final BlockEntry<Block> CORDITE_BLOCK = REGISTRATE.block("cordite_block", Block::new)
+    public static final BlockEntry<PrimeableBombBlock> CORDITE = REGISTRATE.block("cordite", p -> new PrimeableBombBlock(p, PrimedBomb.Cordite::new))
         .initialProperties(() -> Blocks.TNT)
         .properties(p -> p
             .mapColor(MapColor.COLOR_ORANGE)
@@ -261,21 +265,22 @@ public class DestroyBlocks {
     public static final BlockEntry<DynamiteBlock> DYNAMITE_BLOCK = REGISTRATE.block("dynamite_block", DynamiteBlock::new)
         .initialProperties(() -> Blocks.TNT)
         .properties(p -> p
-            .mapColor(MapColor.COLOR_ORANGE)
+            .mapColor(MapColor.COLOR_MAGENTA)
         ).item()
         .build()
         .register();
 
-    public static final BlockEntry<Block> NITROCELLULOSE_BLOCK = REGISTRATE.block("nitrocellulose_block", Block::new)
+    public static final BlockEntry<PrimeableBombBlock> NITROCELLULOSE_BLOCK = REGISTRATE.block("nitrocellulose_block", p -> new PrimeableBombBlock(p, PrimedBomb.Nitrocellulose::new))
         .initialProperties(() -> Blocks.TNT)
         .properties(p -> p
             .mapColor(MapColor.COLOR_LIGHT_GREEN)
         ).item()
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+        .tag(DestroyItemTags.OBLITERATION_EXPLOSIVE.tag)
         .build()
         .register();
 
-    public static final BlockEntry<Block> SODIUM_PICRATE_BLOCK = REGISTRATE.block("sodium_picrate_block", Block::new)
+    public static final BlockEntry<PrimeableBombBlock> SODIUM_PICRATE_BLOCK = REGISTRATE.block("sodium_picrate_block", (p) -> new PrimeableBombBlock(p, PrimedBomb.SodiumPicrate::new))
         .initialProperties(() -> Blocks.TNT)
         .properties(p -> p
             .mapColor(MapColor.COLOR_YELLOW)
@@ -291,6 +296,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
+            .strength(6f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -305,6 +311,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.SAND)
             .requiresCorrectToolForDrops()
+            .strength(5f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_STONE_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -319,6 +326,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.SAND)
             .requiresCorrectToolForDrops()
+            .strength(5f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_STONE_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -334,6 +342,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.DIRT)
             .requiresCorrectToolForDrops()
+            .strength(6f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_DIAMOND_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -347,6 +356,7 @@ public class DestroyBlocks {
         .initialProperties(() -> Blocks.DIAMOND_BLOCK)
         .properties(p -> p
             .requiresCorrectToolForDrops()
+            .strength(6f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -361,6 +371,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.TERRACOTTA_LIGHT_BLUE)
             .requiresCorrectToolForDrops()
+            .strength(6f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_DIAMOND_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -375,6 +386,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.STONE)
             .requiresCorrectToolForDrops()
+            .strength(6f, 6f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_DIAMOND_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -392,6 +404,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
+            .strength(3f, 3f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
@@ -406,6 +419,7 @@ public class DestroyBlocks {
             .mapColor(MapColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
             .sound(SoundType.DEEPSLATE)
+            .strength(4.5f, 3f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
@@ -419,6 +433,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
+            .strength(4f, 9f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
@@ -432,6 +447,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.SAND)
             .requiresCorrectToolForDrops()
+            .strength(3f, 3f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
@@ -446,6 +462,7 @@ public class DestroyBlocks {
             .mapColor(MapColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
             .sound(SoundType.DEEPSLATE)
+            .strength(4.5f, 3f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
@@ -551,7 +568,9 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_YELLOW)
             .sound(SoundType.SLIME_BLOCK)
-        ).item()
+            .strength(0.2f)
+        ).tag(BlockTags.MINEABLE_WITH_SHOVEL)
+        .item()
         .build()
         .register();
 
@@ -560,14 +579,34 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_YELLOW)
             .sound(SoundType.SLIME_BLOCK)
-        ).blockstate((c, p) -> p.axisBlock(c.get(), p.modLoc("block/raw_fries_block_side"), p.modLoc("block/raw_fries_block_end")))
+            .strength(0.2f)
+        ).tag(BlockTags.MINEABLE_WITH_SHOVEL)
         .register();
 
-    // static {
-    //     REGISTRATE.startSection(AllSections.UNASSIGNED);
-    // };
-
     // UNCATEGORISED
+
+    public static final BlockEntry<Block> CORDITE_BLOCK = REGISTRATE.block("cordite_block", Block::new)
+        .initialProperties(() -> Blocks.CLAY)
+        .properties(p -> p
+            .mapColor(MapColor.COLOR_ORANGE)
+            .sound(SoundType.SLIME_BLOCK)
+            .strength(0.2f)
+        ).tag(BlockTags.MINEABLE_WITH_SHOVEL)
+        .tag(BlockTags.MINEABLE_WITH_HOE)
+        .item()
+        .build()
+        .register();
+
+    public static final BlockEntry<RotatedPillarBlock> EXTRUDED_CORDITE_BLOCK = REGISTRATE.block("extruded_cordite_block", RotatedPillarBlock::new)
+        .initialProperties(() -> Blocks.CLAY)
+        .properties(p -> p
+            .mapColor(MapColor.COLOR_ORANGE)
+            .sound(SoundType.SLIME_BLOCK)
+            .strength(0.2f)
+        ).tag(BlockTags.MINEABLE_WITH_SHOVEL)
+        .tag(BlockTags.MINEABLE_WITH_HOE).item()
+        .build()
+        .register();
 
     public static final BlockEntry<HalfTransparentBlock> AGAR_BLOCK = REGISTRATE.block("agar_block", HalfTransparentBlock::new)
         .initialProperties(() -> Blocks.CLAY)
@@ -576,6 +615,7 @@ public class DestroyBlocks {
             .friction(1.1f)
             .noOcclusion()
             .sound(SoundType.SLIME_BLOCK)
+            .strength(0.1f)
         ).transform(TagGen.tagBlockAndItem("storage_blocks/fluorite"))
         .build()
         .register();

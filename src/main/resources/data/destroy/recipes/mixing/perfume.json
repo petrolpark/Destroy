@@ -1,0 +1,23 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "tag": "minecraft:flowers"
+      },
+      {
+        "tag": "minecraft:flowers"
+      },
+      {
+        "mixtureFluidWithTaggedMolecules": "destroy:mixture",
+        "tag": "destroy:fragrant",
+        "amount": 250,
+        "concentration": 5.0
+      }
+    ],
+    "results": [
+      {
+        "fluid": "destroy:perfume",
+        "amount": 250
+      }
+    ]
+  }

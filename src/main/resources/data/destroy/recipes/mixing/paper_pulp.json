@@ -14,7 +14,8 @@
     ],
     "results": [
       {
-        "item": "destroy:paper_pulp"
+        "item": "destroy:paper_pulp",
+        "count": 2
       }
     ],
     "heatRequirement": "heated"

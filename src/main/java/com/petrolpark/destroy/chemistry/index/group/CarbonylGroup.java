@@ -2,10 +2,10 @@ package com.petrolpark.destroy.chemistry.index.group;
 
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Group;
-import com.petrolpark.destroy.chemistry.Molecule;
-import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.petrolpark.destroy.chemistry.GroupType;
+import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 
-public class CarbonylGroup extends Group {
+public class CarbonylGroup extends Group<CarbonylGroup> {
 
     private Atom carbon;
     private Atom oxygen;
@@ -32,20 +32,15 @@ public class CarbonylGroup extends Group {
     };
 
     /**
-     * Whether this Carbonyl is a ketone - if it is not a ketone, it is either an aldehyde with one R group or formaldehye.
+     * Whether this Carbonyl is a ketone - if it is not a ketone, it is either an aldehyde (with one R group), formaldehye, or unknown.
      */
     public Boolean isKetone() {
         return isKetone;
     };
 
     @Override
-    public Molecule getExampleMolecule() {
-        return DestroyMolecules.GENERIC_CARBONYL;
-    };
-
-    @Override
-    public String getID() {
-        return "CARBONYL";
+    public GroupType<CarbonylGroup> getType() {
+        return DestroyGroupTypes.CARBONYL;
     };
     
 };

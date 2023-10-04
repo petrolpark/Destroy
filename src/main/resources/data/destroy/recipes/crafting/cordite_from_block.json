@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
+        "item": "destroy:extruded_cordite_block"
+      }
+    ],
+    "result": {
+      "item": "destroy:cordite_rods",
+      "count": 5
+    }
+  }

@@ -26,8 +26,8 @@ public class FluidIngredientMixin {
     
 	/**
 	 * Overwriting of {@link com.simibubi.create.foundation.fluid.FluidIngredient#isFluidIngredient FluidIngredient} to
-	 * say {@link com.petrolpark.destroy.fluid.ingredient.MoleculeFluidIngredient Molecule ingredients} and //TODO Molecule Tag ingredient
-	 * Molecule Tag ingredients are valid.
+	 * say {@link com.petrolpark.destroy.fluid.ingredient.MoleculeFluidIngredient Molecule ingredients}
+	 * are valid.
 	 */
     @Overwrite
     public static boolean isFluidIngredient(@Nullable JsonElement je) {
@@ -44,8 +44,7 @@ public class FluidIngredientMixin {
 
 	/**
 	 * Overwritten but mostly copied from {@link com.simibubi.create.foundation.fluid.FluidIngredient#deserialize FluidIngredient}.
-	 * This deserializes {@link com.petrolpark.destroy.fluid.ingredient.MoleculeFluidIngredient Molecule ingredients} and //TODO Molecule Tag ingredient
-	 * Molecule Tag ingredients.
+	 * This deserializes {@link com.petrolpark.destroy.fluid.ingredient.MoleculeFluidIngredient Molecule ingredients}.
 	 */
     @Overwrite
     public static FluidIngredient deserialize(@Nullable JsonElement je) {

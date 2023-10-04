@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "G",
+      "C"
+    ],
+    "key": {
+      "C": {
+        "item": "create:copper_casing"
+      },
+      "G": {
+        "item": "destroy:gas_filter"
+      }
+    },
+    "result": {
+      "item": "destroy:vat_controller"
+    }
+  }

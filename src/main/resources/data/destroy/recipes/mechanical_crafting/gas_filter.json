@@ -1,17 +1,16 @@
 {
     "type": "create:mechanical_crafting",
     "pattern": [
-      "BPB",
+      "BFB",
       "BCB",
       "BZB",
-      "BOB",
-      "BPB"
+      "BFB"
     ],
     "key": {
       "B": {
         "tag": "forge:plates/brass"
       },
-      "P": {
+      "F": {
         "item": "create:filter"
       },
       "C": {
@@ -19,9 +18,6 @@
       },
       "Z": {
         "item": "destroy:zeolite"
-      },
-      "O": {
-        "item": "destroy:zinc_oxide"
       }
     },
     "result": {

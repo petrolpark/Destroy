@@ -1,23 +1,32 @@
 package com.petrolpark.destroy.chemistry.index.genericreaction;
 
-import java.util.function.Supplier;
+import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.chemistry.Element;
+import com.petrolpark.destroy.chemistry.Formula;
+import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
+import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
-import com.petrolpark.destroy.chemistry.Reaction;
-import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
-import com.petrolpark.destroy.chemistry.genericreaction.SingleGroupGenericReaction;
-import com.petrolpark.destroy.chemistry.index.group.AlkeneGroup;
+public class AlkeneHydration extends AlkeneAddition {
 
-public class AlkeneHydration extends SingleGroupGenericReaction<AlkeneGroup> {
-
-    public AlkeneHydration(Supplier<AlkeneGroup> supplier) {
-        super(supplier);
-        //TODO Auto-generated constructor stub
+    public AlkeneHydration() {
+        super(Destroy.asResource("alkene_hydration"));
     };
 
     @Override
-    public Reaction generateReaction(GenericReactant<AlkeneGroup> reactant) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'generateReaction'");
+    public Formula getLowDegreeGroup() {
+        return Formula.atom(Element.HYDROGEN);
     };
+
+    @Override
+    public Formula getHighDegreeGroup() {
+        return Formula.alcohol();
+    };
+
+    @Override
+    public void transform(ReactionBuilder builder) {
+        builder.addReactant(DestroyMolecules.WATER, 1, 0)
+            .addCatalyst(DestroyMolecules.SULFURIC_ACID, 1);
+    };
+
     
 };

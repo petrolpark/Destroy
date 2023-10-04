@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.compat.jei.category.GenericReactionCategory;
 import com.petrolpark.destroy.compat.jei.category.ReactionCategory;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.ingredient.MixtureFluidIngredient;
+import com.petrolpark.destroy.recipe.ReactionRecipe;
 
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.helpers.IJeiHelpers;
@@ -39,6 +42,7 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
             }).orElse(false))
         ) {
             recipeTypes.add(ReactionCategory.TYPE); // Add the Reaction Recipe type
+            recipeTypes.add(GenericReactionCategory.TYPE); // Add the generic Reaction Recipe type
             recipeTypes.addAll(DestroyJEI.RECIPE_TYPES.keySet()); // Add all processing Recipes applicable to Mixtures
         };
         return recipeTypes;
@@ -56,6 +60,8 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
             if (!DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid())) return;
             MixtureFluidIngredient ingredient = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(fluidStack.getOrCreateTag().getString("MixtureFluidIngredientSubtype")).getNew();
             if (ingredient == null) return;
+
+            //TODO replace with disambiguation page of all contained Molecules, rather than just include the uses/recipes of all component Molecules in one
             ingredient.getContainedMolecules(fluidStack.getOrCreateTag()).forEach(molecule -> {
                 recipes.addAll(getRecipes(recipeCategory, helpers.getFocusFactory().createFocus(focus.getRole(), MoleculeJEIIngredient.TYPE, molecule)));
             });
@@ -66,10 +72,23 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
         if (molecule != null) { // Ignore this if we're not dealing with a Molecule
             switch (focus.getRole()) {
                 case INPUT: {
+
+                    // Add Generic Reaction Recipes
+                    if (recipeCategory instanceof GenericReactionCategory) {
+                        molecule.getFunctionalGroups().forEach(group -> {
+                            Optional.ofNullable((Group.groupTypesAndReactions.get(group.getType()))).ifPresent(set -> set.forEach(genericReaction -> {
+                                ReactionRecipe recipe = GenericReactionCategory.RECIPES.get(genericReaction);
+                                if (recipe != null) recipes.add((T)recipe);
+                            }));
+                        });
+                    }
+
                     // Add Reaction Recipes
-                    if (recipeCategory instanceof ReactionCategory) molecule.getReactantReactions().forEach(reaction -> {
-                        Optional.ofNullable((T)(ReactionCategory.RECIPES.get(reaction))).ifPresent(recipes::add);
-                    }); // This is an unchecked conversion but I think it's fine
+                    else if (recipeCategory instanceof ReactionCategory) {
+                        molecule.getReactantReactions().forEach(reaction -> {
+                            Optional.ofNullable((T)(ReactionCategory.RECIPES.get(reaction))).ifPresent(recipes::add);
+                        }); // This is an unchecked conversion but I think it's fine
+                    };
                     
                     // Add non-Reaction Recipes
                     List<Recipe<?>> recipeUses = DestroyJEI.MOLECULES_INPUT.get(molecule); // Recipes in which a Mixture containing this Molecule is required
@@ -83,8 +102,19 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
                     break;
                 }
                 case OUTPUT: {
+
+                    // Add Generic Reaction Recipes
+                    if (recipeCategory instanceof GenericReactionCategory) {
+                        molecule.getFunctionalGroups().forEach(group -> {
+                            Optional.ofNullable((GenericReactionCategory.GROUP_RECIPES.get(group.getType()))).ifPresent(set -> set.forEach(genericReaction -> {
+                                ReactionRecipe recipe = GenericReactionCategory.RECIPES.get(genericReaction);
+                                if (recipe != null) recipes.add((T)recipe);
+                            }));
+                        });
+                    }
+
                     // Add Reaction Recipes
-                    if (recipeCategory instanceof ReactionCategory) molecule.getProductReactions().forEach(reaction -> {
+                    else if (recipeCategory instanceof ReactionCategory) molecule.getProductReactions().forEach(reaction -> {
                         Optional.ofNullable((T)(ReactionCategory.RECIPES.get(reaction))).ifPresent(recipes::add);
                     }); // This is an unchecked conversion but I think it's fine
                 

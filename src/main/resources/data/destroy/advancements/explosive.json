@@ -1,0 +1,27 @@
+{
+    "parent": "destroy:plastic",
+    "criteria": {
+      "detonate": {
+        "conditions": {},
+        "trigger": "destroy:detonate"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.explosive.description"
+      },
+      "icon": {
+        "item": "destroy:anfo_block"
+      },
+      "hidden": true,
+      "title": {
+        "translate": "advancement.destroy.explosive"
+      }
+    },
+    "requirements": [
+      [
+        "detonate"
+      ]
+    ]
+  }

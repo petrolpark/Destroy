@@ -1,0 +1,28 @@
+{
+    "parent": "destroy:baby_blue",
+    "criteria": {
+      "try": {
+        "conditions": {},
+        "trigger": "destroy:try_to_make_meth"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.meth.description"
+      },
+      "icon": {
+        "item": "destroy:baby_blue_powder"
+      },
+      "hidden": true,
+      "frame": "challenge",
+      "title": {
+        "translate": "advancement.destroy.meth"
+      }
+    },
+    "requirements": [
+      [
+        "try"
+      ]
+    ]
+  }

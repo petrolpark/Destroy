@@ -3,7 +3,7 @@ package com.petrolpark.destroy.util;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
@@ -141,7 +141,7 @@ public class DestroyLang {
     };
 
     private static final float pressureMin = 0f;
-    private static final float pressureMax = 100000f;
+    private static final float pressureMax = 1000000f;
     private static final float conductivityMin = 0f;
     private static final float conductivityMax = 100f;
 
@@ -245,10 +245,10 @@ public class DestroyLang {
             df.setMaximumFractionDigits(1);
         };
 
-        private Function<Float, Float> conversionFromKelvins;
+        private UnaryOperator<Float> conversionFromKelvins;
         private String symbol;
 
-        TemperatureUnit(Function<Float, Float> conversionFromKelvins, String symbol) {
+        TemperatureUnit(UnaryOperator<Float> conversionFromKelvins, String symbol) {
             this.conversionFromKelvins = conversionFromKelvins;
             this.symbol = symbol;
         };

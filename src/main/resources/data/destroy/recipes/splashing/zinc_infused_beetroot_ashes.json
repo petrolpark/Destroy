@@ -16,11 +16,6 @@
         "chance": 0.5
       },
       {
-        "item": "destroy:zinc_oxide",
-        "count": 1,
-        "chance": 0.1
-      },
-      {
         "item": "create:crushed_raw_lead",
         "count": 1,
         "chance": 0.01

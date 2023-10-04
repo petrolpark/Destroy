@@ -54,6 +54,10 @@
       },
       {
         "type": "single",
+        "resource": "destroy:fluid/perfume"
+      },
+      {
+        "type": "single",
         "resource": "destroy:fluid/urine"
       },
       {
@@ -63,6 +67,10 @@
       {
         "type": "single",
         "resource": "destroy:chemistry/elements"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:chemistry/r_groups"
       },
       {
         "type": "single",

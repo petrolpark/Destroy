@@ -12,7 +12,7 @@
         "translate": "advancement.destroy.baby_blue_high.description"
       },
       "icon": {
-        "item": "destroy:baby_blue_crystal"
+        "item": "destroy:baby_blue_syringe"
       },
       "frame": "challenge",
       "title": {

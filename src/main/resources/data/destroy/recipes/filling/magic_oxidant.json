@@ -1,0 +1,21 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "create:polished_rose_quartz"
+      },
+      {
+        "fluid": "create:potion",
+        "nbt": {
+          "Bottle": "LINGERING",
+          "Potion": "minecraft:fire_resistance"
+        },
+        "amount": 100
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:magic_oxidant"
+      }
+    ]
+  }

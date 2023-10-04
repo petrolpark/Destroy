@@ -1,0 +1,26 @@
+{
+    "type": "create:compacting",
+    "ingredients": [
+      {
+        "item": "destroy:nanodiamonds"
+      },
+      {
+        "item": "destroy:nanodiamonds"
+      },
+      {
+        "item": "destroy:nanodiamonds"
+      },
+      {
+        "item": "destroy:nanodiamonds"
+      },
+      {
+        "item": "destroy:nanodiamonds"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:diamond"
+      }
+    ],
+    "heatRequirement": "superheated"
+  }

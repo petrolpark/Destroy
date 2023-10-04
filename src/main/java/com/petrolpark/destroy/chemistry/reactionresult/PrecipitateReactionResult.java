@@ -1,19 +1,24 @@
 package com.petrolpark.destroy.chemistry.reactionresult;
 
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
-import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.ReactionResult;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 public class PrecipitateReactionResult extends ReactionResult {
     
     private final Supplier<ItemStack> precipitate;
+
+    public static BiFunction<Float, Reaction, ReactionResult> of(Supplier<ItemStack> precipitate) {
+        return (m, r) -> new PrecipitateReactionResult(m, r, precipitate);
+    };
 
     public PrecipitateReactionResult(float moles, Reaction reaction, Supplier<ItemStack> precipitate) {
         super(moles, reaction);
@@ -25,14 +30,13 @@ public class PrecipitateReactionResult extends ReactionResult {
     };
 
     @Override
-    public void onBasinReaction(Level level, BasinBlockEntity basin, Mixture mixture) {
+    public void onBasinReaction(Level level, BasinBlockEntity basin) {
         // Do nothing, this is handled in ReactionInBasinRecipe
     };
 
     @Override
-    public void onVatReaction(Level level, VatControllerBlockEntity vatController, Mixture mixture) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onVatReaction'");
+    public void onVatReaction(Level level, VatControllerBlockEntity vatController) {
+        ItemHandlerHelper.insertItemStacked(vatController.inventory, precipitate.get(), false);
     };
 
 };

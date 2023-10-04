@@ -15,7 +15,6 @@ import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.chemistry.Atom;
-import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.Formula.Topology.SideChainInformation;
@@ -69,15 +68,14 @@ public class MoleculeRenderer {
         moleculeID = molecule.getFullID();
         width = 0;
         height = 0;
-        xOffset = 0;
+        xOffset = 5;
         yOffset = 0;
         zOffset = 0;
         RENDERED_OBJECTS = new ArrayList<>();
 
         // Monatomic Molecules
         if (molecule.getAtoms().size() == 1) {
-
-            RENDERED_OBJECTS.add(Pair.of(Vec3.ZERO, new AtomRenderInstance(molecule.getAtoms().iterator().next().getElement())));
+            RENDERED_OBJECTS.add(Pair.of(Vec3.ZERO, new AtomRenderInstance(molecule.getAtoms().iterator().next())));
 
         // Cyclic Molecules
         } else if (molecule.isCyclic()) {
@@ -87,7 +85,7 @@ public class MoleculeRenderer {
                 cyclicAtomsAndLocations.put(pair.getSecond(), pair.getFirst());
                 RENDERED_OBJECTS.add(Pair.of(
                     pair.getFirst().scale(BOND_LENGTH), // The relative location of the Atom
-                    new AtomRenderInstance(pair.getSecond().getElement()) // The Element of the Atom
+                    new AtomRenderInstance(pair.getSecond()) // The Element of the Atom
                 ));
             });
             // Add all Bonds in the cycle
@@ -188,7 +186,7 @@ public class MoleculeRenderer {
 
         for (Node node : branch.getNodes()) {
             // Mark the Atom for rendering at this location
-            RENDERED_OBJECTS.add(Pair.of(new Vec3(location.x, location.y, location.z), new AtomRenderInstance(node.getAtom().getElement())));
+            RENDERED_OBJECTS.add(Pair.of(new Vec3(location.x, location.y, location.z), new AtomRenderInstance(node.getAtom())));
 
             // Increment the number of Atoms rendered
             i++;
@@ -205,7 +203,7 @@ public class MoleculeRenderer {
 
             // Render side chains
             int j = 1;
-            for (Entry<Branch, BondType> sideBranchAndBondType : node.getSideBranches().entrySet()) {
+            for (Entry<Branch, BondType> sideBranchAndBondType : node.getOrderedSideBranches()) {
 
                 Vec3 sideZag; // The zag which will connect the side chain
                 if (j == geometry.connections.size()) { // This occurs if we're adding side chains on the first Node in the branch: if so, we need to add the side chain 'behind' it
@@ -419,14 +417,14 @@ public class MoleculeRenderer {
         };
     };
 
-    protected static record AtomRenderInstance(Element element) implements IRenderableMoleculePart {
+    protected static record AtomRenderInstance(Atom atom) implements IRenderableMoleculePart {
 
         @Override
         public void render(GuiGraphics graphics, Vec3 location) {
             PoseStack poseStack = graphics.pose();
             poseStack.pushPose();
             poseStack.translate(location.x, location.y, location.z);
-            GuiGameElement.of(element.getPartial())
+            GuiGameElement.of(atom.getPartial())
                 .scale(SCALE)
                 //.rotate(15.5d, 22.5d, 0d)
                 .render(graphics, 0, 0);

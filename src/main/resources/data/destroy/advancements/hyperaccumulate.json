@@ -1,5 +1,5 @@
 {
-    "parent": "destroy:otswald_process",
+    "parent": "destroy:ostwald_process",
     "criteria": {
       "hyperaccumulate": {
         "conditions": {},

@@ -1,0 +1,95 @@
+{
+    "parent": "destroy:extrude",
+    "criteria": {
+      "anfo": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "destroy:anfo_block"
+              ]
+            }
+          ]
+        }
+      },
+      "cordite": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "destroy:cordite"
+              ]
+            }
+          ]
+        }
+      },
+      "dynamite": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "destroy:dynamite_block"
+              ]
+            }
+          ]
+        }
+      },
+      "nc": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "destroy:nitrocellulose_block"
+              ]
+            }
+          ]
+        }
+      },
+      "tnp": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "items": [
+                "destroy:sodium_picrate_block"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.every_explosive.description"
+      },
+      "icon": {
+        "item": "destroy:cordite"
+      },
+      "frame": "goal",
+      "title": {
+        "translate": "advancement.destroy.every_explosive"
+      }
+    },
+    "requirements": [
+      [
+        "anfo"
+      ],
+      [
+        "cordite"
+      ],
+      [
+        "dynamite"
+      ],
+      [
+        "nc"
+      ],
+      [
+        "tnp"
+      ]
+    ]
+  }

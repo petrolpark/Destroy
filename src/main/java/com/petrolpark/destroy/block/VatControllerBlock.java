@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
+import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.foundation.block.IBE;
 
@@ -13,7 +14,9 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -52,8 +55,10 @@ public class VatControllerBlock extends Block implements IBE<VatControllerBlockE
             if (be.getVatOptional().isPresent()) {
                 return InteractionResult.PASS;
             } else {
-                SoundEvent sound = be.tryMakeVat() ? AllSoundEvents.CONFIRM.getMainEvent() : AllSoundEvents.DENY.getMainEvent();
+                boolean success = be.tryMakeVat();
+                SoundEvent sound = success ? AllSoundEvents.CONFIRM.getMainEvent() : AllSoundEvents.DENY.getMainEvent();
                 level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), sound, SoundSource.BLOCKS, 1f, 1f);
+                if (success) DestroyAdvancementBehaviour.setPlacedBy(level, pos, player);
                 return InteractionResult.SUCCESS;
             }
         });
@@ -64,6 +69,12 @@ public class VatControllerBlock extends Block implements IBE<VatControllerBlockE
         withBlockEntityDo(level, pos, be -> {
             be.tryMakeVat();
         });
+    };
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        DestroyAdvancementBehaviour.setPlacedBy(level, pos, placer);
+        super.setPlacedBy(level, pos, state, placer, stack);
     };
 
     @Override

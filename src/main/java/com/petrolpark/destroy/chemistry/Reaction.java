@@ -468,7 +468,7 @@ public class Reaction {
         /**
          * Adds an Item Ta as a {@link IItemReactant catalyst} for this {@link Reaction}. An Item Stack containing Items with the tag
          * must be present for the Reaction to occur.
-         * @param item
+         * @param tag
          * @param moles The {@link Reaction#getMolesPerItem moles of Reaction} which will occur if all necessary Item Reactants are present. If this
          * Reaction has multiple Item Reactants, this must be the same each time.
          * @return This Reaction Builder
@@ -577,7 +577,7 @@ public class Reaction {
 
         /**
          * Set the {@link ReactionResult Reaction Result} for this Reaction.
-         * Use a {@link com.petrolpark.destroy.chemistry.reactionresult.CombinedReactionResult CombinedReactionResult} to set multiple]
+         * Use a {@link com.petrolpark.destroy.chemistry.reactionresult.CombinedReactionResult CombinedReactionResult} to set multiple
          * @return This Reaction Builder
          */
         public ReactionBuilder withResult(float moles, BiFunction<Float, Reaction, ReactionResult> reactionresultFactory)  {
@@ -687,12 +687,11 @@ public class Reaction {
 
             if (!hasForcedActivationEnergy || reaction.activationEnergy <= 0f) {
                 reaction.activationEnergy = 50f;
-                Destroy.LOGGER.warn("Activation energy of reaction '"+reactionString()+"' was missing or invalid, so estimated as 50kJ.");
+                //Destroy.LOGGER.warn("Activation energy of reaction '"+reactionString()+"' was missing or invalid, so estimated as 50kJ.");
             };
 
             if (!hasForcedPreExponentialFactor || reaction.preexponentialFactor <= 0f) {
                 reaction.preexponentialFactor = 1e8f;
-                Destroy.LOGGER.warn("Pre-exponential factor of reaction '"+reactionString()+"' was missing or invalid, so was estimated as 1e8.");
             };
 
             if (!hasForcedEnthalpyChange) reaction.enthalpyChange = 0f;

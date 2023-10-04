@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.fluid.ingredient.RefrigerantDummyFluidIngredient;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
+import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.foundation.utility.Lang;
 
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.Font;
@@ -20,6 +23,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class HeatConditionRenderer {
+
+    private static RefrigerantDummyFluidIngredient refrigerantIngredient = new RefrigerantDummyFluidIngredient();
 
     public static void drawHeatConditionName(Font font, GuiGraphics graphics, int x, int y, HeatCondition requiredHeat) {
         MutableComponent name = Component.empty();
@@ -41,12 +46,22 @@ public class HeatConditionRenderer {
         });
         
         if (requiredHeat.name() == "COOLED") {
-            builder.addSlot(RecipeIngredientRole.CATALYST, x, y).addItemStack(DestroyBlocks.COOLER.asStack());
+            builder
+                .addSlot(RecipeIngredientRole.CATALYST, x, y)
+                .addItemStack(DestroyBlocks.COOLER.asStack());
+            builder
+                .addSlot(RecipeIngredientRole.CATALYST, x + 19, y)
+                .addIngredients(ForgeTypes.FLUID_STACK, refrigerantIngredient.getMatchingFluidStacks())
+                .addTooltipCallback(CreateRecipeCategory.addFluidTooltip());
         } else if (requiredHeat != HeatCondition.NONE) { // This one is copied right from Create; it renders the Blaze Burner
-            builder.addSlot(RecipeIngredientRole.RENDER_ONLY, x, y).addItemStack(AllBlocks.BLAZE_BURNER.asStack());
+            builder
+                .addSlot(RecipeIngredientRole.RENDER_ONLY, x, y)
+                .addItemStack(AllBlocks.BLAZE_BURNER.asStack());
         };
         if (requiredHeat == HeatCondition.SUPERHEATED) { // Used to render all possible Blaze 'treats' rather than just the Blaze Cake
-            builder.addSlot(RecipeIngredientRole.CATALYST, x + 19, y).addItemStacks(blazeTreatStacks);
+            builder
+                .addSlot(RecipeIngredientRole.CATALYST, x + 19, y)
+                .addItemStacks(blazeTreatStacks);
         };
     };
 };

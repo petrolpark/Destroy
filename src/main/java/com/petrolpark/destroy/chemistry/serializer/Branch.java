@@ -3,6 +3,8 @@ package com.petrolpark.destroy.chemistry.serializer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.petrolpark.destroy.chemistry.Atom;
+import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 
 public class Branch {
@@ -83,7 +85,7 @@ public class Branch {
     public Float getMass() {
         float total = 0f;
         for (Node node : nodes) {
-            total += node.getAtom().getElement().getMass();
+            total += getMassForComparisonInSerialization(node.getAtom());
             for (Branch branch : node.getSideBranches().keySet()) {
                 total += branch.getMass();
             };
@@ -94,8 +96,12 @@ public class Branch {
     public Float getMassOfLongestChain() {
         float total = 0f;
         for (Node node : nodes) {
-            total += node.getAtom().getElement().getMass();
+            total += getMassForComparisonInSerialization(node.getAtom());
         };
         return total;
+    };
+
+    public static Float getMassForComparisonInSerialization(Atom atom) {
+        return atom.getElement().getMass() * (atom.getElement() == Element.R_GROUP ? atom.rGroupNumber : 1);
     };
 };

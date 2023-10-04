@@ -36,7 +36,8 @@ public class DestroyTags {
         SECONDARY_EXPLOSIVE("explosive/secondary"),
         SPRAY_BOTTLE,
         SYRINGE,
-        YEAST
+        YEAST,
+        OBLITERATION_EXPLOSIVE // This tag is only used to display the right Blocks in JEI.
         ;
 
         public final TagKey<Item> tag;
@@ -61,6 +62,7 @@ public class DestroyTags {
     public enum DestroyBlockTags {
         BEETROOTS,
         ACID_RAIN_DESTRUCTIBLE,
+        ANFO_MINEABLE,
         ACID_RAIN_DIRT_REPLACEABLE;
 
         public final TagKey<Block> tag;

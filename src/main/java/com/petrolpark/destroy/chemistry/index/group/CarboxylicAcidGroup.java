@@ -2,10 +2,10 @@ package com.petrolpark.destroy.chemistry.index.group;
 
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Group;
-import com.petrolpark.destroy.chemistry.Molecule;
-import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.petrolpark.destroy.chemistry.GroupType;
+import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 
-public class CarboxylicAcidGroup extends Group {
+public class CarboxylicAcidGroup extends Group<CarboxylicAcidGroup> {
     private Atom carbon;
     private Atom carbonylOxygen;
     private Atom alcoholOxygen;
@@ -40,12 +40,7 @@ public class CarboxylicAcidGroup extends Group {
     };
 
     @Override
-    public Molecule getExampleMolecule() {
-        return DestroyMolecules.GENERIC_CARBOXYLIC_ACID;
-    };
-
-    @Override
-    public String getID() {
-        return "CARBOXYLIC_ACID";
+    public GroupType<CarboxylicAcidGroup> getType() {
+        return DestroyGroupTypes.CARBOXYLIC_ACID;
     };
 };

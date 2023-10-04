@@ -1,6 +1,9 @@
 package com.petrolpark.destroy.advancement;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.chemistry.Reaction;
+import com.petrolpark.destroy.chemistry.ReactionResult;
+import com.petrolpark.destroy.chemistry.reactionresult.DestroyAdvancementReactionResult;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,18 +27,22 @@ public enum DestroyAdvancements {
     CHARGE_WITH_DYNAMO("charge_with_dynamo"),
     ELECTROLYZE_WITH_DYNAMO("electrolyze_with_dynamo"),
     EXTRUDE("use_extrusion_die"),
+    DETONATE("detonate"),
     UNPOLLUTE("unpollute"),
     HANGOVER("hangover"),
     CURE_HANGOVER("cure_hangover"),
     HYPERACCUMULATE("hyperaccumulate"),
     MECHANICAL_HANDS("mechanical_hands"),
-    OTSWALD_PROCESS("otswald_process"),
+    TRY_TO_MAKE_METH("try_to_make_meth"),
+    OBLITERATE("detonate_obliteration_explosive"),
+    OSTWALD_PROCESS("ostwald_process"),
     FULLY_POLLUTE("fully_pollute"),
     USE_PUMPJACK("use_pumpjack"),
     JUMP_ON_SAND_CASTLE("jump_on_sand_castle"),
     USE_SEISMOMETER("use_seismometer"),
     COLLECT_TEARS("collect_tears"),
     URINATE("urinate"),
+    USE_VAT("use_vat"),
     VERY_DRUNK("very_drunk");
 
     private String id;
@@ -53,6 +60,10 @@ public enum DestroyAdvancements {
         } else {
             Destroy.LOGGER.warn("Could not award Destroy Advancement "+id+" to client-side Player.");
         };
+    };
+
+    public ReactionResult asReactionResult(float moles, Reaction reaction) {
+        return new DestroyAdvancementReactionResult(moles, reaction, this);
     };
 
     public static void register() {

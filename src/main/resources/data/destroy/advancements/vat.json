@@ -1,0 +1,26 @@
+{
+    "parent": "destroy:distillation",
+    "criteria": {
+      "react": {
+        "conditions": {},
+        "trigger": "destroy:use_vat"
+      }
+    },
+    "display": {
+      "description": {
+        "color": "#DBA213",
+        "translate": "advancement.destroy.vat.description"
+      },
+      "icon": {
+        "item": "destroy:vat_controller"
+      },
+      "title": {
+        "translate": "advancement.destroy.vat"
+      }
+    },
+    "requirements": [
+      [
+        "react"
+      ]
+    ]
+  }

@@ -71,6 +71,9 @@ public class DestroyItems {
         .tag(DestroyItemTags.PLASTIC.tag)
         .register(),
 
+    CARD_STOCK = REGISTRATE.item("card_stock", Item::new)
+        .register(),
+
     // INGOTS ETC
 
     FLUORITE = REGISTRATE.item("fluorite", Item::new)
@@ -96,9 +99,6 @@ public class DestroyItems {
         .register(),
     SULFUR = REGISTRATE.item("sulfur", Item::new)
         .tag(forgeItemTag("raw_materials/sulfur"))
-        .register(),
-    ZINC_DUST = REGISTRATE.item("zinc_dust", Item::new)
-        .tag(forgeItemTag("dusts/zinc"), Tags.Items.DUSTS)
         .register(),
     ZINC_SHEET = REGISTRATE.item("zinc_sheet", Item::new)
         .tag(forgeItemTag("plates/zinc"))
@@ -151,7 +151,7 @@ public class DestroyItems {
     ANFO = REGISTRATE.item("anfo", Item::new)
         .tag(DestroyItemTags.SECONDARY_EXPLOSIVE.tag, Tags.Items.DUSTS)
         .register(),
-    CORDITE = REGISTRATE.item("cordite", Item::new)
+    CORDITE = REGISTRATE.item("cordite_rods", Item::new)
         .tag(DestroyItemTags.SECONDARY_EXPLOSIVE.tag)
         .register(),
     DYNAMITE = REGISTRATE.item("dynamite", Item::new)
@@ -172,12 +172,6 @@ public class DestroyItems {
     AMMONIUM_NITRATE_PRILL = REGISTRATE.item("ammonium_nitrate_prill", Item::new)
         .tag(DestroyItemTags.PRILL.tag, DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
-    CALCIUM_CHLORIDE = REGISTRATE.item("calcium_chloride", Item::new)
-        .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
-    WET_CALCIUM_CHLORIDE = REGISTRATE.item("wet_calcium_chloride", Item::new)
-        .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
     CHALK_DUST = REGISTRATE.item("chalk_dust", Item::new)
         .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
@@ -187,21 +181,6 @@ public class DestroyItems {
         .properties(p -> p
             .food(DestroyFoods.BABY_BLUE_POWDER)
         ).tag(Tags.Items.DUSTS)
-        .register(),
-    SALTPETER = REGISTRATE.item("saltpeter", Item::new)
-        .tag(DestroyItemTags.SALT.tag, forgeItemTag("raw_materials/saltpeter"), Tags.Items.DUSTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
-    POTASSIUM_IODIDE = REGISTRATE.item("potassium_iodide", Item::new)
-        .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(), 
-    PRUSSIAN_BLUE = REGISTRATE.item("prussian_blue", Item::new)
-        .tag(Tags.Items.DYES_BLUE, Tags.Items.DUSTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(), 
-    ROCK_SALT = REGISTRATE.item("rock_salt", Item::new)
-        .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(), 
-    ZINC_OXIDE = REGISTRATE.item("zinc_oxide", Item::new)
-        .tag(DestroyItemTags.SALT.tag, Tags.Items.DUSTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register();
     
     public static final ItemEntry<IodineItem> IODINE = REGISTRATE.item("iodine", IodineItem::new)
@@ -242,23 +221,13 @@ public class DestroyItems {
         ).tag(DestroyItemTags.CHEMICAL_PROTECTION_FEET.tag)
         .register();
 
-    public static final ItemEntry<ZirconiumPantsItem>
+    // public static final ItemEntry<ZirconiumPantsItem>
 
-    ZIRCONIUM_PANTS = REGISTRATE.item("zirconium_pants", ZirconiumPantsItem::new)
-        .properties(p -> p
-            .stacksTo(1)
-        ).tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register();
-
-    public static final ItemEntry<Item>
-
-    SOAP = REGISTRATE.item("soap", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register();
-
-    // static {
-    //     REGISTRATE.startSection(AllSections.LOGISTICS);
-    // };
+    // ZIRCONIUM_PANTS = REGISTRATE.item("zirconium_pants", ZirconiumPantsItem::new)
+    //     .properties(p -> p
+    //         .stacksTo(1)
+    //     ).tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+    //     .register();
 
     public static final ItemEntry<SeismometerItem>
 
@@ -300,10 +269,6 @@ public class DestroyItems {
     PERFUME_BOTTLE = REGISTRATE.item("perfume_bottle", Item::new)
         .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
         .register(),
-    SHAMPOO_BOTTLE = REGISTRATE.item("shampoo_bottle", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
-        .register(),
     SUNSCREEN_BOTTLE = REGISTRATE.item("sunscreen_bottle", Item::new)
         .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
         .register(),
@@ -312,57 +277,24 @@ public class DestroyItems {
 
     SILICA = REGISTRATE.item("silica", Item::new)
         .register(),
-    DIRTY_SILICA = REGISTRATE.item("dirty_silica", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
-        .register(),
-    COPPER_COATED_SILICA = REGISTRATE.item("copper_coated_silica", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
-        .register(),
-    IRON_COATED_SILICA = REGISTRATE.item("iron_coated_silica", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
-        .register(),
-    NICKEL_COATED_SILICA = REGISTRATE.item("nickel_coated_silica", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
-        .register(),
-    PLATINUM_COATED_SILICA = REGISTRATE.item("platinum_coated_silica", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
-        .register(),
-    RHODIUM_COATED_SILICA = REGISTRATE.item("rhodium_coated_silica", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .tag(DestroyItemTags.DIRTY_SILICA.tag, Tags.Items.DUSTS)
-        .register(),
     
     // NON-SILICA CATALYSTS
 
     CONVERSION_CATALYST = REGISTRATE.item("conversion_catalyst", Item::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
-    DIRTY_CONVERSION_CATALYST = REGISTRATE.item("dirty_conversion_catalyst", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
     PALLADIUM_ON_CARBON = REGISTRATE.item("palladium_on_carbon", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
-    DIRTY_COAL = REGISTRATE.item("dirty_coal", Item::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
     ZEOLITE = REGISTRATE.item("zeolite", Item::new)
         .register(),
-    DIRTY_ZEOLITE = REGISTRATE.item("dirty_zeolite", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
     ZEIGLER_NATTA = REGISTRATE.item("ziegler-natta", Item::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
-    DIRTY_ZEIGLER_NATTA = REGISTRATE.item("dirty_ziegler-natta", Item::new)
+    MAGIC_OXIDANT = REGISTRATE.item("magic_oxidant", Item::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
-    MAGIC_OXIDANT = REGISTRATE.item("magic_oxidant", Item::new)
+    MAGIC_REDUCTANT = REGISTRATE.item("magic_reductant", Item::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
 
@@ -390,8 +322,7 @@ public class DestroyItems {
     MASHED_POTATO = REGISTRATE.item("mashed_potato", Item::new)
         .properties(p -> p
             .food(DestroyFoods.MASHED_POTATO)
-        ).tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
+        ).register(),
     WHITE_WHEAT = REGISTRATE.item("white_wheat", Item::new)
         .tag(Tags.Items.CROPS)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
@@ -462,6 +393,9 @@ public class DestroyItems {
     UNFINISHED_BLACKLIGHT = REGISTRATE.item("unfinished_blacklight", SequencedAssemblyItem::new)
         .tab(null)
         .register(),
+    UNFINISHED_CARD_STOCK = REGISTRATE.item("unfinished_card_stock", SequencedAssemblyItem::new)
+        .tab(null)
+        .register(),
     UNFINISHED_VOLTAIC_PILE = REGISTRATE.item("unfinished_voltaic_pile", SequencedAssemblyItem::new)
         .tab(null)
         .register(),
@@ -474,9 +408,6 @@ public class DestroyItems {
     UNPROCESSED_NAPALM_SUNDAE = REGISTRATE.item("unprocessed_napalm_sundae", SequencedAssemblyItem::new)
         .tab(null)
         .tag(AllItemTags.UPRIGHT_ON_BELT.tag)
-        .register(),
-    UNPROCESSED_SUPER_GLUE = REGISTRATE.item("unprocessed_super_glue", SequencedAssemblyItem::new)
-        .tab(null)
         .register();
 
     public static final ItemEntry<CombustibleItem>
@@ -629,10 +560,6 @@ public class DestroyItems {
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
     PAPER_PULP = REGISTRATE.item("paper_pulp", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
-    SAWDUST = REGISTRATE.item("sawdust", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
     TEAR_BOTTLE = REGISTRATE.item("tear_bottle", Item::new)
         .register(),
@@ -643,8 +570,10 @@ public class DestroyItems {
         .register(),
     YEAST = REGISTRATE.item("yeast", Item::new)
         .register(),
-    CHALK = REGISTRATE.item("chalk", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+    // CHALK = REGISTRATE.item("chalk", Item::new)
+    //     .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+    //     .register(),
+    NANODIAMONDS = REGISTRATE.item("nanodiamonds", Item::new)
         .register();
 
     public static final ItemEntry<HyperaccumulatingFertilizerItem> HYPERACCUMULATING_FERTILIZER = REGISTRATE.item("hyperaccumulating_fertilizer", HyperaccumulatingFertilizerItem::new)

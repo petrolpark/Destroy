@@ -63,7 +63,7 @@ public class DistillationTower {
         for (int i = 0; i < height; i++) {
             BlockEntity be = level.getBlockEntity(position.above(i));
             if (be == null || !(be instanceof BubbleCapBlockEntity bubbleCap)) {
-                Destroy.LOGGER.warn("Could not load Distillation Tower starting at "+pos+". New height is "+(i+1));
+                if (!level.isClientSide()) Destroy.LOGGER.warn("Could not load Distillation Tower starting at "+pos+". New height is "+(i+1));
                 break;
             } else {
                 addBubbleCap(bubbleCap);
