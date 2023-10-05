@@ -272,7 +272,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         tag.putBoolean("InventoryChanged", inventoryChanged);
         
         // Mixture
-        if (!level.isClientSide()) {
+        if (!getLevel().isClientSide()) {
             tag.putFloat("Pressure", getPressure());
             tag.putFloat("Temperature", getTemperature());  
         };
@@ -280,7 +280,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     private void onFluidStackChanged() {
         if (!vat.isPresent()) return;
-        sendData();
+        notifyUpdate();
     };
 
     public Optional<Vat> getVatOptional() {
@@ -318,7 +318,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
      * Set the cached Mixture to the Mixture stored in the NBT of the contained Fluids.
      * @see VatControllerBlockEntity#updateFluidMixture Doing the opposite
      */
-    private void updateCachedMixture() {
+    public void updateCachedMixture() {
         Mixture emptyMixture = new Mixture();
         if (!getVatOptional().isPresent()) {
             cachedMixture = emptyMixture;

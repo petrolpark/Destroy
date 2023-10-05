@@ -73,7 +73,7 @@ public class CoaxialGearBlock extends CogWheelBlock {
                 return InteractionResult.SUCCESS;
             } else if (tryRemoveLongShaft(state, context.getLevel(), context.getClickedPos(), false)) {
                 Player player = context.getPlayer();
-                if (!player.isCreative()) player.getInventory().placeItemBackInInventory(DestroyBlocks.COAXIAL_GEAR.asStack());
+                if (player != null && player.isCreative()) player.getInventory().placeItemBackInInventory(DestroyBlocks.COAXIAL_GEAR.asStack());
                 return InteractionResult.SUCCESS;
             };
         };
