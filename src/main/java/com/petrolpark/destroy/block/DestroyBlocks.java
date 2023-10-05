@@ -12,7 +12,6 @@ import com.petrolpark.destroy.entity.PrimedBomb;
 import com.petrolpark.destroy.item.CoaxialGearBlockItem;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.PumpjackBlockItem;
-import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.sound.DestroySoundTypes;
 import com.petrolpark.destroy.util.DestroyTags.DestroyBlockTags;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
@@ -43,10 +42,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.Tags;
 
 public class DestroyBlocks {
-
-    static {
-        REGISTRATE.useCreativeTab(DestroyCreativeModeTabs.MAIN_TAB);
-    };
 
     // BLOCK ENTITIES
 

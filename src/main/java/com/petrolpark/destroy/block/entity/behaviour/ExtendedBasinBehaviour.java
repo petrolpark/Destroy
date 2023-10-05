@@ -40,6 +40,7 @@ public class ExtendedBasinBehaviour extends BlockEntityBehaviour {
 
     @Override
     public void tick() {
+        if (!blockEntity.hasLevel()) return;
         if (!(blockEntity instanceof BasinBlockEntity basin) || basin.getLevel().isClientSide()) return;
 
         BlockEntity potentialOperator = getWorld().getBlockEntity(getPos().above(2));

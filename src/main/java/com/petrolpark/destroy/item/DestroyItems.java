@@ -27,10 +27,6 @@ import net.minecraftforge.common.Tags;
 
 public class DestroyItems {
 
-    static {
-        REGISTRATE.useCreativeTab(DestroyCreativeModeTabs.MAIN_TAB);
-    };
-
     public static final ItemEntry<Item> LOGO = REGISTRATE.item("logo", Item::new)
         .tab(null)
         .register();

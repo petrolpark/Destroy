@@ -31,6 +31,7 @@ import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.petrolpark.destroy.util.InebriationHelper;
 import com.petrolpark.destroy.util.PollutionHelper;
+import com.petrolpark.destroy.world.DestroyDamageSources;
 import com.petrolpark.destroy.world.DestroyDamageTypes;
 import com.petrolpark.destroy.world.entity.goal.BuildSandCastleGoal;
 import com.petrolpark.destroy.world.village.DestroyTrades;
@@ -326,7 +327,7 @@ public class DestroyServerEvents {
                     if (entity instanceof Player) {
                         Player player = (Player)entity;
                         if (player.hasEffect(DestroyMobEffects.HANGOVER.get())) {
-                            player.hurt(DestroyDamageTypes.HEADACHE.source(player.level()), 1f);
+                            player.hurt(DestroyDamageSources.headache(player.level()), 1f);
                         };
                     };
                 }; 

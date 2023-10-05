@@ -6,7 +6,7 @@ import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.entity.ExtrusionDieBlockEntity;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
-import com.petrolpark.destroy.world.DestroyDamageTypes;
+import com.petrolpark.destroy.world.DestroyDamageSources;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 
@@ -59,7 +59,7 @@ public class ExtrusionDieBlock extends RotatedPillarBlock implements IBE<Extrusi
                 double d0 = Math.abs(entity.getX() - entity.xOld);
                 double d1 = Math.abs(entity.getZ() - entity.zOld);
                 if (d0 >= (double)0.003f || d1 >= (double)0.003f) {
-                    entity.hurt(DestroyDamageTypes.EXTRUSION_DIE.source(level), 3f);
+                    entity.hurt(DestroyDamageSources.extrusionDie(level), 3f);
                 };
             };
         };

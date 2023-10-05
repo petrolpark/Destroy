@@ -1,6 +1,7 @@
 package com.petrolpark.destroy.effect;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
+import com.petrolpark.destroy.world.DestroyDamageSources;
 import com.petrolpark.destroy.world.DestroyDamageTypes;
 
 import net.minecraft.world.effect.MobEffectCategory;
@@ -26,7 +27,7 @@ public class InebriationMobEffect extends UncurableMobEffect {
             };
             if (amplifier >= 9) {
                 if (pDuration % Math.round(250 / amplifier) == 0) {
-                    livingEntity.hurt(DestroyDamageTypes.ALCOHOL.source(livingEntity.level()), 1f);
+                    livingEntity.hurt(DestroyDamageSources.alcohol(livingEntity.level()), 1f);
                 };
                 if (livingEntity instanceof Player player) {
                     DestroyAdvancements.VERY_DRUNK.award(player.level(), player);
