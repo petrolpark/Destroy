@@ -20,6 +20,7 @@ import com.petrolpark.destroy.chemistry.index.group.CarboxylicAcidGroup;
 import com.petrolpark.destroy.chemistry.index.group.HalideGroup;
 import com.petrolpark.destroy.chemistry.index.group.EsterGroup;
 import com.petrolpark.destroy.chemistry.index.group.NitrileGroup;
+import com.petrolpark.destroy.chemistry.index.group.NonTertiaryAmineGroup;
 
 public class DestroyGroupFinder extends GroupFinder {
 
@@ -81,13 +82,18 @@ public class DestroyGroupFinder extends GroupFinder {
                         };
                      }
                 };
-            } else { // Alcohols, chlorides, nitriles
+            } else { // Alcohols, halides, nitriles, amines
                 for (Atom halogen : halogens) {
                     groups.add(new HalideGroup(carbon, halogen, carbons.size()));
                 };
-                for (Atom oxygen : singleBondOxygens) {
+                for (Atom oxygen : singleBondOxygens) { // Alcohols
                     if (bondedAtomsOfElementTo(structure, oxygen, Element.HYDROGEN).size() == 1) {
                         groups.add(new AlcoholGroup(carbon, oxygen, bondedAtomsOfElementTo(structure, oxygen, Element.HYDROGEN).get(0), carbons.size()));
+                    };
+                };
+                for (Atom nitrogen : nitrogens) { // Primary and secondary amines
+                    for (Atom hydrogen : bondedAtomsOfElementTo(structure, nitrogen, Element.HYDROGEN)) {
+                        groups.add(new NonTertiaryAmineGroup(carbon, nitrogen, hydrogen));
                     };
                 };
 

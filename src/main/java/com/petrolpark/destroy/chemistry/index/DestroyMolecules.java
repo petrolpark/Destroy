@@ -484,6 +484,13 @@ public final class DestroyMolecules {
         .translationKey("nitrile")
         .build(),
 
+    GENERIC_PRIMARY_AMINE = builder()
+        .id("generic_primary_amine")
+        .structure(Formula.deserialize("destroy:linear:RC(R)(R)NR"))
+        .hypothetical()
+        .translationKey("non_tertiary_amine")
+        .build(),
+
     GLYCEROL = builder()
         .id("glycerol")
         .structure(Formula.deserialize("destroy:linear:OCC(O)CO"))
