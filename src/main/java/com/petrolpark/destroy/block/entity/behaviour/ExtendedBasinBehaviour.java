@@ -39,9 +39,10 @@ public class ExtendedBasinBehaviour extends BlockEntityBehaviour {
     };
 
     @Override
+    @SuppressWarnings("null")
     public void tick() {
         if (!blockEntity.hasLevel()) return;
-        if (!(blockEntity instanceof BasinBlockEntity basin) || basin.getLevel().isClientSide()) return;
+        if (!(blockEntity instanceof BasinBlockEntity basin) || basin.getLevel().isClientSide()) return; // It thinks getLevel() might be null (it's not)
 
         BlockEntity potentialOperator = getWorld().getBlockEntity(getPos().above(2));
         if (potentialOperator instanceof MechanicalMixerBlockEntity mixer) {

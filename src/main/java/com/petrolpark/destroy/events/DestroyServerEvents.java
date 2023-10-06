@@ -32,7 +32,6 @@ import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.petrolpark.destroy.util.InebriationHelper;
 import com.petrolpark.destroy.util.PollutionHelper;
 import com.petrolpark.destroy.world.DestroyDamageSources;
-import com.petrolpark.destroy.world.DestroyDamageTypes;
 import com.petrolpark.destroy.world.entity.goal.BuildSandCastleGoal;
 import com.petrolpark.destroy.world.village.DestroyTrades;
 import com.petrolpark.destroy.world.village.DestroyVillageAddition;
@@ -288,6 +287,7 @@ public class DestroyServerEvents {
      * Give the Player Haste/Mining Fatigue if they have Baby Blue High/Withdrawal respectively.
      */
     @SubscribeEvent
+    @SuppressWarnings("null") // Stop giving warnings for effects we've already checked exist
     public static void changeMiningSpeedWithBabyBlueEffects(PlayerEvent.BreakSpeed event) {
         Player player = event.getEntity();
         if (player.hasEffect(DestroyMobEffects.BABY_BLUE_HIGH.get())) {

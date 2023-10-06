@@ -44,6 +44,7 @@ import com.simibubi.create.foundation.utility.Pointing;
 import com.simibubi.create.foundation.utility.VecHelper;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -154,6 +155,7 @@ public class DestroyScenes {
 
         scene.world.createEntity(w -> {
 			Villager villagerEntity = EntityType.VILLAGER.create(w);
+            if (villagerEntity == null) return villagerEntity; // This should never occur
 			Vec3 v = util.vector.topOf(util.grid.at(1, 0, 0));
             villagerEntity.setVillagerData(new VillagerData(VillagerType.PLAINS, DestroyVillagers.INNKEEPER.get(), 0));
 			villagerEntity.setPos(v.x, v.y, v.z);
@@ -567,6 +569,7 @@ public class DestroyScenes {
         scene.idle(10);
         scene.world.createEntity(w -> {
 			Stray strayEntity = EntityType.STRAY.create(w);
+            if (strayEntity == null) return strayEntity; // This should never occur
 			Vec3 v = util.vector.topOf(center);
 			strayEntity.setPosRaw(v.x, v.y, v.z);
             strayEntity.xo = v.x;
@@ -879,7 +882,6 @@ public class DestroyScenes {
         scene.markAsFinished();
     };
 
-    @SuppressWarnings("resource")
     public static void pumpjack(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("pumpjack", "This text is defined in a language file.");
         scene.configureBasePlate(0, 0, 5);
@@ -893,7 +895,10 @@ public class DestroyScenes {
 
         // Add player
         ElementLink<EntityElement> playerElement = scene.world.createEntity(w -> {
-            PonderPlayer player = new PonderPlayer(w, Minecraft.getInstance().player.getScoreboardName());
+            Minecraft minecraft = Minecraft.getInstance();
+            LocalPlayer localPlayer = minecraft.player;
+            if (localPlayer == null) return null;
+            PonderPlayer player = new PonderPlayer(w, localPlayer.getScoreboardName());
             Vec3 v = util.vector.topOf(2, 0, 0);
             player.setPos(v.x, v.y, v.z);
             player.xo = v.x;

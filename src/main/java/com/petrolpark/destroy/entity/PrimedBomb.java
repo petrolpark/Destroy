@@ -67,7 +67,7 @@ public abstract class PrimedBomb extends PrimedTnt {
         };
 
         @Override
-        public SmartExplosion getExplosion(Level level, Vec3 position, Entity source) {
+        public SmartExplosion getExplosion(Level level, Vec3 position, @Nullable Entity source) {
             return new AnfoExplosion(level, source, position, 5, 0.6f);
         }
 
@@ -94,7 +94,7 @@ public abstract class PrimedBomb extends PrimedTnt {
         };
 
         @Override
-        public SmartExplosion getExplosion(Level level, Vec3 position, Entity source) {
+        public SmartExplosion getExplosion(Level level, Vec3 position, @Nullable Entity source) {
             return new UnderwaterExplosion(level, source, position, 5, 0.6f);
         };
 
@@ -116,7 +116,7 @@ public abstract class PrimedBomb extends PrimedTnt {
         };
 
         @Override
-        public SmartExplosion getExplosion(Level level, Vec3 position, Entity source) {
+        public SmartExplosion getExplosion(Level level, Vec3 position, @Nullable Entity source) {
             return new DebrisMiningExplosion(level, source, position, 10, 0.6f);
         };
 
@@ -138,7 +138,7 @@ public abstract class PrimedBomb extends PrimedTnt {
         };
 
         @Override
-        public SmartExplosion getExplosion(Level level, Vec3 position, Entity source) {
+        public SmartExplosion getExplosion(Level level, Vec3 position, @Nullable Entity source) {
             return new ObliterationExplosion(level, source, null, null, position, 3, 0.8f);
         };
 

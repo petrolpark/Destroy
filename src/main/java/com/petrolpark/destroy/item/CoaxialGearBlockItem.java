@@ -38,6 +38,7 @@ public class CoaxialGearBlockItem extends CogwheelBlockItem {
         BlockPos pos = context.getClickedPos();
         BlockState state = level.getBlockState(pos);
         Player player = context.getPlayer();
+        if (player == null) return InteractionResult.PASS;
         if (ShaftBlock.isShaft(state)) {
             if (CoaxialGearBlock.tryMakeLongShaft(state, level, pos, Direction.getFacingAxis(player, state.getValue(RotatedPillarKineticBlock.AXIS)))) {
                 if (!level.isClientSide() && !player.isCreative()) {

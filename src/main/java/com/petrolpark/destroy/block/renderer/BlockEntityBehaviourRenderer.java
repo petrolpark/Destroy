@@ -15,6 +15,7 @@ import com.simibubi.create.foundation.utility.Lang;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -34,7 +35,8 @@ public class BlockEntityBehaviourRenderer {
     
     public static void tick() {
 		Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null) return;
+		LocalPlayer player = mc.player;
+        if (player == null) return;
 		HitResult target = mc.hitResult;
 		if (target == null || !(target instanceof BlockHitResult)) return;
 
@@ -47,7 +49,7 @@ public class BlockEntityBehaviourRenderer {
 		{
 			WhenTargetedBehaviour behaviour = BlockEntityBehaviour.get(world, pos, WhenTargetedBehaviour.TYPE);
 			if (behaviour == null) return;
-			behaviour.target(mc.player, result);
+			behaviour.target(player, result);
 		}
 
 		// Scroll Boxes on the sides of Blocks
@@ -58,7 +60,7 @@ public class BlockEntityBehaviourRenderer {
 				CreateClient.OUTLINER.remove(pos);
 				return;
 			};
-			ItemStack mainhandItem = mc.player.getItemInHand(InteractionHand.MAIN_HAND); // It thinks player might be null (it's not)
+			ItemStack mainhandItem = player.getItemInHand(InteractionHand.MAIN_HAND); // It thinks player might be null (it's not)
 			boolean clipboard = AllBlocks.CLIPBOARD.isIn(mainhandItem);
 			if (behaviour.onlyVisibleWithWrench() && !AllItems.WRENCH.isIn(mainhandItem) && !clipboard) return;
 			boolean highlight = behaviour.testHit(target.getLocation()) && !clipboard;

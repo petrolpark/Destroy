@@ -3,7 +3,6 @@ package com.petrolpark.destroy.item;
 import static com.petrolpark.destroy.Destroy.REGISTRATE;
 import static com.simibubi.create.AllTags.forgeItemTag;
 
-import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.item.food.DestroyFoods;
 import com.petrolpark.destroy.item.renderer.GasMaskModel;
 import com.petrolpark.destroy.sound.DestroySoundEvents;

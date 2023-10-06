@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.events;
 
+import javax.annotation.Nonnull;
+
 import com.jozufozu.flywheel.util.Color;
 import com.petrolpark.destroy.block.renderer.BlockEntityBehaviourRenderer;
 import com.petrolpark.destroy.capability.level.pollution.ClientLevelPollutionData;
@@ -20,6 +22,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 @EventBusSubscriber(Dist.CLIENT)
 public class DestroyClientEvents {
 
+    @Nonnull
     private static Color BROWN = new Color(0xFF4D2F19);
 
     @SubscribeEvent

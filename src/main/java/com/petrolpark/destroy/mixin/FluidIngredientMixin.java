@@ -49,6 +49,8 @@ public class FluidIngredientMixin {
     @Overwrite
     public static FluidIngredient deserialize(@Nullable JsonElement je) {
 
+		if (je == null) return FluidIngredient.EMPTY;
+
 		// All copied from Create source code.
 		if (!isFluidIngredient(je))
 			throw new JsonSyntaxException("Invalid fluid ingredient: " + Objects.toString(je));

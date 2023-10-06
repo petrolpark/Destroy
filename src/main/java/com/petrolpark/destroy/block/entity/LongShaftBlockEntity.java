@@ -24,10 +24,11 @@ public class LongShaftBlockEntity extends BracketedKineticBlockEntity {
     };
 
     @Override
+    @SuppressWarnings("null") // It thinks getLevel() might be null (it's not)
     public void tick() {
         super.tick();
         if (isVirtual() || !hasLevel()) return;
-        BlockState coaxialGearState = level.getBlockState(getBlockPos().relative(LongShaftBlockEntity.getDirection(getBlockState())));
+        BlockState coaxialGearState = getLevel().getBlockState(getBlockPos().relative(LongShaftBlockEntity.getDirection(getBlockState())));
         if (!CoaxialGearBlock.isCoaxialGear(coaxialGearState) || coaxialGearState.getValue(RotatedPillarKineticBlock.AXIS) != getBlockState().getValue(RotatedPillarKineticBlock.AXIS) || !coaxialGearState.getValue(CoaxialGearBlock.HAS_SHAFT)) {
             getLevel().setBlockAndUpdate(getBlockPos(), AllBlocks.SHAFT.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, getBlockState().getValue(RotatedPillarKineticBlock.AXIS)));
         };

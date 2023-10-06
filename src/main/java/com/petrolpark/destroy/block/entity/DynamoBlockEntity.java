@@ -87,6 +87,7 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
     };
 
     @Override
+    @SuppressWarnings("null")
     public void onSpeedChanged(float prevSpeed) {
         if (hasLevel()) {
             getLevel().updateNeighborsAt(getBlockPos(), DestroyBlocks.DYNAMO.get()); // It thinks getLevel() can be null (it can't at this point)
@@ -119,7 +120,7 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
     };
 
     @Override
-    @SuppressWarnings("resource")
+    @SuppressWarnings({"null", "resource"})
     public boolean tryProcessInWorld(ItemEntity itemEntity, boolean simulate) {
         if (!hasLevel()) return false;
         ItemStack itemStack = itemEntity.getItem();

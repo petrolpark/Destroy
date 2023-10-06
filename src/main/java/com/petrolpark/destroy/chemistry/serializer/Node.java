@@ -39,13 +39,13 @@ public class Node {
         if (atom.rGroupNumber != 0 && atom.getElement() == Element.R_GROUP) {
             string += atom.rGroupNumber;
         };
-        if (!isTerminal) {
+        if (!isTerminal && nextEdge != null) { // Also checking if the next edge is null is sort of redundant, but at least it gets rid of that nasty yellow squiggly line
             string += nextEdge.bondType.getFROWNSCode(); // It thinks 'nextEdge' can be null
         };
         for (Entry<Branch, BondType> entry : getSideBranches().entrySet()) {
             string += "(" + entry.getValue().getFROWNSCode() + entry.getKey().serialize() + ")"; // It thinks "nextEdge" is null
         };
-        if (!isTerminal) {
+        if (!isTerminal && nextEdge != null) {
             string += nextEdge.getDestinationNode().serialize();
         };
         return string;

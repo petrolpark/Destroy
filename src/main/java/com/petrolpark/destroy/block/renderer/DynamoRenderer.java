@@ -24,9 +24,10 @@ public class DynamoRenderer extends KineticBlockEntityRenderer<DynamoBlockEntity
     };
 
     @Override
+    @SuppressWarnings("null")
     protected void renderSafe(DynamoBlockEntity dynamo, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         super.renderSafe(dynamo, partialTicks, ms, buffer, light, overlay);
-        if (!dynamo.isRunning() || !dynamo.hasLevel()) return;
+        if (!dynamo.isRunning() || !dynamo.hasLevel()) return; // It thinks getLevel() can be null (it can't)
         RandomSource rand = dynamo.getLevel().getRandom();
         if (rand.nextFloat() > 0.1f) return;
 

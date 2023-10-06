@@ -62,7 +62,7 @@ public enum DestroyAdvancements {
         };
     };
 
-    public ReactionResult asReactionResult(float moles, Reaction reaction) {
+    public ReactionResult asReactionResult(Float moles, Reaction reaction) {
         return new DestroyAdvancementReactionResult(moles, reaction, this);
     };
 

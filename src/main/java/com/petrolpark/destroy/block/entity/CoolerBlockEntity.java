@@ -124,6 +124,7 @@ public class CoolerBlockEntity extends SmartBlockEntity implements IHaveGoggleIn
     };
 
     @Override
+    @SuppressWarnings("null")
     public void tick() {
         super.tick();
 
@@ -178,11 +179,12 @@ public class CoolerBlockEntity extends SmartBlockEntity implements IHaveGoggleIn
      * The 'FROSTING' value gets {@link com.petrolpark.destroy.mixin.HeatLevelMixin mixed in} to the Heat Level enum.
      * @param coldnessLevel
      */
+    @SuppressWarnings("null")
     public void updateHeatLevel(ColdnessLevel coldnessLevel) {
         if (!hasLevel()) return;
         BlockState newState = getBlockState().setValue(BlazeBurnerBlock.HEAT_LEVEL, coldnessLevel == ColdnessLevel.FROSTING ? HeatLevel.valueOf("FROSTING") : HeatLevel.NONE);
         if (!newState.equals(getBlockState())) {
-            getLevel().setBlockAndUpdate(getBlockPos(), newState);
+            getLevel().setBlockAndUpdate(getBlockPos(), newState); // Level is not null
         };
     };
 
@@ -214,11 +216,12 @@ public class CoolerBlockEntity extends SmartBlockEntity implements IHaveGoggleIn
 		headAnimation.tickChaser();
 	};
 
+    @SuppressWarnings("null")
     protected void spawnParticles(ColdnessLevel coldnessLevel) {
 		if (!hasLevel()) return;
 		if (coldnessLevel == ColdnessLevel.NONE) return;
 
-		RandomSource r = getLevel().getRandom();
+		RandomSource r = getLevel().getRandom(); // It thinks getLevel() might be null (it's not)
 
 		Vec3 c = VecHelper.getCenterOf(getBlockPos());
 		Vec3 v = c.add(VecHelper.offsetRandomly(Vec3.ZERO, r, .125f)
@@ -236,6 +239,7 @@ public class CoolerBlockEntity extends SmartBlockEntity implements IHaveGoggleIn
     /**
      * Whether the Cooler interacts with the Block State above it.
      */
+    @SuppressWarnings("null")
     private boolean validBlockAbove() {
         if (!hasLevel()) return false;
         BlockState blockState = getLevel().getBlockState(worldPosition.above()); // Level isn't null I checked
@@ -260,9 +264,10 @@ public class CoolerBlockEntity extends SmartBlockEntity implements IHaveGoggleIn
         return CoolerBlock.getColdnessLevelOf(getBlockState());
     };
 
+    @SuppressWarnings("null")
     public void setColdnessOfBlock(ColdnessLevel coldnessLevel) {
         if (!hasLevel()) return;
-        getLevel().setBlockAndUpdate(getBlockPos(), getBlockState().setValue(CoolerBlock.COLD_LEVEL, coldnessLevel));
+        getLevel().setBlockAndUpdate(getBlockPos(), getBlockState().setValue(CoolerBlock.COLD_LEVEL, coldnessLevel)); // It thinks getLevel() might be null (it's not)
         updateHeatLevel(coldnessLevel);
     };
 

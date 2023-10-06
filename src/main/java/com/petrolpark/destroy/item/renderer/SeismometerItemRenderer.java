@@ -13,6 +13,7 @@ import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.entity.HumanoidArm;
@@ -53,6 +54,8 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer {
         TransformStack msr = TransformStack.cast(ms);
 
         Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
+        if (player == null) return;
         boolean rightHanded = mc.options.mainHand().get() == HumanoidArm.RIGHT;
         ItemDisplayContext mainHand = rightHanded ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND;
         ItemDisplayContext offHand = rightHanded ? ItemDisplayContext.FIRST_PERSON_LEFT_HAND : ItemDisplayContext.FIRST_PERSON_RIGHT_HAND;
@@ -60,7 +63,7 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer {
 
         int handModifier = transformType == ItemDisplayContext.FIRST_PERSON_LEFT_HAND ? -1 : 1;
 
-        boolean noControllerInMain = !DestroyItems.SEISMOMETER.isIn(mc.player.getMainHandItem()); // It thinks mc.player might be null
+        boolean noControllerInMain = !DestroyItems.SEISMOMETER.isIn(player.getMainHandItem()); // It thinks mc.player might be null
 
         ms.pushPose();
 

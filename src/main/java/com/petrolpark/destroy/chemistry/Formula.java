@@ -1050,8 +1050,8 @@ public class Formula implements Cloneable {
         /**
          * The {@link Formula structure} of this Topology, when it has no side chains attached.
          */
-        @Nullable
         private Formula formula;
+        
         /**
          * Every {@link Atom} in this Topology, paired with its location relative to the first Atom in the Topology.
          */

@@ -49,7 +49,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
-public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, IFluidBlockEntity {
+public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, IDirectionalOutputFluidBlockEntity {
 
     private static final DecimalFormat df = new DecimalFormat();
     static {
@@ -110,13 +110,15 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
     };
 
     @Override
+    @SuppressWarnings("null")
     public void remove() {
-        if (!hasLevel() || getLevel().isClientSide()) super.remove();
+        if (!hasLevel() || getLevel().isClientSide()) super.remove(); // It thinks getLevel() can be null (it can't)
         removeFromDistillationTower();
         super.remove();
     };
 
     @Override
+    @SuppressWarnings("null")
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         if (!hasLevel()) return;
@@ -160,6 +162,7 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
     };
 
     @Override
+    @SuppressWarnings("null")
     public void tick() {
         super.tick();
         if (!particleFluid.isEmpty()) {
@@ -247,9 +250,10 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
         sendData();
     };
 
+    @SuppressWarnings("null")
     public void spawnParticles(FluidStack fluidStack) {
         Vec3 center = VecHelper.getCenterOf(getBlockPos());
-        if (!(hasLevel() && getLevel().isClientSide() && isController)) return;
+        if (!(hasLevel() && getLevel().isClientSide() && isController)) return; // It thinks getLevel() can be null (it can't)
         GasParticleData particleData = new GasParticleData(DestroyParticleTypes.DISTILLATION.get(), fluidStack, getDistillationTower().getHeight() - 1.3f);
         for (int i = 0; i < 10; i++) {
             getLevel().addParticle(particleData, center.x, center.y - 0.3f, center.z, 0, 0, 0); // It thinks 'getLevel()' might be null (it can't be at this point)
@@ -287,6 +291,7 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
 
     @Nonnull
     @Override
+    @SuppressWarnings("null")
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.FLUID_HANDLER) {
             if (side == pipeFace) {
@@ -310,10 +315,9 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
      * @param shouldSwitch Whether the rotation should prioritise switching faces or staying on the current face
      * @return Whether the Bubble Cap was rotated
      */
+    @SuppressWarnings("null")
     public boolean attemptRotation(boolean shouldSwitch) {
-        if (!hasLevel()) {
-            return false;
-        };
+        if (!hasLevel()) return false;
         if (getLevel().setBlockAndUpdate(getBlockPos(), ((BubbleCapBlock)getBlockState().getBlock()).stateForPositionInTower(getLevel(), getBlockPos()) // Refresh the top/bottom
             .setValue(BubbleCapBlock.PIPE_FACE, refreshDirection(this, shouldSwitch ? pipeFace.getClockWise() : pipeFace, getTank(), !isController))) // Change the pipe face
         ) { // If the input/output Direction can be successfully changed

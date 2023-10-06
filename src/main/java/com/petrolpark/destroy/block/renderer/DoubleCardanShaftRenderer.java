@@ -114,11 +114,12 @@ public class DoubleCardanShaftRenderer extends KineticBlockEntityRenderer<Double
             .unCentre()
             .renderInto(ms, vbSolid);
     };
-
+    
+    @SuppressWarnings("null")
     private float getSpeed(DoubleCardanShaftBlockEntity blockEntity, Direction face) {
         Direction sourceFacing = null;
         if (blockEntity.hasSource()) {
-            BlockPos source = blockEntity.source.subtract(blockEntity.getBlockPos());
+            BlockPos source = blockEntity.source.subtract(blockEntity.getBlockPos()); // It thinks source can be null (it can't)
             sourceFacing = Direction.getNearest(source.getX(), source.getY(), source.getZ());
         };
         float speed = blockEntity.getSpeed();
@@ -128,9 +129,10 @@ public class DoubleCardanShaftRenderer extends KineticBlockEntityRenderer<Double
         return speed;
     };
 
+    @SuppressWarnings("null")
     protected Direction getSourceFacing(DoubleCardanShaftBlockEntity blockEntity) {
         if (blockEntity.hasSource()) {
-            BlockPos source = blockEntity.source.subtract(blockEntity.getBlockPos());
+            BlockPos source = blockEntity.source.subtract(blockEntity.getBlockPos()); // It thinks source can be null (it can't)
             return Direction.getNearest(source.getX(), source.getY(), source.getZ());
         } else {
             return null;

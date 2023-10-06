@@ -202,9 +202,10 @@ public class DoubleCardanShaftInstance extends KineticBlockEntityInstance<Double
         }
     };
 
+    @SuppressWarnings("null")
     protected void updateSourceFacing() {
         if (blockEntity.hasSource()) {
-            BlockPos source = blockEntity.source.subtract(pos);
+            BlockPos source = blockEntity.source.subtract(pos); // It thinks source can be null (it can't)
             sourceFacing = Direction.getNearest(source.getX(), source.getY(), source.getZ());
         } else {
             sourceFacing = null;

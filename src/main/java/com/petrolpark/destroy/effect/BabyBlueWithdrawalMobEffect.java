@@ -2,7 +2,6 @@ package com.petrolpark.destroy.effect;
 
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
 import com.petrolpark.destroy.world.DestroyDamageSources;
-import com.petrolpark.destroy.world.DestroyDamageTypes;
 
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,6 +18,7 @@ public class BabyBlueWithdrawalMobEffect extends UncurableMobEffect {
     }
 
     @Override
+    @SuppressWarnings("null") // We know the effect isn't null if its ticking
     public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
         if (!livingEntity.level().isClientSide()) {
             int duration = livingEntity.getEffect(DestroyMobEffects.BABY_BLUE_WITHDRAWAL.get()).getDuration(); // This is the bit it says is null

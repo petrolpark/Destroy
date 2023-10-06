@@ -40,14 +40,15 @@ public class CoaxialGearBlockEntity extends BracketedKineticBlockEntity {
     };
 
     @Override
+    @SuppressWarnings("null")
     public void tick() {
         super.tick();
         if (isVirtual() || !hasLevel()) return;
-        if (getBlockState().getValue(CoaxialGearBlock.HAS_SHAFT) && !level.isClientSide()) {
+        if (getBlockState().getValue(CoaxialGearBlock.HAS_SHAFT) && !getLevel().isClientSide()) { // It thinks getLevel() might be null (it's not)
             Axis axis = getBlockState().getValue(RotatedPillarKineticBlock.AXIS);
             boolean longShaftExists = false;
             for (AxisDirection axisDirection : AxisDirection.values()) {
-                BlockState longShaftState = level.getBlockState(getBlockPos().relative(Direction.get(axisDirection, axis)));
+                BlockState longShaftState = getLevel().getBlockState(getBlockPos().relative(Direction.get(axisDirection, axis))); // It thinks getLevel() might be null (it's not)
                 if (DestroyBlocks.LONG_SHAFT.has(longShaftState) && longShaftState.getValue(RotatedPillarKineticBlock.AXIS) == axis && longShaftState.getValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION) == (axisDirection != AxisDirection.POSITIVE)) {
                     longShaftExists = true;
                     break;

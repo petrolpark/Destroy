@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.recipe.AgingRecipe;
@@ -87,8 +89,9 @@ public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGog
     /**
      * Searches for a valid Recipe given the current contents of the Barrel and start processing if there is one.
      */
+    @SuppressWarnings("null")
     public void checkRecipe() {
-        if (!hasLevel() || getLevel().isClientSide()) return;
+        if (!hasLevel() || getLevel().isClientSide()) return; // It thinks getLevel() might be null (it's not)
         List<Recipe<?>> allRecipes = RecipeFinder.get(agingRecipeKey, level, r -> r.getType() == DestroyRecipeTypes.AGING.getType());
         List<Recipe<?>> possibleRecipes = allRecipes.stream().filter(r -> {
             AgingRecipe recipe = (AgingRecipe) r;
@@ -161,7 +164,8 @@ public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGog
 
     @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    @SuppressWarnings("null")
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.FLUID_HANDLER) {
             return fluidCapability.cast();
         } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
@@ -179,6 +183,7 @@ public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGog
         super.tick();
     };
 
+    @SuppressWarnings("null")
     public void onTimerChange() {
         if (!hasLevel()) return;
         BlockState oldState = getBlockState();
@@ -206,8 +211,9 @@ public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGog
      * Attempts to open the Aging Barrel.
      * @return Whether opening the Barrel was successful
      */
+    @SuppressWarnings("null")
     public boolean tryOpen() {
-        if (!hasLevel() || getLevel().isClientSide()) return false;
+        if (!hasLevel() || getLevel().isClientSide()) return false; // It thinks getLevel() might be null (it's not)
         if (timer == 0) {
             timer = -1;
             onTimerChange();

@@ -146,6 +146,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 	};
 
     @Override
+    @SuppressWarnings("null")
     public void tick() {
         super.tick();
 
@@ -153,7 +154,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             initializationTicks--;
         };
 
-        if (getLevel().isClientSide()) {
+        if (getLevel().isClientSide()) { // It thinks getLevel() might be null (it's not)
             pressure.tickChaser();
             temperature.tickChaser();
         } else {
@@ -254,6 +255,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     };
 
     @Override
+    @SuppressWarnings("null")
     protected void write(CompoundTag tag, boolean clientPacket) {
         super.write(tag, clientPacket);
 
@@ -272,7 +274,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         tag.putBoolean("InventoryChanged", inventoryChanged);
         
         // Mixture
-        if (!getLevel().isClientSide()) {
+        if (!getLevel().isClientSide()) { // It thinks getLevel() might be null (it's not)
             tag.putFloat("Pressure", getPressure());
             tag.putFloat("Temperature", getTemperature());  
         };
@@ -348,6 +350,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     /**
      * Try to make a {@link com.petrolpark.destroy.util.vat.Vat Vat} attached to this Vat Controller.
      */
+    @SuppressWarnings("null") // It thinks getLevel() might be null (it's not)
     public boolean tryMakeVat() {
         if (!hasLevel() || getLevel().isClientSide()) return false;
 
@@ -399,6 +402,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         super.destroy();
     };
 
+    @SuppressWarnings("null") // It thinks getLevel() might be null (it's not)
     public void deleteVat(BlockPos posDestroyed) {
         if (underDeconstruction || getLevel().isClientSide()) return;
         underDeconstruction = true;
@@ -483,14 +487,16 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         return pressure.getValue(partialTicks);
     };
 
-    public float getTemperature() {
-        if (getLevel().isClientSide()) return temperature.getChaseTarget();
+    @SuppressWarnings("null")
+    public float getTemperature() { 
+        if (getLevel().isClientSide()) return temperature.getChaseTarget(); // It thinks getLevel() might be null (it's not)
         if (getVatOptional().isEmpty() || cachedMixture == null) return LevelPollution.getLocalTemperature(getLevel(), getBlockPos());
         return cachedMixture.getTemperature();
     };
 
+    @SuppressWarnings("null")
     public float getPressure() {
-        if (getLevel().isClientSide()) return pressure.getChaseTarget();
+        if (getLevel().isClientSide()) return pressure.getChaseTarget(); // It thinks getLevel() might be null (it's not)
         if (!getVatOptional().isPresent() || getGasTank().isEmpty()) return 0f;
         return Reaction.GAS_CONSTANT * getTemperature() * ReadOnlyMixture.readNBT(getGasTank().getFluid().getOrCreateChildTag("Mixture")).getTotalConcentration();
     };

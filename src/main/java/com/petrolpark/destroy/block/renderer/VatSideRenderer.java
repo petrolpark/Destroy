@@ -2,6 +2,7 @@ package com.petrolpark.destroy.block.renderer;
 
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
 import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
@@ -31,7 +32,8 @@ public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity>
 
     @Override
     protected void renderSafe(VatSideBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        if (be.getController() == null) return;
+        VatControllerBlockEntity controller = be.getController();
+        if (controller == null) return;
 
         Direction facing = be.direction.getOpposite();
 
@@ -39,7 +41,7 @@ public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity>
             case PIPE: {
                 if (be.spoutingTicks == 0 || be.isPipeSubmerged(true, partialTicks) || facing == Direction.UP) break;
                 // Render Fluid stream if necessary
-                float fluidLevel = be.getController().getRenderedFluidLevel(partialTicks);
+                float fluidLevel = controller.getRenderedFluidLevel(partialTicks);
                 if (facing == Direction.DOWN) {
                     FluidRenderer.renderFluidBox(be.spoutingFluid, 6.5f / 16f, fluidLevel - be.getVatOptional().get().getInternalHeight(), 6.5f / 16f, 
                         9.5f / 16f, 0 / 16f, 9.5f / 16f,
@@ -73,7 +75,7 @@ public class VatSideRenderer extends SafeBlockEntityRenderer<VatSideBlockEntity>
                 Vec3 v0 = new Vec3(7 / 16f, 1.5f / 16f, -2 / 16f);
                 Vec3 v1 = new Vec3(9 / 16f, 3.9f / 16f, 0 / 16f);
                 Vec3 v2 = new Vec3(7.5f / 16f, 3.9f / 16f, -1.5f / 16f);
-                Vec3 v3 = new Vec3(8.5f / 16f, (10.1f * Mth.clamp((be.getController().getClientTemperature(partialTicks) - 298f) / 202f, 0, 1) + 3.9f) / 16f, -0.5f / 16f);
+                Vec3 v3 = new Vec3(8.5f / 16f, (10.1f * Mth.clamp((controller.getClientTemperature(partialTicks) - 298f) / 202f, 0, 1) + 3.9f) / 16f, -0.5f / 16f);
                 FluidRenderer.renderFluidBox(THERMOMETER_FLUID, (float)v0.x, (float)v0.y, (float)v0.z, (float)v1.x, (float)v1.y, (float)v1.z, bufferSource, ms, light, true);
                 FluidRenderer.renderFluidBox(THERMOMETER_FLUID, (float)v2.x, (float)v2.y, (float)v2.z, (float)v3.x, (float)v3.y, (float)v3.z, bufferSource, ms, light, false);
                 ms.popPose();

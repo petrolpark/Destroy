@@ -62,7 +62,8 @@ public class LevelRendererMixin {
         if (!rainColorAffected()) return;
         if (particleoptions == ParticleTypes.SMOKE) return;
         Color color = getRainColor();
-        ((LevelRenderer)(Object)this).minecraft.level.addParticle(new TintedSplashParticle.Data(), (double)blockpos1.getX() + d0, (double)blockpos1.getY() + d4, (double)blockpos1.getZ() + d1, color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat());
+        ClientLevel level =  ((LevelRenderer)(Object)this).minecraft.level;
+        if (level != null) level.addParticle(new TintedSplashParticle.Data(), (double)blockpos1.getX() + d0, (double)blockpos1.getY() + d4, (double)blockpos1.getZ() + d1, color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat());
     };
 
     // Don't add the original untinted splash particles, but do add smoke

@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
-import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
 import com.petrolpark.destroy.capability.blockEntity.VatSideTankCapability;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -23,7 +22,6 @@ import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.fluids.FluidFX;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour.AttachmentTypes;
-import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.item.TooltipHelper;
@@ -146,9 +144,10 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     };
 
     @Nullable
+    @SuppressWarnings("null")
     public VatControllerBlockEntity getController() {
         if (!hasLevel() || controllerPosition == null) return null;
-        BlockEntity be = getLevel().getBlockEntity(controllerPosition);
+        BlockEntity be = getLevel().getBlockEntity(controllerPosition); // It thinks getLevel() might be null (it's not)
         if (!(be instanceof VatControllerBlockEntity vatController)) return null;
         return vatController;
     };
@@ -179,10 +178,11 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     };
 
     @Override
+    @SuppressWarnings("null")
     public void tick() {
         super.tick();
  
-        if (spoutingTicks > 0 && getLevel().isClientSide()) {
+        if (spoutingTicks > 0 && getLevel().isClientSide()) { // It thinks getLevel() might be null (it's not)
             spoutingTicks--;
             if (!isPipeSubmerged(true, null)) spawnParticles(spoutingFluid, getLevel());
         };
@@ -256,10 +256,11 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
      * @param partialTicks Not required server-side
      */
     public boolean isPipeSubmerged(boolean client, @Nullable Float partialTicks) {
-        if (getController() == null) return false;
+        VatControllerBlockEntity controller = getController();
+        if (controller == null) return false;
         if (direction == Direction.DOWN) return true;
-        if (direction == Direction.UP) return !getController().canFitFluid();
-        return pipeHeightAboveVatBase() < (client ? getController().getRenderedFluidLevel(partialTicks == null ? 0f : partialTicks) : getController().getFluidLevel());
+        if (direction == Direction.UP) return !controller.canFitFluid();
+        return pipeHeightAboveVatBase() < (client ? controller.getRenderedFluidLevel(partialTicks == null ? 0f : partialTicks) : controller.getFluidLevel());
     };
 
     @Override
@@ -298,6 +299,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         sendData();
     };
 
+    @SuppressWarnings("null")
     public void updateDisplayType(BlockPos neighborPos) {
         if (getController() == null) return;
         FluidTransportBehaviour behaviour = BlockEntityBehaviour.get(getLevel(), neighborPos, FluidTransportBehaviour.TYPE);
@@ -306,7 +308,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             AttachmentTypes attachment = behaviour.getRenderedRimAttachment(getLevel(), neighborPos, behaviour.blockEntity.getBlockState(), direction.getOpposite());
             if (attachment == AttachmentTypes.DRAIN || attachment == AttachmentTypes.PARTIAL_DRAIN) nextToPipe = true;
         };
-        boolean nextToAir = getLevel().getBlockState(neighborPos).isAir();
+        boolean nextToAir = getLevel().getBlockState(neighborPos).isAir(); // It thinks getLevel() might be null (it's not)
         
         if (nextToPipe) {
             setDisplayType(DisplayType.PIPE);
@@ -333,17 +335,18 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        if (!getVatOptional().isPresent() || getController() == null) return false;
+        VatControllerBlockEntity controller = getController();
+        if (!getVatOptional().isPresent() || controller == null) return false;
         switch (getDisplayType()) {
             case THERMOMETER: {
                 TemperatureUnit unit = DestroyAllConfigs.CLIENT.chemistry.temperatureUnit.get();
-                DestroyLang.translate("tooltip.vat.temperature", unit.of(getController().getTemperature(), df)).style(ChatFormatting.WHITE).forGoggles(tooltip);
-                if (DestroyAllConfigs.CLIENT.chemistry.nerdMode.get()) DestroyLang.translate("tooltip.vat.power", df.format(getController().heatingPower / 1000f)).forGoggles(tooltip);
+                DestroyLang.translate("tooltip.vat.temperature", unit.of(controller.getTemperature(), df)).style(ChatFormatting.WHITE).forGoggles(tooltip);
+                if (DestroyAllConfigs.CLIENT.chemistry.nerdMode.get()) DestroyLang.translate("tooltip.vat.power", df.format(controller.heatingPower / 1000f)).forGoggles(tooltip);
                 break;
             } case BAROMETER: {
                 Vat vat = getVatOptional().get();
                 DestroyLang.translate("tooltip.vat.pressure.header").style(ChatFormatting.WHITE).forGoggles(tooltip);
-                DestroyLang.translate("tooltip.vat.pressure.current", df.format(getController().getPressure() / 1000f)).style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
+                DestroyLang.translate("tooltip.vat.pressure.current", df.format(controller.getPressure() / 1000f)).style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
                 DestroyLang.translate("tooltip.vat.pressure.max", df.format(vat.getMaxPressure() / 1000f), vat.getWeakestBlock().getBlock().getName().getString()).style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
                 break;
             } default: {
@@ -361,27 +364,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
                 TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.vat.not_submerged").component(), TooltipHelper.Palette.GRAY_AND_WHITE).forEach(component -> DestroyLang.builder().add(component.copy()).forGoggles(tooltip));
                 tooltip.add(Component.literal(""));
             };
-            VatControllerBlockEntity controller = getController();
         };
         return false;
-    };
-
-    public static MixtureContentsDisplaySource DISPLAY_SOURCE = new MixtureContentsDisplaySource() {
-
-        @Override
-        public FluidStack getFluidStack(DisplayLinkContext context) {
-            if (context.getSourceBlockEntity() instanceof VatSideBlockEntity vatSide) {
-                VatControllerBlockEntity controller = vatSide.getController();
-                if (controller != null && controller.getVatOptional().isPresent());
-                return controller.getLiquidTank().getFluid(); //TODO not just use liquid
-            };
-            return FluidStack.EMPTY;
-        };
-
-        @Override
-        public Component getName() {
-            return DestroyLang.translate("display_source.vat").component();
-        };
-
     };
 };

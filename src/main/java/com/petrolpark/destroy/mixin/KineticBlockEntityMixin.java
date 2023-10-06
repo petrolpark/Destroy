@@ -31,6 +31,7 @@ public class KineticBlockEntityMixin {
         if (!thisKineticBlockEntity().hasLevel()) return;
         BlockPos pos = thisKineticBlockEntity().getBlockPos();
         Level level = thisKineticBlockEntity().getLevel();
+        if (level == null) return;
         for (Direction direction : Direction.values()) {
             BlockState coaxialGearState = level.getBlockState(pos.relative(direction));
             if (CoaxialGearBlock.isCoaxialGear(coaxialGearState) && coaxialGearState.getValue(RotatedPillarKineticBlock.AXIS) == direction.getAxis()) {

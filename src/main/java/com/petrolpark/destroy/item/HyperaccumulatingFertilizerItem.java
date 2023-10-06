@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -60,10 +61,11 @@ public class HyperaccumulatingFertilizerItem extends BoneMealItem {
         Level level = context.getLevel();
         boolean couldGrow = grow(level, context.getClickedPos()); // Try grow the Crop
         if (couldGrow) { // If necessary, use up one Hyperaccumulating Fertilizer
-            if (!level.isClientSide() && context.getPlayer() != null && !context.getPlayer().isCreative()) {
+            Player player = context.getPlayer();
+            if (!level.isClientSide() && player != null && !player.isCreative()) {
                 context.getItemInHand().shrink(1);
             };
-            DestroyAdvancements.HYPERACCUMULATE.award(level, context.getPlayer());
+            DestroyAdvancements.HYPERACCUMULATE.award(level, player);
             return InteractionResult.SUCCESS;
         };
         return super.useOn(context);

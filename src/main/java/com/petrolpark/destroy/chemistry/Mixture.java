@@ -418,7 +418,7 @@ public class Mixture extends ReadOnlyMixture {
                     heat(energyDensity - energyRequiredToFullyBoil); // Continue heating
                 } else { // If there is no leftover energy and the Molecule is still boiling
                     float boiled = energyDensity / (molecule.getLatentHeat() * getConcentrationOf(molecule)); // The proportion of all of the Molecule which is additionally boiled
-                    states.merge(molecule, boiled, Float::sum);
+                    states.merge(molecule, boiled, (f1, f2) -> f1 + f2);
                 };
 
                 equilibrium = false; // Equilibrium is broken when a Molecule evaporates

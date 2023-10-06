@@ -1079,6 +1079,8 @@ public final class DestroyMolecules {
 
     public static class Tags {
 
+        
+        @SuppressWarnings("null")
         public static final MoleculeTag
 
         /**

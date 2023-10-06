@@ -2,7 +2,6 @@ package com.petrolpark.destroy.effect;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.world.DestroyDamageSources;
-import com.petrolpark.destroy.world.DestroyDamageTypes;
 
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -16,6 +15,7 @@ public class InebriationMobEffect extends UncurableMobEffect {
         super(MobEffectCategory.HARMFUL, 0xE88010);
     };
 
+    @SuppressWarnings("null")
     public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
         int pDuration = livingEntity.getEffect(DestroyMobEffects.INEBRIATION.get()).getDuration(); // This is the bit it says is null
         if (!livingEntity.level().isClientSide()) {

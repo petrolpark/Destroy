@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.events;
 
+import javax.annotation.Nullable;
+
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.capability.level.pollution.ClientLevelPollutionData;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
@@ -62,7 +64,7 @@ public class DestroyColorHandler {
         };
 
         @Override
-        public int getColor(BlockState state, BlockAndTintGetter level, BlockPos pos, int tintIndex) {
+        public int getColor(BlockState state, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos, int tintIndex) {
             return level != null && pos != null ? withSmogTint(originalColor.getColor(state, level, pos, tintIndex)) : originalColor.getColor(state, level, pos, tintIndex);
         };
         

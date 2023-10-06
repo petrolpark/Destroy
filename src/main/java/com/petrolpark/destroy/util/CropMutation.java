@@ -80,7 +80,8 @@ public class CropMutation {
             if (crop == cropBlock) {
                 for (CropMutation possibleMutation : MUTATIONS.get(crop)) {
                     if (possibleMutation.oreSpecific) {
-                        if (blockUnder.is(possibleMutation.ore.get())) { // This is the bit it thinks is null
+                        Supplier<Block> ore = possibleMutation.ore;
+                        if (ore != null && blockUnder.is(ore.get())) { // This is the bit it thinks is null
                             mutation = possibleMutation;
                             break checkAllEntries; // Prioritize Ore-specific Mutations
                         };

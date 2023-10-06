@@ -39,8 +39,9 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
     public VatRenderer(BlockEntityRendererProvider.Context context) {};
 
     @Override
+    @SuppressWarnings("null")
     protected void renderSafe(VatControllerBlockEntity controller, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        if (!controller.getVatOptional().isPresent()) return;
+        if (!controller.hasLevel() || !controller.getVatOptional().isPresent()) return;
         Vat vat = controller.getVatOptional().get();
         BlockState state = controller.getBlockState();
         VertexConsumer vbSolid = bufferSource.getBuffer(RenderType.solid());
@@ -55,7 +56,7 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
 
         // Vat sides
         for (BlockPos sidePos : vat.getSideBlockPositions()) {
-            Optional<VatSideBlockEntity> vatSideOptional = controller.getLevel().getBlockEntity(sidePos, DestroyBlockEntityTypes.VAT_SIDE.get());
+            Optional<VatSideBlockEntity> vatSideOptional = controller.getLevel().getBlockEntity(sidePos, DestroyBlockEntityTypes.VAT_SIDE.get()); // It thinks getLevel() can be null (it can't)
             if (vatSideOptional.isEmpty()) continue;
             VatSideBlockEntity vatSide = vatSideOptional.get();
             Direction facing = vatSide.direction;

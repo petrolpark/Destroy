@@ -18,7 +18,7 @@ public class ExplosionReactionResult extends ReactionResult {
 
     protected final BiFunction<Level, Vec3, SmartExplosion> explosionFactory;
 
-    public static ExplosionReactionResult small(float moles, Reaction reaction) {
+    public static ExplosionReactionResult small(Float moles, Reaction reaction) {
         return new ExplosionReactionResult(moles, reaction, (level, pos) -> new SmartExplosion(level, null, null, null, pos, 2, 0.5f));
     };
 
