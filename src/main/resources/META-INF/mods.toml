@@ -31,7 +31,7 @@ description='''A destructive chemistry-based add-on to Create.'''
 [[dependencies.destroy]]
 	modId="create"
 	mandatory=true
-	versionRange="[0.5.1.a,)"
+	versionRange="[0.5.1.e,)"
 	ordering="NONE"
 	side="BOTH"
 

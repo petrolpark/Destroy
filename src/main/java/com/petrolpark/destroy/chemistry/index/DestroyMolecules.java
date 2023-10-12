@@ -324,7 +324,7 @@ public final class DestroyMolecules {
 
     CYCLOHEXENE = builder()
         .id("cyclohexene")
-        .structure(Formula.deserialize("destroy:linear:C")) //TODO cyclohexene topology
+        .structure(Formula.deserialize("destroy:cyclohexene:,,,,,,,,,"))
         .boilingPoint(82.98f)
         .density(811f)
         .molarHeatCapacity(152.9f)
@@ -337,7 +337,7 @@ public final class DestroyMolecules {
 
     CYCLOPENTADIENIDE = builder()
         .id("cyclopentadienide")
-        .structure(Formula.deserialize("destroy:cyclopentadienide:,,,"))
+        .structure(Formula.deserialize("destroy:cyclopentadienide:,,,,"))
         .charge(-1)
         .tag(Tags.SMOG)
         .build(),

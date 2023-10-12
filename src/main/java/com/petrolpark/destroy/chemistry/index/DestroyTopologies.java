@@ -84,6 +84,35 @@ public class DestroyTopologies {
         //TODO reflections
         .build("cubane"),
 
+    CYCLOHEXENE = create(Element.CARBON) // 0
+        .sideChain(new Vec3(-sin(30), -cos(30), 0), new Vec3(-sin(30), -cos(30), 0), BondType.SINGLE)
+        .atom(Element.CARBON, new Vec3(-sin(30), cos(30), 0)) // 1
+            .withBondTo(0, BondType.SINGLE)
+            .withSideBranch(new Vec3(-0.75d, 0, 0.5d).normalize(), new Vec3(-0.75d, 0, 0.5d).normalize(), BondType.SINGLE)
+            .withSideBranch(new Vec3(-0.75d, 0, -.5d).normalize(), new Vec3(-0.75d, 0, -0.5d).normalize(), BondType.SINGLE)
+            .attach()
+        .atom(Element.CARBON, new Vec3(0, 2 * cos(30) - 0.1d, -0.2d)) // 2
+            .withBondTo(1, BondType.SINGLE)
+            .withSideBranch(new Vec3(-cos(30), sin(30), 0.1).normalize(), new Vec3(-cos(30), sin(30), 0.1).normalize(), BondType.SINGLE)
+            .withSideBranch(new Vec3(0.1d, 0, -1).normalize(), new Vec3(0.1d, 0, -1).normalize(), BondType.SINGLE)
+            .attach()
+        .atom(Element.CARBON, new Vec3(0.8d, 2 * cos(30) - 0.1d, 0.2d)) // 3
+            .withBondTo(2, BondType.SINGLE)
+            .withSideBranch(new Vec3(cos(30), sin(30), -0.1).normalize(), new Vec3(cos(30), sin(30), -0.1).normalize(), BondType.SINGLE)
+            .withSideBranch(new Vec3(-0.1d, 0, 1).normalize(), new Vec3(-0.1d, 0, 1).normalize(), BondType.SINGLE)
+            .attach()
+        .atom(Element.CARBON, new Vec3(0.8d + sin(30), cos(30), 0)) // 4
+            .withBondTo(3, BondType.SINGLE)
+            .withSideBranch(new Vec3(0.75d, 0, 0.5d).normalize(), new Vec3(0.75d, 0, 0.5d).normalize(), BondType.SINGLE)
+            .withSideBranch(new Vec3(0.75d, 0, -.5d).normalize(), new Vec3(0.75d, 0, -0.5d).normalize(), BondType.SINGLE)
+            .attach()
+        .atom(Element.CARBON, new Vec3(0.8d, 0d, 0d))
+            .withBondTo(4, BondType.SINGLE)
+            .withBondTo(0, BondType.DOUBLE)
+            .withSideBranch(new Vec3(sin(30), -cos(30), 0d), new Vec3(sin(30), -cos(30), 0d), BondType.SINGLE)
+            .attach()
+        .build("cyclohexene"),
+
     CYCLOPENTADIENE = create(Element.CARBON) // 0
         .atom(Element.CARBON, new Vec3(0d, 1d, 0d)) // 1
             .withBondTo(0, BondType.SINGLE)

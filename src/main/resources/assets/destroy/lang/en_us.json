@@ -358,7 +358,7 @@
     "destroy.chemistry.decarboxylation": "A decarboxylation is a reaction in which [destroy:carbon_dioxide] is {eliminated, destroy:elimination} from a {molecule, destroy:molecule}. It is the opposite of {carboxylation, destroy:carboxylation}.",
     "destroy.chemistry.degree": "Degree refers to the number of carbon {atoms, destroy:atom} to which an atom is {bonded, destroy:bond}. For example, a carbon atom bonded to two others is \"secondary\" (has a degree of two).",
     "destroy.chemistry.diene": "A {molecule, destroy:molecule} which is a diene contains at least two {double bonds, destroy:double_bond} separated by a {single bond, destroy:bond}.",
-    "destroy.chemistry.dienophile": "Dienophiles are {molecules, destroy:molecule} attracted to {dienes, destroy:diene} like alkenes and alkynes.",
+    "destroy.chemistry.dienophile": "Dienophiles are {molecules, destroy:molecule} attracted to {dienes, destroy:diene}. Some [destroy:alkene]s and alkynes are dieneophiles.",
     "destroy.chemistry.disproportionation": "Disproportionation is when the same species is both {oxidized, destroy:oxidation} and {reduced, destroy:reduction} in a reaction.",
     "destroy.chemistry.double_bond": "If two {atoms, destroy:atom} are double-{bonded, destroy:bond}, they share two pairs of {electrons, destroy:electron} between them rather than one.",
     "destroy.chemistry.electron": "Electrons are low-mass, {negatively, destroy:charge} charged {subatomic, destroy:subatomic} particles.",
