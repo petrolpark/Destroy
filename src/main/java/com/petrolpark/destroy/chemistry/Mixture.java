@@ -983,16 +983,16 @@ public class Mixture extends ReadOnlyMixture {
      */
     @SuppressWarnings("unchecked")
     private <G extends Group<G>> List<Reaction> specifySingleGroupGenericReactions(GenericReaction genericReaction, List<GenericReactant<?>> reactants) {
-        try {
-            SingleGroupGenericReaction<G> singleGroupGenericReaction = (SingleGroupGenericReaction<G>) genericReaction; // Unchecked conversion
-            List<Reaction> reactions = new ArrayList<>();
-            for (GenericReactant<?> reactant : reactants) {
+        List<Reaction> reactions = new ArrayList<>();
+        SingleGroupGenericReaction<G> singleGroupGenericReaction = (SingleGroupGenericReaction<G>) genericReaction; // Unchecked conversion
+        for (GenericReactant<?> reactant : reactants) {
+            try {
                 reactions.add(singleGroupGenericReaction.generateReaction((GenericReactant<G>)reactant)); // Unchecked conversion
+            } catch(Throwable e) {
+                Destroy.LOGGER.warn("Couldn't generate Single-Group generic Reaction: "+e); // TODO deal with properly
             };
-            return reactions;
-        } catch(Throwable e) {
-            throw new IllegalStateException("Wasn't able to generate Single-Group Reaction: " + e);
-        }
+        };
+        return reactions;
     };
 
     /**

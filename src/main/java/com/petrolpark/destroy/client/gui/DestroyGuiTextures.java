@@ -13,7 +13,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum DestroyGuiTextures implements ScreenElement {
 
-    //JEI
+	// MENUS
+	VAT("vat", 0, 0, 256, 226),
+	VAT_CARD_UNSELECTED("vat", 0, 227, 100, 28),
+	VAT_CARD_SELECTED("vat", 116, 226, 102, 30),
+	VAT_CARD_ARROW("vat", 218, 226, 25, 30),
+	VAT_SCROLL_DOT("vat", 100, 226, 7, 8),
+
+    // JEI
     JEI_SHORT_DOWN_ARROW("jei/widgets", 0, 64, 18, 18),
     JEI_SHORT_RIGHT_ARROW("jei/widgets", 0, 82, 18, 16),
 	JEI_EQUILIBRIUM_ARROW("jei/widgets", 0, 96, 42, 11),
@@ -26,7 +33,7 @@ public enum DestroyGuiTextures implements ScreenElement {
 	JEI_DISTILLATION_TOWER_BRANCH("jei/widgets", 20, 45, 20, 2),
 	JEI_EXPLOSION("jei/widgets", 169, 0, 18, 21),
 
-	//MISC
+	// MISC
 	NERD_EMOJI("jei/widgets", 115, 19, 16, 14);
 
     public final ResourceLocation location;

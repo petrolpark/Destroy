@@ -32,7 +32,9 @@ public class DestroyIcons extends AllIcons {
         ACID_RAIN = new DestroyIcons(1, 0),
         OZONE_DEPLETION = new DestroyIcons(2, 0),
         GREENHOUSE = new DestroyIcons(3, 0),
-        SMOG = new DestroyIcons(4, 0);
+        SMOG = new DestroyIcons(4, 0),
+
+		QUESTION_MARK = new DestroyIcons(0, 1);
 
 
     public DestroyIcons(int x, int y) {

@@ -479,6 +479,10 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         sendData();
     };
 
+    public ReadOnlyMixture getCombinedReadOnlyMixture() {
+        return tankBehaviour.getCombinedReadOnlyMixture();
+    };
+
     public float getClientTemperature(float partialTicks) {
         return temperature.getValue(partialTicks);
     };

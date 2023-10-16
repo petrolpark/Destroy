@@ -5,9 +5,12 @@ import javax.annotation.Nullable;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.client.gui.screen.VatScreen;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.gui.ScreenOpener;
 
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
@@ -26,6 +29,9 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
 
 public class VatControllerBlock extends Block implements IBE<VatControllerBlockEntity> {
 
@@ -51,16 +57,15 @@ public class VatControllerBlock extends Block implements IBE<VatControllerBlockE
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return onBlockEntityUse(level, pos, be -> {
-            if (level.isClientSide()) return InteractionResult.SUCCESS;
             if (be.getVatOptional().isPresent()) {
-                return InteractionResult.PASS;
-            } else {
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> displayScreen(be, player));
+            } else if (!level.isClientSide()) {
                 boolean success = be.tryMakeVat();
                 SoundEvent sound = success ? AllSoundEvents.CONFIRM.getMainEvent() : AllSoundEvents.DENY.getMainEvent();
                 level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), sound, SoundSource.BLOCKS, 1f, 1f);
                 if (success) DestroyAdvancementBehaviour.setPlacedBy(level, pos, player);
-                return InteractionResult.SUCCESS;
             }
+            return InteractionResult.SUCCESS;
         });
     };
 
@@ -81,6 +86,13 @@ public class VatControllerBlock extends Block implements IBE<VatControllerBlockE
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         IBE.onRemove(state, level, pos, newState);
     };
+
+    @OnlyIn(value = Dist.CLIENT)
+	protected void displayScreen(VatControllerBlockEntity be, Player player) {
+		if (!(player instanceof LocalPlayer)) return;
+		if (be.getBlockState() == null) return;
+		ScreenOpener.open(new VatScreen(be));
+	};
 
     @Override
     public Class<VatControllerBlockEntity> getBlockEntityClass() {

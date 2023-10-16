@@ -2,10 +2,13 @@ package com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Consumer;
 
 import com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour.VatFluidTankBehaviour.VatTankSegment.VatFluidTank;
 import com.petrolpark.destroy.chemistry.Mixture;
+import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.chemistry.Mixture.Phases;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
@@ -94,6 +97,32 @@ public class VatFluidTankBehaviour extends GeniusFluidTankBehaviour {
 
         Mixture mixture = Mixture.mix(mixtures);
         mixture.scale((float)vatCapacity / (float)totalVolume); //TODO use different volume as this makes things slowww
+        return mixture;
+    };
+
+    public ReadOnlyMixture getCombinedReadOnlyMixture() {
+        Map<Molecule, Float> moleculesAndMoles = new HashMap<>();
+        ReadOnlyMixture mixture = new ReadOnlyMixture();
+        int totalVolume = 0;
+
+        FluidStack liquidStack = getLiquidHandler().getFluid();
+        if (!liquidStack.isEmpty()) {
+            ReadOnlyMixture liquidMixture = ReadOnlyMixture.readNBT(liquidStack.getOrCreateChildTag("Mixture"));
+            liquidMixture.getContents(false).forEach(molecule -> moleculesAndMoles.merge(molecule, liquidMixture.getConcentrationOf(molecule) * liquidStack.getAmount(), (f1, f2) -> f1 + f2));
+            totalVolume += liquidStack.getAmount();  
+        };
+
+        FluidStack gasStack = getGasHandler().getFluid();
+        if (!gasStack.isEmpty()) {
+            ReadOnlyMixture gasMixture = ReadOnlyMixture.readNBT(gasStack.getOrCreateChildTag("Mixture"));
+            gasMixture.getContents(false).forEach(molecule -> moleculesAndMoles.merge(molecule, gasMixture.getConcentrationOf(molecule) * gasStack.getAmount(), (f1, f2) -> f1 + f2));
+            totalVolume += gasStack.getAmount();
+        };
+
+        for (Entry<Molecule, Float> entry : moleculesAndMoles.entrySet()) {
+            mixture.addMolecule(entry.getKey(), entry.getValue() / totalVolume); //TODO use different volume as this makes things slow
+        };
+
         return mixture;
     };
 

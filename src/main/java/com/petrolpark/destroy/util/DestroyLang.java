@@ -16,6 +16,7 @@ import com.simibubi.create.foundation.utility.LangBuilder;
 import com.simibubi.create.foundation.utility.LangNumberFormat;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.Font;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -51,6 +52,26 @@ public class DestroyLang {
 
     public static LangBuilder direction(Direction direction) {
         return translate("generic.direction."+Lang.asId(direction.name())+"");
+    };
+
+    /**
+     * Makes a String of text less than or equal to the given width (in pixels) by replacing the end with elipses.
+     * @param string The String to shorten
+     * @param font The Font that gives the width of the string
+     * @param maxWidth The maxmium width (in pixels) the string should take up
+     * @return The original string, shortened and mutated
+    */
+    public static String shorten(String string, Font font, int maxWidth) {
+        if (font.width(string) <= maxWidth) return string;
+        if (string.isBlank()) return "";
+        String elipses = "...";
+        int elipsesWidth = font.width(elipses);
+        while (font.width(string) > maxWidth - elipsesWidth || string.charAt(string.length() - 1) == ' ') {
+            string = string.substring(0, string.length() - 1);
+            if (string.isBlank()) return "";
+        };
+        string += elipses;
+        return string;
     };
 
     public static void fluidContainerInfoHeader(List<Component> tooltip) {
