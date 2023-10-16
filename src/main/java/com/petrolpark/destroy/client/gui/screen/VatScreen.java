@@ -27,8 +27,6 @@ import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.UIRenderHelper;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.widget.IconButton;
-import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 import com.simibubi.create.foundation.utility.Pair;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
@@ -80,6 +78,7 @@ public class VatScreen extends AbstractSimiScreen {
     };
 
     @Override
+    @SuppressWarnings("null")
 	protected void init() {
 		setWindowSize(background.width, background.height);
 		super.init();
@@ -89,7 +88,7 @@ public class VatScreen extends AbstractSimiScreen {
         textArea = new Rect2i(guiLeft + 131, guiTop + 102, 114, 87);
 
         confirmButton = new IconButton(guiLeft + background.width - 33, guiTop + background.height - 24, AllIcons.I_CONFIRM);
-		confirmButton.withCallback(() -> minecraft.player.closeContainer());
+		confirmButton.withCallback(() -> {if (minecraft != null && minecraft.player != null) minecraft.player.closeContainer();}); // It thinks minecraft and player might be null
 		addRenderableWidget(confirmButton);
 
         controlsIcon = new IconButton(guiLeft + 16, guiTop + 202, DestroyIcons.QUESTION_MARK);
@@ -240,13 +239,11 @@ public class VatScreen extends AbstractSimiScreen {
         if (selectedMolecule != null) {
             graphics.drawString(font, selectedMolecule.getName(iupac), 0, 0, 0xFFFFFF);
             textWidth = font.width(selectedMolecule.getName(iupac));
-            int i = 0;
             for (Component line : MoleculeDisplayItem.getLore(selectedMolecule)) {
                 textHeight += font.lineHeight;
                 textWidth = Math.max(textWidth, font.width(line));
                 ms.translate(0, font.lineHeight, 0);
                 graphics.drawString(font, line, 0, 0, 0xFFFFFF);
-                i++;
             };
         } else {
             graphics.drawString(font, DestroyLang.translate(orderedMolecules.isEmpty() ? "tooltip.vat.menu.empty" : "tooltip.vat.menu.select").component(), 0, 0, 0xFFFFFF);            
@@ -270,6 +267,15 @@ public class VatScreen extends AbstractSimiScreen {
         ms.popPose();
     };
 
+    /**
+     * Copied from the {@link com.simibubi.create.content.trains.schedule.ScheduleScreen#startStencil Create source code}.
+     * Confines all rendered pixels to a rectangle.
+     * @param graphics The graphics renderer
+     * @param x The left position of the box
+     * @param y The top position of the box
+     * @param w The width of the box
+     * @param h The height of the box
+     */
     protected void startStencil(GuiGraphics graphics, float x, float y, float w, float h) {
 		RenderSystem.clear(GL30.GL_STENCIL_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX);
 
@@ -291,10 +297,10 @@ public class VatScreen extends AbstractSimiScreen {
 		GL11.glEnable(GL11.GL_STENCIL_TEST);
 		RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
 		RenderSystem.stencilFunc(GL11.GL_EQUAL, 1, 0xFF);
-	}
+	};
 
 	protected void endStencil() {
 		GL11.glDisable(GL11.GL_STENCIL_TEST);
-	}
+	};
     
 };

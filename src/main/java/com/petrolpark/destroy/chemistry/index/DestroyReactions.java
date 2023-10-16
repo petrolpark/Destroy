@@ -224,6 +224,15 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.HYDROGEN)
         .build(), //TODO ensure superheated and carefully balance rate constant with that of hydrogenation of styrene
 
+    ETHYLBENZENE_TRANSALKYLATION = builder()
+        .id("ethylbenzene_transalkylation")
+        .addReactant(DestroyMolecules.ETHYLBENZENE, 3)
+        .addSimpleItemCatalyst(DestroyItems.ZEOLITE::get, 1f)
+        .addProduct(DestroyMolecules.METAXYLENE)
+        .addProduct(DestroyMolecules.ORTHOXYLENE)
+        .addProduct(DestroyMolecules.PARAXYLENE)
+        .build(),
+
     FLUORITE_DISSOLUTION = builder()
         .id("fluorite_dissolution")
         .addReactant(DestroyMolecules.PROTON, 2, 1)
@@ -342,6 +351,15 @@ public class DestroyReactions {
         .withResult(1f, PrecipitateReactionResult.of(DestroyItems.FULMINATED_MERCURY::asStack)) //TODO figure out actual molar ratios
         .build(),
 
+    METAXYLENE_TRANSALKYLATION = builder()
+        .id("metaxylene_transalkylation")
+        .addReactant(DestroyMolecules.METAXYLENE, 3)
+        .addSimpleItemCatalyst(DestroyItems.ZEOLITE::get, 1f)
+        .addProduct(DestroyMolecules.ORTHOXYLENE)
+        .addProduct(DestroyMolecules.PARAXYLENE)
+        .addProduct(DestroyMolecules.ETHYLBENZENE)
+        .build(),
+
     METHANOL_SYNTHESIS = builder()
         .id("methanol_synthesis")
         .addReactant(DestroyMolecules.CARBON_MONOXIDE)
@@ -401,6 +419,15 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.PHTHALIC_ANHYDRIDE)
         .build(),
 
+    ORTHOXYLENE_TRANSALKYLATION = builder()
+        .id("orthoxylene_transalkylation")
+        .addReactant(DestroyMolecules.ORTHOXYLENE, 3)
+        .addSimpleItemCatalyst(DestroyItems.ZEOLITE::get, 1f)
+        .addProduct(DestroyMolecules.METAXYLENE)
+        .addProduct(DestroyMolecules.PARAXYLENE)
+        .addProduct(DestroyMolecules.ETHYLBENZENE)
+        .build(),
+
     OSTWALD_PROCESS = builder()
         .id("ostwald_process")
         .addReactant(DestroyMolecules.AMMONIA)
@@ -412,7 +439,15 @@ public class DestroyReactions {
         .build(), //TODO potentially split into multiple equations, and add side reactions
 
     //TODO phenylacetic acid synthesis, either from benzyl chloride or benzyl cyanide
-    //TODO dissolution of prussian blue to make cyanide (or just remove prussian blue)
+
+    PARAXYLENE_TRANSALKYLATION = builder()
+        .id("paraxylene_transalkylation")
+        .addReactant(DestroyMolecules.PARAXYLENE, 3)
+        .addSimpleItemCatalyst(DestroyItems.ZEOLITE::get, 1f)
+        .addProduct(DestroyMolecules.METAXYLENE)
+        .addProduct(DestroyMolecules.ORTHOXYLENE)
+        .addProduct(DestroyMolecules.ETHYLBENZENE)
+        .build(),
 
     PEROXIDE_PROCESS = builder()
         .id("peroxide_process")
@@ -438,6 +473,17 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.HYDROGEN_PEROXIDE)
         // TODO acid catalyst
         .withResult(3f, PrecipitateReactionResult.of(DestroyItems.ACETONE_PEROXIDE::asStack))
+        .build(),
+
+    TOLUENE_TRANSALKYLATION = builder()
+        .id("toluene_transalkylation")
+        .addReactant(DestroyMolecules.TOLUENE, 8)
+        .addSimpleItemCatalyst(DestroyItems.ZEOLITE::get, 1f)
+        .addProduct(DestroyMolecules.BENZENE, 4)
+        .addProduct(DestroyMolecules.METAXYLENE)
+        .addProduct(DestroyMolecules.ORTHOXYLENE)
+        .addProduct(DestroyMolecules.PARAXYLENE)
+        .addProduct(DestroyMolecules.ETHYLBENZENE)
         .build(),
 
     STEAM_REFORMATION = builder()

@@ -11,7 +11,9 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableSet;
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.chemistry.Formula.Topology;
 import com.petrolpark.destroy.chemistry.Formula.Topology.SideChainInformation;
+import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.client.gui.MoleculeRenderer;
@@ -749,15 +751,15 @@ public class Molecule implements INameableProduct {
             };
 
             if (!hasForcedDensity && molecule.charge != 0) {
-                molecule.density = 1000f;
+                molecule.density = estimateDensity(molecule);
             };
             
             if (!hasForcedBoilingPoint) {
-                molecule.boilingPoint = calculateBoilingPoint();
+                molecule.boilingPoint = estimateBoilingPoint(molecule);
             };
 
             if (!hasForcedDipoleMoment) {
-                molecule.dipoleMoment = calculateDipoleMoment();
+                molecule.dipoleMoment = estimateDipoleMoment(molecule);
             };
 
             if (!hasForcedMolarHeatCapacity) {
@@ -795,12 +797,38 @@ public class Molecule implements INameableProduct {
             return total;
         };
 
-        private float calculateBoilingPoint() {
-            return Float.MAX_VALUE; //TODO calculate boiling point
+        /**
+         * Very loosely estimate the density of an organic molecule.
+         * @return A density in kilograms per metre cubed
+         */
+        private static final float estimateDensity(Molecule molecule) {
+            return 1000f; // Assume the density is similar to water, which is true for a lot of organic molecules.
         };
 
-        private int calculateDipoleMoment() {
-            //TODO calculate Dipole Moment
+        /**
+         * Very loosely estimate the boiling point of an organic molecule.
+         * @return A boiling point in kelvins
+         */
+        private static float estimateBoilingPoint(Molecule molecule) {
+            int hydrogenBondingGroups = 0;
+            int carbonyls = 0;
+            int halogens = 0;
+            int nitriles = 0;
+            for (Group<?> group : molecule.getFunctionalGroups()) {
+                GroupType<?> type = group.getType();
+                if (type == DestroyGroupTypes.ALCOHOL || type == DestroyGroupTypes.NON_TERTIARY_AMINE || type == DestroyGroupTypes.CARBOXYLIC_ACID || type == DestroyGroupTypes.AMIDE) hydrogenBondingGroups++;
+                if (type == DestroyGroupTypes.CARBONYL || type == DestroyGroupTypes.CARBOXYLIC_ACID || type == DestroyGroupTypes.AMIDE) carbonyls++;
+                if (type == DestroyGroupTypes.HALIDE) halogens++;
+                if (type == DestroyGroupTypes.NITRILE) nitriles++;
+            };
+            return 2.04259892128141f * molecule.getMass() + 34.3262117819044f * hydrogenBondingGroups + 13.0899856936379f * carbonyls - 44.7792748741156f * halogens + 63.981050928271f * nitriles + 178.176866128713f;
+        };
+
+        /**
+         * Very loosely estimate the dipole moment of a molecule.
+         */
+        private static int estimateDipoleMoment(Molecule molecule) {
+            // This is currently functionless
             return 0;
         };
     };
