@@ -13,6 +13,8 @@ import com.google.common.collect.ImmutableSet;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Formula.Topology;
 import com.petrolpark.destroy.chemistry.Formula.Topology.SideChainInformation;
+import com.petrolpark.destroy.chemistry.error.ChemistryException;
+import com.petrolpark.destroy.chemistry.error.ChemistryException.FormulaException.FormulaModificationException;
 import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
@@ -553,13 +555,12 @@ public class Molecule implements INameableProduct {
         /**
          * A {@link Molecule} constructor.
          * @param nameSpace The {@link Molecule#nameSpace name space} to which all Molecules constructed with this builder will belong
-         * @throws IllegalArgumentException If a {@link Molecule#FORBIDDEN_NAMESPACES forbidden name space} is used, for example {@code novel} or any
-         * {@link Formula.CycleType cycle type} ID.
+         * @throws IllegalArgumentException If a {@link Molecule#FORBIDDEN_NAMESPACES forbidden name space} is used, for example {@code novel}.
          */
         public MoleculeBuilder(String nameSpace) {
             molecule = new Molecule(nameSpace);
             if (FORBIDDEN_NAMESPACES.contains(nameSpace)) {
-                throw new IllegalArgumentException("Cannot use name space '"+nameSpace+"'.");
+                throw e("Cannot use name space '"+nameSpace+"'.");
             };
             NAMESPACES.add(nameSpace);
             molecule.charge = 0; //default
@@ -588,8 +589,12 @@ public class Molecule implements INameableProduct {
          * @see DestroyMolecules Examples of use
          */
         public MoleculeBuilder structure(Formula structure) {
-            molecule.structure = structure;
-            return this;
+            try {
+                molecule.structure = structure;
+                return this;
+            } catch (FormulaModificationException e) {
+                throw e("Cannot use structure.", e);
+            }
         };
 
         /**
@@ -736,8 +741,10 @@ public class Molecule implements INameableProduct {
             molecule.translationKey = translationKey;
 
             if (molecule.structure == null) {
-                throw new IllegalArgumentException("Molecule's structure has not been declared");
+                throw e("Molecule's structure has not been declared.");
             };
+
+            if (molecule.getAtoms().size() >= 100) throw e("Molecule has too many Atoms");
 
             if (molecule.nameSpace == "novel") {
                 Molecule equivalentMolecule = molecule.getEquivalent();
@@ -746,40 +753,26 @@ public class Molecule implements INameableProduct {
                 };
             };
 
-            if (molecule.getMolecularFormula().containsKey(Element.R_GROUP)) {
-                tag(DestroyMolecules.Tags.HYPOTHETICAL);
-            };
+            if (molecule.getMolecularFormula().containsKey(Element.R_GROUP)) tag(DestroyMolecules.Tags.HYPOTHETICAL);
 
-            if (!hasForcedDensity && molecule.charge != 0) {
-                molecule.density = estimateDensity(molecule);
-            };
+            if (!hasForcedDensity && molecule.charge != 0) molecule.density = estimateDensity(molecule);
             
-            if (!hasForcedBoilingPoint) {
-                molecule.boilingPoint = estimateBoilingPoint(molecule);
-            };
+            if (!hasForcedBoilingPoint) molecule.boilingPoint = estimateBoilingPoint(molecule);
 
-            if (!hasForcedDipoleMoment) {
-                molecule.dipoleMoment = estimateDipoleMoment(molecule);
-            };
+            if (!hasForcedDipoleMoment) molecule.dipoleMoment = estimateDipoleMoment(molecule);
 
-            if (!hasForcedMolarHeatCapacity) {
-                molecule.molarHeatCapacity = 100f;
-            };
+            if (!hasForcedMolarHeatCapacity) molecule.molarHeatCapacity = 100f;
 
-            if (!hasForcedLatentHeat) {
-                molecule.latentHeat = 20000f;
-            };
+            if (!hasForcedLatentHeat) molecule.latentHeat = 20000f;
             
-            if (molecule.color == 0) {
-                molecule.color = 0x20FFFFFF;
-            };
+            if (molecule.color == 0) molecule.color = 0x20FFFFFF;
 
             molecule.refreshFunctionalGroups();
             molecule.structure.updateSideChainStructures();
 
             if (molecule.nameSpace != "novel") {
                 if (molecule.id == null) {
-                    throw new IllegalArgumentException("Molecule's ID has not been declared.");
+                    throw e("Molecule's ID has not been declared.");
                 } else {
                     MOLECULES.put(molecule.nameSpace+":"+molecule.id, molecule);
                 };
@@ -816,8 +809,8 @@ public class Molecule implements INameableProduct {
             int nitriles = 0;
             for (Group<?> group : molecule.getFunctionalGroups()) {
                 GroupType<?> type = group.getType();
-                if (type == DestroyGroupTypes.ALCOHOL || type == DestroyGroupTypes.NON_TERTIARY_AMINE || type == DestroyGroupTypes.CARBOXYLIC_ACID || type == DestroyGroupTypes.AMIDE) hydrogenBondingGroups++;
-                if (type == DestroyGroupTypes.CARBONYL || type == DestroyGroupTypes.CARBOXYLIC_ACID || type == DestroyGroupTypes.AMIDE) carbonyls++;
+                if (type == DestroyGroupTypes.ALCOHOL || type == DestroyGroupTypes.NON_TERTIARY_AMINE || type == DestroyGroupTypes.CARBOXYLIC_ACID || type == DestroyGroupTypes.UNSUBSTITUTED_AMIDE) hydrogenBondingGroups++;
+                if (type == DestroyGroupTypes.CARBONYL || type == DestroyGroupTypes.CARBOXYLIC_ACID || type == DestroyGroupTypes.UNSUBSTITUTED_AMIDE) carbonyls++;
                 if (type == DestroyGroupTypes.HALIDE) halogens++;
                 if (type == DestroyGroupTypes.NITRILE) nitriles++;
             };
@@ -830,6 +823,31 @@ public class Molecule implements INameableProduct {
         private static int estimateDipoleMoment(Molecule molecule) {
             // This is currently functionless
             return 0;
+        };
+
+        public class MoleculeConstructionException extends ChemistryException {
+
+            private MoleculeConstructionException(String message) {
+                super(message);
+            };
+
+            private MoleculeConstructionException(String message, Throwable e) {
+                super(message, e);
+            };
+
+        };
+
+        private MoleculeConstructionException e(String message) {
+            return new MoleculeConstructionException(addInfoToMessage(message));
+        };
+
+        private MoleculeConstructionException e(String message, Throwable e) {
+            return new MoleculeConstructionException(addInfoToMessage(message), e);
+        };
+
+        private String addInfoToMessage(String message) {
+            String id = molecule.id == null ? "Unknown ID" : molecule.nameSpace + ":" + molecule.id;
+            return "Problem building Molecule (" + id + "): " + message;
         };
     };
 

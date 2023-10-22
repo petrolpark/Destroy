@@ -38,7 +38,7 @@ public abstract class DoubleGroupGenericReaction<FirstGroup extends Group<FirstG
     public abstract Reaction generateReaction(GenericReactant<FirstGroup> firstReactant, GenericReactant<SecondGroup> secondReactant);
 
     @Override
-    public final Boolean involvesSingleGroup() {
+    public final boolean involvesSingleGroup() {
         return false;
     };
 

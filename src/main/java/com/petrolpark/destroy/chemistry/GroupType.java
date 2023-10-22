@@ -2,6 +2,8 @@ package com.petrolpark.destroy.chemistry;
 
 import java.util.function.Supplier;
 
+import com.petrolpark.destroy.chemistry.error.ChemistryException.ExampleMoleculeMissingGroupException;
+
 public class GroupType<G extends Group<G>> {
 
     private final Supplier<Molecule> exampleMolecule;
@@ -21,7 +23,7 @@ public class GroupType<G extends Group<G>> {
         if (!exampleMolecule.get().getFunctionalGroups().stream().anyMatch(group -> {
             return group.getType() == this;
         })) {
-            throw new IllegalStateException("Example Molecules for Group Types must include that Group.");
+            throw new ExampleMoleculeMissingGroupException(exampleMolecule.get());
         };
         exampleMoleculeVerified = true;
     };

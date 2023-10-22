@@ -49,6 +49,11 @@ public abstract class SingleFluidRecipe extends ProcessingRecipe<RecipeWrapper> 
         return 2;
     };
 
+    @Override
+    protected boolean canSpecifyDuration() {
+		return true;
+	};
+
     /**
      * Used in error message
      * @return Name of Recipe Type (e.g. "Centrifugation")

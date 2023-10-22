@@ -14,7 +14,7 @@ import com.petrolpark.destroy.chemistry.index.group.AcidAnhydrideGroup;
 import com.petrolpark.destroy.chemistry.index.group.AcylChlorideGroup;
 import com.petrolpark.destroy.chemistry.index.group.AlcoholGroup;
 import com.petrolpark.destroy.chemistry.index.group.AlkeneGroup;
-import com.petrolpark.destroy.chemistry.index.group.AmideGroup;
+import com.petrolpark.destroy.chemistry.index.group.UnsubstitutedAmideGroup;
 import com.petrolpark.destroy.chemistry.index.group.CarbonylGroup;
 import com.petrolpark.destroy.chemistry.index.group.CarboxylicAcidGroup;
 import com.petrolpark.destroy.chemistry.index.group.HalideGroup;
@@ -69,8 +69,11 @@ public class DestroyGroupFinder extends GroupFinder {
                     };
                 } else { // Ketones, aldehydes, acyl chlorides, amides
                      if (nitrogens.size() == 1) { // Amide
-                        groups.add(new AmideGroup(carbon, carbonylOxygen, nitrogens.get(0)));
-                        continue;
+                        List<Atom> amideHydrogens = bondedAtomsOfElementTo(structure, nitrogens.get(0), Element.HYDROGEN);
+                        if (amideHydrogens.size() == 2) {
+                            groups.add(new UnsubstitutedAmideGroup(carbon, carbonylOxygen, nitrogens.get(0), amideHydrogens.get(0), amideHydrogens.get(1)));
+                            continue;
+                        };
                      } else if (chlorines.size() == 1) {
                         groups.add(new AcylChlorideGroup(carbon, carbonylOxygen, chlorines.get(0)));
                         continue;

@@ -32,7 +32,7 @@ public abstract class SingleGroupGenericReaction<G extends Group<G>> extends Gen
     };
 
     @Override
-    public final Boolean involvesSingleGroup() {
+    public final boolean involvesSingleGroup() {
         return true;
     };
 

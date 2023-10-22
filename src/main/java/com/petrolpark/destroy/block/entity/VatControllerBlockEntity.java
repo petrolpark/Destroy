@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.VatControllerBlock;
+import com.petrolpark.destroy.block.VatSideBlock;
 import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
+import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.WhenTargetedBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour.VatFluidTankBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour.VatFluidTankBehaviour.VatTankSegment.VatFluidTank;
@@ -407,6 +410,14 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         if (underDeconstruction || getLevel().isClientSide()) return;
         underDeconstruction = true;
 
+        BlockPos pollutionPos = getBlockPos().relative(getBlockState().getValue(VatControllerBlock.FACING));
+        Optional<VatSideBlockEntity> vatSideOptional = getLevel().getBlockEntity(posDestroyed, DestroyBlockEntityTypes.VAT_SIDE.get());
+        if (vatSideOptional.isPresent()) {
+            pollutionPos = posDestroyed.relative(vatSideOptional.get().direction);
+        };
+
+        PollutingBehaviour.pollute(getLevel(), pollutionPos, getLiquidTank().getFluid(), getGasTank().getFluid());
+
         getLiquidTank().setFluid(FluidStack.EMPTY);
         getGasTank().setFluid(FluidStack.EMPTY);
 
@@ -422,8 +433,6 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             };
         });
         heatingPower = 0f;
-
-        //TODO evaporation
 
         cachedMixture = new Mixture();
         vat = Optional.empty();

@@ -15,6 +15,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.chemistry.error.ChemistryException;
 import com.petrolpark.destroy.chemistry.genericreaction.DoubleGroupGenericReaction;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
@@ -972,9 +973,9 @@ public class Mixture extends ReadOnlyMixture {
      * Given a {@link SingleGroupGenericReaction Generic Reaction} involving only one {@link Group functional Group},
      * generates the specified {@link Reaction Reactions} that apply to this Mixture.
      * 
-     * <p>For example, if the Generic Reaction supplied is the {@link com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydration hydration of an alkene},
+     * <p>For example, if the Generic Reaction supplied is the {@link com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydrolysis hydration of an alkene},
      * and <b>reactants</b> includes {@code destroy:ethene}, the returned collection will include a Reaction with {@code destroy:ethene} and {@code destroy:water} as reactants,
-     * {@code destroy:ethanol} as a product, and all the appropriate rate constants and catalysts as defined in the {@link com.petrolpark.destroy.chemistry.index.genericReaction.AlkeneHydration#generateReaction generator}.</p>
+     * {@code destroy:ethanol} as a product, and all the appropriate rate constants and catalysts as defined in the {@link com.petrolpark.destroy.chemistry.index.AlkeneHydrolysis.AlkeneHydration#generateReaction generator}.</p>
      * 
      * @param <G> <b>G</b> The Group to which this Generic Reaction applies
      * @param genericReaction
@@ -988,8 +989,8 @@ public class Mixture extends ReadOnlyMixture {
         for (GenericReactant<?> reactant : reactants) {
             try {
                 reactions.add(singleGroupGenericReaction.generateReaction((GenericReactant<G>)reactant)); // Unchecked conversion
-            } catch(Throwable e) {
-                Destroy.LOGGER.warn("Couldn't generate Single-Group generic Reaction: "+e); // TODO deal with properly
+            } catch(ChemistryException e) {
+                // Don't do anything for chemistry exceptions
             };
         };
         return reactions;
@@ -1018,10 +1019,9 @@ public class Mixture extends ReadOnlyMixture {
                 if (reactantPair.getFirst().getMolecule() == reactantPair.getSecond().getMolecule()) continue; // Cannot React Molecules with themselves
                 try {
                     reactions.add(doubleGroupGenericReaction.generateReaction((GenericReactant<G1>)reactantPair.getFirst(), (GenericReactant<G2>)reactantPair.getSecond())); // Unchecked conversions {
-                } catch(Throwable e) {
-                    Destroy.LOGGER.info("Wasn't able to generate Double-Group Reaction '"+genericReaction.id.toString()+"' between '"+reactantPair.getFirst().getMolecule().getFullID() +"' and '"+reactantPair.getSecond().getMolecule().getFullID() +"': ");
-                    e.printStackTrace();
-                }
+                } catch(ChemistryException e) {
+                    // Do nothing for chemistry exceptions
+                };
             };
             return reactions;
     };

@@ -6,10 +6,10 @@ import com.petrolpark.destroy.chemistry.Formula;
 import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
-public class AlkeneHydration extends AlkeneAddition {
+public class AlkeneHydrolysis extends AlkeneAddition {
 
-    public AlkeneHydration() {
-        super(Destroy.asResource("alkene_hydration"));
+    public AlkeneHydrolysis() {
+        super(Destroy.asResource("alkene_hydrolysis"));
     };
 
     @Override

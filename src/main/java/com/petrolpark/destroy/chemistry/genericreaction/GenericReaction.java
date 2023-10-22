@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.Molecule.MoleculeBuilder;
 import com.petrolpark.destroy.chemistry.Reaction.ReactionBuilder;
+import com.petrolpark.destroy.chemistry.error.ChemistryException;
 
 import net.minecraft.resources.ResourceLocation;
 
@@ -32,15 +33,7 @@ public abstract class GenericReaction {
         this.id = id;
     };
 
-    protected static MoleculeBuilder moleculeBuilder() {
-        return new MoleculeBuilder("novel");
-    };
-
-    protected static ReactionBuilder reactionBuilder() {
-        return Reaction.generatedReactionBuilder();
-    };
-
-    public abstract Boolean involvesSingleGroup();
+    public abstract boolean involvesSingleGroup();
 
     public Reaction getExampleReaction() {
         if (exampleReaction == null) exampleReaction = generateExampleReaction();
@@ -54,5 +47,30 @@ public abstract class GenericReaction {
      */
     @NotNull
     protected abstract Reaction generateExampleReaction();
+
+    protected static MoleculeBuilder moleculeBuilder() {
+        return new MoleculeBuilder("novel");
+    };
+
+    protected static ReactionBuilder reactionBuilder() {
+        return Reaction.generatedReactionBuilder();
+    };
+
+    /**
+     * Instantiate a {@link com.petrolpark.destroy.chemistry.error.ChemistryException Chemistry Exception}. These kinds of exceptions are
+     * ignored when a Mixture is generating generic Reactions.
+     * @param string The message of the exception. The identifier of this Generic Reaction will be prepended if this error is logged.
+     */
+    protected GenericReactionGenerationException exception(String string) {
+        return new GenericReactionGenerationException("Problem generating " + (involvesSingleGroup() ? "single" : "double") + "-Group Generic Reaction '" + id.toString() + "': " + string);
+    };
+
+    public class GenericReactionGenerationException extends ChemistryException {
+
+        public GenericReactionGenerationException(String message) {
+            super(message);
+        };
+
+    };
 
 };

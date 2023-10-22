@@ -437,7 +437,7 @@ public final class DestroyMolecules {
 
     GENERIC_AMIDE = builder()
         .id("generic_amide")
-        .structure(Formula.deserialize("destroy:linear:RC(=O)N(R)R"))
+        .structure(Formula.deserialize("destroy:linear:RC(=O)N"))
         .hypothetical()
         .translationKey("amide")
         .build(),

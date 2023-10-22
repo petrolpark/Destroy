@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.chemistry.error.ChemistryException;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 
@@ -22,7 +23,7 @@ import net.minecraft.world.item.Item;
  * A Reaction takes place between specific {@link Molecule Molecules}, and produces specific Molecules.
  * This is in contrast with {@link com.petrolpark.destroy.chemistry.genericreaction.GenericReaction Generic
  * Reactions}, which essentially function as Reaction generators, and will generate Reactions based on the
- * available Molecules.
+ * available Molecules in a {@link Mixture}.
  */
 public class Reaction {
 
@@ -357,7 +358,7 @@ public class Reaction {
         };
 
         private void checkNull(Molecule molecule) {
-            if (molecule == null) throw new IllegalStateException("Molecules cannot be null");
+            if (molecule == null) throw e("Molecules cannot be null");
         };
 
         /**
@@ -406,7 +407,7 @@ public class Reaction {
          * @see ReactionBuilder#addCatalyst(Molecule, int) Adding order with respect to a Molecule that is not a reactant (i.e. a catalyst)
          */
         public ReactionBuilder setOrder(Molecule molecule, int order) {
-            if (!reaction.reactants.keySet().contains(molecule)) throw new IllegalStateException("Cannot modify order of a Molecule that is not a reactant.");
+            if (!reaction.reactants.keySet().contains(molecule)) throw e("Cannot modify order of a Molecule ("+ molecule.getFullID() +") that is not a reactant.");
             addCatalyst(molecule, order);
             return this;
         };
@@ -421,13 +422,11 @@ public class Reaction {
          * @see ReactionBuilder#addSimpleItemTagReactant Adding an Item Tag as a Reactant
          */
         public ReactionBuilder addItemReactant(IItemReactant itemReactant, float moles) {
-            if (reaction.molesPerItem != 0f && reaction.molesPerItem != moles) throw molesPerItemError;
+            if (reaction.molesPerItem != 0f && reaction.molesPerItem != moles) throw e("The number of moles of Reaction which occur when all Item Requirements are met is constant for a Reaction, not individual per Item Reactant. The same number must be supplied each time an Item Reactant is added.");
             reaction.molesPerItem = moles;
             reaction.itemReactants.add(itemReactant);
             return this;
         };
-
-        private static IllegalStateException molesPerItemError = new IllegalStateException("The number of moles of Reaction which occur when all Item Requirements are met is constant for a Reaction, not individual per Item Reactant. The same number must be supplied each time an Item Reactant is added.");
 
         /**
          * Adds an Item as a {@link IItemReactant reactant} for this {@link Reaction}. An Item Stack of size {@code 1},
@@ -581,7 +580,7 @@ public class Reaction {
          * @return This Reaction Builder
          */
         public ReactionBuilder withResult(float moles, BiFunction<Float, Reaction, ReactionResult> reactionresultFactory)  {
-            if (reaction.result != null) throw new IllegalStateException("Reaction already has a Reaction Result. Use a CombinedReactionResult to have multiple.");
+            if (reaction.result != null) throw e("Reaction already has a Reaction Result. Use a CombinedReactionResult to have multiple.");
             reaction.result = reactionresultFactory.apply(moles, reaction);
             return this;
         };
@@ -597,7 +596,7 @@ public class Reaction {
          */
         public Reaction acid(Molecule acid, Molecule conjugateBase, float pKa) {
 
-            if (conjugateBase.getCharge() + 1 != acid.getCharge()) throw new IllegalStateException("Acids must not violate the conservation of charge.");
+            if (conjugateBase.getCharge() + 1 != acid.getCharge()) throw e("Acids must not violate the conservation of charge.");
 
             // Dissociation
             Reaction dissociationReaction = this
@@ -639,7 +638,7 @@ public class Reaction {
          * @return This Reaction Builder (not the reverse Reaction Builder)
          */
         public ReactionBuilder reverseReaction(Consumer<ReactionBuilder> reverseReactionModifier) {
-            if (generated) throw new IllegalStateException("Generated Reactions cannot be reversible. Add another Generic Reaction instead.");
+            if (generated) throw e("Generated Reactions cannot be reversible. Add another Generic Reaction instead.");
             reaction.displayAsReversible = true;
             ReactionBuilder reverseBuilder = new ReactionBuilder(namespace);
             for (Entry<Molecule, Integer> reactant : reaction.reactants.entrySet()) {
@@ -672,7 +671,7 @@ public class Reaction {
                 reaction.activationEnergy - reaction.enthalpyChange != reverseBuilder.reaction.activationEnergy
                 || reaction.enthalpyChange != -reverseBuilder.reaction.enthalpyChange
             ) { 
-                throw new IllegalStateException("Activation energies and enthalpy changes for reversible Reactions must obey Hess' Law");
+                throw e("Activation energies and enthalpy changes for reversible Reactions must obey Hess' Law");
             };
 
             reverseBuilder.build();
@@ -682,7 +681,7 @@ public class Reaction {
         public Reaction build() {
 
             if (reaction.id == null && !generated) {
-                throw new IllegalStateException("Reaction '"+reactionString()+"' is missing an ID.");
+                throw e("Reaction is missing an ID.");
             };
 
             if (!hasForcedActivationEnergy || reaction.activationEnergy <= 0f) {
@@ -711,6 +710,19 @@ public class Reaction {
             };
             
             return reaction;
+        };
+
+        public class ReactionConstructionException extends ChemistryException {
+
+            public ReactionConstructionException(String message) {
+                super(message);
+            };
+            
+        };
+
+        private ReactionConstructionException e(String message) {
+            String id = reaction.id == null ? reactionString() : reaction.nameSpace + ":" + reaction.id;
+            return new ReactionConstructionException("Problem generating reation ("+ id + "): " + message);
         };
 
         private String reactionString() {

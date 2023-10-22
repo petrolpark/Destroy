@@ -4,6 +4,7 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Formula;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Reaction;
+import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.genericreaction.DoubleGroupGenericReaction;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
@@ -39,10 +40,23 @@ public class HalideAmineSubstitution extends DoubleGroupGenericReaction<HalideGr
             .addReactant(firstReactant.getMolecule())
             .addReactant(secondReactant.getMolecule(), 1, 2)
             .addProduct(substitutedAmine)
-            .addProduct(HalideSubstitution.getIon(halideGroup.halogen))
+            .addProduct(getIon(halideGroup.halogen))
             .addProduct(DestroyMolecules.PROTON)
             //TODO kinetics
             .build();
+    };
+
+    public Molecule getIon(Atom atom) {
+        switch (atom.getElement()) {
+            case FLUORINE:
+                return DestroyMolecules.FLUORIDE;
+            case CHLORINE:
+                return DestroyMolecules.CHLORIDE;
+            case IODINE:
+                return DestroyMolecules.IODIDE;
+            default:
+                throw new GenericReactionGenerationException(atom.getElement().toString()+" is not a halogen.");
+        }
     };
     
 };

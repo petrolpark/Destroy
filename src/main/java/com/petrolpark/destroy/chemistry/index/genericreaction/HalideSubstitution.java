@@ -45,7 +45,7 @@ public abstract class HalideSubstitution extends SingleGroupGenericReaction<Hali
      */
     public abstract void transform(ReactionBuilder builder, HalideGroup group);
 
-    public static Molecule getIon(Atom atom) {
+    public Molecule getIon(Atom atom) {
         switch (atom.getElement()) {
             case FLUORINE:
                 return DestroyMolecules.FLUORIDE;
@@ -54,7 +54,7 @@ public abstract class HalideSubstitution extends SingleGroupGenericReaction<Hali
             case IODINE:
                 return DestroyMolecules.IODIDE;
             default:
-                throw new IllegalArgumentException(atom.getElement().toString()+" is not a halogen.");
+                throw new GenericReactionGenerationException(atom.getElement().toString()+" is not a halogen.");
         }
     };
     

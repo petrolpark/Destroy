@@ -9,10 +9,10 @@ import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.group.AcylChlorideGroup;
 
-public class AcylChlorideHydration extends SingleGroupGenericReaction<AcylChlorideGroup> {
+public class AcylChlorideHydrolysis extends SingleGroupGenericReaction<AcylChlorideGroup> {
 
-    public AcylChlorideHydration() {
-        super(Destroy.asResource("acyl_chloride_hydration"), DestroyGroupTypes.ACYL_CHLORIDE);
+    public AcylChlorideHydrolysis() {
+        super(Destroy.asResource("acyl_chloride_hydrolysis"), DestroyGroupTypes.ACYL_CHLORIDE);
     };
 
     @Override

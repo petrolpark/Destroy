@@ -2,6 +2,7 @@ package com.petrolpark.destroy.fluid;
 
 import javax.annotation.Nullable;
 
+import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.simibubi.create.AllFluids.TintedFluidType;
 import com.simibubi.create.content.fluids.VirtualFluid;
@@ -23,7 +24,7 @@ public class MixtureFluid extends VirtualFluid {
     /**
      * Creates a Fluid Stack of the given {@link com.petrolpark.destroy.chemistry.Mixture Mixture}.
      * @param amount How many mB this Fluid Stack is
-     * @param mixture This does not have to be read-only name
+     * @param mixture This does not have to be read-only
      */
     public static FluidStack of(int amount, ReadOnlyMixture mixture) {
         return of(amount, mixture, null);
