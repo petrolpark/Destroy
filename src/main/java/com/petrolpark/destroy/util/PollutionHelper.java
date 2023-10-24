@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.util;
 
+import java.util.List;
+
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
@@ -7,7 +9,10 @@ import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.fluid.DestroyFluids;
+import com.petrolpark.destroy.network.DestroyMessages;
+import com.petrolpark.destroy.network.packet.EvaporatingFluidS2CPacket;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -76,9 +81,10 @@ public class PollutionHelper {
     };
 
     /**
-     * <p>To summon the evaporation Particles too, use {@link com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour#pollute PollutingBehaviour.pollute}.</p>
+     * Pollute a single Fluid Stack, with no Particles.
      * @param level
      * @param fluidStack
+     * @see PollutionHelper#pollute(Level, BlockPos, int, FluidStack...) Showing evaporation particles too
      */
     public static void pollute(Level level, FluidStack fluidStack) {
         if (DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid()) && fluidStack.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND)) {
@@ -90,5 +96,30 @@ public class PollutionHelper {
                 };
             };
         };
+    };
+
+    /**
+     * Release the given Fluids into the environment and sometimes summon evaporation particles.
+     * @param level The level in which the pollution is taking place
+     * @param blockPos The position from which the evaporation Particles should originate
+     * @param particleWeight There will be a {@code 1} in {@code particleWeight} chance of a Particle being shown. If this is {@code 1} (as is the default), there will always be a Particle
+     * @param fluidStacks The Fluids with which to pollute
+     */
+    public static void pollute(Level level, BlockPos blockPos, int particleWeight, FluidStack ...fluidStacks) {
+        if (level.isClientSide()) return;
+        for (FluidStack fluidStack : List.of(fluidStacks)) {
+            pollute(level, fluidStack);
+            if (particleWeight == 1 || level.getRandom().nextInt(particleWeight) == 0) DestroyMessages.sendToAllClients(new EvaporatingFluidS2CPacket(blockPos, fluidStack));
+        };
+    };
+
+    /**
+     * Release the given Fluids into the environment and summon evaporation particles.
+     * @param level The Level in which the pollution is taking place
+     * @param blockPos The position from which the evaporation Particles should originate
+     * @param fluidStacks The Fluids with which to pollute
+     */
+    public static void pollute(Level level, BlockPos blockPos, FluidStack ...fluidStacks) {
+        pollute(level, blockPos, 1, fluidStacks);
     };
 };

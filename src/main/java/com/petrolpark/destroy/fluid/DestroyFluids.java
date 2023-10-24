@@ -10,8 +10,13 @@ import com.tterrag.registrate.builders.FluidBuilder;
 import com.tterrag.registrate.util.entry.FluidEntry;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 
 public class DestroyFluids {
+
+    public static FluidStack air(int amount) {
+        return MixtureFluid.of(amount, MixtureFluid.airMixture(), "fluid.destroy.air");
+    };
     
     public static final FluidEntry<MixtureFluid> MIXTURE = REGISTRATE.virtualFluid("mixture",
         new ResourceLocation("destroy", "fluid/mixture_still"),

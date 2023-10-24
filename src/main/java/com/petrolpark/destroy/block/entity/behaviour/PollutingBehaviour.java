@@ -3,15 +3,11 @@ package com.petrolpark.destroy.block.entity.behaviour;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.petrolpark.destroy.network.DestroyMessages;
-import com.petrolpark.destroy.network.packet.EvaporatingFluidS2CPacket;
 import com.petrolpark.destroy.util.PollutionHelper;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -38,23 +34,9 @@ public class PollutingBehaviour extends BlockEntityBehaviour {
             fluidsToRelease.add(fluidStack);
         };
 
-        pollute(getWorld(), getPos(), fluidsToRelease.toArray(new FluidStack[0]));
+        PollutionHelper.pollute(getWorld(), getPos(), fluidsToRelease.toArray(new FluidStack[0]));
 
         super.destroy();
-    };
-
-    /**
-     * Release the given Fluids into the environment and summon evaporation particles.
-     * @param level The Level in which the pollution is taking place
-     * @param blockPos The position from which the evaporation Particles should originate
-     * @param fluidStacks The Fluids with which to pollute
-     */
-    public static void pollute(Level level, BlockPos blockPos, FluidStack ...fluidStacks) {
-        if (level.isClientSide()) return;
-        for (FluidStack fluidStack : List.of(fluidStacks)) {
-            PollutionHelper.pollute(level, fluidStack);
-            DestroyMessages.sendToAllClients(new EvaporatingFluidS2CPacket(blockPos, fluidStack));
-        };
     };
 
     @Override

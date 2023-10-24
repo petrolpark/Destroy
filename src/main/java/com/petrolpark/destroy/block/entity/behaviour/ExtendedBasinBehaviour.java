@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.ReactionResult;
+import com.petrolpark.destroy.util.PollutionHelper;
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -59,7 +60,7 @@ public class ExtendedBasinBehaviour extends BlockEntityBehaviour {
         reactionResults.clear();
 
         if (!evaporatedFluid.isEmpty()) {
-            PollutingBehaviour.pollute(basin.getLevel(), basin.getBlockPos(), evaporatedFluid);
+            PollutionHelper.pollute(basin.getLevel(), basin.getBlockPos(), evaporatedFluid);
             evaporatedFluid = FluidStack.EMPTY;
         };
     };
@@ -69,7 +70,7 @@ public class ExtendedBasinBehaviour extends BlockEntityBehaviour {
 	 */
 	public void destroy() {
         if (!evaporatedFluid.isEmpty() && blockEntity.getLevel() instanceof ServerLevel serverLevel) {
-            PollutingBehaviour.pollute(serverLevel, blockEntity.getBlockPos(), evaporatedFluid);
+            PollutionHelper.pollute(serverLevel, blockEntity.getBlockPos(), evaporatedFluid);
             evaporatedFluid = FluidStack.EMPTY;
         };
     };

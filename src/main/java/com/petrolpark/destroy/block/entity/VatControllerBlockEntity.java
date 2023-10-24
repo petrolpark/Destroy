@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import com.petrolpark.destroy.Destroy;
+import javax.annotation.Nullable;
+
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.VatControllerBlock;
-import com.petrolpark.destroy.block.VatSideBlock;
 import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
-import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.WhenTargetedBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour.VatFluidTankBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour.VatFluidTankBehaviour.VatTankSegment.VatFluidTank;
@@ -23,9 +23,11 @@ import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.chemistry.Mixture.ReactionContext;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
+import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.ExplosionHelper;
+import com.petrolpark.destroy.util.PollutionHelper;
 import com.petrolpark.destroy.util.vat.Vat;
 import com.petrolpark.destroy.world.explosion.SmartExplosion;
 import com.simibubi.create.CreateClient;
@@ -43,10 +45,12 @@ import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -61,6 +65,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
+
+    public static final float AIR_PRESSURE = 101000;
 
     protected Optional<Vat> vat;
 
@@ -83,6 +89,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     protected VatFluidTankBehaviour tankBehaviour;
     protected LazyOptional<IFluidHandler> fluidCapability;
+    protected BlockPos openVentPos;
 
     public SmartInventory inventory;
     protected LazyOptional<IItemHandler> itemCapability;
@@ -99,11 +106,13 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     public VatControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+
         vat = Optional.empty();
         initializationTicks = 3;
         underDeconstruction = false;
 
         fluidCapability = LazyOptional.empty();
+        openVentPos = null;
 
         inventory = new SmartInventory(9, this)
             .whenContentsChanged(i -> setInventoryChanged());
@@ -201,9 +210,13 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                 ItemHandlerHelper.insertItemStacked(inventory, itemStack, false);
             };
 
-            inventoryChanged = false;
+            // Releasing gas if there is an open vent
+            VatSideBlockEntity openVent = getOpenVent();
+            if (openVent != null && !getGasTank().isEmptyOrFullOfAir()) {
+                PollutionHelper.pollute(getLevel(), openVent.getBlockPos().relative(openVent.direction), 10, tankBehaviour.flush());
+            };
 
-            //TODO reaction results
+            inventoryChanged = false;
 
             if (shouldUpdateFluidMixture) {
                 // Enact Reaction Results
@@ -214,18 +227,22 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             };
 
             // Check for Explosion
-            if (DestroyAllConfigs.SERVER.contraptions.vatExplodesAtHighPressure.get() && getPercentagePressure() >= 1f) explode();
+            if (DestroyAllConfigs.SERVER.contraptions.vatExplodesAtHighPressure.get() && Math.abs(getPercentagePressure()) >= 1f) explode();
 
             sendData();
         };
     };
 
     public void explode() {
+        explode((level, pos) -> new SmartExplosion(level, null, null, null, pos, 5, 0.6f));
+    };
+
+    public void explode(BiFunction<Level, Vec3, SmartExplosion> explosionFactory) {
         if (!(getLevel() instanceof ServerLevel serverLevel)) return;
         getVatOptional().ifPresent(vat -> {
             Vec3 center = vat.getCenter();
             deleteVat(getBlockPos());
-            ExplosionHelper.explode(serverLevel, new SmartExplosion(serverLevel, null, null, null, center, 5, 0.6f));
+            ExplosionHelper.explode(serverLevel, explosionFactory.apply(serverLevel, center));
         });
     };
 
@@ -253,6 +270,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             pressure.chase(tag.getFloat("Pressure"), 0.125f, Chaser.EXP);
             temperature.chase(tag.getFloat("Temperature"), 0.125f, Chaser.EXP);
         } else {
+            if (tag.contains("VentPos", Tag.TAG_COMPOUND)) openVentPos = NbtUtils.readBlockPos(tag.getCompound("VentPos"));
             updateCachedMixture();
         };
     };
@@ -281,6 +299,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             tag.putFloat("Pressure", getPressure());
             tag.putFloat("Temperature", getTemperature());  
         };
+
+        if (openVentPos != null) tag.put("VentPos", NbtUtils.writeBlockPos(openVentPos));
     };
 
     private void onFluidStackChanged() {
@@ -387,6 +407,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
         vat = Optional.of(newVat.get());
         finalizeVatConstruction();
+        tankBehaviour.flush();
+        updateCachedMixture();
 
         return true;
     };
@@ -416,7 +438,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             pollutionPos = posDestroyed.relative(vatSideOptional.get().direction);
         };
 
-        PollutingBehaviour.pollute(getLevel(), pollutionPos, getLiquidTank().getFluid(), getGasTank().getFluid());
+        PollutionHelper.pollute(getLevel(), pollutionPos, getLiquidTank().getFluid(), getGasTank().getFluid());
 
         getLiquidTank().setFluid(FluidStack.EMPTY);
         getGasTank().setFluid(FluidStack.EMPTY);
@@ -448,6 +470,13 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     public VatFluidTank getGasTank() {
         return tankBehaviour.getGasHandler();
+    };
+
+    @Nullable
+    @SuppressWarnings("null")
+    public VatSideBlockEntity getOpenVent() {
+        if (getLevel() == null || openVentPos == null) return null;
+        return getLevel().getBlockEntity(openVentPos, DestroyBlockEntityTypes.VAT_SIDE.get()).orElse(null);
     };
 
     @Override
@@ -507,11 +536,14 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         return cachedMixture.getTemperature();
     };
 
+    /**
+     * Get the pressure above room pressure of the gas in this Vat.
+     */
     @SuppressWarnings("null")
     public float getPressure() {
         if (getLevel().isClientSide()) return pressure.getChaseTarget(); // It thinks getLevel() might be null (it's not)
         if (!getVatOptional().isPresent() || getGasTank().isEmpty()) return 0f;
-        return Reaction.GAS_CONSTANT * getTemperature() * ReadOnlyMixture.readNBT(getGasTank().getFluid().getOrCreateChildTag("Mixture")).getTotalConcentration();
+        return Reaction.GAS_CONSTANT * getTemperature() * ReadOnlyMixture.readNBT(getGasTank().getFluid().getOrCreateChildTag("Mixture")).getTotalConcentration() - AIR_PRESSURE;
     };
 
     /**

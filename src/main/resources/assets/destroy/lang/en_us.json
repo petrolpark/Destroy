@@ -776,6 +776,7 @@
 
     "entity.minecraft.villager.destroy.innkeeper": "Innkeeper",
 
+    "fluid.destroy.air": "Air",
     "fluid.destroy.brine": "Brine",
     "fluid.destroy.chlorine_solution": "Chlorine Solution",
     "fluid.destroy.chorus_wine": "Chorus Wine",

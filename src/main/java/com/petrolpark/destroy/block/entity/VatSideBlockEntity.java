@@ -283,7 +283,13 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         NORMAL,
         BAROMETER,
         THERMOMETER,
-        PIPE
+        PIPE,
+        CLOSED_VENT,
+        OPEN_VENT;
+
+        public boolean isVent() {
+            return this == CLOSED_VENT || this == OPEN_VENT;
+        };
     };
 
     public DisplayType getDisplayType() {

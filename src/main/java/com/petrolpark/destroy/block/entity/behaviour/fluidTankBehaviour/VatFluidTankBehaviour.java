@@ -134,6 +134,17 @@ public class VatFluidTankBehaviour extends GeniusFluidTankBehaviour {
         });
     };
 
+    /**
+     * Replace all the gas in the gas tank with room temperature and pressure air.
+     * @return The gas that was previously stored
+     */
+    public FluidStack flush() {
+        FluidStack oldGas = getGasHandler().getFluid();
+        getGasHandler().setFluid(DestroyFluids.air(vatCapacity - getLiquidHandler().getFluidAmount()));
+        getGasHandler().flushed = true;
+        return oldGas;
+    };
+
     @Override
 	public void write(CompoundTag nbt, boolean clientPacket) {
 		super.write(nbt, clientPacket);
@@ -232,9 +243,19 @@ public class VatFluidTankBehaviour extends GeniusFluidTankBehaviour {
 
             private final boolean isForGas;
 
+            /**
+             * Whether this tank has been {@link VatFluidTankBehaviour#flush flushed}.
+             */
+            protected boolean flushed;
+
             public VatFluidTank(int capacity, boolean isForGas, Consumer<FluidStack> updateCallback) {
                 super(capacity, updateCallback);
                 this.isForGas = isForGas;
+                flushed = false;
+            };
+
+            public boolean isEmptyOrFullOfAir() {
+                return isEmpty() || flushed;
             };
 
             @Override
@@ -245,12 +266,14 @@ public class VatFluidTankBehaviour extends GeniusFluidTankBehaviour {
             @Override
             public void onContentsChanged() {
                 super.onContentsChanged();
+                flushed = false;
                 if (fluid.getAmount() < getCapacity() && !isForGas) liquidFull = false;
             };
 
             @Override
             public void setFluid(FluidStack stack) {
                 super.setFluid(stack);
+                flushed = false;
                 if (stack.getAmount() < getCapacity() && !isForGas) liquidFull = false;
             };
 

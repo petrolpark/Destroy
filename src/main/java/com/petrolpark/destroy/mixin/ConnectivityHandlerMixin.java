@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
+import com.petrolpark.destroy.util.PollutionHelper;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
 
@@ -51,7 +51,7 @@ public class ConnectivityHandlerMixin {
         maxCapacity = ifluidBE.getTankSize(0); // Get how much Fluid can fit in each Tank (I think?)
 
         if (width == 1 && height == 1) { // If this was the only BE in the multi
-            if (toDistribute.getAmount() > 0) PollutingBehaviour.pollute(level, startPos, toDistribute); // Pollute with the contents of this one Fluid Tank
+            if (toDistribute.getAmount() > 0) PollutionHelper.pollute(level, startPos, toDistribute); // Pollute with the contents of this one Fluid Tank
             return;
         };
 
@@ -83,7 +83,7 @@ public class ConnectivityHandlerMixin {
                 };
             };
 
-            if (toDistribute.getAmount() > 0) PollutingBehaviour.pollute(level, startPos, toDistribute); // Actually do the pollution
+            if (toDistribute.getAmount() > 0) PollutionHelper.pollute(level, startPos, toDistribute); // Actually do the pollution
         };
     };
 

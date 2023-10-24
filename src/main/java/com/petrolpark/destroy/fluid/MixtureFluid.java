@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
+import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.simibubi.create.AllFluids.TintedFluidType;
 import com.simibubi.create.content.fluids.VirtualFluid;
 
@@ -19,6 +20,18 @@ public class MixtureFluid extends VirtualFluid {
 
     public MixtureFluid(Properties properties) {
         super(properties);
+    };
+
+    private static Mixture AIR_MIXTURE;
+
+    public static Mixture airMixture() {
+        if (AIR_MIXTURE == null) {
+            AIR_MIXTURE = new Mixture();
+            AIR_MIXTURE.addMolecule(DestroyMolecules.NITROGEN, 32.80f);
+            AIR_MIXTURE.addMolecule(DestroyMolecules.OXYGEN, 8.83f);
+            AIR_MIXTURE.setTemperature(289f); // 16 degrees C
+        };
+        return AIR_MIXTURE;
     };
 
     /**

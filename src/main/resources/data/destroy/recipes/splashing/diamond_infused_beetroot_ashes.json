@@ -19,6 +19,5 @@
         "item": "destroy:zircon",
         "chance": 0.1
       }
-    ],
-    "processingTime": 50
+    ]
   }
