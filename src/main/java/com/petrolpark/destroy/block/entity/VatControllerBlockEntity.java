@@ -13,6 +13,7 @@ import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.VatControllerBlock;
 import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
+import com.petrolpark.destroy.block.entity.VatSideBlockEntity.DisplayType;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.WhenTargetedBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour.VatFluidTankBehaviour;
@@ -23,7 +24,6 @@ import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.chemistry.Mixture.ReactionContext;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
-import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.ExplosionHelper;
@@ -213,7 +213,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             // Releasing gas if there is an open vent
             VatSideBlockEntity openVent = getOpenVent();
             if (openVent != null && !getGasTank().isEmptyOrFullOfAir()) {
-                PollutionHelper.pollute(getLevel(), openVent.getBlockPos().relative(openVent.direction), 10, tankBehaviour.flush());
+                PollutionHelper.pollute(getLevel(), openVent.getBlockPos().relative(openVent.direction), 3, tankBehaviour.flush());
             };
 
             inventoryChanged = false;
@@ -477,6 +477,20 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     public VatSideBlockEntity getOpenVent() {
         if (getLevel() == null || openVentPos == null) return null;
         return getLevel().getBlockEntity(openVentPos, DestroyBlockEntityTypes.VAT_SIDE.get()).orElse(null);
+    };
+
+    /**
+     * Remove the recorded open vent at the given position (if there is one) and search for a new one.
+     */
+    @SuppressWarnings("null")
+    public void removeVent() {
+        openVentPos = null;
+        if (!hasLevel() || getVatOptional().isEmpty()) return;
+        getVatOptional().get().getSideBlockPositions().forEach(pos -> {
+            getLevel().getBlockEntity(pos, DestroyBlockEntityTypes.VAT_SIDE.get()).ifPresent(vatSide -> { // It thinks getLevel() might be null
+                if (vatSide.getDisplayType() == DisplayType.OPEN_VENT) openVentPos = pos;
+            });
+        });
     };
 
     @Override

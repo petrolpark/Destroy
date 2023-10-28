@@ -1,0 +1,21 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "destroy:block/vat_side_vent",
+		"particle": "destroy:block/vat_side_vent"
+	},
+	"elements": [
+		{
+			"from": [-1, -0.5, 3],
+			"to": [1, 0.5, 13],
+			"faces": {
+				"north": {"uv": [12.5, 0.5, 13.5, 1], "rotation": 180, "texture": "#0"},
+				"east": {"uv": [13, 0.5, 13.5, 5.5], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [12.5, 5, 13.5, 5.5], "texture": "#0"},
+				"west": {"uv": [12.5, 0.5, 13, 5.5], "rotation": 270, "texture": "#0"},
+				"up": {"uv": [12.5, 0.5, 13.5, 5.5], "texture": "#0"},
+				"down": {"uv": [12.5, 0.5, 13.5, 5.5], "texture": "#0"}
+			}
+		}
+	]
+}

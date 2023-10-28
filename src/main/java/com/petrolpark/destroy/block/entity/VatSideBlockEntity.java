@@ -26,11 +26,12 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.VecHelper;
+import com.simibubi.create.foundation.utility.animation.LerpedFloat;
+import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -75,6 +76,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     protected DisplayType displayType;
     public int spoutingTicks;
     public FluidStack spoutingFluid;
+    public LerpedFloat ventOpenness = LerpedFloat.linear().startWithValue(0f);
 
     public VatSideBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -182,9 +184,12 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
     public void tick() {
         super.tick();
  
-        if (spoutingTicks > 0 && getLevel().isClientSide()) { // It thinks getLevel() might be null (it's not)
-            spoutingTicks--;
-            if (!isPipeSubmerged(true, null)) spawnParticles(spoutingFluid, getLevel());
+        if (getLevel().isClientSide()) { // It thinks getLevel() might be null (it's not)
+            ventOpenness.tickChaser();
+            if (spoutingTicks > 0) {
+                spoutingTicks--;
+                if (!isPipeSubmerged(true, null)) spawnParticles(spoutingFluid, getLevel());
+            };
         };
         tryInsertFluidInVat();
     };
@@ -203,6 +208,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         if (clientPacket) {
             spoutingTicks = tag.getInt("SpoutingTicks");
             spoutingFluid = FluidStack.loadFluidStackFromNBT(tag.getCompound("SpoutingFluid"));
+            ventOpenness.chase(displayType == DisplayType.OPEN_VENT ? 1f : 0f, 0.3f, Chaser.EXP);
         };
     };
 
@@ -287,6 +293,18 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         CLOSED_VENT,
         OPEN_VENT;
 
+        public boolean validForTop() {
+            return this != BAROMETER && this != THERMOMETER;
+        };
+
+        public boolean validForBottom() {
+            return validForTop() && this != CLOSED_VENT && this != OPEN_VENT;
+        };
+
+        public boolean validForSide() {
+            return this != OPEN_VENT && this != CLOSED_VENT;
+        };
+
         public boolean isVent() {
             return this == CLOSED_VENT || this == OPEN_VENT;
         };
@@ -298,11 +316,18 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
 
     public void setDisplayType(DisplayType displayType) {
         if (this.displayType == displayType) return;
+        boolean updateVent = this.displayType == DisplayType.OPEN_VENT;
         this.displayType = displayType;
         if (!hasLevel()) return;
+
         getBlockState().updateNeighbourShapes(getLevel(), getBlockPos(), 3);
         updateDisplayType(getBlockPos().relative(direction)); // Check for a Pipe
         sendData();
+
+        VatControllerBlockEntity controller = getController();
+        if (controller == null) return;
+        if (updateVent) controller.removeVent();
+        if (controller.openVentPos == null && displayType == DisplayType.OPEN_VENT) controller.openVentPos = getBlockPos();
     };
 
     @SuppressWarnings("null")
@@ -322,10 +347,28 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
             setDisplayType(DisplayType.NORMAL);
         } else {
             if (getDisplayType() == DisplayType.PIPE) setDisplayType(DisplayType.NORMAL);
-            if (direction.getAxis() == Axis.Y && (getDisplayType() != DisplayType.NORMAL)) setDisplayType(DisplayType.NORMAL);
+            switch (direction) {
+                case UP: {
+                    if (!getDisplayType().validForTop()) setDisplayType(DisplayType.NORMAL);
+                    break;
+                } case DOWN: {
+                    if (!getDisplayType().validForBottom()) setDisplayType(DisplayType.NORMAL);
+                    break;
+                } default: {
+                    if (!getDisplayType().validForSide()) setDisplayType(DisplayType.NORMAL);
+                }
+            };
         };
 
         invalidateRenderBoundingBox();
+    };
+
+    @SuppressWarnings("null")
+    public void updateRedstone() {
+        if (!hasLevel()) return;
+        boolean hasPower = getLevel().hasNeighborSignal(getBlockPos()); // It thinks getLevel() might be null
+        if (getDisplayType() == DisplayType.OPEN_VENT && hasPower) setDisplayType(DisplayType.CLOSED_VENT);
+        if (getDisplayType() == DisplayType.CLOSED_VENT && !hasPower) setDisplayType(DisplayType.OPEN_VENT);
     };
 
     protected void spawnParticles(FluidStack fluid, Level level) {

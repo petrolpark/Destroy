@@ -16,6 +16,7 @@ import com.simibubi.create.foundation.fluid.FluidRenderer;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.VecHelper;
 
 import net.minecraft.client.Minecraft;
@@ -93,6 +94,23 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
                         .translate(sidePos.subtract(controller.getBlockPos()))
                         .light(light)
                         .renderInto(ms, vbCutout);
+                    break;
+                } case OPEN_VENT:
+                case CLOSED_VENT: {
+                    CachedBufferer.partial(DestroyPartials.VAT_SIDE_VENT, state)
+                        .translate(sidePos.subtract(controller.getBlockPos()))
+                        .light(light)
+                        .renderInto(ms, vbSolid);
+                    for (boolean top : Iterate.trueAndFalse) {
+                        for (int i = 0; i < 5; i++) {
+                            CachedBufferer.partial(DestroyPartials.VAT_SIDE_VENT_BAR, state)
+                                .translate(sidePos.subtract(controller.getBlockPos()))
+                                .translate((4 / 16f) + (i * 2 / 16f), top ? 17.5 / 16f : -1.5 / 16f, 0f)
+                                .rotateZ(vatSide.ventOpenness.getValue(partialTicks) * -75)
+                                .light(light)
+                                .renderInto(ms, vbSolid);
+                        };
+                    };
                     break;
                 } default: {}
             };

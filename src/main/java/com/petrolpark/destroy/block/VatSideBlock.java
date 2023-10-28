@@ -23,6 +23,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -54,12 +55,12 @@ public class VatSideBlock extends CopycatBlock {
                 case PIPE: {
                     return InteractionResult.PASS;
                 } case NORMAL: {
-                    vatSide.setDisplayType(DisplayType.THERMOMETER);
+                    vatSide.setDisplayType(vatSide.direction == Direction.UP ? DisplayType.OPEN_VENT : DisplayType.THERMOMETER);
                     return InteractionResult.SUCCESS;
                 } case THERMOMETER: {
                     vatSide.setDisplayType(DisplayType.BAROMETER);
                     return InteractionResult.SUCCESS;
-                } case BAROMETER: {
+                } case BAROMETER: case OPEN_VENT: case CLOSED_VENT: {
                     vatSide.setDisplayType(DisplayType.NORMAL);
                     return InteractionResult.SUCCESS;
                 } default:
@@ -72,8 +73,9 @@ public class VatSideBlock extends CopycatBlock {
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
         withBlockEntityDo(level, currentPos, be -> {
             if (!(be instanceof VatSideBlockEntity vatSide)) return;
+            vatSide.updateRedstone();
             if (facing != vatSide.direction) return;
-            vatSide.updateDisplayType(facingPos); //TODO change to use correct neighbour
+            vatSide.updateDisplayType(facingPos);
             vatSide.setPowerFromAdjacentBlock(facingPos);   
         });
         return state;
@@ -88,6 +90,14 @@ public class VatSideBlock extends CopycatBlock {
             vatSide.setPowerFromAdjacentBlock(neighbor);   
         });
         super.onNeighborChange(state, level, pos, neighbor);
+    };
+
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        withBlockEntityDo(level, pos, be -> {
+            if (!(be instanceof VatSideBlockEntity vatSide)) return;
+            vatSide.updateRedstone();
+        });
     };
 
     @Override
