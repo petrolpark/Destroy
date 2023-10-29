@@ -49,6 +49,15 @@ public class DestroyPartials {
     PG_PLANET_GEAR = block("planetary_gearset/planet_gear"),
     PG_RING_GEAR = block("planetary_gearset/ring_gear"),
 
+    // Differential
+    DIFFERENTIAL_RING_GEAR = block("differential/ring_gear"),
+    DIFFERENTIAL_BOTTOM_GEAR = block("differential/bottom_gear"),
+    DIFFERENTIAL_TOP_GEAR = block("differential/top_gear"),
+    DIFFERENTIAL_EAST_GEAR = block("differential/east_gear"),
+    DIFFERENTIAL_WEST_GEAR = block("differential/west_gear"),
+    DIFFERENTIAL_BOTTOM_SHAFT = block("differential/bottom_shaft"),
+    DIFFERENTIAL_TOP_SHAFT = block("differential/top_shaft"),
+
     // Miscellaneous
     GAS_MASK = block("gas_mask"),
     STRAY_SKULL = block("cooler/skull");

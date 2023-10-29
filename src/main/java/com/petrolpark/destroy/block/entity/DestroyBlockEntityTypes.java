@@ -63,6 +63,11 @@ public class DestroyBlockEntityTypes {
         .renderer(() -> DoubleCardanShaftRenderer::new)
         .register();
 
+    public static final BlockEntityEntry<DifferentialBlockEntity> DIFFERENTIAL = REGISTRATE
+        .blockEntity("differential", DifferentialBlockEntity::new)
+        .validBlock(DestroyBlocks.DIFFERENTIAL)
+        .register();
+
     public static final BlockEntityEntry<DynamiteBlockEntity> DYNAMITE = REGISTRATE
         .blockEntity("dynamite", DynamiteBlockEntity::new)
         .validBlocks(DestroyBlocks.DYNAMITE_BLOCK)

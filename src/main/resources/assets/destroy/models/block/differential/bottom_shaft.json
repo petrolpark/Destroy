@@ -1,0 +1,23 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"2": "create:block/axis",
+		"3": "create:block/axis_top",
+		"particle": "create:block/large_cogwheel"
+	},
+	"elements": [
+		{
+			"name": "Bottom Shaft",
+			"from": [6, 0, 6],
+			"to": [10, 1, 10],
+			"faces": {
+				"north": {"uv": [6, 15, 10, 16], "texture": "#2"},
+				"east": {"uv": [6, 15, 10, 16], "texture": "#2"},
+				"south": {"uv": [6, 15, 10, 16], "texture": "#2"},
+				"west": {"uv": [6, 15, 10, 16], "texture": "#2"},
+				"up": {"uv": [6, 6, 10, 10], "texture": "#3"},
+				"down": {"uv": [6, 6, 10, 10], "texture": "#3"}
+			}
+		}
+	]
+}

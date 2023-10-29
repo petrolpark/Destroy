@@ -420,6 +420,7 @@ public class Formula implements Cloneable {
                 for (Bond reverseBond : structure.get(otherAtom)) {
                     if (reverseBond.getDestinationAtom() == currentAtom) {
                         bond.setType(bondType);
+                        refreshFunctionalGroups();
                         return this;
                     };
                 };

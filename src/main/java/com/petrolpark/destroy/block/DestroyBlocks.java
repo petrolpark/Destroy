@@ -114,6 +114,17 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
+    public static final BlockEntry<DifferentialBlock> DIFFERENTIAL = REGISTRATE.block("differential", DifferentialBlock::new)
+        .initialProperties(AllBlocks.LARGE_COGWHEEL)
+        .properties(p -> p
+            .noOcclusion()
+            .sound(SoundType.WOOD)
+		    .mapColor(MapColor.DIRT)
+        ).transform(TagGen.axeOrPickaxe())
+        .item(CogwheelBlockItem::new)
+        .transform(customItemModel())
+        .register();
+
     public static final BlockEntry<DynamoBlock> DYNAMO = REGISTRATE.block("dynamo", DynamoBlock::new)
         .initialProperties(SharedProperties::softMetal)
         .properties(p -> p
