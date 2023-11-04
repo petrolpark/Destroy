@@ -28,7 +28,7 @@ public class PlanetaryGearsetRenderer extends KineticBlockEntityRenderer<Planeta
         super(context);
     };
 
-     @Override
+    @Override
     protected void renderSafe(PlanetaryGearsetBlockEntity planetaryGearsetBlockEntity, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         if (Backend.canUseInstancing(planetaryGearsetBlockEntity.getLevel())) return;
 

@@ -11,6 +11,7 @@ import com.petrolpark.destroy.block.renderer.AgingBarrelRenderer;
 import com.petrolpark.destroy.block.renderer.BubbleCapRenderer;
 import com.petrolpark.destroy.block.renderer.CentrifugeRenderer;
 import com.petrolpark.destroy.block.renderer.CoolerRenderer;
+import com.petrolpark.destroy.block.renderer.DifferentialRenderer;
 import com.petrolpark.destroy.block.renderer.DoubleCardanShaftRenderer;
 import com.petrolpark.destroy.block.renderer.DynamoRenderer;
 import com.petrolpark.destroy.block.renderer.PlanetaryGearsetRenderer;
@@ -66,6 +67,7 @@ public class DestroyBlockEntityTypes {
     public static final BlockEntityEntry<DifferentialBlockEntity> DIFFERENTIAL = REGISTRATE
         .blockEntity("differential", DifferentialBlockEntity::new)
         .validBlock(DestroyBlocks.DIFFERENTIAL)
+        .renderer(() -> DifferentialRenderer::new)
         .register();
 
     public static final BlockEntityEntry<DynamiteBlockEntity> DYNAMITE = REGISTRATE

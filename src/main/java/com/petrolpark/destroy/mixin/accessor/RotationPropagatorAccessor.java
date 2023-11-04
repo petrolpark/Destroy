@@ -15,4 +15,9 @@ public interface RotationPropagatorAccessor {
     public static float invokeGetAxisModifier(KineticBlockEntity be, Direction direction) {
         return 0f; // This return value is ignored.
     };
+
+    @Invoker("getConveyedSpeed")
+    public static float invokeGetConveyedSpeed(KineticBlockEntity from, KineticBlockEntity to) {
+        return 0f; // This return value is ignored
+    };
 };

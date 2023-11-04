@@ -1,7 +1,8 @@
 package com.petrolpark.destroy.block;
 
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
-import com.simibubi.create.content.kinetics.RotationPropagator;
+import com.petrolpark.destroy.block.entity.DifferentialBlockEntity;
+
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 
@@ -32,13 +33,12 @@ public class DifferentialBlock extends CogWheelBlock {
     };
 
     @Override
+    @SuppressWarnings("null")
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
         withBlockEntityDo(level, pos, be -> {
-            RotationPropagator.handleRemoved(be.getLevel(), pos, be);
-            be.source = null;
-            be.updateSpeed = true;
-            be.setSpeed(0f);
-            be.network = null;
+            if (be instanceof DifferentialBlockEntity differential && differential.initializationTicks == 0) {
+                differential.getLevel().setBlockAndUpdate(pos, DestroyBlocks.DUMMY_DIFFERENTIAL.getDefaultState().setValue(AXIS, state.getValue(AXIS))); // It thinks getLevel() might be null
+            };
         });
         super.onNeighborChange(state, level, pos, neighbor);
     };
