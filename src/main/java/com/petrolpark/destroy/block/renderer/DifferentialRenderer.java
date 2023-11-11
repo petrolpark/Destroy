@@ -1,12 +1,10 @@
 package com.petrolpark.destroy.block.renderer;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.block.entity.DifferentialBlockEntity;
 import com.petrolpark.destroy.block.instance.PlanetaryGearsetInstance;
 import com.petrolpark.destroy.block.model.DestroyPartials;
-import com.simibubi.create.content.kinetics.RotationPropagator;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;

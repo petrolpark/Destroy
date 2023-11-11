@@ -14,22 +14,6 @@
       },
       {
         "type": "single",
-        "resource": "destroy:fluid/diesel"
-      },
-      {
-        "type": "single",
-        "resource": "destroy:fluid/fuel_oil"
-      },
-      {
-        "type": "single",
-        "resource": "destroy:fluid/kerosene"
-      },
-      {
-        "type": "single",
-        "resource": "destroy:fluid/lpg"
-      },
-      {
-        "type": "single",
         "resource": "destroy:fluid/mixture_flow"
       },
       {
@@ -43,14 +27,6 @@
       {
         "type": "single",
         "resource": "destroy:fluid/napalm_sundae"
-      },
-      {
-        "type": "single",
-        "resource": "destroy:fluid/naptha"
-      },
-      {
-        "type": "single",
-        "resource": "destroy:fluid/petrol"
       },
       {
         "type": "single",

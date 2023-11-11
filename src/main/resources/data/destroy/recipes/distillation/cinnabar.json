@@ -16,7 +16,7 @@
                     "Contents": [
                         {
                             "Molecule": "destroy:mercury",
-                            "Concentration": 67.5
+                            "Concentration": 67.53011087
                         }
                     ]
                 }
@@ -32,7 +32,7 @@
                     "Contents": [
                         {
                             "Molecule": "destroy:octasulfur",
-                            "Concentration": 56.7
+                            "Concentration": 7.09217093
                         }
                     ]
                 }

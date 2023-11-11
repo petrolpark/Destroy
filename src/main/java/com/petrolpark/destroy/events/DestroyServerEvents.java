@@ -155,10 +155,6 @@ public class DestroyServerEvents {
         level.getCapability(LevelPollutionProvider.LEVEL_POLLUTION).ifPresent(levelPollution -> {
             DestroyMessages.sendToClient(new LevelPollutionS2CPacket(levelPollution), serverPlayer);
         });
-
-        // try {
-        //     Badge.getBadgesOf(player.getGameProfile().getName());
-        // } finally {};
     };
 
     /**
@@ -336,7 +332,7 @@ public class DestroyServerEvents {
     };
 
     /**
-     * The clues in the name.
+     * The clue's in the name.
      * @param event
      */
     @SubscribeEvent

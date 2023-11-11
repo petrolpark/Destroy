@@ -2,7 +2,7 @@
     "type": "create:mixing",
     "ingredients": [
       {
-        "fluid": "destroy:fuel_oil",
+        "fluid": "destroy:crude_oil",
         "amount": 500
       },
       {

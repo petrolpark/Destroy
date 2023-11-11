@@ -2,8 +2,6 @@ package com.petrolpark.destroy;
 
 import com.mojang.logging.LogUtils;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
-// import com.petrolpark.destroy.badge.Badge;
-// import com.petrolpark.destroy.badge.DestroyBadges;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.model.DestroyPartials;
@@ -104,7 +102,6 @@ public class Destroy {
         DestroyCropMutations.register();
         DestroyEntityTypes.register();
         DestroyVillagers.register(modEventBus);
-        // DestroyBadges.register(modEventBus);
         DestroyLoot.register(modEventBus);
 
         // Events

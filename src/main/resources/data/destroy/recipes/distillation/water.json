@@ -16,7 +16,7 @@
                     "Contents": [
                         {
                             "Molecule": "destroy:water",
-                            "Concentration": 55.6
+                            "Concentration": 55.555556
                         },
                         {
                             "Molecule": "destroy:sodium_ion",
@@ -39,7 +39,7 @@
                     "Contents": [
                         {
                             "Molecule": "destroy:water",
-                            "Concentration": 55.6
+                            "Concentration": 55.555556
                         }
                     ]
                 }

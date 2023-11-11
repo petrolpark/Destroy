@@ -3,13 +3,13 @@
     "ingredients": [
         {
             "fluid": "destroy:crude_oil",
-            "amount": 1000
+            "amount": 100
         }
     ],
     "results": [
         {
             "fluid": "destroy:mixture",
-            "amount": 54,
+            "amount": 8,
             "nbt": {
                 "Mixture": {
                     "TranslationKey": "fluid.destroy.molten_sulfur",
@@ -17,35 +17,109 @@
                     "Contents": [
                         {
                             "Molecule": "destroy:octasulfur",
-                            "Concentration": 56.7
+                            "Concentration": 7.09217093
                         }
                     ]
                 }
             }
         },
         {
-            "fluid": "destroy:fuel_oil",
-            "amount": 252
+            "fluid": "destroy:mixture",
+            "amount": 23,
+            "nbt": {
+                "Mixture": {
+                    "TranslationKey": "fluid.destroy.mixed_xylenes",
+                    "Temperature": "388",
+                    "Contents": [
+                        {
+                            "Molecule": "destroy:paraxylene",
+                            "Concentration": 2.03011668
+                        },
+                        {
+                            "Molecule": "destroy:metaxylene",
+                            "Concentration": 2.03011668
+                        },
+                        {
+                            "Molecule": "destroy:orthoxylene",
+                            "Concentration": 2.03011668
+                        },
+                        {
+                            "Molecule": "destroy:ethylbenzene",
+                            "Concentration": 2.03011668
+                        }
+                    ]
+                }
+            }
         },
         {
-            "fluid": "destroy:diesel",
-            "amount": 173
+            "fluid": "destroy:mixture",
+            "amount": 14,
+            "nbt": {
+                "Mixture": {
+                    "Contents": [
+                        {
+                            "Molecule": "destroy:toluene",
+                            "Concentration": 9.358483194
+                        }
+                    ]
+                }
+            }
         },
         {
-            "fluid": "destroy:kerosene",
-            "amount": 115
+            "fluid": "destroy:mixture",
+            "amount": 52,
+            "nbt": {
+                "Mixture": {
+                    "Contents": [
+                        {
+                            "Molecule": "destroy:benzene",
+                            "Concentration": 11.22103592
+                        }
+                    ]
+                }
+            }
         },
         {
-            "fluid": "destroy:naptha",
-            "amount": 136
+            "fluid": "destroy:mixture",
+            "amount": 3,
+            "nbt": {
+                "Mixture": {
+                    "TranslationKey": "fluid.destroy.cyclopentadiene",
+                    "Contents": [
+                        {
+                            "Molecule": "destroy:proton",
+                            "Concentration": 12.13258097
+                        },
+                        {
+                            "Molecule": "destroy:cyclopentadienide",
+                            "Concentration": 12.13258097
+                        }
+                    ]
+                }
+            }
         },
         {
-            "fluid": "destroy:petrol",
-            "amount": 159
-        },
-        {
-            "fluid": "destroy:lpg",
-            "amount": 111
+            "fluid": "destroy:mixture",
+            "amount": 1000,
+            "nbt": {
+                "Mixture": {
+                    "TranslationKey": "fluid.destroy.lpg",
+                    "Contents": [
+                        {
+                            "Molecule": "destroy:methane",
+                            "Concentration": 0.007024359
+                        },
+                        {
+                            "Molecule": "destroy:ethene",
+                            "Concentration": 0.0210730786
+                        },
+                        {
+                            "Molecule": "destroy:propene",
+                            "Concentration": 0.01404871907
+                        }
+                    ]
+                }
+            }
         }
     ],
     "heatRequirement": "heated"

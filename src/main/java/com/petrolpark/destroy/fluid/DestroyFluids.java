@@ -38,23 +38,11 @@ public class DestroyFluids {
         .register(),
     CRUDE_OIL = virtualFluid("crude_oil")
         .register(),
-    DIESEL = virtualFluid("diesel")
-        .register(),
-    FUEL_OIL = virtualFluid("fuel_oil")
-        .register(),
-    KEROSENE = virtualFluid("kerosene")
-        .register(),
-    LPG = virtualFluid("lpg")
-        .register(),
     MOLTEN_CINNABAR = virtualFluid("molten_cinnabar")
         .register(),
     NAPALM_SUNDAE = virtualFluid("napalm_sundae")
         .register(),
-    NAPTHA = virtualFluid("naptha")
-        .register(),
     ONCE_DISTILLED_MOONSHINE = coloredWaterFluid("once_distilled_moonshine", 0xE0684F31)
-        .register(),
-    PETROL = virtualFluid("petrol")
         .register(),
     PERFUME = REGISTRATE.virtualFluid("perfume", new ResourceLocation("destroy", "fluid/swirling"), new ResourceLocation("destroy", "fluid/swirling"), (properties, stillTexture, flowingTexture) -> new ColoredFluidType(properties, stillTexture, flowingTexture, 0x80ffcff7), VirtualFluid::new)
         .register(),

@@ -148,11 +148,8 @@ dependencies {
     // Registrate
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 
-    // MongoDB
-    // library 'org.mongodb:mongodb-driver-sync:4.9.0'
-    // jarJar('org.mongodb:mongodb-driver-sync:4.9.0') {
-    //     jarJar.ranged(it, "[4.9.0]")
-    // }
+    // Websocket
+    implementation 'org.java-websocket:Java-WebSocket:1.3.0'
 
     // OPTIONAL DEPENDENCIES
 
