@@ -78,19 +78,19 @@ public abstract class PrimedBomb extends PrimedTnt {
 
     };
 
-    public static class SodiumPicrate extends PrimedBomb {
+    public static class PicricAcid extends PrimedBomb {
 
-        public SodiumPicrate(EntityType<? extends PrimedTnt> entityType, Level level) {
+        public PicricAcid(EntityType<? extends PrimedTnt> entityType, Level level) {
             super(entityType, level);
         };
 
-        public SodiumPicrate(Level level, BlockPos blockPos, BlockState state, @Nullable LivingEntity owner) {
-            super(DestroyEntityTypes.PRIMED_SODIUM_PICRATE.get(), level, blockPos, state, owner);
+        public PicricAcid(Level level, BlockPos blockPos, BlockState state, @Nullable LivingEntity owner) {
+            super(DestroyEntityTypes.PRIMED_PICRIC_ACID.get(), level, blockPos, state, owner);
         };
 
         @Override
         public BlockState getBlockStateToRender() {
-            return DestroyBlocks.SODIUM_PICRATE_BLOCK.getDefaultState();
+            return DestroyBlocks.PICRIC_ACID_BLOCK.getDefaultState();
         };
 
         @Override

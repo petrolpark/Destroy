@@ -19,6 +19,17 @@ public class DestroyReactions {
 
     public static final Reaction
 
+    ABS_COPOLYMERIZATION = builder()
+        .id("abs_copolymerization")
+        .addReactant(DestroyMolecules.ACRYLONITRILE)
+        .addReactant(DestroyMolecules.BUTADIENE)
+        .addReactant(DestroyMolecules.STYRENE)
+        .addCatalyst(DestroyMolecules.AIBN, 0)
+        .withResult(1f, PrecipitateReactionResult.of(DestroyItems.ABS::asStack))
+        .preexponentialFactor(15f)
+        .activationEnergy(20f)
+        .build(),
+
     AIBN_SYNTHESIS = builder()
         .id("aibn_synthesis")
         .addReactant(DestroyMolecules.ACETONE_CYANOHYDRIN, 2)
@@ -204,6 +215,15 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.BUTADIENE)
         .addReactant(DestroyMolecules.ETHENE)
         .addProduct(DestroyMolecules.CYCLOHEXENE)
+        .build(),
+
+    ETHENE_POLYMERIZATION = builder()
+        .id("ethene_polymerization")
+        .addReactant(DestroyMolecules.ETHENE)
+        .addCatalyst(DestroyMolecules.AIBN, 0)
+        .withResult(3f, PrecipitateReactionResult.of(DestroyItems.POLYETHENE::asStack))
+        .preexponentialFactor(10f)
+        .activationEnergy(10f)
         .build(),
 
     ETHYLANTHRAQUINONE_SYNTHESIS = builder()
@@ -467,12 +487,74 @@ public class DestroyReactions {
         .enthalpyChange(-107.6f)
         .build(),
 
+    PROPENE_POLYMERIZATION = builder()
+        .id("propene_polymerization")
+        .addReactant(DestroyMolecules.PROPENE)
+        .addCatalyst(DestroyMolecules.AIBN, 0)
+        .withResult(3f, PrecipitateReactionResult.of(DestroyItems.POLYPROPENE::asStack))
+        .preexponentialFactor(10f)
+        .activationEnergy(10f)
+        .build(),
+
+    SODIUM_DISSOLUTION = builder()
+        .id("sodium_dissolution")
+        .addReactant(DestroyMolecules.SODIUM_METAL, 2, 1)
+        .addReactant(DestroyMolecules.WATER, 2, 1)
+        .addProduct(DestroyMolecules.SODIUM_ION, 2)
+        .addProduct(DestroyMolecules.HYDROXIDE, 2)
+        .addProduct(DestroyMolecules.HYDROGEN)
+        .build(),
+
+    STEAM_REFORMATION = builder()
+        .id("steam_reformation")
+        .addReactant(DestroyMolecules.WATER)
+        .addReactant(DestroyMolecules.METHANE)
+        .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/nickel"), 1f)
+        .addProduct(DestroyMolecules.CARBON_MONOXIDE)
+        .addProduct(DestroyMolecules.HYDROGEN, 3)
+        .build(),
+
+    STYRENE_BUTADIENE_COPOLYMERIZATION = builder()
+        .id("styrene_butadiene_copolymerization")
+        .addReactant(DestroyMolecules.STYRENE)
+        .addReactant(DestroyMolecules.BUTADIENE)
+        .addCatalyst(DestroyMolecules.AIBN, 0)
+        .withResult(1.5f, PrecipitateReactionResult.of(DestroyItems.POLYSTYRENE_BUTADIENE::asStack))
+        .preexponentialFactor(10f)
+        .activationEnergy(15f)
+        .build(),
+
+    STYRENE_POLYMERIZATION = builder()
+        .id("styrene_polymerization")
+        .addReactant(DestroyMolecules.STYRENE)
+        .addCatalyst(DestroyMolecules.AIBN, 0)
+        .withResult(3f, PrecipitateReactionResult.of(DestroyItems.POLYSTYRENE::asStack))
+        .preexponentialFactor(10f)
+        .activationEnergy(10f)
+        .build(),
+    
+    SULFUR_OXIDATION = builder()    
+        .id("sulfur_oxidation")
+        .addReactant(DestroyMolecules.OCTASULFUR)
+        .addReactant(DestroyMolecules.OXYGEN, 8, 1)
+        .addProduct(DestroyMolecules.SULFUR_DIOXIDE, 8)
+        .build(), //TODO replace with half-equation
+
     TATP = builder()
         .id("tatp")
         .addReactant(DestroyMolecules.ACETONE)
         .addReactant(DestroyMolecules.HYDROGEN_PEROXIDE)
         // TODO acid catalyst
         .withResult(3f, PrecipitateReactionResult.of(DestroyItems.ACETONE_PEROXIDE::asStack))
+        .build(),
+
+    TETRAFLUOROETHENE_POLYMERIZATION = builder()
+        .id("tetrafluoroethene_polymerization")
+        .addReactant(DestroyMolecules.TETRAFLUOROETHENE)
+        .addCatalyst(DestroyMolecules.AIBN, 0)
+        .withResult(3f, PrecipitateReactionResult.of(DestroyItems.POLYTETRAFLUOROETHENE::asStack))
+        .preexponentialFactor(10f)
+        .activationEnergy(10f)
         .build(),
 
     TOLUENE_TRANSALKYLATION = builder()
@@ -485,31 +567,6 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.PARAXYLENE)
         .addProduct(DestroyMolecules.ETHYLBENZENE)
         .build(),
-
-    STEAM_REFORMATION = builder()
-        .id("steam_reformation")
-        .addReactant(DestroyMolecules.WATER)
-        .addReactant(DestroyMolecules.METHANE)
-        .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/nickel"), 1f)
-        .addProduct(DestroyMolecules.CARBON_MONOXIDE)
-        .addProduct(DestroyMolecules.HYDROGEN, 3)
-        .build(),
-
-    SODIUM_DISSOLUTION = builder()
-        .id("sodium_dissolution")
-        .addReactant(DestroyMolecules.SODIUM_METAL, 2, 1)
-        .addReactant(DestroyMolecules.WATER, 2, 1)
-        .addProduct(DestroyMolecules.SODIUM_ION, 2)
-        .addProduct(DestroyMolecules.HYDROXIDE, 2)
-        .addProduct(DestroyMolecules.HYDROGEN)
-        .build(),
-    
-    SULFUR_OXIDATION = builder()    
-        .id("sulfur_oxidation")
-        .addReactant(DestroyMolecules.OCTASULFUR)
-        .addReactant(DestroyMolecules.OXYGEN, 8, 1)
-        .addProduct(DestroyMolecules.SULFUR_DIOXIDE, 8)
-        .build(), //TODO replace with half-equation
 
     VINYL_ACETATE_SYNTHESIS = builder()
         .id("vinyl_acetate_synthesis")

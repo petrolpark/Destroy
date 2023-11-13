@@ -1,8 +1,0 @@
-{
-    "parent": "minecraft:block/cube_bottom_top",
-    "textures": {
-        "bottom": "destroy:block/sodium_picrate_bottom",
-        "side": "destroy:block/sodium_picrate_side",
-        "top": "destroy:block/sodium_picrate_top"
-    }
-}

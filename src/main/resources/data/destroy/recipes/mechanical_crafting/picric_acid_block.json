@@ -18,11 +18,11 @@
         "tag": "destroy:explosive/primary"
       },
       "A": {
-        "item": "destroy:sodium_picrate_tablet"
+        "item": "destroy:picric_acid_tablet"
       }
     },
     "result": {
-      "item": "destroy:sodium_picrate_block",
+      "item": "destroy:picric_acid_block",
       "count": 10
     },
     "acceptMirrored": false

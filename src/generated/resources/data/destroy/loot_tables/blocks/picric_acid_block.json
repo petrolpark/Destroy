@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "destroy:sodium_picrate_block"
+          "name": "destroy:picric_acid_block"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "destroy:blocks/sodium_picrate_block"
+  "random_sequence": "destroy:blocks/picric_acid_block"
 }

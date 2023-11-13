@@ -80,6 +80,10 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
      * being heated) or negative (if it is being cooled).
      */
     protected float heatingPower;
+    /**
+     * The amount of UV being supplied to this Vat.
+     */
+    protected float UVPower;
 
     /**
      * As the client side doesn't have access to the cached Mixture, store the pressure and temperature.
@@ -190,16 +194,19 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                 if (!stack.isEmpty()) availableItemStacks.add(stack.copy());
             };
 
+            ReactionContext context = new ReactionContext(availableItemStacks, UVPower);
+
             // Dissolve new Items
             if (inventoryChanged) {
-                cachedMixture.dissolveItems(availableItemStacks, fluidAmount);
+                cachedMixture.dissolveItems(context, fluidAmount);
                 cachedMixture.disturbEquilibrium(); // Disturb the equilibrium anyway as even if an Item Stack is not dissolved, it may still be a new catalyst
             };
             inventory.clearContent(); // Clear all Items as they may get re-inserted
 
             // Reacting
             if (!cachedMixture.isAtEquilibrium()) {
-                cachedMixture.reactForTick(new ReactionContext(availableItemStacks));
+                context = new ReactionContext(availableItemStacks, UVPower); // Update the context
+                cachedMixture.reactForTick(context);
                 shouldUpdateFluidMixture = true;
 
                 if (!cachedMixture.isAtEquilibrium()) advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.USE_VAT);
@@ -251,6 +258,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         super.read(tag, clientPacket);
 
         heatingPower = tag.getFloat("HeatingPower");
+        UVPower = tag.getFloat("UVPower");
 
         // Vat
         if (tag.contains("Vat", Tag.TAG_COMPOUND)) {
@@ -281,6 +289,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         super.write(tag, clientPacket);
 
         tag.putFloat("HeatingPower", heatingPower);
+        tag.putFloat("UVPower", UVPower);
 
         // Vat
         if (vat.isPresent()) {
@@ -455,6 +464,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             };
         });
         heatingPower = 0f;
+        UVPower = 0f;
 
         cachedMixture = new Mixture();
         vat = Optional.empty();
@@ -528,6 +538,11 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
     public void changeHeatingPower(float powerChange) {
         heatingPower += powerChange;
+        sendData();
+    };
+
+    public void changeUVPower(float UVChange) {
+        UVPower += UVChange;
         sendData();
     };
 

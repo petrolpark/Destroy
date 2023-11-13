@@ -3,6 +3,7 @@ package com.petrolpark.destroy.block;
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.block.shape.DestroyShapes;
+import com.petrolpark.destroy.util.vat.IUVLampBlock;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
 
@@ -13,6 +14,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,7 +26,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BlacklightBlock extends Block implements IWrenchable, ProperWaterloggedBlock {
+public class BlacklightBlock extends Block implements IUVLampBlock, IWrenchable, ProperWaterloggedBlock {
 
     public static final DirectionProperty SIDE = BlockStateProperties.FACING;
     public static final BooleanProperty FLIPPED = BooleanProperty.create("flipped");
@@ -75,6 +77,12 @@ public class BlacklightBlock extends Block implements IWrenchable, ProperWaterlo
     public InteractionResult onWrenched(BlockState state, UseOnContext context) {
         context.getLevel().setBlockAndUpdate(context.getClickedPos(), state.setValue(FLIPPED, !state.getValue(FLIPPED)));
         return InteractionResult.SUCCESS;
+    };
+
+    @Override
+    public float getUVPower(Level level, BlockState blockState, BlockPos blockPos, Direction face) {
+        if (face == blockState.getValue(SIDE).getOpposite()) return 100f;
+        return 0f;
     };
     
 };

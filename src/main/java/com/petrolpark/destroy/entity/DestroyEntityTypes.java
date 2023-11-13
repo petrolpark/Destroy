@@ -13,7 +13,7 @@ import net.minecraft.world.entity.item.PrimedTnt;
 public class DestroyEntityTypes {
     
     public static final EntityEntry<PrimedBomb.Anfo> PRIMED_ANFO = bomb("primed_anfo", PrimedBomb.Anfo::new);
-    public static final EntityEntry<PrimedBomb.SodiumPicrate> PRIMED_SODIUM_PICRATE = bomb("primed_sodium_picrate", PrimedBomb.SodiumPicrate::new);
+    public static final EntityEntry<PrimedBomb.PicricAcid> PRIMED_PICRIC_ACID = bomb("primed_picric_acid", PrimedBomb.PicricAcid::new);
     public static final EntityEntry<PrimedBomb.Cordite> PRIMED_CORDITE = bomb("primed_cordite", PrimedBomb.Cordite::new);
     public static final EntityEntry<PrimedBomb.Nitrocellulose> PRIMED_NITROCELLULOSE = bomb("primed_nitrocellulose", PrimedBomb.Nitrocellulose::new);
 

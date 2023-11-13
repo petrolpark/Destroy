@@ -277,6 +277,11 @@ public class DestroyServerEvents {
                 level.setBlockAndUpdate(posOn, DestroyBlocks.URINE_CAULDRON.getDefaultState());
             };
         };
+
+        // Give the Player cancer if in direct sunlight
+        if (level.canSeeSky(posOn) && !player.hasEffect(DestroyMobEffects.SUN_PROTECTION.get())) {
+            if (player.getRandom().nextInt(PollutionType.OZONE_DEPLETION.max * 600) < PollutionHelper.getPollution(level, PollutionType.OZONE_DEPLETION)) player.addEffect(new MobEffectInstance(DestroyMobEffects.CANCER.get(), MobEffectInstance.INFINITE_DURATION));
+        };
     };
 
     /**

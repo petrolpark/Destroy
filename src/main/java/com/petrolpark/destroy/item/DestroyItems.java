@@ -155,7 +155,7 @@ public class DestroyItems {
     NITROCELLULOSE = REGISTRATE.item("nitrocellulose", Item::new)
         .tag(DestroyItemTags.SECONDARY_EXPLOSIVE.tag)
         .register(),
-    SODIUM_PICRATE_TABLET = REGISTRATE.item("sodium_picrate_tablet", Item::new)
+    PICRIC_ACID_TABLET = REGISTRATE.item("picric_acid_tablet", Item::new)
         .tag(DestroyItemTags.SALT.tag, DestroyItemTags.SECONDARY_EXPLOSIVE.tag)
         .register(),
     TNT_TABLET = REGISTRATE.item("tnt_tablet", Item::new)

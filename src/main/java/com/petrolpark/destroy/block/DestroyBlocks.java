@@ -288,7 +288,7 @@ public class DestroyBlocks {
         .build()
         .register();
 
-    public static final BlockEntry<PrimeableBombBlock> SODIUM_PICRATE_BLOCK = REGISTRATE.block("sodium_picrate_block", (p) -> new PrimeableBombBlock(p, PrimedBomb.SodiumPicrate::new))
+    public static final BlockEntry<PrimeableBombBlock> PICRIC_ACID_BLOCK = REGISTRATE.block("picric_acid_block", (p) -> new PrimeableBombBlock(p, PrimedBomb.PicricAcid::new))
         .initialProperties(() -> Blocks.TNT)
         .properties(p -> p
             .mapColor(MapColor.COLOR_YELLOW)

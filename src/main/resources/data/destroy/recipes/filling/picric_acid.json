@@ -1,0 +1,19 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "tag": "minecraft:sand"
+      },
+      {
+        "mixtureFluidWithMolecule": "destroy:mixture",
+        "molecule": "destroy:sodium_ion",
+        "concentration": 7.7,
+        "amount": 200
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:picric_acid_tablet"
+      }
+    ]
+  }

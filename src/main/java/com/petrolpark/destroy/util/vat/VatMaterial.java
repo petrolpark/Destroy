@@ -2,6 +2,7 @@ package com.petrolpark.destroy.util.vat;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.simibubi.create.AllBlocks;
@@ -29,6 +30,10 @@ public record VatMaterial(float maxPressure, float thermalConductivity, boolean 
      */
     public static boolean isValid(Block block) {
         return BLOCK_MATERIALS.containsKey(block);
+    };
+
+    public static Optional<VatMaterial> getMaterial(Block block) {
+        return Optional.ofNullable(BLOCK_MATERIALS.get(block));
     };
 
     public static void registerDestroyVatMaterials() {

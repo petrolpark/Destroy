@@ -1,0 +1,19 @@
+{
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "minecraft:clay"
+      },
+      {
+        "mixtureFluidWithMolecule": "destroy:mixture",
+        "amount": 200,
+        "molecule": "destroy:nitroglycerine",
+        "concentration": 7.0
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:dynamite"
+      }
+    ]
+  }

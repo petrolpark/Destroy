@@ -343,7 +343,7 @@ public class Mixture extends ReadOnlyMixture {
 
             for (IItemReactant itemReactant : possibleReaction.getItemReactants()) { // Check all Reactions have the necessary Item catalysts
                 boolean validStackFound = false; // Start by assuming we won't have the required Item Stack...
-                checkAllItems: for (ItemStack stack : context.getItemStacks()) {
+                checkAllItems: for (ItemStack stack : context.availableItemStacks) {
                     if (itemReactant.isItemValid(stack)) {
                         validStackFound = true; // ...If we do, correct this assumption
                         break checkAllItems;
@@ -352,7 +352,7 @@ public class Mixture extends ReadOnlyMixture {
                 if (!validStackFound) continue orderEachReaction; // If we don't have the requesite Item Stacks, don't do this Reaction
             };
 
-            reactionRates.put(possibleReaction, calculateReactionRate(possibleReaction)); // Calculate the Reaction data for this tick
+            reactionRates.put(possibleReaction, calculateReactionRate(possibleReaction, context)); // Calculate the Reaction data for this tick
             orderedReactions.add(possibleReaction); // Add the Reaction to the rate-ordered list, which is currently not sorted
         };
 
@@ -463,7 +463,8 @@ public class Mixture extends ReadOnlyMixture {
      * @param availableStacks The Item Stacks available to this Mixture. This Stacks in this List will be modified
      * @param volume The amount of this Mixture there is, in buckets
      */
-    public void dissolveItems(List<ItemStack> availableStacks, double volume) {
+    public void dissolveItems(ReactionContext context, double volume) {
+        List<ItemStack> availableStacks = List.copyOf(context.availableItemStacks);
         if (availableStacks.isEmpty()) return;
         boolean shouldRefreshReactions = false;
 
@@ -476,7 +477,7 @@ public class Mixture extends ReadOnlyMixture {
 
         if (orderedReactions.isEmpty()) return; // Don't go any further if there aren't any items to dissolve
 
-        Collections.sort(possibleReactions, (r1, r2) -> ((Float)calculateReactionRate(r1)).compareTo(calculateReactionRate(r2))); // Order the list of Item-consuming Reactions by rate, in case multiple of them want the same Item
+        Collections.sort(possibleReactions, (r1, r2) -> ((Float)calculateReactionRate(r1, context)).compareTo(calculateReactionRate(r2, context))); // Order the list of Item-consuming Reactions by rate, in case multiple of them want the same Item
 
         tryEachReaction: for (Reaction reaction : orderedReactions) {
 
@@ -701,9 +702,9 @@ public class Mixture extends ReadOnlyMixture {
         float volumeInBuckets = (float)volume / 1000f;
         int ticks = 0;
 
-        dissolveItems(availableStacks, volumeInBuckets); // Dissolve all Items
-        ReactionContext context = new ReactionContext(availableStacks); // React the Mixture
-        while (!equilibrium && ticks < 600) {
+        ReactionContext context = new ReactionContext(availableStacks, 0f); 
+        dissolveItems(context, volumeInBuckets); // Dissolve all Items
+        while (!equilibrium && ticks < 600) { // React the Mixture
             float energyChange = heatingPower / TICKS_PER_SECOND;
             energyChange += (outsideTemperature - temperature) * 100f / TICKS_PER_SECOND; // Fourier's Law (sort of), the Basin has a fixed conductance of 100 andthe divide by 20 is for 20 ticks per second
             if (Math.abs(energyChange) > 0.0001f) {
@@ -901,11 +902,12 @@ public class Mixture extends ReadOnlyMixture {
      * Get the rate - in moles of Reaction per Bucket <em>per tick</em> (not per second) - at which this {@link Reaction} will proceed in this Mixture.
      * @param reaction
      */
-    private float calculateReactionRate(Reaction reaction) {
+    private float calculateReactionRate(Reaction reaction, ReactionContext context) {
         float rate = reaction.getRateConstant(temperature) / (float) TICKS_PER_SECOND;
         for (Molecule molecule : reaction.getOrders().keySet()) {
             rate *= (float)Math.pow(getConcentrationOf(molecule), reaction.getOrders().get(molecule));
         };
+        if (reaction.needsUV()) rate *= context.UVPower;
         return rate;
     };
 
@@ -1036,14 +1038,12 @@ public class Mixture extends ReadOnlyMixture {
      */
     public static class ReactionContext {
 
-        private final ImmutableList<ItemStack> availableItemStacks;
+        public final ImmutableList<ItemStack> availableItemStacks;
+        public final float UVPower;
 
-        public ReactionContext(List<ItemStack> availableItemStacks) {
+        public ReactionContext(List<ItemStack> availableItemStacks, float UVPower) {
             this.availableItemStacks = ImmutableList.copyOf(availableItemStacks);
-        };
-
-        public List<ItemStack> getItemStacks() {
-            return availableItemStacks;
+            this.UVPower = UVPower;
         };
     };
 };

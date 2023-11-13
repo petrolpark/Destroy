@@ -14,8 +14,10 @@ import com.petrolpark.destroy.capability.blockEntity.VatSideTankCapability;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DestroyLang.TemperatureUnit;
+import com.petrolpark.destroy.util.vat.IUVLampBlock;
 import com.petrolpark.destroy.util.vat.IVatHeaterBlock;
 import com.petrolpark.destroy.util.vat.Vat;
+import com.petrolpark.destroy.util.vat.VatMaterial;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
@@ -69,6 +71,10 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
      * Vat Side had last time its adjacent block was changed.
      */
     protected float oldPower;
+    /**
+     * The UV power this Vat Side had last time its adjacent block was changed.
+     */
+    protected float oldUV;
 
     public Direction direction; // The outward direction this side is facing
     public BlockPos controllerPosition;
@@ -84,6 +90,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         spoutingTicks = 0;
         spoutingFluid = FluidStack.EMPTY;
         oldPower = 0f;
+        oldUV = 0f;
         fluidCapability = LazyOptional.empty();
         itemCapability = LazyOptional.empty();
         refreshItemCapability();
@@ -205,6 +212,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         controllerPosition = NbtUtils.readBlockPos(tag.getCompound("ControllerPosition"));
         displayType = DisplayType.values()[tag.getInt("DisplayType")];
         oldPower = tag.getFloat("OldHeatingPower");
+        oldUV = tag.getFloat("OldUVPower");
         if (clientPacket) {
             spoutingTicks = tag.getInt("SpoutingTicks");
             spoutingFluid = FluidStack.loadFluidStackFromNBT(tag.getCompound("SpoutingFluid"));
@@ -219,6 +227,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         if (controllerPosition != null) tag.put("ControllerPosition", NbtUtils.writeBlockPos(controllerPosition));
         tag.putInt("DisplayType", displayType.ordinal());
         tag.putFloat("OldHeatingPower", oldPower);
+        tag.putFloat("OldUVPower", oldUV);
         if (clientPacket) {
             tag.putInt("SpoutingTicks", spoutingTicks);
             if (!spoutingFluid.isEmpty()) tag.put("SpoutingFluid", spoutingFluid.writeToNBT(new CompoundTag()));
@@ -275,13 +284,30 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         super.setMaterial(blockState);
     };
 
-    public void setPowerFromAdjacentBlock(BlockPos heaterPos) {
+    @SuppressWarnings("null")
+    public void setPowerFromAdjacentBlock(BlockPos heaterOrLampPos) {
+        if (!hasLevel() | getLevel().isClientSide()) return;
         VatControllerBlockEntity vatController = getController();
         if (vatController == null) return;
-        float newPower = IVatHeaterBlock.getHeatingPower(getLevel(), heaterPos, direction.getOpposite());
-        if (newPower == oldPower) return;
-        vatController.changeHeatingPower(newPower - oldPower);
-        oldPower = newPower;
+
+        float newPower = IVatHeaterBlock.getHeatingPower(getLevel(), heaterOrLampPos, direction.getOpposite());
+        if (newPower != oldPower) {
+            vatController.changeHeatingPower(newPower - oldPower);
+            oldPower = newPower;
+        };
+
+        float newUVPower = 0f;
+        if (VatMaterial.getMaterial(getMaterial().getBlock()).map(VatMaterial::transparent).orElse(false)) {
+            newUVPower = IUVLampBlock.getUVPower(getLevel(), heaterOrLampPos, direction.getOpposite());
+            if (newUVPower == 0f) {
+                if (direction == Direction.UP && getLevel().canSeeSky(getBlockPos())) newUVPower = 10f; // It thinks getLevel() might be null
+            };
+        };
+        if (newUVPower != oldUV) {
+            vatController.changeUVPower(newUVPower - oldUV);
+            oldUV = newUVPower;
+        };
+
         sendData();
     };
 
