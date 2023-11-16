@@ -1,4 +1,6 @@
-package com.petrolpark.destroy.world;
+package com.petrolpark.destroy.world.damage;
+
+import com.petrolpark.destroy.chemistry.Molecule;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -11,16 +13,16 @@ import net.minecraft.world.level.LevelReader;
 
 public class DestroyDamageSources {
 
-    public static DamageSource acidBurn(Level level) {
-        return source(DestroyDamageTypes.Keys.ACID_BURN, level);
-    };
-
     public static DamageSource alcohol(Level level) {
         return source(DestroyDamageTypes.Keys.ALCOHOL, level);
     };
 
-    public static DamageSource baseBurn(Level level) {
-        return source(DestroyDamageTypes.Keys.BASE_BURN, level);
+    public static DamageSource chemicalBurn(Level level) {
+        return source(DestroyDamageTypes.Keys.CHEMICAL_BURN, level);
+    };
+
+    public static ChemicalDamageSource chemicalPoison(Level level, Molecule molecule) {
+        return chemicalSource(DestroyDamageTypes.Keys.CHEMICAL_POISON, level, molecule);
     };
 
     public static DamageSource headache(Level level) {
@@ -57,6 +59,11 @@ public class DestroyDamageSources {
     private static DamageSource source(ResourceKey<DamageType> key, LevelReader level, Entity entity) {
 		Registry<DamageType> registry = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
 		return new DamageSource(registry.getHolderOrThrow(key), entity);
+	};
+
+    private static ChemicalDamageSource chemicalSource(ResourceKey<DamageType> key, LevelReader level, Molecule molecule) {
+		Registry<DamageType> registry = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
+		return new ChemicalDamageSource(registry.getHolderOrThrow(key), molecule);
 	};
     
 };

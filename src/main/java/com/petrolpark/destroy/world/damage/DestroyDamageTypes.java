@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.world;
+package com.petrolpark.destroy.world.damage;
 
 import com.petrolpark.destroy.Destroy;
 import com.simibubi.create.foundation.damageTypes.DamageTypeBuilder;
@@ -13,9 +13,9 @@ public class DestroyDamageTypes {
 
     public static class Keys {
         public static ResourceKey<DamageType>
-            ACID_BURN = key("acid_burn"),
             ALCOHOL = key("alcohol"),
-            BASE_BURN = key("base_burn"),
+            CHEMICAL_BURN = key("chemical_burn"),
+            CHEMICAL_POISON = key("chemical_poison"),
             HEADACHE = key("headache"),
             BABY_BLUE_OVERDOSE = key("baby_blue_overdose"),
             SELF_NEEDLE = key("self_needle"),
@@ -23,17 +23,13 @@ public class DestroyDamageTypes {
             EXTRUSION_DIE = key("extrusion_die");
     };
 
+    public static void register() {};
+
     private static ResourceKey<DamageType> key(String name) {
 		return ResourceKey.create(Registries.DAMAGE_TYPE, Destroy.asResource(name));
 	};
 
     public static final DamageType 
-
-    ACID_BURN = new DamageTypeBuilder(Keys.ACID_BURN)
-        .exhaustion(0.1f)
-        .scaling(DamageScaling.ALWAYS)
-        .effects(DamageEffects.BURNING)
-        .build(),
 
     ALCOHOL = new DamageTypeBuilder(Keys.ALCOHOL)
         .exhaustion(0.1f)
@@ -41,11 +37,18 @@ public class DestroyDamageTypes {
         //.tag(DamageTypeTags.BYPASSES_ARMOR)
         .build(),
 
-    BASE_BURN = new DamageTypeBuilder(Keys.BASE_BURN)
+    CHEMICAL_BURN = new DamageTypeBuilder(Keys.CHEMICAL_BURN)
         .exhaustion(0.1f)
         .scaling(DamageScaling.ALWAYS)
         .effects(DamageEffects.BURNING)
         .build(),
+
+    CHEMICAL_POISON = new DamageTypeBuilder(Keys.CHEMICAL_POISON)
+        .exhaustion(0.1f)
+        .scaling(DamageScaling.ALWAYS)
+        .effects(DamageEffects.BURNING)
+        //.tag(DamageTypeTags.BYPASSES_ARMOR)
+        .build(), //Bypass armor
 
     HEADACHE = new DamageTypeBuilder(Keys.HEADACHE)
         .exhaustion(0.2f)

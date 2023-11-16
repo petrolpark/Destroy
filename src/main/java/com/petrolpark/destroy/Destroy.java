@@ -32,6 +32,7 @@ import com.petrolpark.destroy.recipe.DestroyMysteriousItemConversions;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.util.DestroyTags;
 import com.petrolpark.destroy.util.vat.VatMaterial;
+import com.petrolpark.destroy.world.damage.DestroyDamageTypes;
 import com.petrolpark.destroy.world.loot.DestroyLoot;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
 import com.simibubi.create.content.fluids.OpenEndedPipe;
@@ -103,6 +104,7 @@ public class Destroy {
         DestroyEntityTypes.register();
         DestroyVillagers.register(modEventBus);
         DestroyLoot.register(modEventBus);
+        DestroyDamageTypes.register();
 
         // Events
         MinecraftForge.EVENT_BUS.register(this);

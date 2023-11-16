@@ -1,6 +1,6 @@
 {
     "exhaustion": 0.1,
-    "message_id": "destroy.base_burn",
+    "message_id": "destroy.chemical_poison",
     "scaling": "always",
     "effects": "burning"
 }

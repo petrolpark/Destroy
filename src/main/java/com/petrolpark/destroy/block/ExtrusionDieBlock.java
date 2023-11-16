@@ -6,7 +6,7 @@ import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.entity.ExtrusionDieBlockEntity;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
-import com.petrolpark.destroy.world.DestroyDamageSources;
+import com.petrolpark.destroy.world.damage.DestroyDamageSources;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 

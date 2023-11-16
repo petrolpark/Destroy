@@ -15,6 +15,7 @@ import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.petrolpark.destroy.item.renderer.ILayerTintsWithAlphaItem;
+import com.petrolpark.destroy.util.ChemistryDamageHelper;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Lang;
 
@@ -23,6 +24,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -54,6 +57,15 @@ public class TestTubeItem extends ItemFluidContainer implements ILayerTintsWithA
         ItemStack stack = DestroyItems.TEST_TUBE.asStack(1);
         setContents(stack, fluidStack);
         return stack;
+    };
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+        super.inventoryTick(stack, level, entity, slotId, isSelected);
+        Optional<FluidStack> contentsOptional = getContents(stack);
+        if (entity instanceof LivingEntity livingEntity && contentsOptional.isPresent()) {
+            ChemistryDamageHelper.damage(level, livingEntity, contentsOptional.get(), false);
+        };
     };
 
     @Override

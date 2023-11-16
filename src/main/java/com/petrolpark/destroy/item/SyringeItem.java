@@ -3,7 +3,7 @@ package com.petrolpark.destroy.item;
 import java.util.function.Consumer;
 
 import com.petrolpark.destroy.item.renderer.SyringeItemRenderer;
-import com.petrolpark.destroy.world.DestroyDamageSources;
+import com.petrolpark.destroy.world.damage.DestroyDamageSources;
 import com.simibubi.create.foundation.item.CustomUseEffectsItem;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 

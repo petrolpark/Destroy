@@ -1,7 +1,7 @@
 package com.petrolpark.destroy.effect;
 
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
-import com.petrolpark.destroy.world.DestroyDamageSources;
+import com.petrolpark.destroy.world.damage.DestroyDamageSources;
 
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;

@@ -4,6 +4,7 @@ import com.petrolpark.destroy.Destroy;
 
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -16,6 +17,7 @@ public class DestroyMobEffects {
     public static final RegistryObject<MobEffect> 
 
     CANCER = MOB_EFFECTS.register("cancer", () -> new DummyMobEffect(MobEffectCategory.NEUTRAL, 0)),
+    CHEMICAL_POISON = MOB_EFFECTS.register("chemical_poison", ChemicalPoisonMobEffect::new),
     CRYING = MOB_EFFECTS.register("crying", CryingMobEffect::new),
     FRAGRANCE = MOB_EFFECTS.register("fragrance",
         () -> new DummyMobEffect(MobEffectCategory.BENEFICIAL, 0xF294D9)
@@ -30,5 +32,9 @@ public class DestroyMobEffects {
 
     public static void register(IEventBus eventBus) {
         MOB_EFFECTS.register(eventBus);
-    }
+    };
+
+    public static MobEffectInstance cancerInstance() {
+        return new MobEffectInstance(CANCER.get(), MobEffectInstance.INFINITE_DURATION, 0, false, false);
+    };
 }

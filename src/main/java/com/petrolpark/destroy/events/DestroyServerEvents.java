@@ -8,6 +8,7 @@ import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.behaviour.ExtendedBasinBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.capability.chunk.ChunkCrudeOil;
+import com.petrolpark.destroy.capability.entity.EntityChemicalPoison;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
@@ -31,7 +32,7 @@ import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.petrolpark.destroy.util.InebriationHelper;
 import com.petrolpark.destroy.util.PollutionHelper;
-import com.petrolpark.destroy.world.DestroyDamageSources;
+import com.petrolpark.destroy.world.damage.DestroyDamageSources;
 import com.petrolpark.destroy.world.entity.goal.BuildSandCastleGoal;
 import com.petrolpark.destroy.world.village.DestroyTrades;
 import com.petrolpark.destroy.world.village.DestroyVillageAddition;
@@ -65,6 +66,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Stray;
@@ -144,6 +146,14 @@ public class DestroyServerEvents {
         };
     };
 
+    @SubscribeEvent
+    public static void onAttachCapabilitiesEntity(AttachCapabilitiesEvent<Entity> event) {
+        Entity entity = event.getObject();
+        if (entity instanceof LivingEntity && !entity.getCapability(EntityChemicalPoison.Provider.ENTITY_CHEMICAL_POISON).isPresent()) {
+            event.addCapability(Destroy.asResource("chemical_poison"), new EntityChemicalPoison.Provider());
+        };
+    };
+
     /**
      * Update the Level Pollution the Player sees (for example, this affects the colour of foliage).
      */
@@ -186,6 +196,7 @@ public class DestroyServerEvents {
         event.register(PlayerBabyBlueAddiction.class);
         event.register(PlayerPreviousPositions.class);
         event.register(PlayerCrouching.class);
+        event.register(EntityChemicalPoison.class);
     };
 
     @SubscribeEvent
@@ -280,7 +291,7 @@ public class DestroyServerEvents {
 
         // Give the Player cancer if in direct sunlight
         if (level.canSeeSky(posOn) && !player.hasEffect(DestroyMobEffects.SUN_PROTECTION.get())) {
-            if (player.getRandom().nextInt(PollutionType.OZONE_DEPLETION.max * 600) < PollutionHelper.getPollution(level, PollutionType.OZONE_DEPLETION)) player.addEffect(new MobEffectInstance(DestroyMobEffects.CANCER.get(), MobEffectInstance.INFINITE_DURATION));
+            if (player.getRandom().nextInt(PollutionType.OZONE_DEPLETION.max * 600) < PollutionHelper.getPollution(level, PollutionType.OZONE_DEPLETION)) player.addEffect(DestroyMobEffects.cancerInstance());
         };
     };
 
@@ -337,13 +348,22 @@ public class DestroyServerEvents {
     };
 
     /**
-     * The clue's in the name.
-     * @param event
+     * Disable eating if the Player is in Baby Blue withdrawal or wearing a Gas Mask.
      */
     @SubscribeEvent
-    public static void disableEatingWithBabyBlueWithdrawal(PlayerInteractEvent.RightClickItem event) {
-        if (event.getItemStack().getItem().isEdible() && event.getItemStack().getItem() != DestroyItems.BABY_BLUE_POWDER.get() && event.getEntity().hasEffect(DestroyMobEffects.BABY_BLUE_WITHDRAWAL.get())) {
-            event.setCanceled(true);
+    public static void disableEating(PlayerInteractEvent.RightClickItem event) {
+        ItemStack stack = event.getItemStack();
+        Player player = event.getEntity();
+        if (stack.getItem().isEdible()) {
+            if (DestroyItemTags.CHEMICAL_PROTECTION_HEAD.matches(player.getItemBySlot(EquipmentSlot.HEAD).getItem())) {
+                player.displayClientMessage(DestroyLang.translate("tooltip.eating_prevented.gas_mask").component(), true);
+                event.setCanceled(true);
+                return;
+            };
+            if (stack.getItem() != DestroyItems.BABY_BLUE_POWDER.get() && player.hasEffect(DestroyMobEffects.BABY_BLUE_WITHDRAWAL.get())) {
+                player.displayClientMessage(DestroyLang.translate("tooltip.eating_prevented.baby_blue").component(), true);
+                event.setCanceled(true);
+            };
         };
     };
 

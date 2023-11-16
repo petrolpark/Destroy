@@ -1,15 +1,15 @@
 {
     "values": [
         {
-          "id": "destroy:acid_burn",
-          "required": false
-        },
-        {
           "id": "destroy:alcohol",
           "required": false
         },
         {
-          "id": "destroy:base_burn",
+          "id": "destroy:chemical_burn",
+          "required": false
+        },
+        {
+          "id": "destroy:chemical_poison",
           "required": false
         },
         {

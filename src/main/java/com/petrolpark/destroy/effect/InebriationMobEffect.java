@@ -1,7 +1,7 @@
 package com.petrolpark.destroy.effect;
 
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
-import com.petrolpark.destroy.world.DestroyDamageSources;
+import com.petrolpark.destroy.world.damage.DestroyDamageSources;
 
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;

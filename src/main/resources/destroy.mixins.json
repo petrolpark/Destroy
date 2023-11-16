@@ -25,6 +25,8 @@
         "CreateRecipeCategoryMixin",
         "DestroyFrictionModifier",
         "FluidIngredientMixin",
+        "GuiMixin",
+        "HeartTypeMixin",
         "HeatConditionMixin",
         "HeatLevelMixin",
         "ItemRendererMixin",
