@@ -9,12 +9,14 @@ import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.petrolpark.destroy.world.damage.DestroyDamageSources;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 
 public class ChemistryDamageHelper {
@@ -24,13 +26,14 @@ public class ChemistryDamageHelper {
      * @param level
      * @param entity
      * @param mixture
-     * @param skinExposed Whether the entity has contact with the Mixture on a body part other than their mouth (if they are "submerged" in it), regardless of any protective clothing
+     * @param skinContact Whether the entity has contact with the Mixture on a body part other than their mouth (if they are "submerged" in it), regardless of any protective clothing
      */
-    public static void damage(Level level, LivingEntity entity, FluidStack stack, boolean skinExposed) {
+    public static void damage(Level level, LivingEntity entity, FluidStack stack, boolean skinContact) {
         if (!DestroyFluids.MIXTURE.get().isSame(stack.getFluid())) return;
         ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(stack.getOrCreateChildTag("Mixture"));
         if (mixture.isEmpty()) return;
 
+        boolean burning = mixture.getConcentrationOf(DestroyMolecules.PROTON) > 0.01f || mixture.getConcentrationOf(DestroyMolecules.HYDROXIDE) > 0.01f;
         boolean nauseating = false;
         boolean carcinogen = false;
         Molecule toxicMolecule = null;
@@ -43,7 +46,7 @@ public class ChemistryDamageHelper {
         };
 
         boolean gasMask = DestroyItemTags.CHEMICAL_PROTECTION_HEAD.matches(entity.getItemBySlot(EquipmentSlot.HEAD).getItem());
-        skinExposed &= !(gasMask && DestroyItemTags.CHEMICAL_PROTECTION_TORSO.matches(entity.getItemBySlot(EquipmentSlot.CHEST).getItem()) && DestroyItemTags.CHEMICAL_PROTECTION_LEGS.matches(entity.getItemBySlot(EquipmentSlot.LEGS).getItem()) && DestroyItemTags.CHEMICAL_PROTECTION_FEET.matches(entity.getItemBySlot(EquipmentSlot.FEET).getItem()));
+        boolean hazmat = gasMask && DestroyItemTags.CHEMICAL_PROTECTION_TORSO.matches(entity.getItemBySlot(EquipmentSlot.CHEST).getItem()) && DestroyItemTags.CHEMICAL_PROTECTION_LEGS.matches(entity.getItemBySlot(EquipmentSlot.LEGS).getItem()) && DestroyItemTags.CHEMICAL_PROTECTION_FEET.matches(entity.getItemBySlot(EquipmentSlot.FEET).getItem());
         boolean perfume = entity.hasEffect(DestroyMobEffects.FRAGRANCE.get());
 
         // Smelly chemicals
@@ -52,10 +55,9 @@ public class ChemistryDamageHelper {
         };
 
         // Acutely toxic Molecules
-        if (toxicMolecule != null && !gasMask) {
-            LazyOptional<EntityChemicalPoison> chemicalPoisonCap = entity.getCapability(EntityChemicalPoison.Provider.ENTITY_CHEMICAL_POISON);
-            if (chemicalPoisonCap.isPresent()) chemicalPoisonCap.resolve().get().setMolecule(toxicMolecule);
-            entity.addEffect(new MobEffectInstance(DestroyMobEffects.CHEMICAL_POISON.get(), 200, 0, false, false));
+        if (toxicMolecule != null && !gasMask && !level.isClientSide()) {
+            EntityChemicalPoison.setMolecule(entity, toxicMolecule);
+            if (!entity.hasEffect(DestroyMobEffects.CHEMICAL_POISON.get())) entity.addEffect(new MobEffectInstance(DestroyMobEffects.CHEMICAL_POISON.get(), 219, 0, false, false));
         };
         
         // Carcinogens
@@ -64,9 +66,35 @@ public class ChemistryDamageHelper {
         };
 
         // Acid/base burns
-        if (skinExposed && (mixture.getConcentrationOf(DestroyMolecules.PROTON) > 0.01f || mixture.getConcentrationOf(DestroyMolecules.HYDROXIDE) > 0.01f)) {
-            entity.hurt(DestroyDamageSources.chemicalBurn(level), 5f);
+        if (skinContact) {
+            if (hazmat && (burning || nauseating || carcinogen || toxicMolecule != null)) { // If there is a hazard
+                for (ItemStack armor : entity.getArmorSlots()) contaminate(armor, stack);
+            } else {
+                if (burning) {
+                    entity.hurt(DestroyDamageSources.chemicalBurn(level), 5f);
+                };
+            };
         };
 
+    };
+
+    public static void contaminate(ItemStack stack, FluidStack fluidStack) {
+        Item item = stack.getItem();
+        if (LivingEntity.getEquipmentSlotForItem(stack) != null && (
+            DestroyItemTags.CHEMICAL_PROTECTION_FEET.matches(item) ||
+            DestroyItemTags.CHEMICAL_PROTECTION_HEAD.matches(item) ||
+            DestroyItemTags.CHEMICAL_PROTECTION_LEGS.matches(item) ||
+            DestroyItemTags.CHEMICAL_PROTECTION_TORSO.matches(item)
+        )) {
+            CompoundTag tag = stack.getOrCreateTag();
+            if (tag.contains("ContaminatingFluid")) return;
+            CompoundTag fluidTag = new CompoundTag();
+            fluidStack.writeToNBT(fluidTag);
+            tag.put("ContaminatingFluid", fluidTag);
+        };
+    };
+
+    public static void decontaminate(ItemStack stack) {
+        stack.getOrCreateTag().remove("ContaminatingFluid");
     };
 };

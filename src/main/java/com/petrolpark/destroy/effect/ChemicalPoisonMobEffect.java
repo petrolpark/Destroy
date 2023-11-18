@@ -1,25 +1,37 @@
 package com.petrolpark.destroy.effect;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import com.petrolpark.destroy.capability.entity.EntityChemicalPoison;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.world.damage.DestroyDamageSources;
 
-import net.minecraft.world.effect.MobEffect;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class ChemicalPoisonMobEffect extends MobEffect {
+public class ChemicalPoisonMobEffect extends UncurableMobEffect {
 
     protected ChemicalPoisonMobEffect() {
         super(MobEffectCategory.HARMFUL, 0xFFFFFF);
+    };
+    
+    @Override
+    public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
+        consumer.accept(new ChemicalPoisonMobEffectExtensions());
     };
 
     @Override
     public void removeAttributeModifiers(LivingEntity livingEntity, AttributeMap attributeMap, int amplifier) {
         super.removeAttributeModifiers(livingEntity, attributeMap, amplifier);
-        getCap(livingEntity).ifPresent(EntityChemicalPoison::removeMolecule);
+        EntityChemicalPoison.removeMolecule(livingEntity);
     };
 
     @Override
@@ -44,6 +56,21 @@ public class ChemicalPoisonMobEffect extends MobEffect {
 
     private static LazyOptional<EntityChemicalPoison> getCap(LivingEntity livingEntity) {
         return livingEntity.getCapability(EntityChemicalPoison.Provider.ENTITY_CHEMICAL_POISON);
+    };
+
+    public static class ChemicalPoisonMobEffectExtensions extends DestroyMobEffectExtensions {
+
+        @Override
+        public void addToTooltip(List<Component> tooltip, MobEffectInstance instance) {
+            super.addToTooltip(tooltip, instance);
+            Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft.player != null) {
+                minecraft.player.getCapability(EntityChemicalPoison.Provider.ENTITY_CHEMICAL_POISON).ifPresent(cp -> {
+                    Molecule molecule = cp.getMolecule();
+                    if (molecule != null) tooltip.set(0, Component.translatable("effect.destroy.chemical_poison.molecule", cp.getMolecule().getName(DestroyAllConfigs.CLIENT.chemistry.iupacNames.get())));
+                });
+            };
+        };
     };
     
 };

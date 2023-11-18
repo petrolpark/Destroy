@@ -55,6 +55,10 @@
       {
         "type": "single",
         "resource": "minecraft:entity/skeleton/stray_overlay"
+      },
+      {
+        "type": "single",
+        "resource": "destroy:entity/armor/gas_mask"
       }
     ]
   }

@@ -1,11 +1,16 @@
 package com.petrolpark.destroy.network;
 
+import java.util.function.Function;
+
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.network.packet.ChemicalPoisonS2CPacket;
 import com.petrolpark.destroy.network.packet.CryingS2CPacket;
 import com.petrolpark.destroy.network.packet.EvaporatingFluidS2CPacket;
 import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
+import com.petrolpark.destroy.network.packet.S2CPacket;
 import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
 
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkDirection;
@@ -32,31 +37,19 @@ public class DestroyMessages {
     
         INSTANCE = net;
 
-        net.messageBuilder(CryingS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(CryingS2CPacket::new)
-            .encoder(CryingS2CPacket::toBytes)
-            .consumerMainThread(CryingS2CPacket::handle)
-            .add();
+        addPacket(net, CryingS2CPacket.class, CryingS2CPacket::new);
+        addPacket(net, LevelPollutionS2CPacket.class, LevelPollutionS2CPacket::new);
+        addPacket(net, EvaporatingFluidS2CPacket.class, EvaporatingFluidS2CPacket::new);
+        addPacket(net, SeismometerSpikeS2CPacket.class, SeismometerSpikeS2CPacket::new);
+        addPacket(net, ChemicalPoisonS2CPacket.class, ChemicalPoisonS2CPacket::new);
+    };
 
-        net.messageBuilder(LevelPollutionS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(LevelPollutionS2CPacket::new)
-            .encoder(LevelPollutionS2CPacket::toBytes)
-            .consumerMainThread(LevelPollutionS2CPacket::handle)
+    public static <T extends S2CPacket> void addPacket(SimpleChannel net, Class<T> clazz, Function<FriendlyByteBuf, T> decoder) {
+        net.messageBuilder(clazz, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(decoder)
+            .encoder(T::toBytes)
+            .consumerMainThread(T::handle)
             .add();
-
-        net.messageBuilder(EvaporatingFluidS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(EvaporatingFluidS2CPacket::new)
-            .encoder(EvaporatingFluidS2CPacket::toBytes)
-            .consumerMainThread(EvaporatingFluidS2CPacket::handle)
-            .add();
-
-        net.messageBuilder(SeismometerSpikeS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(SeismometerSpikeS2CPacket::new)
-            .encoder(SeismometerSpikeS2CPacket::toBytes)
-            .consumerMainThread(SeismometerSpikeS2CPacket::handle)
-            .add();
-
-        //TODO maybe make a convienience method for registering packets
     };
 
     public static <MSG> void sendToClient(MSG message, ServerPlayer player) {

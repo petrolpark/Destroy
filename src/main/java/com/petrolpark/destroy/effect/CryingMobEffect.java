@@ -7,13 +7,12 @@ import com.petrolpark.destroy.network.packet.CryingS2CPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.phys.Vec3;
 
-public class CryingMobEffect extends MobEffect {
+public class CryingMobEffect extends DestroyMobEffect {
 
     protected CryingMobEffect() {
         super(MobEffectCategory.NEUTRAL, 0xCBF2F0);

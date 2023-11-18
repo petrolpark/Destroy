@@ -9,7 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
-public class LevelPollutionS2CPacket {
+public class LevelPollutionS2CPacket extends S2CPacket {
     
     private final LevelPollution levelPollution;
 
@@ -22,12 +22,14 @@ public class LevelPollutionS2CPacket {
         levelPollution.loadNBTData(buffer.readNbt());
     };
 
+    @Override
     public void toBytes(FriendlyByteBuf buffer) {
         CompoundTag tag = new CompoundTag();
         levelPollution.saveNBTData(tag);
         buffer.writeNbt(tag);
     };
     
+    @Override
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {

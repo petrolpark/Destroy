@@ -1,0 +1,10 @@
+{
+    "values": [
+      "destroy:alcohol",
+      "destroy:chemical_burn",
+      "destroy:chemical_poison",
+      "destroy:headache",
+      "destroy:needle",
+      "destroy:self_needle"
+      ]
+}

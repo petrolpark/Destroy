@@ -23,6 +23,7 @@ import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.compostable.DestroyCompostables;
 import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
 import com.petrolpark.destroy.item.potatoCannonProjectileType.DestroyPotatoCannonProjectileTypes;
+import com.petrolpark.destroy.item.tooltip.ContaminatedItemDescription;
 import com.petrolpark.destroy.item.tooltip.IDynamicItemDescription;
 import com.petrolpark.destroy.item.tooltip.TempramentalItemDescription;
 import com.petrolpark.destroy.network.DestroyMessages;
@@ -77,7 +78,8 @@ public class Destroy {
 			return new ItemDescription.Modifier(item, Palette.STANDARD_CREATE)
 				.andThen(TooltipModifier.mapNull(KineticStats.create(item)))
                 .andThen(TooltipModifier.mapNull(IDynamicItemDescription.create(item)))
-                .andThen(new TempramentalItemDescription());
+                .andThen(new TempramentalItemDescription())
+                .andThen(new ContaminatedItemDescription());
 		});
 	}
 

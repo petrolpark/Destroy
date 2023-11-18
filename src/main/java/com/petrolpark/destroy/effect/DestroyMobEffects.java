@@ -16,18 +16,18 @@ public class DestroyMobEffects {
 
     public static final RegistryObject<MobEffect> 
 
-    CANCER = MOB_EFFECTS.register("cancer", () -> new DummyMobEffect(MobEffectCategory.NEUTRAL, 0)),
+    CANCER = MOB_EFFECTS.register("cancer", () -> new DestroyMobEffect(MobEffectCategory.NEUTRAL, 0)),
     CHEMICAL_POISON = MOB_EFFECTS.register("chemical_poison", ChemicalPoisonMobEffect::new),
     CRYING = MOB_EFFECTS.register("crying", CryingMobEffect::new),
     FRAGRANCE = MOB_EFFECTS.register("fragrance",
-        () -> new DummyMobEffect(MobEffectCategory.BENEFICIAL, 0xF294D9)
+        () -> new DestroyMobEffect(MobEffectCategory.BENEFICIAL, 0xF294D9)
     ),
     HANGOVER = MOB_EFFECTS.register("hangover", HangoverMobEffect::new),
     INEBRIATION = MOB_EFFECTS.register("inebriation", InebriationMobEffect::new),
     BABY_BLUE_HIGH = MOB_EFFECTS.register("baby_blue_high", BabyBlueHighMobEffect::new),
     BABY_BLUE_WITHDRAWAL = MOB_EFFECTS.register("baby_blue_withdrawal", BabyBlueWithdrawalMobEffect::new),
     SUN_PROTECTION = MOB_EFFECTS.register("sun_protection",
-        () -> new DummyMobEffect(MobEffectCategory.BENEFICIAL, 0xFFFFFF)
+        () -> new DestroyMobEffect(MobEffectCategory.BENEFICIAL, 0xFFFFFF)
     );
 
     public static void register(IEventBus eventBus) {

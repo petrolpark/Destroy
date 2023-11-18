@@ -175,7 +175,7 @@ public class Molecule implements INameableProduct {
         } else if (idComponents.length == 2) {
             return MOLECULES.get(id);
         };
-        Destroy.LOGGER.warn("Could not find Molecule '"+id+"'.");
+        if (id != "NO_MOLECULE") Destroy.LOGGER.warn("Could not find Molecule '"+id+"'."); // The 'NO_MOLECULE' is just to stop false warnings due to the Chemical Poison mob effect
         return null;
     };
 

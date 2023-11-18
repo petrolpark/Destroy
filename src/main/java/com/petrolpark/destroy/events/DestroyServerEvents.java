@@ -28,6 +28,7 @@ import com.petrolpark.destroy.item.SyringeItem;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
 import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
+import com.petrolpark.destroy.util.ChemistryDamageHelper;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.petrolpark.destroy.util.InebriationHelper;
@@ -54,6 +55,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -93,6 +96,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent.CropGrowEvent;
@@ -122,6 +126,13 @@ public class DestroyServerEvents {
 
     @SubscribeEvent
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
+        Entity entity = event.getObject();
+        if (entity instanceof LivingEntity) {
+            // Add Chemical Poison Capability
+            if (!entity.getCapability(EntityChemicalPoison.Provider.ENTITY_CHEMICAL_POISON).isPresent()) {
+                event.addCapability(Destroy.asResource("chemical_poison"), new EntityChemicalPoison.Provider());
+            };
+        };
         if (event.getObject() instanceof Player player) {
             // Add Baby Blue Addiction Capability
             if (!player.getCapability(PlayerBabyBlueAddictionProvider.PLAYER_BABY_BLUE_ADDICTION).isPresent()) {
@@ -143,14 +154,6 @@ public class DestroyServerEvents {
         LevelChunk chunk = event.getObject();
         if (!chunk.getCapability(ChunkCrudeOil.Provider.CHUNK_CRUDE_OIL).isPresent()) {
             event.addCapability(Destroy.asResource("crude_oil"), new ChunkCrudeOil.Provider());
-        };
-    };
-
-    @SubscribeEvent
-    public static void onAttachCapabilitiesEntity(AttachCapabilitiesEvent<Entity> event) {
-        Entity entity = event.getObject();
-        if (entity instanceof LivingEntity && !entity.getCapability(EntityChemicalPoison.Provider.ENTITY_CHEMICAL_POISON).isPresent()) {
-            event.addCapability(Destroy.asResource("chemical_poison"), new EntityChemicalPoison.Provider());
         };
     };
 
@@ -290,7 +293,7 @@ public class DestroyServerEvents {
         };
 
         // Give the Player cancer if in direct sunlight
-        if (level.canSeeSky(posOn) && !player.hasEffect(DestroyMobEffects.SUN_PROTECTION.get())) {
+        if (level.canSeeSky(posOn.above()) && !player.hasEffect(DestroyMobEffects.SUN_PROTECTION.get())) {
             if (player.getRandom().nextInt(PollutionType.OZONE_DEPLETION.max * 600) < PollutionHelper.getPollution(level, PollutionType.OZONE_DEPLETION)) player.addEffect(DestroyMobEffects.cancerInstance());
         };
     };
@@ -540,6 +543,19 @@ public class DestroyServerEvents {
                 event.setResult(Result.DENY);
                 return;
             };
+        };
+    };
+
+    /**
+     * Damage entities with the effects of chemicals if they take off contaminated armor without washing it first.
+     * @param event
+     */
+    @SubscribeEvent
+    public static void onContaminatedArmorRemoved(LivingEquipmentChangeEvent event) {
+        CompoundTag tag = event.getFrom().getOrCreateTag();
+        if (tag.contains("ContaminatingFluid", Tag.TAG_COMPOUND)) {
+            ChemistryDamageHelper.damage(event.getEntity().level(), event.getEntity(), FluidStack.loadFluidStackFromNBT(tag.getCompound("ContaminatingFluid")), true);
+            ChemistryDamageHelper.decontaminate(event.getFrom());
         };
     };
 

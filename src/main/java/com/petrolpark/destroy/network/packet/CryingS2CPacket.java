@@ -12,7 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.network.NetworkEvent;
 
-public class CryingS2CPacket {
+public class CryingS2CPacket extends S2CPacket {
 
     private final boolean isCrying;
     private final int entityId;
@@ -27,12 +27,14 @@ public class CryingS2CPacket {
         this.entityId = buffer.readInt();
     };
 
+    @Override
     public void toBytes(FriendlyByteBuf buffer) {
         buffer.writeBoolean(isCrying);
         buffer.writeInt(entityId);
     };
     
     @SuppressWarnings("resource")
+    @Override
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {

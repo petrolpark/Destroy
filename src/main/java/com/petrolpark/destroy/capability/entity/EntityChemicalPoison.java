@@ -4,10 +4,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.network.DestroyMessages;
+import com.petrolpark.destroy.network.packet.ChemicalPoisonS2CPacket;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -19,17 +24,26 @@ public class EntityChemicalPoison {
   
     private Molecule molecule;
 
-    public void setMolecule(Molecule molecule) {
-        if (molecule == null) this.molecule = molecule;
+    public static void setMolecule(Entity entity, Molecule molecule) {
+        if (!(entity instanceof LivingEntity)) return;
+        entity.getCapability(Provider.ENTITY_CHEMICAL_POISON).ifPresent(cp -> {
+            if (cp.molecule != null) return; // Don't replace existing poison
+            cp.molecule = molecule;
+            if (entity instanceof ServerPlayer serverPlayer) DestroyMessages.sendToClient(new ChemicalPoisonS2CPacket(molecule), serverPlayer);
+        });
+    };
+
+    public static void removeMolecule(Entity entity) {
+        if (!(entity instanceof LivingEntity)) return;
+        entity.getCapability(Provider.ENTITY_CHEMICAL_POISON).ifPresent(cp -> {
+            cp.molecule = null;
+            if (entity instanceof ServerPlayer serverPlayer) DestroyMessages.sendToClient(new ChemicalPoisonS2CPacket((Molecule)null), serverPlayer);
+        });
     };
 
     @Nullable
     public Molecule getMolecule() {
         return molecule;
-    };
-
-    public void removeMolecule() {
-        this.molecule = null;
     };
 
     public static class Provider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
@@ -47,13 +61,15 @@ public class EntityChemicalPoison {
         @Override
         public CompoundTag serializeNBT() {
             CompoundTag tag = new CompoundTag();
-            if (createEntityChemicalPoison().molecule != null) tag.putString("ToxicMolecule", createEntityChemicalPoison().molecule.getFullID());
+            if (createEntityChemicalPoison().molecule != null)
+                tag.putString("ToxicMolecule", createEntityChemicalPoison().molecule.getFullID());
             return tag;
         };
 
         @Override
         public void deserializeNBT(CompoundTag tag) {
-            if (tag.contains("ToxicMolecule", Tag.TAG_STRING)) createEntityChemicalPoison().molecule = Molecule.getMolecule(tag.getString("ToxicMolecule"));
+            if (tag.contains("ToxicMolecule", Tag.TAG_STRING))
+                createEntityChemicalPoison().molecule = Molecule.getMolecule(tag.getString("ToxicMolecule"));
         };
 
         @Override

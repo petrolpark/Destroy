@@ -16,7 +16,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fluids.FluidStack;
 
 public class PollutionHelper {
@@ -81,10 +83,10 @@ public class PollutionHelper {
     };
 
     /**
-     * Pollute a single Fluid Stack, with no Particles.
+     * Pollute a single Fluid Stack, with no Particles, and without damaging nearby Entities.
      * @param level
      * @param fluidStack
-     * @see PollutionHelper#pollute(Level, BlockPos, int, FluidStack...) Showing evaporation particles too
+     * @see PollutionHelper#pollute(Level, BlockPos, int, FluidStack...) Harming Entities and showing evaporation particles too
      */
     public static void pollute(Level level, FluidStack fluidStack) {
         if (DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid()) && fluidStack.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND)) {
@@ -99,7 +101,7 @@ public class PollutionHelper {
     };
 
     /**
-     * Release the given Fluids into the environment and sometimes summon evaporation particles.
+     * Release the given Fluids into the environment, sometimes summon evaporation particles, and expose nearby entities to the effects of the chemicals.
      * @param level The level in which the pollution is taking place
      * @param blockPos The position from which the evaporation Particles should originate
      * @param particleWeight There will be a {@code 1} in {@code particleWeight} chance of a Particle being shown. If this is {@code 1} (as is the default), there will always be a Particle
@@ -107,9 +109,13 @@ public class PollutionHelper {
      */
     public static void pollute(Level level, BlockPos blockPos, int particleWeight, FluidStack ...fluidStacks) {
         if (level.isClientSide()) return;
+        List<LivingEntity> nearbyEntities = level.getEntities(null, new AABB(blockPos).inflate(2)).stream().filter(e -> e instanceof LivingEntity).map(e -> (LivingEntity)e).toList();
         for (FluidStack fluidStack : List.of(fluidStacks)) {
             pollute(level, fluidStack);
             if (particleWeight == 1 || level.getRandom().nextInt(particleWeight) == 0) DestroyMessages.sendToAllClients(new EvaporatingFluidS2CPacket(blockPos, fluidStack));
+            for (LivingEntity entity : nearbyEntities) {
+                ChemistryDamageHelper.damage(level, entity, fluidStack, true);
+            };
         };
     };
 
