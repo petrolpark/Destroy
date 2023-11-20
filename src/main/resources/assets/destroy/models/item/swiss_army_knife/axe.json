@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/handheld",
+    "textures": {
+      "layer0": "destroy:item/swiss_army_knife/axe"
+    }
+}

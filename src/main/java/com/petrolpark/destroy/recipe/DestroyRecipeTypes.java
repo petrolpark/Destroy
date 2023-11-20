@@ -35,7 +35,10 @@ public enum DestroyRecipeTypes implements IRecipeTypeInfo {
     EXTRUSION(ExtrusionRecipe::new),
     MUTATION(MutationRecipe::new),
     OBLITERATION(ObliterationRecipe::new),
-    REACTION(ReactionRecipe::new);
+    REACTION(ReactionRecipe::new),
+
+    DURATION_4_FIREWORK_ROCKET_CRAFTING(() -> ExtendedDurationFireworkRocketRecipe.DURATION_4_FIREWORK_ROCKET, () -> RecipeType.CRAFTING, false),
+    DURATION_5_FIREWORK_ROCKET_CRAFTING(() -> ExtendedDurationFireworkRocketRecipe.DURATION_5_FIREWORK_ROCKET, () -> RecipeType.CRAFTING, false);
 
     // This is alllllll copied from Create source code
     private final ResourceLocation id;

@@ -1,0 +1,44 @@
+{
+    "parent": "minecraft:item/handheld",
+    "textures": {
+      "layer0": "destroy:item/swiss_army_knife/cover"
+    },
+    "overrides": [
+      {
+        "predicate": {
+          "destroy:component": 0.125
+        },
+        "model": "destroy:item/swiss_army_knife/pickaxe"
+      },
+      {
+        "predicate": {
+          "destroy:component": 0.125
+        },
+        "model": "destroy:item/swiss_army_knife/shovel"
+      },
+      {
+        "predicate": {
+          "destroy:component": 0.25
+        },
+        "model": "destroy:item/swiss_army_knife/axe"
+      },
+      {
+        "predicate": {
+          "destroy:component": 0.375
+        },
+        "model": "destroy:item/swiss_army_knife/hoe"
+      },
+      {
+        "predicate": {
+          "destroy:component": 0.5
+        },
+        "model": "destroy:item/swiss_army_knife/upper_shears"
+      },
+      {
+        "predicate": {
+          "destroy:component": 0.625
+        },
+        "model": "destroy:item/swiss_army_knife/lower_shears"
+      }
+    ]
+  }

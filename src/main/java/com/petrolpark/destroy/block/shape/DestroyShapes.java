@@ -27,6 +27,9 @@ public class DestroyShapes {
     HEFTY_BEETROOT = shape(4, -1, 4, 12, 5, 12)
         .build(),
 
+    MAGIC_BEETROOT_SEEDS = shape(0, 0, 0, 16, 2, 16)
+        .build(),
+
     AGING_BARREL_INTERIOR = shape(0, 0, 0, 16, 16, 16) // Used for detecting when Items are thrown into the Aging Barrel
         .erase(2, 7, 2, 14, 16, 14)
         .build(),

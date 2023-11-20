@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:gift",
+    "pools": [
+      {
+        "bonus_rolls": 0.0,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "name": "minecraft:torchflower_seeds"
+          },
+          {
+            "type": "minecraft:item",
+            "name": "minecraft:pitcher_pod"
+          },
+          {
+            "type": "minecraft:item",
+            "name": "destroy:magic_beetroot_seeds",
+            "functions": [
+                {
+                    "function": "set_count",
+                    "count": 5
+                }
+            ]
+          }
+        ],
+        "rolls": 1.0
+      }
+    ],
+    "random_sequence": "minecraft:gameplay/sniffer_digging"
+  }

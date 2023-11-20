@@ -3,6 +3,7 @@ package com.petrolpark.destroy.item;
 import static com.petrolpark.destroy.Destroy.REGISTRATE;
 import static com.simibubi.create.AllTags.forgeItemTag;
 
+import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.item.food.DestroyFoods;
 import com.petrolpark.destroy.item.renderer.GasMaskModel;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
@@ -18,9 +19,11 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BowlFoodItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.RecordItem;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.ArmorItem.Type;
 import net.minecraftforge.common.Tags;
 
@@ -183,6 +186,13 @@ public class DestroyItems {
         .register();
 
     // TOOLS AND ARMOR
+
+    public static final ItemEntry<SwissArmyKnifeItem>
+
+    SWISS_ARMY_KNIFE = REGISTRATE.item("swiss_army_knife", (p) -> new SwissArmyKnifeItem(5f, 5f, Tiers.IRON, p))    
+        .properties(p -> p
+            .durability(800)
+        ).register();
 
     public static final ItemEntry<Item>
 
@@ -427,6 +437,13 @@ public class DestroyItems {
         .register();
 
     // BEETROOT
+
+    public static final ItemEntry<ItemNameBlockItem>
+
+    MAGIC_BEETROOT_SEEDS = REGISTRATE.item("magic_beetroot_seeds", p -> new ItemNameBlockItem(DestroyBlocks.MAGIC_BEETROOT_SHOOTS.get(), p))
+        .tag(Tags.Items.SEEDS)
+        .tag(Tags.Items.SEEDS_BEETROOT)
+        .register();
 
     public static final ItemEntry<Item>
 

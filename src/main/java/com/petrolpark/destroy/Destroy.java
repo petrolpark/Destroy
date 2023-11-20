@@ -19,6 +19,7 @@ import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.entity.DestroyEntityTypes;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.pipeEffectHandler.MixtureOpenEndedPipeEffectHandler;
+import com.petrolpark.destroy.item.DestroyItemProperties;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.compostable.DestroyCompostables;
 import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
@@ -152,6 +153,9 @@ public class Destroy {
     };
 
     public static void clientInit(final FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            DestroyItemProperties.register();
+        });
         DestroyPonderTags.register();
         DestroyPonderIndex.register();
     };

@@ -43,10 +43,10 @@ import net.minecraftforge.fluids.FluidStack;
 @Mixin(CreateRecipeCategory.class)
 public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
 
-    private static DecimalFormat df = new DecimalFormat();
+    private static final DecimalFormat df = new DecimalFormat();
     static {
-        df.setMinimumFractionDigits(1);
-        df.setMaximumFractionDigits(1);
+        df.setMinimumFractionDigits(3);
+        df.setMaximumFractionDigits(3);
     };
 
     /**
@@ -118,7 +118,7 @@ public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
                     if (!mixtureTag.isEmpty()) {
                         ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(mixtureTag);
                         name = mixture.getName();
-                        mixtureTooltip = mixture.getContentsTooltip(iupac, false, new DecimalFormat());
+                        mixtureTooltip = mixture.getContentsTooltip(iupac, false, df);
                     } else {
                         mixtureTooltip = List.of(DestroyLang.translate("mixture.empty").component());
                     };

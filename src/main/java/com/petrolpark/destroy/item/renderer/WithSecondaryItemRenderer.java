@@ -23,10 +23,11 @@ public class WithSecondaryItemRenderer extends CustomRenderedItemModelRenderer {
         if (transformType == ItemDisplayContext.GUI && Screen.hasShiftDown()) {
             ItemStack secondaryStack = WithSecondaryItem.getSecondaryItem(stack);
             if (!stack.isEmpty()) {
-                PoseStack localMs = new PoseStack();
-                localMs.translate(1/ 4f, -1 / 4f, 1);
-                localMs.scale(0.5f, 0.5f, 0.5f);
-                itemRenderer.renderStatic(secondaryStack, ItemDisplayContext.GUI, light, OverlayTexture.NO_OVERLAY, localMs, buffer, mc.level, 0);
+                ms.pushPose();
+                ms.translate(1/ 4f, -1 / 4f, 1);
+                ms.scale(0.5f, 0.5f, 0.5f);
+                itemRenderer.renderStatic(secondaryStack, ItemDisplayContext.GUI, light, OverlayTexture.NO_OVERLAY, ms, buffer, mc.level, 0);
+                ms.popPose();
 			};
 		}
 
