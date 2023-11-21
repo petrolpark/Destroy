@@ -12,31 +12,31 @@
       },
       {
         "predicate": {
-          "destroy:component": 0.125
+          "destroy:component": 0.25
         },
         "model": "destroy:item/swiss_army_knife/shovel"
       },
       {
         "predicate": {
-          "destroy:component": 0.25
+          "destroy:component": 0.375
         },
         "model": "destroy:item/swiss_army_knife/axe"
       },
       {
         "predicate": {
-          "destroy:component": 0.375
+          "destroy:component": 0.5
         },
         "model": "destroy:item/swiss_army_knife/hoe"
       },
       {
         "predicate": {
-          "destroy:component": 0.5
+          "destroy:component": 0.625
         },
         "model": "destroy:item/swiss_army_knife/upper_shears"
       },
       {
         "predicate": {
-          "destroy:component": 0.625
+          "destroy:component": 0.75
         },
         "model": "destroy:item/swiss_army_knife/lower_shears"
       }

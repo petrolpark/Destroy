@@ -189,9 +189,9 @@ public class DestroyItems {
 
     public static final ItemEntry<SwissArmyKnifeItem>
 
-    SWISS_ARMY_KNIFE = REGISTRATE.item("swiss_army_knife", (p) -> new SwissArmyKnifeItem(5f, 5f, Tiers.IRON, p))    
+    SWISS_ARMY_KNIFE = REGISTRATE.item("swiss_army_knife", (p) -> new SwissArmyKnifeItem(5f, -1f, Tiers.DIAMOND, p))    
         .properties(p -> p
-            .durability(800)
+            .durability(1600)
         ).register();
 
     public static final ItemEntry<Item>

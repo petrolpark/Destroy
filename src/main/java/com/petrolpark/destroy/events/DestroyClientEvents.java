@@ -11,6 +11,7 @@ import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
 import com.petrolpark.destroy.client.gui.button.OpenDestroyMenuButton;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
+import com.petrolpark.destroy.item.SwissArmyKnifeItem;
 import com.petrolpark.destroy.item.renderer.SeismometerItemRenderer;
 import com.petrolpark.destroy.mixin.accessor.MenuRowsAccessor;
 import com.petrolpark.destroy.util.PollutionHelper;
@@ -46,6 +47,7 @@ public class DestroyClientEvents {
             SeismometerItemRenderer.tick();
         } else {
             BlockEntityBehaviourRenderer.tick();
+            SwissArmyKnifeItem.clientPlayerTick();
         };
     };
 

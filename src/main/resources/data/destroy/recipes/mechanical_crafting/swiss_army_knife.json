@@ -1,0 +1,36 @@
+{
+    "type": "create:mechanical_crafting",
+    "pattern": [
+      "PPPPPP",
+      "MIASHO",
+      "PPPPPP"
+    ],
+    "key": {
+      "P": {
+        "item": "destroy:polypropene"
+      },
+      "M": {
+        "item": "create:precision_mechanism"
+      },
+      "I": {
+        "item": "minecraft:iron_pickaxe"
+      },
+      "A": {
+        "item": "minecraft:iron_axe"
+      },
+      "S": {
+        "item": "minecraft:shears"
+      },
+      "H": {
+        "item": "minecraft:iron_shovel"
+      },
+      "O": {
+        "item": "minecraft:iron_hoe"
+      }
+    },
+    "result": {
+      "item": "destroy:swiss_army_knife",
+      "count": 1
+    },
+    "acceptMirrored": true
+  }

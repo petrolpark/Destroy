@@ -3,12 +3,14 @@ package com.petrolpark.destroy.network;
 import java.util.function.Function;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.network.packet.C2SPacket;
 import com.petrolpark.destroy.network.packet.ChemicalPoisonS2CPacket;
 import com.petrolpark.destroy.network.packet.CryingS2CPacket;
 import com.petrolpark.destroy.network.packet.EvaporatingFluidS2CPacket;
 import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
 import com.petrolpark.destroy.network.packet.S2CPacket;
 import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
+import com.petrolpark.destroy.network.packet.SwissArmyKnifeToolC2SPacket;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,19 +39,33 @@ public class DestroyMessages {
     
         INSTANCE = net;
 
-        addPacket(net, CryingS2CPacket.class, CryingS2CPacket::new);
-        addPacket(net, LevelPollutionS2CPacket.class, LevelPollutionS2CPacket::new);
-        addPacket(net, EvaporatingFluidS2CPacket.class, EvaporatingFluidS2CPacket::new);
-        addPacket(net, SeismometerSpikeS2CPacket.class, SeismometerSpikeS2CPacket::new);
-        addPacket(net, ChemicalPoisonS2CPacket.class, ChemicalPoisonS2CPacket::new);
+        addS2CPacket(net, CryingS2CPacket.class, CryingS2CPacket::new);
+        addS2CPacket(net, LevelPollutionS2CPacket.class, LevelPollutionS2CPacket::new);
+        addS2CPacket(net, EvaporatingFluidS2CPacket.class, EvaporatingFluidS2CPacket::new);
+        addS2CPacket(net, SeismometerSpikeS2CPacket.class, SeismometerSpikeS2CPacket::new);
+        addS2CPacket(net, ChemicalPoisonS2CPacket.class, ChemicalPoisonS2CPacket::new);
+
+        addC2SPacket(net, SwissArmyKnifeToolC2SPacket.class, SwissArmyKnifeToolC2SPacket::new);
     };
 
-    public static <T extends S2CPacket> void addPacket(SimpleChannel net, Class<T> clazz, Function<FriendlyByteBuf, T> decoder) {
+    public static <T extends S2CPacket> void addS2CPacket(SimpleChannel net, Class<T> clazz, Function<FriendlyByteBuf, T> decoder) {
         net.messageBuilder(clazz, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(decoder)
             .encoder(T::toBytes)
             .consumerMainThread(T::handle)
             .add();
+    };
+
+    public static <T extends C2SPacket> void addC2SPacket(SimpleChannel net, Class<T> clazz, Function<FriendlyByteBuf, T> decoder) {
+        net.messageBuilder(clazz, id(), NetworkDirection.PLAY_TO_SERVER)
+            .decoder(decoder)
+            .encoder(T::toBytes)
+            .consumerMainThread(T::handle)
+            .add();
+    };
+
+    public static <MSG> void sendToServer(MSG message) {
+        INSTANCE.sendToServer(message);
     };
 
     public static <MSG> void sendToClient(MSG message, ServerPlayer player) {

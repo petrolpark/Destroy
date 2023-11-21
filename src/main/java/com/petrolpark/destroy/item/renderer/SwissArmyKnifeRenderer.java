@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.item.SwissArmyKnifeItem;
@@ -14,7 +13,6 @@ import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -31,39 +29,47 @@ public class SwissArmyKnifeRenderer extends CustomRenderedItemModelRenderer {
     protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer, ItemDisplayContext transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         Minecraft mc = Minecraft.getInstance();
         ItemRenderer itemRenderer = mc.getItemRenderer();
-        if (transformType == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND || transformType == ItemDisplayContext.FIRST_PERSON_LEFT_HAND) {
+        if (transformType == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND || transformType == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || transformType == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND || transformType == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
+
+            boolean firstPerson = (transformType == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND || transformType == ItemDisplayContext.FIRST_PERSON_LEFT_HAND);
 
             Map<Tool, LerpedFloat> chasers = SwissArmyKnifeItem.getChasers(stack);
-            float partialTicks = AnimationTickHolder.getPartialTicks();
 
             ms.pushPose();
-            ms.translate(0f,  - 4 / 16f, -0.27f);
+            if (!firstPerson) {
+                ms.scale(0.5f, 0.5f, 0.5f);
+                ms.translate(-3 / 10f, - 5 / 10f, 0f);
+                TransformStack.cast(ms).rotateZ(-90f);
+            } else {
+                ms.scale(0.6f, 0.6f, 0.6f);
+                ms.translate(0f, -6 / 16f, 3 / 16f);
+                TransformStack.cast(ms).rotateZ(-45f);
+            };
+            ms.translate(0f, 0f, -0.175f);
             itemRenderer.render(stack, ItemDisplayContext.NONE, false, ms, buffer, light, overlay, model.getOriginalModel()); // Render first casing
 
             // Render all tools
             ms.pushPose();
             ms.translate(-10 / 16f, 10 / 16f, 0f);
 
-            int inversion = 1;
-            for (RenderedTool tool : RenderedTool.TOOLS) {
-                ms.translate(0f, 0f, 0.06f);
+            for (RenderedTool tool : RenderedTool.ORDERED_TOOLS) {
+                ms.translate(0f, 0f, 0.05f);
                 ItemStack renderedTool = tool.getRenderedItemStack((SwissArmyKnifeItem)stack.getItem());
                 LerpedFloat toolAngle = chasers.get(tool.tool);
 
                 ms.pushPose();
-                if (tool != RenderedTool.CASING) {
+                if (toolAngle != null) {
                     TransformStack.cast(ms)
                         .translate(5 / 16f, -5 / 16f, 0f)
-                        .rotateZ(180 * (1 - toolAngle.getValue(partialTicks)) * inversion)
+                        .rotateZ(179 * (1 - toolAngle.getValue()) * (tool == RenderedTool.LOWER_SHEARS ? 1f : -1f))
                         .translateBack(5 / 16f, -5 / 16f, 0f);
                 };
                 itemRenderer.renderStatic(renderedTool, ItemDisplayContext.NONE, light, OverlayTexture.NO_OVERLAY, ms, buffer, mc.level, 0);
                 ms.popPose();
-                inversion *= -1; // Alternately flip each tool
             };
             ms.popPose();
 
-            ms.translate(0f, 0f, 0.42f);
+            ms.translate(0f, 0f, 0.35f);
             itemRenderer.render(stack, ItemDisplayContext.NONE, false, ms, buffer, light, overlay, model.getOriginalModel()); // Render other casing
 
             ms.popPose();
@@ -74,7 +80,7 @@ public class SwissArmyKnifeRenderer extends CustomRenderedItemModelRenderer {
     };
 
     public static enum RenderedTool {
-        CASING(null),
+        CASING(Tool.PICKAXE), // The 'Tool.PICKAXE' is not used here
         PICKAXE(Tool.PICKAXE),
         SHOVEL(Tool.SHOVEL),
         AXE(Tool.AXE),
@@ -82,9 +88,8 @@ public class SwissArmyKnifeRenderer extends CustomRenderedItemModelRenderer {
         UPPER_SHEARS(Tool.SHEARS),
         LOWER_SHEARS(Tool.SHEARS);
 
-        private static final List<RenderedTool> TOOLS = List.of(PICKAXE, AXE, LOWER_SHEARS, UPPER_SHEARS, SHOVEL, HOE);
+        private static final List<RenderedTool> ORDERED_TOOLS = List.of(PICKAXE, AXE, LOWER_SHEARS, UPPER_SHEARS, SHOVEL, HOE);
 
-        @Nullable
         public final Tool tool;
 
         RenderedTool(Tool tool) {
