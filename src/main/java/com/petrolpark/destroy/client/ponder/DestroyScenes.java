@@ -19,6 +19,7 @@ import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.particle.data.GasParticleData;
+import com.petrolpark.destroy.client.ponder.instruction.HighlightTagInstruction;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.petrolpark.destroy.item.DestroyItems;
@@ -1070,6 +1071,7 @@ public class DestroyScenes {
 
         scene.overlay.showText(80)
             .text("This text is defined in a language file");
+        scene.addInstruction(new HighlightTagInstruction(DestroyPonderTags.VAT_SIDE_BLOCKS, 80));
         scene.idle(100);
 
         scene.overlay.showText(100)

@@ -64,19 +64,19 @@ public class DestroyMessages {
             .add();
     };
 
-    public static <MSG> void sendToServer(MSG message) {
+    public static void sendToServer(C2SPacket message) {
         INSTANCE.sendToServer(message);
     };
 
-    public static <MSG> void sendToClient(MSG message, ServerPlayer player) {
+    public static void sendToClient(S2CPacket message, ServerPlayer player) {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
     };
 
-    public static <MSG> void sendToAllClients(MSG message) {
+    public static void sendToAllClients(S2CPacket message) {
         INSTANCE.send(PacketDistributor.ALL.noArg(), message);
     };
 
-    public static <MSG> void sendToClientsTrackingEntity(MSG message, Entity trackedEntity) {
+    public static void sendToClientsTrackingEntity(S2CPacket message, Entity trackedEntity) {
         INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> trackedEntity), message);
     };
 }

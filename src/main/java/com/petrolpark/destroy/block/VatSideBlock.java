@@ -70,6 +70,11 @@ public class VatSideBlock extends CopycatBlock {
     };
 
     @Override
+    public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
+		return InteractionResult.PASS;
+	};
+
+    @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
         withBlockEntityDo(level, currentPos, be -> {
             if (!(be instanceof VatSideBlockEntity vatSide)) return;

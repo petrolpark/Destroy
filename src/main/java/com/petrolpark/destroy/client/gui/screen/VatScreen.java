@@ -46,8 +46,8 @@ public class VatScreen extends AbstractSimiScreen {
 
     private static final DecimalFormat df = new DecimalFormat();
     static {
-        df.setMinimumFractionDigits(6);
-        df.setMaximumFractionDigits(6);
+        df.setMinimumFractionDigits(5);
+        df.setMaximumFractionDigits(5);
     };
 
     private VatControllerBlockEntity blockEntity;
@@ -105,9 +105,10 @@ public class VatScreen extends AbstractSimiScreen {
         horizontalTextScroll.tickChaser();
 
         ReadOnlyMixture mixture = blockEntity.getCombinedReadOnlyMixture();
+        int vatCapacity = blockEntity.getVatOptional().get().getCapacity(); //TODO swap along with all other references to the vat capacity
 
         orderedMolecules = new ArrayList<>(mixture.getContents(false).size());
-        orderedMolecules.addAll(mixture.getContents(false).stream().map(molecule -> Pair.of(molecule, mixture.getConcentrationOf(molecule))).toList());
+        orderedMolecules.addAll(mixture.getContents(false).stream().map(molecule -> Pair.of(molecule, mixture.getConcentrationOf(molecule) * vatCapacity / 1000)).toList());
         Collections.sort(orderedMolecules, (p1, p2) -> Float.compare(p2.getSecond(), p1.getSecond()));
 	};
 
@@ -204,7 +205,7 @@ public class VatScreen extends AbstractSimiScreen {
             boolean selected = selectedMolecule != null && molecule.getFullID().equals(selectedMolecule.getFullID());
             (selected ? DestroyGuiTextures.VAT_CARD_SELECTED : DestroyGuiTextures.VAT_CARD_UNSELECTED).render(graphics, selected ? -1 : 0, selected ? -1 : 0);
             graphics.drawString(font, DestroyLang.shorten(molecule.getName(iupac).getString(), font, 92), 4, 4, 0xFFFFFF);
-            graphics.drawString(font, Component.literal(df.format(pair.getSecond())+"M"), 4, 17, 0xFFFFFF);
+            graphics.drawString(font, DestroyLang.translate("tooltip.vat.menu.moles", df.format(pair.getSecond())).component(), 4, 17, 0xFFFFFF);
             ms.popPose();
             ms.translate(0, CARD_HEIGHT, 0);
         };
