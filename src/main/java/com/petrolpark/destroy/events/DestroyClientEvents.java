@@ -59,6 +59,7 @@ public class DestroyClientEvents {
         if (!DestroyClientEvents.smogEnabled()) return;
         if (event.getType() == FogType.NONE) {
             LevelPollution levelPollution = ClientLevelPollutionData.getLevelPollution();
+            if (levelPollution == null) return;
             event.scaleNearPlaneDistance(1f - (0.8f * (float)levelPollution.get(PollutionType.SMOG) / (float)PollutionType.SMOG.max));
             event.scaleFarPlaneDistance(1f - (0.5f * (float)levelPollution.get(PollutionType.SMOG) / (float)PollutionType.SMOG.max));
             event.setCanceled(true);

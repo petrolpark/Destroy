@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
+import com.petrolpark.destroy.badge.BadgeHandler;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.behaviour.ExtendedBasinBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
@@ -12,6 +13,7 @@ import com.petrolpark.destroy.capability.entity.EntityChemicalPoison;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollution.PollutionType;
 import com.petrolpark.destroy.capability.level.pollution.LevelPollutionProvider;
+import com.petrolpark.destroy.capability.player.PlayerBadges;
 import com.petrolpark.destroy.capability.player.PlayerCrouching;
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddiction;
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
@@ -146,6 +148,10 @@ public class DestroyServerEvents {
             if (!player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).isPresent()) {
                 event.addCapability(Destroy.asResource("crouching"), new PlayerCrouching.Provider());
             };
+            // Add Badge Capability
+            if (!player.getCapability(PlayerBadges.Provider.PLAYER_BADGES).isPresent()) {
+                event.addCapability(Destroy.asResource("badges"), new PlayerBadges.Provider());
+            };
         };
     };
 
@@ -165,9 +171,14 @@ public class DestroyServerEvents {
         Player player = event.getEntity();
         if (!(player instanceof ServerPlayer serverPlayer)) return;
         Level level = player.level();
+
+        // Update render info
         level.getCapability(LevelPollutionProvider.LEVEL_POLLUTION).ifPresent(levelPollution -> {
             DestroyMessages.sendToClient(new LevelPollutionS2CPacket(levelPollution), serverPlayer);
         });
+
+        // Collect the Player's badges
+        BadgeHandler.fetchAndAddBadgesIncludingEarlyBird(serverPlayer);
     };
 
     /**

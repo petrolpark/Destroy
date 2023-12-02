@@ -2,6 +2,7 @@ package com.petrolpark.destroy;
 
 import com.mojang.logging.LogUtils;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
+import com.petrolpark.destroy.badge.DestroyBadges;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.model.DestroyPartials;
@@ -108,6 +109,7 @@ public class Destroy {
         DestroyVillagers.register(modEventBus);
         DestroyLoot.register(modEventBus);
         DestroyDamageTypes.register();
+        DestroyBadges.register(modEventBus);
 
         // Events
         MinecraftForge.EVENT_BUS.register(this);
