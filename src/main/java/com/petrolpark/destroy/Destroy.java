@@ -109,7 +109,7 @@ public class Destroy {
         DestroyVillagers.register(modEventBus);
         DestroyLoot.register(modEventBus);
         DestroyDamageTypes.register();
-        DestroyBadges.register(modEventBus);
+        DestroyBadges.register();
 
         // Events
         MinecraftForge.EVENT_BUS.register(this);

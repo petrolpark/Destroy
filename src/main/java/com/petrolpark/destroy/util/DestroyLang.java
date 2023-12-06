@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.fluid.ingredient.MixtureFluidIngredient;
 import com.petrolpark.destroy.util.vat.VatMaterial;
@@ -27,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
+@MoveToPetrolparkLibrary
 public class DestroyLang {
 
     private static DecimalFormat df = new DecimalFormat();

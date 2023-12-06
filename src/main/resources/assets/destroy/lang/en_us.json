@@ -706,6 +706,8 @@
 
     "destroy.tooltip.aging_barrel.progress": "Progress: %1$s",
     "destroy.tooltip.aging_barrel.aging_time": "Duration: %1$s",
+    "destroy.tooltip.badge": "Awarded to _%1$s_ on _%2$s_",
+    "destroy.tooltip.badge.unknown": "This isn't a real Badge...",
     "destroy.tooltip.basin.too_full.title": "Overfilled:",
     "destroy.tooltip.basin.too_full": "This Basin will _overflow_ if it reacts. Try a _Vat_ instead.",
     "destroy.tooltip.bubble_cap.input_tank": "Reboiler:",
@@ -851,6 +853,7 @@
     "item.destroy.baby_blue_syringe.tooltip.behaviour1": "Injects _that Entity_ with Baby Blue",
     "item.destroy.baby_blue_syringe.tooltip.condition2": "Hold Syringe in Offhand, hold L-click with empty Mainhand",
     "item.destroy.baby_blue_syringe.tooltip.behaviour2": "Injects _yourself_ with Baby Blue",
+    "item.destroy.badge": "Unknown Badge",
     "item.destroy.bangers_and_mash": "Bangers and Mash",
     "item.destroy.bangers_and_mash.tooltip": "BANGERS_AND_MASH",
     "item.destroy.bangers_and_mash.tooltip.summary": "A _British medicine_ used to _cure excitement_.",
