@@ -33,13 +33,13 @@ import com.petrolpark.destroy.recipe.DestroyCropMutations;
 import com.petrolpark.destroy.recipe.DestroyExtrusions;
 import com.petrolpark.destroy.recipe.DestroyMysteriousItemConversions;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
+import com.petrolpark.destroy.registrate.DestroyRegistrate;
 import com.petrolpark.destroy.util.DestroyTags;
 import com.petrolpark.destroy.util.vat.VatMaterial;
 import com.petrolpark.destroy.world.damage.DestroyDamageTypes;
 import com.petrolpark.destroy.world.loot.DestroyLoot;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
 import com.simibubi.create.content.fluids.OpenEndedPipe;
-import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
@@ -69,7 +69,7 @@ public class Destroy {
 
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MOD_ID);
+    public static final DestroyRegistrate REGISTRATE = new DestroyRegistrate(MOD_ID);
 
     public static ResourceLocation asResource(String path) {
         return new ResourceLocation(MOD_ID, path);
