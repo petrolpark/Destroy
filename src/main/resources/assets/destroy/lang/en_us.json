@@ -64,6 +64,9 @@
     "advancement.destroy.vat.description": "React chemicals in a Vat",
     "advancement.destroy.very_drunk": "Twenty-One Plus Percent B.A.C.",
     "advancement.destroy.very_drunk.description": "Reach 10 levels of Inebriation",
+
+    "advancement.petrolpark.badge_root": "Badges",
+    "advancement.petrolpark.badge_root.description": "You shouldn't see this",
     
     "badge.destroy.patreon_1": "Dame of Demolition",
     "badge.destroy.patreon_1.description": "Pledge to the first tier on the Destroy Patreon",

@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:badge/content_creator"
+      "layer0": "petrolpark:item/badge/beta_tester"
     }
   }

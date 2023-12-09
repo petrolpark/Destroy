@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:badge/early_bird"
+      "layer0": "petrolpark:item/badge/early_bird"
     }
   }

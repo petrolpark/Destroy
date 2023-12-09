@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.item.creativeModeTab;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
@@ -39,31 +40,34 @@ public class DestroyCreativeModeTabs {
 
 	public static class DestroyDisplayItemsGenerator implements DisplayItemsGenerator {
 
-		private static List<ItemProviderEntry<?>> excludedItems = List.of(
-			// Meta
-			DestroyItems.LOGO,
-			DestroyItems.MOLECULE_DISPLAY,
+		public static List<ItemProviderEntry<?>> excludedItems = new ArrayList<>();
 
-			// Temporary Items
-			DestroyItems.UNFINISHED_BLACKLIGHT,
-			DestroyItems.UNFINISHED_VOLTAIC_PILE,
-			DestroyItems.UNPROCESSED_CONVERSION_CATALYST,
-			DestroyItems.UNPROCESSED_MASHED_POTATO,
-			DestroyItems.UNPROCESSED_NAPALM_SUNDAE,
-			DestroyItems.UNFINISHED_CARD_STOCK,
+		static {
+			excludedItems.addAll(List.of(
+				// Meta
+				DestroyItems.LOGO,
+				DestroyItems.MOLECULE_DISPLAY,
 
-			// Removal
-			DestroyItems.BIFURICATED_CARROT,
-			DestroyItems.POTATE_O,
-			DestroyItems.WHITE_WHEAT,
-			DestroyItems.AGAR,
+				// Temporary Items
+				DestroyItems.UNFINISHED_BLACKLIGHT,
+				DestroyItems.UNFINISHED_VOLTAIC_PILE,
+				DestroyItems.UNPROCESSED_CONVERSION_CATALYST,
+				DestroyItems.UNPROCESSED_MASHED_POTATO,
+				DestroyItems.UNPROCESSED_NAPALM_SUNDAE,
+				DestroyItems.UNFINISHED_CARD_STOCK,
 
-			// Blocks
-			DestroyBlocks.YEAST_MUSHROOM,
-			DestroyBlocks.YEAST_COVERED_AGAR_BLOCK,
-			DestroyBlocks.AGAR_BLOCK
+				// Removal
+				DestroyItems.BIFURICATED_CARROT,
+				DestroyItems.POTATE_O,
+				DestroyItems.WHITE_WHEAT,
+				DestroyItems.AGAR,
 
-		);
+				// Blocks
+				DestroyBlocks.YEAST_MUSHROOM,
+				DestroyBlocks.YEAST_COVERED_AGAR_BLOCK,
+				DestroyBlocks.AGAR_BLOCK
+			));
+		};
 
 		@Override
 		public void accept(ItemDisplayParameters parameters, Output output) {

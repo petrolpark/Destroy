@@ -3,7 +3,6 @@ package com.petrolpark.destroy.item;
 import static com.petrolpark.destroy.Destroy.REGISTRATE;
 import static com.simibubi.create.AllTags.forgeItemTag;
 
-import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.item.food.DestroyFoods;
 import com.petrolpark.destroy.item.renderer.GasMaskModel;
@@ -35,11 +34,6 @@ public class DestroyItems {
         .register();
 
     public static final ItemEntry<MoleculeDisplayItem> MOLECULE_DISPLAY = REGISTRATE.item("molecule_display", MoleculeDisplayItem::new)
-        .tab(null)
-        .register();
-
-    @MoveToPetrolparkLibrary
-    public static final ItemEntry<BadgeItem> BADGE = REGISTRATE.item("badge", BadgeItem::new)
         .tab(null)
         .register();
 

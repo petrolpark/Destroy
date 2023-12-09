@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:badge/translator"
+      "layer0": "petrolpark:item/badge/bestie"
     }
   }

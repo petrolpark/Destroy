@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:badge/beta_tester"
+      "layer0": "destroy:item/badge/patreon_1"
     }
   }

@@ -2,6 +2,7 @@ package com.petrolpark.destroy.item;
 
 import java.util.Date;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -13,9 +14,10 @@ import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,34 +27,35 @@ import net.minecraft.world.level.Level;
 @MoveToPetrolparkLibrary
 public class BadgeItem extends Item {
 
-    protected static final DateFormat df = new SimpleDateFormat("YYYY-MM-DD");
+    protected static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-    public BadgeItem(Properties properties) {
+    protected final Supplier<Badge> badge;
+
+    public BadgeItem(Properties properties, Supplier<Badge> badge) {
         super(properties);
+        this.badge = badge;
     };
 
     public static ItemStack of(Player player, Badge badge, Date date) {
-        ItemStack stack = DestroyItems.BADGE.asStack();
+        ItemStack stack = new ItemStack(badge.getItem());
         CompoundTag tag = stack.getOrCreateTag();
-        tag.putString("Player", player.getScoreboardName());
-        tag.putString("Badge", Badge.getId(badge).toString());
+        tag.putString("Player", player == null ? "unknown" : player.getScoreboardName());
         tag.putLong("Date", date.getTime());
+        tag.getCompound("display").putString("Name", stack.getDisplayName().toString()); // Always display the name in an item frame
         return stack;
     };
 
     @Override
     public Component getName(ItemStack stack) {
-        Badge badge = Badge.getBadge(ResourceLocation.of(stack.getOrCreateTag().getString("Badge"), ':'));
-        if (badge != null) return badge.getName();
-        return super.getName(stack);
+        return badge.get().getName();
     };
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         CompoundTag tag = stack.getOrCreateTag();
-        Badge badge = Badge.getBadge(ResourceLocation.of(stack.getOrCreateTag().getString("Badge"), ':'));
-        if (badge == null) {
-            tooltipComponents.add(DestroyLang.translate("tooltip.badge.unknown").component());
+        Badge badge = this.badge.get();
+        if (!tag.contains("Date", Tag.TAG_LONG) || !tag.contains("Player", Tag.TAG_STRING)) {
+            tooltipComponents.add(DestroyLang.translate("tooltip.badge.unknown").style(ChatFormatting.GRAY).component());
             return;
         };
         tooltipComponents.addAll(TooltipHelper.cutTextComponent(badge.getDescription(), Palette.STANDARD_CREATE));

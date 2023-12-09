@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:badge/patreon_1"
+      "layer0": "petrolpark:item/badge/content_creator"
     }
   }

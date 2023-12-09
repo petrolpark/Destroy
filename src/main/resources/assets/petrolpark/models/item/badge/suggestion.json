@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:badge/patreon_2"
+      "layer0": "petrolpark:item/badge/suggestion"
     }
   }

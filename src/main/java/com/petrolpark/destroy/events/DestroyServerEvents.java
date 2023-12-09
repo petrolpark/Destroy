@@ -3,6 +3,7 @@ package com.petrolpark.destroy.events;
 import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.badge.BadgeHandler;
 import com.petrolpark.destroy.block.DestroyBlocks;
@@ -182,15 +183,22 @@ public class DestroyServerEvents {
     };
 
     /**
-     * Conserve Baby Blue addiction across death.
+     * Conserve Baby Blue addiction and Badges across death.
      */
     @SubscribeEvent
+    @MoveToPetrolparkLibrary
     public static void onPlayerCloned(PlayerEvent.Clone event) {
         if (event.isWasDeath()) {
             // Copy Baby Blue Addiction Data
             event.getOriginal().getCapability(PlayerBabyBlueAddictionProvider.PLAYER_BABY_BLUE_ADDICTION).ifPresent(oldStore -> {
                 event.getOriginal().getCapability(PlayerBabyBlueAddictionProvider.PLAYER_BABY_BLUE_ADDICTION).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
+                });
+            });
+            // Copy Badge data
+            event.getOriginal().getCapability(PlayerBadges.Provider.PLAYER_BADGES).ifPresent(oldStore -> {
+                event.getOriginal().getCapability(PlayerBadges.Provider.PLAYER_BADGES).ifPresent(newStore -> {
+                    newStore.setBadges(oldStore.getBadges());
                 });
             });
         };
@@ -211,6 +219,7 @@ public class DestroyServerEvents {
         event.register(PlayerPreviousPositions.class);
         event.register(PlayerCrouching.class);
         event.register(EntityChemicalPoison.class);
+        event.register(PlayerBadges.class);
     };
 
     @SubscribeEvent

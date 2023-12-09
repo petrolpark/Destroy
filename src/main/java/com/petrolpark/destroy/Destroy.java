@@ -2,6 +2,7 @@ package com.petrolpark.destroy;
 
 import com.mojang.logging.LogUtils;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
+import com.petrolpark.destroy.badge.Badge;
 import com.petrolpark.destroy.badge.DestroyBadges;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
@@ -45,6 +46,8 @@ import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -58,6 +61,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.registries.RegistryBuilder;
 
 import org.slf4j.Logger;
 
@@ -66,15 +70,17 @@ public class Destroy {
     public static final String MOD_ID = "destroy";
 
     // Utility
-
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    @MoveToPetrolparkLibrary
+    public static final DestroyRegistrate PETROLPARK_REGISTRATE = new DestroyRegistrate("petrolpark");
     public static final DestroyRegistrate REGISTRATE = new DestroyRegistrate(MOD_ID);
 
     public static ResourceLocation asResource(String path) {
         return new ResourceLocation(MOD_ID, path);
     };
 
+    // Tooltips
     static {
 		REGISTRATE.setTooltipModifierFactory(item -> {
 			return new ItemDescription.Modifier(item, Palette.STANDARD_CREATE)
@@ -83,18 +89,22 @@ public class Destroy {
                 .andThen(new TempramentalItemDescription())
                 .andThen(new ContaminatedItemDescription());
 		});
-	}
+	};
+
+    // Registries
+    public static ResourceKey<Registry<Badge>> BADGE_REGISTRY_KEY = PETROLPARK_REGISTRATE.makeRegistry("badge", RegistryBuilder::new);
 
     // Initiation
-
     public Destroy() {
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
+        PETROLPARK_REGISTRATE.registerEventListeners(modEventBus);
         REGISTRATE.registerEventListeners(modEventBus);
 
         // Mod objects
+        DestroyBadges.register();
         DestroyCreativeModeTabs.register(modEventBus);
         DestroyTags.register();
         DestroyBlockEntityTypes.register();
@@ -109,7 +119,6 @@ public class Destroy {
         DestroyVillagers.register(modEventBus);
         DestroyLoot.register(modEventBus);
         DestroyDamageTypes.register();
-        DestroyBadges.register();
 
         // Events
         MinecraftForge.EVENT_BUS.register(this);

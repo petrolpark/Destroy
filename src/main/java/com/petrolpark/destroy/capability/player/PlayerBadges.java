@@ -57,7 +57,7 @@ public class PlayerBadges {
             ListTag listTag = new ListTag();
             for (Pair<Badge, Date> pair : createPlayerBadges().badges) {
                 CompoundTag badgeTag = new CompoundTag();
-                ResourceLocation id = Badge.getId(pair.getFirst());
+                ResourceLocation id = pair.getFirst().getId();
                 if (id == null) continue;
                 badgeTag.putString("Id", id.toString());
                 badgeTag.putLong("DateAwarded", pair.getSecond().getTime());

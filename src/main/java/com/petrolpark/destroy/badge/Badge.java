@@ -3,25 +3,34 @@ package com.petrolpark.destroy.badge;
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.advancement.SimpleDestroyTrigger;
+import com.petrolpark.destroy.item.BadgeItem;
+import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.Util;
-import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.RegistryManager;
 
 public class Badge {
 
-    public static final ResourceKey<Registry<Badge>> BADGE_REGISTRY_KEY = ResourceKey.createRegistryKey(Destroy.asResource("badge"));
-    public static final ForgeRegistry<Badge> BADGE_REGISTRY = RegistryManager.ACTIVE.getRegistry(BADGE_REGISTRY_KEY);
+    public static ForgeRegistry<Badge> badgeRegistry() {
+        return RegistryManager.ACTIVE.getRegistry(Destroy.BADGE_REGISTRY_KEY);
+    };
+
+    protected ResourceLocation id;
+    protected ItemEntry<BadgeItem> itemEntry;
 
     protected Ingredient duplicationIngredient;
+    public SimpleDestroyTrigger advancementTrigger;
 
     public Badge() {
         duplicationIngredient = Ingredient.EMPTY;
+        advancementTrigger = null;
     };
 
     public void setDuplicationItem(Ingredient ingredient) {
@@ -33,12 +42,46 @@ public class Badge {
         return duplicationIngredient;
     };
 
+    public void setAdvancementTrigger(SimpleDestroyTrigger trigger) {
+        if (advancementTrigger != null) throw new UnsupportedOperationException("Cannot reset Badge advancement trigger");
+        advancementTrigger = trigger;
+    };
+
+    public void grantAdvancement(Player player) {
+        if (advancementTrigger != null && player instanceof ServerPlayer serverPlayer) {
+            advancementTrigger.trigger(serverPlayer);
+        };
+    };
+
+    public void setId(ResourceLocation id) {
+        if (this.id != null) throw new UnsupportedOperationException("Cannot change a Badge's ID");
+        this.id = id;
+    };
+
+    public void setBadgeItem(ItemEntry<BadgeItem> entry) {
+        if (itemEntry != null) throw new UnsupportedOperationException("Cannot reset a Badge's Item");
+        itemEntry = entry;
+    };
+
     public Component getName() {
-        return Component.translatable(Util.makeDescriptionId("badge", getId(this)));
+        return Component.translatable(Util.makeDescriptionId("badge", getId()));
     };
 
     public Component getDescription() {
-        return Component.translatable(Util.makeDescriptionId("badge", getId(this)) + ".description");
+        return Component.translatable(Util.makeDescriptionId("badge", getId()) + ".description");
+    };
+
+    public ResourceLocation getId() {
+        return id;
+    };
+
+    public BadgeItem getItem() {
+        return itemEntry.get();
+    };
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Badge badge && getId() != null && badge.getId() == getId();
     };
 
     @Nullable
@@ -48,11 +91,7 @@ public class Badge {
     
     @Nullable
     public static Badge getBadge(ResourceLocation id) {
-        return BADGE_REGISTRY.getValue(id);
-    };
-
-    public static ResourceLocation getId(Badge badge) {
-        return BADGE_REGISTRY.getKey(badge);
+        return badgeRegistry().getValue(id);
     };
 
 };
