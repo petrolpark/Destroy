@@ -5,6 +5,7 @@
     "destroy:centrifuge",
     "destroy:cooler",
     "destroy:double_cardan_shaft",
+    "destroy:differential",
     "destroy:dynamo",
     "destroy:planetary_gearset",
     "destroy:pollutometer",

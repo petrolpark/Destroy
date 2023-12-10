@@ -1,0 +1,8 @@
+{
+  "values": [
+    "destroy:mashed_potato_block",
+    "destroy:raw_fries_block",
+    "destroy:cordite_block",
+    "destroy:extruded_cordite_block"
+  ]
+}

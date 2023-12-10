@@ -1,5 +1,6 @@
 {
   "values": [
+    "destroy:empty_bomb_bon",
     "destroy:bomb_bon",
     "destroy:napalm_sundae",
     "destroy:thermite_brownie"

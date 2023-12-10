@@ -31,6 +31,7 @@ import com.petrolpark.destroy.item.SyringeItem;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
 import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
+import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.ChemistryDamageHelper;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
@@ -84,7 +85,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
@@ -286,7 +286,7 @@ public class DestroyServerEvents {
         // Update the time this Player has been crouching/urinating
         BlockPos posOn = player.getOnPos();
         BlockState stateOn = level.getBlockState(posOn);
-        boolean urinating = stateOn.getBlock() == Blocks.WATER_CAULDRON && stateOn.getValue(BlockStateProperties.LEVEL_CAULDRON) == 1 && player.hasEffect(DestroyMobEffects.INEBRIATION.get());
+        boolean urinating = (stateOn.getBlock() == Blocks.WATER_CAULDRON || stateOn.getBlock() == Blocks.CAULDRON) && player.hasEffect(DestroyMobEffects.INEBRIATION.get());
         if (player.isCrouching()) {
             player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> {
                 crouchingCap.ticksCrouching++;
@@ -303,8 +303,11 @@ public class DestroyServerEvents {
         int ticksUrinating = player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).map(crouchingCap -> crouchingCap.ticksUrinating).orElse(0);
         if (ticksUrinating > 0) {
             Vec3 pos = player.position();
-            if (level instanceof ServerLevel serverLevel) serverLevel.sendParticles(FluidFX.getFluidParticle(new FluidStack(DestroyFluids.URINE.get(), 1000)), pos.x, pos.y + 0.5f, pos.z, 1, 0d, -0.07d, 0d, 0d);
-            //TODO sound
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(FluidFX.getFluidParticle(new FluidStack(DestroyFluids.URINE.get(), 1000)), pos.x, pos.y + 0.5f, pos.z, 1, 0d, -0.07d, 0d, 0d);
+            };
+            if (ticksUrinating % 40 == 1)
+                DestroySoundEvents.URINATE.playOnServer(level, posOn);
             if (ticksUrinating == 100) {
                 InebriationHelper.increaseInebriation(player, -1);
                 DestroyAdvancements.URINATE.award(level, player);

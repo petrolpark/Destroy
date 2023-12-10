@@ -6,8 +6,8 @@
     "destroy:nickel_hydrazine_nitrate",
     "destroy:touch_powder",
     "destroy:anfo",
+    "destroy:chalk_dust",
     "destroy:baby_blue_powder",
-    "destroy:hyperaccumulating_fertilizer",
-    "destroy:chalk_dust"
+    "destroy:hyperaccumulating_fertilizer"
   ]
 }

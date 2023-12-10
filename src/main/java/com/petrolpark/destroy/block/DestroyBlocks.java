@@ -57,6 +57,7 @@ public class DestroyBlocks {
             .noOcclusion()
         ).transform(TagGen.axeOnly())
         .item()
+        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .transform(customItemModel())
         .register();
 

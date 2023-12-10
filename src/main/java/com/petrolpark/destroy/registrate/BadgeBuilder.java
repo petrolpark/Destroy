@@ -18,7 +18,6 @@ import com.tterrag.registrate.util.nullness.NonnullType;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.advancements.FrameType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -73,16 +72,16 @@ public class BadgeBuilder<T extends Badge, P> extends AbstractBuilder<Badge, T, 
             Advancement.Builder advancementBuilder = Advancement.Builder.advancement();
             advancementBuilder
                .parent(new ResourceLocation("petrolpark", "badge_root"))
-                    .display(
-                        badge::getItem,
-                        badge.getName(),
-                        badge.getDescription(),
-                        null,
-                        FrameType.CHALLENGE,
-                        false,
-                        true,
-                        true
-                    )
+                    // .display(
+                    //     badge::getItem,
+                    //     badge.getName(),
+                    //     badge.getDescription(),
+                    //     null,
+                    //     FrameType.CHALLENGE,
+                    //     false,
+                    //     false,
+                    //     true
+                    // )
                     .rewards(new BadgeAdvancementRewards(badge))
                     .addCriterion("get_badge", badge.advancementTrigger.instance())
                     .requirements(new String[][]{new String[]{"get_badge"}}); 

@@ -5,23 +5,6 @@
         "trigger": "minecraft:impossible"
       }
     },
-    "display": {
-      "announce_to_chat": false,
-      "background": "minecraft:textures/block/gold_block.png",
-      "description": {
-        "color": "#DBA213",
-        "translate": "advancement.petrolpark.badge_root.description"
-      },
-      "frame": "task",
-      "hidden": true,
-      "icon": {
-        "item": "minecraft:dead_bush"
-      },
-      "show_toast": false,
-      "title": {
-        "translate": "advancement.petrolpark.badge_root"
-      }
-    },
     "requirements": [
       [
         "nothing"

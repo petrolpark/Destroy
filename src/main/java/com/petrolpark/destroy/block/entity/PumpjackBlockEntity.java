@@ -14,12 +14,14 @@ import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.capability.chunk.ChunkCrudeOil;
 import com.petrolpark.destroy.fluid.DestroyFluids;
+import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -47,11 +49,12 @@ public class PumpjackBlockEntity extends SmartBlockEntity implements IHaveGoggle
 
     public WeakReference<PumpjackCamBlockEntity> source;
 
-    private boolean squeak; // Client-only
+    private boolean upsqueak; // Client-only
 
     public PumpjackBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         source = new WeakReference<>(null);
+        upsqueak = false;
     };
 
     @Override
@@ -142,15 +145,15 @@ public class PumpjackBlockEntity extends SmartBlockEntity implements IHaveGoggle
     @OnlyIn(Dist.CLIENT)
     public void playClientSound() {
         if (getTargetAngle() == null) return;
+        Minecraft minecraft = Minecraft.getInstance();
         // Sound is syncronised to Pumpjack movement
-        if (getTargetAngle() - Mth.PI < 0.0001 && squeak) {
-            //DestroySoundEvents.PUMPJACK_CREAK_1.play(getLevel(), Minecraft.getInstance().player, getBlockPos()); //TODO uncomment once sounds are done
-            squeak = false;
-        } else if (getTargetAngle() + Mth.PI < 0.0001 && squeak) {
-            squeak = false;
-            //DestroySoundEvents.PUMPJACK_CREAK_2.play(getLevel(), Minecraft.getInstance().player, getBlockPos());
-        } else {
-            squeak = true;
+        if (Math.abs(getTargetAngle()) <= 0.1f && upsqueak) {
+            DestroySoundEvents.PUMPJACK_CREAK_1.play(getLevel(), minecraft.player, getBlockPos());
+            upsqueak = false;
+        };
+        if (Math.abs(Math.abs(getTargetAngle()) - Mth.PI) < 0.1 && !upsqueak) {
+            DestroySoundEvents.PUMPJACK_CREAK_2.play(getLevel(), minecraft.player, getBlockPos());
+            upsqueak = true;
         };
     };
 

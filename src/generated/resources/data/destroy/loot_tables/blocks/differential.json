@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "destroy:extruded_cordite_block"
+          "name": "destroy:differential"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "destroy:blocks/extruded_cordite_block"
+  "random_sequence": "destroy:blocks/differential"
 }

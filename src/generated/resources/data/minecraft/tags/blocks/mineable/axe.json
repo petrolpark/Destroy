@@ -2,6 +2,7 @@
   "values": [
     "destroy:aging_barrel",
     "destroy:coaxial_gear",
+    "destroy:differential",
     "destroy:planetary_gearset",
     "destroy:vat_side"
   ]

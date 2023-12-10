@@ -35,6 +35,7 @@ import com.petrolpark.destroy.recipe.DestroyExtrusions;
 import com.petrolpark.destroy.recipe.DestroyMysteriousItemConversions;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.registrate.DestroyRegistrate;
+import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.DestroyTags;
 import com.petrolpark.destroy.util.vat.VatMaterial;
 import com.petrolpark.destroy.world.damage.DestroyDamageTypes;
@@ -104,6 +105,7 @@ public class Destroy {
         REGISTRATE.registerEventListeners(modEventBus);
 
         // Mod objects
+        DestroySoundEvents.prepare();
         DestroyBadges.register();
         DestroyCreativeModeTabs.register(modEventBus);
         DestroyTags.register();
@@ -172,6 +174,5 @@ public class Destroy {
     };
 
     public static void gatherData(GatherDataEvent event) {
-
     };
 }
