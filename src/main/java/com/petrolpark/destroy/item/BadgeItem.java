@@ -29,7 +29,7 @@ public class BadgeItem extends Item {
 
     protected static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-    protected final Supplier<Badge> badge;
+    public final Supplier<Badge> badge;
 
     public BadgeItem(Properties properties, Supplier<Badge> badge) {
         super(properties);
@@ -60,6 +60,11 @@ public class BadgeItem extends Item {
         };
         tooltipComponents.addAll(TooltipHelper.cutTextComponent(badge.getDescription(), Palette.STANDARD_CREATE));
         tooltipComponents.addAll(TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.badge", tag.getString("Player"), df.format(new Date(tag.getLong("Date")))).component(), Palette.STANDARD_CREATE));
+    };
+
+    @Override
+    public ItemStack getCraftingRemainingItem(ItemStack stack) {
+        return stack;
     };
     
 };

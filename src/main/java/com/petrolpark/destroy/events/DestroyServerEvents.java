@@ -306,9 +306,9 @@ public class DestroyServerEvents {
             if (level instanceof ServerLevel serverLevel) {
                 serverLevel.sendParticles(FluidFX.getFluidParticle(new FluidStack(DestroyFluids.URINE.get(), 1000)), pos.x, pos.y + 0.5f, pos.z, 1, 0d, -0.07d, 0d, 0d);
             };
-            if (ticksUrinating % 40 == 1)
+            if (ticksUrinating % 40 == 0)
                 DestroySoundEvents.URINATE.playOnServer(level, posOn);
-            if (ticksUrinating == 100) {
+            if (ticksUrinating == 119) {
                 InebriationHelper.increaseInebriation(player, -1);
                 DestroyAdvancements.URINATE.award(level, player);
                 level.setBlockAndUpdate(posOn, DestroyBlocks.URINE_CAULDRON.getDefaultState());

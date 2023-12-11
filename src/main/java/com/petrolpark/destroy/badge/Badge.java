@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.badge;
 
+import java.util.Date;
+
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.Destroy;
@@ -8,11 +10,19 @@ import com.petrolpark.destroy.item.BadgeItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.RegistryManager;
 
@@ -38,8 +48,27 @@ public class Badge {
         duplicationIngredient = ingredient;
     };
 
+    @Nullable
     public Ingredient getDuplicationIngredient() {
-        return duplicationIngredient;
+        return duplicationIngredient; 
+    };
+
+    @Nullable
+    @OnlyIn(Dist.CLIENT)
+    public CraftingRecipe getExampleDuplicationRecipe() {
+        Ingredient ingredient = getDuplicationIngredient();
+        if (ingredient == null) return null;
+
+        Minecraft minecraft = Minecraft.getInstance();
+        ItemStack stack = BadgeItem.of(minecraft.player, this, new Date(System.currentTimeMillis()));
+
+        return new ShapelessRecipe(
+            new ResourceLocation(getId().getNamespace(), "badge_duplication_"+ getId().getPath()),
+            getId().getNamespace() + "badge_duplication",
+            CraftingBookCategory.MISC,
+            stack,
+            NonNullList.of(Ingredient.of(stack), ingredient)
+        );
     };
 
     public void setAdvancementTrigger(SimpleDestroyTrigger trigger) {

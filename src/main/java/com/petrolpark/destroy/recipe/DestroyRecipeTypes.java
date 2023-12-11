@@ -38,7 +38,9 @@ public enum DestroyRecipeTypes implements IRecipeTypeInfo {
     REACTION(ReactionRecipe::new),
 
     DURATION_4_FIREWORK_ROCKET_CRAFTING(() -> ExtendedDurationFireworkRocketRecipe.DURATION_4_FIREWORK_ROCKET, () -> RecipeType.CRAFTING, false),
-    DURATION_5_FIREWORK_ROCKET_CRAFTING(() -> ExtendedDurationFireworkRocketRecipe.DURATION_5_FIREWORK_ROCKET, () -> RecipeType.CRAFTING, false);
+    DURATION_5_FIREWORK_ROCKET_CRAFTING(() -> ExtendedDurationFireworkRocketRecipe.DURATION_5_FIREWORK_ROCKET, () -> RecipeType.CRAFTING, false),
+
+    BADGE_DUPLICATION(() -> BadgeDuplicationRecipe.BADGE_DUPLICATION, () -> RecipeType.CRAFTING, false);
 
     // This is alllllll copied from Create source code
     private final ResourceLocation id;

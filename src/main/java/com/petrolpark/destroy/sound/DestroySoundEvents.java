@@ -72,6 +72,6 @@ public class DestroySoundEvents {
     };
 
     public static void prepare() {
-		//AllSoundEvents.ALL.entrySet().stream().filter(entry -> entry.getKey().getNamespace().equals(Destroy.MOD_ID)).forEach(entry -> entry.getValue().prepare());
+		AllSoundEvents.ALL.entrySet().stream().filter(entry -> entry.getKey().getNamespace().equals(Destroy.MOD_ID)).forEach(entry -> entry.getValue().prepare());
 	};
 };

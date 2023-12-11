@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.registrate;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import com.tterrag.registrate.util.nullness.NonnullType;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 
 @MoveToPetrolparkLibrary
@@ -40,7 +42,9 @@ public class BadgeBuilder<T extends Badge, P> extends AbstractBuilder<Badge, T, 
         duplicationIngredient = Ingredient.EMPTY;
         item = getOwner().item("badge/"+getName(), p -> new BadgeItem(p, () -> this.getEntry()))
             .tab(null)
-            .register();
+            .properties(p -> p
+                .stacksTo(1)
+            ).register();
         DestroyCreativeModeTabs.DestroyDisplayItemsGenerator.excludedItems.add(item);
     };
 
@@ -88,6 +92,10 @@ public class BadgeBuilder<T extends Badge, P> extends AbstractBuilder<Badge, T, 
             advancements.put(new ResourceLocation(badge.getId().getNamespace(), "badge/"+badge.getId().getPath()), advancementBuilder);
         };
         return advancements;
+    };
+
+    public static Collection<CraftingRecipe> getExampleDuplicationRecipes() {
+        return Badge.badgeRegistry().getValues().stream().map(Badge::getExampleDuplicationRecipe).filter(r -> r != null).toList();
     };
     
 };

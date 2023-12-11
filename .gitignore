@@ -30,3 +30,5 @@ forge*changelog.txt
 .apt_generated
 .apt_generated_tests
 src/main/resources/assets/destroy/textures/fluid/.DS_Store
+src/main/resources/assets/destroy/models/.DS_Store
+src/main/resources/assets/destroy/models/block/.DS_Store
