@@ -28,6 +28,7 @@
         "DestroyFrictionModifier",
         "EffectRenderingInventoryScreenMixin",
         "FluidIngredientMixin",
+        "FluidNetworkMixin",
         "GuiMixin",
         "HeartTypeMixin",
         "HeatConditionMixin",

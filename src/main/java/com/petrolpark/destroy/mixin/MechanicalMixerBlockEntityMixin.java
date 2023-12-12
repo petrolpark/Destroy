@@ -46,7 +46,7 @@ public class MechanicalMixerBlockEntityMixin {
 
             for (int tank = 0; tank < fluidHandler.getTanks(); tank++) {
                 FluidStack fluidStack = fluidHandler.getFluidInTank(tank);
-                if (DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid())) {
+                if (DestroyFluids.isMixture(fluidStack)) {
                     availableFluidStacks.add(fluidStack);
                 } else if (!fluidStack.isEmpty()) {
                     containsOnlyMixtures = false;

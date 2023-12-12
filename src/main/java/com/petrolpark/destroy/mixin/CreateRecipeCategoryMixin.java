@@ -104,7 +104,7 @@ public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
 				tooltip.addAll(1, potionTooltip.stream().toList());
             //
 
-			} else if (fluid.isSame(DestroyFluids.MIXTURE.get())) {
+			} else if (DestroyFluids.isMixture(fluid)) {
                 Component name = DestroyLang.translate("mixture.mixture").component();
                 boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
 

@@ -84,7 +84,7 @@ public class CoolerBlockEntity extends SmartBlockEntity implements IHaveGoggleIn
         if (!hasLevel()) return;
 
         FluidStack fluidStack = tank.getPrimaryHandler().getFluid();
-        if (fluidStack.getFluid().isSame(DestroyFluids.MIXTURE.get())) {
+        if (DestroyFluids.isMixture(fluidStack)) {
 
             int amount = fluidStack.getAmount();
             ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(fluidStack.getOrCreateChildTag("Mixture"));

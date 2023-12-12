@@ -17,7 +17,7 @@ public class MixtureOpenEndedPipeEffectHandler implements IEffectHandler {
 
     @Override
     public boolean canApplyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-        return fluid.getFluid().isSame(DestroyFluids.MIXTURE.get());
+        return DestroyFluids.isMixture(fluid);
     };
 
     @Override

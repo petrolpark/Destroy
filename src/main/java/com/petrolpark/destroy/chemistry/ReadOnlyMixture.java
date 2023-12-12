@@ -108,6 +108,10 @@ public class ReadOnlyMixture {
      */
     public static ReadOnlyMixture readNBT(CompoundTag compound) {
         ReadOnlyMixture mixture = new ReadOnlyMixture();
+        if (compound == null) {
+            Destroy.LOGGER.warn("Null Mixture read");
+            return mixture;  
+        };
         mixture.translationKey = compound.getString("TranslationKey"); // Set to "" if the key is not present
         if (compound.contains("Temperature")) mixture.temperature = compound.getFloat("Temperature");
         ListTag contents = compound.getList("Contents", 10);
@@ -188,7 +192,7 @@ public class ReadOnlyMixture {
      */
     public ReadOnlyMixture addMolecule(Molecule molecule, float concentration) {
 
-        if (molecule == null) {
+        if (molecule == null || concentration == 0f) {
             return this;
         };
         if (molecule.isHypothetical()) {

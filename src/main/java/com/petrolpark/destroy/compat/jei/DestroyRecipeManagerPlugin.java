@@ -38,7 +38,7 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
             // Mixture ingredients (which contain a single Molecule)
             || (focus.checkedCast(ForgeTypes.FLUID_STACK).map(fluidFocus -> {
                 FluidStack fluidStack = fluidFocus.getTypedValue().getIngredient();
-                return DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid()) && fluidStack.getOrCreateTag().contains("MixtureFluidIngredientSubtype");
+                return DestroyFluids.isMixture(fluidStack) && fluidStack.getOrCreateTag().contains("MixtureFluidIngredientSubtype");
             }).orElse(false))
         ) {
             recipeTypes.add(ReactionCategory.TYPE); // Add the Reaction Recipe type
@@ -57,7 +57,7 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
         // For Mixture inputs (which have a single Molecule required), simply replace this lookup with the lookup for that Molecule
         focus.checkedCast(ForgeTypes.FLUID_STACK).ifPresent(fluidFocus -> { // Check to see if it's a Fluid ingredient
             FluidStack fluidStack = fluidFocus.getTypedValue().getIngredient();
-            if (!DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid())) return;
+            if (!DestroyFluids.isMixture(fluidStack)) return;
             MixtureFluidIngredient ingredient = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(fluidStack.getOrCreateTag().getString("MixtureFluidIngredientSubtype")).getNew();
             if (ingredient == null) return;
 

@@ -14,6 +14,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -29,7 +30,7 @@ public class ChemistryDamageHelper {
      * @param skinContact Whether the entity has contact with the Mixture on a body part other than their mouth (if they are "submerged" in it), regardless of any protective clothing
      */
     public static void damage(Level level, LivingEntity entity, FluidStack stack, boolean skinContact) {
-        if (!DestroyFluids.MIXTURE.get().isSame(stack.getFluid())) return;
+        if (!DestroyFluids.isMixture(stack)) return;
         ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(stack.getOrCreateChildTag("Mixture"));
         if (mixture.isEmpty()) return;
 
@@ -50,7 +51,7 @@ public class ChemistryDamageHelper {
         boolean perfume = entity.hasEffect(DestroyMobEffects.FRAGRANCE.get());
 
         // Smelly chemicals
-        if (nauseating && !perfume && !gasMask) {
+        if (nauseating && !perfume && !gasMask && !(entity instanceof Player player && player.isCreative())) {
             entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0, false, false));
         };
 

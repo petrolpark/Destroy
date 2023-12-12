@@ -12,4 +12,7 @@ public interface FluidNetworkAccessor {
     
     @Accessor("fluid")
     public void setFluid(FluidStack stack);
+
+    @Accessor("fluid")
+    public FluidStack getFluid();
 };

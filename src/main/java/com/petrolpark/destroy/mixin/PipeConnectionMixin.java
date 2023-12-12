@@ -40,7 +40,7 @@ public class PipeConnectionMixin {
         FlowSource source = ((PipeConnectionAccessor)this).getSource().get();
 
         FluidStack provided = flow.inbound ? source.provideFluid(extractionPredicate) : internalFluid;
-        if (((PipeConnection)(Object)this).hasPressure() && provided.getFluid().isSame(DestroyFluids.MIXTURE.get()) && flow.fluid.getFluid().isSame(DestroyFluids.MIXTURE.get())) { // Only update the Fluid if we Fluid and should be moving it
+        if (((PipeConnection)(Object)this).hasPressure() && DestroyFluids.isMixture(provided) && DestroyFluids.isMixture(flow.fluid)) { // Only update the Fluid if we have Fluid and should be moving it
             flow.fluid = provided;
             Optional<FluidNetwork> network = retainedNetwork;
             if (network.isPresent()) {
