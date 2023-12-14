@@ -61,6 +61,7 @@ public class DestroyPonderIndex {
 
         // Vat Controller
         HELPER.forComponents(DestroyBlocks.VAT_CONTROLLER)
-            .addStoryBoard("vat/construction", DestroyScenes::vatConstruction);
+            .addStoryBoard("vat/construction", DestroyScenes::vatConstruction)
+            .addStoryBoard("vat/interaction", DestroyScenes::vatInteraction);
     };
 };

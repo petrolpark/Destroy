@@ -3,7 +3,6 @@ package com.petrolpark.destroy.block.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.mixin.accessor.RotationPropagatorAccessor;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
@@ -37,7 +36,9 @@ public class DifferentialBlockEntity extends SplitShaftBlockEntity {
     @Override
     public float propagateRotationTo(KineticBlockEntity target, BlockState stateFrom, BlockState stateTo, BlockPos diff, boolean connectedViaAxes, boolean connectedViaCogs) {
         if (connectedViaAxes || LongShaftBlockEntity.connectedToLongShaft(this, target, diff)) {
-            return shaftOutputs(target, diff) * Math.signum(RotationPropagatorAccessor.invokeGetAxisModifier(target, CoaxialGearBlockEntity.directionBetween(target.getBlockPos(), getBlockPos())));
+            return shaftOutputs(target, diff)
+            * Math.signum(RotationPropagatorAccessor.invokeGetAxisModifier(target, CoaxialGearBlockEntity.directionBetween(target.getBlockPos(), getBlockPos())))
+            ;
         };
         return super.propagateRotationTo(target, stateFrom, stateTo, diff, connectedViaAxes, connectedViaCogs);
 	};
@@ -83,7 +84,6 @@ public class DifferentialBlockEntity extends SplitShaftBlockEntity {
             if (actualSpeed == 0f) return 0f;
             return getPropagatedSpeed(target) / actualSpeed;
         } else { // If there are two sources and one is the big cog
-            Destroy.LOGGER.info("bad mews");
             if (sources.get(1).equals(target)) { // If this is the other source we're looking at
                 return getPropagatedSpeed(target) / getSpeed();
             } else { // If this is the unpowered shaft

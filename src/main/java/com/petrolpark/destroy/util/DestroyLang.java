@@ -7,6 +7,7 @@ import java.util.function.UnaryOperator;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.MoveToPetrolparkLibrary;
+import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.fluid.ingredient.MixtureFluidIngredient;
 import com.petrolpark.destroy.util.vat.VatMaterial;
@@ -176,6 +177,12 @@ public class DestroyLang {
 
         if (!(stack.getItem() instanceof BlockItem blockItem) || !VatMaterial.isValid(blockItem.getBlock())) return tooltip;
         tooltip.add(Component.literal(""));
+
+        if (DestroyBlocks.VAT_CONTROLLER.isIn(stack)) {
+            tooltip.addAll(TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.vat_material.vat_controller").component(), DestroyLang.GRAYS));
+            return tooltip;
+        };
+
         boolean nerdMode = DestroyAllConfigs.CLIENT.chemistry.nerdMode.get();
         VatMaterial material = VatMaterial.BLOCK_MATERIALS.get(blockItem.getBlock());
 

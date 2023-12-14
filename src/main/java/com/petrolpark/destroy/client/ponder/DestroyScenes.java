@@ -13,6 +13,8 @@ import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
 import com.petrolpark.destroy.block.entity.DynamoBlockEntity;
 import com.petrolpark.destroy.block.entity.PumpjackBlockEntity;
+import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
+import com.petrolpark.destroy.block.entity.VatSideBlockEntity.DisplayType;
 import com.petrolpark.destroy.block.entity.behaviour.ChargingBehaviour;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
@@ -28,6 +30,7 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.contraptions.chassis.StickerBlock;
 import com.simibubi.create.content.contraptions.chassis.StickerBlockEntity;
+import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
 import com.simibubi.create.content.fluids.potion.PotionFluid;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
@@ -821,7 +824,7 @@ public class DestroyScenes {
 
         scene.world.toggleRedstonePower(redstone1);
         scene.world.modifyBlock(sticker, s -> s.setValue(StickerBlock.EXTENDED, true), false);
-		scene.effects.indicateRedstone(util.grid.at(2, 3, 1));
+		scene.effects.indicateRedstone(util.grid.at(2, 3, 2));
 		scene.world.modifyBlockEntityNBT(util.select.position(sticker), StickerBlockEntity.class, nbt -> {});
 		scene.idle(20);
 		scene.world.toggleRedstonePower(redstone1);
@@ -1142,6 +1145,137 @@ public class DestroyScenes {
         scene.world.moveSection(vat4SouthLink, new Vec3(0, 0, -2), 10);
         scene.world.moveSection(vat4WestLink, new Vec3(2, 0, 0), 10);
         scene.idle(20);
+
+        scene.markAsFinished();
+    };
+
+    public static void vatInteraction(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("vat_interaction", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 6);
+        scene.scaleSceneView(0.8f);
+        scene.showBasePlate();
+
+        Selection vat = util.select.fromTo(1, 1, 1, 4, 4, 4);
+        BlockPos dialBlock = util.grid.at(3, 3, 1);
+        BlockPos pipeBlock = util.grid.at(1, 2, 3);
+        BlockPos pipe = util.grid.at(0, 2, 3);
+        BlockState pipeState = AllBlocks.FLUID_PIPE.getDefaultState()
+            .setValue(FluidPipeBlock.DOWN, false)
+            .setValue(FluidPipeBlock.UP, false)
+            .setValue(FluidPipeBlock.NORTH, false)
+            .setValue(FluidPipeBlock.SOUTH, false)
+            .setValue(FluidPipeBlock.EAST, true)
+            .setValue(FluidPipeBlock.WEST, true);
+        BlockPos bottomFunnel = util.grid.at(0, 2, 2);
+        BlockPos vent = util.grid.at(3, 4, 2);
+        BlockPos lever = util.grid.at(3, 4, 0);
+        Selection everything = util.select.fromTo(0, 1, 0, 4, 5, 4);
+
+        scene.idle(10);
+        scene.world.showSection(util.select.fromTo(1, 1, 1, 4, 4, 4), Direction.DOWN);
+        scene.idle(10);
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(20);
+        scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(dialBlock, Direction.NORTH), Pointing.RIGHT)
+            .withWrench(),
+            20
+        );
+        scene.idle(5);
+        scene.world.modifyBlockEntity(dialBlock, VatSideBlockEntity.class, vatSide -> vatSide.setDisplayType(DisplayType.THERMOMETER));
+        scene.idle(75);
+
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.RED)
+            .attachKeyFrame();
+        scene.overlay.showOutline(PonderPalette.RED, "vat_outside", vat.substract(util.select.fromTo(2, 2, 1, 3, 3, 4)).substract(util.select.fromTo(2, 1, 2, 3, 4, 3)).substract(util.select.fromTo(1, 2, 2, 4, 3, 3)), 60);
+        scene.idle(80);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(20);
+        scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(dialBlock, Direction.NORTH), Pointing.RIGHT)
+            .withWrench(),
+            20
+        );
+        scene.idle(5);
+        scene.world.modifyBlockEntity(dialBlock, VatSideBlockEntity.class, vatSide -> vatSide.setDisplayType(DisplayType.BAROMETER));
+        scene.idle(75);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(20);
+        scene.world.setBlock(pipe, pipeState, false);
+        scene.world.showSection(util.select.position(pipe), Direction.EAST);
+        scene.idle(12);
+        scene.world.modifyBlockEntity(pipeBlock, VatSideBlockEntity.class, vatSide -> vatSide.setDisplayType(DisplayType.PIPE));
+        scene.idle(68);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.RED)
+            .pointAt(util.vector.blockSurface(pipeBlock, Direction.WEST));
+        scene.idle(120);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(10);
+        scene.world.showSection(util.select.position(2, 5, 3), Direction.DOWN);
+        scene.idle(20);
+        ElementLink<EntityElement> itemEntity = scene.world.createItemEntity(util.vector.centerOf(util.grid.at(2, 9, 3)), util.vector.of(0f, -0.4f, 0f), DestroyItems.PLATINUM_INGOT.asStack());
+        scene.idle(8);
+        scene.world.modifyEntity(itemEntity, Entity::discard);
+        scene.idle(22);
+        scene.world.showSection(util.select.position(bottomFunnel), Direction.EAST);
+        scene.idle(20);
+        scene.world.flapFunnel(bottomFunnel, true);
+        scene.world.createItemEntity(util.vector.centerOf(bottomFunnel).add(0.15f, -0.45f, 0), Vec3.ZERO, DestroyItems.PLATINUM_INGOT.asStack());
+        scene.idle(40);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(20);
+        scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(vent, Direction.UP), Pointing.DOWN)
+            .withWrench(),
+            20
+        );
+        scene.idle(5);
+        scene.world.modifyBlockEntity(vent, VatSideBlockEntity.class, vatSide -> vatSide.setDisplayType(DisplayType.OPEN_VENT));
+        scene.idle(95);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.");
+        scene.idle(10);
+        scene.world.showSection(util.select.position(lever), Direction.SOUTH);
+        scene.idle(20);
+        scene.world.toggleRedstonePower(util.select.position(lever));
+        scene.effects.indicateRedstone(lever);
+        scene.world.modifyBlockEntity(vent, VatSideBlockEntity.class, vatSide -> vatSide.setDisplayType(DisplayType.CLOSED_VENT));
+        scene.idle(50);
+
+        ElementLink<WorldSectionElement> everythingLink = scene.world.makeSectionIndependent(everything);
+        scene.world.moveSection(everythingLink, util.vector.of(0, 3, 0), 10);
+        scene.idle(20);
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(10);
+        ElementLink<WorldSectionElement> blazeBurners = scene.world.showIndependentSection(util.select.fromTo(5, 1, 2, 6, 1, 3), Direction.WEST);
+        scene.world.moveSection(blazeBurners, util.vector.of(-3, 0, 0), 0);
+        scene.idle(20);
+        scene.world.hideIndependentSection(blazeBurners, Direction.WEST);
+        scene.idle(20);
+        ElementLink<WorldSectionElement> coolers = scene.world.showIndependentSection(util.select.fromTo(7, 1, 2, 8, 1, 3), Direction.WEST);
+        scene.world.moveSection(coolers, util.vector.of(-5, 0, 0), 0);
+        scene.idle(20);
+        scene.world.moveSection(everythingLink, util.vector.of(0, -2, 0), 10);
+        scene.idle(40);
 
         scene.markAsFinished();
     };

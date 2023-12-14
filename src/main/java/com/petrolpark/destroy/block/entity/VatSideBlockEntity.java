@@ -340,11 +340,14 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         return displayType;
     };
 
+    @SuppressWarnings("null") // It thinks getLevel() might be null (it's not)
     public void setDisplayType(DisplayType displayType) {
         if (this.displayType == displayType) return;
         boolean updateVent = this.displayType == DisplayType.OPEN_VENT;
         this.displayType = displayType;
         if (!hasLevel()) return;
+
+        if (getLevel().isClientSide()) ventOpenness.chase(displayType == DisplayType.OPEN_VENT ? 1f : 0f, 0.3f, Chaser.EXP);
 
         getBlockState().updateNeighbourShapes(getLevel(), getBlockPos(), 3);
         updateDisplayType(getBlockPos().relative(direction)); // Check for a Pipe
