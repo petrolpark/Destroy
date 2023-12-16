@@ -63,6 +63,7 @@ public class DestroyCreativeModeTabs {
 				DestroyItems.AGAR,
 
 				// Blocks
+				DestroyBlocks.DIFFERENTIAL,
 				DestroyBlocks.YEAST_MUSHROOM,
 				DestroyBlocks.YEAST_COVERED_AGAR_BLOCK,
 				DestroyBlocks.AGAR_BLOCK

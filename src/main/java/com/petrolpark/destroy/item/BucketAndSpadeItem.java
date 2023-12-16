@@ -5,14 +5,19 @@ import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.SandCastleBlock;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class BucketAndSpadeItem extends Item {
@@ -21,20 +26,36 @@ public class BucketAndSpadeItem extends Item {
 
     public BucketAndSpadeItem(Properties properties) {
         super(properties);
+        DispenserBlock.registerBehavior(this, new BucketAndSpadeDispenseBehaviour());
     };
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
         BlockState blockUnderneath = context.getLevel().getBlockState(context.getClickedPos());
         BlockPos posAbove = context.getClickedPos().above();
-        if (context.getClickedFace() == Direction.UP && canSandCastleBeBuiltOn(blockUnderneath, context.getLevel().getBlockState(posAbove))) {
-            if (context.getLevel().setBlockAndUpdate(posAbove, getSandCastleForMaterial(blockUnderneath))) {
-                context.getLevel().playSound(null, posAbove, SoundEvents.SAND_BREAK, SoundSource.BLOCKS, 0.5f, 1f);
-                context.getItemInHand().hurtAndBreak(1, context.getPlayer(), p -> p.broadcastBreakEvent(context.getHand()));
-                return InteractionResult.SUCCESS;
-            };
+        if (buildSandcastle(null, posAbove, blockUnderneath, context.getItemInHand())) {
+            context.getItemInHand().hurtAndBreak(1, context.getPlayer(), p -> p.broadcastBreakEvent(context.getHand()));
+            return InteractionResult.SUCCESS;
         };
         return super.useOn(context);
+    };
+
+    /**
+     * Construct a sandcastle but do not break the Bucket and Spade.
+     * @param level
+     * @param posAbove
+     * @param stateUnderneath
+     * @param stack The Bucket and Spade
+     * @return Whether a sandcastle was successfully built
+     */
+    public static boolean buildSandcastle(Level level, BlockPos posAbove, BlockState stateUnderneath, ItemStack stack) {
+        if (canSandCastleBeBuiltOn(stateUnderneath, level.getBlockState(posAbove))) {
+            if (level.setBlockAndUpdate(posAbove, getSandCastleForMaterial(stateUnderneath))) {
+                level.playSound(null, posAbove, SoundEvents.SAND_BREAK, SoundSource.BLOCKS, 0.5f, 1f);
+                return true;
+            };
+        };
+        return false;
     };
 
     /**
@@ -58,6 +79,21 @@ public class BucketAndSpadeItem extends Item {
             material = SandCastleBlock.Material.SOUL_SAND;
         };
         return DestroyBlocks.SAND_CASTLE.getDefaultState().setValue(SandCastleBlock.MATERIAL, material);
+    };
+
+    public static class BucketAndSpadeDispenseBehaviour extends OptionalDispenseItemBehavior {
+
+        @Override
+        protected ItemStack execute(BlockSource source, ItemStack stack) {
+            BlockPos posAbove = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
+            if (buildSandcastle(source.getLevel(), posAbove, source.getLevel().getBlockState(posAbove.relative(Direction.DOWN)), stack)) {
+                if (stack.hurt(1, source.getLevel().getRandom(), null)) stack.shrink(1);
+                setSuccess(true);
+            } else {
+                setSuccess(false);
+            };
+            return stack;
+        };
     };
     
 };

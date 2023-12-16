@@ -4,6 +4,7 @@ import static com.petrolpark.destroy.Destroy.REGISTRATE;
 import static com.simibubi.create.AllTags.forgeItemTag;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.item.food.DestroyFoods;
 import com.petrolpark.destroy.item.renderer.GasMaskModel;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
@@ -17,6 +18,7 @@ import com.simibubi.create.foundation.item.CombustibleItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.BowlFoodItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
@@ -270,15 +272,20 @@ public class DestroyItems {
 
     SPRAY_BOTTLE = REGISTRATE.item("spray_bottle", Item::new)
         .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
-        .register(),
-    PERFUME_BOTTLE = REGISTRATE.item("perfume_bottle", Item::new)
+        .register();
+
+    public static final ItemEntry<SprayBottleItem>
+    
+    PERFUME_BOTTLE = REGISTRATE.item("perfume_bottle", p -> new SprayBottleItem(p, new MobEffectInstance(DestroyMobEffects.FRAGRANCE.get(), 12000, 0)))
         .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
         .register(),
-    SUNSCREEN_BOTTLE = REGISTRATE.item("sunscreen_bottle", Item::new)
+    SUNSCREEN_BOTTLE = REGISTRATE.item("sunscreen_bottle", p -> new SprayBottleItem(p, new MobEffectInstance(DestroyMobEffects.SUN_PROTECTION.get(), 12000, 0, false, false, true)))
         .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
-        .register(),
+        .register();
 
     // SILICA
+
+    public static final ItemEntry<Item>
 
     SILICA = REGISTRATE.item("silica", Item::new)
         .register(),

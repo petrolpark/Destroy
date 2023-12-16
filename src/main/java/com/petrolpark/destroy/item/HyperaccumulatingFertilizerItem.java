@@ -23,7 +23,7 @@ public class HyperaccumulatingFertilizerItem extends BoneMealItem {
 
     public HyperaccumulatingFertilizerItem(Properties properties) {
         super(properties);
-        registerDispenserBehaviour(this);
+        DispenserBlock.registerBehavior(this, new HyperaccumulatingFertilizerDispenserBehaviour());
     };
 
     /**
@@ -71,27 +71,24 @@ public class HyperaccumulatingFertilizerItem extends BoneMealItem {
         return super.useOn(context);
     };
 
-    @SuppressWarnings("deprecation") // BoneMealItem.growCrop() is deprecated but it's used in the Bone Meal Dispenser Behaviour so I don't care
-    public static void registerDispenserBehaviour(HyperaccumulatingFertilizerItem item) {
-        DispenserBlock.registerBehavior(item, new OptionalDispenseItemBehavior() {
-            protected ItemStack execute(BlockSource blockSource, ItemStack stack) {
-                Level level = blockSource.getLevel();
-                BlockPos blockPos = blockSource.getPos().relative(blockSource.getBlockState().getValue(DispenserBlock.FACING));
-                if (grow(level, blockPos)) { // Try to grow it as Hyperaccumulating Fertilizer
-                    stack.shrink(1);
-                    this.setSuccess(true);
-                } else if (BoneMealItem.growCrop(stack, level, blockPos) || BoneMealItem.growWaterPlant(stack, level, blockPos, (Direction)null)) { // Try to grow as normal Bonemeal
-                    // Shrinking the Stack is covered in BoneMealItem.growCrop() or .growWaterPlant()
-                    this.setSuccess(true);
-                    if (!level.isClientSide()) {
-                        level.levelEvent(1505, blockPos, 0); // Don't really know what this does but it's in the Bone Meal Dispenser Behaviour so best to include it
-                    };
-                } else {
-                    this.setSuccess(false);
-                };
-                return stack;
+    public static class HyperaccumulatingFertilizerDispenserBehaviour extends OptionalDispenseItemBehavior {
+
+        @Override
+        @SuppressWarnings("deprecation") // BoneMealItem.growCrop() is deprecated but it's used in the Bone Meal Dispenser Behaviour so I don't care
+        protected ItemStack execute(BlockSource blockSource, ItemStack stack) {
+            Level level = blockSource.getLevel();
+            BlockPos blockPos = blockSource.getPos().relative(blockSource.getBlockState().getValue(DispenserBlock.FACING));
+            if (grow(level, blockPos)) { // Try to grow it as Hyperaccumulating Fertilizer
+                stack.shrink(1);
+                setSuccess(true);
+            } else if (BoneMealItem.growCrop(stack, level, blockPos) || BoneMealItem.growWaterPlant(stack, level, blockPos, (Direction)null)) { // Try to grow as normal Bonemeal
+                // Shrinking the Stack is covered in BoneMealItem.growCrop() or .growWaterPlant()
+                setSuccess(true);
+                if (!level.isClientSide()) level.levelEvent(1505, blockPos, 0); // Don't really know what this does but it's in the Bone Meal Dispenser Behaviour so best to include it
+            } else {
+                setSuccess(false);
             };
-        });
+            return stack;
+        };
     };
-    
 };

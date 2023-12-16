@@ -27,7 +27,7 @@ public class DestroyMobEffects {
     BABY_BLUE_HIGH = MOB_EFFECTS.register("baby_blue_high", BabyBlueHighMobEffect::new),
     BABY_BLUE_WITHDRAWAL = MOB_EFFECTS.register("baby_blue_withdrawal", BabyBlueWithdrawalMobEffect::new),
     SUN_PROTECTION = MOB_EFFECTS.register("sun_protection",
-        () -> new DestroyMobEffect(MobEffectCategory.BENEFICIAL, 0xFFFFFF)
+        () -> new DestroyMobEffect(MobEffectCategory.BENEFICIAL, 0xFFFFFE)
     );
 
     public static void register(IEventBus eventBus) {
@@ -35,6 +35,6 @@ public class DestroyMobEffects {
     };
 
     public static MobEffectInstance cancerInstance() {
-        return new MobEffectInstance(CANCER.get(), MobEffectInstance.INFINITE_DURATION, 0, false, false);
+        return new MobEffectInstance(CANCER.get(), MobEffectInstance.INFINITE_DURATION, 0, false, false, true);
     };
 }

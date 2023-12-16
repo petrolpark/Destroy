@@ -800,7 +800,7 @@
     "effect.destroy.crying": "Crying",
     "effect.destroy.crying.description": "Releases _tears_, which can be bottled.",
     "effect.destroy.fragrance": "Fragrance",
-    "effect.destroy.fragance.description": "Negates the effect of _smelly chemicals_ on the user.",
+    "effect.destroy.fragrance.description": "Negates the effect of _smelly chemicals_ on the user.",
     "effect.destroy.hangover": "Hangover",
     "effect.destroy.hangover.description": "Deals damage every time a _loud noise_ is heard; curable with _Aspirin_.",
     "effect.destroy.inebriation": "Inebriation",
