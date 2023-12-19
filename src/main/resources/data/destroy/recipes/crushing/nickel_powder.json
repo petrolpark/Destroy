@@ -1,0 +1,14 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "tag": "forge:ingots/nickel"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:nickel_powder"
+      }
+    ],
+    "processingTime": 100
+  }

@@ -42,4 +42,9 @@ public abstract class Group<G extends Group<G>> {
     public static final Set<GenericReaction> getReactionsOfGroupByID(GroupType<?> type) {
         return groupTypesAndReactions.get(type);
     };
+
+    @Override
+    public String toString() {
+        return getType().toString();
+    };
 };

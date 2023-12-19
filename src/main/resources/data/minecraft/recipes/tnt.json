@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "SGS",
+        "GSG",
+        "SGS"
+    ],
+    "key": {
+        "S": {
+            "item": "minecraft:sand"
+        },
+        "G": {
+            "item": "minecraft:gunpowder"
+        }
+    },
+    "result": {
+        "item": "minecraft:air"
+    }
+}

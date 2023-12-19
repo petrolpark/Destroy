@@ -25,6 +25,7 @@
         "ClientComponentTooltipMixin",
         "ConnectivityHandlerMixin",
         "CreateRecipeCategoryMixin",
+        "CuttingBoardMixin",
         "DestroyFrictionModifier",
         "EffectRenderingInventoryScreenMixin",
         "FluidIngredientMixin",

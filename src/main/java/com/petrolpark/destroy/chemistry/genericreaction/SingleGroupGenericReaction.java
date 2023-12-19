@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.chemistry.genericreaction;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Formula;
@@ -7,6 +8,7 @@ import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.GroupType;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Reaction;
+import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 
 import net.minecraft.resources.ResourceLocation;
 
@@ -57,8 +59,12 @@ public abstract class SingleGroupGenericReaction<G extends Group<G>> extends Gen
         Molecule copiedExampleMolecule = moleculeBuilder()
             .structure(copiedStructure)
             .build();
+        if (getGroupType() == DestroyGroupTypes.NITRILE) {
+            Destroy.LOGGER.info("Hello");
+            Destroy.LOGGER.info("These are the functional groups: "+copiedExampleMolecule.getFunctionalGroups().stream().map(group -> group.toString()).toString());
+        }
         for (Group<?> group : copiedExampleMolecule.getFunctionalGroups()) { // Just in case the example Molecule has multiple functional groups (which it shouldn't ideally)
-            if (group.getType() == getGroupType()) {
+            if (group.getType().equals(getGroupType())) {
                 Reaction reaction = generateReaction(new GenericReactant<>(copiedExampleMolecule, (G)group)); // Unchecked conversion
                 return reaction;
             };

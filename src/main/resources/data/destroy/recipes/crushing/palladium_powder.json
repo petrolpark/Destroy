@@ -1,0 +1,14 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "tag": "forge:ingots/palladium"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:palladium_powder"
+      }
+    ],
+    "processingTime": 100
+  }

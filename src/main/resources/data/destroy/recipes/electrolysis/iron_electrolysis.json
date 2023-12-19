@@ -1,0 +1,16 @@
+{
+    "type": "destroy:electrolysis",
+    "ingredients": [
+      {
+        "mixtureFluidWithIon": "destroy:mixture",
+        "molecule": "destroy:iron_iii",
+        "concentration": 4,
+        "amount": 250
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:iron_powder"
+      }
+    ]
+  }

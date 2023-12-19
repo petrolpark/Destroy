@@ -17,6 +17,7 @@
     "destroy:potate_o",
     "destroy:discharged_voltaic_pile",
     "destroy:voltaic_pile",
+    "destroy:aging_barrel",
     "destroy:dynamo",
     "destroy:anfo_block",
     "destroy:cordite",

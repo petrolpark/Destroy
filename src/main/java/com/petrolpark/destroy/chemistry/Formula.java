@@ -693,7 +693,7 @@ public class Formula implements Cloneable {
      * @return This Formula
      */
     public Formula refreshFunctionalGroups() {
-        this.groups = new ArrayList<>();
+        groups = new ArrayList<>();
         for (GroupFinder finder : GroupFinder.allGroupFinders()) {
             //if (topology == Topology.LINEAR) {
                 groups.addAll(finder.findGroups(structure));

@@ -97,9 +97,9 @@ public class DestroyItems {
     ZIRCONIUM_INGOT = REGISTRATE.item("zirconium_ingot", Item::new)
         .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/zirconium"), Tags.Items.INGOTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
-    SULFUR = REGISTRATE.item("sulfur", Item::new)
-        .tag(forgeItemTag("raw_materials/sulfur"))
-        .register(),
+    // SULFUR = REGISTRATE.item("sulfur", Item::new)
+    //     .tag(forgeItemTag("raw_materials/sulfur"))
+    //     .register(),
     ZINC_SHEET = REGISTRATE.item("zinc_sheet", Item::new)
         .tag(forgeItemTag("plates/zinc"))
         .register(),
@@ -124,6 +124,30 @@ public class DestroyItems {
         .register(),
     ZIRCON = REGISTRATE.item("zircon", Item::new)
         .tag(forgeItemTag("raw_materials/zircon"))
+        .register(),
+
+    // DUSTS
+
+    COPPER_POWDER = REGISTRATE.item("copper_powder", Item::new)
+        .tag(forgeItemTag("dusts/copper"), Tags.Items.DUSTS)
+        .register(),
+    IRON_POWDER = REGISTRATE.item("iron_powder", Item::new)
+        .tag(forgeItemTag("dusts/iron"), Tags.Items.DUSTS)
+        .register(),
+    NICKEL_POWDER = REGISTRATE.item("nickel_powder", Item::new)
+        .tag(forgeItemTag("dusts/nickel"), Tags.Items.DUSTS)
+        .register(),
+    PALLADIUM_POWDER = REGISTRATE.item("palladium_powder", Item::new)
+        .tag(forgeItemTag("dusts/palladium"), Tags.Items.DUSTS)
+        .register(),
+    PLATINUM_POWDER = REGISTRATE.item("platinum_powder", Item::new)
+        .tag(forgeItemTag("dusts/platinum"), Tags.Items.DUSTS)
+        .register(),
+    RHODIUM_POWDER = REGISTRATE.item("rhodium_powder", Item::new)
+        .tag(forgeItemTag("dusts/rhodium"), Tags.Items.DUSTS)
+        .register(),
+    ZINC_POWDER = REGISTRATE.item("zinc_powder", Item::new)
+        .tag(forgeItemTag("dusts/zinc"), Tags.Items.DUSTS)
         .register(),
 
     // PRIMARY EXPLOSIVES
@@ -428,19 +452,19 @@ public class DestroyItems {
 
     EMPTY_BOMB_BON = REGISTRATE.item("empty_bomb_bon", CombustibleItem::new)
         .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag, AllItemTags.UPRIGHT_ON_BELT.tag)
-        .onRegister(i -> i.setBurnTime(800))
+        .onRegister(i -> i.setBurnTime(1000))
         .register(),
     BOMB_BON = REGISTRATE.item("bomb_bon", CombustibleItem::new)
         .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag, AllItemTags.UPRIGHT_ON_BELT.tag)
-        .onRegister(i -> i.setBurnTime(6400))
+        .onRegister(i -> i.setBurnTime(20000))
         .register(),
     NAPALM_SUNDAE = REGISTRATE.item("napalm_sundae", CombustibleItem::new)
         .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag, AllItemTags.UPRIGHT_ON_BELT.tag)
-        .onRegister(i -> i.setBurnTime(6400))
+        .onRegister(i -> i.setBurnTime(20000))
         .register(),
     THERMITE_BROWNIE = REGISTRATE.item("thermite_brownie", CombustibleItem::new)
         .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag)
-        .onRegister(i -> i.setBurnTime(6400))
+        .onRegister(i -> i.setBurnTime(20000))
         .register();
 
     // BEETROOT
@@ -588,6 +612,7 @@ public class DestroyItems {
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
     YEAST = REGISTRATE.item("yeast", Item::new)
+        .tag(DestroyItemTags.FERTILIZER.tag)
         .register(),
     // CHALK = REGISTRATE.item("chalk", Item::new)
     //     .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)

@@ -2,6 +2,7 @@ package com.petrolpark.destroy.chemistry;
 
 import java.util.function.Supplier;
 
+import com.google.common.base.MoreObjects;
 import com.petrolpark.destroy.chemistry.error.ChemistryException.ExampleMoleculeMissingGroupException;
 
 public class GroupType<G extends Group<G>> {
@@ -26,5 +27,10 @@ public class GroupType<G extends Group<G>> {
             throw new ExampleMoleculeMissingGroupException(exampleMolecule.get());
         };
         exampleMoleculeVerified = true;
+    };
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("Example Molecule", getExampleMolecule().getFullID()).toString();
     };
 };

@@ -1,0 +1,14 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "tag": "forge:ingots/rhodium"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:rhodium_powder"
+      }
+    ],
+    "processingTime": 100
+  }

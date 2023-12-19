@@ -2,7 +2,7 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
       "IFP",
-      "BBB"
+      " B "
     ],
     "key": {
       "I": {

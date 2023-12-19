@@ -12,6 +12,7 @@ import com.petrolpark.destroy.chemistry.index.genericreaction.HalideAmineSubstit
 import com.petrolpark.destroy.chemistry.index.genericreaction.HalideAmmoniaSubstitution;
 import com.petrolpark.destroy.chemistry.index.genericreaction.HalideCyanideSubstitution;
 import com.petrolpark.destroy.chemistry.index.genericreaction.HalideHydroxideSubstitution;
+import com.petrolpark.destroy.chemistry.index.genericreaction.NitrileHydrogenation;
 import com.petrolpark.destroy.chemistry.index.genericreaction.NitrileHydrolysis;
 
 public class DestroyGenericReactions {
@@ -28,6 +29,7 @@ public class DestroyGenericReactions {
     public static final HalideAmmoniaSubstitution HALIDE_AMMONIA_SUBSTITUTION = new HalideAmmoniaSubstitution();
     public static final HalideCyanideSubstitution HALIDE_CYANIDE_SUBSTITUTION = new HalideCyanideSubstitution();
     public static final HalideHydroxideSubstitution HALIDE_HYDROXIDE_SUBSTITUTION = new HalideHydroxideSubstitution();
+    public static final NitrileHydrogenation NITRILE_HYDROGENATION = new NitrileHydrogenation();
     public static final NitrileHydrolysis NITRILE_HYDROLYSIS = new NitrileHydrolysis();
 
     public static void register() {};

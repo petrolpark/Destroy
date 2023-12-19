@@ -5,6 +5,7 @@ buildscript {
         jcenter()
         maven { url = 'https://repo.spongepowered.org/repository/maven-public' } // Mixins
         maven { url = 'https://maven.parchmentmc.org' } // Parchment
+        maven { url = 'https://api.modrinth.com/maven' } // Modrinth
     }
     dependencies {
         classpath "net.minecraftforge.gradle:ForgeGradle:${forgegradle_version}" // Forge
@@ -107,10 +108,16 @@ repositories {
     maven { // Blueprint
         url = "https://maven.jaackson.me"
     }
-    maven { // Fallback
-        name = "Modrinth"
-        url = "https://api.modrinth.com/maven"
-        content {
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        forRepositories(fg.repository)
+        filter {
             includeGroup "maven.modrinth"
         }
     }
@@ -201,5 +208,5 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 tasks.withType(Copy) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }

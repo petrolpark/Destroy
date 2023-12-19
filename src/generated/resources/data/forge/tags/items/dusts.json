@@ -1,6 +1,13 @@
 {
   "values": [
     "destroy:pure_gold_dust",
+    "destroy:copper_powder",
+    "destroy:iron_powder",
+    "destroy:nickel_powder",
+    "destroy:palladium_powder",
+    "destroy:platinum_powder",
+    "destroy:rhodium_powder",
+    "destroy:zinc_powder",
     "destroy:acetone_peroxide",
     "destroy:fulminated_mercury",
     "destroy:nickel_hydrazine_nitrate",
