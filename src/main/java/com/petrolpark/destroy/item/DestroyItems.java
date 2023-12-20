@@ -25,6 +25,7 @@ import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.RecordItem;
+import net.minecraft.world.item.SimpleFoiledItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.ArmorItem.Type;
 import net.minecraftforge.common.Tags;
@@ -326,13 +327,18 @@ public class DestroyItems {
         .register(),
     ZEIGLER_NATTA = REGISTRATE.item("ziegler-natta", Item::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
-    MAGIC_OXIDANT = REGISTRATE.item("magic_oxidant", Item::new)
+        .register();
+
+    public static final ItemEntry<SimpleFoiledItem>
+
+    MAGIC_OXIDANT = REGISTRATE.item("magic_oxidant", SimpleFoiledItem::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
-    MAGIC_REDUCTANT = REGISTRATE.item("magic_reductant", Item::new)
+    MAGIC_REDUCTANT = REGISTRATE.item("magic_reductant", SimpleFoiledItem::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
+        .register();
+
+    public static final ItemEntry<Item>
 
     // FOOD AND DRINK
 

@@ -3,6 +3,8 @@ package com.petrolpark.destroy.chemistry.index;
 import com.petrolpark.destroy.chemistry.index.genericreaction.AcylChlorideEsterification;
 import com.petrolpark.destroy.chemistry.index.genericreaction.AcylChlorideFormation;
 import com.petrolpark.destroy.chemistry.index.genericreaction.AcylChlorideHydrolysis;
+import com.petrolpark.destroy.chemistry.index.genericreaction.AlcoholOxidation;
+import com.petrolpark.destroy.chemistry.index.genericreaction.AldehydeOxidation;
 import com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydrolysis;
 import com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydrogenation;
 import com.petrolpark.destroy.chemistry.index.genericreaction.AmideHydrolysis;
@@ -20,6 +22,8 @@ public class DestroyGenericReactions {
     public static final AcylChlorideEsterification ACYL_CHLORIDE_ESTERIFICATION = new AcylChlorideEsterification();
     public static final AcylChlorideFormation ACYL_CHLORIDE_FORMATION = new AcylChlorideFormation();
     public static final AcylChlorideHydrolysis ACYL_CHLORIDE_HYDROLYSIS = new AcylChlorideHydrolysis();
+    public static final AlcoholOxidation ALCOHOL_OXIDATION = new AlcoholOxidation();
+    public static final AldehydeOxidation ALDEHYDE_OXIDATION = new AldehydeOxidation();
     public static final AlkeneHydrolysis ALKENE_HYDROLYSIS = new AlkeneHydrolysis();
     public static final AlkeneHydrogenation ALKENE_HYDROGENATION = new AlkeneHydrogenation();
     public static final AmideHydrolysis AMIDE_HYDROLYSIS = new AmideHydrolysis();

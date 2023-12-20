@@ -9,7 +9,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 public class DestroyExtrusions {
     
     public static void register() {
+        // Vanilla
         BlockExtrusion.register(Blocks.QUARTZ_BLOCK, (state, direction) -> Blocks.QUARTZ_PILLAR.defaultBlockState().setValue(BlockStateProperties.AXIS, direction.getAxis()));
+        BlockExtrusion.register(Blocks.PURPUR_BLOCK, (state, direction) -> Blocks.PURPUR_PILLAR.defaultBlockState().setValue(BlockStateProperties.AXIS, direction.getAxis()));
+
+        // Destroy
         BlockExtrusion.register(DestroyBlocks.CORDITE_BLOCK.get(), (state, direction) -> DestroyBlocks.EXTRUDED_CORDITE_BLOCK.getDefaultState().setValue(BlockStateProperties.AXIS, direction.getAxis()));
     };
 };

@@ -990,7 +990,8 @@ public class Mixture extends ReadOnlyMixture {
         SingleGroupGenericReaction<G> singleGroupGenericReaction = (SingleGroupGenericReaction<G>) genericReaction; // Unchecked conversion
         for (GenericReactant<?> reactant : reactants) {
             try {
-                reactions.add(singleGroupGenericReaction.generateReaction((GenericReactant<G>)reactant)); // Unchecked conversion
+                Reaction reaction = singleGroupGenericReaction.generateReaction((GenericReactant<G>)reactant);
+                if (reaction != null) reactions.add(reaction); // Unchecked conversion
             } catch(ChemistryException e) {
                 // Don't do anything for chemistry exceptions
             };
@@ -1020,7 +1021,8 @@ public class Mixture extends ReadOnlyMixture {
             for (Pair<GenericReactant<?>, GenericReactant<?>> reactantPair : reactantPairs) {
                 if (reactantPair.getFirst().getMolecule() == reactantPair.getSecond().getMolecule()) continue; // Cannot React Molecules with themselves
                 try {
-                    reactions.add(doubleGroupGenericReaction.generateReaction((GenericReactant<G1>)reactantPair.getFirst(), (GenericReactant<G2>)reactantPair.getSecond())); // Unchecked conversions {
+                    Reaction reaction = doubleGroupGenericReaction.generateReaction((GenericReactant<G1>)reactantPair.getFirst(), (GenericReactant<G2>)reactantPair.getSecond());
+                    if (reaction != null) reactions.add(reaction); // Unchecked conversions {
                 } catch(ChemistryException e) {
                     // Do nothing for chemistry exceptions
                 };

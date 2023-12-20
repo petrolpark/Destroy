@@ -90,6 +90,7 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -580,6 +581,10 @@ public class DestroyServerEvents {
             ChemistryDamageHelper.damage(event.getEntity().level(), event.getEntity(), FluidStack.loadFluidStackFromNBT(tag.getCompound("ContaminatingFluid")), true);
             ChemistryDamageHelper.decontaminate(event.getFrom());
         };
+    };
+
+    public static void onRecipeLoaded(RecipesUpdatedEvent event) {
+
     };
 
     @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)

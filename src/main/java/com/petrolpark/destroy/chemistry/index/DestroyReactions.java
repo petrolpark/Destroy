@@ -83,10 +83,18 @@ public class DestroyReactions {
 
     BENZENE_HYDROGENATION = builder()
         .id("benzene_hydrogenation")
-        .addReactant(DestroyMolecules.BENZENE)
+        .addReactant(DestroyMolecules.TOLUENE)
         .addReactant(DestroyMolecules.HYDROGEN, 2, 1)
         .addSimpleItemTagCatalyst(AllTags.forgeItemTag("dusts/nickel"), 1f)
         .addProduct(DestroyMolecules.CYCLOHEXENE)
+        .build(),
+
+    BENZENE_NITRATION = builder()
+        .id("benzene_nitration")
+        .addReactant(DestroyMolecules.BENZENE)
+        .addReactant(DestroyMolecules.NITRONIUM, 3, 1)
+        .addProduct(DestroyMolecules.TRINITROTOLUENE)
+        .addProduct(DestroyMolecules.PROTON, 3)
         .build(),
 
     BUTADIENE_CARBONYLATION = builder()

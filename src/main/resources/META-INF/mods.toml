@@ -32,6 +32,6 @@ description='''A destructive chemistry-based add-on to Create.'''
 	modId="create"
 	mandatory=true
 	versionRange="[0.5.1.e,)"
-	ordering="NONE"
+	ordering="AFTER"
 	side="BOTH"
 

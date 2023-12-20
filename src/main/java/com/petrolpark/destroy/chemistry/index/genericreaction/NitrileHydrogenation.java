@@ -4,7 +4,6 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Formula;
 import com.petrolpark.destroy.chemistry.Reaction;
-import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReactant;
 import com.petrolpark.destroy.chemistry.genericreaction.SingleGroupGenericReaction;
 import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
@@ -24,12 +23,13 @@ public class NitrileHydrogenation extends SingleGroupGenericReaction<NitrileGrou
         Formula structure = reactant.getMolecule().shallowCopyStructure();
         
         structure.moveTo(group.carbon)
-            .replaceBondTo(group.nitrogen, BondType.SINGLE)
+            .remove(group.nitrogen)
             .addAtom(Element.HYDROGEN)
             .addAtom(Element.HYDROGEN)
-            .moveTo(group.nitrogen)
-            .addAtom(Element.HYDROGEN)
-            .addAtom(Element.HYDROGEN);
+            .addGroup(Formula.atom(Element.NITROGEN)
+                .addAtom(Element.HYDROGEN)
+                .addAtom(Element.HYDROGEN)
+            );
 
         return reactionBuilder()
             .addReactant(reactant.getMolecule())

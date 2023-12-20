@@ -511,6 +511,14 @@ public class Formula implements Cloneable {
     };
 
     /**
+     * Get all Atoms of the given Element which are bonded to the {@link Formula#currentAtom current} {@link Atom}.
+     * @param element
+     */
+    public List<Atom> getBondedAtomsOfElement(Element element) {
+        return GroupFinder.bondedAtomsOfElementTo(structure, currentAtom, element);
+    };
+
+    /**
      * The total {@link Bond.BondType#getEquivalent single-bond equivalents} of a List of {@link Bond Bonds}.
      * <p>Note that this returns an integer - it would be possible for an {@link Atom} to have a non-integeric sum,
      * but this method is used for automatically constructing organic {@link Molecule Molecules} and their
@@ -718,14 +726,13 @@ public class Formula implements Cloneable {
         try {
 
             Formula newFormula = (Formula) super.clone();
-            newFormula.optimumFROWNSCode = null; // Let the FROWNS code be reset
             newFormula.structure = new HashMap<>();
             newFormula.structure = shallowCopyStructure(structure); // Shallow copy the Structure
             newFormula.groups = new ArrayList<>(groups); // Shallow copy the Groups
             newFormula.topology = this.topology; // Shallow copy the Topology
             updateSideChainStructures();
             newFormula.sideChains = sideChains.stream().map(pair -> Pair.of(pair.getFirst(), pair.getSecond().shallowCopy())).toList();
-            newFormula.optimumFROWNSCode = null; // Delete the FROWNS Code again, as copies are typically going to be modified
+            newFormula.optimumFROWNSCode = null; // Delete the FROWNS Code, as copies are typically going to be modified
 
             return newFormula;
 

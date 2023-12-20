@@ -23,8 +23,8 @@ public class CyanideNucleophilicAddition extends SingleGroupGenericReaction<Carb
         Molecule reactantMolecule = reactant.getMolecule();
         CarbonylGroup carbonyl = reactant.getGroup();
         Molecule productMolecule = moleculeBuilder().structure(reactantMolecule.shallowCopyStructure()
-            .moveTo(carbonyl.getCarbon())
-            .remove(carbonyl.getOxygen())
+            .moveTo(carbonyl.carbon)
+            .remove(carbonyl.oxygen)
             .addGroup(Formula.alcohol())
             .addGroup(Formula.atom(Element.CARBON).addAtom(Element.NITROGEN, BondType.TRIPLE))
         ).build();
