@@ -85,13 +85,13 @@
 				"south": {"uv": [12, 0, 16, 1.5], "texture": "#1"},
 				"west": {"uv": [12, 0, 16, 1.5], "texture": "#1"},
 				"up": {"uv": [12, 1.5, 16, 5.5], "texture": "#1"},
-				"down": {"uv": [12, 5.5, 16, 9.5], "texture": "#1"}
+				"down": {"uv": [1.5, 1.5, 5.5, 5.5], "texture": "#1"}
 			}
 		}
 	],
 	"groups": [
 		{
-			"name": "Bottom Gear",
+			"name": "Input Gear",
 			"origin": [8, 8, 8],
 			"color": 0,
 			"children": [0, 1, 2, 3, 4, 5]

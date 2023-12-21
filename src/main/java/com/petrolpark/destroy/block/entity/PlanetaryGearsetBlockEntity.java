@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.mixin.accessor.RotationPropagatorAccessor;
+import com.petrolpark.destroy.util.KineticsHelper;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.transmission.SplitShaftBlockEntity;
@@ -23,7 +24,7 @@ public class PlanetaryGearsetBlockEntity extends SplitShaftBlockEntity {
     public float propagateRotationTo(KineticBlockEntity target, BlockState stateFrom, BlockState stateTo, BlockPos diff, boolean connectedViaAxes, boolean connectedViaCogs) {
         if (connectedViaAxes || LongShaftBlockEntity.connectedToLongShaft(this, target, diff)) {
             if (DestroyBlocks.PLANETARY_GEARSET.has(stateTo)) return 0;
-            return RotationPropagatorAccessor.invokeGetAxisModifier(target, CoaxialGearBlockEntity.directionBetween(target.getBlockPos(), getBlockPos())) < 0 ? 2 : -2;
+            return RotationPropagatorAccessor.invokeGetAxisModifier(target, KineticsHelper.directionBetween(target.getBlockPos(), getBlockPos())) < 0 ? 2 : -2;
         };
         return super.propagateRotationTo(target, stateFrom, stateTo, diff, connectedViaAxes, connectedViaCogs);
 	};
@@ -31,11 +32,7 @@ public class PlanetaryGearsetBlockEntity extends SplitShaftBlockEntity {
     @Override
 	public List<BlockPos> addPropagationLocations(IRotate block, BlockState state, List<BlockPos> neighbours) {
 	    super.addPropagationLocations(block, state, neighbours);
-		BlockPos.betweenClosedStream(new BlockPos(-1, -1, -1), new BlockPos(1, 1, 1))
-			.forEach(offset -> {
-				if (offset.distSqr(BlockPos.ZERO) == 2)
-					neighbours.add(worldPosition.offset(offset));
-			});
+        KineticsHelper.addLargeCogwheelPropagationLocations(worldPosition, neighbours);
 		return neighbours;
 	};
 

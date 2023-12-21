@@ -92,7 +92,7 @@ public class CoaxialGearBlock extends CogWheelBlock {
             for (AxisDirection axisDirection : AxisDirection.values()) {
                 BlockPos longShaftPos = pos.relative(Direction.get(axisDirection, axis));
                 BlockState longShaftState = level.getBlockState(pos.relative(Direction.get(axisDirection, axis)));
-                if (DestroyBlocks.LONG_SHAFT.has(longShaftState) && longShaftState.getValue(AXIS) == axis && longShaftState.getValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION) == (axisDirection != AxisDirection.POSITIVE)) {
+                if (DestroyBlocks.LONG_SHAFT.has(longShaftState) && longShaftState.getValue(AXIS) == axis && longShaftState.getValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION) == (axisDirection != AxisDirection.POSITIVE)) {
                     level.getBlockEntity(longShaftPos, DestroyBlockEntityTypes.LONG_SHAFT.get()).ifPresent(be -> {
                         be.updateSpeed = true;
                     });
@@ -122,7 +122,7 @@ public class CoaxialGearBlock extends CogWheelBlock {
             if (shaftState.getValue(AXIS) != axis) continue;
             // Creation was successful
             if (!level.isClientSide()) {
-                level.setBlockAndUpdate(shaftPos, DestroyBlocks.LONG_SHAFT.getDefaultState().setValue(AXIS, axis).setValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION, direction.getAxisDirection() != AxisDirection.POSITIVE));
+                level.setBlockAndUpdate(shaftPos, DestroyBlocks.LONG_SHAFT.getDefaultState().setValue(AXIS, axis).setValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION, direction.getAxisDirection() != AxisDirection.POSITIVE));
                 level.setBlockAndUpdate(pos, DestroyBlocks.COAXIAL_GEAR.getDefaultState().setValue(AXIS, axis).setValue(HAS_SHAFT, true));
             };
             return true;
@@ -139,7 +139,7 @@ public class CoaxialGearBlock extends CogWheelBlock {
             BlockPos longShaftPos = pos.relative(Direction.get(axisDirection, thisAxis));
             BlockState longShaftState = level.getBlockState(longShaftPos);
             if (DestroyBlocks.LONG_SHAFT.has(longShaftState)) {
-                if (longShaftState.getValue(AXIS) == thisAxis && (longShaftState.getValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION) != (axisDirection == AxisDirection.POSITIVE))) {
+                if (longShaftState.getValue(AXIS) == thisAxis && (longShaftState.getValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION) != (axisDirection == AxisDirection.POSITIVE))) {
                     if (!level.isClientSide()) {
                         if (!removing) level.setBlockAndUpdate(pos, AllBlocks.SHAFT.getDefaultState().setValue(AXIS, thisAxis));
                         level.setBlockAndUpdate(longShaftPos, AllBlocks.SHAFT.getDefaultState().setValue(AXIS, thisAxis));

@@ -92,7 +92,7 @@
 	],
 	"groups": [
 		{
-			"name": "Top Gear",
+			"name": "Control Gear",
 			"origin": [8, 8, 8],
 			"color": 0,
 			"children": [0, 1, 2, 3, 4, 5]

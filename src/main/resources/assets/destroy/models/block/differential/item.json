@@ -420,7 +420,7 @@
 				"south": {"uv": [12, 0, 16, 1.5], "texture": "#1"},
 				"west": {"uv": [12, 0, 16, 1.5], "texture": "#1"},
 				"up": {"uv": [12, 1.5, 16, 5.5], "texture": "#1"},
-				"down": {"uv": [12, 5.5, 16, 9.5], "texture": "#1"}
+				"down": {"uv": [1.5, 1.5, 5.5, 5.5], "texture": "#1"}
 			}
 		},
 		{
@@ -676,7 +676,7 @@
 			}
 		},
 		{
-			"name": "Bottom Shaft",
+			"name": "Input Shaft",
 			"from": [6, 0, 6],
 			"to": [10, 1, 10],
 			"faces": {
@@ -689,7 +689,7 @@
 			}
 		},
 		{
-			"name": "Top Shaft",
+			"name": "Control Shaft",
 			"from": [6, 15, 6],
 			"to": [10, 16, 10],
 			"faces": {
@@ -704,7 +704,7 @@
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"rotation": [75, 45, 0],
+			"rotation": [75, 45, 1],
 			"translation": [0, 2.5, 0],
 			"scale": [0.375, 0.375, 0.375]
 		},
@@ -722,6 +722,7 @@
 			"scale": [0.4, 0.4, 0.4]
 		},
 		"ground": {
+			"rotation": [0, 0, 2],
 			"translation": [0, 3, 0],
 			"scale": [0.25, 0.25, 0.25]
 		},
@@ -760,13 +761,13 @@
 			]
 		},
 		{
-			"name": "Bottom Gear",
+			"name": "Input Gear",
 			"origin": [8, 8, 8],
 			"color": 0,
 			"children": [24, 25, 26, 27, 28, 29]
 		},
 		{
-			"name": "Top Gear",
+			"name": "Control Gear",
 			"origin": [8, 8, 8],
 			"color": 0,
 			"children": [30, 31, 32, 33, 34, 35]

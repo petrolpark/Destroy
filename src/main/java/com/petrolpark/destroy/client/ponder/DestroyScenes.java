@@ -6,8 +6,8 @@ import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.block.BubbleCapBlock;
 import com.petrolpark.destroy.block.CoaxialGearBlock;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.block.DirectionalRotatedPillarKineticBlock;
 import com.petrolpark.destroy.block.DoubleCardanShaftBlock;
-import com.petrolpark.destroy.block.LongShaftBlock;
 import com.petrolpark.destroy.block.entity.AgingBarrelBlockEntity;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
@@ -490,7 +490,7 @@ public class DestroyScenes {
         , 60);
         scene.idle(5);
         scene.world.setBlock(coaxialGear1, DestroyBlocks.COAXIAL_GEAR.getDefaultState().setValue(CoaxialGearBlock.HAS_SHAFT, true), false);
-        scene.world.setBlock(longShaft1, DestroyBlocks.LONG_SHAFT.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, Axis.Y).setValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION, false), false);
+        scene.world.setBlock(longShaft1, DestroyBlocks.LONG_SHAFT.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, Axis.Y).setValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION, false), false);
         scene.idle(55);
 
         scene.world.showSection(util.select.fromTo(1, 2, 2, 1, 3, 2), Direction.DOWN);
@@ -508,7 +508,7 @@ public class DestroyScenes {
         , 60);
         scene.idle(5);
         scene.world.setBlock(coaxialGear2, DestroyBlocks.COAXIAL_GEAR.getDefaultState().setValue(CoaxialGearBlock.HAS_SHAFT, true), false);
-        scene.world.setBlock(longShaft2, DestroyBlocks.LONG_SHAFT.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, Axis.Y).setValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION, false), false);
+        scene.world.setBlock(longShaft2, DestroyBlocks.LONG_SHAFT.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, Axis.Y).setValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION, false), false);
         scene.idle(65);
 
         scene.overlay.showText(80)

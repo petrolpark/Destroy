@@ -1,7 +1,6 @@
 package com.petrolpark.destroy.block;
 
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
-import com.petrolpark.destroy.block.entity.LongShaftBlockEntity;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.ITransformableBlock;
 import com.simibubi.create.content.contraptions.StructureTransform;
@@ -23,27 +22,24 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 public class LongShaftBlock extends ShaftBlock implements ITransformableBlock {
 
-    public static final BooleanProperty POSITIVE_AXIS_DIRECTION = BooleanProperty.create("positive_axis_direction");
-
     public LongShaftBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(POSITIVE_AXIS_DIRECTION, true));
+        registerDefaultState(defaultBlockState().setValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION, true));
     };
 
     @Override
     protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
-        builder.add(POSITIVE_AXIS_DIRECTION);
+        builder.add(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION);
         super.createBlockStateDefinition(builder);
     };
 
     @Override
 	public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
-        if (!state.hasProperty(POSITIVE_AXIS_DIRECTION)) return false;
-		return face.getAxis() == state.getValue(AXIS) && (face.getAxisDirection() == AxisDirection.POSITIVE) != state.getValue(POSITIVE_AXIS_DIRECTION);
+        if (!state.hasProperty(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION)) return false;
+		return face.getAxis() == state.getValue(AXIS) && (face.getAxisDirection() == AxisDirection.POSITIVE) != state.getValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION);
 	};
 
     @Override
@@ -64,21 +60,21 @@ public class LongShaftBlock extends ShaftBlock implements ITransformableBlock {
 
     @Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-        return getStateForDirection(rot.rotate(LongShaftBlockEntity.getDirection(state)));
+        return getStateForDirection(rot.rotate(DirectionalRotatedPillarKineticBlock.getDirection(state)));
 	};
 
     @Override
 	public BlockState mirror(BlockState state, Mirror mirror) {
-		return getStateForDirection(mirror.mirror(LongShaftBlockEntity.getDirection(state)));
+		return getStateForDirection(mirror.mirror(DirectionalRotatedPillarKineticBlock.getDirection(state)));
 	};
 
     @Override
 	public BlockState transform(BlockState state, StructureTransform transform) {
-        return getStateForDirection(transform.mirrorFacing(transform.rotateFacing(LongShaftBlockEntity.getDirection(state))));
+        return getStateForDirection(transform.mirrorFacing(transform.rotateFacing(DirectionalRotatedPillarKineticBlock.getDirection(state))));
 	};
 
     public BlockState getStateForDirection(Direction direction) {
-        return defaultBlockState().setValue(AXIS, direction.getAxis()).setValue(POSITIVE_AXIS_DIRECTION, direction.getAxisDirection() == AxisDirection.POSITIVE);
+        return defaultBlockState().setValue(AXIS, direction.getAxis()).setValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION, direction.getAxisDirection() == AxisDirection.POSITIVE);
     };
 
     @Override

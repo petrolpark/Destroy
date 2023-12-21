@@ -131,7 +131,9 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
-    public static final BlockEntry<DummyDifferentialBlock> DUMMY_DIFFERENTIAL = REGISTRATE.block("dummy_differential", DummyDifferentialBlock::new).register();
+    public static final BlockEntry<DummyDifferentialBlock> DUMMY_DIFFERENTIAL = REGISTRATE.block("dummy_differential", DummyDifferentialBlock::new)
+        .initialProperties(DIFFERENTIAL)
+        .register();
 
     public static final BlockEntry<DynamoBlock> DYNAMO = REGISTRATE.block("dynamo", DynamoBlock::new)
         .initialProperties(SharedProperties::softMetal)

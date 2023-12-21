@@ -113,6 +113,7 @@
     "block.destroy.cordite_block": "Cordite Block",
     "block.destroy.deepslate_fluorite_ore": "Deepslate Fluorite Ore",
     "block.destroy.deepslate_nickel_ore": "Deepslate Nickel Ore",
+    "block.destroy.differential": "Differential",
     "block.destroy.double_cardan_shaft": "Double Cardan Shaft",
     "block.destroy.dynamite_block": "Dynamite Block",
     "block.destroy.dynamite_block.tooltip": "DYNAMITE_BLOCK",
