@@ -15,6 +15,10 @@ public class DestroyPonderIndex {
         HELPER.forComponents(DestroyBlocks.AGING_BARREL)
             .addStoryBoard("aging_barrel", DestroyScenes::agingBarrel);
 
+        // Blacklight
+        HELPER.forComponents(DestroyBlocks.BLACKLIGHT)
+            .addStoryBoard("vat/uv", DestroyScenes::uv);
+
         // Bubble Cap
         HELPER.forComponents(DestroyBlocks.BUBBLE_CAP)
             .addStoryBoard("bubble_cap/generic", DestroyScenes::bubbleCapGeneric)
@@ -33,6 +37,10 @@ public class DestroyPonderIndex {
         HELPER.forComponents(DestroyBlocks.COOLER)
             .addStoryBoard("cooler", DestroyScenes::cooler);
 
+        // Differential
+        HELPER.forComponents(DestroyBlocks.DIFFERENTIAL)
+            .addStoryBoard("differential", DestroyScenes::differential);
+
         // Double Cardan Shaft
         HELPER.forComponents(DestroyBlocks.DOUBLE_CARDAN_SHAFT)
             .addStoryBoard("double_cardan_shaft", DestroyScenes::doubleCardanShaft);
@@ -40,8 +48,8 @@ public class DestroyPonderIndex {
         // Dynamo
         HELPER.forComponents(DestroyBlocks.DYNAMO)
             .addStoryBoard("dynamo/redstone", DestroyScenes::dynamoRedstone)
-            .addStoryBoard("dynamo/charging", DestroyScenes::dynamoCharging)
-            .addStoryBoard("dynamo/electrolysis", DestroyScenes::dynamoElectrolysis);
+            .addStoryBoard("dynamo/charging", DestroyScenes::dynamoCharging);
+            //.addStoryBoard("dynamo/electrolysis", DestroyScenes::dynamoElectrolysis);
 
         // Extrusion Die
         HELPER.forComponents(DestroyBlocks.EXTRUSION_DIE)
@@ -62,6 +70,7 @@ public class DestroyPonderIndex {
         // Vat Controller
         HELPER.forComponents(DestroyBlocks.VAT_CONTROLLER)
             .addStoryBoard("vat/construction", DestroyScenes::vatConstruction)
-            .addStoryBoard("vat/interaction", DestroyScenes::vatInteraction);
+            .addStoryBoard("vat/interaction", DestroyScenes::vatInteraction)
+            .addStoryBoard("vat/uv", DestroyScenes::uv);
     };
 };

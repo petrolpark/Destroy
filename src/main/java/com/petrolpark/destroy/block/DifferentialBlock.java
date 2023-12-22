@@ -31,8 +31,10 @@ public class DifferentialBlock extends CogWheelBlock {
     @SuppressWarnings("null")
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
         withBlockEntityDo(level, pos, be -> {
-            if (be instanceof DifferentialBlockEntity differential && KineticsHelper.directionBetween(pos, neighbor) == DirectionalRotatedPillarKineticBlock.getDirection(state).getOpposite()) {
-                boolean flip = !differential.hasSource() && level.getBlockEntity(neighbor) instanceof KineticBlockEntity;
+            Direction directionBetween = KineticsHelper.directionBetween(pos, neighbor);
+            Direction differentialDirection = DirectionalRotatedPillarKineticBlock.getDirection(state).getOpposite();
+            if (be instanceof DifferentialBlockEntity differential && directionBetween.getAxis() == differentialDirection.getAxis()) {
+                boolean flip = !differential.hasSource() && directionBetween == differentialDirection && level.getBlockEntity(neighbor) instanceof KineticBlockEntity;
                 differential.getLevel().setBlockAndUpdate(pos, DestroyBlocks.DUMMY_DIFFERENTIAL.getDefaultState().setValue(AXIS, state.getValue(AXIS)).setValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION, state.getValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION) ^ flip)); // It thinks getLevel() might be null
             };
         });

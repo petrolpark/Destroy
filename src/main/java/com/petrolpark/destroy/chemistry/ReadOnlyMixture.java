@@ -298,6 +298,7 @@ public class ReadOnlyMixture {
         List<Molecule> anions = new ArrayList<>();
         List<Molecule> solvents = new ArrayList<>();
         List<Molecule> impurities = new ArrayList<>();
+        boolean thereAreNeutralMolecules = false;
         for (Entry<Molecule, Float> entry : contents.entrySet()) {
             Molecule molecule = entry.getKey();
             if (neutral && (molecule == DestroyMolecules.HYDROXIDE || molecule == DestroyMolecules.PROTON)) continue;
@@ -314,6 +315,7 @@ public class ReadOnlyMixture {
                     products.add(molecule);
                 };
             };
+            if (molecule.getCharge() == 0) thereAreNeutralMolecules = true;
         };
 
         // Check for salts
@@ -337,25 +339,21 @@ public class ReadOnlyMixture {
                 name = (thereAreImpurities ? DestroyLang.translate("mixture.dirty").space() : DestroyLang.builder())
                     .add(solvents.get(0).getName(iupac).plainCopy())
                     .component();
-                return;
             } else if (solvents.size() == 2) { // Two solvents, no products
                 name = (thereAreImpurities ? DestroyLang.translate("mixture.dirty").space() : DestroyLang.builder())
                     .add(DestroyLang.translate("mixture.and", 
                         solvents.get(0).getName(iupac).getString(), solvents.get(1).getName(iupac).getString()
                     )).component();
-                return;
             } else if (thereAreSolvents) { // Many solvents, no products
                 name = (thereAreImpurities ? DestroyLang.translate("mixture.dirty").space() : DestroyLang.builder())
                     .add(DestroyLang.translate("mixture.solvents"))
                     .component();
-                return;
             };
         } else if (products.size() == 1) { // One product
             name = (thereAreImpurities ? DestroyLang.translate("mixture.impure").space() : DestroyLang.builder())
                 .add(products.get(0).getName(iupac).plainCopy())
                 .add(thereAreSolvents ? DestroyLang.builder().space().translate("mixture.solution") : Lang.text(""))
                 .component();
-            return;
         } else if (products.size() == 2) { // Two products
             Collections.sort(products, (p1, p2) -> p1.getName(iupac).getString().compareTo(p2.getName(iupac).getString()));
             name = (thereAreImpurities ? DestroyLang.translate("mixture.impure").space() : DestroyLang.builder())
@@ -363,9 +361,11 @@ public class ReadOnlyMixture {
                     products.get(0).getName(iupac).getString(), products.get(1).getName(iupac).getString()
                 )).add(thereAreSolvents ? DestroyLang.builder().space().translate("mixture.solution") : Lang.text(""))
                 .component();
+        } else { // Many products
+            name = DestroyLang.translate("mixture.mixture").component();
             return;
-        } else {}; // Many products
+        }; 
 
-        name = DestroyLang.translate("mixture.mixture").component();
+        if (!thereAreNeutralMolecules) name = DestroyLang.translate("mixture.supersaturated", name.getString()).component();
     };
 };
