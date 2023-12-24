@@ -325,7 +325,7 @@ public class DestroyItems {
         .register(),
     ZEOLITE = REGISTRATE.item("zeolite", Item::new)
         .register(),
-    ZEIGLER_NATTA = REGISTRATE.item("ziegler-natta", Item::new)
+    ZIEGLER_NATTA = REGISTRATE.item("ziegler-natta", Item::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register();
 

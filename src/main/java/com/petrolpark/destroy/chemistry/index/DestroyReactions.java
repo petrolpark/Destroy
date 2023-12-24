@@ -24,6 +24,7 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.BUTADIENE)
         .addReactant(DestroyMolecules.STYRENE)
         .addCatalyst(DestroyMolecules.AIBN, 0)
+        .addSimpleItemCatalyst(DestroyItems.ZIEGLER_NATTA::get, 1f)
         .withResult(1f, PrecipitateReactionResult.of(DestroyItems.ABS::asStack))
         .preexponentialFactor(15f)
         .activationEnergy(20f)
@@ -253,6 +254,7 @@ public class DestroyReactions {
         .id("ethene_polymerization")
         .addReactant(DestroyMolecules.ETHENE)
         .addCatalyst(DestroyMolecules.AIBN, 0)
+        .addSimpleItemCatalyst(DestroyItems.ZIEGLER_NATTA::get, 1f)
         .withResult(3f, PrecipitateReactionResult.of(DestroyItems.POLYETHENE::asStack))
         .preexponentialFactor(10f)
         .activationEnergy(10f)
@@ -555,6 +557,7 @@ public class DestroyReactions {
         .id("propene_polymerization")
         .addReactant(DestroyMolecules.PROPENE)
         .addCatalyst(DestroyMolecules.AIBN, 0)
+        .addSimpleItemCatalyst(DestroyItems.ZIEGLER_NATTA::get, 1f)
         .withResult(3f, PrecipitateReactionResult.of(DestroyItems.POLYPROPENE::asStack))
         .preexponentialFactor(10f)
         .activationEnergy(10f)
@@ -583,6 +586,7 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.STYRENE)
         .addReactant(DestroyMolecules.BUTADIENE)
         .addCatalyst(DestroyMolecules.AIBN, 0)
+        .addSimpleItemCatalyst(DestroyItems.ZIEGLER_NATTA::get, 1f)
         .withResult(1.5f, PrecipitateReactionResult.of(DestroyItems.POLYSTYRENE_BUTADIENE::asStack))
         .preexponentialFactor(10f)
         .activationEnergy(15f)
@@ -592,6 +596,7 @@ public class DestroyReactions {
         .id("styrene_polymerization")
         .addReactant(DestroyMolecules.STYRENE)
         .addCatalyst(DestroyMolecules.AIBN, 0)
+        .addSimpleItemCatalyst(DestroyItems.ZIEGLER_NATTA::get, 1f)
         .withResult(3f, PrecipitateReactionResult.of(DestroyItems.POLYSTYRENE::asStack))
         .preexponentialFactor(10f)
         .activationEnergy(10f)
@@ -616,6 +621,7 @@ public class DestroyReactions {
         .id("tetrafluoroethene_polymerization")
         .addReactant(DestroyMolecules.TETRAFLUOROETHENE)
         .addCatalyst(DestroyMolecules.AIBN, 0)
+        .addSimpleItemCatalyst(DestroyItems.ZIEGLER_NATTA::get, 1f)
         .withResult(3f, PrecipitateReactionResult.of(DestroyItems.POLYTETRAFLUOROETHENE::asStack))
         .preexponentialFactor(10f)
         .activationEnergy(10f)
@@ -647,6 +653,13 @@ public class DestroyReactions {
         .addSimpleItemTagCatalyst(AllTags.forgeItemTag("dusts/palladium"), 1f)
         .addProduct(DestroyMolecules.VINYL_ACETATE, 2)
         .addProduct(DestroyMolecules.WATER, 2)
+        .build(),
+
+    ZIEGLER_NATTA_CATALYST_FORMATION = builder()
+        .id("zeigler_natta_catalyst_formation")
+        .addReactant(DestroyMolecules.CYCLOPENTADIENIDE)
+        .addSimpleItemReactant(DestroyItems.ZIRCONIUM_INGOT::get, 5f)
+        .withResult(5f, PrecipitateReactionResult.of(DestroyItems.ZIEGLER_NATTA::asStack))
         .build(),
 
     ZINC_DISSOLUTION = builder() //TODO replace with redox
