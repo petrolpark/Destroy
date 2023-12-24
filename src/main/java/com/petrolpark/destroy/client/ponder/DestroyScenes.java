@@ -55,8 +55,6 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -66,7 +64,7 @@ import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -81,9 +79,9 @@ public class DestroyScenes {
 
     // Define coloured Fluids
     static {
-        purpleFluid = new FluidStack(PotionFluid.withEffects(1000, new Potion(), List.of(new MobEffectInstance(MobEffects.REGENERATION))), 1000);
-        blueFluid = new FluidStack(PotionFluid.withEffects(500, new Potion(), List.of(new MobEffectInstance(MobEffects.NIGHT_VISION))), 1000);
-        redFluid = new FluidStack(PotionFluid.withEffects(500, new Potion(), List.of(new MobEffectInstance(MobEffects.DAMAGE_BOOST))), 1000);
+        purpleFluid = new FluidStack(PotionFluid.withEffects(1000, Potions.TURTLE_MASTER, List.of()), 1000);
+        blueFluid = new FluidStack(PotionFluid.withEffects(500, Potions.AWKWARD, List.of()), 1000);
+        redFluid = new FluidStack(PotionFluid.withEffects(500, Potions.HEALING, List.of()), 1000);
     };
 
     private static FluidStack clearMixture(int amount) {
@@ -178,8 +176,8 @@ public class DestroyScenes {
         scene.markAsFinished();
     };
 
-    public static void centrifuge(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("centrifuge", "This text is defined in a language file.");
+    public static void centrifugeGeneric(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("centrifuge_generic", "This text is defined in a language file.");
         scene.configureBasePlate(0, 0, 5);
         scene.showBasePlate();
 
@@ -233,8 +231,28 @@ public class DestroyScenes {
             .pointAt(util.vector.blockSurface(lightOutputPump, Direction.EAST));
         scene.idle(120);
         scene.markAsFinished();
+    };
 
-        // TODO lubrication
+    public static void centrifugeMixture(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("centrifuge_mixture", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 5);
+        scene.showBasePlate();
+        scene.world.showSection(util.select.everywhere(), Direction.DOWN);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(util.grid.at(3, 3, 2), Direction.WEST));
+        scene.idle(120);
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(util.grid.at(1, 1, 2), Direction.WEST));
+        scene.idle(100);
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(util.grid.at(3, 1, 2), Direction.WEST));
+        scene.idle(100);
+
+        scene.markAsFinished();
     };
 
     public static void bubbleCapGeneric(SceneBuilder scene, SceneBuildingUtil util) {
@@ -688,6 +706,8 @@ public class DestroyScenes {
             .add(util.select.position(middleSmallGear))
             .add(util.select.position(middleSpeedometer));
 
+        Selection back = util.select.fromTo(3, 0, 5, 4, 2, 5);
+
         scene.idle(10);
         ElementLink<WorldSectionElement> bigGearElement = scene.world.showIndependentSection(util.select.position(westBigGear), Direction.EAST);
         scene.world.showSection(util.select.position(eastBigGear), Direction.WEST);
@@ -814,6 +834,20 @@ public class DestroyScenes {
             .colored(PonderPalette.RED)
             .pointAt(util.vector.blockSurface(differential, Direction.NORTH));
         scene.idle(80);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(differential, Direction.UP))
+            .attachKeyFrame();
+        scene.idle(20);
+        scene.world.showSection(back, Direction.NORTH);
+        scene.idle(5);
+        for (int z = 5; z >= 2; z--) {
+            scene.world.showSection(util.select.position(util.grid.at(4, 3, z)), Direction.DOWN);
+            scene.idle(5);
+        };
+        scene.world.destroyBlock(differential);
+        scene.idle(60);
 
         scene.markAsFinished();
     };
@@ -949,9 +983,27 @@ public class DestroyScenes {
 
     public static void dynamoElectrolysis(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("dynamo_electrolysis", "This text is defined in a language file.");
-        scene.configureBasePlate(0, 0, 5);
+        scene.configureBasePlate(0, 0, 3);
         scene.showBasePlate();
-        //TODO
+        
+        BlockPos basin = util.grid.at(1, 1, 1);
+        BlockPos dynamo = util.grid.at(1, 3, 1);
+
+        scene.idle(5);
+        scene.world.showSection(util.select.position(basin), Direction.DOWN);
+        scene.idle(5);
+        scene.world.showSection(util.select.fromTo(1, 0, 3, 1, 3, 3), Direction.NORTH);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(1, 3, 2), Direction.DOWN);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(dynamo), Direction.DOWN);
+        scene.idle(5);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(dynamo, Direction.WEST));
+        scene.idle(100);
+        
         scene.markAsFinished();
     };
 
@@ -1358,7 +1410,8 @@ public class DestroyScenes {
             .text("This text is defined in a language file.")
             .colored(PonderPalette.RED)
             .attachKeyFrame();
-        scene.overlay.showOutline(PonderPalette.RED, "vat_outside", vat.substract(util.select.fromTo(2, 2, 1, 3, 3, 4)).substract(util.select.fromTo(2, 1, 2, 3, 4, 3)).substract(util.select.fromTo(1, 2, 2, 4, 3, 3)), 60);
+        Selection edges = vat.substract(util.select.fromTo(2, 2, 1, 3, 3, 4)).substract(util.select.fromTo(2, 1, 2, 3, 4, 3)).substract(util.select.fromTo(1, 2, 2, 4, 3, 3));
+        scene.overlay.showOutline(PonderPalette.RED, "vat_outside", edges, 60);
         scene.idle(80);
 
         scene.overlay.showText(80)
@@ -1444,6 +1497,44 @@ public class DestroyScenes {
         scene.idle(20);
         scene.world.moveSection(everythingLink, util.vector.of(0, -2, 0), 10);
         scene.idle(40);
+
+        scene.markAsFinished();
+    };
+
+    public static void reactions(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("reactions", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 9);
+        scene.scaleSceneView(.5f);
+        scene.showBasePlate();
+
+        scene.world.showSection(util.select.everywhere().substract(util.select.position(2, 1, 2)).substract(util.select.fromTo(0, 0, 0, 8, 0, 8)), Direction.DOWN);
+        scene.idle(10);
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(util.grid.at(4, 4, 5), Direction.UP));
+        scene.idle(120);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(120);
+
+        BlockPos underBasin = util.grid.at(1, 1, 2);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(underBasin, Direction.WEST));
+        scene.idle(20);
+        scene.world.hideSection(util.select.position(underBasin), Direction.WEST);
+        scene.idle(20);
+        ElementLink<WorldSectionElement> burner = scene.world.showIndependentSection(util.select.position(2, 1, 2), Direction.WEST);
+        scene.world.moveSection(burner, util.vector.of(-1d, 0d, 0d), 0);
+        scene.idle(80);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(120);
 
         scene.markAsFinished();
     };

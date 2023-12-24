@@ -366,6 +366,6 @@ public class ReadOnlyMixture {
             return;
         }; 
 
-        if (!thereAreNeutralMolecules) name = DestroyLang.translate("mixture.supersaturated", name.getString()).component();
+        if (!thereAreNeutralMolecules && name != null) name = DestroyLang.translate("mixture.supersaturated", name.getString()).component();
     };
 };

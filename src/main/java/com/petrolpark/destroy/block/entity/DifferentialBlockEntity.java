@@ -2,6 +2,8 @@ package com.petrolpark.destroy.block.entity;
 
 import java.util.List;
 
+import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.block.DifferentialBlock;
 import com.petrolpark.destroy.block.DirectionalRotatedPillarKineticBlock;
 import com.petrolpark.destroy.mixin.accessor.RotationPropagatorAccessor;
 import com.petrolpark.destroy.util.KineticsHelper;
@@ -12,6 +14,7 @@ import com.simibubi.create.content.kinetics.transmission.SplitShaftBlockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -31,7 +34,29 @@ public class DifferentialBlockEntity extends SplitShaftBlockEntity {
         };
         return super.propagateRotationTo(target, stateFrom, stateTo, diff, connectedViaAxes, connectedViaCogs);
 	};
-    
+
+    @Override
+    @SuppressWarnings("null") // It thinks getLevel() might be null
+    public void setSource(BlockPos source) {
+        super.setSource(source);
+        Direction directionBetween = KineticsHelper.directionBetween(getBlockPos(), source);
+        if (hasLevel() && (directionBetween == null || directionBetween.getAxis() != getBlockState().getValue(DifferentialBlock.AXIS))) getLevel().destroyBlock(getBlockPos(), true);
+    };
+
+    @Override
+    @SuppressWarnings("null") // It thinks getLevel() might be null
+    public void tick() {
+        super.tick();
+        if (!hasLevel()) return;
+
+        if (getSpeed() == 0f) { // Try switching the direction if we're not powered by the existing side
+            Direction direction = DirectionalRotatedPillarKineticBlock.getDirection(getBlockState());
+            BlockPos adjacentPos = getBlockPos().relative(direction);
+            BlockPos otherAdjacentPos = getBlockPos().relative(direction.getOpposite());
+            if (!propagatesToMe(adjacentPos, direction.getOpposite()) && propagatesToMe(otherAdjacentPos, direction))
+                getLevel().setBlockAndUpdate(getBlockPos(), DestroyBlocks.DUMMY_DIFFERENTIAL.getDefaultState().setValue(DifferentialBlock.AXIS, direction.getAxis()).setValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION, direction.getAxisDirection() == AxisDirection.NEGATIVE)); 
+        };
+    };
 
     @Override
     @SuppressWarnings("null")

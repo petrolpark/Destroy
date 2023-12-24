@@ -9,11 +9,15 @@ import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class DifferentialBlock extends CogWheelBlock {
 
@@ -28,14 +32,18 @@ public class DifferentialBlock extends CogWheelBlock {
     };
 
     @Override
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+        return Shapes.block();
+    };
+
+    @Override
     @SuppressWarnings("null")
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
         withBlockEntityDo(level, pos, be -> {
             Direction directionBetween = KineticsHelper.directionBetween(pos, neighbor);
-            Direction differentialDirection = DirectionalRotatedPillarKineticBlock.getDirection(state).getOpposite();
+            Direction differentialDirection = DirectionalRotatedPillarKineticBlock.getDirection(state);
             if (be instanceof DifferentialBlockEntity differential && directionBetween.getAxis() == differentialDirection.getAxis()) {
-                boolean flip = !differential.hasSource() && directionBetween == differentialDirection && level.getBlockEntity(neighbor) instanceof KineticBlockEntity;
-                differential.getLevel().setBlockAndUpdate(pos, DestroyBlocks.DUMMY_DIFFERENTIAL.getDefaultState().setValue(AXIS, state.getValue(AXIS)).setValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION, state.getValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION) ^ flip)); // It thinks getLevel() might be null
+                differential.getLevel().setBlockAndUpdate(pos, DestroyBlocks.DUMMY_DIFFERENTIAL.getDefaultState().setValue(AXIS, state.getValue(AXIS)).setValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION, state.getValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION))); // It thinks getLevel() might be null
             };
         });
         super.onNeighborChange(state, level, pos, neighbor);
