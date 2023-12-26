@@ -8,7 +8,9 @@ import com.petrolpark.destroy.chemistry.index.genericreaction.AldehydeOxidation;
 import com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydrolysis;
 import com.petrolpark.destroy.chemistry.index.genericreaction.AlkeneHydrogenation;
 import com.petrolpark.destroy.chemistry.index.genericreaction.AmideHydrolysis;
+import com.petrolpark.destroy.chemistry.index.genericreaction.CarbonylReduction;
 import com.petrolpark.destroy.chemistry.index.genericreaction.CarboxylicAcidEsterification;
+import com.petrolpark.destroy.chemistry.index.genericreaction.CarboxylicAcidReduction;
 import com.petrolpark.destroy.chemistry.index.genericreaction.CyanideNucleophilicAddition;
 import com.petrolpark.destroy.chemistry.index.genericreaction.HalideAmineSubstitution;
 import com.petrolpark.destroy.chemistry.index.genericreaction.HalideAmmoniaSubstitution;
@@ -27,6 +29,8 @@ public class DestroyGenericReactions {
     public static final AlkeneHydrolysis ALKENE_HYDROLYSIS = new AlkeneHydrolysis();
     public static final AlkeneHydrogenation ALKENE_HYDROGENATION = new AlkeneHydrogenation();
     public static final AmideHydrolysis AMIDE_HYDROLYSIS = new AmideHydrolysis();
+    public static final CarbonylReduction CARBONYL_REDUCTION = new CarbonylReduction();
+    public static final CarboxylicAcidReduction CARBOXYLIC_ACID_REDUCTION = new CarboxylicAcidReduction();
     public static final CarboxylicAcidEsterification CARBOXYLIC_ACID_ESTERIFICATION = new CarboxylicAcidEsterification();
     public static final CyanideNucleophilicAddition CYANIDE_NUCLEOPHILIC_ADDITION = new CyanideNucleophilicAddition();
     public static final HalideAmineSubstitution HALIDE_AMINE_SUBSTITUION = new HalideAmineSubstitution();

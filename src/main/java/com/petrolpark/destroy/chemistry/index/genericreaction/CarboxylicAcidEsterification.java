@@ -28,9 +28,9 @@ public class CarboxylicAcidEsterification extends DoubleGroupGenericReaction<Car
         alcoholStructureCopy.moveTo(alcoholGroup.oxygen);
         alcoholStructureCopy.remove(alcoholGroup.hydrogen);
 
-        acidStructureCopy.moveTo(acidGroup.getCarbon());
-        acidStructureCopy.remove(acidGroup.getProton());
-        acidStructureCopy.remove(acidGroup.getAlcoholOxygen());
+        acidStructureCopy.moveTo(acidGroup.carbon)
+            .remove(acidGroup.proton)
+            .remove(acidGroup.alcoholOxygen);
 
         Molecule ester = moleculeBuilder().structure(Formula.joinFormulae(acidStructureCopy, alcoholStructureCopy, BondType.SINGLE)).build();
 

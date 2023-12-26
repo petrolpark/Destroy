@@ -22,9 +22,9 @@ public class AcylChlorideFormation extends SingleGroupGenericReaction<Carboxylic
         CarboxylicAcidGroup acidGroup = reactant.getGroup();
 
         Molecule productMolecule = moleculeBuilder().structure(reactantMolecule.shallowCopyStructure()
-            .moveTo(acidGroup.getCarbon())
-            .remove(acidGroup.getAlcoholOxygen())
-            .remove(acidGroup.getProton())
+            .moveTo(acidGroup.carbon)
+            .remove(acidGroup.alcoholOxygen)
+            .remove(acidGroup.proton)
             .addAtom(Element.CHLORINE)
         ).build();
 

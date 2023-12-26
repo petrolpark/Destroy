@@ -28,9 +28,8 @@ public class DifferentialBlockEntity extends SplitShaftBlockEntity {
     @Override
     public float propagateRotationTo(KineticBlockEntity target, BlockState stateFrom, BlockState stateTo, BlockPos diff, boolean connectedViaAxes, boolean connectedViaCogs) {
         if (connectedViaAxes || LongShaftBlockEntity.connectedToLongShaft(this, target, diff)) {
-            return ratio(stateFrom)
-            * Math.signum(RotationPropagatorAccessor.invokeGetAxisModifier(target, KineticsHelper.directionBetween(target.getBlockPos(), getBlockPos())))
-            ;
+            if (target instanceof DifferentialBlockEntity) return 0f;
+            return ratio(stateFrom) * Math.signum(RotationPropagatorAccessor.invokeGetAxisModifier(target, KineticsHelper.directionBetween(target.getBlockPos(), getBlockPos())));
         };
         return super.propagateRotationTo(target, stateFrom, stateTo, diff, connectedViaAxes, connectedViaCogs);
 	};
@@ -74,11 +73,11 @@ public class DifferentialBlockEntity extends SplitShaftBlockEntity {
 
         BlockEntity inputBE = getLevel().getBlockEntity(inputPos);
         float inputSpeed = 0f;
-        if (propagatesToMe(inputPos, towardsControl) && inputBE instanceof KineticBlockEntity inputKBE) inputSpeed = getPropagatedSpeed(inputKBE);
+        if (propagatesToMe(inputPos, towardsControl) && inputBE instanceof KineticBlockEntity inputKBE) inputSpeed = getPropagatedSpeed(inputKBE, towardsControl);
 
         BlockEntity controlBE = getLevel().getBlockEntity(controlPos);
         float controlSpeed = 0f;
-        if (propagatesToMe(controlPos, towardsInput) && controlBE instanceof KineticBlockEntity controlKBE) controlSpeed = getPropagatedSpeed(controlKBE);
+        if (propagatesToMe(controlPos, towardsInput) && controlBE instanceof KineticBlockEntity controlKBE) controlSpeed = getPropagatedSpeed(controlKBE, towardsInput);
 
         if (inputSpeed + controlSpeed == 0f) return 0f;
         return 2f * inputSpeed / (inputSpeed + controlSpeed);
@@ -91,9 +90,9 @@ public class DifferentialBlockEntity extends SplitShaftBlockEntity {
         return state.getBlock() instanceof KineticBlock kineticBlock && kineticBlock.hasShaftTowards(getLevel(), pos, state, directionToMe);
     };
 
-    public float getPropagatedSpeed(KineticBlockEntity from) {
+    public float getPropagatedSpeed(KineticBlockEntity from, Direction directionToMe) {
         if (from instanceof DifferentialBlockEntity) return 0f;
-        return from.getSpeed();
+        return from.getSpeed() * RotationPropagatorAccessor.invokeGetAxisModifier(from, directionToMe);
     };
 
     @Override

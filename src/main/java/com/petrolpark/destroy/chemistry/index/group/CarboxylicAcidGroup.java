@@ -6,14 +6,10 @@ import com.petrolpark.destroy.chemistry.GroupType;
 import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 
 public class CarboxylicAcidGroup extends Group<CarboxylicAcidGroup> {
-    private Atom carbon;
-    private Atom carbonylOxygen;
-    private Atom alcoholOxygen;
-    private Atom proton;
-
-    public CarboxylicAcidGroup() {
-        super();
-    };
+    public final Atom carbon;
+    public final Atom carbonylOxygen;
+    public final Atom alcoholOxygen;
+    public final Atom proton;
 
     public CarboxylicAcidGroup(Atom carbon, Atom carbonylOxygen, Atom alcoholOxygen, Atom proton) {
         super();
@@ -21,22 +17,6 @@ public class CarboxylicAcidGroup extends Group<CarboxylicAcidGroup> {
         this.carbonylOxygen = carbonylOxygen;
         this.alcoholOxygen = alcoholOxygen;
         this.proton = proton;
-    };
-
-    public Atom getCarbon() {
-        return this.carbon;
-    };
-
-    public Atom getCarbonylOxygen() {
-        return this.carbonylOxygen;
-    };
-
-    public Atom getAlcoholOxygen() {
-        return this.alcoholOxygen;
-    };
-
-    public Atom getProton() {
-        return this.proton;
     };
 
     @Override

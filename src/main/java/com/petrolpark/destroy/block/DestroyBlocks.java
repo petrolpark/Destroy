@@ -397,21 +397,21 @@ public class DestroyBlocks {
         .build()
         .register();
 
-    public static final BlockEntry<Block> ZIRCONIUM_BLOCK = REGISTRATE.block("zirconium_block", Block::new)
-        .initialProperties(() -> Blocks.NETHERITE_BLOCK)
-        .properties(p -> p
-            .mapColor(MapColor.STONE)
-            .requiresCorrectToolForDrops()
-            .strength(6f, 6f)
-        ).transform(TagGen.pickaxeOnly())
-        .tag(BlockTags.NEEDS_DIAMOND_TOOL)
-        .tag(Tags.Blocks.STORAGE_BLOCKS)
-        .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/zirconium"))
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .tag(Tags.Items.STORAGE_BLOCKS)
-        .build()
-        .register();
+    // public static final BlockEntry<Block> ZIRCONIUM_BLOCK = REGISTRATE.block("zirconium_block", Block::new)
+    //     .initialProperties(() -> Blocks.NETHERITE_BLOCK)
+    //     .properties(p -> p
+    //         .mapColor(MapColor.STONE)
+    //         .requiresCorrectToolForDrops()
+    //         .strength(6f, 6f)
+    //     ).transform(TagGen.pickaxeOnly())
+    //     .tag(BlockTags.NEEDS_DIAMOND_TOOL)
+    //     .tag(Tags.Blocks.STORAGE_BLOCKS)
+    //     .tag(BlockTags.BEACON_BASE_BLOCKS)
+    //     .transform(TagGen.tagBlockAndItem("storage_blocks/zirconium"))
+    //     .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+    //     .tag(Tags.Items.STORAGE_BLOCKS)
+    //     .build()
+    //     .register();
 
     // ORES
 

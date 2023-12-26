@@ -34,6 +34,7 @@ public class DestroyCompostables {
         add(0.4f, DestroyItems.YEAST.get());
         add(0.6f, DestroyItems.AGAR.get());
         add(1.0f, DestroyBlocks.AGAR_BLOCK.get());
+        add(1.0f, DestroyBlocks.MASHED_POTATO_BLOCK.get());
         add(1.0f, DestroyBlocks.YEAST_COVERED_AGAR_BLOCK.get());
     };
 

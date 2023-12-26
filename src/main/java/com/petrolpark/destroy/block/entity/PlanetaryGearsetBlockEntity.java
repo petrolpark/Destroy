@@ -24,7 +24,7 @@ public class PlanetaryGearsetBlockEntity extends SplitShaftBlockEntity {
     public float propagateRotationTo(KineticBlockEntity target, BlockState stateFrom, BlockState stateTo, BlockPos diff, boolean connectedViaAxes, boolean connectedViaCogs) {
         if (connectedViaAxes || LongShaftBlockEntity.connectedToLongShaft(this, target, diff)) {
             if (DestroyBlocks.PLANETARY_GEARSET.has(stateTo)) return 0;
-            return RotationPropagatorAccessor.invokeGetAxisModifier(target, KineticsHelper.directionBetween(target.getBlockPos(), getBlockPos())) < 0 ? 2 : -2;
+            return Math.signum(RotationPropagatorAccessor.invokeGetAxisModifier(target, KineticsHelper.directionBetween(target.getBlockPos(), getBlockPos()))) * -2;
         };
         return super.propagateRotationTo(target, stateFrom, stateTo, diff, connectedViaAxes, connectedViaCogs);
 	};

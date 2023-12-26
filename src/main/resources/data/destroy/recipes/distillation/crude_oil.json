@@ -9,7 +9,7 @@
     "results": [
         {
             "fluid": "destroy:mixture",
-            "amount": 8,
+            "amount": 9,
             "nbt": {
                 "Mixture": {
                     "TranslationKey": "fluid.destroy.molten_sulfur",
@@ -74,25 +74,6 @@
                         {
                             "Molecule": "destroy:benzene",
                             "Concentration": 11.22103592
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "fluid": "destroy:mixture",
-            "amount": 1,
-            "nbt": {
-                "Mixture": {
-                    "TranslationKey": "fluid.destroy.cyclopentadiene",
-                    "Contents": [
-                        {
-                            "Molecule": "destroy:proton",
-                            "Concentration": 12.13258097
-                        },
-                        {
-                            "Molecule": "destroy:cyclopentadienide",
-                            "Concentration": 12.13258097
                         }
                     ]
                 }

@@ -56,8 +56,8 @@ public class DifferentialRenderer extends KineticBlockEntityRenderer<Differentia
         float inputCogAngle = 0f;
         float controlCogAngle = 0f;
 
-        if (differential.propagatesToMe(inputPos, face.getOpposite()) && inputBE instanceof KineticBlockEntity inputKBE) inputCogAngle = (time * differential.getPropagatedSpeed(inputKBE) * 3f / 10 % 360) / 180 * Mth.PI;
-        if (differential.propagatesToMe(controlPos, face) && controlBE instanceof KineticBlockEntity controlKBE) controlCogAngle = (time * differential.getPropagatedSpeed(controlKBE) * 3f / 10 % 360) / 180 * Mth.PI;
+        if (differential.propagatesToMe(inputPos, face.getOpposite()) && inputBE instanceof KineticBlockEntity inputKBE) inputCogAngle = (time * differential.getPropagatedSpeed(inputKBE, face) * 3f / 10 % 360) / 180 * Mth.PI;
+        if (differential.propagatesToMe(controlPos, face) && controlBE instanceof KineticBlockEntity controlKBE) controlCogAngle = (time * differential.getPropagatedSpeed(controlKBE, face.getOpposite()) * 3f / 10 % 360) / 180 * Mth.PI;
 
         SuperByteBuffer ringGear = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_RING_GEAR, state, face, () -> rotateToFace(face));
         kineticRotationTransform(ringGear, differential, axis, ringGearAngle + ringGearOffset, light);

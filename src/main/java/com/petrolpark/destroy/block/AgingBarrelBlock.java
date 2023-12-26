@@ -5,6 +5,8 @@ import com.petrolpark.destroy.block.entity.AgingBarrelBlockEntity;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.shape.DestroyShapes;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
+import com.simibubi.create.content.contraptions.ITransformableBlock;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
 import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
@@ -42,7 +44,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class AgingBarrelBlock extends HorizontalDirectionalBlock implements IBE<AgingBarrelBlockEntity>, IWrenchable {
+public class AgingBarrelBlock extends HorizontalDirectionalBlock implements IBE<AgingBarrelBlockEntity>, IWrenchable, ITransformableBlock {
 
     public static final BooleanProperty IS_OPEN = BooleanProperty.create("open");
     public static final IntegerProperty PROGRESS = IntegerProperty.create("progress", 0, 4); //0 = smallest balloon, ... 4 = done (biggest balloon)
@@ -209,6 +211,11 @@ public class AgingBarrelBlock extends HorizontalDirectionalBlock implements IBE<
     @Override
     public BlockEntityType<? extends AgingBarrelBlockEntity> getBlockEntityType() {
         return DestroyBlockEntityTypes.AGING_BARREL.get();
+    }
+
+    @Override
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return state.setValue(FACING, transform.rotation.rotate(state.getValue(FACING)));
     };
 
 }

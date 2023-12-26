@@ -2,11 +2,11 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
       {
-        "tag": "forge:storage_blocks/zirconium"
+        "item": "destroy:mashed_potato_block"
       }
     ],
     "result": {
-      "item": "destroy:zirconium_ingot",
+      "item": "destroy:mashed_potato",
       "count": 9
     }
   }

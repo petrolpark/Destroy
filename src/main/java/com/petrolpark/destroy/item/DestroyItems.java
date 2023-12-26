@@ -95,9 +95,9 @@ public class DestroyItems {
     PURE_GOLD_INGOT = REGISTRATE.item("pure_gold_ingot", Item::new)
         .tag(DestroyItemTags.DESTROY_INGOTS.tag, Tags.Items.INGOTS, ItemTags.PIGLIN_LOVED)
         .register(),
-    ZIRCONIUM_INGOT = REGISTRATE.item("zirconium_ingot", Item::new)
-        .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/zirconium"), Tags.Items.INGOTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
+    // ZIRCONIUM_INGOT = REGISTRATE.item("zirconium_ingot", Item::new)
+    //     .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/zirconium"), Tags.Items.INGOTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
+    //     .register(),
     // SULFUR = REGISTRATE.item("sulfur", Item::new)
     //     .tag(forgeItemTag("raw_materials/sulfur"))
     //     .register(),
@@ -123,9 +123,9 @@ public class DestroyItems {
     PURE_GOLD_DUST = REGISTRATE.item("pure_gold_dust", Item::new)
         .tag(Tags.Items.DUSTS, ItemTags.PIGLIN_LOVED)
         .register(),
-    ZIRCON = REGISTRATE.item("zircon", Item::new)
-        .tag(forgeItemTag("raw_materials/zircon"))
-        .register(),
+    // ZIRCON = REGISTRATE.item("zircon", Item::new)
+    //     .tag(forgeItemTag("raw_materials/zircon"))
+    //     .register(),
 
     // DUSTS
 
@@ -278,10 +278,6 @@ public class DestroyItems {
 
     // TOYS
 
-    // static {
-    //     REGISTRATE.startSection(AllSections.MATERIALS);
-    // };
-
     public static final ItemEntry<BucketAndSpadeItem> BUCKET_AND_SPADE = REGISTRATE.item("bucket_and_spade", BucketAndSpadeItem::new)
         .properties(p -> p
             .durability(4)
@@ -317,17 +313,17 @@ public class DestroyItems {
     
     // NON-SILICA CATALYSTS
 
-    CONVERSION_CATALYST = REGISTRATE.item("conversion_catalyst", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
-    PALLADIUM_ON_CARBON = REGISTRATE.item("palladium_on_carbon", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
+    // CONVERSION_CATALYST = REGISTRATE.item("conversion_catalyst", Item::new)
+    //     .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+    //     .register(),
+    // PALLADIUM_ON_CARBON = REGISTRATE.item("palladium_on_carbon", Item::new)
+    //     .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+    //     .register(),
     ZEOLITE = REGISTRATE.item("zeolite", Item::new)
-        .register(),
-    ZIEGLER_NATTA = REGISTRATE.item("ziegler-natta", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register();
+    // ZIEGLER_NATTA = REGISTRATE.item("ziegler-natta", Item::new)
+    //     .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+    //     .register();
 
     public static final ItemEntry<SimpleFoiledItem>
 
