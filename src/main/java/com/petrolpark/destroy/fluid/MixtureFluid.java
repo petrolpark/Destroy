@@ -22,16 +22,13 @@ public class MixtureFluid extends VirtualFluid {
         super(properties);
     };
 
-    private static Mixture AIR_MIXTURE;
-
-    public static Mixture airMixture() {
-        if (AIR_MIXTURE == null) {
-            AIR_MIXTURE = new Mixture();
-            AIR_MIXTURE.addMolecule(DestroyMolecules.NITROGEN, 32.80f);
-            AIR_MIXTURE.addMolecule(DestroyMolecules.OXYGEN, 8.83f);
-            AIR_MIXTURE.setTemperature(289f); // 16 degrees C
-        };
-        return AIR_MIXTURE;
+    public static Mixture airMixture(float temperature) {
+        if (temperature <= 0f || Float.isNaN(temperature)) throw new IllegalStateException("Temperature cannot be negative or 0.");
+        Mixture air = new Mixture();
+        air.addMolecule(DestroyMolecules.NITROGEN, 32.80f * 279f / temperature);
+        air.addMolecule(DestroyMolecules.OXYGEN, 8.83f * 279f / temperature);
+        air.setTemperature(temperature);
+        return air;
     };
 
     /**
@@ -85,7 +82,7 @@ public class MixtureFluid extends VirtualFluid {
 
         @Override
         public Component getDescription(FluidStack stack) {
-            return ReadOnlyMixture.readNBT(stack.getChildTag("Mixture")).getName(); //TODO cache Mixture name to avoid calculating every time
+            return ReadOnlyMixture.readNBT(stack.getChildTag("Mixture")).getName();
         };
 
     };
@@ -93,7 +90,7 @@ public class MixtureFluid extends VirtualFluid {
     public static int getTintColor(FluidStack stack) {
         if (stack.isEmpty()) return 0x00FFFFFF; // Transparent
         if (!stack.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND)) return -1;
-        return ReadOnlyMixture.readNBT(stack.getChildTag("Mixture")).getColor(); //TODO cache Mixture color to avoid calculating every time
+        return ReadOnlyMixture.readNBT(stack.getChildTag("Mixture")).getColor();
     };
 
     

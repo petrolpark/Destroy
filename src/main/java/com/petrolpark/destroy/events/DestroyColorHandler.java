@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.events;
 
+import java.util.function.BiFunction;
+
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.Destroy;
@@ -47,17 +49,21 @@ public class DestroyColorHandler {
 
     public static class SmogAffectedBlockColor implements BlockColor {
 
-        private static SmogAffectedBlockColor
+        private static final SmogAffectedBlockColor
         GRASS = new SmogAffectedBlockColor((state, level, pos, tintIndex) ->  level != null && pos != null ? BiomeColors.getAverageGrassColor(level, pos) : GrassColor.getDefaultColor()),
         DOUBLE_TALL_GRASS = new SmogAffectedBlockColor((state, level, pos, tintIndex) -> level != null && pos != null ? BiomeColors.getAverageGrassColor(level, state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER ? pos.below() : pos) : GrassColor.getDefaultColor()),
-        PINK_PETALS = new SmogAffectedBlockColor((state, level, pos, tintIndex) -> tintIndex == 0 ? -1 : (level != null && pos != null ? BiomeColors.getAverageGrassColor(level, pos) : GrassColor.getDefaultColor())),
-        FOLIAGE = new SmogAffectedBlockColor((state, level, pos, tintIndex) -> level != null && pos != null ? BiomeColors.getAverageFoliageColor(level, pos) : FoliageColor.getDefaultColor()),
-        BIRCH = new SmogAffectedBlockColor((state, level, pos, tintIndex) -> level != null && pos != null ? BiomeColors.getAverageFoliageColor(level, pos) : FoliageColor.getBirchColor()),
-        SPRUCE = new SmogAffectedBlockColor((state, level, pos, tintIndex) -> level != null && pos != null ? BiomeColors.getAverageFoliageColor(level, pos) : FoliageColor.getEvergreenColor()),
-        WATER = new SmogAffectedBlockColor((state, level, pos, tintIndex) -> level != null && pos != null ? BiomeColors.getAverageWaterColor(level, pos) : -1),
-        SUGAR_CANE = new SmogAffectedBlockColor((state, level, pos, tintIndex) ->  level != null && pos != null ? BiomeColors.getAverageGrassColor(level, pos) : -1);
+        PINK_PETALS = new SmogAffectedBlockColor(BiomeColors::getAverageGrassColor, GrassColor.getDefaultColor()),
+        FOLIAGE = new SmogAffectedBlockColor(BiomeColors::getAverageFoliageColor, FoliageColor.getDefaultColor()),
+        BIRCH = new SmogAffectedBlockColor(BiomeColors::getAverageFoliageColor, FoliageColor.getBirchColor()),
+        SPRUCE = new SmogAffectedBlockColor(BiomeColors::getAverageFoliageColor, FoliageColor.getEvergreenColor()),
+        WATER = new SmogAffectedBlockColor(BiomeColors::getAverageWaterColor, -1),
+        SUGAR_CANE = new SmogAffectedBlockColor(BiomeColors::getAverageGrassColor, -1);
 
         private final BlockColor originalColor;
+
+        public SmogAffectedBlockColor(BiFunction<BlockAndTintGetter, BlockPos, Integer> levelAndPosBlockColor, Integer fallback) {
+            this((state, level, pos, tintIndex) -> level != null && pos != null ? levelAndPosBlockColor.apply(level, pos) : fallback);
+        };
 
         public SmogAffectedBlockColor(BlockColor originalColor) {
             this.originalColor = originalColor;

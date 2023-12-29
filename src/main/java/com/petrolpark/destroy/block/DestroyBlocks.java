@@ -50,12 +50,14 @@ public class DestroyBlocks {
 
     // BLOCK ENTITIES
 
+    @SuppressWarnings("removal") // I'll start rendering translucency the proper way once it actually works the proper way
     public static final BlockEntry<AgingBarrelBlock> AGING_BARREL = REGISTRATE.block("aging_barrel", AgingBarrelBlock::new)
         .initialProperties(SharedProperties::stone)
         .properties(p -> p
             .mapColor(MapColor.COLOR_BROWN)
             .noOcclusion()
         ).transform(TagGen.axeOnly())
+        .addLayer(() -> RenderType::translucent)
         .item()
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .transform(customItemModel())
@@ -249,12 +251,14 @@ public class DestroyBlocks {
         .tag(BlockTags.CAULDRONS)
         .register();
 
+    @SuppressWarnings("removal") // I'll start rendering translucency the proper way once it actually works the proper way
     public static final BlockEntry<BlacklightBlock> BLACKLIGHT = REGISTRATE.block("blacklight", BlacklightBlock::new)
         .initialProperties(() -> Blocks.LANTERN)
         .properties(p -> p
             .mapColor(MapColor.COLOR_PURPLE)
             .sound(SoundType.GLASS)
-        ).item()
+        ).addLayer(() -> RenderType::translucent)
+        .item()
         .build()
         .register();
 

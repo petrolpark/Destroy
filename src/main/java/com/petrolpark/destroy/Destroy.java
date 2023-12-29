@@ -41,6 +41,7 @@ import com.petrolpark.destroy.util.vat.VatMaterial;
 import com.petrolpark.destroy.world.damage.DestroyDamageTypes;
 import com.petrolpark.destroy.world.loot.DestroyLoot;
 import com.petrolpark.destroy.world.village.DestroyVillagers;
+import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
@@ -162,6 +163,9 @@ public class Destroy {
         DestroyMolecules.register();
         DestroyReactions.register();
         DestroyGenericReactions.register();
+
+        // Config
+        GogglesItem.addIsWearingPredicate(player -> player.isCreative() && DestroyAllConfigs.COMMON.automaticGoggles.get());
     };
 
     public static void clientInit(final FMLClientSetupEvent event) {

@@ -147,6 +147,7 @@ public class Mixture extends ReadOnlyMixture {
         };
 
         mixture.updateName();
+        mixture.updateColor();
         mixture.refreshPossibleReactions();
         mixture.updateNextBoilingPoints();
 
@@ -199,6 +200,7 @@ public class Mixture extends ReadOnlyMixture {
         if (getConcentrationOf(molecule) > 0f) { // If we already have this Molecule
             changeConcentrationOf(molecule, concentration, true);
             updateName();
+            updateColor();
             return this;
         };
 
@@ -214,6 +216,7 @@ public class Mixture extends ReadOnlyMixture {
      * @return A new Mixture instance
      */
     public static Mixture mix(Map<Mixture, Double> mixtures) {
+        if (mixtures.size() == 0) return new Mixture();
         if (mixtures.size() == 1) return mixtures.keySet().iterator().next();
         Mixture resultMixture = new Mixture();
         Map<Molecule, Double> moleculesAndMoles = new HashMap<>(); // A Map of all Molecules to their quantity in moles (not their concentration)
@@ -255,6 +258,7 @@ public class Mixture extends ReadOnlyMixture {
 
         resultMixture.refreshPossibleReactions();
         resultMixture.updateName();
+        resultMixture.updateColor();
         resultMixture.updateNextBoilingPoints();
 
         return resultMixture;
@@ -316,7 +320,7 @@ public class Mixture extends ReadOnlyMixture {
     };
 
     /**
-     * Let this Mixture know it should no longer be at {@link Mixture#equilibrium}.
+     * Let this Mixture know it should no longer be at {@link Mixture#equilibrium equilibrium}.
      */
     public void disturbEquilibrium() {
         equilibrium = false;
@@ -388,6 +392,7 @@ public class Mixture extends ReadOnlyMixture {
         };
 
         updateName();
+        updateColor();
     };
 
     /**
@@ -396,6 +401,7 @@ public class Mixture extends ReadOnlyMixture {
      */
     public void heat(float energyDensity) {
         float volumetricHeatCapacity = getVolumetricHeatCapacity();
+        if (volumetricHeatCapacity == 0f) return;
 
         float temperatureChange = energyDensity / volumetricHeatCapacity; // The theoretical temperature change if no boiling or condensation occurs
 
@@ -531,6 +537,8 @@ public class Mixture extends ReadOnlyMixture {
         };
 
         updateName();
+        updateColor();
+        
         if (shouldRefreshReactions) refreshPossibleReactions();
     };
 

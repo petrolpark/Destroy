@@ -759,7 +759,7 @@ public final class DestroyMolecules {
         .id("nitrogen")
         .structure(Formula.deserialize("destroy:linear:N#N"))
         .boilingPointInKelvins(77.355f)
-        .density(1.2506f)
+        .density(807f)
         .molarHeatCapacity(29.12f)
         .tag(Tags.ABUNDANT_IN_AIR)
         .build(),

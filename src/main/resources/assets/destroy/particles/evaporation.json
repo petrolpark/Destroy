@@ -1,16 +1,16 @@
 {
     "textures": [
-      "minecraft:big_smoke_0",
-      "minecraft:big_smoke_1",
-      "minecraft:big_smoke_2",
-      "minecraft:big_smoke_3",
-      "minecraft:big_smoke_4",
-      "minecraft:big_smoke_5",
-      "minecraft:big_smoke_6",
-      "minecraft:big_smoke_7",
-      "minecraft:big_smoke_8",
-      "minecraft:big_smoke_9",
-      "minecraft:big_smoke_10",
-      "minecraft:big_smoke_11"
+      "destroy:gas_0",
+      "destroy:gas_1",
+      "destroy:gas_2",
+      "destroy:gas_3",
+      "destroy:gas_4",
+      "destroy:gas_5",
+      "destroy:gas_6",
+      "destroy:gas_7",
+      "destroy:gas_8",
+      "destroy:gas_9",
+      "destroy:gas_10",
+      "destroy:gas_11"
     ]
 }

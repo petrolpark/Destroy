@@ -53,6 +53,11 @@ public class ReadOnlyMixture {
      * The full translation key of this Mixture if it has a custom name, for example {@code destroy.mixture.brine}.
      */
     protected String translationKey;
+
+    /**
+     * The RGBA color of this Mixture.
+     */
+    protected Integer color;
     
     /**
      * How hot (in kelvins) this Mixture is. Temperature affects the rate of {@link Reaction Reactions}.
@@ -122,6 +127,7 @@ public class ReadOnlyMixture {
             mixture.states.put(molecule, moleculeTag.getFloat("Gaseous"));
         });
         mixture.updateName();
+        mixture.updateColor();
         return mixture;
     };
 
@@ -133,6 +139,14 @@ public class ReadOnlyMixture {
     public Component getName() {
         if (name == null) updateName();
         return name;
+    };
+
+    /**
+     * The {@link ReadOnlyMixture#color color} of this Mixture.
+     */
+    public int getColor() {
+        if (color == null) updateColor();
+        return color;
     };
 
     /**
@@ -255,7 +269,7 @@ public class ReadOnlyMixture {
         return tooltip;
     };
 
-    public int getColor() {
+    public void updateColor() {
         float totalColorContribution = 0f;
         float totalRed = 0;
         float totalGreen = 0;
@@ -271,7 +285,7 @@ public class ReadOnlyMixture {
             totalBlue += color.getBlue() * colorContribution;
             totalAlpha = Math.max(totalAlpha, color.getAlpha());
         };
-        return new Color((int)(totalRed / totalColorContribution), (int)(totalGreen / totalColorContribution), (int)(totalBlue / totalColorContribution), totalAlpha).getRGB();
+        color = new Color((int)(totalRed / totalColorContribution), (int)(totalGreen / totalColorContribution), (int)(totalBlue / totalColorContribution), totalAlpha).getRGB();
     };
 
     /**
@@ -362,9 +376,9 @@ public class ReadOnlyMixture {
                 )).add(thereAreSolvents ? DestroyLang.builder().space().translate("mixture.solution") : Lang.text(""))
                 .component();
         } else { // Many products
-            name = DestroyLang.translate("mixture.mixture").component();
-            return;
         }; 
+
+        if (name == null) name = DestroyLang.translate("mixture.mixture").component();
 
         if (!thereAreNeutralMolecules && name != null) name = DestroyLang.translate("mixture.supersaturated", name.getString()).component();
     };

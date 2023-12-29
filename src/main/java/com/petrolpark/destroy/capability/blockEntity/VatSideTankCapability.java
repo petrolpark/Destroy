@@ -51,6 +51,9 @@ public class VatSideTankCapability extends CombinedTankWrapper {
 
     @SuppressWarnings("null")
     protected void updateVatGasVolume(FluidStack drained, FluidAction action) {
-        if (action == FluidAction.EXECUTE && !drained.isEmpty() && vatSide.getController() != null && !vatSide.getLevel().isClientSide()) vatSide.getController().updateGasVolume();
+        if (action == FluidAction.EXECUTE && !drained.isEmpty() && vatSide.getController() != null && !vatSide.getLevel().isClientSide()) {
+            vatSide.getController().updateCachedMixture();
+            vatSide.getController().updateGasVolume();
+        };
     };
 };

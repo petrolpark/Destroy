@@ -57,9 +57,9 @@ public abstract class SingleGroupGenericReaction<G extends Group<G>> extends Gen
             };
         };
         Molecule copiedExampleMolecule = moleculeBuilder()
-            .structure(copiedStructure)
+            .structure(copiedStructure.refreshFunctionalGroups())
             .build();
-        if (getGroupType() == DestroyGroupTypes.NITRILE) {
+        if (getGroupType() == DestroyGroupTypes.CARBONYL) {
             Destroy.LOGGER.info("Hello");
         }
         for (Group<?> group : copiedExampleMolecule.getFunctionalGroups()) { // Just in case the example Molecule has multiple functional groups (which it shouldn't ideally)

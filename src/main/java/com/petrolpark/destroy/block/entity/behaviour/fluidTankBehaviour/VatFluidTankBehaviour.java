@@ -134,9 +134,9 @@ public class VatFluidTankBehaviour extends GeniusFluidTankBehaviour {
      * Replace all the gas in the gas tank with room temperature and pressure air.
      * @return The gas that was previously stored
      */
-    public FluidStack flush() {
+    public FluidStack flush(float temperature) {
         FluidStack oldGas = getGasHandler().getFluid();
-        getGasHandler().setFluid(DestroyFluids.air(vatCapacity - getLiquidHandler().getFluidAmount()));
+        getGasHandler().setFluid(DestroyFluids.air(vatCapacity - getLiquidHandler().getFluidAmount(), temperature));
         getGasHandler().flushed = true;
         return oldGas;
     };

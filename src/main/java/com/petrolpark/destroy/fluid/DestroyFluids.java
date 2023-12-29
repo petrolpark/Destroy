@@ -16,8 +16,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class DestroyFluids {
 
-    public static FluidStack air(int amount) {
-        return MixtureFluid.of(amount, MixtureFluid.airMixture(), "fluid.destroy.air");
+    public static FluidStack air(int amount, float temperature) {
+        return MixtureFluid.of(amount, MixtureFluid.airMixture(temperature), "fluid.destroy.air");
     };
     
     public static final FluidEntry<MixtureFluid> MIXTURE = REGISTRATE.virtualFluid("mixture",

@@ -37,7 +37,7 @@ public class GasParticle extends FluidStackParticle {
             yd += VERTICAL_SPEED + (double)(random.nextFloat() / 500.0F);
         } else {
             isDistillation = false;
-            lifetime = (int)Mth.lerp(fluid.getAmount() / 4000, 60, 180);
+            lifetime = (int)Mth.lerp(fluid.getAmount() / 4000, 60, 300);
         };
 
         hasPhysics = !isDistillation;
