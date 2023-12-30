@@ -1,13 +1,20 @@
 package com.petrolpark.destroy.sound;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.petrolpark.destroy.Destroy;
-import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.AllSoundEvents.SoundEntry;
 import com.simibubi.create.AllSoundEvents.SoundEntryBuilder;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
+import net.minecraftforge.registries.RegisterEvent;
 
 public class DestroySoundEvents {
+
+    public static final Map<ResourceLocation, SoundEntry> ALL = new HashMap<>();
 
     public static final SoundEntry
 
@@ -68,10 +75,37 @@ public class DestroySoundEvents {
         .build();
     
     private static SoundEntryBuilder create(String name) {
-        return AllSoundEvents.create(Destroy.asResource(name));
+        return new DestroySoundEntryBuilder(Destroy.asResource(name));
     };
 
+    /**
+     * Copied from the {@link com.simibubi.create.AllSoundEvents#prepare Create source code}.
+     */
     public static void prepare() {
-		AllSoundEvents.ALL.entrySet().stream().filter(entry -> entry.getKey().getNamespace().equals(Destroy.MOD_ID)).forEach(entry -> entry.getValue().prepare());
+		for (SoundEntry entry : ALL.values()) entry.prepare();
 	};
+
+    /**
+     * Copied from the {@link com.simibubi.create.AllSoundEvents#register Create source code}.
+     */
+    public static void register(RegisterEvent event) {
+		event.register(Registries.SOUND_EVENT, helper -> {
+			for (SoundEntry entry : ALL.values()) entry.register(helper);
+		});
+	}
+
+    public static class DestroySoundEntryBuilder extends SoundEntryBuilder {
+
+        public DestroySoundEntryBuilder(ResourceLocation id) {
+            super(id);
+        };
+
+        @Override
+        public SoundEntry build() {
+            SoundEntry entry = super.build();
+            ALL.put(entry.getId(), entry);
+			return entry;
+        };
+
+    };
 };

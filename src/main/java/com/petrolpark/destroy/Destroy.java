@@ -129,6 +129,7 @@ public class Destroy {
 
         // Initiation Events
         modEventBus.addListener(Destroy::init);
+        modEventBus.addListener(DestroySoundEvents::register);
         modEventBus.addListener(Destroy::clientInit);
         modEventBus.addListener(DestroyParticleTypes::registerProviders);
         modEventBus.addListener(EventPriority.LOWEST, Destroy::gatherData);
