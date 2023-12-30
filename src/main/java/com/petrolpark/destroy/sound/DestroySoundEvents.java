@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.petrolpark.destroy.Destroy;
+import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.AllSoundEvents.SoundEntry;
 import com.simibubi.create.AllSoundEvents.SoundEntryBuilder;
 
@@ -103,6 +104,7 @@ public class DestroySoundEvents {
         @Override
         public SoundEntry build() {
             SoundEntry entry = super.build();
+            AllSoundEvents.ALL.remove(entry.getId());
             ALL.put(entry.getId(), entry);
 			return entry;
         };

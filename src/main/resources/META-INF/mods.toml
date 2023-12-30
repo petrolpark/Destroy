@@ -1,14 +1,14 @@
 modLoader="javafml"
 loaderVersion="[40,)"
 issueTrackerURL="https://github.com/petrolpark/Destroy/issues"
-license="MIT"
+license="All Rights Reserved"
 
 [[mods]]
 modId="destroy"
 version="${file.jarVersion}"
 displayName="Destroy"
 #updateJSONURL=""
-displayURL="https://www.curseforge.com/minecraft/mc-mods/create-destroy"
+displayURL="https://www.modrinth.com/mods/destroy"
 logoFile="logo.png"
 #credits=""
 authors="petrolpark"
