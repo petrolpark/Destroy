@@ -43,7 +43,7 @@ afterEvaluate {
 // Mod Details
 version = "${mod_version}"
 group = 'com.petrolpark.destroy'
-archivesBaseName = 'destroy'
+archivesBaseName = "destroy-${minecraft_version}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17) //Set Java version
 
