@@ -158,15 +158,17 @@ dependencies {
     // OPTIONAL DEPENDENCIES
 
     // JEI
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    // compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    // compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
+    // implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
     // Farmer's Delight
-    implementation fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
+    // compileOnly fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
+    // implementation fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
 
     // Blueprint
-    implementation fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
+    // compileOnly fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
+    // implementation fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
 }
 
 jar {

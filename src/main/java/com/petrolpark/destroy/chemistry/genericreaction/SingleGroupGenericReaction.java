@@ -56,12 +56,13 @@ public abstract class SingleGroupGenericReaction<G extends Group<G>> extends Gen
                 i++;
             };
         };
+        copiedStructure.refreshFunctionalGroups();
         Molecule copiedExampleMolecule = moleculeBuilder()
-            .structure(copiedStructure.refreshFunctionalGroups())
+            .structure(copiedStructure)
             .build();
-        if (getGroupType() == DestroyGroupTypes.CARBONYL) {
+        if (getGroupType().equals(DestroyGroupTypes.CARBONYL)) {
             Destroy.LOGGER.info("Hello");
-        }
+        };
         for (Group<?> group : copiedExampleMolecule.getFunctionalGroups()) { // Just in case the example Molecule has multiple functional groups (which it shouldn't ideally)
             if (group.getType().equals(getGroupType())) {
                 Reaction reaction = generateReaction(new GenericReactant<>(copiedExampleMolecule, (G)group)); // Unchecked conversion

@@ -66,5 +66,10 @@ public class BadgeItem extends Item {
     public ItemStack getCraftingRemainingItem(ItemStack stack) {
         return stack;
     };
+
+    @Override
+    public boolean isFoil(ItemStack pStack) {
+        return true;
+    };
     
 };
