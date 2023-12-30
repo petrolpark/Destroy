@@ -11,12 +11,18 @@ import net.minecraft.core.Direction;
 @Mixin(RotationPropagator.class)
 public interface RotationPropagatorAccessor {
     
-    @Invoker("getAxisModifier")
+    @Invoker(
+        value = "getAxisModifier",
+        remap = false
+    )
     public static float invokeGetAxisModifier(KineticBlockEntity be, Direction direction) {
         return 0f; // This return value is ignored.
     };
 
-    @Invoker("getConveyedSpeed")
+    @Invoker(
+        value = "getConveyedSpeed",
+        remap = false
+    )
     public static float invokeGetConveyedSpeed(KineticBlockEntity from, KineticBlockEntity to) {
         return 0f; // This return value is ignored
     };

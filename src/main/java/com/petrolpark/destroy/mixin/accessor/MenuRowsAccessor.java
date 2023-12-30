@@ -10,9 +10,15 @@ import com.simibubi.create.infrastructure.gui.OpenCreateMenuButton.MenuRows;
 @Mixin(MenuRows.class)
 public interface MenuRowsAccessor {
     
-    @Accessor("leftButtons")
+    @Accessor(
+        value = "leftButtons",
+        remap = false
+    )
     public List<String> getLeftButtons();
 
-    @Accessor("rightButtons")
+    @Accessor(
+        value = "rightButtons",
+        remap = false
+    )
     public List<String> getRightButtons();
 };

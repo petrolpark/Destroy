@@ -23,7 +23,12 @@ public class RotationPropagatorMixin {
      * @param to
      * @param cir
      */
-    @Inject(method = "getRotationSpeedModifier", at = @At(value = "TAIL"), cancellable = true)
+    @Inject(
+        method = "getRotationSpeedModifier(Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;)V",
+        at = @At("TAIL"),
+        cancellable = true,
+        remap = false
+    )
     private static void inGetRotationSpeedModifier(KineticBlockEntity from, KineticBlockEntity to, CallbackInfoReturnable<Float> cir) {
         BlockPos fromBlockPos = from.getBlockPos();
         if (to instanceof LongShaftBlockEntity) {

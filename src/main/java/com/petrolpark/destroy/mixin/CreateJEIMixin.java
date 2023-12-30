@@ -11,7 +11,11 @@ import com.simibubi.create.compat.jei.CreateJEI;
 @Mixin(CreateJEI.class)
 public class CreateJEIMixin {
     
-    @Inject(method = "loadCategories", at = @At("HEAD"))
+    @Inject(
+        method = "Lcom/simibubi/create/compat/jei/CreateJEI;loadCategories()V",
+        at = @At("HEAD"),
+        remap = false
+    )
     public void inLoadCategories(CallbackInfo ci) {
         DestroyMysteriousItemConversions.register();
     };

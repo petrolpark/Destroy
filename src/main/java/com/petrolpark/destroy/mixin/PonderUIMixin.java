@@ -20,7 +20,16 @@ import net.minecraft.client.gui.GuiGraphics;
 @Mixin(PonderUI.class)
 public class PonderUIMixin {
     
-    @Inject(method = "lambda$renderPonderTags$9", at = @At(value = "INVOKE", target = "tickChaser"), locals = LocalCapture.CAPTURE_FAILSOFT)
+    @Inject(
+        //method = "lambda$renderPonderTags$9(Lcom/mojang/blaze3d/vertex/PoseStack;IIZFFLnet/minecraft/client/gui/GuiGraphics;DI)V",
+        method = "lambda$renderPonderTags$9",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/simibubi/create/foundation/utility/animation/LerpedFloat;tickChaser()V"
+        ),
+        locals = LocalCapture.CAPTURE_FAILSOFT,
+        remap = false
+    )
     public void inRenderPonderTags(PoseStack ms, int mouseX, int mouseY, boolean highlightAll, float fade, float partialTicks, GuiGraphics graphics, double guiScale, int height, CallbackInfo ci, LerpedFloat chase, PonderButton button) {
         if (button.getRenderElement() instanceof SimpleRenderElement element) {
             if (((SimpleRenderElementAccessor)element).getRenderable() instanceof PonderTag tag) {

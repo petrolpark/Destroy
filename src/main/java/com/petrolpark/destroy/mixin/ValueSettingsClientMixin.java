@@ -24,7 +24,15 @@ public class ValueSettingsClientMixin {
      * with an {@link com.petrolpark.destroy.client.gui.BetterValueSettingsScreen improved version}.
      * @param ci The callback information
      */
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "open"), cancellable = true)
+    @Inject(
+        method = "Lcom/simibubi/create/foundation/blockEntity/behaviour/ValueSettingsClient;tick()V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/simibubi/create/foundation/gui/ScreenOpener;open(Lnet/minecraft/client/gui/screens/Screen;)V"
+        ),
+        cancellable = true,
+        remap = false
+    )
     public void inTick(CallbackInfo ci) {
 
         // Get the Value Box Behaviour

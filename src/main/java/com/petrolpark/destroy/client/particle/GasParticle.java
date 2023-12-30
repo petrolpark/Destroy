@@ -46,8 +46,8 @@ public class GasParticle extends FluidStackParticle {
     @Override
     public void tick() {
         super.tick();
-        xd += (double)(random.nextFloat() / 5000.0F * (float)(random.nextBoolean() ? 1 : -1));
-        zd += (double)(random.nextFloat() / 5000.0F * (float)(random.nextBoolean() ? 1 : -1));
+        xd += (double)(random.nextFloat() / 5000f * (float)(random.nextBoolean() ? 1 : -1));
+        zd += (double)(random.nextFloat() / 5000f * (float)(random.nextBoolean() ? 1 : -1));
 
         if (isDistillation) {
             this.move(0d, VERTICAL_SPEED, 0d);

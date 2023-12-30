@@ -25,7 +25,18 @@ public class FluidNetworkMixin {
      * Similar to {@link com.petrolpark.destroy.mixin.PipeConnectionMixin here}, we don't want a Fluid Network to reset transferring Fluid if all that has changed
      * is one Mixture becoming another.
      */
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;remove", ordinal = 1), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
+    @Inject(
+        method = "Lcom/simibubi/create/content/fluids/FluidNetwork;tick()V",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Iterator;remove()V",
+            ordinal = 1
+        ),
+        cancellable = true,
+        locals = LocalCapture.CAPTURE_FAILSOFT,
+        remap = false
+        
+    )
     public void inTick(CallbackInfo ci, int cycle, boolean shouldContinue, Iterator<Pair<BlockFace, PipeConnection>> iterator, Pair<BlockFace, PipeConnection> pair, BlockFace blockFace, PipeConnection pipeConnection, Flow flow) {
         FluidStack fluid = ((FluidNetworkAccessor)this).getFluid();
         if (DestroyFluids.isMixture(fluid) && DestroyFluids.isMixture(flow.fluid)) {

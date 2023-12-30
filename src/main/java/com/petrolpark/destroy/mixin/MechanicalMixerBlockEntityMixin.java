@@ -29,7 +29,13 @@ public class MechanicalMixerBlockEntityMixin {
      * to allow them to recognise Mixtures that are able to React.
      * @see com.petrolpark.destroy.recipe.ReactionInBasinRecipe Reactions in Basins
      */
-    @Inject(method = "getMatchingRecipes", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(
+        method = "getMatchingRecipes()Ljava/util/List;",
+        at = @At("HEAD"),
+        cancellable = true,
+        remap = false
+        
+    )
     public void inGetMatchingRecipes(CallbackInfoReturnable<List<Recipe<?>>> ci) {
 
         ((BasinOperatingBlockEntityAccessor)this).invokeGetBasin().ifPresent(basin -> {

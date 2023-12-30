@@ -18,7 +18,12 @@ public class SchematicannonInventoryMixin {
      * This allows any {@link com.petrolpark.destroy.util.DestroyTags.DestroyItemTags#SCHEMATICANNON_FUEL explosive} (not just gunpowder)
      * to be used as fuel for the {@link com.simibubi.create.content.schematics.block.SchematicannonBlockEntity Schematicannon}.
      */
-    @Inject(method = "isItemValid", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(
+        method = "Lcom/simibubi/create/content/schematics/cannon/SchematicannonInventory;isItemValid(ILnet/minecraft/world/item/ItemStack;)Z",
+        at = @At("HEAD"),
+        cancellable = true,
+        remap = false
+    )
     public void isItemValid(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> ci) {
         if (slot == 4) ci.setReturnValue(DestroyItemTags.SCHEMATICANNON_FUEL.matches(stack.getItem()));
     };

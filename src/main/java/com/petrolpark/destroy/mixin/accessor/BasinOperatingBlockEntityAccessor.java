@@ -11,9 +11,15 @@ import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 @Mixin(BasinOperatingBlockEntity.class)
 public interface BasinOperatingBlockEntityAccessor {
     
-    @Invoker("getRecipeCacheKey")
+    @Invoker(
+        value = "getRecipeCacheKey",
+        remap = false
+    )
     public Object invokeGetRecipeCacheKey();
 
-    @Invoker("getBasin")
+    @Invoker(
+        value = "getBasin",
+        remap = false
+    )
     public Optional<BasinBlockEntity> invokeGetBasin();
 };

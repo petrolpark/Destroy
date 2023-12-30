@@ -34,7 +34,17 @@ public class PipeConnectionMixin {
      * @param extractionPredicate
      * @param cir
      */
-    @Inject(method = "manageFlows", at = @At(value = "INVOKE", target = "Ljava/util/Optional;empty", ordinal = 1), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
+    @Inject(
+        method = "manageFlows(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraftforge/fluids/FluidStack;Ljava/util/function/Predicate;)Z",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Optional;empty()V",
+            ordinal = 1
+        ),
+        cancellable = true,
+        locals = LocalCapture.CAPTURE_FAILSOFT,
+        remap = false
+    )
     public void inManageFlows(Level world, BlockPos pos, FluidStack internalFluid, Predicate<FluidStack> extractionPredicate, CallbackInfoReturnable<Boolean> cir, Optional<FluidNetwork> retainedNetwork) {
         Flow flow = ((PipeConnectionAccessor)this).getFlow().get();
         FlowSource source = ((PipeConnectionAccessor)this).getSource().get();

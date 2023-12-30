@@ -22,7 +22,7 @@ public interface DestroyFrictionModifier extends IForgeBlockState {
     /**
      * Duplicate of {@link net.minecraftforge.common.extensions.IForgeBlockState#self self()} to avoid having to use an Accessor.
      */
-    @Overwrite
+    @Overwrite(remap = false)
     public default BlockState self() {
         return (BlockState)this;
     };
@@ -33,7 +33,7 @@ public interface DestroyFrictionModifier extends IForgeBlockState {
      * This decreases the friction Entities experience if they are under the {@link com.petrolpark.destroy.effect.InebriationMobEffect Inebriation Effect},
      * according to the {@link com.petrolpark.destroy.config.DestroySubstancesConfigs#drunkenSlipping config file}.
      */
-    @Overwrite
+    @Overwrite(remap = false)
     default float getFriction(LevelReader level, BlockPos pos, @Nullable Entity entity) {
 
         // Copied from the Minecraft source code

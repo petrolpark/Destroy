@@ -20,7 +20,7 @@ public class ValueSettingsPacketMixin {
      * Pass Block Entities with {@link com.petrolpark.destroy.block.entity.behaviour.SmartValueSettingsBehaviour Smart Value Settings Behaviours} additional information.
      * Copied and minorly adjusted from the {@link com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsPacket Create source code}.
      */
-    @Overwrite
+    @Overwrite(remap = false)
 	protected void applySettings(ServerPlayer player, SmartBlockEntity be) {
 		for (BlockEntityBehaviour behaviour : be.getAllBehaviours()) {
 			if (!(behaviour instanceof ValueSettingsBehaviour valueSettingsBehaviour))

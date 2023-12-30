@@ -21,7 +21,12 @@ public class VanillaFluidTargetsMixin {
     /**
      * Injection into the {@link com.simibubi.create.content.contraptions.fluids.pipes.VanillaFluidTargets#drainBlock Create method} which can drain non-Block-Entity-having Block States.
      */
-    @Inject(method = "drainBlock", at = @At(value="HEAD"), cancellable = true)
+    @Inject(
+        method = "Lcom/simibubi/create/content/fluids/pipes/VanillaFluidTargets;drainBlock(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)Lnet/minecraftforge/fluids/FluidStack;",
+        at = @At("HEAD"), 
+        cancellable = true,
+        remap = false
+    )
     private static void inDrainBlock(Level level, BlockPos pos, BlockState state, boolean simulate, CallbackInfoReturnable<FluidStack> ci) {
         if (state.getBlock() == DestroyBlocks.URINE_CAULDRON.get()) {
             if (!simulate) level.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), 3);

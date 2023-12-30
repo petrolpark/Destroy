@@ -14,6 +14,9 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(TooltipRenderer.class)
 public interface TooltipRendererAccessor {
 
-    @Invoker("drawHoveringText")
+    @Invoker(
+        value = "drawHoveringText",
+        remap = false
+    )
     public static void invokeDrawHoveringText(GuiGraphics graphics, List<Component> textLines, int x, int y, ItemStack itemStack, Font font) {};
 };

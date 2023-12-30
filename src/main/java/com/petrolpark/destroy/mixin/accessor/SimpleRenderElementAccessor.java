@@ -9,6 +9,9 @@ import com.simibubi.create.foundation.gui.element.RenderElement.SimpleRenderElem
 @Mixin(SimpleRenderElement.class)
 public interface SimpleRenderElementAccessor {
     
-    @Accessor("renderable")
+    @Accessor(
+        value = "renderable",
+        remap = false
+    )
     public ScreenElement getRenderable();
 };

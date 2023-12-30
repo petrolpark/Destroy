@@ -20,8 +20,8 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
-apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
+apply plugin: 'org.spongepowered.mixin'
 
 jarJar.enable()
 
@@ -32,6 +32,12 @@ sourceSets.main.resources {
 
 mixin {
     add sourceSets.main, "destroy.refmap.json"
+}
+
+// Workaround for SpongePowered/MixinGradle#38, copied from Create source code
+afterEvaluate {
+    tasks.configureReobfTaskForReobfJar.mustRunAfter(tasks.compileJava)
+    tasks.configureReobfTaskForReobfJarJar.mustRunAfter(tasks.compileJava)
 }
 
 // Mod Details
@@ -158,17 +164,22 @@ dependencies {
     // OPTIONAL DEPENDENCIES
 
     // JEI
-    // compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-    // compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-    // implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
+    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
     // Farmer's Delight
-    // compileOnly fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
-    // implementation fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
+    compileOnly fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
+    implementation fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
 
     // Blueprint
-    // compileOnly fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
-    // implementation fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
+    compileOnly fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
+    implementation fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
+
+
+    // ANNOTATION PROCESSORS
+
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }
 
 jar {

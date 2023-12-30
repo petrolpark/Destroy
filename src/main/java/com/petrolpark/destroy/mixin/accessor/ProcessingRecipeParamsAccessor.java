@@ -12,9 +12,15 @@ import net.minecraftforge.fluids.FluidStack;
 @Mixin(ProcessingRecipeBuilder.ProcessingRecipeParams.class)
 public interface ProcessingRecipeParamsAccessor {
 
-    @Accessor("fluidIngredients")
+    @Accessor(
+        value = "fluidIngredients",
+        remap = false
+    )
     public NonNullList<FluidIngredient> getFluidIngredients();
 
-    @Accessor("fluidResults")
+    @Accessor(
+        value = "fluidResults",
+        remap = false
+    )
 	public NonNullList<FluidStack> getFluidResults();
 };

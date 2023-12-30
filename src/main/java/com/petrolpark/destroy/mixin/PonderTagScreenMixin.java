@@ -31,7 +31,12 @@ public class PonderTagScreenMixin {
      * @param partialTicks
      * @param ci
      */
-    @Inject(method = "renderWindowForeground", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(
+        method = "Lcom/simibubi/create/foundation/ponder/ui/PonderTagScreen;renderWindowForeground(Lnet/minecraft/client/gui/GuiGraphics;IIF)V",
+        at = @At("HEAD"),
+        cancellable = true,
+        remap = false
+    )
     public void inRenderWindowForeground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
         if (((PonderTagScreenAccessor)this).getTag() == DestroyPonderTags.VAT_SIDE_BLOCKS) {
             ItemStack hoveredItem = ((PonderTagScreenAccessor)this).getHoveredItem();

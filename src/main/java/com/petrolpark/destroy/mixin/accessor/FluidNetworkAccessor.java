@@ -10,9 +10,15 @@ import net.minecraftforge.fluids.FluidStack;
 @Mixin(FluidNetwork.class)
 public interface FluidNetworkAccessor {
     
-    @Accessor("fluid")
+    @Accessor(
+        value = "fluid",
+        remap = false
+    )
     public void setFluid(FluidStack stack);
 
-    @Accessor("fluid")
+    @Accessor(
+        value = "fluid",
+        remap = false
+    )
     public FluidStack getFluid();
 };

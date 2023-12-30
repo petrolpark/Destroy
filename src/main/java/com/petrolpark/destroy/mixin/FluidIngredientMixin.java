@@ -29,7 +29,7 @@ public class FluidIngredientMixin {
 	 * say {@link com.petrolpark.destroy.fluid.ingredient.MoleculeFluidIngredient Molecule ingredients}
 	 * are valid.
 	 */
-    @Overwrite
+    @Overwrite(remap = false)
     public static boolean isFluidIngredient(@Nullable JsonElement je) {
         if (je == null || je.isJsonNull())
 			return false;
@@ -46,7 +46,7 @@ public class FluidIngredientMixin {
 	 * Overwritten but mostly copied from {@link com.simibubi.create.foundation.fluid.FluidIngredient#deserialize FluidIngredient}.
 	 * This deserializes {@link com.petrolpark.destroy.fluid.ingredient.MoleculeFluidIngredient Molecule ingredients}.
 	 */
-    @Overwrite
+    @Overwrite(remap = false)
     public static FluidIngredient deserialize(@Nullable JsonElement je) {
 
 		if (je == null) return FluidIngredient.EMPTY;

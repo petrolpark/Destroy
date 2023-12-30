@@ -37,7 +37,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class LevelRendererMixin {
     
     // Tint the rain according to the rain acidity
-    @Inject(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture*", ordinal = 0))
+    @Inject(
+        method = "renderSnowAndRain(Lnet/minecraft/client/renderer/LightTexture;FDDD)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture*(ILnet/minecraft/resources/ResourceLocation;)V",
+            ordinal = 0
+        )
+    )
     public void inRenderSnowAndRainDrawRain(LightTexture lightTexture, float partialTick, double camX, double camY, double camZ, CallbackInfo ci) {
         if (!rainColorAffected()) return;
         Color color = getRainColor();
@@ -45,19 +52,37 @@ public class LevelRendererMixin {
     };
 
     // Disable tinting if we're rendering snow and not rain
-    @Inject(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture*", ordinal = 1))
+    @Inject(
+        method = "renderSnowAndRain(Lnet/minecraft/client/renderer/LightTexture;FDDD)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture*(ILnet/minecraft/resources/ResourceLocation;)V",
+            ordinal = 1
+        )
+    )
     public void inRenderSnowAndRainDrawSnow(LightTexture lightTexture, float partialTick, double camX, double camY, double camZ, CallbackInfo ci) {
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     };
 
     // Disable the tinting once the rain has been rendered
-    @Inject(method = "renderSnowAndRain", at = @At(value = "RETURN"))
+    @Inject(
+        method = "renderSnowAndRain(Lnet/minecraft/client/renderer/LightTexture;FDDD)V",
+        at = @At("RETURN")
+    )
     public void inRenderSnowAndRainReturn(LightTexture lightTexture, float partialTick, double camX, double camY, double camZ, CallbackInfo ci) {
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     };
 
     // Add tinted splash particles 
-    @Inject(method = "tickRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;addParticle"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+    @Inject(
+        method = "tickRain(Lnet/minecraft/client/Camera;)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/multiplayer/ClientLevel;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"
+        ),
+        locals = LocalCapture.CAPTURE_FAILHARD,
+        cancellable = true
+    )
     public void inTickRain(Camera pCamera, CallbackInfo ci, float f, RandomSource randomsource, LevelReader levelreader, BlockPos blockpos, BlockPos blockpos1, int i, int j, int k, int l, BlockPos blockpos2, Biome biome, double d0, double d1, BlockState blockstate, FluidState fluidstate, VoxelShape voxelshape, double d2, double d3, double d4, ParticleOptions particleoptions) {
         if (!rainColorAffected()) return;
         if (particleoptions == ParticleTypes.SMOKE) return;
@@ -67,7 +92,13 @@ public class LevelRendererMixin {
     };
 
     // Don't add the original untinted splash particles, but do add smoke
-    @Redirect(method = "tickRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;addParticle"))
+    @Redirect(
+        method = "tickRain(Lnet/minecraft/client/Camera;)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/multiplayer/ClientLevel;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"
+        )
+    )
     public void ignoreAddParticle(ClientLevel level, ParticleOptions particleData, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
         if (particleData == ParticleTypes.SMOKE || !rainColorAffected()) level.addParticle(particleData, x, y, z, xSpeed, ySpeed, zSpeed);
     };
