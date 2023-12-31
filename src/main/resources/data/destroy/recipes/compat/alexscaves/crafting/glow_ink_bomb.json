@@ -1,0 +1,32 @@
+{
+    "conditions": [
+      {
+          "type": "forge:mod_loaded",
+          "modid": "alexscaves"
+      }
+    ],
+    "type": "minecraft:crafting_shapeless",
+    "pattern": [
+      "IsI",
+      "IPI",
+      "ISI"
+    ],
+    "key": {
+      "I": {
+        "tag": "forge:plates/iron"
+      },
+      "s": {
+        "item": "minecraft:glow_ink_sac"
+      },
+      "P": {
+        "tag": "destroy:explosives/primary"
+      },
+      "S": {
+        "tag": "destroy:explosives/secondary"
+      }
+    },
+    "result": {
+      "item": "alexscaves:glow_ink_bomb",
+      "count": 3
+    }
+  }

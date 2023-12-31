@@ -55,7 +55,7 @@ public class DestroyReactions {
         .addReactant(DestroyMolecules.ETHYLANTHRAHYDROQUINONE)
         .addReactant(DestroyMolecules.OXYGEN)
         .addProduct(DestroyMolecules.ETHYLANTHRAQUINONE)
-        .addReactant(DestroyMolecules.HYDROGEN_PEROXIDE)
+        .addProduct(DestroyMolecules.HYDROGEN_PEROXIDE)
         .build(),
 
     ANTHRAQUINONE_REDUCTION = builder()

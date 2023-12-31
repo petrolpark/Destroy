@@ -1,11 +1,11 @@
 {
-    "type": "minecraft:crafting_shaped",
     "conditions": [
-        {
-            "type": "forge:mod_loaded",
-            "modid": "supplementaries"
-        }
+      {
+          "type": "forge:mod_loaded",
+          "modid": "supplementaries"
+      }
     ],
+    "type": "minecraft:crafting_shaped",
     "pattern": [
       " IS",
       "IEI",
@@ -19,7 +19,7 @@
         "tag": "destroy:explosives/secondary"
       },
       "S": {
-        "item": "destroy:explosives/primary"
+        "tag": "destroy:explosives/primary"
       }
     },
     "result": {

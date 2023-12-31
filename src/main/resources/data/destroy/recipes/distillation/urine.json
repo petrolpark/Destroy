@@ -2,8 +2,8 @@
     "type": "destroy:distillation",
     "ingredients": [
         {
-            "fluid": "minecraft:water",
-            "amount": 1000
+            "fluid": "destroy:urine",
+            "amount": 500
         }
     ],
     "results": [

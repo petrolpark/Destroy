@@ -453,7 +453,7 @@ public class DestroyItems {
     // BLAZE BURNER TREATS
 
     EMPTY_BOMB_BON = REGISTRATE.item("empty_bomb_bon", CombustibleItem::new)
-        .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag, AllItemTags.UPRIGHT_ON_BELT.tag)
+        .tag(AllItemTags.UPRIGHT_ON_BELT.tag)
         .onRegister(i -> i.setBurnTime(1000))
         .register(),
     BOMB_BON = REGISTRATE.item("bomb_bon", CombustibleItem::new)

@@ -607,14 +607,14 @@ public class DestroyBlocks {
         .build()
         .register();
 
-    public static final BlockEntry<RotatedPillarBlock> RAW_FRIES_BLOCK = REGISTRATE.block("raw_fries_block", RotatedPillarBlock::new)
-        .initialProperties(() -> Blocks.CLAY)
-        .properties(p -> p
-            .mapColor(MapColor.COLOR_YELLOW)
-            .sound(SoundType.SLIME_BLOCK)
-            .strength(0.2f)
-        ).tag(BlockTags.MINEABLE_WITH_SHOVEL)
-        .register();
+    // public static final BlockEntry<RotatedPillarBlock> RAW_FRIES_BLOCK = REGISTRATE.block("raw_fries_block", RotatedPillarBlock::new)
+    //     .initialProperties(() -> Blocks.CLAY)
+    //     .properties(p -> p
+    //         .mapColor(MapColor.COLOR_YELLOW)
+    //         .sound(SoundType.SLIME_BLOCK)
+    //         .strength(0.2f)
+    //     ).tag(BlockTags.MINEABLE_WITH_SHOVEL)
+    //     .register();
 
     // UNCATEGORISED
 

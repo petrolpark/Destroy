@@ -29,13 +29,12 @@ import vectorwing.farmersdelight.common.block.entity.CuttingBoardBlockEntity;
 public class CuttingBoardMixin {
     
     @Inject(
-        method = "use(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;",
+        method = "Lvectorwing/farmersdelight/common/block/CuttingBoardBlock;use(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;",
         at = @At(
             value = "INVOKE",
             target = "Lvectorwing/farmersdelight/common/block/CuttingBoardBlock;spawnCuttingParticles(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/item/ItemStack;I)V"
         ),
-        locals = LocalCapture.CAPTURE_FAILSOFT,
-        remap = false
+        locals = LocalCapture.CAPTURE_FAILSOFT
     )
     public void inUse(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir, BlockEntity tileEntity, CuttingBoardBlockEntity cuttingBoardEntity, ItemStack heldStack, ItemStack offhandStack, ItemStack boardStack) {
         if (boardStack.is(AllTags.forgeItemTag("crops/onion"))) {

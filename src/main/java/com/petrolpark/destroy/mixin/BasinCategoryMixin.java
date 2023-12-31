@@ -42,13 +42,12 @@ public class BasinCategoryMixin {
      */
     @SuppressWarnings("resource")
     @Inject(
-        method = "Lcom/simibubi/create/compat/jei/category/BasinCategory;draw(Lcom/simibubi/create/content/processing/basin/BasinRecipe;Lmezz/jei/api/gui/ingredient/IRecipeSlotsView;Lnet/minecraft/client/gui/GuiGraphics;DD)V",
+        method = "Lcom/simibubi/create/compat/jei/category/BasinCategory;draw*(Lcom/simibubi/create/content/processing/basin/BasinRecipe;Lmezz/jei/api/gui/ingredient/IRecipeSlotsView;Lnet/minecraft/client/gui/GuiGraphics;DD)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/Minecraft;getInstance()Lnet/minecraft/client/Minecraft;" // Injects when it is writing "Heated", "Superheated", etc at the bottom of the screen
         ),
-        cancellable = true,
-        remap = false
+        cancellable = true
     ) 
     protected void inDraw(BasinRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY, CallbackInfo ci) {
         HeatConditionRenderer.drawHeatConditionName(Minecraft.getInstance().font, graphics, 9, 86, recipe.getRequiredHeat());

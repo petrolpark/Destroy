@@ -1,0 +1,29 @@
+{
+    "conditions": [
+      {
+          "type": "forge:mod_loaded",
+          "modid": "alexscaves"
+      }
+    ],
+    "type": "create:compacting",
+    "ingredients": [
+      {
+        "tag": "destroy:plastic"
+      },
+      {
+        "tag": "destroy:plastic"
+      },
+      {
+        "tag": "destroy:plastic"
+      },
+      {
+        "item": "alexscaves:toxic_paste"
+      }
+    ],
+    "results": [
+      {
+        "item": "alexscaves:polymer_plate",
+        "count": 3
+      }
+    ]
+  }
