@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public abstract class ItemDrainBlockMixin extends Block {
   
     public ItemDrainBlockMixin(Properties properties) {
-        super(properties); //This should never get called
+        super(properties); // This should never get called
     };
 
     @Override
