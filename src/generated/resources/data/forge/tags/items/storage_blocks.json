@@ -5,7 +5,6 @@
     "destroy:nickel_block",
     "destroy:palladium_block",
     "destroy:platinum_block",
-    "destroy:rhodium_block",
-    "destroy:zirconium_block"
+    "destroy:rhodium_block"
   ]
 }

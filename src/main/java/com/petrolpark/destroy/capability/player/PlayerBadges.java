@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.destroy.badge.Badge;
-import com.petrolpark.destroy.badge.DestroyBadges;
 import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.core.Direction;
@@ -26,7 +25,6 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.registries.RegistryObject;
 
 public class PlayerBadges {
 
@@ -59,7 +57,7 @@ public class PlayerBadges {
             ListTag listTag = new ListTag();
             for (Pair<Badge, Date> pair : createPlayerBadges().badges) {
                 CompoundTag badgeTag = new CompoundTag();
-                ResourceLocation id = DestroyBadges.getId(pair.getFirst());
+                ResourceLocation id = pair.getFirst().getId();
                 if (id == null) continue;
                 badgeTag.putString("Id", id.toString());
                 badgeTag.putLong("DateAwarded", pair.getSecond().getTime());
@@ -74,9 +72,9 @@ public class PlayerBadges {
             List<Pair<Badge, Date>> badges = new ArrayList<>();
             tag.getList("Badges", Tag.TAG_COMPOUND).forEach(t -> {
                 CompoundTag badgeTag = (CompoundTag)t;
-                RegistryObject<Badge> badgeObject = DestroyBadges.getBadge(ResourceLocation.of(badgeTag.getString("Id"), ':'));
-                if (badgeObject == null) return;
-                badges.add(Pair.of(badgeObject.get(), new Date(badgeTag.getLong("DateAwarded"))));
+                Badge badge = Badge.getBadge(ResourceLocation.of(badgeTag.getString("Id"), ':'));
+                if (badge == null) return;
+                badges.add(Pair.of(badge, new Date(badgeTag.getLong("DateAwarded"))));
             });
             createPlayerBadges().setBadges(badges);
         };

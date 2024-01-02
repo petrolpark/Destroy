@@ -40,10 +40,12 @@ public class DestroyPonderTags {
         
         PonderRegistry.TAGS.forTag(DestroyPonderTags.DESTROY)
             .add(DestroyBlocks.AGING_BARREL)
+            .add(DestroyBlocks.BLACKLIGHT)
             .add(DestroyBlocks.BUBBLE_CAP)
             .add(DestroyBlocks.CENTRIFUGE)
             .add(DestroyBlocks.COAXIAL_GEAR)
             .add(DestroyBlocks.COOLER)
+            .add(DestroyBlocks.DIFFERENTIAL)
             .add(DestroyBlocks.DOUBLE_CARDAN_SHAFT)
             .add(DestroyBlocks.DYNAMO)
             .add(DestroyBlocks.EXTRUSION_DIE)
@@ -71,6 +73,7 @@ public class DestroyPonderTags {
 
         PonderRegistry.TAGS.forTag(AllPonderTags.KINETIC_RELAYS)
             .add(DestroyBlocks.COAXIAL_GEAR)
+            .add(DestroyBlocks.DIFFERENTIAL)
             .add(DestroyBlocks.DOUBLE_CARDAN_SHAFT)
             .add(DestroyBlocks.PLANETARY_GEARSET)
         ;

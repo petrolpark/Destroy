@@ -11,9 +11,15 @@ import net.minecraft.world.item.ItemStack;
 @Mixin(PonderTagScreen.class)
 public interface PonderTagScreenAccessor {
     
-    @Accessor("tag")
+    @Accessor(
+        value = "tag",
+        remap = false
+    )
     public PonderTag getTag();
 
-    @Accessor("hoveredItem")
+    @Accessor(
+        value = "hoveredItem",
+        remap = false
+    )
     public ItemStack getHoveredItem();
 };

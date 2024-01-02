@@ -2,6 +2,7 @@
     "required": "true",
     "package": "com.petrolpark.destroy.mixin",
     "compatibilityLevel": "JAVA_16",
+    "refmap": "destroy.refmap.json",
     "plugin": "com.petrolpark.destroy.mixin.plugin.DestroyMixinPlugin",
     "mixins": [
         "accessor.AbstractVillagerAccessor",
@@ -25,13 +26,17 @@
         "ClientComponentTooltipMixin",
         "ConnectivityHandlerMixin",
         "CreateRecipeCategoryMixin",
+        "CuttingBoardMixin",
+        "CreateJEIMixin",
         "DestroyFrictionModifier",
         "EffectRenderingInventoryScreenMixin",
         "FluidIngredientMixin",
+        "FluidNetworkMixin",
         "GuiMixin",
         "HeartTypeMixin",
         "HeatConditionMixin",
         "HeatLevelMixin",
+        "ItemDrainBlockMixin",
         "ItemRendererMixin",
         "KineticBlockEntityMixin",
         "LevelRendererMixin",
@@ -44,7 +49,9 @@
         "ProcessingRecipeMixin",
         "RotationPropagatorMixin",
         "SchematicannonInventoryMixin",
+        "ServerAdvancementManagerMixin",
         "SplashingTypeMixin",
+        "SpoutBlockMixin",
         "TooltipRendererMixin",
         "ValueSettingsClientMixin",
         "ValueSettingsPacketMixin",
@@ -57,6 +64,5 @@
     "injectors": {
         "defaultRequire": 1
     },
-    "refmap": "destroy.refmap.json",
     "minVersion": "0.8"
 }

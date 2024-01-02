@@ -25,7 +25,12 @@ public class TooltipRendererMixin {
      * Injection into JEI's {@link mezz.jei.common.gui.TooltipRenderer#drawHoveringText TooltipRenderer}.
      * This allows {@link com.petrolpark.destroy.item.MoleculeDisplayItem Molecule tooltips} to be rendered - usually tooltips are only rendered for Item Stack ingredients.
      */
-    @Inject(method = "drawHoveringText(Lnet/minecraft/client/gui/GuiGraphics;Ljava/util/List;IILjava/lang/Object;Lmezz/jei/api/ingredients/IIngredientRenderer;)V", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(
+        method = "Lmezz/jei/common/gui/TooltipRenderer;drawHoveringText(Lnet/minecraft/client/gui/GuiGraphics;Ljava/util/List;IILjava/lang/Object;Lmezz/jei/api/ingredients/IIngredientRenderer;)V",
+        at = @At("HEAD"),
+        cancellable = true,
+        remap = false
+    )
     private static <T> void inDrawHoveringText(GuiGraphics graphics, List<Component> textLines, int x, int y, T ingredient, IIngredientRenderer<T> ingredientRenderer, CallbackInfo ci) {
         if (ingredient instanceof Molecule molecule) {
             Minecraft minecraft = Minecraft.getInstance();

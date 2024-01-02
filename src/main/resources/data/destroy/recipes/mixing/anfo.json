@@ -6,7 +6,11 @@
         "amount": 500
       },
       {
-        "item": "destroy:ammonium_nitrate_prill"
+        "mixtureFluidWithSalt": "destroy:mixture",
+        "amount": 500,
+        "cation": "destroy:ammonium",
+        "anion": "destroy:nitrate",
+        "concentration": 3.0
       }
     ],
     "results": [

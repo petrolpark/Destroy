@@ -68,7 +68,11 @@ public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
      * {@link com.petrolpark.destroy.compat.jei.DestroyJEI#RECIPE_TYPES list of Recipe Types} for which {@link com.petrolpark.destroy.chemistry.Mixture Mixtures}
      * can be {@link com.petrolpark.destroy.fluid.ingredient.MoleculeFluidIngredient ingredients} or results.
      */
-    @Inject(method = "<init>", at = @At(value = "RETURN"))
+    @Inject(
+        method = "<init>",
+        at = @At("RETURN"),
+        remap = false
+    )
     public void inInit(Info<T> info, CallbackInfo ci) {
 
         String recipeTypeId = info.recipeType().getUid().getPath();
@@ -81,7 +85,7 @@ public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
      * Copied from the {@link com.simibubi.create.compat.jei.category.CreateRecipeCategory#addFluidTooltip Create source code} because I can't be bothered to deal with Injection.
      * Modifies the tooltip for Fluid Stacks which are {@link com.petrolpark.destroy.chemistry.Mixture Mixtures}.
      */
-    @Overwrite
+    @Overwrite(remap = false)
     public static IRecipeSlotTooltipCallback addFluidTooltip(int mbAmount) {
         return (view, tooltip) -> {
             Optional<FluidStack> displayed = view.getDisplayedIngredient(ForgeTypes.FLUID_STACK);
@@ -104,7 +108,7 @@ public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
 				tooltip.addAll(1, potionTooltip.stream().toList());
             //
 
-			} else if (fluid.isSame(DestroyFluids.MIXTURE.get())) {
+			} else if (DestroyFluids.isMixture(fluid)) {
                 Component name = DestroyLang.translate("mixture.mixture").component();
                 boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
 

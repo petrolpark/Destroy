@@ -20,10 +20,10 @@ public class InebriationMobEffect extends UncurableMobEffect {
         int pDuration = livingEntity.getEffect(DestroyMobEffects.INEBRIATION.get()).getDuration(); // This is the bit it says is null
         if (!livingEntity.level().isClientSide()) {
             if (amplifier >= 3) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 15, (amplifier - 2), true, false, false));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 205, (amplifier - 2), true, false, false));
             };
             if (amplifier >= 6) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 15, (amplifier - 6), true, false, false));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 25, (amplifier - 6), true, false, false));
             };
             if (amplifier >= 9) {
                 if (pDuration % Math.round(250 / amplifier) == 0) {

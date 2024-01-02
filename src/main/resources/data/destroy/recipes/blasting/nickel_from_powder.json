@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:blasting",
+    "ingredient": {
+      "tag": "forge:dusts/nickel"
+    },
+    "result": "destroy:nickel_ingot",
+    "cookingtime": 100
+  }

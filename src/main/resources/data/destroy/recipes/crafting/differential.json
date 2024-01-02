@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "ASA",
+      "SLS",
+      "ASA"
+    ],
+    "key": {
+      "A": {
+        "item": "create:andesite_alloy"
+      },
+      "S": {
+        "item": "create:cogwheel"
+      },
+      "L": {
+        "item": "create:large_cogwheel"
+      }
+    },
+    "result": {
+      "item": "destroy:differential"
+    }
+  }

@@ -11,6 +11,7 @@ import com.petrolpark.destroy.block.entity.behaviour.ChargingBehaviour.ChargingB
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.recipe.ChargingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
+import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
@@ -42,7 +43,7 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
     public ChargingBehaviour chargingBehaviour;
     protected DestroyAdvancementBehaviour advancementBehaviour;
 
-    private int soundDuration;
+    public int soundDuration;
 
     public DynamoBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
@@ -69,7 +70,7 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
         if (soundDuration > 0) {
             soundDuration--;
         } else if (isRunning()) {
-            //DestroySoundEvents.DYNAMO_CRACKLE.playOnServer(level, getBlockPos()); //TODO uncommment once sound is sorted out
+            DestroySoundEvents.DYNAMO_CRACKLE.playOnServer(level, getBlockPos());
             soundDuration = 80;
         };
     };

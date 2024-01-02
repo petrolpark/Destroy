@@ -45,7 +45,7 @@ public abstract class ProcessingRecipeMixin {
             };
         };
         for (FluidStack fluidResult : ((ProcessingRecipeParamsAccessor)params).getFluidResults()) {
-            if (DestroyFluids.MIXTURE.get().isSame(fluidResult.getFluid())) {
+            if (DestroyFluids.isMixture(fluidResult)) {
                 ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(fluidResult.getOrCreateTag().getCompound("Mixture"));
                 for (Molecule molecule : mixture.getContents(true)) {
                     DestroyJEI.MOLECULES_OUTPUT.putIfAbsent(molecule, new ArrayList<>()); // Create the List if it's not there

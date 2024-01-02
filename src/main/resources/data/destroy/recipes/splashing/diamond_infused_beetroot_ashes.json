@@ -14,10 +14,6 @@
         "item": "minecraft:diamond",
         "count": 1,
         "chance": 0.25
-      },
-      {
-        "item": "destroy:zircon",
-        "chance": 0.1
       }
     ]
   }

@@ -18,13 +18,18 @@ public class DestroyMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
+        // JEI & Create JEI mixins
         onlyLoadIfModPresent("com.petrolpark.destroy.mixin.accessor.TooltipRendererAccessor", "jei");
         onlyLoadIfModPresent("com.petrolpark.destroy.mixin.BasinCategoryMixin.java", "jei");
+        onlyLoadIfModPresent("com.petrolpark.destroy.mixin.CreateJEIMixin.java", "jei");
         onlyLoadIfModPresent("com.petrolpark.destroy.mixin.CreateRecipeCategoryMixin", "jei");
         onlyLoadIfModPresent("com.petrolpark.destroy.mixin.MixingRecipeCategoryMixin", "jei");
         onlyLoadIfModPresent("com.petrolpark.destroy.mixin.PackingRecipeCategoryMixin", "jei");
         onlyLoadIfModPresent("com.petrolpark.destroy.mixin.ProcessingRecipeMixin", "jei");
         onlyLoadIfModPresent("com.petrolpark.destroy.mixin.TooltipRendererMixin", "jei");
+
+        // Farmers' Delight mixins
+        onlyLoadIfModPresent("com.petrolpark.destroy.mixin.CuttingBoardMixin", "farmersdelight");
     };
 
     @Override

@@ -3,7 +3,6 @@ package com.petrolpark.destroy.item.armorMaterial;
 import java.util.function.Supplier;
 
 import com.google.common.base.Suppliers;
-import com.petrolpark.destroy.item.DestroyItems;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -13,8 +12,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public enum DestroyArmorMaterials implements ArmorMaterial {
     
-    HAZMAT("hazmat", 2, new int[] {1, 1, 1, 1}, 0, () -> SoundEvents.ARMOR_EQUIP_LEATHER, 0f, 0f, () -> Ingredient.EMPTY),
-    ZIRCONIUM("zirconium", 35, new int[] {3, 6, 8, 3}, 20, () -> SoundEvents.ARMOR_EQUIP_GOLD, 1f, 0f, () -> Ingredient.of(DestroyItems.ZIRCONIUM_INGOT.get()));
+    HAZMAT("hazmat", 2, new int[] {1, 1, 1, 1}, 0, () -> SoundEvents.ARMOR_EQUIP_LEATHER, 0f, 0f, () -> Ingredient.EMPTY);
 
     private static final int[] MAX_DAMAGE = new int[] { 13, 15, 16, 11 };
 	private final String name;

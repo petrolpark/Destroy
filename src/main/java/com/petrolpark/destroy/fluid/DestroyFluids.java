@@ -9,13 +9,15 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.builders.FluidBuilder;
 import com.tterrag.registrate.util.entry.FluidEntry;
 
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 public class DestroyFluids {
 
-    public static FluidStack air(int amount) {
-        return MixtureFluid.of(amount, MixtureFluid.airMixture(), "fluid.destroy.air");
+    public static FluidStack air(int amount, float temperature) {
+        return MixtureFluid.of(amount, MixtureFluid.airMixture(temperature), "fluid.destroy.air");
     };
     
     public static final FluidEntry<MixtureFluid> MIXTURE = REGISTRATE.virtualFluid("mixture",
@@ -61,6 +63,14 @@ public class DestroyFluids {
 
     private static FluidBuilder<VirtualFluid, CreateRegistrate> coloredWaterFluid(String name, int color) {
         return REGISTRATE.virtualFluid(name, (properties, stillTexture, flowingTexture) -> new ColoredFluidType(properties, new ResourceLocation("minecraft", "block/water_still"), new ResourceLocation("minecraft", "block/water_flowing"), color), VirtualFluid::new);
+    };
+
+    public static boolean isMixture(FluidStack stack) {
+        return isMixture(stack.getFluid()) && stack.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND);
+    };
+
+    public static boolean isMixture(Fluid fluid) {
+        return fluid.isSame(MIXTURE.get());
     };
 
     public static void register() {}

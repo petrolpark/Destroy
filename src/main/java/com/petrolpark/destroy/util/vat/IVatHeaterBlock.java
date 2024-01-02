@@ -41,7 +41,7 @@ public interface IVatHeaterBlock {
             } else if (heatLevel == HeatLevel.SEETHING) {
                 return 50000f;
             } else if (heatLevel.name() == "FROSTING") {
-                return -10000f;
+                return -30000f;
             };
         };
 

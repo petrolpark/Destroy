@@ -4,6 +4,7 @@ import static com.petrolpark.destroy.Destroy.REGISTRATE;
 import static com.simibubi.create.AllTags.forgeItemTag;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.item.food.DestroyFoods;
 import com.petrolpark.destroy.item.renderer.GasMaskModel;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
@@ -17,12 +18,14 @@ import com.simibubi.create.foundation.item.CombustibleItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.BowlFoodItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.RecordItem;
+import net.minecraft.world.item.SimpleFoiledItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.ArmorItem.Type;
 import net.minecraftforge.common.Tags;
@@ -92,12 +95,12 @@ public class DestroyItems {
     PURE_GOLD_INGOT = REGISTRATE.item("pure_gold_ingot", Item::new)
         .tag(DestroyItemTags.DESTROY_INGOTS.tag, Tags.Items.INGOTS, ItemTags.PIGLIN_LOVED)
         .register(),
-    ZIRCONIUM_INGOT = REGISTRATE.item("zirconium_ingot", Item::new)
-        .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/zirconium"), Tags.Items.INGOTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
-    SULFUR = REGISTRATE.item("sulfur", Item::new)
-        .tag(forgeItemTag("raw_materials/sulfur"))
-        .register(),
+    // ZIRCONIUM_INGOT = REGISTRATE.item("zirconium_ingot", Item::new)
+    //     .tag(DestroyItemTags.DESTROY_INGOTS.tag, forgeItemTag("ingots/zirconium"), Tags.Items.INGOTS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
+    //     .register(),
+    // SULFUR = REGISTRATE.item("sulfur", Item::new)
+    //     .tag(forgeItemTag("raw_materials/sulfur"))
+    //     .register(),
     ZINC_SHEET = REGISTRATE.item("zinc_sheet", Item::new)
         .tag(forgeItemTag("plates/zinc"))
         .register(),
@@ -120,8 +123,32 @@ public class DestroyItems {
     PURE_GOLD_DUST = REGISTRATE.item("pure_gold_dust", Item::new)
         .tag(Tags.Items.DUSTS, ItemTags.PIGLIN_LOVED)
         .register(),
-    ZIRCON = REGISTRATE.item("zircon", Item::new)
-        .tag(forgeItemTag("raw_materials/zircon"))
+    // ZIRCON = REGISTRATE.item("zircon", Item::new)
+    //     .tag(forgeItemTag("raw_materials/zircon"))
+    //     .register(),
+
+    // DUSTS
+
+    COPPER_POWDER = REGISTRATE.item("copper_powder", Item::new)
+        .tag(forgeItemTag("dusts/copper"), Tags.Items.DUSTS)
+        .register(),
+    IRON_POWDER = REGISTRATE.item("iron_powder", Item::new)
+        .tag(forgeItemTag("dusts/iron"), Tags.Items.DUSTS)
+        .register(),
+    NICKEL_POWDER = REGISTRATE.item("nickel_powder", Item::new)
+        .tag(forgeItemTag("dusts/nickel"), Tags.Items.DUSTS)
+        .register(),
+    PALLADIUM_POWDER = REGISTRATE.item("palladium_powder", Item::new)
+        .tag(forgeItemTag("dusts/palladium"), Tags.Items.DUSTS)
+        .register(),
+    PLATINUM_POWDER = REGISTRATE.item("platinum_powder", Item::new)
+        .tag(forgeItemTag("dusts/platinum"), Tags.Items.DUSTS)
+        .register(),
+    RHODIUM_POWDER = REGISTRATE.item("rhodium_powder", Item::new)
+        .tag(forgeItemTag("dusts/rhodium"), Tags.Items.DUSTS)
+        .register(),
+    ZINC_POWDER = REGISTRATE.item("zinc_powder", Item::new)
+        .tag(forgeItemTag("dusts/zinc"), Tags.Items.DUSTS)
         .register(),
 
     // PRIMARY EXPLOSIVES
@@ -251,10 +278,6 @@ public class DestroyItems {
 
     // TOYS
 
-    // static {
-    //     REGISTRATE.startSection(AllSections.MATERIALS);
-    // };
-
     public static final ItemEntry<BucketAndSpadeItem> BUCKET_AND_SPADE = REGISTRATE.item("bucket_and_spade", BucketAndSpadeItem::new)
         .properties(p -> p
             .durability(4)
@@ -270,38 +293,48 @@ public class DestroyItems {
 
     SPRAY_BOTTLE = REGISTRATE.item("spray_bottle", Item::new)
         .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
-        .register(),
-    PERFUME_BOTTLE = REGISTRATE.item("perfume_bottle", Item::new)
+        .register();
+
+    public static final ItemEntry<SprayBottleItem>
+    
+    PERFUME_BOTTLE = REGISTRATE.item("perfume_bottle", p -> new SprayBottleItem(p, new MobEffectInstance(DestroyMobEffects.FRAGRANCE.get(), 12000, 0)))
         .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
         .register(),
-    SUNSCREEN_BOTTLE = REGISTRATE.item("sunscreen_bottle", Item::new)
+    SUNSCREEN_BOTTLE = REGISTRATE.item("sunscreen_bottle", p -> new SprayBottleItem(p, new MobEffectInstance(DestroyMobEffects.SUN_PROTECTION.get(), 12000, 0, false, false, true)))
         .tag(DestroyItemTags.SPRAY_BOTTLE.tag)
-        .register(),
+        .register();
 
     // SILICA
+
+    public static final ItemEntry<Item>
 
     SILICA = REGISTRATE.item("silica", Item::new)
         .register(),
     
     // NON-SILICA CATALYSTS
 
-    CONVERSION_CATALYST = REGISTRATE.item("conversion_catalyst", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
-    PALLADIUM_ON_CARBON = REGISTRATE.item("palladium_on_carbon", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
+    // CONVERSION_CATALYST = REGISTRATE.item("conversion_catalyst", Item::new)
+    //     .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+    //     .register(),
+    // PALLADIUM_ON_CARBON = REGISTRATE.item("palladium_on_carbon", Item::new)
+    //     .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+    //     .register(),
     ZEOLITE = REGISTRATE.item("zeolite", Item::new)
-        .register(),
-    ZEIGLER_NATTA = REGISTRATE.item("ziegler-natta", Item::new)
+        .register();
+    // ZIEGLER_NATTA = REGISTRATE.item("ziegler-natta", Item::new)
+    //     .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+    //     .register();
+
+    public static final ItemEntry<SimpleFoiledItem>
+
+    MAGIC_OXIDANT = REGISTRATE.item("magic_oxidant", SimpleFoiledItem::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
-    MAGIC_OXIDANT = REGISTRATE.item("magic_oxidant", Item::new)
+    MAGIC_REDUCTANT = REGISTRATE.item("magic_reductant", SimpleFoiledItem::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
-    MAGIC_REDUCTANT = REGISTRATE.item("magic_reductant", Item::new)
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .register(),
+        .register();
+
+    public static final ItemEntry<Item>
 
     // FOOD AND DRINK
 
@@ -420,20 +453,20 @@ public class DestroyItems {
     // BLAZE BURNER TREATS
 
     EMPTY_BOMB_BON = REGISTRATE.item("empty_bomb_bon", CombustibleItem::new)
-        .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag, AllItemTags.UPRIGHT_ON_BELT.tag)
-        .onRegister(i -> i.setBurnTime(800))
+        .tag(AllItemTags.UPRIGHT_ON_BELT.tag)
+        .onRegister(i -> i.setBurnTime(1000))
         .register(),
     BOMB_BON = REGISTRATE.item("bomb_bon", CombustibleItem::new)
         .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag, AllItemTags.UPRIGHT_ON_BELT.tag)
-        .onRegister(i -> i.setBurnTime(6400))
+        .onRegister(i -> i.setBurnTime(20000))
         .register(),
     NAPALM_SUNDAE = REGISTRATE.item("napalm_sundae", CombustibleItem::new)
         .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag, AllItemTags.UPRIGHT_ON_BELT.tag)
-        .onRegister(i -> i.setBurnTime(6400))
+        .onRegister(i -> i.setBurnTime(20000))
         .register(),
     THERMITE_BROWNIE = REGISTRATE.item("thermite_brownie", CombustibleItem::new)
         .tag(AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.tag)
-        .onRegister(i -> i.setBurnTime(6400))
+        .onRegister(i -> i.setBurnTime(20000))
         .register();
 
     // BEETROOT
@@ -581,6 +614,7 @@ public class DestroyItems {
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .register(),
     YEAST = REGISTRATE.item("yeast", Item::new)
+        .tag(DestroyItemTags.FERTILIZER.tag)
         .register(),
     // CHALK = REGISTRATE.item("chalk", Item::new)
     //     .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)

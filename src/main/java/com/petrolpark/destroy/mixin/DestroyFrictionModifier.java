@@ -22,7 +22,7 @@ public interface DestroyFrictionModifier extends IForgeBlockState {
     /**
      * Duplicate of {@link net.minecraftforge.common.extensions.IForgeBlockState#self self()} to avoid having to use an Accessor.
      */
-    @Overwrite
+    @Overwrite(remap = false)
     public default BlockState self() {
         return (BlockState)this;
     };
@@ -33,7 +33,7 @@ public interface DestroyFrictionModifier extends IForgeBlockState {
      * This decreases the friction Entities experience if they are under the {@link com.petrolpark.destroy.effect.InebriationMobEffect Inebriation Effect},
      * according to the {@link com.petrolpark.destroy.config.DestroySubstancesConfigs#drunkenSlipping config file}.
      */
-    @Overwrite
+    @Overwrite(remap = false)
     default float getFriction(LevelReader level, BlockPos pos, @Nullable Entity entity) {
 
         // Copied from the Minecraft source code
@@ -44,9 +44,8 @@ public interface DestroyFrictionModifier extends IForgeBlockState {
             MobEffectInstance alcoholEffect = livingEntity.getEffect(DestroyMobEffects.INEBRIATION.get());
             if (alcoholEffect != null) {
                 return (float)(originalFriction + ((1 - originalFriction)
-                    * 0.2 * Math.min(5, alcoholEffect.getAmplifier() + 1) // Scale the extent of slipping with the amplifier of Inebriation (effects stop compounding after 4)
+                    * Math.min(5, alcoholEffect.getAmplifier() + 1) // Scale the extent of slipping with the amplifier of Inebriation (effects stop compounding after 4)
                     * (DestroyAllConfigs.COMMON.substances.drunkenSlipping.get() - 0.001f)) // Maximum level of slipping
-                    //*0.5)
                 );
             };
         };

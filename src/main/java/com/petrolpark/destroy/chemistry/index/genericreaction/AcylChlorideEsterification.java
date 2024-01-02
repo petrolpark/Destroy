@@ -25,8 +25,8 @@ public class AcylChlorideEsterification extends DoubleGroupGenericReaction<AcylC
         Formula alcoholStructureCopy = secondReactant.getMolecule().shallowCopyStructure();
         AlcoholGroup alcoholGroup = secondReactant.getGroup();
 
-        alcoholStructureCopy.moveTo(alcoholGroup.getOxygen());
-        alcoholStructureCopy.remove(alcoholGroup.getHydrogen());
+        alcoholStructureCopy.moveTo(alcoholGroup.oxygen);
+        alcoholStructureCopy.remove(alcoholGroup.hydrogen);
 
         acylChlorideStructureCopy.moveTo(acylChlorideGroup.getCarbon());
         acylChlorideStructureCopy.remove(acylChlorideGroup.getChlorine());

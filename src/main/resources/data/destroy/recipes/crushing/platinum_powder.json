@@ -1,0 +1,14 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "tag": "forge:ingots/platinum"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:platinum_powder"
+      }
+    ],
+    "processingTime": 100
+  }

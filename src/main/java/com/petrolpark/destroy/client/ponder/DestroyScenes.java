@@ -6,13 +6,15 @@ import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.block.BubbleCapBlock;
 import com.petrolpark.destroy.block.CoaxialGearBlock;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.block.DirectionalRotatedPillarKineticBlock;
 import com.petrolpark.destroy.block.DoubleCardanShaftBlock;
-import com.petrolpark.destroy.block.LongShaftBlock;
 import com.petrolpark.destroy.block.entity.AgingBarrelBlockEntity;
 import com.petrolpark.destroy.block.entity.BubbleCapBlockEntity;
 import com.petrolpark.destroy.block.entity.CentrifugeBlockEntity;
 import com.petrolpark.destroy.block.entity.DynamoBlockEntity;
 import com.petrolpark.destroy.block.entity.PumpjackBlockEntity;
+import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
+import com.petrolpark.destroy.block.entity.VatSideBlockEntity.DisplayType;
 import com.petrolpark.destroy.block.entity.behaviour.ChargingBehaviour;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
@@ -28,6 +30,7 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.contraptions.chassis.StickerBlock;
 import com.simibubi.create.content.contraptions.chassis.StickerBlockEntity;
+import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
 import com.simibubi.create.content.fluids.potion.PotionFluid;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
@@ -52,8 +55,6 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -63,7 +64,7 @@ import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -78,9 +79,9 @@ public class DestroyScenes {
 
     // Define coloured Fluids
     static {
-        purpleFluid = new FluidStack(PotionFluid.withEffects(1000, new Potion(), List.of(new MobEffectInstance(MobEffects.REGENERATION))), 1000);
-        blueFluid = new FluidStack(PotionFluid.withEffects(500, new Potion(), List.of(new MobEffectInstance(MobEffects.NIGHT_VISION))), 1000);
-        redFluid = new FluidStack(PotionFluid.withEffects(500, new Potion(), List.of(new MobEffectInstance(MobEffects.DAMAGE_BOOST))), 1000);
+        purpleFluid = new FluidStack(PotionFluid.withEffects(1000, Potions.TURTLE_MASTER, List.of()), 1000);
+        blueFluid = new FluidStack(PotionFluid.withEffects(500, Potions.AWKWARD, List.of()), 1000);
+        redFluid = new FluidStack(PotionFluid.withEffects(500, Potions.HEALING, List.of()), 1000);
     };
 
     private static FluidStack clearMixture(int amount) {
@@ -175,8 +176,8 @@ public class DestroyScenes {
         scene.markAsFinished();
     };
 
-    public static void centrifuge(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("centrifuge", "This text is defined in a language file.");
+    public static void centrifugeGeneric(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("centrifuge_generic", "This text is defined in a language file.");
         scene.configureBasePlate(0, 0, 5);
         scene.showBasePlate();
 
@@ -230,8 +231,28 @@ public class DestroyScenes {
             .pointAt(util.vector.blockSurface(lightOutputPump, Direction.EAST));
         scene.idle(120);
         scene.markAsFinished();
+    };
 
-        // TODO lubrication
+    public static void centrifugeMixture(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("centrifuge_mixture", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 5);
+        scene.showBasePlate();
+        scene.world.showSection(util.select.everywhere(), Direction.DOWN);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(util.grid.at(3, 3, 2), Direction.WEST));
+        scene.idle(120);
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(util.grid.at(1, 1, 2), Direction.WEST));
+        scene.idle(100);
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(util.grid.at(3, 1, 2), Direction.WEST));
+        scene.idle(100);
+
+        scene.markAsFinished();
     };
 
     public static void bubbleCapGeneric(SceneBuilder scene, SceneBuildingUtil util) {
@@ -487,7 +508,7 @@ public class DestroyScenes {
         , 60);
         scene.idle(5);
         scene.world.setBlock(coaxialGear1, DestroyBlocks.COAXIAL_GEAR.getDefaultState().setValue(CoaxialGearBlock.HAS_SHAFT, true), false);
-        scene.world.setBlock(longShaft1, DestroyBlocks.LONG_SHAFT.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, Axis.Y).setValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION, false), false);
+        scene.world.setBlock(longShaft1, DestroyBlocks.LONG_SHAFT.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, Axis.Y).setValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION, false), false);
         scene.idle(55);
 
         scene.world.showSection(util.select.fromTo(1, 2, 2, 1, 3, 2), Direction.DOWN);
@@ -505,7 +526,7 @@ public class DestroyScenes {
         , 60);
         scene.idle(5);
         scene.world.setBlock(coaxialGear2, DestroyBlocks.COAXIAL_GEAR.getDefaultState().setValue(CoaxialGearBlock.HAS_SHAFT, true), false);
-        scene.world.setBlock(longShaft2, DestroyBlocks.LONG_SHAFT.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, Axis.Y).setValue(LongShaftBlock.POSITIVE_AXIS_DIRECTION, false), false);
+        scene.world.setBlock(longShaft2, DestroyBlocks.LONG_SHAFT.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, Axis.Y).setValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION, false), false);
         scene.idle(65);
 
         scene.overlay.showText(80)
@@ -647,6 +668,190 @@ public class DestroyScenes {
         scene.markAsFinished();
     };
 
+    public static void differential(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("differential", "This text is defined in a language file.");
+        scene.configureBasePlate(1, 0, 5);
+        scene.showBasePlate();
+        
+        BlockPos westBigGear = util.grid.at(0, 0, 3);
+        BlockPos eastBigGear = util.grid.at(6, 0, 1);
+        BlockPos westBottomSmallGear = util.grid.at(0, 1, 2);
+        BlockPos westTopSmallGear = util.grid.at(0, 2, 2);
+        BlockPos eastBottomSmallGear = util.grid.at(6, 1, 2);
+        BlockPos eastTopSmallGear = util.grid.at(6, 2, 2);
+        BlockPos westOuterShaft = util.grid.at(1, 2, 2);
+        BlockPos westInnerShaft = util.grid.at(2, 2, 2);
+        BlockPos eastOuterShaft = util.grid.at(5, 2, 2);
+        BlockPos eastInnerShaft = util.grid.at(4, 2, 2);
+        BlockPos differential = util.grid.at(3, 2, 2);
+        BlockPos westSpeedometer = util.grid.at(1, 1, 2);
+        BlockPos eastSpeedometer = util.grid.at(5, 1, 2);
+        BlockPos middleSmallGear = util.grid.at(3, 3, 3);
+        BlockPos middleSpeedometer = util.grid.at(2, 3, 3);
+
+        Selection west = util.select.position(westBottomSmallGear)
+            .add(util.select.position(westTopSmallGear))
+            .add(util.select.position(westOuterShaft))
+            .add(util.select.position(westInnerShaft))
+            .add(util.select.position(westSpeedometer));
+
+        Selection east = util.select.position(eastBigGear)
+            .add(util.select.position(eastBottomSmallGear))
+            .add(util.select.position(eastTopSmallGear))
+            .add(util.select.position(eastOuterShaft))
+            .add(util.select.position(eastInnerShaft))
+            .add(util.select.position(eastSpeedometer));
+
+        Selection center = util.select.position(differential)
+            .add(util.select.position(middleSmallGear))
+            .add(util.select.position(middleSpeedometer));
+
+        Selection back = util.select.fromTo(3, 0, 5, 4, 2, 5);
+
+        scene.idle(10);
+        ElementLink<WorldSectionElement> bigGearElement = scene.world.showIndependentSection(util.select.position(westBigGear), Direction.EAST);
+        scene.world.showSection(util.select.position(eastBigGear), Direction.WEST);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(westBottomSmallGear), Direction.EAST);
+        scene.world.showSection(util.select.position(eastBottomSmallGear), Direction.WEST);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(westTopSmallGear), Direction.EAST);
+        scene.world.showSection(util.select.position(eastTopSmallGear), Direction.WEST);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(westOuterShaft), Direction.DOWN);
+        scene.world.showSection(util.select.position(eastOuterShaft), Direction.DOWN);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(westInnerShaft), Direction.DOWN);
+        scene.world.showSection(util.select.position(eastInnerShaft), Direction.DOWN);
+        scene.idle(5);
+        ElementLink<WorldSectionElement> differentialElement = scene.world.showIndependentSection(util.select.position(differential), Direction.DOWN);
+        scene.idle(10);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.topOf(differential))
+            .attachKeyFrame();
+        scene.idle(20);
+        scene.effects.rotationSpeedIndicator(westOuterShaft);
+        scene.effects.rotationSpeedIndicator(eastOuterShaft);
+        scene.idle(20);
+        scene.effects.rotationSpeedIndicator(differential);
+        scene.idle(60);
+
+        scene.world.showSection(util.select.position(eastSpeedometer), Direction.EAST);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(westSpeedometer), Direction.WEST);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(middleSmallGear), Direction.DOWN);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(middleSpeedometer), Direction.DOWN);
+        scene.idle(10);
+
+        scene.overlay.showText(120)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(20);
+        scene.overlay.showOutline(PonderPalette.BLUE, "east", util.select.position(eastSpeedometer), 100);
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.BLUE)
+            .independent(40);
+        scene.idle(20);
+        scene.overlay.showOutline(PonderPalette.RED, "west", util.select.position(westSpeedometer), 80);
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.RED)
+            .independent(60);
+        scene.idle(20);
+        scene.overlay.showOutline(PonderPalette.FAST, "total", util.select.position(middleSpeedometer), 60);
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.FAST)
+            .independent(80);
+        scene.idle(80);
+
+        scene.overlay.showText(170)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(10);
+        scene.world.multiplyKineticSpeed(center, 8 / 14f);
+        scene.world.multiplyKineticSpeed(west, 1 / 1000f);
+        scene.world.moveSection(bigGearElement, util.vector.of(-1d, 0d, 0d), 10);
+        scene.idle(15);
+        scene.world.rotateSection(bigGearElement, 0d, 0d, 180d, 10);
+        scene.idle(15);
+        scene.world.moveSection(bigGearElement, util.vector.of(1d, 0d, 0d), 10);
+        scene.idle(10);
+        scene.world.rotateSection(bigGearElement, 0d, 0d, 180d, 0);
+        scene.world.setKineticSpeed(util.select.position(westBigGear), -3f);
+        scene.world.multiplyKineticSpeed(center, 2 / 8f);
+        scene.world.multiplyKineticSpeed(west, -1000f);
+        scene.idle(20);
+        scene.overlay.showOutline(PonderPalette.BLUE, "east", util.select.position(eastSpeedometer), 100);
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.BLUE)
+            .independent(40);
+        scene.idle(20);
+        scene.overlay.showOutline(PonderPalette.RED, "west", util.select.position(westSpeedometer), 80);
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.RED)
+            .independent(60);
+        scene.idle(20);
+        scene.overlay.showOutline(PonderPalette.FAST, "total", util.select.position(middleSpeedometer), 60);
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.FAST)
+            .independent(80);
+        scene.idle(70);
+        scene.world.hideSection(util.select.position(middleSmallGear).add(util.select.position(middleSpeedometer)), Direction.SOUTH);
+        scene.idle(10);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.RED)
+            .attachKeyFrame();
+        scene.idle(100);
+
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.GREEN)
+            .pointAt(util.vector.blockSurface(differential, Direction.WEST));
+        scene.idle(80);
+        scene.world.setKineticSpeed(util.select.position(differential), 0f);
+        scene.world.hideSection(east, Direction.EAST);
+        scene.world.hideSection(west, Direction.WEST);
+        scene.world.hideIndependentSection(bigGearElement, Direction.WEST);
+        scene.idle(10);
+        scene.world.setKineticSpeed(east, 0f);
+        scene.world.setKineticSpeed(west, 0f);
+        scene.idle(10);
+        scene.world.rotateSection(differentialElement, 0d, 90d, 0d, 10);
+        scene.idle(10);
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.RED)
+            .pointAt(util.vector.blockSurface(differential, Direction.NORTH));
+        scene.idle(80);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(differential, Direction.UP))
+            .attachKeyFrame();
+        scene.idle(20);
+        scene.world.showSection(back, Direction.NORTH);
+        scene.idle(5);
+        for (int z = 5; z >= 2; z--) {
+            scene.world.showSection(util.select.position(util.grid.at(4, 3, z)), Direction.DOWN);
+            scene.idle(5);
+        };
+        scene.world.destroyBlock(differential);
+        scene.idle(60);
+
+        scene.markAsFinished();
+    };
+
     public static void doubleCardanShaft(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("double_cardan_shaft", "This text is defined in a language file.");
         scene.configureBasePlate(0, 0, 5);
@@ -778,9 +983,27 @@ public class DestroyScenes {
 
     public static void dynamoElectrolysis(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("dynamo_electrolysis", "This text is defined in a language file.");
-        scene.configureBasePlate(0, 0, 5);
+        scene.configureBasePlate(0, 0, 3);
         scene.showBasePlate();
+        
+        BlockPos basin = util.grid.at(1, 1, 1);
+        BlockPos dynamo = util.grid.at(1, 3, 1);
 
+        scene.idle(5);
+        scene.world.showSection(util.select.position(basin), Direction.DOWN);
+        scene.idle(5);
+        scene.world.showSection(util.select.fromTo(1, 0, 3, 1, 3, 3), Direction.NORTH);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(1, 3, 2), Direction.DOWN);
+        scene.idle(5);
+        scene.world.showSection(util.select.position(dynamo), Direction.DOWN);
+        scene.idle(5);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(dynamo, Direction.WEST));
+        scene.idle(100);
+        
         scene.markAsFinished();
     };
 
@@ -821,7 +1044,7 @@ public class DestroyScenes {
 
         scene.world.toggleRedstonePower(redstone1);
         scene.world.modifyBlock(sticker, s -> s.setValue(StickerBlock.EXTENDED, true), false);
-		scene.effects.indicateRedstone(util.grid.at(2, 3, 1));
+		scene.effects.indicateRedstone(util.grid.at(2, 3, 2));
 		scene.world.modifyBlockEntityNBT(util.select.position(sticker), StickerBlockEntity.class, nbt -> {});
 		scene.idle(20);
 		scene.world.toggleRedstonePower(redstone1);
@@ -1142,6 +1365,208 @@ public class DestroyScenes {
         scene.world.moveSection(vat4SouthLink, new Vec3(0, 0, -2), 10);
         scene.world.moveSection(vat4WestLink, new Vec3(2, 0, 0), 10);
         scene.idle(20);
+
+        scene.markAsFinished();
+    };
+
+    public static void vatInteraction(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("vat_interaction", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 6);
+        scene.scaleSceneView(0.8f);
+        scene.showBasePlate();
+
+        Selection vat = util.select.fromTo(1, 1, 1, 4, 4, 4);
+        BlockPos dialBlock = util.grid.at(3, 3, 1);
+        BlockPos pipeBlock = util.grid.at(1, 2, 3);
+        BlockPos pipe = util.grid.at(0, 2, 3);
+        BlockState pipeState = AllBlocks.FLUID_PIPE.getDefaultState()
+            .setValue(FluidPipeBlock.DOWN, false)
+            .setValue(FluidPipeBlock.UP, false)
+            .setValue(FluidPipeBlock.NORTH, false)
+            .setValue(FluidPipeBlock.SOUTH, false)
+            .setValue(FluidPipeBlock.EAST, true)
+            .setValue(FluidPipeBlock.WEST, true);
+        BlockPos bottomFunnel = util.grid.at(0, 2, 2);
+        BlockPos vent = util.grid.at(3, 4, 2);
+        BlockPos lever = util.grid.at(3, 4, 0);
+        Selection everything = util.select.fromTo(0, 1, 0, 4, 5, 4);
+
+        scene.idle(10);
+        scene.world.showSection(util.select.fromTo(1, 1, 1, 4, 4, 4), Direction.DOWN);
+        scene.idle(10);
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(20);
+        scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(dialBlock, Direction.NORTH), Pointing.RIGHT)
+            .withWrench(),
+            20
+        );
+        scene.idle(5);
+        scene.world.modifyBlockEntity(dialBlock, VatSideBlockEntity.class, vatSide -> vatSide.setDisplayType(DisplayType.THERMOMETER));
+        scene.idle(75);
+
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.RED)
+            .attachKeyFrame();
+        Selection edges = vat.substract(util.select.fromTo(2, 2, 1, 3, 3, 4)).substract(util.select.fromTo(2, 1, 2, 3, 4, 3)).substract(util.select.fromTo(1, 2, 2, 4, 3, 3));
+        scene.overlay.showOutline(PonderPalette.RED, "vat_outside", edges, 60);
+        scene.idle(80);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(20);
+        scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(dialBlock, Direction.NORTH), Pointing.RIGHT)
+            .withWrench(),
+            20
+        );
+        scene.idle(5);
+        scene.world.modifyBlockEntity(dialBlock, VatSideBlockEntity.class, vatSide -> vatSide.setDisplayType(DisplayType.BAROMETER));
+        scene.idle(75);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(20);
+        scene.world.setBlock(pipe, pipeState, false);
+        scene.world.showSection(util.select.position(pipe), Direction.EAST);
+        scene.idle(12);
+        scene.world.modifyBlockEntity(pipeBlock, VatSideBlockEntity.class, vatSide -> vatSide.setDisplayType(DisplayType.PIPE));
+        scene.idle(68);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .colored(PonderPalette.RED)
+            .pointAt(util.vector.blockSurface(pipeBlock, Direction.WEST));
+        scene.idle(120);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(10);
+        scene.world.showSection(util.select.position(2, 5, 3), Direction.DOWN);
+        scene.idle(20);
+        ElementLink<EntityElement> itemEntity = scene.world.createItemEntity(util.vector.centerOf(util.grid.at(2, 9, 3)), util.vector.of(0f, -0.4f, 0f), DestroyItems.PLATINUM_INGOT.asStack());
+        scene.idle(8);
+        scene.world.modifyEntity(itemEntity, Entity::discard);
+        scene.idle(22);
+        scene.world.showSection(util.select.position(bottomFunnel), Direction.EAST);
+        scene.idle(20);
+        scene.world.flapFunnel(bottomFunnel, true);
+        scene.world.createItemEntity(util.vector.centerOf(bottomFunnel).add(0.15f, -0.45f, 0), Vec3.ZERO, DestroyItems.PLATINUM_INGOT.asStack());
+        scene.idle(40);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(20);
+        scene.overlay.showControls(new InputWindowElement(util.vector.blockSurface(vent, Direction.UP), Pointing.DOWN)
+            .withWrench(),
+            20
+        );
+        scene.idle(5);
+        scene.world.modifyBlockEntity(vent, VatSideBlockEntity.class, vatSide -> vatSide.setDisplayType(DisplayType.OPEN_VENT));
+        scene.idle(95);
+
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.");
+        scene.idle(10);
+        scene.world.showSection(util.select.position(lever), Direction.SOUTH);
+        scene.idle(20);
+        scene.world.toggleRedstonePower(util.select.position(lever));
+        scene.effects.indicateRedstone(lever);
+        scene.world.modifyBlockEntity(vent, VatSideBlockEntity.class, vatSide -> vatSide.setDisplayType(DisplayType.CLOSED_VENT));
+        scene.idle(50);
+
+        ElementLink<WorldSectionElement> everythingLink = scene.world.makeSectionIndependent(everything);
+        scene.world.moveSection(everythingLink, util.vector.of(0, 3, 0), 10);
+        scene.idle(20);
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(10);
+        ElementLink<WorldSectionElement> blazeBurners = scene.world.showIndependentSection(util.select.fromTo(5, 1, 2, 6, 1, 3), Direction.WEST);
+        scene.world.moveSection(blazeBurners, util.vector.of(-3, 0, 0), 0);
+        scene.idle(20);
+        scene.world.hideIndependentSection(blazeBurners, Direction.WEST);
+        scene.idle(20);
+        ElementLink<WorldSectionElement> coolers = scene.world.showIndependentSection(util.select.fromTo(7, 1, 2, 8, 1, 3), Direction.WEST);
+        scene.world.moveSection(coolers, util.vector.of(-5, 0, 0), 0);
+        scene.idle(20);
+        scene.world.moveSection(everythingLink, util.vector.of(0, -2, 0), 10);
+        scene.idle(40);
+
+        scene.markAsFinished();
+    };
+
+    public static void reactions(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("reactions", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 9);
+        scene.scaleSceneView(.5f);
+        scene.showBasePlate();
+
+        scene.world.showSection(util.select.everywhere().substract(util.select.position(2, 1, 2)).substract(util.select.fromTo(0, 0, 0, 8, 0, 8)), Direction.DOWN);
+        scene.idle(10);
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(util.grid.at(4, 4, 5), Direction.UP));
+        scene.idle(120);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(120);
+
+        BlockPos underBasin = util.grid.at(1, 1, 2);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(underBasin, Direction.WEST));
+        scene.idle(20);
+        scene.world.hideSection(util.select.position(underBasin), Direction.WEST);
+        scene.idle(20);
+        ElementLink<WorldSectionElement> burner = scene.world.showIndependentSection(util.select.position(2, 1, 2), Direction.WEST);
+        scene.world.moveSection(burner, util.vector.of(-1d, 0d, 0d), 0);
+        scene.idle(80);
+
+        scene.overlay.showText(100)
+            .text("This text is defined in a language file.")
+            .attachKeyFrame();
+        scene.idle(120);
+
+        scene.markAsFinished();
+    };
+
+    public static void uv(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("uv", "This text is defined in a language file.");
+        scene.configureBasePlate(0, 0, 6);
+        scene.scaleSceneView(0.8f);
+        scene.showBasePlate();
+
+
+        scene.idle(10);
+        scene.world.showSection(util.select.fromTo(1, 1, 1, 4, 4, 4), Direction.DOWN);
+        scene.overlay.showText(60)
+            .text("This text is defined in a language file.");
+        scene.idle(80);
+
+        scene.idle(10);
+        scene.overlay.showOutline(PonderPalette.WHITE, "top_glass", util.select.fromTo(2, 4, 2, 3, 4, 3), 80);
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.of(3, 5, 3))
+            .attachKeyFrame();
+        scene.idle(100);
+
+        scene.world.showSection(util.select.fromTo(0, 2, 2, 0, 3, 3), Direction.EAST);
+        scene.idle(10);
+        scene.overlay.showText(80)
+            .text("This text is defined in a language file.")
+            .pointAt(util.vector.blockSurface(util.grid.at(0, 3, 2), Direction.WEST))
+            .attachKeyFrame();
+        scene.idle(100);
 
         scene.markAsFinished();
     };

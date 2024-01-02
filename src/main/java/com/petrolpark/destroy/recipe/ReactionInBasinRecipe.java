@@ -60,7 +60,7 @@ public class ReactionInBasinRecipe extends MixingRecipe {
 
         // Check all Fluids are Mixturess
         for (FluidStack fluidStack : availableFluids) {
-            if (!DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid())) { // Can't react with any non-Mixtures
+            if (!DestroyFluids.isMixture(fluidStack)) { // Can't react with any non-Mixtures
                 canReact = false;
                 break;
             };

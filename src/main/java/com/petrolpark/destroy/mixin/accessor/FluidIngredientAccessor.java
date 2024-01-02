@@ -10,9 +10,15 @@ import com.simibubi.create.foundation.fluid.FluidIngredient;
 @Mixin(FluidIngredient.class)
 public interface FluidIngredientAccessor {
     
-    @Accessor("amountRequired")
+    @Accessor(
+		value = "amountRequired",
+		remap = false
+	)
 	void setAmountRequired(int amountRequired);
 
-	@Invoker("readInternal")
+	@Invoker(
+		value = "readInternal",
+		remap = false
+	)
 	void invokeReadInternal(JsonObject json);
 };

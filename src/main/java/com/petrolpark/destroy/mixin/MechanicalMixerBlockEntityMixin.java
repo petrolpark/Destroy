@@ -29,7 +29,13 @@ public class MechanicalMixerBlockEntityMixin {
      * to allow them to recognise Mixtures that are able to React.
      * @see com.petrolpark.destroy.recipe.ReactionInBasinRecipe Reactions in Basins
      */
-    @Inject(method = "getMatchingRecipes", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(
+        method = "getMatchingRecipes()Ljava/util/List;",
+        at = @At("HEAD"),
+        cancellable = true,
+        remap = false
+        
+    )
     public void inGetMatchingRecipes(CallbackInfoReturnable<List<Recipe<?>>> ci) {
 
         ((BasinOperatingBlockEntityAccessor)this).invokeGetBasin().ifPresent(basin -> {
@@ -46,7 +52,7 @@ public class MechanicalMixerBlockEntityMixin {
 
             for (int tank = 0; tank < fluidHandler.getTanks(); tank++) {
                 FluidStack fluidStack = fluidHandler.getFluidInTank(tank);
-                if (DestroyFluids.MIXTURE.get().isSame(fluidStack.getFluid())) {
+                if (DestroyFluids.isMixture(fluidStack)) {
                     availableFluidStacks.add(fluidStack);
                 } else if (!fluidStack.isEmpty()) {
                     containsOnlyMixtures = false;

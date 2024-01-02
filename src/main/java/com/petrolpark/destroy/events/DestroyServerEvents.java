@@ -3,6 +3,7 @@ package com.petrolpark.destroy.events;
 import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.badge.BadgeHandler;
 import com.petrolpark.destroy.block.DestroyBlocks;
@@ -30,6 +31,7 @@ import com.petrolpark.destroy.item.SyringeItem;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
 import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
+import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.ChemistryDamageHelper;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
@@ -83,12 +85,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -182,15 +184,22 @@ public class DestroyServerEvents {
     };
 
     /**
-     * Conserve Baby Blue addiction across death.
+     * Conserve Baby Blue addiction and Badges across death.
      */
     @SubscribeEvent
+    @MoveToPetrolparkLibrary
     public static void onPlayerCloned(PlayerEvent.Clone event) {
         if (event.isWasDeath()) {
             // Copy Baby Blue Addiction Data
             event.getOriginal().getCapability(PlayerBabyBlueAddictionProvider.PLAYER_BABY_BLUE_ADDICTION).ifPresent(oldStore -> {
                 event.getOriginal().getCapability(PlayerBabyBlueAddictionProvider.PLAYER_BABY_BLUE_ADDICTION).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
+                });
+            });
+            // Copy Badge data
+            event.getOriginal().getCapability(PlayerBadges.Provider.PLAYER_BADGES).ifPresent(oldStore -> {
+                event.getOriginal().getCapability(PlayerBadges.Provider.PLAYER_BADGES).ifPresent(newStore -> {
+                    newStore.setBadges(oldStore.getBadges());
                 });
             });
         };
@@ -211,6 +220,7 @@ public class DestroyServerEvents {
         event.register(PlayerPreviousPositions.class);
         event.register(PlayerCrouching.class);
         event.register(EntityChemicalPoison.class);
+        event.register(PlayerBadges.class);
     };
 
     @SubscribeEvent
@@ -254,6 +264,7 @@ public class DestroyServerEvents {
         Registry<StructureProcessorList> processorListRegistry = event.getServer().registryAccess().registry(Registries.PROCESSOR_LIST).orElseThrow();
         
         DestroyVillageAddition.addBuildingToPool(templatePoolRegistry, processorListRegistry, new ResourceLocation("minecraft:village/plains/houses"), "destroy:plains_inn", 5);
+        DestroyVillageAddition.addBuildingToPool(templatePoolRegistry, processorListRegistry, new ResourceLocation("minecraft:village/desert/houses"), "destroy:desert_inn", 5);
     };
 
     /**
@@ -277,7 +288,7 @@ public class DestroyServerEvents {
         // Update the time this Player has been crouching/urinating
         BlockPos posOn = player.getOnPos();
         BlockState stateOn = level.getBlockState(posOn);
-        boolean urinating = stateOn.getBlock() == Blocks.WATER_CAULDRON && stateOn.getValue(BlockStateProperties.LEVEL_CAULDRON) == 1 && player.hasEffect(DestroyMobEffects.INEBRIATION.get());
+        boolean urinating = (stateOn.getBlock() == Blocks.WATER_CAULDRON || stateOn.getBlock() == Blocks.CAULDRON) && player.hasEffect(DestroyMobEffects.INEBRIATION.get());
         if (player.isCrouching()) {
             player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).ifPresent(crouchingCap -> {
                 crouchingCap.ticksCrouching++;
@@ -294,9 +305,12 @@ public class DestroyServerEvents {
         int ticksUrinating = player.getCapability(PlayerCrouching.Provider.PLAYER_CROUCHING).map(crouchingCap -> crouchingCap.ticksUrinating).orElse(0);
         if (ticksUrinating > 0) {
             Vec3 pos = player.position();
-            if (level instanceof ServerLevel serverLevel) serverLevel.sendParticles(FluidFX.getFluidParticle(new FluidStack(DestroyFluids.URINE.get(), 1000)), pos.x, pos.y + 0.5f, pos.z, 1, 0d, -0.07d, 0d, 0d);
-            //TODO sound
-            if (ticksUrinating == 100) {
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(FluidFX.getFluidParticle(new FluidStack(DestroyFluids.URINE.get(), 1000)), pos.x, pos.y + 0.5f, pos.z, 1, 0d, -0.07d, 0d, 0d);
+            };
+            if (ticksUrinating % 40 == 0)
+                DestroySoundEvents.URINATE.playOnServer(level, posOn);
+            if (ticksUrinating == 119) {
                 InebriationHelper.increaseInebriation(player, -1);
                 DestroyAdvancements.URINATE.award(level, player);
                 level.setBlockAndUpdate(posOn, DestroyBlocks.URINE_CAULDRON.getDefaultState());
@@ -568,6 +582,10 @@ public class DestroyServerEvents {
             ChemistryDamageHelper.damage(event.getEntity().level(), event.getEntity(), FluidStack.loadFluidStackFromNBT(tag.getCompound("ContaminatingFluid")), true);
             ChemistryDamageHelper.decontaminate(event.getFrom());
         };
+    };
+
+    public static void onRecipeLoaded(RecipesUpdatedEvent event) {
+
     };
 
     @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)

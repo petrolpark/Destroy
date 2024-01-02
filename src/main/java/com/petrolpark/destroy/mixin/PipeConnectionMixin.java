@@ -34,13 +34,23 @@ public class PipeConnectionMixin {
      * @param extractionPredicate
      * @param cir
      */
-    @Inject(method = "manageFlows", at = @At(value = "INVOKE", target = "Ljava/util/Optional;empty", ordinal = 1), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
+    @Inject(
+        method = "manageFlows(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraftforge/fluids/FluidStack;Ljava/util/function/Predicate;)Z",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Optional;empty()V",
+            ordinal = 1
+        ),
+        cancellable = true,
+        locals = LocalCapture.CAPTURE_FAILSOFT,
+        remap = false
+    )
     public void inManageFlows(Level world, BlockPos pos, FluidStack internalFluid, Predicate<FluidStack> extractionPredicate, CallbackInfoReturnable<Boolean> cir, Optional<FluidNetwork> retainedNetwork) {
         Flow flow = ((PipeConnectionAccessor)this).getFlow().get();
         FlowSource source = ((PipeConnectionAccessor)this).getSource().get();
 
         FluidStack provided = flow.inbound ? source.provideFluid(extractionPredicate) : internalFluid;
-        if (((PipeConnection)(Object)this).hasPressure() && provided.getFluid().isSame(DestroyFluids.MIXTURE.get()) && flow.fluid.getFluid().isSame(DestroyFluids.MIXTURE.get())) { // Only update the Fluid if we Fluid and should be moving it
+        if (((PipeConnection)(Object)this).hasPressure() && DestroyFluids.isMixture(provided) && DestroyFluids.isMixture(flow.fluid)) { // Only update the Fluid if we have Fluid and should be moving it
             flow.fluid = provided;
             Optional<FluidNetwork> network = retainedNetwork;
             if (network.isPresent()) {

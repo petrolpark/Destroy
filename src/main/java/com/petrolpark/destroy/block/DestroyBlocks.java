@@ -50,13 +50,16 @@ public class DestroyBlocks {
 
     // BLOCK ENTITIES
 
+    @SuppressWarnings("removal") // I'll start rendering translucency the proper way once it actually works the proper way
     public static final BlockEntry<AgingBarrelBlock> AGING_BARREL = REGISTRATE.block("aging_barrel", AgingBarrelBlock::new)
         .initialProperties(SharedProperties::stone)
         .properties(p -> p
             .mapColor(MapColor.COLOR_BROWN)
             .noOcclusion()
         ).transform(TagGen.axeOnly())
+        .addLayer(() -> RenderType::translucent)
         .item()
+        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
         .transform(customItemModel())
         .register();
 
@@ -130,7 +133,9 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
-    public static final BlockEntry<DummyDifferentialBlock> DUMMY_DIFFERENTIAL = REGISTRATE.block("dummy_differential", DummyDifferentialBlock::new).register();
+    public static final BlockEntry<DummyDifferentialBlock> DUMMY_DIFFERENTIAL = REGISTRATE.block("dummy_differential", DummyDifferentialBlock::new)
+        .initialProperties(DIFFERENTIAL)
+        .register();
 
     public static final BlockEntry<DynamoBlock> DYNAMO = REGISTRATE.block("dynamo", DynamoBlock::new)
         .initialProperties(SharedProperties::softMetal)
@@ -246,12 +251,14 @@ public class DestroyBlocks {
         .tag(BlockTags.CAULDRONS)
         .register();
 
+    @SuppressWarnings("removal") // I'll start rendering translucency the proper way once it actually works the proper way
     public static final BlockEntry<BlacklightBlock> BLACKLIGHT = REGISTRATE.block("blacklight", BlacklightBlock::new)
         .initialProperties(() -> Blocks.LANTERN)
         .properties(p -> p
             .mapColor(MapColor.COLOR_PURPLE)
             .sound(SoundType.GLASS)
-        ).item()
+        ).addLayer(() -> RenderType::translucent)
+        .item()
         .build()
         .register();
 
@@ -394,21 +401,21 @@ public class DestroyBlocks {
         .build()
         .register();
 
-    public static final BlockEntry<Block> ZIRCONIUM_BLOCK = REGISTRATE.block("zirconium_block", Block::new)
-        .initialProperties(() -> Blocks.NETHERITE_BLOCK)
-        .properties(p -> p
-            .mapColor(MapColor.STONE)
-            .requiresCorrectToolForDrops()
-            .strength(6f, 6f)
-        ).transform(TagGen.pickaxeOnly())
-        .tag(BlockTags.NEEDS_DIAMOND_TOOL)
-        .tag(Tags.Blocks.STORAGE_BLOCKS)
-        .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/zirconium"))
-        .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
-        .tag(Tags.Items.STORAGE_BLOCKS)
-        .build()
-        .register();
+    // public static final BlockEntry<Block> ZIRCONIUM_BLOCK = REGISTRATE.block("zirconium_block", Block::new)
+    //     .initialProperties(() -> Blocks.NETHERITE_BLOCK)
+    //     .properties(p -> p
+    //         .mapColor(MapColor.STONE)
+    //         .requiresCorrectToolForDrops()
+    //         .strength(6f, 6f)
+    //     ).transform(TagGen.pickaxeOnly())
+    //     .tag(BlockTags.NEEDS_DIAMOND_TOOL)
+    //     .tag(Tags.Blocks.STORAGE_BLOCKS)
+    //     .tag(BlockTags.BEACON_BASE_BLOCKS)
+    //     .transform(TagGen.tagBlockAndItem("storage_blocks/zirconium"))
+    //     .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+    //     .tag(Tags.Items.STORAGE_BLOCKS)
+    //     .build()
+    //     .register();
 
     // ORES
 
@@ -600,14 +607,14 @@ public class DestroyBlocks {
         .build()
         .register();
 
-    public static final BlockEntry<RotatedPillarBlock> RAW_FRIES_BLOCK = REGISTRATE.block("raw_fries_block", RotatedPillarBlock::new)
-        .initialProperties(() -> Blocks.CLAY)
-        .properties(p -> p
-            .mapColor(MapColor.COLOR_YELLOW)
-            .sound(SoundType.SLIME_BLOCK)
-            .strength(0.2f)
-        ).tag(BlockTags.MINEABLE_WITH_SHOVEL)
-        .register();
+    // public static final BlockEntry<RotatedPillarBlock> RAW_FRIES_BLOCK = REGISTRATE.block("raw_fries_block", RotatedPillarBlock::new)
+    //     .initialProperties(() -> Blocks.CLAY)
+    //     .properties(p -> p
+    //         .mapColor(MapColor.COLOR_YELLOW)
+    //         .sound(SoundType.SLIME_BLOCK)
+    //         .strength(0.2f)
+    //     ).tag(BlockTags.MINEABLE_WITH_SHOVEL)
+    //     .register();
 
     // UNCATEGORISED
 

@@ -1,0 +1,14 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "tag": "forge:ingots/iron"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:iron_powder"
+      }
+    ],
+    "processingTime": 100
+  }

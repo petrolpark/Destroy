@@ -1,36 +1,56 @@
 package com.petrolpark.destroy.badge;
 
-import com.petrolpark.destroy.Destroy;
+import static com.petrolpark.destroy.Destroy.PETROLPARK_REGISTRATE;
+import static com.petrolpark.destroy.Destroy.REGISTRATE;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryBuilder;
-import net.minecraftforge.registries.RegistryObject;
+import com.simibubi.create.AllTags;
+import com.tterrag.registrate.util.entry.RegistryEntry;
+
+import net.minecraft.world.item.crafting.Ingredient;
 
 public class DestroyBadges {
-    public static final DeferredRegister<Badge> BADGES = DeferredRegister.create(Destroy.asResource("badge"), Destroy.MOD_ID);
 
+    private static final Ingredient GOLD_SHEET_INGREDIENT = Ingredient.of(AllTags.forgeItemTag("plates/gold"));
 
-    public static final RegistryObject<Badge>
-    
-    EARLY_BIRD = BADGES.register("early_bird", Badge::new),
-    DEVELOPER = BADGES.register("developer", Badge::new);
+    public static final RegistryEntry<Badge>
 
-    public static void register(IEventBus eventBus) {
-        BADGES.makeRegistry(RegistryBuilder::new);
-        BADGES.register(eventBus);
-    };
+    BETA_TESTER = PETROLPARK_REGISTRATE.badge("beta_tester")
+        .duplicationIngredient(GOLD_SHEET_INGREDIENT)
+        .register(),
+    BESTIE = PETROLPARK_REGISTRATE.badge("bestie")
+        .duplicationIngredient(GOLD_SHEET_INGREDIENT)
+        .register(),
+    COMPETITION_WINNER = PETROLPARK_REGISTRATE.badge("competition_winner")
+        .duplicationIngredient(GOLD_SHEET_INGREDIENT)
+        .register(),
+    CONTENT_CREATOR = PETROLPARK_REGISTRATE.badge("content_creator")
+        .duplicationIngredient(GOLD_SHEET_INGREDIENT)
+        .register(),
+    DEVELOPER = PETROLPARK_REGISTRATE.badge("developer")
+        .duplicationIngredient(GOLD_SHEET_INGREDIENT)
+        .register(),
+    EARLY_BIRD = PETROLPARK_REGISTRATE.badge("early_bird")
+        .duplicationIngredient(GOLD_SHEET_INGREDIENT)
+        .register(),
+    NITRO = PETROLPARK_REGISTRATE.badge("nitro")
+        .duplicationIngredient(GOLD_SHEET_INGREDIENT)
+        .register(),
+    SUGGESTION = PETROLPARK_REGISTRATE.badge("suggestion")
+        .duplicationIngredient(GOLD_SHEET_INGREDIENT)
+        .register(),
+    TRANSLATOR = PETROLPARK_REGISTRATE.badge("translator")
+        .duplicationIngredient(GOLD_SHEET_INGREDIENT)
+        .register(),
 
-    public static RegistryObject<Badge> getBadge(String namespace, String id) {
-        return getBadge(new ResourceLocation(namespace, id));
-    };
+    PATREON_1 = REGISTRATE.badge("patreon_1")
+        .duplicationIngredient(GOLD_SHEET_INGREDIENT)
+        .register(),
+    PATREON_2 = REGISTRATE.badge("patreon_2")
+        .duplicationIngredient(GOLD_SHEET_INGREDIENT)
+        .register(),
+    PATREON_3 = REGISTRATE.badge("patreon_3")
+        .duplicationIngredient(GOLD_SHEET_INGREDIENT)
+        .register();
 
-    public static RegistryObject<Badge> getBadge(ResourceLocation id) {
-        return BADGES.getEntries().stream().filter(badgeEntry -> badgeEntry.getId().equals(id)).findFirst().orElse(null);
-    };
-
-    public static ResourceLocation getId(Badge badge) {
-        return BADGES.getEntries().stream().filter(badgeEntry -> badgeEntry.get().equals(badge)).map(RegistryObject::getId).findFirst().orElse(null);
-    };
+    public static void register() {};
 };

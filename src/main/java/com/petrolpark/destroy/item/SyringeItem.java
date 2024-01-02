@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.item;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import com.petrolpark.destroy.item.renderer.SyringeItemRenderer;
@@ -7,6 +8,8 @@ import com.petrolpark.destroy.world.damage.DestroyDamageSources;
 import com.simibubi.create.foundation.item.CustomUseEffectsItem;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 
+import net.minecraft.core.BlockSource;
+import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,13 +21,17 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 public class SyringeItem extends Item implements CustomUseEffectsItem {
+
     public SyringeItem(Properties properties) {
         super(properties.stacksTo(1));
+        DispenserBlock.registerBehavior(this, new SyringeDispenserBehaviour());
     };
 
     /**
@@ -109,5 +116,20 @@ public class SyringeItem extends Item implements CustomUseEffectsItem {
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(SimpleCustomRenderer.create(this, new SyringeItemRenderer()));
     };
+
+    public class SyringeDispenserBehaviour extends OptionalDispenseItemBehavior {
+
+        @Override
+        public ItemStack execute(BlockSource blockSource, ItemStack stack) {
+            List<LivingEntity> list = blockSource.getLevel().getEntitiesOfClass(LivingEntity.class, new AABB(blockSource.getPos().relative(blockSource.getBlockState().getValue(DispenserBlock.FACING))));
+            if (!list.isEmpty()) {
+                onInject(stack, blockSource.getLevel(), list.get(0));
+                setSuccess(true);
+                return DestroyItems.SYRINGE.asStack();
+            } else {
+                return super.execute(blockSource, stack);
+            }
+        };
+    };
     
-}
+};

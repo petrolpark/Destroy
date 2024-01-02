@@ -37,7 +37,7 @@ public class GasParticle extends FluidStackParticle {
             yd += VERTICAL_SPEED + (double)(random.nextFloat() / 500.0F);
         } else {
             isDistillation = false;
-            lifetime = (int)Mth.lerp(fluid.getAmount() / 4000, 60, 180);
+            lifetime = (int)Mth.lerp(fluid.getAmount() / 4000, 60, 300);
         };
 
         hasPhysics = !isDistillation;
@@ -46,8 +46,8 @@ public class GasParticle extends FluidStackParticle {
     @Override
     public void tick() {
         super.tick();
-        xd += (double)(random.nextFloat() / 5000.0F * (float)(random.nextBoolean() ? 1 : -1));
-        zd += (double)(random.nextFloat() / 5000.0F * (float)(random.nextBoolean() ? 1 : -1));
+        xd += (double)(random.nextFloat() / 5000f * (float)(random.nextBoolean() ? 1 : -1));
+        zd += (double)(random.nextFloat() / 5000f * (float)(random.nextBoolean() ? 1 : -1));
 
         if (isDistillation) {
             this.move(0d, VERTICAL_SPEED, 0d);

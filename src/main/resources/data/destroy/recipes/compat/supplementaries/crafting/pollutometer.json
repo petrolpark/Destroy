@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+        "type": "forge:mod_loaded",
+        "modid": "supplementaries"
+    }
+  ],
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "VPA",
+      "PMP",
+      " P "
+    ],
+    "key": {
+      "A": {
+        "item": "supplementaries:altimeter"
+      },
+      "P": {
+        "item": "destroy:polypropene"
+      },
+      "V": {
+        "item": "supplementaries:wind_vane"
+      },
+      "M": {
+        "item": "destroy:voltaic_pile"
+      }
+    },
+    "result": {
+      "item": "destroy:pollutometer"
+    }
+  }

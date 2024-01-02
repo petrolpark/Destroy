@@ -21,13 +21,17 @@ public class ConnectivityHandlerMixin {
     /**
      * Injection into {@link com.simibubi.create.api.connectivity.ConnectivityHandler ConnectivityHandler}.
      * This is called whenever part of a {@link com.simibubi.create.content.contraptions.base.fluids.tank.FluidTankBlockEntity Fluid Tank} is destroyed. It's purpose is to determine if any Fluid
-     * had to be voided because it wouldn't fit, and if so, {@link com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour#pollute pollute the Level} accordingly.
+     * had to be voided because it wouldn't fit, and if so, {@link com.petrolpark.destroy.util.PollutionHelper#pollute pollute the Level} accordingly.
      * It's mostly all copied from {@link com.simibubi.create.api.connectivity.ConnectivityHandler this internal splitMulti method}.
      * @param <T> A type of Block Entity (typically Fluid Tank)
      * @param be The BE which was destroyed
      * @param ci The callback
      */
-    @Inject(method = "splitMulti", at = @At(value="HEAD"))
+    @Inject(
+        method = "Lcom/simibubi/create/api/connectivity/ConnectivityHandler;splitMulti(Lnet/minecraft/world/level/block/entity/BlockEntity;)V",
+        at = @At(value="HEAD"),
+        remap = false
+    )
     private static <T extends BlockEntity & IMultiBlockEntityContainer> void inSplitMulti(T be, CallbackInfo ci) {
 
         BlockPos startPos = be.getBlockPos(); // The position of the BE destroyed

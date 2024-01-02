@@ -1,18 +1,10 @@
 {
   "values": [
-    "destroy:dynamo",
-    "destroy:anfo_block",
-    "destroy:cordite",
-    "destroy:nitrocellulose_block",
-    "destroy:picric_acid_block",
-    "destroy:nickel_block",
-    "destroy:zirconium_block",
-    "destroy:yeast_mushroom",
-    "destroy:yeast_covered_agar_block",
+    "destroy:ammonium_nitrate_prill",
+    "destroy:chalk_dust",
     "destroy:playwell",
-    "destroy:conversion_catalyst",
-    "destroy:palladium_on_carbon",
-    "destroy:ziegler-natta",
+    "destroy:magic_oxidant",
+    "destroy:magic_reductant",
     "destroy:raw_fries",
     "destroy:unseasoned_fries",
     "destroy:fries",
@@ -21,8 +13,14 @@
     "destroy:potate_o",
     "destroy:discharged_voltaic_pile",
     "destroy:voltaic_pile",
-    "destroy:zirconium_ingot",
-    "destroy:magic_reductant",
-    "destroy:magic_oxidant"
+    "destroy:aging_barrel",
+    "destroy:dynamo",
+    "destroy:anfo_block",
+    "destroy:cordite",
+    "destroy:nitrocellulose_block",
+    "destroy:picric_acid_block",
+    "destroy:nickel_block",
+    "destroy:yeast_mushroom",
+    "destroy:yeast_covered_agar_block"
   ]
 }

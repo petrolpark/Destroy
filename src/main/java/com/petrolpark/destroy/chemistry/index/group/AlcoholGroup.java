@@ -7,15 +7,11 @@ import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 
 public class AlcoholGroup extends Group<AlcoholGroup> {
 
-    private Atom carbon;
-    private Atom oxygen;
-    private Atom hydrogen;
+    public final Atom carbon;
+    public final Atom oxygen;
+    public final Atom hydrogen;
 
-    private int degree;
-
-    public AlcoholGroup() {
-        super();
-    };
+    public final int degree;
 
     public AlcoholGroup(Atom carbon, Atom oxygen, Atom hydrogen, int degree) {
         super();
@@ -23,22 +19,6 @@ public class AlcoholGroup extends Group<AlcoholGroup> {
         this.oxygen = oxygen;
         this.hydrogen = hydrogen;
         this.degree = degree;
-    };
-
-    public Atom getCarbon() {
-        return carbon;
-    };
-
-    public Atom getOxygen() {
-        return oxygen;
-    };
-
-    public Atom getHydrogen() {
-        return hydrogen;
-    };
-
-    public int getDegree() {
-        return this.degree;
     };
 
     @Override

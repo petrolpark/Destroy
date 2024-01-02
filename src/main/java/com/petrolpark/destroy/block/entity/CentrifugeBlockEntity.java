@@ -1,8 +1,11 @@
 package com.petrolpark.destroy.block.entity;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -13,6 +16,10 @@ import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour.GeniusFluidTankBehaviour;
+import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
+import com.petrolpark.destroy.fluid.DestroyFluids;
+import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -142,7 +149,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IDirect
             }).collect(Collectors.toList());
             if (possibleRecipes.size() >= 1) {
                 lastRecipe = (CentrifugationRecipe)possibleRecipes.get(0);
-            } else {
+            } else { // If no recipe could be found
                 lastRecipe = null;
             };
         };
@@ -195,13 +202,58 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IDirect
     };
 
     public void process() {
-        if (lastRecipe == null) return;
-        if (!canFitFluidInTank(lastRecipe.getDenseOutputFluid(), getDenseOutputTank()) || !canFitFluidInTank(lastRecipe.getLightOutputFluid(), getLightOutputTank()) || hasFluidInTank(lastRecipe.getRequiredFluid(), getLightOutputTank())) return; // Ensure the Recipe can still be Processed
-        getInputTank().drain(lastRecipe.getRequiredFluid().getRequiredAmount(), FluidAction.EXECUTE);
-        getDenseOutputTank().fill(lastRecipe.getDenseOutputFluid(), FluidAction.EXECUTE);
-        getLightOutputTank().fill(lastRecipe.getLightOutputFluid(), FluidAction.EXECUTE);
-        advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.USE_CENTRIFUGE);
-        notifyUpdate();
+        if (lastRecipe == null) { // If there is no Recipe
+            if (DestroyFluids.isMixture(getInputTank().getFluid())) { // If there are Fluids to Centrifuge
+                ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(getInputTank().getFluid().getOrCreateChildTag("Mixture"));
+                if (mixture == null) return;
+                if (!(DestroyFluids.isMixture(getDenseOutputTank().getFluid()) || getDenseOutputTank().isEmpty()) || !(DestroyFluids.isMixture(getLightOutputTank().getFluid()) || getLightOutputTank().isEmpty())) return; // Don't go any further if either output tank can't take Mixture
+                int amount = IntStream.of(new int[]{getInputTank().getFluidAmount(), getDenseOutputTank().getSpace() * 2, getLightOutputTank().getSpace() * 2}).min().getAsInt(); // Determine how much can be processed
+                if (amount == 0) return; // If either of the two output tanks can't fit anything at all, give up
+                float totalVolume = amount / 1000f;
+
+                List<Molecule> chargedMolecules = new ArrayList<>();
+                List<Molecule> neutralMolecules = new ArrayList<>();
+                for (Molecule molecule : mixture.getContents(false)) {
+                    (molecule.getCharge() == 0 ? neutralMolecules : chargedMolecules).add(molecule);
+                };
+
+                Collections.sort(neutralMolecules, (m1, m2) -> {
+                    return Float.compare(m1.getDensity(), m2.getDensity()); //TODO account for the fact that some things may be in the gas state
+                });
+
+                float volumeOfDenseMixture = 0f; // in B
+
+                ReadOnlyMixture lightMixture = new ReadOnlyMixture();
+                ReadOnlyMixture denseMixture = new ReadOnlyMixture();
+
+                for (Molecule molecule : neutralMolecules) {
+                    float moles = mixture.getConcentrationOf(molecule) * totalVolume;
+                    float volume = moles / molecule.getPureConcentration(); // Volume of this Molecule present in the original Mixture in Buckets
+                    float volumeInDenseMixture = Math.min((totalVolume / 2f) - volumeOfDenseMixture, volume); // What volume of this Molecule gets put in the dense portion, in Buckets
+                    volumeOfDenseMixture += volumeInDenseMixture; // Increase the amount of dense Fluid made
+                    denseMixture.addMolecule(molecule, 2f * (moles * volumeInDenseMixture / volume) / totalVolume);
+                    lightMixture.addMolecule(molecule, 2f * (moles * (volume - volumeInDenseMixture) / volume) / totalVolume);
+                };
+
+                //TODO charged molecules
+
+                // If we've got to this point, the Fluid can be succesfully processed
+                getInputTank().drain(amount, FluidAction.EXECUTE);
+                getDenseOutputTank().fill(MixtureFluid.of(amount / 2, denseMixture), FluidAction.EXECUTE);
+                getLightOutputTank().fill(MixtureFluid.of(amount / 2, lightMixture), FluidAction.EXECUTE);
+                advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.USE_CENTRIFUGE);
+                notifyUpdate();
+            } else { // If there is no Mixture to Centrifuge
+                return;
+            };
+        } else { // If there is a Recipe
+            if (!canFitFluidInTank(lastRecipe.getDenseOutputFluid(), getDenseOutputTank()) || !canFitFluidInTank(lastRecipe.getLightOutputFluid(), getLightOutputTank()) || hasFluidInTank(lastRecipe.getRequiredFluid(), getLightOutputTank())) return; // Ensure the Recipe can still be Processed
+            getInputTank().drain(lastRecipe.getRequiredFluid().getRequiredAmount(), FluidAction.EXECUTE);
+            getDenseOutputTank().fill(lastRecipe.getDenseOutputFluid(), FluidAction.EXECUTE);
+            getLightOutputTank().fill(lastRecipe.getLightOutputFluid(), FluidAction.EXECUTE);
+            advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.USE_CENTRIFUGE);
+            notifyUpdate();
+        };
     };
 
     @SuppressWarnings("null")

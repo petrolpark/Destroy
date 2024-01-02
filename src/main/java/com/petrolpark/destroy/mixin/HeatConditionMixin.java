@@ -48,7 +48,12 @@ public abstract class HeatConditionMixin {
      * Injection into {@link com.simibubi.create.content.contraptions.processing.HeatCondition#testBlazeBurner HeatCondition}.
      * This ensures that a {@link com.petrolpark.destroy.block.entity.CoolerBlockEntity Cooler} (or anything which is {@code FROSTING}) is required for Recipes with the {@code cooled} heat requirement.
      */
-    @Inject(method = "testBlazeBurner", at = @At("HEAD"), cancellable = true)
+    @Inject(
+        method = "Lcom/simibubi/create/content/processing/recipe/HeatCondition;testBlazeBurner(Lcom/simibubi/create/content/processing/burner/BlazeBurnerBlock$HeatLevel;)Z",
+        at = @At("HEAD"),
+        cancellable = true,
+        remap = false
+    )
     public void inTestBlazeBurner(HeatLevel heatLevel, CallbackInfoReturnable<Boolean> ci) {
         HeatCondition thisHeatCondition = (HeatCondition) (Object) (this);
         if (thisHeatCondition == COOLED) {

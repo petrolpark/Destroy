@@ -1,4 +1,93 @@
 {
+  "aging_barrel_balloon": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "destroy:aging_barrel_balloon"
+      }
+    ],
+    "subtitle": "destroy.subtitle.aging_barrel_balloon"
+  },
+  "aging_barrel_shut": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:block.barrel.close"
+      },
+      {
+        "type": "event",
+        "name": "minecraft:block.bubble_column.upwards_ambient"
+      }
+    ],
+    "subtitle": "destroy.subtitle.aging_barrel_shut"
+  },
+  "aging_barrel_open": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:block.barrel.open"
+      }
+    ],
+    "subtitle": "destroy.subtitle.aging_barrel_open"
+  },
+  "cooler_break": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:block.stone.break"
+      },
+      {
+        "type": "event",
+        "name": "minecraft:entity.skeleton.step"
+      }
+    ],
+    "subtitle": "destroy.subtitle.cooler_break"
+  },
+  "cooler_place": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:block.stone.place"
+      },
+      {
+        "type": "event",
+        "name": "minecraft:entity.skeleton.step"
+      }
+    ],
+    "subtitle": "destroy.subtitle.cooler_place"
+  },
+  "distillate_boil": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:block.bubble_column.whirlpool_ambient",
+        "pitch": 1.45
+      }
+    ],
+    "subtitle": "destroy.subtitle.distillate_boil"
+  },
+  "distillate_condense": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:block.fire.extinguish"
+      },
+      {
+        "type": "event",
+        "name": "minecraft:item.bucket.empty"
+      }
+    ],
+    "subtitle": "destroy.subtitle.distillate_condense"
+  },
+  "dynamo_crackle": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "destroy:dynamo_crackle"
+      }
+    ],
+    "subtitle": "destroy.subtitle.dynamo_crackle"
+  },
   "music_disc_spectrum": {
     "sounds": [
       {
@@ -7,5 +96,50 @@
         "stream": true
       }
     ]
+  },
+  "oil_gurgle": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "destroy:oil_gurgle"
+      }
+    ],
+    "subtitle": "destroy.subtitle.oil_gurgle"
+  },
+  "pumpjack_creak_1": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "destroy:pumpjack_creak_1"
+      }
+    ],
+    "subtitle": "destroy.subtitle.pumpjack_creak"
+  },
+  "pumpjack_creak_2": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "destroy:pumpjack_creak_2"
+      }
+    ],
+    "subtitle": "destroy.subtitle.pumpjack_creak"
+  },
+  "spray_bottle_spray": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "destroy:spray"
+      }
+    ],
+    "subtitle": "destroy.subtitle.spray_bottle_spray"
+  },
+  "urinate": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "destroy:urinate"
+      }
+    ],
+    "subtitle": "destroy.subtitle.urinate"
   }
 }

@@ -12,8 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public abstract class DoubleGroupGenericReaction<FirstGroup extends Group<FirstGroup>, SecondGroup extends Group<SecondGroup>> extends GenericReaction {
 
-    private final GroupType<FirstGroup> firstType;
-    private final GroupType<SecondGroup> secondType;
+    protected final GroupType<FirstGroup> firstType;
+    protected final GroupType<SecondGroup> secondType;
 
     /**
      * This number is used to number R Groups in example Reactions.
@@ -33,7 +33,7 @@ public abstract class DoubleGroupGenericReaction<FirstGroup extends Group<FirstG
      * Generates a Reaction (with non-abstract Reactants and Products) based on the given Molecules which have these Groups.
      * @param reactant1 has the {@link FirstGroup first declared Group}.
      * @param reactant2 has the {@link SecondGroup second declared Group}.
-     * @return The whole Reaction, including the defined structures of the product(s).
+     * @return The whole Reaction, including the defined structures of the product(s). Return {@code null} if the Reaction is impossible.
      */
     public abstract Reaction generateReaction(GenericReactant<FirstGroup> firstReactant, GenericReactant<SecondGroup> secondReactant);
 

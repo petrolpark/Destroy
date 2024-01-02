@@ -23,6 +23,7 @@ public enum DestroyAdvancements {
     CAPTURE_STRAY("capture_stray"),
     USE_CENTRIFUGE("use_centrifuge"),
     LUBRICATE_CENTRIFUGE("lubricate_centrifuge"),
+    CUT_ONIONS("cut_onions"),
     DISTILL("distill"),
     CHARGE_WITH_DYNAMO("charge_with_dynamo"),
     ELECTROLYZE_WITH_DYNAMO("electrolyze_with_dynamo"),

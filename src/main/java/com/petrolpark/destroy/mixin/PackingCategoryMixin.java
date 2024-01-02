@@ -24,7 +24,15 @@ public class PackingCategoryMixin {
      * Injection into {@link com.simibubi.create.compat.jei.category.PackingCategory#draw PackingCategory}.
      * This renders the Cooler instead of the Blaze Burner and sets the text, if required.
      */
-    @Inject(method = "draw", at = @At(value = "INVOKE", target = "getRequiredHeat"), cancellable = true)
+    @Inject(
+        method = "Lcom/simibubi/create/compat/jei/category/PackingCategory;draw(Lcom/simibubi/create/content/processing/basin/BasinRecipe;Lmezz/jei/api/gui/ingredient/IRecipeSlotsView;Lnet/minecraft/client/gui/GuiGraphics;DD)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;getRequiredHeat()Lcom/simibubi/create/content/processing/recipe/HeatCondition;"
+        ),
+        cancellable = true,
+        remap = false
+    )
     private void inDraw(BasinRecipe recipe, IRecipeSlotsView iRecipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY, CallbackInfo ci) {
         if (recipe.getRequiredHeat().name() == "COOLED") {
             cooler.withColdness(ColdnessLevel.FROSTING)

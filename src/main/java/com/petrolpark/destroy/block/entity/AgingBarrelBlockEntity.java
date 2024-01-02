@@ -13,6 +13,7 @@ import com.petrolpark.destroy.block.AgingBarrelBlock;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.recipe.AgingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
+import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
@@ -201,9 +202,8 @@ public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGog
         if (newState != oldState) {
             getLevel().setBlockAndUpdate(getBlockPos(), newState); // This is the bit it thinks might be null
             sendData();
-            // TODO uncomment once sound has been implemented
-            //if (newState.getValue(AgingBarrelBlock.PROGRESS) != 0) DestroySoundEvents.AGING_BARREL_BALLOON.playOnServer(level, getBlockPos());
-            //if (timer < 0) DestroySoundEvents.AGING_BARREL_OPEN.playOnServer(level, getBlockPos()); // If the Barrel has been opened
+            if (newState.getValue(AgingBarrelBlock.PROGRESS) != 0) DestroySoundEvents.AGING_BARREL_BALLOON.playOnServer(level, getBlockPos());
+            if (timer < 0) DestroySoundEvents.AGING_BARREL_OPEN.playOnServer(level, getBlockPos()); // If the Barrel has been opened
         };
     };
 
@@ -226,7 +226,7 @@ public class AgingBarrelBlockEntity extends SmartBlockEntity implements IHaveGog
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         containedFluidTooltip(tooltip, isPlayerSneaking, fluidCapability);
         if (timer != -1) {
-            DestroyLang.translate("tooltip.aging_barrel.progress", (int)((1 - (timer/(float)totalTime)) * 100) + "%")
+            DestroyLang.translate("tooltip.aging_barrel.progress", (int)((0.995 - (timer/(float)totalTime)) * 100) + "%")
                 .style(ChatFormatting.WHITE)
                 .forGoggles(tooltip);
         };

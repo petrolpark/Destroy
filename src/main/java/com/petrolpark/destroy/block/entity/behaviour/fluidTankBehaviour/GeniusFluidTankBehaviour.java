@@ -62,7 +62,7 @@ public class GeniusFluidTankBehaviour extends SmartFluidTankBehaviour {
         public int fill(FluidStack resource, FluidAction action) {
             int filled = super.fill(resource, action);
             if (filled == 0 && getSpace() > 0) { // If we wouldn't usually be able to insert, and we're not full (i.e. the Fluids are 'different')
-                if (!DestroyFluids.MIXTURE.get().isSame(resource.getFluid()) || !DestroyFluids.MIXTURE.get().isSame(fluid.getFluid())) return 0;
+                if (!DestroyFluids.isMixture(resource) || !DestroyFluids.isMixture(fluid)) return 0;
                 if (!resource.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND) || !fluid.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND)) return 0;
                 Mixture existingMixture = Mixture.readNBT(fluid.getOrCreateTag().getCompound("Mixture"));
                 Mixture addedMixture = Mixture.readNBT(resource.getOrCreateTag().getCompound("Mixture"));

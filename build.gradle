@@ -5,6 +5,7 @@ buildscript {
         jcenter()
         maven { url = 'https://repo.spongepowered.org/repository/maven-public' } // Mixins
         maven { url = 'https://maven.parchmentmc.org' } // Parchment
+        maven { url = 'https://api.modrinth.com/maven' } // Modrinth
     }
     dependencies {
         classpath "net.minecraftforge.gradle:ForgeGradle:${forgegradle_version}" // Forge
@@ -19,8 +20,8 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
-apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
+apply plugin: 'org.spongepowered.mixin'
 
 jarJar.enable()
 
@@ -33,10 +34,16 @@ mixin {
     add sourceSets.main, "destroy.refmap.json"
 }
 
+// Workaround for SpongePowered/MixinGradle#38, copied from Create source code
+afterEvaluate {
+    tasks.configureReobfTaskForReobfJar.mustRunAfter(tasks.compileJava)
+    tasks.configureReobfTaskForReobfJarJar.mustRunAfter(tasks.compileJava)
+}
+
 // Mod Details
 version = "${mod_version}"
 group = 'com.petrolpark.destroy'
-archivesBaseName = 'destroy'
+archivesBaseName = "destroy-${minecraft_version}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17) //Set Java version
 
@@ -107,10 +114,16 @@ repositories {
     maven { // Blueprint
         url = "https://maven.jaackson.me"
     }
-    maven { // Fallback
-        name = "Modrinth"
-        url = "https://api.modrinth.com/maven"
-        content {
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        forRepositories(fg.repository)
+        filter {
             includeGroup "maven.modrinth"
         }
     }
@@ -156,10 +169,17 @@ dependencies {
     implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
     // Farmer's Delight
+    compileOnly fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
     implementation fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
 
     // Blueprint
+    compileOnly fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
     implementation fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
+
+
+    // ANNOTATION PROCESSORS
+
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }
 
 jar {
@@ -198,4 +218,8 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+tasks.withType(Copy) {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }

@@ -11,18 +11,33 @@ import net.minecraft.world.InteractionHand;
 @Mixin(ValueSettingsPacket.class)
 public interface ValueSettingsPacketAccessor {
     
-    @Accessor("row")
+    @Accessor(
+        value = "row",
+        remap = false
+    )
     int getRow();
 
-    @Accessor("value")
+    @Accessor(
+        value = "value",
+        remap = false
+    )
 	int getValue();
 
-    @Accessor("interactHand")
+    @Accessor(
+        value = "interactHand",
+        remap = false
+    )
 	InteractionHand getInteractHand();
 
-    @Accessor("side")
+    @Accessor(
+        value = "side",
+        remap = false
+    )
 	Direction getSide();
 
-    @Accessor("ctrlDown")
+    @Accessor(
+        value = "ctrlDown",
+        remap = false
+    )
 	boolean getCtrlDown();
 };

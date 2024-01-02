@@ -1,10 +1,12 @@
 package com.petrolpark.destroy.advancement;
 
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.simibubi.create.foundation.advancement.SimpleCreateTrigger;
 
 import net.minecraft.resources.ResourceLocation;
 
+@MoveToPetrolparkLibrary
 public class SimpleDestroyTrigger extends SimpleCreateTrigger {
 
     private ResourceLocation trueID;

@@ -17,11 +17,11 @@ import java.util.concurrent.CompletableFuture;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.capability.player.PlayerBadges;
 import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.registries.RegistryObject;
 
 public class BadgeHandler {
 
@@ -55,15 +55,21 @@ public class BadgeHandler {
                     JsonObject badgeObject = element.getAsJsonObject();
                     String date = badgeObject.get("date").getAsString();
                     date = date.substring(0, date.length() - 1);
-                    RegistryObject<Badge> badgeEntry = DestroyBadges.getBadge(badgeObject.get("namespace").getAsString(), badgeObject.get("id").getAsString());
-                    if (badgeEntry != null) {
+                    Badge badge = Badge.getBadge(badgeObject.get("namespace").getAsString(), badgeObject.get("id").getAsString());
+                    Destroy.LOGGER.info(badgeObject.get("namespace").getAsString(), badgeObject.get("id").getAsString());
+                    if (badge != null) {
                         badges.add(Pair.of(
-                            badgeEntry.get(),
+                            badge,
                             Date.from(LocalDateTime.parse(date).toInstant(ZoneOffset.UTC))
                         ));
                     };
                 };
-                player.getCapability(PlayerBadges.Provider.PLAYER_BADGES).ifPresent(playerBadges -> playerBadges.setBadges(badges));
+                player.getCapability(PlayerBadges.Provider.PLAYER_BADGES).ifPresent(playerBadges -> {
+                    playerBadges.setBadges(badges);
+                    // Award Advancements for Badges
+                    playerBadges.getBadges().forEach(pair ->
+                        pair.getFirst().grantAdvancement(player));
+                });
             } catch (Exception e) {};
         }).join();
 

@@ -1,0 +1,22 @@
+{
+    "conditions": [
+        {
+            "type": "forge:mod_loaded",
+            "modid": "farmersdelight"
+        }
+    ],
+    "type": "farmersdelight:cutting",
+    "ingredients": [
+      {
+        "tag": "forge:crops/onion"
+      }
+    ],
+    "result": [
+      {
+        "item": "minecraft:air"
+      }
+    ],
+    "tool": {
+      "tag": "forge:tools/knives"
+    }
+  }

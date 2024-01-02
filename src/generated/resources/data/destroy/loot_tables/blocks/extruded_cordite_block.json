@@ -1,49 +1,21 @@
 {
-    "type": "minecraft:block",
-    "pools": [
-      {
-        "bonus_rolls": 0.0,
-        "entries": [
-          {
-            "type": "minecraft:alternatives",
-            "children": [
-              {
-                "type": "minecraft:item",
-                "conditions": [
-                  {
-                    "condition": "minecraft:match_tool",
-                    "predicate": {
-                      "enchantments": [
-                        {
-                          "enchantment": "minecraft:silk_touch",
-                          "levels": {
-                            "min": 1
-                          }
-                        }
-                      ]
-                    }
-                  }
-                ],
-                "name": "destroy:extruded_cordite_block"
-              },
-              {
-                "type": "minecraft:item",
-                "functions": [
-                  {
-                    "add": false,
-                    "count": 5,
-                    "function": "minecraft:set_count"
-                  },
-                  {
-                    "function": "minecraft:explosion_decay"
-                  }
-                ],
-                "name": "destroy:cordite_rods"
-              }
-            ]
-          }
-        ],
-        "rolls": 1.0
-      }
-    ]
-  }
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "destroy:extruded_cordite_block"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "destroy:blocks/extruded_cordite_block"
+}

@@ -108,6 +108,5 @@
 			"color": 0,
 			"children": [4, 5, 6]
 		}
-	],
-	"render_type": "translucent"
+	]
 }

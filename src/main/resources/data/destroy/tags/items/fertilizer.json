@@ -1,0 +1,8 @@
+{
+    "replace": false,
+    "values": [
+        "minecraft:bone_meal",
+        "minecraft:rotten_flesh",
+        "minectaft:rooted_dirt"
+    ]
+}

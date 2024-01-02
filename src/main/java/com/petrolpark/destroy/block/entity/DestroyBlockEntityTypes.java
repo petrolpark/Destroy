@@ -66,6 +66,7 @@ public class DestroyBlockEntityTypes {
 
     public static final BlockEntityEntry<DifferentialBlockEntity> DIFFERENTIAL = REGISTRATE
         .blockEntity("differential", DifferentialBlockEntity::new)
+        //TODO instance
         .validBlock(DestroyBlocks.DIFFERENTIAL)
         .renderer(() -> DifferentialRenderer::new)
         .register();

@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "conditions": [
+        {
+            "type": "forge:mod_loaded",
+            "modid": "cloudstorage"
+        }
+    ],
+    "pattern": [
+      " B ",
+      "LSL",
+      "LSL"
+    ],
+    "key": {
+      "B": {
+        "item": "cloudstorage:balloon"
+      },
+      "L": {
+        "tag": "minecraft:logs"
+      },
+      "S": {
+        "tag": "minecraft:wooden_slabs"
+      }
+    },
+    "result": {
+      "item": "destroy:aging_barrel"
+    }
+  }

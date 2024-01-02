@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+      "tag": "forge:dusts/rhodium"
+    },
+    "result": "destroy:rhodium_ingot",
+    "cookingtime": 200
+  }

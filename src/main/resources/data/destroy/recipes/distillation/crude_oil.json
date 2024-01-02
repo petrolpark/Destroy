@@ -9,7 +9,7 @@
     "results": [
         {
             "fluid": "destroy:mixture",
-            "amount": 8,
+            "amount": 9,
             "nbt": {
                 "Mixture": {
                     "TranslationKey": "fluid.destroy.molten_sulfur",
@@ -25,7 +25,7 @@
         },
         {
             "fluid": "destroy:mixture",
-            "amount": 23,
+            "amount": 24,
             "nbt": {
                 "Mixture": {
                     "TranslationKey": "fluid.destroy.mixed_xylenes",
@@ -67,32 +67,13 @@
         },
         {
             "fluid": "destroy:mixture",
-            "amount": 52,
+            "amount": 53,
             "nbt": {
                 "Mixture": {
                     "Contents": [
                         {
                             "Molecule": "destroy:benzene",
                             "Concentration": 11.22103592
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "fluid": "destroy:mixture",
-            "amount": 3,
-            "nbt": {
-                "Mixture": {
-                    "TranslationKey": "fluid.destroy.cyclopentadiene",
-                    "Contents": [
-                        {
-                            "Molecule": "destroy:proton",
-                            "Concentration": 12.13258097
-                        },
-                        {
-                            "Molecule": "destroy:cyclopentadienide",
-                            "Concentration": 12.13258097
                         }
                     ]
                 }
@@ -107,15 +88,19 @@
                     "Contents": [
                         {
                             "Molecule": "destroy:methane",
-                            "Concentration": 0.007024359
+                            "Concentration": 0.00314171
                         },
                         {
                             "Molecule": "destroy:ethene",
-                            "Concentration": 0.0210730786
+                            "Concentration": 0.00942513
                         },
                         {
                             "Molecule": "destroy:propene",
-                            "Concentration": 0.01404871907
+                            "Concentration": 0.00628342
+                        },
+                        {
+                            "Molecule": "destroy:butadiene",
+                            "Concentration": 0.00628342
                         }
                     ]
                 }

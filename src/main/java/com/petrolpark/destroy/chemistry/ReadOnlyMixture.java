@@ -53,6 +53,11 @@ public class ReadOnlyMixture {
      * The full translation key of this Mixture if it has a custom name, for example {@code destroy.mixture.brine}.
      */
     protected String translationKey;
+
+    /**
+     * The RGBA color of this Mixture.
+     */
+    protected Integer color;
     
     /**
      * How hot (in kelvins) this Mixture is. Temperature affects the rate of {@link Reaction Reactions}.
@@ -108,6 +113,10 @@ public class ReadOnlyMixture {
      */
     public static ReadOnlyMixture readNBT(CompoundTag compound) {
         ReadOnlyMixture mixture = new ReadOnlyMixture();
+        if (compound == null) {
+            Destroy.LOGGER.warn("Null Mixture read");
+            return mixture;  
+        };
         mixture.translationKey = compound.getString("TranslationKey"); // Set to "" if the key is not present
         if (compound.contains("Temperature")) mixture.temperature = compound.getFloat("Temperature");
         ListTag contents = compound.getList("Contents", 10);
@@ -118,6 +127,7 @@ public class ReadOnlyMixture {
             mixture.states.put(molecule, moleculeTag.getFloat("Gaseous"));
         });
         mixture.updateName();
+        mixture.updateColor();
         return mixture;
     };
 
@@ -129,6 +139,14 @@ public class ReadOnlyMixture {
     public Component getName() {
         if (name == null) updateName();
         return name;
+    };
+
+    /**
+     * The {@link ReadOnlyMixture#color color} of this Mixture.
+     */
+    public int getColor() {
+        if (color == null) updateColor();
+        return color;
     };
 
     /**
@@ -188,7 +206,7 @@ public class ReadOnlyMixture {
      */
     public ReadOnlyMixture addMolecule(Molecule molecule, float concentration) {
 
-        if (molecule == null) {
+        if (molecule == null || concentration == 0f) {
             return this;
         };
         if (molecule.isHypothetical()) {
@@ -251,7 +269,7 @@ public class ReadOnlyMixture {
         return tooltip;
     };
 
-    public int getColor() {
+    public void updateColor() {
         float totalColorContribution = 0f;
         float totalRed = 0;
         float totalGreen = 0;
@@ -267,7 +285,7 @@ public class ReadOnlyMixture {
             totalBlue += color.getBlue() * colorContribution;
             totalAlpha = Math.max(totalAlpha, color.getAlpha());
         };
-        return new Color((int)(totalRed / totalColorContribution), (int)(totalGreen / totalColorContribution), (int)(totalBlue / totalColorContribution), totalAlpha).getRGB();
+        color = new Color((int)(totalRed / totalColorContribution), (int)(totalGreen / totalColorContribution), (int)(totalBlue / totalColorContribution), totalAlpha).getRGB();
     };
 
     /**
@@ -294,6 +312,7 @@ public class ReadOnlyMixture {
         List<Molecule> anions = new ArrayList<>();
         List<Molecule> solvents = new ArrayList<>();
         List<Molecule> impurities = new ArrayList<>();
+        boolean thereAreNeutralMolecules = false;
         for (Entry<Molecule, Float> entry : contents.entrySet()) {
             Molecule molecule = entry.getKey();
             if (neutral && (molecule == DestroyMolecules.HYDROXIDE || molecule == DestroyMolecules.PROTON)) continue;
@@ -310,6 +329,7 @@ public class ReadOnlyMixture {
                     products.add(molecule);
                 };
             };
+            if (molecule.getCharge() == 0) thereAreNeutralMolecules = true;
         };
 
         // Check for salts
@@ -333,25 +353,21 @@ public class ReadOnlyMixture {
                 name = (thereAreImpurities ? DestroyLang.translate("mixture.dirty").space() : DestroyLang.builder())
                     .add(solvents.get(0).getName(iupac).plainCopy())
                     .component();
-                return;
             } else if (solvents.size() == 2) { // Two solvents, no products
                 name = (thereAreImpurities ? DestroyLang.translate("mixture.dirty").space() : DestroyLang.builder())
                     .add(DestroyLang.translate("mixture.and", 
                         solvents.get(0).getName(iupac).getString(), solvents.get(1).getName(iupac).getString()
                     )).component();
-                return;
             } else if (thereAreSolvents) { // Many solvents, no products
                 name = (thereAreImpurities ? DestroyLang.translate("mixture.dirty").space() : DestroyLang.builder())
                     .add(DestroyLang.translate("mixture.solvents"))
                     .component();
-                return;
             };
         } else if (products.size() == 1) { // One product
             name = (thereAreImpurities ? DestroyLang.translate("mixture.impure").space() : DestroyLang.builder())
                 .add(products.get(0).getName(iupac).plainCopy())
                 .add(thereAreSolvents ? DestroyLang.builder().space().translate("mixture.solution") : Lang.text(""))
                 .component();
-            return;
         } else if (products.size() == 2) { // Two products
             Collections.sort(products, (p1, p2) -> p1.getName(iupac).getString().compareTo(p2.getName(iupac).getString()));
             name = (thereAreImpurities ? DestroyLang.translate("mixture.impure").space() : DestroyLang.builder())
@@ -359,9 +375,11 @@ public class ReadOnlyMixture {
                     products.get(0).getName(iupac).getString(), products.get(1).getName(iupac).getString()
                 )).add(thereAreSolvents ? DestroyLang.builder().space().translate("mixture.solution") : Lang.text(""))
                 .component();
-            return;
-        } else {}; // Many products
+        } else { // Many products
+        }; 
 
-        name = DestroyLang.translate("mixture.mixture").component();
+        if (name == null) name = DestroyLang.translate("mixture.mixture").component();
+
+        if (!thereAreNeutralMolecules && name != null) name = DestroyLang.translate("mixture.supersaturated", name.getString()).component();
     };
 };

@@ -43,10 +43,6 @@ public class VatFluidTankBehaviour extends GeniusFluidTankBehaviour {
         this.vatCapacity = vatCapacity;
     };
 
-    public static boolean isMixture(FluidStack fs) {
-        return DestroyFluids.MIXTURE.get().isSame(fs.getFluid());
-    };
-
     public VatFluidTank getLiquidHandler() {
         return getLiquidTank().getTank();
     };
@@ -138,9 +134,9 @@ public class VatFluidTankBehaviour extends GeniusFluidTankBehaviour {
      * Replace all the gas in the gas tank with room temperature and pressure air.
      * @return The gas that was previously stored
      */
-    public FluidStack flush() {
+    public FluidStack flush(float temperature) {
         FluidStack oldGas = getGasHandler().getFluid();
-        getGasHandler().setFluid(DestroyFluids.air(vatCapacity - getLiquidHandler().getFluidAmount()));
+        getGasHandler().setFluid(DestroyFluids.air(vatCapacity - getLiquidHandler().getFluidAmount(), temperature));
         getGasHandler().flushed = true;
         return oldGas;
     };
@@ -178,7 +174,7 @@ public class VatFluidTankBehaviour extends GeniusFluidTankBehaviour {
         @Override
 		public int fill(FluidStack resource, FluidAction action) {
             if (liquidFull) return 0;
-            if (!resource.getFluid().isSame(DestroyFluids.MIXTURE.get())) return 0;
+            if (!DestroyFluids.isMixture(resource)) return 0;
 
             boolean simulate = action == FluidAction.SIMULATE;
 
@@ -223,7 +219,7 @@ public class VatFluidTankBehaviour extends GeniusFluidTankBehaviour {
 
         @Override
         public boolean isFluidValid(int tank, FluidStack stack) {
-            return isMixture(stack);
+            return DestroyFluids.isMixture(stack);
         };
 
     };
@@ -260,7 +256,7 @@ public class VatFluidTankBehaviour extends GeniusFluidTankBehaviour {
 
             @Override
             public boolean isFluidValid(int tank, FluidStack stack) {
-                return isMixture(stack);
+                return DestroyFluids.isMixture(stack);
             };
 
             @Override

@@ -1,0 +1,13 @@
+{
+    "criteria": {
+      "nothing": {
+        "conditions": {},
+        "trigger": "minecraft:impossible"
+      }
+    },
+    "requirements": [
+      [
+        "nothing"
+      ]
+    ]
+  }

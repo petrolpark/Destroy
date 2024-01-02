@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableSet;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Formula.Topology;
@@ -85,7 +86,7 @@ public class Molecule implements INameableProduct {
      */
     private float dipoleMoment;
     /**
-     * The molara heat capacity in joules per mole-kelvin of this Molecule.
+     * The molar heat capacity in joules per mole-kelvin of this Molecule.
      */
     private float molarHeatCapacity;
     /**
@@ -615,6 +616,9 @@ public class Molecule implements INameableProduct {
          */
         public MoleculeBuilder charge(int charge) {
             molecule.charge = charge;
+            if (charge != 0) {
+                boilingPointInKelvins(Float.MAX_VALUE);
+            };
             return this;
         };
 
@@ -658,9 +662,7 @@ public class Molecule implements INameableProduct {
          * @return This Molecule Builder
          */
         public MoleculeBuilder specificHeatCapacity(float specificHeatCapacity) {
-            molecule.molarHeatCapacity = specificHeatCapacity * 1000 / calculateMass();
-            hasForcedMolarHeatCapacity = true;
-            return this;
+            return molarHeatCapacity(specificHeatCapacity * 1000 / calculateMass());
         };
 
         /**
@@ -670,6 +672,7 @@ public class Molecule implements INameableProduct {
          * @return This Molecule Builder
          */
         public MoleculeBuilder molarHeatCapacity(float molarHeatCapacity) {
+            if (molarHeatCapacity <= 0f) throw e("Molar heat capacity must be greater than 0.");
             molecule.molarHeatCapacity = molarHeatCapacity;
             hasForcedMolarHeatCapacity = true;
             return this;
@@ -682,6 +685,7 @@ public class Molecule implements INameableProduct {
          * @return This Molecule Builder
          */
         public MoleculeBuilder latentHeat(float latentHeat) {
+            if (latentHeat <= 0f) throw e("Latent heat of fusion must be greater than 0.");
             molecule.latentHeat = latentHeat;
             hasForcedLatentHeat = true;
             return this;
@@ -853,6 +857,11 @@ public class Molecule implements INameableProduct {
 
     private void refreshFunctionalGroups() {
         structure.refreshFunctionalGroups();
+    };
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("ID", getFullID()).toString();
     };
 
 };

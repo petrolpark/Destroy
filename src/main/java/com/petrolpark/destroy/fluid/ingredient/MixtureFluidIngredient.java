@@ -25,6 +25,7 @@ public abstract class MixtureFluidIngredient extends FluidIngredient {
         registerMixtureFluidIngredientSubtype(new SaltFluidIngredient());
         registerMixtureFluidIngredientSubtype(new MoleculeTagFluidIngredient());
         registerMixtureFluidIngredientSubtype(new RefrigerantDummyFluidIngredient());
+        registerMixtureFluidIngredientSubtype(new IonFluidIngredient());
     };
 
     public static void registerMixtureFluidIngredientSubtype(MixtureFluidIngredient mixtureFluidIngredient) {

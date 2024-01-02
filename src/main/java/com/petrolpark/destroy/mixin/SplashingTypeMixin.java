@@ -23,7 +23,11 @@ public class SplashingTypeMixin {
      * @param level
      * @param ci
      */
-    @Inject(method = "affectEntity", at = @At("RETURN"))
+    @Inject(
+        method = "Lcom/simibubi/create/content/kinetics/fan/processing/AllFanProcessingTypes$SplashingType;affectEntity(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/Level;)V",
+        at = @At("RETURN"),
+        remap = false
+    )
     public void inAffectEntity(Entity entity, Level level, CallbackInfo ci) {
         if (entity instanceof LivingEntity livingEntity) {
             for (ItemStack armor : livingEntity.getArmorSlots()) ChemistryDamageHelper.decontaminate(armor);

@@ -183,7 +183,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             // Heating
             float energyChange = heatingPower / 20;
             energyChange += (LevelPollution.getLocalTemperature(getLevel(), getBlockPos()) - cachedMixture.getTemperature()) * vat.getConductance() / 20; // Fourier's Law (sort of), the divide by 20 is for 20 ticks per second
-            if (Math.abs(energyChange) > 0.0001f) {
+            if (Math.abs(energyChange) > 0.0001f && fluidAmount != 0d) {
                 cachedMixture.heat(energyChange / (float)fluidAmount); 
             };
 
@@ -220,7 +220,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             // Releasing gas if there is an open vent
             VatSideBlockEntity openVent = getOpenVent();
             if (openVent != null && !getGasTank().isEmptyOrFullOfAir()) {
-                PollutionHelper.pollute(getLevel(), openVent.getBlockPos().relative(openVent.direction), 3, tankBehaviour.flush());
+                PollutionHelper.pollute(getLevel(), openVent.getBlockPos().relative(openVent.direction), 10, tankBehaviour.flush(cachedMixture.getTemperature()));
             };
 
             inventoryChanged = false;
@@ -416,7 +416,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
 
         vat = Optional.of(newVat.get());
         finalizeVatConstruction();
-        tankBehaviour.flush();
+        updateCachedMixture();
+        tankBehaviour.flush(cachedMixture.getTemperature());
         updateCachedMixture();
 
         return true;
@@ -571,7 +572,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     @SuppressWarnings("null")
     public float getPressure() {
         if (getLevel().isClientSide()) return pressure.getChaseTarget(); // It thinks getLevel() might be null (it's not)
-        if (!getVatOptional().isPresent() || getGasTank().isEmpty()) return 0f;
+        if (!getVatOptional().isPresent() || getOpenVent() != null) return 0f;
         return Reaction.GAS_CONSTANT * getTemperature() * ReadOnlyMixture.readNBT(getGasTank().getFluid().getOrCreateChildTag("Mixture")).getTotalConcentration() - AIR_PRESSURE;
     };
 

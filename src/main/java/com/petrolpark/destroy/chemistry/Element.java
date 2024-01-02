@@ -12,7 +12,7 @@ import com.petrolpark.destroy.client.gui.MoleculeRenderer.Geometry;
 public enum Element {
 
     // In the order they should appear in Empirical Formulae
-    R_GROUP("R", 0.0001f, 2.5f, new double[]{1}),
+    R_GROUP("R", 0.0001f, 2.5f, new double[]{1, 2, 3}),
     CARBON("C", 12.01f, 2.5f, new double[]{4}),
     HYDROGEN("H", 1.01f, 2.1f, new double[]{1}),
     SULFUR("S", 32.07f, 2.5f, new double[]{2, 0, 4, 6}),

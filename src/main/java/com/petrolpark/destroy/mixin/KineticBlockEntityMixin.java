@@ -26,7 +26,11 @@ public class KineticBlockEntityMixin {
      * @param state
      * @param neighbours
      */
-    @Inject(method = "addPropagationLocations", at = @At(value = "HEAD"))
+    @Inject(
+        method = "Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;addPropagationLocations*(Lcom/simibubi/create/content/kinetics/base/IRotate;Lnet/minecraft/world/level/block/state/BlockState;Ljava/util/List;)Ljava/util/List;",
+        at = @At("HEAD"),
+        remap = false
+    )
     public void inAddPropagationLocations(IRotate block, BlockState state, List<BlockPos> neighbours, CallbackInfoReturnable<List<BlockPos>> cir) {
         if (!thisKineticBlockEntity().hasLevel()) return;
         BlockPos pos = thisKineticBlockEntity().getBlockPos();

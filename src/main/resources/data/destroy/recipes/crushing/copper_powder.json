@@ -1,0 +1,14 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+      {
+        "tag": "forge:ingots/copper"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:copper_powder"
+      }
+    ],
+    "processingTime": 100
+  }

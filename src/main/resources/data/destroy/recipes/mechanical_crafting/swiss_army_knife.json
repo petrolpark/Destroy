@@ -1,9 +1,9 @@
 {
     "type": "create:mechanical_crafting",
     "pattern": [
-      "PPPPPP",
-      "MIASHO",
-      "PPPPPP"
+      "PPPPPPP",
+      "MIASHOD",
+      "PPPPPPP"
     ],
     "key": {
       "P": {
@@ -26,6 +26,9 @@
       },
       "O": {
         "item": "minecraft:iron_hoe"
+      },
+      "D": {
+        "item": "destroy:nanodiamonds"
       }
     },
     "result": {

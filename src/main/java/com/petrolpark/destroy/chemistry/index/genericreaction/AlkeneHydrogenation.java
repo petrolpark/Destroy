@@ -26,7 +26,7 @@ public class AlkeneHydrogenation extends AlkeneAddition {
     @Override
     public void transform(ReactionBuilder builder) {
         builder.addReactant(DestroyMolecules.HYDROGEN)
-            .addSimpleItemTagCatalyst(AllTags.forgeItemTag("ingots/nickel"), 1f);
+            .addSimpleItemTagCatalyst(AllTags.forgeItemTag("dusts/nickel"), 1f);
     };
     
 };

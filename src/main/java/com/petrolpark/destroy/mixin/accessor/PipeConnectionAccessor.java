@@ -13,18 +13,33 @@ import com.simibubi.create.content.fluids.PipeConnection.Flow;
 @Mixin(PipeConnection.class)
 public interface PipeConnectionAccessor {
   
-    @Accessor("flow")
+    @Accessor(
+        value = "flow",
+        remap = false
+    )
     public Optional<Flow> getFlow();
 
-    @Accessor("flow")
+    @Accessor(
+        value = "flow",
+        remap = false
+    )
     public void setFlow(Optional<Flow> flow);
 
-    @Accessor("source")
+    @Accessor(
+        value = "source",
+        remap = false
+    )
     public Optional<FlowSource> getSource();
 
-    @Accessor("network")
+    @Accessor(
+        value = "network",
+        remap = false
+    )
     public Optional<FluidNetwork> getNetwork();
 
-    @Accessor("network")
+    @Accessor(
+        value = "network",
+        remap = false
+    )
     public void setNetwork(Optional<FluidNetwork> network);
 };
