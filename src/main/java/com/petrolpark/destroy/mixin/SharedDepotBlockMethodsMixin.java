@@ -34,6 +34,6 @@ public class SharedDepotBlockMethodsMixin {
         remap = false
     )
     private static void inOnUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray, CallbackInfoReturnable<InteractionResult> cir, DepotBehaviour behaviour, ItemStack heldItem, boolean wasEmptyHanded, boolean shouldntPlaceItem, ItemStack mainItemStack, ItemStackHandler outputs, TransportedItemStack transported) {
-        behaviour.setHeldItem(DirectionalTransportedItemStack.copy(transported));
+        behaviour.setHeldItem(DirectionalTransportedItemStack.copyFully(transported));
     };
 };

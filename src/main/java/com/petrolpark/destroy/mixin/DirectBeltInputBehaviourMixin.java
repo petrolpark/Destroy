@@ -24,7 +24,7 @@ public class DirectBeltInputBehaviourMixin {
     )
     public void inHandleInsertion(TransportedItemStack stack, Direction side, boolean simulate, CallbackInfoReturnable<ItemStack> cir) {
         if (!(stack instanceof DirectionalTransportedItemStack) && IDirectionalOnBelt.isDirectional(stack.stack)) { // If not already cast to a Directional transported stack
-            cir.setReturnValue(((DirectBeltInputBehaviour)(Object)this).handleInsertion(DirectionalTransportedItemStack.copy(stack), side, simulate));
+            cir.setReturnValue(((DirectBeltInputBehaviour)(Object)this).handleInsertion(DirectionalTransportedItemStack.copyFully(stack), side, simulate));
         };
     };
 };

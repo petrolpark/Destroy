@@ -11,11 +11,12 @@ import net.minecraft.world.level.block.Rotation;
 public class DirectionalTransportedItemStack extends TransportedItemStack {
 
     @Nullable
-    public Rotation rotation; // Rotation from North
+    protected Rotation rotation; // Rotation from South
 
     public DirectionalTransportedItemStack(ItemStack stack) {
         super(stack);
-        rotation = Rotation.NONE;
+        rotation = stack.getItem() instanceof IDirectionalOnBelt item ? item.rotationForPlacement(stack) : null;
+        if (rotation == null) rotation = Rotation.NONE;
         refreshAngle();
     };
 
@@ -24,8 +25,17 @@ public class DirectionalTransportedItemStack extends TransportedItemStack {
         return 0f;
     };
 
+    public Rotation getRotation() {
+        return rotation;
+    };
+
     public void rotate(Rotation appliedRotation) {
         rotation = appliedRotation.getRotated(rotation);
+        refreshAngle();
+    };
+
+    public void setRotation(Rotation rotation) {
+        this.rotation = rotation;
         refreshAngle();
     };
 
@@ -37,10 +47,10 @@ public class DirectionalTransportedItemStack extends TransportedItemStack {
     public int getTargetAngle() {
         if (rotation == null) return 0;
         switch (rotation) {
-            case NONE: return 0;
-            case CLOCKWISE_90: return 270;
-            case CLOCKWISE_180: return 180;
-            case COUNTERCLOCKWISE_90: return 90;
+            case NONE: return 180;
+            case CLOCKWISE_90: return 90;
+            case CLOCKWISE_180: return 0;
+            case COUNTERCLOCKWISE_90: return 270;
             default: return 0;
         }
     };
@@ -67,9 +77,16 @@ public class DirectionalTransportedItemStack extends TransportedItemStack {
 		copy.processingTime = stack.processingTime;
         //
         if (stack instanceof DirectionalTransportedItemStack directionalStack) {
-            copy.rotation = directionalStack.rotation;
+            if (directionalStack.rotation != null) copy.rotation = directionalStack.rotation;
             copy.refreshAngle();
         };
+        return copy;
+    };
+
+    public static DirectionalTransportedItemStack copyFully(TransportedItemStack stack) {
+        DirectionalTransportedItemStack copy = copy(stack);
+        copy.locked = stack.locked;
+        copy.lockedExternally = stack.lockedExternally;
         return copy;
     };
 

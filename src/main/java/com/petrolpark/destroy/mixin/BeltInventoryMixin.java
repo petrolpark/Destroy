@@ -22,7 +22,7 @@ public abstract class BeltInventoryMixin {
     )
     public void inInsert(TransportedItemStack stack, CallbackInfo ci) {
         if (!(stack instanceof DirectionalTransportedItemStack) && IDirectionalOnBelt.isDirectional(stack.stack)) {
-            invokeInsert(DirectionalTransportedItemStack.copy(stack));
+            invokeInsert(DirectionalTransportedItemStack.copyFully(stack));
             ci.cancel();
         };
     };

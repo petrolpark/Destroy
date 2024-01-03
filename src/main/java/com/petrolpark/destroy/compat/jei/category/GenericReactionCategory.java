@@ -56,7 +56,8 @@ public class GenericReactionCategory extends ReactionCategory {
             Reaction reaction = genericReaction.getExampleReaction();
             if (reaction != null) {
                 // Add the Generic Reaction to JEI.
-                RECIPES.put(genericReaction, GenericReactionRecipe.create(genericReaction));
+                ReactionRecipe recipe = GenericReactionRecipe.create(genericReaction);
+                if (recipe != null) RECIPES.put(genericReaction, recipe);
                 for (Molecule product : reaction.getProducts()) {
                     if (product.isNovel()) {
                         // Determine what functional groups this Generic Reaction can produce

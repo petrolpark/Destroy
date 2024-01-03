@@ -26,10 +26,9 @@ public class TransportedItemStackMixin {
     )
     private static void inRead(CompoundTag nbt, CallbackInfoReturnable<TransportedItemStack> cir, TransportedItemStack stack) {
         if (IDirectionalOnBelt.isDirectional(stack.stack)) {
-            DirectionalTransportedItemStack directionalStack = DirectionalTransportedItemStack.copy(stack);
+            DirectionalTransportedItemStack directionalStack = DirectionalTransportedItemStack.copyFully(stack);
             if (nbt.contains("Rotation", Tag.TAG_INT)) {
-                directionalStack.rotation = Rotation.values()[nbt.getInt("Rotation")];
-                directionalStack.refreshAngle();
+                directionalStack.setRotation(Rotation.values()[nbt.getInt("Rotation")]);
             };
             cir.setReturnValue(directionalStack);
             cir.cancel();

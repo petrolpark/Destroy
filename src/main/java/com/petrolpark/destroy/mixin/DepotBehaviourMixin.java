@@ -1,6 +1,7 @@
 package com.petrolpark.destroy.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -14,7 +15,7 @@ import com.simibubi.create.content.logistics.depot.DepotBehaviour;
 import net.minecraft.world.item.ItemStack;
 
 @Mixin(DepotBehaviour.class)
-public class DepotBehaviourMixin {
+public abstract class DepotBehaviourMixin {
     
     @Inject(
         method = "Lcom/simibubi/create/content/logistics/depot/DepotBehaviour;insert(Lcom/simibubi/create/content/kinetics/belt/transport/TransportedItemStack;Z)Lnet/minecraft/world/item/ItemStack;",
@@ -24,7 +25,7 @@ public class DepotBehaviourMixin {
     )
     public void inInsert(TransportedItemStack heldItem, boolean simulate, CallbackInfoReturnable<ItemStack> cir) {
         if (!(heldItem instanceof DirectionalTransportedItemStack) && IDirectionalOnBelt.isDirectional(heldItem.stack)) {
-            cir.setReturnValue(((DepotBehaviour)(Object)this).insert(DirectionalTransportedItemStack.copy(heldItem), simulate));
+            cir.setReturnValue(((DepotBehaviour)(Object)this).insert(DirectionalTransportedItemStack.copyFully(heldItem), simulate));
             cir.cancel();
         };
     };
@@ -38,4 +39,7 @@ public class DepotBehaviourMixin {
     public void inTick(TransportedItemStack heldItem, CallbackInfoReturnable<Boolean> ci, float diff) {
         if (heldItem instanceof DirectionalTransportedItemStack directionalStack) directionalStack.refreshAngle();
     };
+
+    @Accessor("Lcom/simibubi/create/content/logistics/depot/DepotBehaviour;heldItem:Lcom/simibubi/create/content/kinetics/belt/transport/TransportedItemStack;")
+    public abstract TransportedItemStack getHeldItem();
 };

@@ -34,6 +34,7 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
@@ -154,6 +155,15 @@ public class DestroyBlocks {
         .properties(p -> p
             .noCollission()
         ).item()
+        .transform(customItemModel())
+        .register();
+
+    public static final BlockEntry<KeypunchBlock> KEYPUNCH = REGISTRATE.block("keypunch", KeypunchBlock::new)
+        .initialProperties(SharedProperties::softMetal)
+        .properties(p -> p
+            .noOcclusion()
+        ).item()
+        .removeTab(CreativeModeTabs.SEARCH)
         .transform(customItemModel())
         .register();
 
@@ -512,6 +522,7 @@ public class DestroyBlocks {
         .initialProperties(() -> Blocks.BROWN_MUSHROOM)
         .item()
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+        .removeTab(CreativeModeTabs.SEARCH)
         .build()
         .register();
 
@@ -650,6 +661,7 @@ public class DestroyBlocks {
             .sound(SoundType.SLIME_BLOCK)
             .strength(0.1f)
         ).transform(TagGen.tagBlockAndItem("storage_blocks/fluorite"))
+        .removeTab(CreativeModeTabs.SEARCH)
         .build()
         .register();
 
@@ -657,6 +669,7 @@ public class DestroyBlocks {
         .initialProperties(AGAR_BLOCK)
         .item()
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+        .removeTab(CreativeModeTabs.SEARCH)
         .build()
         .register();
 
