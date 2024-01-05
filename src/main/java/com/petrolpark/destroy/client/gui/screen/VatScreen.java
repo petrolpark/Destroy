@@ -3,6 +3,7 @@ package com.petrolpark.destroy.client.gui.screen;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -22,6 +23,7 @@ import com.petrolpark.destroy.client.gui.MoleculeRenderer;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.item.MoleculeDisplayItem;
 import com.petrolpark.destroy.util.DestroyLang;
+import com.petrolpark.destroy.util.vat.Vat;
 import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.UIRenderHelper;
@@ -105,7 +107,9 @@ public class VatScreen extends AbstractSimiScreen {
         horizontalTextScroll.tickChaser();
 
         ReadOnlyMixture mixture = blockEntity.getCombinedReadOnlyMixture();
-        int vatCapacity = blockEntity.getVatOptional().get().getCapacity(); //TODO swap along with all other references to the vat capacity
+        Optional<Vat> vatOptional = blockEntity.getVatOptional();
+        if (vatOptional.isEmpty()) return;
+        int vatCapacity = vatOptional.get().getCapacity(); //TODO swap along with all other references to the vat capacity
 
         orderedMolecules = new ArrayList<>(mixture.getContents(false).size());
         orderedMolecules.addAll(mixture.getContents(false).stream().map(molecule -> Pair.of(molecule, mixture.getConcentrationOf(molecule) * vatCapacity / 1000)).toList());

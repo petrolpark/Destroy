@@ -10,7 +10,6 @@ import com.petrolpark.destroy.advancement.BadgeAdvancementRewards;
 import com.petrolpark.destroy.advancement.SimpleDestroyTrigger;
 import com.petrolpark.destroy.badge.Badge;
 import com.petrolpark.destroy.item.BadgeItem;
-import com.petrolpark.destroy.item.creativeModeTab.DestroyCreativeModeTabs;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -45,7 +44,6 @@ public class BadgeBuilder<T extends Badge, P> extends AbstractBuilder<Badge, T, 
             .properties(p -> p
                 .stacksTo(1)
             ).register();
-        DestroyCreativeModeTabs.DestroyDisplayItemsGenerator.excludedItems.add(item);
     };
 
     public BadgeBuilder<T, P> duplicationIngredient(Ingredient ingredient) {

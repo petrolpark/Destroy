@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.item.BadgeItem;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
@@ -75,7 +76,7 @@ public class DestroyCreativeModeTabs {
 		@Override
 		public void accept(ItemDisplayParameters parameters, Output output) {
 			for (RegistryEntry<Item> entry : Destroy.REGISTRATE.getAll(Registries.ITEM)) {
-				if (!excludedItems.contains(entry)) {
+				if (!excludedItems.contains(entry) && !(entry.get() instanceof BadgeItem)) {
 					output.accept(new ItemStack(entry.get().asItem()));
 				};
 			};

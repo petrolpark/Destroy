@@ -783,7 +783,7 @@
 
     "destroy.tooltip.aging_barrel.progress": "Progress: %1$s",
     "destroy.tooltip.aging_barrel.aging_time": "Duration: %1$s",
-    "destroy.tooltip.badge": "Awarded to _%1$s_ on _%2$s_",
+    "destroy.tooltip.badge": "Awarded to %1$s on %2$s",
     "destroy.tooltip.badge.unknown": "This isn't a real Badge...",
     "destroy.tooltip.basin.too_full.title": "Overfilled:",
     "destroy.tooltip.basin.too_full": "This Basin will _overflow_ if it reacts. Try a _Vat_ instead.",

@@ -666,7 +666,7 @@ public class DestroyBlocks {
             .noOcclusion()
             .sound(SoundType.SLIME_BLOCK)
             .strength(0.1f)
-        ).transform(TagGen.tagBlockAndItem("storage_blocks/fluorite"))
+        ).transform(TagGen.tagBlockAndItem("storage_blocks/agar"))
         .removeTab(CreativeModeTabs.SEARCH)
         .build()
         .register();

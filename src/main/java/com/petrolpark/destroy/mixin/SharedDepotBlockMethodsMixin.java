@@ -28,7 +28,7 @@ public class SharedDepotBlockMethodsMixin {
         method = "Lcom/simibubi/create/content/logistics/depot/SharedDepotBlockMethods;onUse(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/player/Player;setItemInHand(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V"
+            target = "setItemInHand"
         ),
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false

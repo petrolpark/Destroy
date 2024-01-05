@@ -59,7 +59,7 @@ public class BadgeItem extends Item {
             return;
         };
         tooltipComponents.addAll(TooltipHelper.cutTextComponent(badge.getDescription(), Palette.STANDARD_CREATE));
-        tooltipComponents.addAll(TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.badge", tag.getString("Player"), df.format(new Date(tag.getLong("Date")))).component(), Palette.STANDARD_CREATE));
+        tooltipComponents.add(DestroyLang.translate("tooltip.badge", tag.getString("Player"), df.format(new Date(tag.getLong("Date")))).component());
     };
 
     @Override
