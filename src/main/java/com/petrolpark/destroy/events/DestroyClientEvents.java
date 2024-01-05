@@ -74,6 +74,7 @@ public class DestroyClientEvents {
         if (!DestroyClientEvents.smogEnabled()) return;
         if (event.getCamera().getFluidInCamera() == FogType.NONE) {
             LevelPollution levelPollution = ClientLevelPollutionData.getLevelPollution();
+            if (levelPollution == null) return;
             Color existing = new Color(event.getRed(), event.getGreen(), event.getBlue(), 1f);
             Color color = Color.mixColors(existing, BROWN, 0.8f * (float)levelPollution.get(PollutionType.SMOG) / (float)PollutionType.SMOG.max);
             event.setRed(color.getRedAsFloat());

@@ -1,0 +1,19 @@
+{
+    "variants": {
+        "facing=north": {
+            "model": "destroy:block/keypunch/block"
+        },
+        "facing=east": {
+            "model": "destroy:block/keypunch/block",
+            "y": 90
+        },
+        "facing=south": {
+            "model": "destroy:block/keypunch/block",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "destroy:block/keypunch/block",
+            "y": 270
+        }
+    }
+}

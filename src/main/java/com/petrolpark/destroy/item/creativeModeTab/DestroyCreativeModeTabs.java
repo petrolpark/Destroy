@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.item.BadgeItem;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
@@ -48,7 +49,7 @@ public class DestroyCreativeModeTabs {
 				DestroyItems.LOGO,
 				DestroyItems.MOLECULE_DISPLAY,
 
-				// Temporary Items
+				// Temporary items
 				DestroyItems.UNFINISHED_BLACKLIGHT,
 				DestroyItems.UNFINISHED_VOLTAIC_PILE,
 				DestroyItems.UNPROCESSED_CONVERSION_CATALYST,
@@ -56,13 +57,16 @@ public class DestroyCreativeModeTabs {
 				DestroyItems.UNPROCESSED_NAPALM_SUNDAE,
 				DestroyItems.UNFINISHED_CARD_STOCK,
 
+				// Unfinished
+				DestroyItems.CIRCUIT_MASK,
+				DestroyBlocks.KEYPUNCH,
+				DestroyBlocks.REDSTONE_PROGRAMMER,
+
 				// Removal
 				DestroyItems.BIFURICATED_CARROT,
 				DestroyItems.POTATE_O,
 				DestroyItems.WHITE_WHEAT,
 				DestroyItems.AGAR,
-
-				// Blocks
 				DestroyBlocks.YEAST_MUSHROOM,
 				DestroyBlocks.YEAST_COVERED_AGAR_BLOCK,
 				DestroyBlocks.AGAR_BLOCK
@@ -72,7 +76,9 @@ public class DestroyCreativeModeTabs {
 		@Override
 		public void accept(ItemDisplayParameters parameters, Output output) {
 			for (RegistryEntry<Item> entry : Destroy.REGISTRATE.getAll(Registries.ITEM)) {
-				if (!excludedItems.contains(entry)) output.accept(new ItemStack(entry.get().asItem()));
+				if (!excludedItems.contains(entry) && !(entry.get() instanceof BadgeItem)) {
+					output.accept(new ItemStack(entry.get().asItem()));
+				};
 			};
 		};
 		

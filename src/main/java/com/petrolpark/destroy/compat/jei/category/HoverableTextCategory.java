@@ -63,6 +63,7 @@ public abstract class HoverableTextCategory<T extends Recipe<?>> extends Destroy
         PoseStack stack = graphics.pose();
 
         Collection<LinesAndActivationAreas> paragraphs = PARAGRAPHS.get(recipe);
+        if (paragraphs == null) return;
 
         float partialTicks = AnimationTickHolder.getPartialTicks();
         Minecraft minecraft = Minecraft.getInstance();

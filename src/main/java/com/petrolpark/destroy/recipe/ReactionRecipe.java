@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.recipe;
 
+import javax.annotation.Nullable;
+
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.chemistry.genericreaction.GenericReaction;
@@ -53,11 +55,17 @@ public class ReactionRecipe extends ProcessingRecipe<RecipeWrapper> {
             super(params);
         };
 
+        @Nullable
         public static GenericReactionRecipe create(GenericReaction genericReaction) {
-            GenericReactionRecipe recipe = new ProcessingRecipeBuilder<>(GenericReactionRecipe::new, Destroy.asResource("generic_reaction_"+counter++)).build();
-            recipe.reaction = genericReaction.getExampleReaction();
-            recipe.genericReaction = genericReaction;
-            return recipe;
+            try {
+                GenericReactionRecipe recipe = new ProcessingRecipeBuilder<>(GenericReactionRecipe::new, Destroy.asResource("generic_reaction_"+counter++)).build();
+                recipe.reaction = genericReaction.getExampleReaction();
+                recipe.genericReaction = genericReaction;
+                return recipe;
+            } catch (IllegalStateException e) {
+                return null; // If this fails (which it sometimes does for unfathomable reasons), then we still want the rest of the JEI plugin to load
+            }
+
         };
 
         public GenericReaction getGenericReaction() {

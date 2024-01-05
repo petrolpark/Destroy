@@ -1,0 +1,44 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "destroy:block/redstone_programmer",
+		"particle": "destroy:block/redstone_programmer"
+	},
+	"elements": [
+		{
+			"name": "Outer",
+			"from": [4, 4, 8],
+			"to": [12, 8, 12],
+			"rotation": {"angle": 0, "axis": "x", "origin": [0, 5, 10]},
+			"faces": {
+				"north": {"uv": [1.5, 9, 5.5, 11], "texture": "#0"},
+				"east": {"uv": [5.5, 9, 7.5, 11], "texture": "#0"},
+				"south": {"uv": [1.5, 9, 5.5, 11], "texture": "#0"},
+				"west": {"uv": [5.5, 9, 7.5, 11], "texture": "#0"},
+				"up": {"uv": [1.5, 9, 5.5, 11], "texture": "#0"},
+				"down": {"uv": [1.5, 9, 5.5, 11], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Inner",
+			"from": [1.5, 5.5, 9.5],
+			"to": [14.5, 6.5, 10.5],
+			"faces": {
+				"north": {"uv": [1.5, 11, 8, 11.5], "texture": "#0"},
+				"east": {"uv": [1.5, 11, 2, 11.5], "texture": "#0"},
+				"south": {"uv": [1.5, 11, 8, 11.5], "texture": "#0"},
+				"west": {"uv": [7.5, 11, 8, 11.5], "texture": "#0"},
+				"up": {"uv": [1.5, 11, 8, 11.5], "texture": "#0"},
+				"down": {"uv": [1.5, 11, 8, 11.5], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "Cylinder",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

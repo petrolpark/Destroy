@@ -6,6 +6,7 @@ import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.instance.CentrifugeCogInstance;
 import com.petrolpark.destroy.block.instance.DoubleCardanShaftInstance;
 import com.petrolpark.destroy.block.instance.DynamoCogInstance;
+import com.petrolpark.destroy.block.instance.HorizontalShaftlessCogwheelInstance;
 import com.petrolpark.destroy.block.instance.PlanetaryGearsetInstance;
 import com.petrolpark.destroy.block.renderer.AgingBarrelRenderer;
 import com.petrolpark.destroy.block.renderer.BubbleCapRenderer;
@@ -14,9 +15,11 @@ import com.petrolpark.destroy.block.renderer.CoolerRenderer;
 import com.petrolpark.destroy.block.renderer.DifferentialRenderer;
 import com.petrolpark.destroy.block.renderer.DoubleCardanShaftRenderer;
 import com.petrolpark.destroy.block.renderer.DynamoRenderer;
+import com.petrolpark.destroy.block.renderer.KeypunchRenderer;
 import com.petrolpark.destroy.block.renderer.PlanetaryGearsetRenderer;
 import com.petrolpark.destroy.block.renderer.PollutometerRenderer;
 import com.petrolpark.destroy.block.renderer.PumpjackRenderer;
+import com.petrolpark.destroy.block.renderer.RedstoneProgrammerRenderer;
 import com.petrolpark.destroy.block.renderer.VatRenderer;
 import com.petrolpark.destroy.block.renderer.VatSideRenderer;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntityInstance;
@@ -88,6 +91,13 @@ public class DestroyBlockEntityTypes {
         .validBlocks(DestroyBlocks.EXTRUSION_DIE)
         .register();
 
+    public static final BlockEntityEntry<KeypunchBlockEntity> KEYPUNCH = REGISTRATE
+        .blockEntity("keypunch", KeypunchBlockEntity::new)
+        .instance(() -> HorizontalShaftlessCogwheelInstance::new)
+        .validBlocks(DestroyBlocks.KEYPUNCH)
+        .renderer(() -> KeypunchRenderer::new)
+        .register();
+
     public static final BlockEntityEntry<LongShaftBlockEntity> LONG_SHAFT = REGISTRATE
         .blockEntity("long_shaft", LongShaftBlockEntity::new)
         .instance(() -> BracketedKineticBlockEntityInstance::new, false)
@@ -119,6 +129,12 @@ public class DestroyBlockEntityTypes {
         .blockEntity("pumpjack_cam", PumpjackCamBlockEntity::new)
 		.validBlocks(DestroyBlocks.PUMPJACK_CAM)
 		.register();
+
+    public static final BlockEntityEntry<RedstoneProgrammerBlockEntity> REDSTONE_PROGRAMMER = REGISTRATE
+        .blockEntity("redstone_programmer", RedstoneProgrammerBlockEntity::new)
+        .validBlocks(DestroyBlocks.REDSTONE_PROGRAMMER)
+        .renderer(() -> RedstoneProgrammerRenderer::new)
+        .register();
 
     public static final BlockEntityEntry<SandCastleBlockEntity> SAND_CASTLE = REGISTRATE
         .blockEntity("sand_castle", SandCastleBlockEntity::new)

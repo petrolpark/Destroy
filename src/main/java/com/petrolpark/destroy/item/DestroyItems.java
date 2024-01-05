@@ -20,6 +20,7 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.BowlFoodItem;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -34,10 +35,12 @@ public class DestroyItems {
 
     public static final ItemEntry<Item> LOGO = REGISTRATE.item("logo", Item::new)
         .tab(null)
+        .removeTab(CreativeModeTabs.SEARCH)
         .register();
 
     public static final ItemEntry<MoleculeDisplayItem> MOLECULE_DISPLAY = REGISTRATE.item("molecule_display", MoleculeDisplayItem::new)
         .tab(null)
+        .removeTab(CreativeModeTabs.SEARCH)
         .register();
 
     public static final ItemEntry<Item>
@@ -364,16 +367,19 @@ public class DestroyItems {
     WHITE_WHEAT = REGISTRATE.item("white_wheat", Item::new)
         .tag(Tags.Items.CROPS)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
+        .removeTab(CreativeModeTabs.SEARCH)
         .register(),
     BIFURICATED_CARROT = REGISTRATE.item("bifuricated_carrot", Item::new)
         .properties(p -> p
             .food(DestroyFoods.BIFURICATED_CARROT)
         ).tag(Tags.Items.CROPS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
+        .removeTab(CreativeModeTabs.SEARCH)
         .register(),
     POTATE_O = REGISTRATE.item("potate_o", Item::new)
         .properties(p -> p
             .food(DestroyFoods.POTATE_O)
         ).tag(Tags.Items.CROPS, DestroyItemTags.LIABLE_TO_CHANGE.tag)
+        .removeTab(CreativeModeTabs.SEARCH)
         .register();
 
     public static final ItemEntry<BowlFoodItem>
@@ -600,6 +606,7 @@ public class DestroyItems {
     public static final ItemEntry<Item>
 
     AGAR = REGISTRATE.item("agar", Item::new)
+        .removeTab(CreativeModeTabs.SEARCH)
         .register(),
     DISCHARGED_VOLTAIC_PILE = REGISTRATE.item("discharged_voltaic_pile", Item::new)
         .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
@@ -620,6 +627,12 @@ public class DestroyItems {
     //     .tag(DestroyItemTags.LIABLE_TO_CHANGE.tag)
     //     .register(),
     NANODIAMONDS = REGISTRATE.item("nanodiamonds", Item::new)
+        .register();
+
+    public static final ItemEntry<CircuitMaskItem> CIRCUIT_MASK = REGISTRATE.item("circuit_mask", CircuitMaskItem::new)
+        .properties(p -> p
+            .stacksTo(1)
+        ).removeTab(CreativeModeTabs.SEARCH)
         .register();
 
     public static final ItemEntry<HyperaccumulatingFertilizerItem> HYPERACCUMULATING_FERTILIZER = REGISTRATE.item("hyperaccumulating_fertilizer", HyperaccumulatingFertilizerItem::new)

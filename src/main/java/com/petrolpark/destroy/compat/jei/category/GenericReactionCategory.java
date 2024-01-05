@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.GroupType;
 import com.petrolpark.destroy.chemistry.Molecule;
@@ -53,7 +54,12 @@ public class GenericReactionCategory extends ReactionCategory {
      */
     static {
         for (GenericReaction genericReaction : GenericReaction.GENERIC_REACTIONS) {
-            Reaction reaction = genericReaction.getExampleReaction();
+            Reaction reaction = null;
+            try {
+                reaction = genericReaction.getExampleReaction();
+            } catch (Throwable e) {
+                Destroy.LOGGER.warn("Problem generating generic reaction "+genericReaction.id); // Warn but don't do anything
+            };
             if (reaction != null) {
                 // Add the Generic Reaction to JEI.
                 RECIPES.put(genericReaction, GenericReactionRecipe.create(genericReaction));

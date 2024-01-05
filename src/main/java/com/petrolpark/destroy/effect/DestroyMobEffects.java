@@ -17,7 +17,7 @@ public class DestroyMobEffects {
     public static final RegistryObject<MobEffect> 
 
     CANCER = MOB_EFFECTS.register("cancer",
-        () -> new DestroyMobEffect(MobEffectCategory.NEUTRAL, 0)
+        () -> new UncurableMobEffect(MobEffectCategory.NEUTRAL, 0)
     ),
     CHEMICAL_POISON = MOB_EFFECTS.register("chemical_poison", ChemicalPoisonMobEffect::new),
     CRYING = MOB_EFFECTS.register("crying", CryingMobEffect::new),

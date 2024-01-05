@@ -4,7 +4,7 @@
 		"0": "destroy:block/dynamo",
 		"1": "create:block/axis_top",
 		"2": "create:block/axis",
-		"particle": "destroy:block/dynamo"
+		"particle": "minecraft:block/dark_oak_planks"
 	},
 	"elements": [
 		{

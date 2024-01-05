@@ -1,0 +1,7 @@
+{
+	"parent": "destroy:block/redstone_programmer/block",
+	"textures": {
+		"0": "destroy:block/redstone_programmer_powered",
+		"particle": "destroy:block/redstone_programmer_powered"
+	}
+}
