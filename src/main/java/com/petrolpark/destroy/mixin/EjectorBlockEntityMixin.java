@@ -35,6 +35,6 @@ public abstract class EjectorBlockEntityMixin {
         if (stack instanceof DirectionalTransportedItemStack directionalStack && directionalStack.stack.getItem() instanceof IDirectionalOnBelt item) item.launch(directionalStack, funnelFacing.getOpposite());
     };
 
-    @Accessor("Lcom/simibubi/create/content/logistics/depot/EjectorBlockEntity;depotBehaviour:Lcom/simibubi/create/content/logistics/depot/DepotBehaviour;")
+    @Accessor("depotBehaviour")
     public abstract DepotBehaviour getDepotBehaviour();
 };

@@ -40,6 +40,6 @@ public abstract class DepotBehaviourMixin {
         if (heldItem instanceof DirectionalTransportedItemStack directionalStack) directionalStack.refreshAngle();
     };
 
-    @Accessor("Lcom/simibubi/create/content/logistics/depot/DepotBehaviour;heldItem:Lcom/simibubi/create/content/kinetics/belt/transport/TransportedItemStack;")
+    @Accessor("heldItem")
     public abstract TransportedItemStack getHeldItem();
 };

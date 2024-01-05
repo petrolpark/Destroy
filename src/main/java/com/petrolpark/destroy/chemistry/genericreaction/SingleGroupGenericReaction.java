@@ -70,7 +70,8 @@ public abstract class SingleGroupGenericReaction<G extends Group<G>> extends Gen
             };
         };
         //TODO cache these generated Molecules as currently they get regenerated every frame
-        throw new RuntimeException("Couldn't generate example Reaction for Generic Reaction "+id.toString());
+        Destroy.LOGGER.warn("Couldn't generate example Reaction for Generic Reaction "+id.toString());
+        return null;
     };
 
 };

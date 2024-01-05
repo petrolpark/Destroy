@@ -28,7 +28,7 @@ public abstract class BeltInventoryMixin {
     };
 
     @Invoker(
-        value = "Lcom/simibubi/create/content/kinetics/belt/transport/BeltInventory;insert(Lcom/simibubi/create/content/kinetics/belt/transport/TransportedItemStack;)V",
+        value = "insert",
         remap = false
     )
     public abstract void invokeInsert(TransportedItemStack stack);

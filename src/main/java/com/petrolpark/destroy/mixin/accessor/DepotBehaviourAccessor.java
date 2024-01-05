@@ -9,6 +9,9 @@ import com.simibubi.create.content.logistics.depot.DepotBehaviour;
 @Mixin(DepotBehaviour.class)
 public interface DepotBehaviourAccessor {
     
-    @Accessor("Lcom/simibubi/create/content/logistics/depot/DepotBehaviour;heldItem:Lcom/simibubi/create/content/kinetics/belt/transport/TransportedItemStack;")
+    @Accessor(
+        value = "heldItem",
+        remap = false
+    )
     public TransportedItemStack getHeldItem();
 };
