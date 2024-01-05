@@ -20,7 +20,7 @@ public abstract class SingleGroupGenericReaction<G extends Group<G>> extends Gen
         super(id);
         this.type = type;;
         Group.groupTypesAndReactions.get(type).add(this);
-        GENERIC_REACTIONS.add(this); // Add this to the list of all known Generic Reaction
+        GENERIC_REACTIONS.add(this); // Add this to the list of all known Generic Reactions
     };
 
     /**
@@ -70,7 +70,7 @@ public abstract class SingleGroupGenericReaction<G extends Group<G>> extends Gen
             };
         };
         //TODO cache these generated Molecules as currently they get regenerated every frame
-        throw new IllegalStateException("Couldn't generate example Reaction for Generic Reaction "+id.toString());
+        throw new RuntimeException("Couldn't generate example Reaction for Generic Reaction "+id.toString());
     };
 
 };

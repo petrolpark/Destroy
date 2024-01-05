@@ -8,11 +8,13 @@ import com.petrolpark.destroy.block.model.DestroyPartials;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
+import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.Direction;
 
 public class RedstoneProgrammerRenderer extends SafeBlockEntityRenderer<RedstoneProgrammerBlockEntity> {
 
@@ -20,14 +22,18 @@ public class RedstoneProgrammerRenderer extends SafeBlockEntityRenderer<Redstone
 
     @Override
     protected void renderSafe(RedstoneProgrammerBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
+        Direction direction = be.getBlockState().getValue(RedstoneProgrammerBlock.FACING);
         VertexConsumer vc = bufferSource.getBuffer(RenderType.solid());
-        SuperByteBuffer cylinder = CachedBufferer.partialFacing(DestroyPartials.REDSTONE_PROGRAMMER_CYLINDER, be.getBlockState(), be.getBlockState().getValue(RedstoneProgrammerBlock.FACING));
+        SuperByteBuffer cylinder = CachedBufferer.partial(DestroyPartials.REDSTONE_PROGRAMMER_CYLINDER, be.getBlockState())
+            .centre()
+            .rotateY(AngleHelper.horizontalAngle(direction))
+            .unCentre();
 
 
         cylinder
-            .translate(0, 5 / 16d, 10 / 16d)
-            .rotateY(AnimationTickHolder.getPartialTicks())
-            .translateBack(0, 5 / 16d, 10 / 16d);
+            .translate(0, 6 / 16d, 10 / 16d)
+            .rotateX(AnimationTickHolder.getRenderTime())
+            .translateBack(0, 6 / 16d, 10 / 16d);
         
         cylinder
             .renderInto(ms, vc);
