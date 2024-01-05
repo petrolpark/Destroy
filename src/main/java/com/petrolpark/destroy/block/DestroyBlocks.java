@@ -172,6 +172,12 @@ public class DestroyBlocks {
         .onRegister(CreateRegistrate.blockModel(() -> BracketedKineticBlockModel::new))
         .register();
 
+    public static final BlockEntry<RedstoneProgrammerBlock> REDSTONE_PROGRAMMER = REGISTRATE.block("redstone_programmer", RedstoneProgrammerBlock::new)
+        .initialProperties(SharedProperties::wooden)
+        .properties(p -> p
+            .noOcclusion()
+        ).register();
+
     public static final BlockEntry<PlanetaryGearsetBlock> PLANETARY_GEARSET = REGISTRATE.block("planetary_gearset", PlanetaryGearsetBlock::new)
         .initialProperties(AllBlocks.LARGE_COGWHEEL)
         .properties(p -> p

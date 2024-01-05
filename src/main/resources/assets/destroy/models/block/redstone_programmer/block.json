@@ -1,0 +1,62 @@
+{
+	"credit": "Made with Blockbench",
+	"parent" : "minecraft:block/block",
+	"textures": {
+		"0": "destroy:block/redstone_programmer",
+		"particle": "destroy:block/redstone_programmer"
+	},
+	"elements": [
+		{
+			"name": "Base",
+			"from": [1, 0, 1],
+			"to": [15, 3, 15],
+			"faces": {
+				"north": {"uv": [8, 7, 15, 8.5], "texture": "#0"},
+				"east": {"uv": [0, 7, 7, 8.5], "texture": "#0"},
+				"south": {"uv": [8, 7, 15, 8.5], "texture": "#0"},
+				"west": {"uv": [0, 7, 7, 8.5], "texture": "#0"},
+				"up": {"uv": [8, 0, 15, 7], "texture": "#0"},
+				"down": {"uv": [0, 0, 7, 7], "texture": "#0"}
+			}
+		},
+		{
+			"name": "East Support",
+			"from": [12, 3, 9],
+			"to": [14, 7, 11],
+			"faces": {
+				"north": {"uv": [8, 1, 7, 3], "texture": "#0"},
+				"east": {"uv": [7, 1, 8, 3], "texture": "#0"},
+				"south": {"uv": [8, 1, 7, 3], "texture": "#0"},
+				"west": {"uv": [7, 1, 8, 3], "texture": "#0"},
+				"up": {"uv": [7, 0, 8, 1], "texture": "#0"},
+				"down": {"uv": [7, 0, 8, 1], "texture": "#0"}
+			}
+		},
+		{
+			"name": "West Support",
+			"from": [2, 3, 9],
+			"to": [4, 7, 11],
+			"faces": {
+				"north": {"uv": [8, 1, 7, 3], "texture": "#0"},
+				"east": {"uv": [7, 1, 8, 3], "texture": "#0"},
+				"south": {"uv": [8, 1, 7, 3], "texture": "#0"},
+				"west": {"uv": [7, 1, 8, 3], "texture": "#0"},
+				"up": {"uv": [7, 0, 8, 1], "texture": "#0"},
+				"down": {"uv": [7, 0, 8, 1], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Needle Support",
+			"from": [4, 3, 3],
+			"to": [7, 10, 6],
+			"faces": {
+				"north": {"uv": [1.5, 10.5, 0, 14], "texture": "#0"},
+				"east": {"uv": [0, 10.5, 1.5, 14], "texture": "#0"},
+				"south": {"uv": [1.5, 10.5, 0, 14], "texture": "#0"},
+				"west": {"uv": [0, 10.5, 1.5, 14], "texture": "#0"},
+				"up": {"uv": [0, 9, 1.5, 10.5], "texture": "#0"},
+				"down": {"uv": [0, 9, 1.5, 10.5], "texture": "#0"}
+			}
+		}
+	]
+}

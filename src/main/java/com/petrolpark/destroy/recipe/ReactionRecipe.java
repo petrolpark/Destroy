@@ -62,7 +62,7 @@ public class ReactionRecipe extends ProcessingRecipe<RecipeWrapper> {
                 recipe.reaction = genericReaction.getExampleReaction();
                 recipe.genericReaction = genericReaction;
                 return recipe;
-            } catch (Throwable e) {
+            } catch (IllegalStateException e) {
                 return null; // If this fails (which it sometimes does for unfathomable reasons), then we still want the rest of the JEI plugin to load
             }
 

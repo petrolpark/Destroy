@@ -19,6 +19,7 @@ import com.petrolpark.destroy.block.renderer.KeypunchRenderer;
 import com.petrolpark.destroy.block.renderer.PlanetaryGearsetRenderer;
 import com.petrolpark.destroy.block.renderer.PollutometerRenderer;
 import com.petrolpark.destroy.block.renderer.PumpjackRenderer;
+import com.petrolpark.destroy.block.renderer.RedstoneProgrammerRenderer;
 import com.petrolpark.destroy.block.renderer.VatRenderer;
 import com.petrolpark.destroy.block.renderer.VatSideRenderer;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntityInstance;
@@ -128,6 +129,12 @@ public class DestroyBlockEntityTypes {
         .blockEntity("pumpjack_cam", PumpjackCamBlockEntity::new)
 		.validBlocks(DestroyBlocks.PUMPJACK_CAM)
 		.register();
+
+    public static final BlockEntityEntry<RedstoneProgrammerBlockEntity> REDSTONE_PROGRAMMER = REGISTRATE
+        .blockEntity("redstone_programmer", RedstoneProgrammerBlockEntity::new)
+        .validBlocks(DestroyBlocks.REDSTONE_PROGRAMMER)
+        .renderer(() -> RedstoneProgrammerRenderer::new)
+        .register();
 
     public static final BlockEntityEntry<SandCastleBlockEntity> SAND_CASTLE = REGISTRATE
         .blockEntity("sand_castle", SandCastleBlockEntity::new)

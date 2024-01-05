@@ -59,6 +59,7 @@ public class DestroyCreativeModeTabs {
 				// Unfinished
 				DestroyItems.CIRCUIT_MASK,
 				DestroyBlocks.KEYPUNCH,
+				DestroyBlocks.REDSTONE_PROGRAMMER,
 
 				// Removal
 				DestroyItems.BIFURICATED_CARROT,

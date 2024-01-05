@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "destroy:block/redstone_programmer",
+		"particle": "destroy:block/redstone_programmer"
+	},
+	"elements": [
+		{
+			"name": "Needle",
+			"from": [5, 8, 5],
+			"to": [6, 9, 9],
+			"faces": {
+				"north": {"uv": [1.5, 11.5, 2, 12], "texture": "#0"},
+				"east": {"uv": [1.5, 11.5, 3.5, 12], "texture": "#0"},
+				"south": {"uv": [1.5, 11.5, 2, 12], "texture": "#0"},
+				"west": {"uv": [1.5, 11.5, 3.5, 12], "texture": "#0"},
+				"up": {"uv": [1.5, 11.5, 3.5, 12], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [1.5, 11.5, 3.5, 12], "rotation": 90, "texture": "#0"}
+			}
+		}
+	]
+}

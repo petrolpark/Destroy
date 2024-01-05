@@ -58,6 +58,10 @@ public class DestroyPartials {
     DIFFERENTIAL_INPUT_SHAFT = block("differential/input_shaft"),
     DIFFERENTIAL_CONTROL_SHAFT = block("differential/control_shaft"),
 
+    // Redstone Programmer
+    REDSTONE_PROGRAMMER_CYLINDER = block("redstone_programmer/cylinder"),
+    REDSTONE_PROGRAMMER_NEEDLE = block("redstone_programmer/needle"),
+
     // Miscellaneous
     GAS_MASK = block("gas_mask"),
     STRAY_SKULL = block("cooler/skull");
