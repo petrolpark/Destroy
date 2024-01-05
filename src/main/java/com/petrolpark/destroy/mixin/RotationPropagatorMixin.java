@@ -24,7 +24,7 @@ public class RotationPropagatorMixin {
      * @param cir
      */
     @Inject(
-        method = "getRotationSpeedModifier(Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;)V",
+        method = "getRotationSpeedModifier(Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;)F",
         at = @At("TAIL"),
         cancellable = true,
         remap = false

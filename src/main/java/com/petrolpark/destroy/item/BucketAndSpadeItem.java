@@ -31,6 +31,7 @@ public class BucketAndSpadeItem extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
+        if (context.getLevel() == null) return InteractionResult.PASS;
         BlockState blockUnderneath = context.getLevel().getBlockState(context.getClickedPos());
         BlockPos posAbove = context.getClickedPos().above();
         if (buildSandcastle(null, posAbove, blockUnderneath, context.getItemInHand())) {
@@ -49,6 +50,7 @@ public class BucketAndSpadeItem extends Item {
      * @return Whether a sandcastle was successfully built
      */
     public static boolean buildSandcastle(Level level, BlockPos posAbove, BlockState stateUnderneath, ItemStack stack) {
+        if (level == null) return false;
         if (canSandCastleBeBuiltOn(stateUnderneath, level.getBlockState(posAbove))) {
             if (level.setBlockAndUpdate(posAbove, getSandCastleForMaterial(stateUnderneath))) {
                 level.playSound(null, posAbove, SoundEvents.SAND_BREAK, SoundSource.BLOCKS, 0.5f, 1f);

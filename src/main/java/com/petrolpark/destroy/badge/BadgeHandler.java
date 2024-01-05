@@ -76,26 +76,31 @@ public class BadgeHandler {
     };
 
     public static void fetchAndAddBadgesIncludingEarlyBird(Player player) {
-        if (EARLY_BIRD_VIABLE) { // Try and give this Player the Early bird badge
-            HttpClient client = HttpClient.newHttpClient();
+        try {
+            if (EARLY_BIRD_VIABLE) { // Try and give this Player the Early bird badge
+                HttpClient client = HttpClient.newHttpClient();
 
-            String addEarlyBirdJsonInputString = "{\"playername\": \""+player.getScoreboardName()+"\", \"version_uuid\": \""+VERSION_UUID+"\"}";
+                String addEarlyBirdJsonInputString = "{\"playername\": \""+player.getScoreboardName()+"\", \"version_uuid\": \""+VERSION_UUID+"\"}";
 
-            HttpRequest getBadgesRequest = HttpRequest.newBuilder()
-                .uri(URI.create(EARLY_BIRD_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(addEarlyBirdJsonInputString))
-                .build();
+                HttpRequest getBadgesRequest = HttpRequest.newBuilder()
+                    .uri(URI.create(EARLY_BIRD_URL))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(addEarlyBirdJsonInputString))
+                    .build();
 
-            CompletableFuture<HttpResponse<String>> responseFuture = client.sendAsync(getBadgesRequest, HttpResponse.BodyHandlers.ofString());
+                CompletableFuture<HttpResponse<String>> responseFuture = client.sendAsync(getBadgesRequest, HttpResponse.BodyHandlers.ofString());
 
-            responseFuture.thenAcceptAsync(response -> {
-                getAndAddBadges(player);
-            }).join();
+                responseFuture.thenAcceptAsync(response -> {
+                    getAndAddBadges(player);
+                }).join();
             
-        } else { // If Early Bird is no longer obtainable, get the Badges straight away
-            getAndAddBadges(player);
+            } else { // If Early Bird is no longer obtainable, get the Badges straight away
+                getAndAddBadges(player);
+            };
+        } catch (Throwable e) {
+            Destroy.LOGGER.error("Error fetching Badges for player: ", e);
         };
+
     };
     
 };

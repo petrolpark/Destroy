@@ -18,7 +18,9 @@ public abstract class SpoutBlockMixin extends Block {
     };
 
     @Override
+    @SuppressWarnings("deprecation")
 	public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        super.onRemove(state, worldIn, pos, newState, isMoving);
 		IBE.onRemove(state, worldIn, pos, newState);
 	};
 };

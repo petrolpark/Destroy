@@ -35,10 +35,10 @@ public class PipeConnectionMixin {
      * @param cir
      */
     @Inject(
-        method = "manageFlows(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraftforge/fluids/FluidStack;Ljava/util/function/Predicate;)Z",
+        method = "Lcom/simibubi/create/content/fluids/PipeConnection;manageFlows(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraftforge/fluids/FluidStack;Ljava/util/function/Predicate;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Ljava/util/Optional;empty()V",
+            target = "empty",
             ordinal = 1
         ),
         cancellable = true,
