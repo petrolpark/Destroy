@@ -662,7 +662,7 @@ public class DestroyBlocks {
         .initialProperties(() -> Blocks.CLAY)
         .properties(p -> p
             .mapColor(MapColor.COLOR_LIGHT_BLUE)
-            .friction(1.1f)
+            .friction(0.5f)
             .noOcclusion()
             .sound(SoundType.SLIME_BLOCK)
             .strength(0.1f)

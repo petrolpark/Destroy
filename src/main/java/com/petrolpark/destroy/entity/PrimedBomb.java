@@ -38,7 +38,7 @@ public abstract class PrimedBomb extends PrimedTnt {
         yo = pos.y;
         zo = pos.z;
         this.owner = owner;
-        setFuse(state.getBlock() instanceof PrimeableBombBlock primeableBombBlock ? primeableBombBlock.getFuseTime(level, blockPos, state) : 80);
+        setFuse(state != null && state.getBlock() instanceof PrimeableBombBlock primeableBombBlock ? primeableBombBlock.getFuseTime(level, blockPos, state) : 80);
     };
 
     @Override

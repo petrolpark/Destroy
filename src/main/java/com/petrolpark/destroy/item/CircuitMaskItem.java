@@ -2,12 +2,10 @@ package com.petrolpark.destroy.item;
 
 import java.util.function.Consumer;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.item.directional.DirectionalTransportedItemStack;
 import com.petrolpark.destroy.item.renderer.CircuitMaskItemRenderer;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
@@ -17,16 +15,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-@EventBusSubscriber(modid = Destroy.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CircuitMaskItem extends CircuitPatternItem {
-
-    public static final BakedModel[] models = new BakedModel[16];
 
     public CircuitMaskItem(Properties properties) {
         super(properties);
@@ -56,20 +47,6 @@ public class CircuitMaskItem extends CircuitPatternItem {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
         stack.getOrCreateTag().remove("Flipped");
         stack.getOrCreateTag().remove("RotationWhileFlying");
-    };
-
-    @SubscribeEvent
-    public static void onRegisterModels(ModelEvent.RegisterAdditional event) {
-        for (int i = 0; i < 16; i++) {
-            event.register(Destroy.asResource("item/circuit_mask/"+i));
-        };  
-    };
-
-    @SubscribeEvent
-    public static void onModelsLoaded(ModelEvent.BakingCompleted event) {
-        for (int i = 0; i < 16; i++) {
-            models[i] = event.getModels().get(Destroy.asResource("item/circuit_mask/"+i));
-        };  
     };
 
     @Override

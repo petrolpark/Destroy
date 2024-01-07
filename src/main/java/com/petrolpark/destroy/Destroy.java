@@ -131,7 +131,6 @@ public class Destroy {
         modEventBus.addListener(Destroy::init);
         modEventBus.addListener(DestroySoundEvents::register);
         modEventBus.addListener(Destroy::clientInit);
-        modEventBus.addListener(DestroyParticleTypes::registerProviders);
         modEventBus.addListener(EventPriority.LOWEST, Destroy::gatherData);
 
         // JEI compat
@@ -140,7 +139,7 @@ public class Destroy {
         };
 
         // Client
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DestroyPartials::init);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> clientCtor(modEventBus, forgeEventBus));
     };
 
     //Initiation Events
@@ -173,6 +172,11 @@ public class Destroy {
         });
         DestroyPonderTags.register();
         DestroyPonderIndex.register();
+    };
+
+    public static void clientCtor(IEventBus modEventBus, IEventBus forgeEventBus) {
+        DestroyPartials.init();
+        modEventBus.addListener(DestroyParticleTypes::registerProviders);
     };
 
     public static void gatherData(GatherDataEvent event) {

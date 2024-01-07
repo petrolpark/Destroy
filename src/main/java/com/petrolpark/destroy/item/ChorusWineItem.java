@@ -30,6 +30,7 @@ public class ChorusWineItem extends AlcoholicDrinkItem implements IDynamicItemDe
             player.getCapability(PlayerPreviousPositionsProvider.PLAYER_PREVIOUS_POSITIONS).ifPresent(previousPositions -> {
                 if (player.isPassenger()) player.stopRiding();
                 BlockPos pos = previousPositions.getOldestPosition();
+                if (pos == null) return;
                 Vec3 oldLocation = new Vec3(player.getX(), player.getY(), player.getZ());
                 Vec3 newLocation = new Vec3(pos.getX() + 0.5f, pos.getY(), pos.getZ() + 0.5f);
                 if (player.randomTeleport(newLocation.x, newLocation.y, newLocation.z, true)) {

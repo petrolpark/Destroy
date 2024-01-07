@@ -179,6 +179,11 @@ public class DestroyServerEvents {
             DestroyMessages.sendToClient(new LevelPollutionS2CPacket(levelPollution), serverPlayer);
         });
 
+        // Clear Chorus wine info
+        player.getCapability(PlayerPreviousPositionsProvider.PLAYER_PREVIOUS_POSITIONS).ifPresent(previousPositions -> {
+            previousPositions.clearPositions();
+        });
+
         // Collect the Player's badges
         BadgeHandler.fetchAndAddBadgesIncludingEarlyBird(serverPlayer);
     };

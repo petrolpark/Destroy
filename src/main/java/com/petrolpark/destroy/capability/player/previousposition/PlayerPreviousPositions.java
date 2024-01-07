@@ -28,6 +28,10 @@ public class PlayerPreviousPositions {
         previousPositions.add(pos);
     };
 
+    public void clearPositions() {
+        previousPositions.clear();
+    };
+
     public void incrementTickCounter() {
         tickCounter++;
         if (tickCounter >= TICKS_PER_SECOND) {
