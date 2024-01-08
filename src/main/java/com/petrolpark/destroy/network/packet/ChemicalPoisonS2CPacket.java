@@ -7,6 +7,8 @@ import com.petrolpark.destroy.chemistry.Molecule;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkEvent;
 
 public class ChemicalPoisonS2CPacket extends S2CPacket {
@@ -33,6 +35,7 @@ public class ChemicalPoisonS2CPacket extends S2CPacket {
     };
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {

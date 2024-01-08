@@ -579,7 +579,7 @@ public class Formula implements Cloneable {
             updateSideChainStructures();
             List<Branch> identity = new ArrayList<>(topology.getConnections());
 
-            for (int i = 0; i < topology.getConnections(); i++) {
+            if (topology.getConnections() > 0) for (int i = 0; i < topology.getConnections(); i++) {
                 Formula sideChain = sideChains.get(i).getSecond();
                 if (sideChain.getAllAtoms().size() == 0 || (sideChain.startingAtom.isHydrogen())) { // If there is nothing or just a hydrogen
                     identity.add(new Branch(new Node(new Atom(Element.HYDROGEN))));
@@ -604,14 +604,14 @@ public class Formula implements Cloneable {
             Collections.sort(possibleReflections, (r1, r2) -> getReflectionComparison(r1).compareTo(getReflectionComparison(r2)));
 
             List<Branch> bestReflection = possibleReflections.get(0);
-            for (int i = 0; i < topology.getConnections(); i++) {
+            if (bestReflection.size() > 0) for (int i = 0; i < topology.getConnections(); i++) {
                 Branch branch = bestReflection.get(i);
                 if (!branch.getStartNode().getAtom().isHydrogen()) { // If there's actually a chain to add and not just a hydrogen
                     body += branch.serialize();
                 };
                 body += ",";
             };
-            body = body.substring(0, body.length() - 1); // The -1 removes the final comma
+            if (body.length() > 0) body = body.substring(0, body.length() - 1); // The -1 removes the final comma
         };
 
         optimumFROWNSCode = prefix + ":" + body;
@@ -1228,7 +1228,9 @@ public class Formula implements Cloneable {
                     topology.formula.topology = topology;
                     // Tell the Formula where to bond side-chains
                     topology.connections.forEach(sideChainInfo -> topology.formula.sideChains.add(Pair.of(sideChainInfo, new Formula()))); // Gives a null warning, which has been accounted for
-                }; 
+                };
+                // Add no reflections if there are none
+                if (topology.reflections == null) topology.reflections = new int[topology.connections.size()][0];
                 // Add the Topology to the register
                 TOPOLOGIES.put(nameSpace+":"+id, topology);
                 return topology;

@@ -12,6 +12,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.TntBlock;
@@ -42,6 +43,20 @@ public class PrimeableBombBlock extends TntBlock {
         level.gameEvent(igniter, GameEvent.PRIME_FUSE, pos);
     };
 
+    @Override
+    public void wasExploded(Level level, BlockPos pos, Explosion explosion) {
+        if (!level.isClientSide() && factory != null) {
+            PrimedBomb entity = factory.create(level, pos, null, explosion.getIndirectSourceEntity());
+            int i = entity.getFuse();
+            entity.setFuse((short)(level.random.nextInt(i / 4) + i / 8));
+            level.addFreshEntity(entity);
+        };
+    };
+
+    /**
+     * Get the fuse time for this bomb.
+     * This does not get called when the entity is exploded by another explosion.
+     */
     public int getFuseTime(Level world, BlockPos pos, BlockState state) {
         return 80;
     };

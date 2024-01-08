@@ -49,9 +49,9 @@ public interface IDirectionalOutputFluidBlockEntity {
             if (adjacentBE != null) {
                 FluidTransportBehaviour transport = BlockEntityBehaviour.get(adjacentBE, FluidTransportBehaviour.TYPE);
                 if (transport != null) {
-                    if (output && transport.canPullFluidFrom(tank.getFluid(), be.getBlockState(), direction)) { // If Fluid can be outputted in this Direction
+                    if (output && transport.canPullFluidFrom(tank.getFluid(), adjacentBE.getBlockState(), direction)) { // If Fluid can be outputted in this Direction
                         return direction;
-                    } else if (!output && transport.canHaveFlowToward(be.getBlockState(), direction)) { // If Fluid can be inserted from this Direction
+                    } else if (!output && transport.canHaveFlowToward(adjacentBE.getBlockState(), direction)) { // If Fluid can be inserted from this Direction
                         return direction;
                     };
                 } else {

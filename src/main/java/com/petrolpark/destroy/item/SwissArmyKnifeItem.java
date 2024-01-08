@@ -54,7 +54,6 @@ import net.minecraftforge.common.ToolActions;
 
 public class SwissArmyKnifeItem extends DiggerItem {
 
-    @OnlyIn(Dist.CLIENT)
     @Nullable
     public static Tool selectedTool = null;
 

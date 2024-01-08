@@ -106,11 +106,12 @@ public class DestroyTopologies {
             .withSideBranch(new Vec3(0.75d, 0, 0.5d).normalize(), new Vec3(0.75d, 0, 0.5d).normalize(), BondType.SINGLE)
             .withSideBranch(new Vec3(0.75d, 0, -.5d).normalize(), new Vec3(0.75d, 0, -0.5d).normalize(), BondType.SINGLE)
             .attach()
-        .atom(Element.CARBON, new Vec3(0.8d, 0d, 0d))
+        .atom(Element.CARBON, new Vec3(0.8d, 0d, 0d)) // 5
             .withBondTo(4, BondType.SINGLE)
             .withBondTo(0, BondType.DOUBLE)
             .withSideBranch(new Vec3(sin(30), -cos(30), 0d), new Vec3(sin(30), -cos(30), 0d), BondType.SINGLE)
             .attach()
+        //TODO symmetries
         .build("cyclohexene"),
 
     CYCLOPENTADIENE = create(Element.CARBON) // 0

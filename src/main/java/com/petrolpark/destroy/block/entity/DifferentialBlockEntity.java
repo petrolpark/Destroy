@@ -21,6 +21,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class DifferentialBlockEntity extends SplitShaftBlockEntity {
 
+    public float oldControlSpeed;
+
     public DifferentialBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     };
@@ -48,12 +50,17 @@ public class DifferentialBlockEntity extends SplitShaftBlockEntity {
         super.tick();
         if (!hasLevel()) return;
 
+        Direction direction = DirectionalRotatedPillarKineticBlock.getDirection(getBlockState());
+        BlockPos otherAdjacentPos = getBlockPos().relative(direction.getOpposite());
+
         if (getSpeed() == 0f) { // Try switching the direction if we're not powered by the existing side
-            Direction direction = DirectionalRotatedPillarKineticBlock.getDirection(getBlockState());
             BlockPos adjacentPos = getBlockPos().relative(direction);
-            BlockPos otherAdjacentPos = getBlockPos().relative(direction.getOpposite());
             if (!propagatesToMe(adjacentPos, direction.getOpposite()) && propagatesToMe(otherAdjacentPos, direction))
                 getLevel().setBlockAndUpdate(getBlockPos(), DestroyBlocks.DUMMY_DIFFERENTIAL.getDefaultState().setValue(DifferentialBlock.AXIS, direction.getAxis()).setValue(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION, direction.getAxisDirection() == AxisDirection.NEGATIVE)); 
+        };
+
+        if (getLevel().getBlockEntity(otherAdjacentPos) instanceof KineticBlockEntity kbe) {
+            oldControlSpeed = getPropagatedSpeed(kbe, direction);
         };
     };
 

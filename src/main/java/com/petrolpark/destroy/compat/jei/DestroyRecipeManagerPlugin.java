@@ -58,7 +58,9 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
         focus.checkedCast(ForgeTypes.FLUID_STACK).ifPresent(fluidFocus -> { // Check to see if it's a Fluid ingredient
             FluidStack fluidStack = fluidFocus.getTypedValue().getIngredient();
             if (!DestroyFluids.isMixture(fluidStack)) return;
-            MixtureFluidIngredient ingredient = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(fluidStack.getOrCreateTag().getString("MixtureFluidIngredientSubtype")).getNew();
+            MixtureFluidIngredient ingredientType = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(fluidStack.getOrCreateTag().getString("MixtureFluidIngredientSubtype"));
+            if (ingredientType == null) return;
+            MixtureFluidIngredient ingredient = ingredientType.getNew();
             if (ingredient == null) return;
 
             //TODO replace with disambiguation page of all contained Molecules, rather than just include the uses/recipes of all component Molecules in one
