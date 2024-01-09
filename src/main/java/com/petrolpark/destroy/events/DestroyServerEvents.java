@@ -62,6 +62,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.PackType;
@@ -90,7 +91,6 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -98,6 +98,7 @@ import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -105,6 +106,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent.CropGrowEvent;
 import net.minecraftforge.event.level.ExplosionEvent;
+import net.minecraftforge.event.level.SaplingGrowTreeEvent;
 import net.minecraftforge.event.level.SleepFinishedTimeEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
@@ -166,7 +168,7 @@ public class DestroyServerEvents {
     };
 
     /**
-     * Update the Level Pollution the Player sees (for example, this affects the colour of foliage).
+     * Collect the Player's Badges and refresh the Pollution they see.
      */
     @SubscribeEvent
     public static void onPlayerEntersWorld(PlayerEvent.PlayerLoggedInEvent event) {
@@ -179,13 +181,31 @@ public class DestroyServerEvents {
             DestroyMessages.sendToClient(new LevelPollutionS2CPacket(levelPollution), serverPlayer);
         });
 
+        // Collect the Player's badges
+        BadgeHandler.fetchAndAddBadgesIncludingEarlyBird(serverPlayer);
+    };
+
+    /**
+     * Refresh the Pollution the Player sees and remove information on their previous positions.
+     */
+    @SubscribeEvent
+    public static void onEntityEntersDimension(EntityTravelToDimensionEvent event) {
+        Entity entity = event.getEntity();
+        if (!(entity instanceof ServerPlayer player)) return;
+        MinecraftServer server = player.level().getServer();
+        if (server == null) return;
+        Level level = server.getLevel(event.getDimension());
+        if (level == null) return;
+
+        // Update render info
+        level.getCapability(LevelPollutionProvider.LEVEL_POLLUTION).ifPresent(levelPollution -> {
+            DestroyMessages.sendToClient(new LevelPollutionS2CPacket(levelPollution), player);
+        });
+
         // Clear Chorus wine info
         player.getCapability(PlayerPreviousPositionsProvider.PLAYER_PREVIOUS_POSITIONS).ifPresent(previousPositions -> {
             previousPositions.clearPositions();
         });
-
-        // Collect the Player's badges
-        BadgeHandler.fetchAndAddBadgesIncludingEarlyBird(serverPlayer);
     };
 
     /**
@@ -589,8 +609,25 @@ public class DestroyServerEvents {
         };
     };
 
-    public static void onRecipeLoaded(RecipesUpdatedEvent event) {
+    /**
+     * Decrease Pollution when a tree is grown.
+     */
+    @SubscribeEvent
+    public static void onTreeGrown(SaplingGrowTreeEvent event) {
+        if (!(event.getLevel() instanceof Level level)) return;
+        if (level.random.nextInt(3) == 0) PollutionHelper.changePollution(level, PollutionType.GREENHOUSE, -1);
+        if (level.random.nextInt(3) == 0) PollutionHelper.changePollution(level, PollutionType.SMOG, -1);
+        if (level.random.nextInt(3) == 0) PollutionHelper.changePollution(level, PollutionType.ACID_RAIN, -1);
+    };
 
+    /**
+     * Naturally decrease Pollution over time.
+     */
+    @SubscribeEvent
+    public static void onTick(TickEvent.LevelTickEvent event) {
+        for (PollutionType pollutionType : PollutionType.values()) {
+            if (event.level.random.nextInt(100) == 0) PollutionHelper.changePollution(event.level, pollutionType, -1);
+        };
     };
 
     @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)

@@ -8,6 +8,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.petrolpark.destroy.block.CoaxialGearBlock;
+import com.petrolpark.destroy.block.DirectionalRotatedPillarKineticBlock;
+import com.petrolpark.destroy.block.LongShaftBlock;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
@@ -39,7 +41,9 @@ public class KineticBlockEntityMixin {
         for (Direction direction : Direction.values()) {
             BlockState coaxialGearState = level.getBlockState(pos.relative(direction));
             if (CoaxialGearBlock.isCoaxialGear(coaxialGearState) && coaxialGearState.getValue(RotatedPillarKineticBlock.AXIS) == direction.getAxis()) {
-                neighbours.add(pos.relative(direction, 2));
+                BlockPos longShaftPos = pos.relative(direction, 2);
+                BlockState longShaftState = level.getBlockState(longShaftPos);
+                if (longShaftState.getBlock() instanceof LongShaftBlock && DirectionalRotatedPillarKineticBlock.getDirection(longShaftState) == direction.getOpposite()) neighbours.add(longShaftPos);
             };
         };
     };

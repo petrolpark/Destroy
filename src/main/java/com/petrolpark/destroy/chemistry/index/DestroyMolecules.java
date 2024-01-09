@@ -367,7 +367,7 @@ public final class DestroyMolecules {
         .id("ethene")
         .structure(Formula.deserialize("destroy:linear:C=C"))
         .boilingPoint(-103.7f)
-        .density(1.178f) // Gas density
+        .density(567.9f)
         .molarHeatCapacity(67.3f)
         .tag(Tags.SMOG)
         .build(),

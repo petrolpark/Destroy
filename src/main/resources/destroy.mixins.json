@@ -41,6 +41,7 @@
         "KineticBlockEntityMixin",
         "MechanicalMixerBlockEntityMixin",
         "MixingCategoryMixin",
+        "MultiPlayerGameModeMixin",
         "PackingCategoryMixin",
         "PipeConnectionMixin",
         "PonderTagScreenMixin",

@@ -356,7 +356,10 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveGoggl
         VatControllerBlockEntity controller = getController();
         if (controller == null) return;
         if (updateVent) controller.removeVent();
-        if (controller.openVentPos == null && displayType == DisplayType.OPEN_VENT) controller.openVentPos = getBlockPos();
+        if (displayType == DisplayType.OPEN_VENT) {
+            if (controller.cachedMixture != null) controller.cachedMixture.disturbEquilibrium();
+            if (controller.openVentPos == null) controller.openVentPos = getBlockPos();
+        };
     };
 
     @SuppressWarnings("null")

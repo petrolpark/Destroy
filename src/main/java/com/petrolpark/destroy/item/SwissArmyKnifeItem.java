@@ -4,10 +4,10 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.petrolpark.destroy.block.IBlockWithPreferredSwissArmyKnifeTool;
 import com.petrolpark.destroy.entity.IEntityWithPreferredSwissArmyKnifeTool;
 import com.petrolpark.destroy.item.renderer.SwissArmyKnifeRenderer;
@@ -28,7 +28,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.DiggerItem;
@@ -48,11 +47,15 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
 public class SwissArmyKnifeItem extends DiggerItem {
+
+    @OnlyIn(Dist.CLIENT)
+    private static int timeUntilToolPutAway = 20;
 
     @Nullable
     public static Tool selectedTool = null;
@@ -66,6 +69,9 @@ public class SwissArmyKnifeItem extends DiggerItem {
         Map<Tool, LerpedFloat> chasers = getChasers(stack);
         chasers.values().forEach(LerpedFloat::tickChaser);
         putChasers(stack, chasers);
+        if (level.isClientSide()) {
+            if (getTool(stack) != selectedTool) DestroyMessages.sendToServer(new SwissArmyKnifeToolC2SPacket(selectedTool));
+        };
     };
 
     @Override
@@ -76,18 +82,7 @@ public class SwissArmyKnifeItem extends DiggerItem {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Tool tool = getTool(context.getItemInHand());
-        if (tool != null) switch (tool) {
-            case AXE:
-                return Items.IRON_AXE.useOn(context);
-            case HOE:
-                return Items.IRON_HOE.useOn(context);
-            case SHEARS:
-                return Items.SHEARS.useOn(context);
-            case SHOVEL:
-                return Items.IRON_SHOVEL.useOn(context);
-            default:
-                break;
-        };
+        if (tool != null) return tool.exampleTool.get().getItem().useOn(context);
         return super.useOn(context);
     };
 
@@ -120,7 +115,17 @@ public class SwissArmyKnifeItem extends DiggerItem {
 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack from, ItemStack to, boolean slotChanged) {
-        return false;
+        return !(from.getItem() instanceof SwissArmyKnifeItem) || !(to.getItem() instanceof SwissArmyKnifeItem);
+    };
+
+    @Override
+    public boolean canContinueUsing(ItemStack oldStack, ItemStack newStack) {
+        return oldStack.getItem() instanceof SwissArmyKnifeItem && newStack.getItem() instanceof SwissArmyKnifeItem;
+    };
+
+    @Override
+    public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+        return !(oldStack.getItem() instanceof SwissArmyKnifeItem) || !(newStack.getItem() instanceof SwissArmyKnifeItem);
     };
 
     @Override
@@ -135,12 +140,21 @@ public class SwissArmyKnifeItem extends DiggerItem {
         LocalPlayer player = minecraft.player;
         if (player == null) return;
         Tool newTool;
+        boolean switchTool = false;
         if (!(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof SwissArmyKnifeItem) && !(player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof SwissArmyKnifeItem)) {
             newTool = null;
+            switchTool = true;
         } else {
             newTool = getTool(minecraft.level, minecraft.hitResult, player.isCrouching());
+            if (newTool == null && timeUntilToolPutAway > 0) {
+                timeUntilToolPutAway--;
+                if (timeUntilToolPutAway == 0) switchTool = true;
+            } else {
+                timeUntilToolPutAway = 20;
+            };
         };
-        if (newTool != selectedTool || AnimationTickHolder.getTicks() % 20 == 0) {
+        switchTool |= newTool != null && newTool != selectedTool;
+        if (switchTool) {
             DestroyMessages.sendToServer(new SwissArmyKnifeToolC2SPacket(newTool));
             selectedTool = newTool;
         };
@@ -159,6 +173,7 @@ public class SwissArmyKnifeItem extends DiggerItem {
             if (state.is(BlockTags.MINEABLE_WITH_SHOVEL)) tool = Tool.SHOVEL;
             if (state.is(BlockTags.MINEABLE_WITH_HOE)) tool = Tool.HOE;
             if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) tool = Tool.PICKAXE;
+            if (state instanceof IForgeShearable) tool = Tool.SHEARS;
             if (state.is(BlockTags.LEAVES) || state.is(BlockTags.WOOL)) tool = Tool.SHEARS;
 
             if (shiftDown || tool == null) {
@@ -171,7 +186,7 @@ public class SwissArmyKnifeItem extends DiggerItem {
             Entity entity = ehr.getEntity();
             if (entity instanceof IEntityWithPreferredSwissArmyKnifeTool specialEntity) return specialEntity.getToolForSwissArmyKnife(shiftDown);
             if (entity instanceof LivingEntity) tool = Tool.AXE;
-            if (entity instanceof Sheep) tool = shiftDown ? Tool.AXE : Tool.SHEARS;
+            if (entity instanceof IForgeShearable) tool = shiftDown ? Tool.AXE : Tool.SHEARS;
         };
         return tool;
     };
@@ -219,11 +234,11 @@ public class SwissArmyKnifeItem extends DiggerItem {
     };
 
     public static enum Tool {
-        PICKAXE(ToolActions.DEFAULT_PICKAXE_ACTIONS),
-        AXE(ToolActions.DEFAULT_AXE_ACTIONS),
-        SHOVEL(ToolActions.DEFAULT_SHOVEL_ACTIONS),
-        HOE(ToolActions.DEFAULT_HOE_ACTIONS),
-        SHEARS(ToolActions.DEFAULT_SHEARS_ACTIONS);
+        PICKAXE(ToolActions.DEFAULT_PICKAXE_ACTIONS, () -> new ItemStack(Items.IRON_PICKAXE)),
+        AXE(ToolActions.DEFAULT_AXE_ACTIONS,() -> new ItemStack(Items.IRON_AXE)),
+        SHOVEL(ToolActions.DEFAULT_SHOVEL_ACTIONS, () -> new ItemStack(Items.IRON_SHOVEL)),
+        HOE(ToolActions.DEFAULT_HOE_ACTIONS,() -> new ItemStack(Items.IRON_HOE)),
+        SHEARS(ToolActions.DEFAULT_SHEARS_ACTIONS, () -> new ItemStack(Items.IRON_PICKAXE));
 
         public static Map<Tool, LerpedFloat> ALL_RETRACTED = new EnumMap<>(Tool.class);
         static {
@@ -231,9 +246,11 @@ public class SwissArmyKnifeItem extends DiggerItem {
         };
 
         public final Set<ToolAction> actions;
+        public final Supplier<ItemStack> exampleTool;
 
-        Tool(Set<ToolAction> toolActions) {
+        Tool(Set<ToolAction> toolActions, Supplier<ItemStack> exampleTool) {
             actions = toolActions;
+            this.exampleTool = exampleTool;
         };
     };
     

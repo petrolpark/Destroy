@@ -45,9 +45,9 @@ public class DestroyClientEvents {
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
             SeismometerItemRenderer.tick();
+            SwissArmyKnifeItem.clientPlayerTick();
         } else {
             BlockEntityBehaviourRenderer.tick();
-            SwissArmyKnifeItem.clientPlayerTick();
         };
     };
 

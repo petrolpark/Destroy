@@ -112,7 +112,7 @@ public class PollutionHelper {
         List<LivingEntity> nearbyEntities = level.getEntities(null, new AABB(blockPos).inflate(2)).stream().filter(e -> e instanceof LivingEntity).map(e -> (LivingEntity)e).toList();
         for (FluidStack fluidStack : List.of(fluidStacks)) {
             pollute(level, fluidStack);
-            if (particleWeight == 1 || level.getRandom().nextInt(particleWeight) == 0) DestroyMessages.sendToAllClients(new EvaporatingFluidS2CPacket(blockPos, fluidStack));
+            if (particleWeight == 1 || level.getRandom().nextInt(particleWeight) == 0); DestroyMessages.sendToAllClients(new EvaporatingFluidS2CPacket(blockPos, fluidStack));
             for (LivingEntity entity : nearbyEntities) {
                 ChemistryDamageHelper.damage(level, entity, fluidStack, true);
             };

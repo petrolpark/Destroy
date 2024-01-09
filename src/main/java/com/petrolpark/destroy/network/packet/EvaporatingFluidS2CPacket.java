@@ -46,7 +46,7 @@ public class EvaporatingFluidS2CPacket extends S2CPacket {
         context.enqueueWork(() -> {
             ClientLevel level = Minecraft.getInstance().level;
             Vec3 center = VecHelper.getCenterOf(blockPos);
-            if (level == null) return;
+            if (level == null || fluidStack.isEmpty()) return;
             GasParticleData particleData = new GasParticleData(DestroyParticleTypes.EVAPORATION.get(), fluidStack);
             for (int i = 0; i < 5; i++) {
                 level.addParticle(particleData, center.x, center.y, center.z, 0, 0.07D, 0);

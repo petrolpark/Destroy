@@ -2,6 +2,7 @@ package com.petrolpark.destroy.capability.blockEntity;
 
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
 import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
+import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -15,6 +16,11 @@ public class VatSideTankCapability extends CombinedTankWrapper {
 		super(new IFluidHandler[]{liquidOutput, gasOutput, input});
         this.vatSide = vatSide;
 	};
+
+    @Override
+    public boolean isFluidValid(int tank, FluidStack stack) {
+        return DestroyFluids.isMixture(stack);
+    };
 
     public IFluidHandler getLiquidOutput() {
         return itemHandler[0];

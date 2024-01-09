@@ -1,12 +1,16 @@
 package com.petrolpark.destroy.block.entity;
 
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
+import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
+import com.simibubi.create.content.fluids.pipes.GlassFluidPipeBlock;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -46,16 +50,19 @@ public interface IDirectionalOutputFluidBlockEntity {
         int i = 0;
         while (i < 4) { // Loop through possible Directions, prioritising the current Direction
             BlockEntity adjacentBE = be.getLevel().getBlockEntity(be.getBlockPos().relative(direction)); // It thinks 'level' can be null (it can't)
+            BlockState adjacentState = be.getLevel().getBlockState(be.getBlockPos().relative(direction));
             if (adjacentBE != null) {
                 FluidTransportBehaviour transport = BlockEntityBehaviour.get(adjacentBE, FluidTransportBehaviour.TYPE);
                 if (transport != null) {
-                    if (output && transport.canPullFluidFrom(tank.getFluid(), adjacentBE.getBlockState(), direction)) { // If Fluid can be outputted in this Direction
+                    if (output && transport.canPullFluidFrom(tank.getFluid(), adjacentState, direction.getOpposite())) { // If Fluid can be outputted in this Direction
                         return direction;
-                    } else if (!output && transport.canHaveFlowToward(adjacentBE.getBlockState(), direction)) { // If Fluid can be inserted from this Direction
+                    } else if (!output && transport.canHaveFlowToward(adjacentState, direction.getOpposite())) { // If Fluid can be inserted from this Direction
+                        return direction;
+                    } else if (FluidPipeBlock.isPipe(adjacentState) || (adjacentState.getBlock() instanceof GlassFluidPipeBlock && direction.getAxis() != adjacentState.getValue(RotatedPillarBlock.AXIS))) {
                         return direction;
                     };
                 } else {
-
+                    
                 }
             };
             direction = direction.getClockWise(); // Check the next Direction

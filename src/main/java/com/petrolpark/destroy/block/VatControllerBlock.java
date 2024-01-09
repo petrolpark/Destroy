@@ -83,8 +83,10 @@ public class VatControllerBlock extends Block implements IBE<VatControllerBlockE
     };
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         IBE.onRemove(state, level, pos, newState);
+        super.onRemove(state, level, pos, newState, isMoving);
     };
 
     @OnlyIn(value = Dist.CLIENT)

@@ -124,7 +124,11 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveGoggl
         if (!hasLevel()) return;
         fraction = compound.getInt("Fraction");
         int[] controllerPosArray = compound.getIntArray("DistillationTowerControllerPosition");
-        towerControllerPos = new BlockPos(controllerPosArray[0], controllerPosArray[1], controllerPosArray[2]);
+        if (controllerPosArray.length == 0) {
+            towerControllerPos = getBlockPos();
+        } else {
+            towerControllerPos = new BlockPos(controllerPosArray[0], controllerPosArray[1], controllerPosArray[2]);
+        };
 
         // Load Tower if this is the controller
         if (compound.contains("DistillationTower")) {

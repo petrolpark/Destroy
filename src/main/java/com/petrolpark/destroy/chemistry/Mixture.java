@@ -460,7 +460,7 @@ public class Mixture extends ReadOnlyMixture {
             };
         };
 
-        temperature = Math.max(temperature, 0f);
+        temperature = Math.max(temperature, 0.0001f);
     };
 
     /**

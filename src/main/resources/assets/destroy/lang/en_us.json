@@ -171,7 +171,7 @@
     "commands.destroy.babyblueaddiction.query": "%s has a Baby Blue Addiction level of %s",
     "commands.destroy.crudeoil": "Generated %s mB of Crude Oil in the chunk at [%s, %s, %s]",
     "commands.destroy.pollution.query": "Pollution of type %s has a level of %s",
-    "commands.destroy.pollution.set": "Set level of Pollution of type %s to %s",
+    "commands.destroy.pollution.set": "Set level of Pollution of type %s to %s. A reload may be required for some changes to take effect.",
 
     "death.attack.destroy.alcohol": "%1$s died of alcohol poisoning",
     "death.attack.destroy.chemical_burn": "%1$s died from chemical burns",
@@ -561,7 +561,7 @@
     "destroy.ponder.vat_construction.text_9": "Like the blocks of which it's made, the shape and size of a Vat also affects its behaviour - for example, its capacity.",
     "destroy.ponder.vat_construction.text_10": "The edges of a Vat are not needed, and do not form part of the Vat.",
     "destroy.ponder.vat_interaction.header": "Interacting with Vats",
-    "destroy.ponder.vat_interaction.text_1": "Use a Wrench on the side of a Vat to see its internal temperature.",
+    "destroy.ponder.vat_interaction.text_1": "Use a Wrench on the outer side of a Vat to see its internal temperature.",
     "destroy.ponder.vat_interaction.text_2": "This does not work on the edges or corners.",
     "destroy.ponder.vat_interaction.text_3": "Wrench it again to see the pressure.",
     "destroy.ponder.vat_interaction.text_4": "Chemicals can be pulled and pushed from Vats with Fluid Pipes and Pumps.",

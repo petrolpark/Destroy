@@ -573,6 +573,9 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
     public float getPressure() {
         if (getLevel().isClientSide()) return pressure.getChaseTarget(); // It thinks getLevel() might be null (it's not)
         if (!getVatOptional().isPresent() || getOpenVent() != null) return 0f;
+        if (getGasTank().isEmpty()) {
+            return getLiquidTank().isEmpty() ? 0f : AIR_PRESSURE; // Return 0 for a vacuum, and normal air pressure for a full Vat
+        };
         return Reaction.GAS_CONSTANT * getTemperature() * ReadOnlyMixture.readNBT(getGasTank().getFluid().getOrCreateChildTag("Mixture")).getTotalConcentration() - AIR_PRESSURE;
     };
 
