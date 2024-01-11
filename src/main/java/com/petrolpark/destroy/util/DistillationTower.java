@@ -148,6 +148,7 @@ public class DistillationTower {
 
         // Mixtures
         FluidStack fluidStack = getControllerBubbleCap().getTank().getFluid();
+        if (fluidStack.isEmpty()) return false;
         if (DestroyFluids.isMixture(fluidStack.getFluid()) && fluidStack.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND)) {
             ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(fluidStack.getOrCreateTag().getCompound("Mixture"));
             List<FluidStack> fractions = getFractionsOfMixture(mixture, fluidStack.getAmount(), getHeight() - 1);
@@ -210,7 +211,6 @@ public class DistillationTower {
 
         };
         // If we've got to this point, the Recipe is being successfully processed
-        controller.getTank().drain(lastRecipe.getRequiredFluid().getRequiredAmount(), FluidAction.EXECUTE);
         controller.particleFluid = fluidDrained.copy();
         controller.onDistill();
         return true;

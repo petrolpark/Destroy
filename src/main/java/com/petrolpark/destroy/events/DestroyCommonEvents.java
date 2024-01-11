@@ -7,6 +7,7 @@ import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.badge.BadgeHandler;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.block.IChainableBlock;
 import com.petrolpark.destroy.block.entity.behaviour.ExtendedBasinBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.capability.chunk.ChunkCrudeOil;
@@ -20,6 +21,7 @@ import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddiction
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
 import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositions;
 import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositionsProvider;
+import com.petrolpark.destroy.chemistry.naming.SaltNameOverrides;
 import com.petrolpark.destroy.commands.BabyBlueAddictionCommand;
 import com.petrolpark.destroy.commands.CrudeOilCommand;
 import com.petrolpark.destroy.commands.PollutionCommand;
@@ -33,6 +35,7 @@ import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
 import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.ChemistryDamageHelper;
+import com.petrolpark.destroy.util.CogwheelChainingHandler;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.petrolpark.destroy.util.InebriationHelper;
@@ -72,6 +75,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -93,6 +97,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddPackFindersEvent;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -120,7 +125,7 @@ import net.minecraftforge.forgespi.language.IModFileInfo;
 import net.minecraftforge.forgespi.locating.IModFile;
 
 @Mod.EventBusSubscriber(modid = Destroy.MOD_ID)
-public class DestroyServerEvents {
+public class DestroyCommonEvents {
 
     @SubscribeEvent
     public static void onAttachCapabilitiesLevel(AttachCapabilitiesEvent<Level> event) {
@@ -420,6 +425,22 @@ public class DestroyServerEvents {
         };
     };
 
+    @SubscribeEvent
+    public static void chainCogwheels(PlayerInteractEvent.RightClickBlock event) {
+        // ItemStack stack = event.getItemStack();
+        // Level level = event.getLevel();
+        // BlockState state = level.getBlockState(event.getPos());
+        // if (stack.is(Items.CHAIN) && (IChainableBlock.isStateChainable(state) || DestroyBlocks.CHAINED_COGWHEEL.has(state))) {
+        //     if (level.isClientSide()) {
+        //         event.setCancellationResult(CogwheelChainingHandler.tryConnect(event.getPos()) ? InteractionResult.SUCCESS : InteractionResult.FAIL);
+        //     } else {
+        //         event.setCancellationResult(InteractionResult.SUCCESS);
+        //     };
+        //     event.setCanceled(true);
+        // };
+        //TODO uncomment when chaining is fully implemented
+    };
+
     /**
      * Give Players a hangover when they wake up if they go to sleep drunk.
      */
@@ -628,6 +649,11 @@ public class DestroyServerEvents {
         for (PollutionType pollutionType : PollutionType.values()) {
             if (event.level.random.nextInt(100) == 0) PollutionHelper.changePollution(event.level, pollutionType, -1);
         };
+    };
+
+    @SubscribeEvent
+    public static void addReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(SaltNameOverrides.MANAGER);
     };
 
     @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)

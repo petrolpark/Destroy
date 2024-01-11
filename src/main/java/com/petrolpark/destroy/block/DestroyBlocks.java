@@ -102,6 +102,18 @@ public class DestroyBlocks {
         .transform(customItemModel())
         .register();
 
+    public static final BlockEntry<ChainedCogwheelBlock> CHAINED_COGWHEEL = REGISTRATE.block("chained_cogwheel", ChainedCogwheelBlock::small)
+        .initialProperties(AllBlocks.COGWHEEL)
+        .properties(p -> p
+            .noOcclusion()
+        ).register();
+
+    public static final BlockEntry<ChainedCogwheelBlock> CHAINED_LARGE_COGWHEEL = REGISTRATE.block("chained_large_cogwheel", ChainedCogwheelBlock::large)
+        .initialProperties(CHAINED_COGWHEEL)
+        .properties(p -> p
+            .noOcclusion()
+        ).register();
+
     public static final BlockEntry<CoolerBlock> COOLER = REGISTRATE.block("cooler", CoolerBlock::new)
         .initialProperties(SharedProperties::stone)
         .properties(p -> p

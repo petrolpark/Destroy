@@ -939,7 +939,6 @@ public final class DestroyMolecules {
 
     SODIUM_ION = builder()
         .id("sodium_ion")
-        .translationKey("sodium")
         .structure(Formula.atom(Element.SODIUM))
         .charge(1)
         .build(),

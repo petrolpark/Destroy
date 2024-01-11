@@ -14,6 +14,7 @@ import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.item.SwissArmyKnifeItem;
 import com.petrolpark.destroy.item.renderer.SeismometerItemRenderer;
 import com.petrolpark.destroy.mixin.accessor.MenuRowsAccessor;
+import com.petrolpark.destroy.util.CogwheelChainingHandler;
 import com.petrolpark.destroy.util.PollutionHelper;
 import com.simibubi.create.infrastructure.gui.OpenCreateMenuButton.MenuRows;
 
@@ -44,6 +45,7 @@ public class DestroyClientEvents {
     @SubscribeEvent
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
+            CogwheelChainingHandler.tick();
             SeismometerItemRenderer.tick();
             SwissArmyKnifeItem.clientPlayerTick();
         } else {

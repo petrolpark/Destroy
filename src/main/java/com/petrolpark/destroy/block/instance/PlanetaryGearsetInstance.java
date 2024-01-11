@@ -7,10 +7,9 @@ import org.joml.Vector3f;
 import com.jozufozu.flywheel.api.InstanceData;
 import com.jozufozu.flywheel.api.Instancer;
 import com.jozufozu.flywheel.api.MaterialManager;
-import com.jozufozu.flywheel.util.transform.TransformStack;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.block.entity.PlanetaryGearsetBlockEntity;
 import com.petrolpark.destroy.block.model.DestroyPartials;
+import com.petrolpark.destroy.util.KineticsHelper;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityInstance;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.content.kinetics.base.flwdata.RotatingData;
@@ -35,7 +34,7 @@ public class PlanetaryGearsetInstance extends KineticBlockEntityInstance<Planeta
         int blockLight = world.getBrightness(LightLayer.BLOCK, pos);
         int skyLight = world.getBrightness(LightLayer.SKY, pos);
 
-        ringGear = getRotatingMaterial().getModel(DestroyPartials.PG_RING_GEAR, blockState, Direction.get(AxisDirection.POSITIVE, axis), () -> rotateToAxis(axis))
+        ringGear = getRotatingMaterial().getModel(DestroyPartials.PG_RING_GEAR, blockState, Direction.get(AxisDirection.POSITIVE, axis), () -> KineticsHelper.rotateToAxis(axis))
             .createInstance();
         ringGear
             .setRotationAxis(axis)
@@ -45,7 +44,7 @@ public class PlanetaryGearsetInstance extends KineticBlockEntityInstance<Planeta
 			.setBlockLight(blockLight)
 			.setSkyLight(skyLight);
 
-        sunGear = getRotatingMaterial().getModel(DestroyPartials.PG_SUN_GEAR, blockState, Direction.get(AxisDirection.POSITIVE, axis), () -> rotateToAxis(axis))
+        sunGear = getRotatingMaterial().getModel(DestroyPartials.PG_SUN_GEAR, blockState, Direction.get(AxisDirection.POSITIVE, axis), () -> KineticsHelper.rotateToAxis(axis))
             .createInstance();
         sunGear
             .setRotationAxis(axis)
@@ -60,7 +59,7 @@ public class PlanetaryGearsetInstance extends KineticBlockEntityInstance<Planeta
         for (Direction direction : Direction.values()) {
             if (direction.getAxis() == axis) continue;
 
-            Instancer<RotatingData> planetGear = getRotatingMaterial().getModel(DestroyPartials.PG_PLANET_GEAR, blockState, Direction.get(AxisDirection.POSITIVE, axis), () -> rotateToAxis(axis));
+            Instancer<RotatingData> planetGear = getRotatingMaterial().getModel(DestroyPartials.PG_PLANET_GEAR, blockState, Direction.get(AxisDirection.POSITIVE, axis), () -> KineticsHelper.rotateToAxis(axis));
 
 			RotatingData key = planetGear.createInstance();
 
@@ -78,17 +77,6 @@ public class PlanetaryGearsetInstance extends KineticBlockEntityInstance<Planeta
             keys.put(direction, key);
         };
     };
-
-    public static PoseStack rotateToAxis(Direction.Axis axis) {
-		Direction facing = Direction.fromAxisAndDirection(axis, AxisDirection.POSITIVE);
-		PoseStack poseStack = new PoseStack();
-		TransformStack.cast(poseStack)
-				.centre()
-				.rotateToFace(facing)
-				.multiply(com.mojang.math.Axis.XN.rotationDegrees(-90))
-				.unCentre();
-		return poseStack;
-	}
 
     @Override
     public void update() {

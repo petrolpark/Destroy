@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 public class VatSideBlock extends CopycatBlock {
 
@@ -124,6 +125,21 @@ public class VatSideBlock extends CopycatBlock {
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         return true;
+    };
+
+    @Override
+    public ItemStack getCloneItemStack(BlockGetter pLevel, BlockPos pPos, BlockState pState) {
+        return getPickBlockItemStack(pLevel, pPos);
+    };
+
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+        return getPickBlockItemStack(level, pos);
+    };
+
+    protected ItemStack getPickBlockItemStack(BlockGetter level, BlockPos pos) {
+        if (getBlockEntity(level, pos) instanceof VatSideBlockEntity vatSide) return vatSide.getConsumedItem();
+        return ItemStack.EMPTY;
     };
 
     @Override

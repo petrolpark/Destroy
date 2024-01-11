@@ -1,10 +1,10 @@
 package com.petrolpark.destroy.block.renderer;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.block.entity.DifferentialBlockEntity;
 import com.petrolpark.destroy.block.model.DestroyPartials;
+import com.petrolpark.destroy.util.KineticsHelper;
 import com.petrolpark.destroy.block.DirectionalRotatedPillarKineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
@@ -59,45 +59,35 @@ public class DifferentialRenderer extends KineticBlockEntityRenderer<Differentia
         if (differential.propagatesToMe(inputPos, face.getOpposite()) && inputBE instanceof KineticBlockEntity inputKBE) inputCogAngle = (time * differential.getPropagatedSpeed(inputKBE, face) * 3f / 10 % 360) / 180 * Mth.PI;
         if (differential.propagatesToMe(controlPos, face) && controlBE instanceof KineticBlockEntity controlKBE) controlCogAngle = (time * differential.getPropagatedSpeed(controlKBE, face.getOpposite()) * 3f / 10 % 360) / 180 * Mth.PI;
 
-        SuperByteBuffer ringGear = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_RING_GEAR, state, face, () -> rotateToFace(face));
+        SuperByteBuffer ringGear = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_RING_GEAR, state, face, () -> KineticsHelper.rotateToFace(face));
         kineticRotationTransform(ringGear, differential, axis, ringGearAngle + ringGearOffset, light);
         ringGear.renderInto(ms, vbSolid);
 
-        SuperByteBuffer eastGear = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_EAST_GEAR, state, face, () -> rotateToFace(face));
+        SuperByteBuffer eastGear = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_EAST_GEAR, state, face, () -> KineticsHelper.rotateToFace(face));
         kineticRotationTransform(eastGear, differential, axis, ringGearAngle + ringGearOffset, light);
         kineticRotationTransform(eastGear, differential, axis == Axis.X ? Axis.Z : Axis.X, ((controlCogAngle - inputCogAngle) / 2) * (axis == Axis.Z ? -1 : 1), light);
         eastGear.renderInto(ms, vbSolid);
 
-        SuperByteBuffer westGear = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_WEST_GEAR, state, face, () -> rotateToFace(face));
+        SuperByteBuffer westGear = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_WEST_GEAR, state, face, () -> KineticsHelper.rotateToFace(face));
         kineticRotationTransform(westGear, differential, axis, ringGearAngle + ringGearOffset, light);
         kineticRotationTransform(westGear, differential, axis == Axis.X ? Axis.Z : Axis.X, ((inputCogAngle - controlCogAngle) / 2) * (axis == Axis.Z ? -1 : 1), light);
         westGear.renderInto(ms, vbSolid);
 
-        SuperByteBuffer topGear = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_CONTROL_GEAR, state, face, () -> rotateToFace(face));
+        SuperByteBuffer topGear = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_CONTROL_GEAR, state, face, () -> KineticsHelper.rotateToFace(face));
         kineticRotationTransform(topGear, differential, axis, controlCogAngle + ringGearOffset, light);
         topGear.renderInto(ms, vbSolid);
 
-        SuperByteBuffer topShaft = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_CONTROL_SHAFT, state, face, () -> rotateToFace(face));
+        SuperByteBuffer topShaft = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_CONTROL_SHAFT, state, face, () -> KineticsHelper.rotateToFace(face));
         kineticRotationTransform(topShaft, differential, axis, controlCogAngle + controlShaftOffset, light);
         topShaft.renderInto(ms, vbSolid);
 
-        SuperByteBuffer bottomGear = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_INPUT_GEAR, state, face, () -> rotateToFace(face));
+        SuperByteBuffer bottomGear = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_INPUT_GEAR, state, face, () -> KineticsHelper.rotateToFace(face));
         kineticRotationTransform(bottomGear, differential, axis, inputCogAngle + ringGearOffset, light);
         bottomGear.renderInto(ms, vbSolid);
 
-        SuperByteBuffer bottomShaft = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_INPUT_SHAFT, state, face, () -> rotateToFace(face));
+        SuperByteBuffer bottomShaft = CachedBufferer.partialDirectional(DestroyPartials.DIFFERENTIAL_INPUT_SHAFT, state, face, () -> KineticsHelper.rotateToFace(face));
         kineticRotationTransform(bottomShaft, differential, axis, inputCogAngle + inputShaftOffset, light);
         bottomShaft.renderInto(ms, vbSolid);
     };
-
-    public static PoseStack rotateToFace(Direction facing) {
-		PoseStack poseStack = new PoseStack();
-		TransformStack.cast(poseStack)
-				.centre()
-				.rotateToFace(facing)
-				.multiply(com.mojang.math.Axis.XN.rotationDegrees(-90))
-				.unCentre();
-		return poseStack;
-	}
     
 };

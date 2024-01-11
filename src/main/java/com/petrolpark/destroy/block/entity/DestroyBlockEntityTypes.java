@@ -11,6 +11,7 @@ import com.petrolpark.destroy.block.instance.PlanetaryGearsetInstance;
 import com.petrolpark.destroy.block.renderer.AgingBarrelRenderer;
 import com.petrolpark.destroy.block.renderer.BubbleCapRenderer;
 import com.petrolpark.destroy.block.renderer.CentrifugeRenderer;
+import com.petrolpark.destroy.block.renderer.ChainedCogwheelRenderer;
 import com.petrolpark.destroy.block.renderer.CoolerRenderer;
 import com.petrolpark.destroy.block.renderer.DifferentialRenderer;
 import com.petrolpark.destroy.block.renderer.DoubleCardanShaftRenderer;
@@ -45,6 +46,12 @@ public class DestroyBlockEntityTypes {
         .instance(() -> CentrifugeCogInstance::new)
         .validBlocks(DestroyBlocks.CENTRIFUGE)
         .renderer(() -> CentrifugeRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<ChainedCogwheelBlockEntity> CHAINED_COGWHEEL = REGISTRATE
+        .blockEntity("chained_cogwheel", ChainedCogwheelBlockEntity::new)
+        .validBlocks(DestroyBlocks.CHAINED_COGWHEEL, DestroyBlocks.CHAINED_LARGE_COGWHEEL)
+        .renderer(() -> ChainedCogwheelRenderer::new)
         .register();
 
     public static final BlockEntityEntry<CoaxialGearBlockEntity> COAXIAL_GEAR = REGISTRATE

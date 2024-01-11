@@ -11,15 +11,18 @@ import java.util.Map.Entry;
 import com.jozufozu.flywheel.util.Color;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.petrolpark.destroy.chemistry.naming.INameableProduct;
+import com.petrolpark.destroy.chemistry.naming.NamedSalt;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.util.DestroyLang;
-import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.NBTHelper;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * A {@link com.petrolpark.destroy.chemistry.Mixture Mixture} which cannot react.
@@ -291,6 +294,7 @@ public class ReadOnlyMixture {
     /**
      * Update the {@link ReadOnlyMixture#name name} of this Mixture to reflect what's in it.
      */
+    @OnlyIn(Dist.CLIENT)
     protected void updateName() {
 
         if (translationKey != "") {
@@ -335,11 +339,7 @@ public class ReadOnlyMixture {
         // Check for salts
         if (cations.size() != 0 || anions.size() != 0) {
             if (cations.size() == 1 && anions.size() == 1) { // Single simple salt (one cation, one anion)
-                if (cations.get(0) == DestroyMolecules.PROTON) { // If it's a proton 'salt'
-                    products.add(b -> DestroyLang.translate("mixture.acid").component());
-                } else {
-                    products.add(b -> DestroyLang.translate("mixture.simple_salt", cations.get(0).getName(b).getString(), anions.get(0).getName(b).getString()).component());
-                };
+                products.add(new NamedSalt(cations.get(0), anions.get(0)));
             } else { // Multiple salts
                 products.add(b -> DestroyLang.translate("mixture.salts").component());
             };
@@ -348,34 +348,29 @@ public class ReadOnlyMixture {
         boolean thereAreSolvents = solvents.size() != 0;
         boolean thereAreImpurities = impurities.size() != 0;
 
+        // If two products have the same name, such as an acid having its undissociated and dissociated form salt name override the same, ignore one
+        if (products.size() == 2 && products.get(0).getName(iupac).getString().equals(products.get(1).getName(iupac).getString())) products.remove(1);
+
         if (products.size() == 0) {
             if (solvents.size() == 1) { // One solvent, no products
-                name = (thereAreImpurities ? DestroyLang.translate("mixture.dirty").space() : DestroyLang.builder())
-                    .add(solvents.get(0).getName(iupac).plainCopy())
-                    .component();
+                name = solvents.get(0).getName(iupac).plainCopy();
             } else if (solvents.size() == 2) { // Two solvents, no products
-                name = (thereAreImpurities ? DestroyLang.translate("mixture.dirty").space() : DestroyLang.builder())
-                    .add(DestroyLang.translate("mixture.and", 
-                        solvents.get(0).getName(iupac).getString(), solvents.get(1).getName(iupac).getString()
-                    )).component();
+                name = DestroyLang.translate("mixture.and", solvents.get(0).getName(iupac).getString(), solvents.get(1).getName(iupac).getString()).component();
             } else if (thereAreSolvents) { // Many solvents, no products
-                name = (thereAreImpurities ? DestroyLang.translate("mixture.dirty").space() : DestroyLang.builder())
-                    .add(DestroyLang.translate("mixture.solvents"))
-                    .component();
+                name = DestroyLang.translate("mixture.solvents").component();
             };
-        } else if (products.size() == 1) { // One product
-            name = (thereAreImpurities ? DestroyLang.translate("mixture.impure").space() : DestroyLang.builder())
-                .add(products.get(0).getName(iupac).plainCopy())
-                .add(thereAreSolvents ? DestroyLang.builder().space().translate("mixture.solution") : Lang.text(""))
-                .component();
-        } else if (products.size() == 2) { // Two products
-            Collections.sort(products, (p1, p2) -> p1.getName(iupac).getString().compareTo(p2.getName(iupac).getString()));
-            name = (thereAreImpurities ? DestroyLang.translate("mixture.impure").space() : DestroyLang.builder())
-                .add(DestroyLang.translate("mixture.and", 
-                    products.get(0).getName(iupac).getString(), products.get(1).getName(iupac).getString()
-                )).add(thereAreSolvents ? DestroyLang.builder().space().translate("mixture.solution") : Lang.text(""))
-                .component();
+            if (thereAreImpurities) name = DestroyLang.translate("mixture.dirty", name.getString()).component();
+
+        } else if (products.size() <= 2) { // If there are not enough products to just call it "Mixture"
+            if (products.size() == 1) {
+                name = products.get(0).getName(iupac).plainCopy();
+            } else {
+                name = DestroyLang.translate("mixture.and", products.get(0).getName(iupac).getString(), products.get(1).getName(iupac).getString()).component();
+            };
+            if (thereAreSolvents) name = DestroyLang.translate("mixture.solution", name.getString()).component(); // If there are solvents, this is a solution
+            if (thereAreImpurities) name = DestroyLang.translate("mixture.impure", name.getString()).component(); // If there impurities, this is 'impure', regardless of whether its a solution or not
         } else { // Many products
+
         }; 
 
         if (name == null) name = DestroyLang.translate("mixture.mixture").component();

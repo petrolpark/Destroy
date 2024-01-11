@@ -1,13 +1,13 @@
 package com.petrolpark.destroy.item;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import com.ibm.icu.text.DateFormat;
-import com.ibm.icu.text.SimpleDateFormat;
 import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.badge.Badge;
 import com.petrolpark.destroy.util.DestroyLang;

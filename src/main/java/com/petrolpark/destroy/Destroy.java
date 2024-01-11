@@ -74,6 +74,7 @@ public class Destroy {
 
     @MoveToPetrolparkLibrary
     public static final DestroyRegistrate PETROLPARK_REGISTRATE = new DestroyRegistrate("petrolpark");
+
     public static final DestroyRegistrate REGISTRATE = new DestroyRegistrate(MOD_ID);
 
     public static ResourceLocation asResource(String path) {

@@ -1,4 +1,6 @@
-package com.petrolpark.destroy.chemistry;
+package com.petrolpark.destroy.chemistry.naming;
+
+import com.petrolpark.destroy.chemistry.Molecule;
 
 import net.minecraft.network.chat.Component;
 

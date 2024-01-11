@@ -28,15 +28,18 @@ public class RedstoneProgrammerRenderer extends SafeBlockEntityRenderer<Redstone
             .centre()
             .rotateY(AngleHelper.horizontalAngle(direction))
             .unCentre();
-
+        SuperByteBuffer needle = CachedBufferer.partial(DestroyPartials.REDSTONE_PROGRAMMER_NEEDLE, be.getBlockState())
+            .centre()
+            .rotateY(AngleHelper.horizontalAngle(direction))
+            .unCentre();
 
         cylinder
             .translate(0, 6 / 16d, 10 / 16d)
             .rotateX(AnimationTickHolder.getRenderTime())
             .translateBack(0, 6 / 16d, 10 / 16d);
         
-        cylinder
-            .renderInto(ms, vc);
+        cylinder.renderInto(ms, vc);
+        needle.renderInto(ms, vc);
     };
     
 };

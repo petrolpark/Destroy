@@ -19,6 +19,7 @@ public class DestroyPartials {
     
     // Kinetics
     CENTRIFUGE_COG = block("centrifuge/inner"),
+    CHAIN_LINK = block("chain_link"),
     DYNAMO_COG = block("dynamo/inner"),
 
     // Pumpjack

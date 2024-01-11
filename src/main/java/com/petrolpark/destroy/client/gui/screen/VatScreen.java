@@ -42,6 +42,8 @@ import net.minecraft.util.Mth;
 
 public class VatScreen extends AbstractSimiScreen {
 
+    private int ticksUntilRefresh;
+
     private static int CARD_HEIGHT = 32;
     private Rect2i moleculeScrollArea;
     private Rect2i textArea;
@@ -77,6 +79,8 @@ public class VatScreen extends AbstractSimiScreen {
 
         selectedMolecule = null;
         orderedMolecules = new ArrayList<>(blockEntity.getCombinedReadOnlyMixture().getContents(false).size());
+
+        ticksUntilRefresh = 0;
     };
 
     @Override
@@ -111,9 +115,13 @@ public class VatScreen extends AbstractSimiScreen {
         if (vatOptional.isEmpty()) return;
         int vatCapacity = vatOptional.get().getCapacity(); //TODO swap along with all other references to the vat capacity
 
-        orderedMolecules = new ArrayList<>(mixture.getContents(false).size());
-        orderedMolecules.addAll(mixture.getContents(false).stream().map(molecule -> Pair.of(molecule, mixture.getConcentrationOf(molecule) * vatCapacity / 1000)).toList());
-        Collections.sort(orderedMolecules, (p1, p2) -> Float.compare(p2.getSecond(), p1.getSecond()));
+        ticksUntilRefresh--;
+        if (ticksUntilRefresh < 0) {
+            ticksUntilRefresh = 20;
+            orderedMolecules = new ArrayList<>(mixture.getContents(false).size());
+            orderedMolecules.addAll(mixture.getContents(false).stream().map(molecule -> Pair.of(molecule, mixture.getConcentrationOf(molecule) * vatCapacity / 1000)).toList());
+            Collections.sort(orderedMolecules, (p1, p2) -> Float.compare(p2.getSecond(), p1.getSecond()));
+        };
 	};
 
     @Override

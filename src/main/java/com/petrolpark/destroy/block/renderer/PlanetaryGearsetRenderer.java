@@ -4,8 +4,8 @@ import com.jozufozu.flywheel.backend.Backend;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.block.entity.PlanetaryGearsetBlockEntity;
-import com.petrolpark.destroy.block.instance.PlanetaryGearsetInstance;
 import com.petrolpark.destroy.block.model.DestroyPartials;
+import com.petrolpark.destroy.util.KineticsHelper;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntityRenderer;
@@ -41,17 +41,17 @@ public class PlanetaryGearsetRenderer extends KineticBlockEntityRenderer<Planeta
         float offset2 = Mth.PI * BracketedKineticBlockEntityRenderer.getShaftAngleOffset(axis, planetaryGearsetBlockEntity.getBlockPos()) / 180f;
 		float angle = ((time * planetaryGearsetBlockEntity.getSpeed() * 3f / 10 + offset1) % 360) / 180 * Mth.PI;
 
-        SuperByteBuffer ringGear = CachedBufferer.partialDirectional(DestroyPartials.PG_RING_GEAR, state, Direction.get(AxisDirection.POSITIVE, axis), () -> PlanetaryGearsetInstance.rotateToAxis(axis));
+        SuperByteBuffer ringGear = CachedBufferer.partialDirectional(DestroyPartials.PG_RING_GEAR, state, Direction.get(AxisDirection.POSITIVE, axis), () -> KineticsHelper.rotateToAxis(axis));
         kineticRotationTransform(ringGear, planetaryGearsetBlockEntity, axis, angle + offset1, light);
         ringGear.renderInto(ms, vbSolid);
         
-        SuperByteBuffer sunGear = CachedBufferer.partialDirectional(DestroyPartials.PG_SUN_GEAR, state, Direction.get(AxisDirection.POSITIVE, axis), () -> PlanetaryGearsetInstance.rotateToAxis(axis));
+        SuperByteBuffer sunGear = CachedBufferer.partialDirectional(DestroyPartials.PG_SUN_GEAR, state, Direction.get(AxisDirection.POSITIVE, axis), () -> KineticsHelper.rotateToAxis(axis));
         kineticRotationTransform(sunGear, planetaryGearsetBlockEntity, axis, (-2 * angle) + offset2, light);
         sunGear.renderInto(ms, vbSolid);
         
         for (Direction direction : Direction.values()) {
             if (direction.getAxis() == axis) continue;
-            SuperByteBuffer planetGear = CachedBufferer.partialDirectional(DestroyPartials.PG_PLANET_GEAR, state, Direction.get(AxisDirection.POSITIVE, axis), () -> PlanetaryGearsetInstance.rotateToAxis(axis));
+            SuperByteBuffer planetGear = CachedBufferer.partialDirectional(DestroyPartials.PG_PLANET_GEAR, state, Direction.get(AxisDirection.POSITIVE, axis), () -> KineticsHelper.rotateToAxis(axis));
             planetGear.translate(direction.step().mul(6.25f / 16f));
             kineticRotationTransform(planetGear, planetaryGearsetBlockEntity, axis, (2 * angle) + offset2, light);
             planetGear.renderInto(ms, vbSolid);

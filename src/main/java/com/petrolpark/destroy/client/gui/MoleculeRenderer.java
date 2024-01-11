@@ -21,13 +21,12 @@ import com.petrolpark.destroy.chemistry.Formula.Topology.SideChainInformation;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Edge;
 import com.petrolpark.destroy.chemistry.serializer.Node;
-
+import com.petrolpark.destroy.util.MathsHelper;
 import com.simibubi.create.foundation.gui.ILightingSettings;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 public class MoleculeRenderer {
@@ -123,7 +122,7 @@ public class MoleculeRenderer {
                 startLocation,
                 startDirection,
                 startPlane,
-                rotate(startDirection, startPlane, 180d + (getGeometry(molecule.getRenderBranch().getNodes().get(1), false).getAngle() * 0.5d)),
+                MathsHelper.rotate(startDirection, startPlane, 180d + (getGeometry(molecule.getRenderBranch().getNodes().get(1), false).getAngle() * 0.5d)),
                 false
             );
         };
@@ -215,7 +214,7 @@ public class MoleculeRenderer {
                 Branch sideBranch = sideBranchAndBondType.getKey();
                 Vec3 newPlane = confinedGeometry.getZig().cross(sideZag);
                 RENDERED_OBJECTS.add(Pair.of(location.add(sideZag.scale(0.5d * BOND_LENGTH)), BondRenderInstance.fromZig(sideBranchAndBondType.getValue(),  sideZag)));
-                generateBranch(sideBranch, location.add(sideZag.scale(BOND_LENGTH)), rotate(sideZag, newPlane, 90d), newPlane, sideZag, false);
+                generateBranch(sideBranch, location.add(sideZag.scale(BOND_LENGTH)), MathsHelper.rotate(sideZag, newPlane, 90d), newPlane, sideZag, false);
                 j++;
             };
 
@@ -271,7 +270,7 @@ public class MoleculeRenderer {
          * specifically, the angle between the input vector (1,0,0) and the XY-coplanar output vector.
          */
         public double getAngle() {
-            double angle = angleBetween(standardDirection, connections.get(0), new Vec3(0d, 0d, 1d));
+            double angle = MathsHelper.angleBetween(standardDirection, connections.get(0), new Vec3(0d, 0d, 1d));
             return angle < 90d ? 180d - angle : angle; // We always want the obtuse angle
         };
 
@@ -288,13 +287,13 @@ public class MoleculeRenderer {
 
             // Determine how the zig was transformed from (1,0,0)
             Vec3 rotationVec = zig.cross(standardDirection);
-            double angle = angleBetween(standardDirection, zig, rotationVec);
+            double angle = MathsHelper.angleBetween(standardDirection, zig, rotationVec);
 
             // Calculate the adjusted zag vector by applying the same transformation to the XY-coplanar output vector for this geometry
-            Vec3 zag = rotate(connections.get(0), rotationVec, angle);
+            Vec3 zag = MathsHelper.rotate(connections.get(0), rotationVec, angle);
 
             // Determine whether the continuation vector flipped by 180 degrees is more faithful to the direction in which this branch should be going
-            boolean flip = distanceFromPointToLine(zig.add(rotate(zag, zig, 180d)), Vec3.ZERO, direction) < distanceFromPointToLine(zig.add(zag), Vec3.ZERO, direction);
+            boolean flip = distanceFromPointToLine(zig.add(MathsHelper.rotate(zag, zig, 180d)), Vec3.ZERO, direction) < distanceFromPointToLine(zig.add(zag), Vec3.ZERO, direction);
 
             return new ConfinedGeometry(this, rotationVec, angle, flip);
         };
@@ -325,11 +324,11 @@ public class MoleculeRenderer {
         };
 
         private Vec3 getZig() {
-            return rotate(Geometry.standardDirection, rotationAxis, angle);
+            return MathsHelper.rotate(Geometry.standardDirection, rotationAxis, angle);
         };
 
         private Vec3 getInverseZig() {
-            return rotate(Geometry.inverseStandardDirection, rotationAxis, angle);
+            return MathsHelper.rotate(Geometry.inverseStandardDirection, rotationAxis, angle);
         };
 
         private Vec3 getZag() {
@@ -337,39 +336,13 @@ public class MoleculeRenderer {
         };
 
         private Vec3 getZag(int index) {
-            Vec3 unflipped = rotate(geometry.connections.get(index), rotationAxis, angle);
+            Vec3 unflipped = MathsHelper.rotate(geometry.connections.get(index), rotationAxis, angle);
             if (!flip) {
                 return unflipped;
             } else {
-                return rotate(unflipped, rotate(Geometry.standardDirection, rotationAxis, angle), 180d);
+                return MathsHelper.rotate(unflipped, MathsHelper.rotate(Geometry.standardDirection, rotationAxis, angle), 180d);
             }
         };
-    };
-
-    /**
-     * @param vec The vector to rotate
-     * @param rotationAxis The vector about which to rotate the first vector
-     * @param angle The angle in degrees through which to rotate the first vector around the second
-     */
-    public static Vec3 rotate(Vec3 vec, Vec3 rotationAxis, double angle) {
-        Vec3 k = rotationAxis.normalize();
-        double angleInRads = angle * Mth.PI / 180d;
-        // Rodrigues' formula
-        return vec.scale(Math.cos(angleInRads))
-            .add(k.cross(vec).scale(Math.sin(angleInRads)))
-            .add(k.scale(k.dot(vec) * (1 - Math.cos(angleInRads)))); 
-    };
-
-    /**
-     * The directional angle in degrees between two vectors, between 0 and 360.
-     * @param vec1
-     * @param vec2
-     * @param plane The approximate vector around which {@code vec1} was rotated to get {@code vec2}
-     */
-    public static double angleBetween(Vec3 vec1, Vec3 vec2, Vec3 plane) {
-        double angle = Math.acos(vec1.dot(vec2) / (vec1.length() * vec2.length())) * 180d / Mth.PI;
-        if (vec1.dot(vec2.cross(plane)) < 0d) angle = 360d - angle;
-        return angle;
     };
 
     /**

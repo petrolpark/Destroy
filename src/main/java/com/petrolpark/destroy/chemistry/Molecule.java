@@ -18,6 +18,7 @@ import com.petrolpark.destroy.chemistry.error.ChemistryException;
 import com.petrolpark.destroy.chemistry.error.ChemistryException.FormulaException.FormulaModificationException;
 import com.petrolpark.destroy.chemistry.index.DestroyGroupTypes;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.petrolpark.destroy.chemistry.naming.INameableProduct;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.client.gui.MoleculeRenderer;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -437,12 +438,17 @@ public class Molecule implements INameableProduct {
     @Override
     public Component getName(boolean iupac) {
         if (isNovel()) return Component.literal(getSerlializedMolecularFormula(true));
+        return Component.translatable(getTranslationKey(iupac));
+    };
+
+    public String getTranslationKey(boolean iupac) {
+        if (isNovel()) return "destroy.chemical.unknown";
         String key = nameSpace + ".chemical." + translationKey;
         String iupacKey = key + ".iupac";
         if (iupac && I18n.exists(iupacKey)) {
             key = iupacKey;
         };
-        return Component.translatable(key);
+        return key;
     };
 
     /**
