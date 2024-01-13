@@ -879,7 +879,7 @@
     "destroy.tooltip.vat_material.pressure.nerd_mode": "%1$skPa",
     "destroy.tooltip.vat_material.transparent": "透明度：",
     "destroy.tooltip.vat_material.transparent.description": "透明方块可以使一些反应需要的_紫外光_通过。",
-    "destroy.tooltip.vat_material.vat_controller": "建造反应釜需要_一个_反应釜控制器。它可以承受住_任何大小的压力_、_不导热_且_完全密封_。"
+    "destroy.tooltip.vat_material.vat_controller": "建造反应釜需要_一个_反应釜控制器。它可以承受住_任何大小的压力_，_不导热_，且_完全密封_。"
 
     "effect.destroy.cancer": "癌症警示",
     "effect.destroy.cancer.description": "_游戏内没有任何影响_。坍毁化合里的许多东西都是玩笑，但_癌症不是其中之一_。这里是为了_提高_职业性接触，以及_对臭氧层的危害_这两者与癌症风险增加之间的联系的_认识_。请参阅“_cancerresearchuk.org_”的专业信息源。这个效果可以被_顺铂_移除。",
