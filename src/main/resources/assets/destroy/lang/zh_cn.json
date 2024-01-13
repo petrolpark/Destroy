@@ -407,7 +407,7 @@
     "destroy.chemistry.precipitation": "沉淀来自从{溶液, destroy:solution}溶解的物质。",
     "destroy.chemistry.radical": "虽然大多数物质都含有成对{电子, destroy:electron}，但是自由基是具有未成对电子的物种，并且通常具有很强的反应活性。",
     "destroy.chemistry.radical_initiator": "自由基引发剂是产生{自由基, destroy:radical}并引发{聚合, destroy:polymer}反应的物质。",
-    "destroy.chemistry.reduction": "当一个{原子, destroy:atom}获得{电子, destroy:electron}时，该{原子, destroy:atom}减少。还原与{氧化, destroy:oxidation}相反。",
+    "destroy.chemistry.reduction": "当一个{原子, destroy:atom}获得{电子, destroy:electron}时，该{原子, destroy:atom}化合价降低。还原与{氧化, destroy:oxidation}相反。",
     "destroy.chemistry.sequestration": "碳封存是对温室气体的捕获，使其以固体或液体的形式储存。",
     "destroy.chemistry.solution": "溶液中含有溶于溶剂的溶质。",
     "destroy.chemistry.substitution": "取代反应是指一个{分子, destroy:molecule}上的一个基团被另一个基团迅速取代的反应。",
