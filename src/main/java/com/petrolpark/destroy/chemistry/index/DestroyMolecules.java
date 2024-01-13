@@ -467,7 +467,7 @@ public final class DestroyMolecules {
         .id("generic_chloride")
         .structure(Formula.deserialize("destroy:linear:RC(R)(R)Cl"))
         .hypothetical()
-        .translationKey("chloride")
+        .translationKey("organic_chloride")
         .build(),
 
     GENERIC_ESTER = builder()

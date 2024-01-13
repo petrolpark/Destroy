@@ -110,7 +110,7 @@ public class PumpjackBlockEntity extends SmartBlockEntity implements IHaveGoggle
         advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.USE_PUMPJACK);
         // Add the oil to the Pumpjack's internal tank
         tank.allowInsertion();
-        int amountPumped = tank.getPrimaryHandler().fill(new FluidStack(DestroyFluids.CRUDE_OIL.get(), (int)Math.min(oilAmount, cam.getSpeed() / 16)), FluidAction.EXECUTE);
+        int amountPumped = tank.getPrimaryHandler().fill(new FluidStack(DestroyFluids.CRUDE_OIL.get(), (int)Math.min(oilAmount, Math.abs(cam.getSpeed() / 16))), FluidAction.EXECUTE);
         tank.forbidInsertion();
         crudeOilOptional.ifPresent(crudeOilCap -> crudeOilCap.decreaseAmount(amountPumped));
     };

@@ -1,4 +1,9 @@
 {
+    "destroy:ammonium": {
+        "specifics": {
+            "destroy:chloride": "destroy.chemical.sal_ammoniac"
+        }
+    },
     "destroy:copper_i": {
         "generic": "destroy.chemical.cuprous"
     },

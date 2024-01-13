@@ -55,7 +55,7 @@ public class SaltNameOverrides {
                 if (molecule == null) throw new IllegalStateException("Unknown molecule in overrides: "+moleculeId);
 
                 SaltNameOverrides overrides = ALL_OVERRIDES.get(molecule);
-                if (overrides == null) overrides = new SaltNameOverrides();
+                if (overrides == null) overrides = new SaltNameOverrides(); // Create a new one if one doesn't already exist
 
                 JsonObject overridesObject = moleculeEntry.getValue().getAsJsonObject();
                 if (overridesObject.has("generic")) overrides.genericOverrideKey = overridesObject.get("generic").getAsString();
@@ -80,7 +80,6 @@ public class SaltNameOverrides {
         Minecraft minecraft = Minecraft.getInstance();
         ALL_OVERRIDES.clear();
         for (String namespace : resourceManager.getNamespaces()) {
-            Destroy.LOGGER.info("Loading salt name overrides for mod "+namespace);
             ResourceLocation location = new ResourceLocation(namespace, "lang/salt_name_overrides/"+minecraft.getLanguageManager().getSelected()+".json");
             Optional<Resource> resource = resourceManager .getResource(location);
             if (resource.isPresent()) {

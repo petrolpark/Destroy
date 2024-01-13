@@ -110,8 +110,8 @@ public class ExtrudableMovementBehaviour implements MovementBehaviour {
         };
 
         // Making a new model every frame seems like a bad idea but it changes shape continually and I'm not smart enough to do it another way
-        ms.translate(context.localPos.getX(), context.localPos.getY(), context.localPos.getZ());
         ms.pushPose();
+        ms.translate(context.localPos.getX(), context.localPos.getY(), context.localPos.getZ());
         BakedModel model = new ExtrudedBlockModel(getBlockState(context), direction, progress);
 		BakedModelRenderHelper.standardModelRender(model, Blocks.AIR.defaultBlockState())
             .renderInto(ms, vbSolid);

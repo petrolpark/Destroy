@@ -38,7 +38,7 @@ public class GeniusFluidTankBehaviour extends SmartFluidTankBehaviour {
 		};
         capability = LazyOptional.of(() -> new InternalFluidHandler(handlers, enforceVariety));
     };
-
+    
     public class GeniusTankSegment extends TankSegment {
 
         public GeniusTankSegment(int capacity) {

@@ -35,6 +35,7 @@
         "EjectorBlockEntityMixin",
         "FluidIngredientMixin",
         "FluidNetworkMixin",
+        "FluidTankBlockEntityMixin",
         "HeatConditionMixin",
         "HeatLevelMixin",
         "ItemDrainBlockMixin",
