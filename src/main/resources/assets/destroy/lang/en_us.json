@@ -370,7 +370,7 @@
     "destroy.chemistry.alkane": "Alkanes are a group of {molecules, destroy:molecule} containing only carbon and hydrogen, and only single {bonds, destroy:bond}.",
     "destroy.chemistry.aqua_regia": "Latin for 'royal water', aqua regia is a mixture of [destroy:nitric_acid] and [destroy:hydrochloric_acid] which can {dissolve, destroy:solution} {noble, destroy:inert} metals like gold.",
     "destroy.chemistry.atom": "Atoms are tiny particles consisting of {positive, destroy:charge} {nuclei, destroy:nucleus} surrounded by {negative, destroy:charge} {electrons, destroy:electron}.",
-    "destroy.chemistry.base": "Bases are species which can accept hydrogen ions ({protons, destroy:protons}) from other species. They react with {acids, destroy:acid}.",
+    "destroy.chemistry.base": "Bases are species which can accept hydrogen ions ({protons, destroy:proton}) from other species. They react with {acids, destroy:acid}.",
     "destroy.chemistry.bond": "Two {atoms, destroy:atom} can bond by sharing a pair of {electrons, destroy:electron}. The {positive, destroy:charge} {nuclei, destroy:nucleus} of the atoms are attracted to the {negative, destroy:charge} {electrons, destroy:electron}, requiring lots of energy to be pulled apart.",
     "destroy.chemistry.carbonylation": "A carbonylation is a reaction with [destroy:carbon_monoxide].",
     "destroy.chemistry.carboxylation": "A carboxylation is a reaction with [destroy:carbon_dioxide]. It is the opposite of a {decarboxylation, destroy:decarboxylation}.",
