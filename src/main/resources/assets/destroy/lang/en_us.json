@@ -355,7 +355,7 @@
     "destroy.chemical.trichlorofluoromethane": "R-11",
     "destroy.chemical.trichlorofluoromethane.iupac": "Trichlorofluoromethane",
     "destroy.chemical.trimethylamine": "Trimethylamine",
-    "destrot.chemical.unknown": "Unknown",
+    "destroy.chemical.unknown": "Unknown",
     "destroy.chemical.vinyl_acetate": "Vinyl Acetate",
     "destroy.chemical.vinyl_acetate.iupac": "Ethenyl Ethanoate",
     "destroy.chemical.water": "Water",
@@ -626,7 +626,7 @@
     "destroy.generic_reaction.nitrile_hydrolysis.description": "The {hydrolysis, destroy:hydrolysis} of a [destroy:nitrile] to produce an [destroy:amide].",
 
     "destroy.reaction.abs_copolymerization": "ABS Copolymerization",
-    "destroy.reaction.abs_copolymerization.description": "The {free-radical, destroy:radical} {addition copolymerization, destroy:addition_polymerization} of [destroy:acrylonitrile], [destroy:butadiene] and [destroy:styrene].",
+    "destroy.reaction.abs_copolymerization.description": "The {free-radical, destroy:radical} {addition copolymerization, destroy:addition_polymer} of [destroy:acrylonitrile], [destroy:butadiene] and [destroy:styrene].",
     "destroy.reaction.aibn_synthesis": "[destroy:aibn] Synthesis",
     "destroy.reaction.aibn_synthesis.description": "A two-step synthesis in reality, which produces the {radical initiator, destroy:radical_initiator} [destroy:aibn].",
     "destroy.reaction.andrussow_process": "Andrussow Process",
