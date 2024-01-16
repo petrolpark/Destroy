@@ -1,0 +1,8 @@
+{
+    "block.create.schematicannon.tooltip.summary": "发射方块，重新构建已在世界中部署的_蓝图_，会使用相邻箱子中的物品进行填充，_爆炸物_作为燃料。",
+
+    "create.gui.schematicannon.gunpowderLevel": "爆炸物%1$s%%",
+    "create.gui.schematicannon.slot.gunpowder": "向蓝图加农炮添加爆炸物以提供动力",
+
+    "create.schematicannon.status.noGunpowder": "爆炸物已耗尽"
+}
