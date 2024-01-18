@@ -10,7 +10,6 @@ import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
 import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
 import com.petrolpark.destroy.block.model.DestroyPartials;
 import com.petrolpark.destroy.util.vat.Vat;
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
 import com.simibubi.create.foundation.item.SmartInventory;
@@ -35,7 +34,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntity> {
 
-    private static final float dialPivot = 5.75f / 16;
+    private static final float dialPivot = 8f / 16;
     
     public VatRenderer(BlockEntityRendererProvider.Context context) {};
 
@@ -76,15 +75,14 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
                         .renderInto(ms, vbSolid);
                     if (facing.getAxis() == Axis.Y) break;
                     ms.pushPose();
-                    CachedBufferer.partial(AllPartialModels.BOILER_GAUGE_DIAL, state)
+                    CachedBufferer.partial(DestroyPartials.VAT_SIDE_BAROMETER_DIAL, state)
                         .translate(sidePos.subtract(controller.getBlockPos()))
                         .centre()
                         .rotateY((facing.getAxis() == Axis.X ? facing.getClockWise() : facing.getCounterClockWise()).toYRot())
                         .unCentre()
                         .translate(2 / 16f, 0, 0)
-                        .translate(0, dialPivot, dialPivot)
-                        .rotateX(-90 * controller.getClientPressure(partialTicks) / controller.getVatOptional().get().getMaxPressure())
-                        .translate(0, -dialPivot, -dialPivot)
+                        .translate(0d, dialPivot, dialPivot)
+                        .rotateX(-90 - 180 * Mth.clamp(controller.getClientPressure(partialTicks) / controller.getVatOptional().get().getMaxPressure(), -1f, 1f))
                         .light(light)
                         .renderInto(ms, vbSolid);
                     ms.popPose();

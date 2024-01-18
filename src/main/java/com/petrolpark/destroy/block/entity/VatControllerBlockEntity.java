@@ -35,6 +35,7 @@ import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Lang;
@@ -116,11 +117,10 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         underDeconstruction = false;
 
         fluidCapability = LazyOptional.empty();
+        itemCapability = LazyOptional.empty();
         openVentPos = null;
 
-        inventory = new SmartInventory(9, this)
-            .whenContentsChanged(i -> setInventoryChanged());
-		itemCapability = LazyOptional.of(() -> inventory);
+        updateItemCapability();
     };
 
     @Override
@@ -140,6 +140,13 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         // Advancement behaviour
         advancementBehaviour = new DestroyAdvancementBehaviour(this);
         behaviours.add(advancementBehaviour);
+    };
+
+    protected void updateItemCapability() {
+        if (itemCapability.isPresent()) return;
+        inventory = new SmartInventory(9, this)
+            .whenContentsChanged(i -> setInventoryChanged());
+        itemCapability = LazyOptional.of(() -> inventory);
     };
 
     protected void updateFluidCapability() {
@@ -391,6 +398,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         Optional<Vat> newVat = Vat.tryConstruct(getLevel(), vatInternalStartPos, getBlockPos());
         if (!newVat.isPresent()) return false;
 
+        updateItemCapability();
+
         // Once the Vat has been successfully created...
         Collection<BlockPos> sides = newVat.get().getSideBlockPositions();
         // For each Block which makes up a side of this Vat...
@@ -448,6 +457,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             pollutionPos = posDestroyed.relative(vatSideOptional.get().direction);
         };
 
+        ItemHelper.dropContents(getLevel(), posDestroyed, inventory);
+        itemCapability.invalidate();
         PollutionHelper.pollute(getLevel(), pollutionPos, getLiquidTank().getFluid(), getGasTank().getFluid());
 
         getLiquidTank().setFluid(FluidStack.EMPTY);
@@ -459,7 +470,6 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
             if (!pos.equals(posDestroyed)) {
                 getLevel().getBlockEntity(pos, DestroyBlockEntityTypes.VAT_SIDE.get()).ifPresent(vatSide -> {
                     BlockState newState = vatSide.getMaterial();
-                    getLevel().removeBlock(pos, false);
                     getLevel().setBlockAndUpdate(pos, newState);
                 });
             };

@@ -23,19 +23,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 
-public class VatControllerBlock extends Block implements IBE<VatControllerBlockEntity> {
-
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+public class VatControllerBlock extends HorizontalDirectionalBlock implements IBE<VatControllerBlockEntity> {
 
     public VatControllerBlock(Properties properties) {
         super(properties);

@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.entity.behaviour.ExtendedBasinBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour.GeniusFluidTankBehaviour;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -33,8 +32,6 @@ public abstract class BasinBlockEntityMixin implements IHaveHoveringInformation 
         remap = false
     )
     public void inAddBehaviours(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
-        Destroy.LOGGER.info("heres all the stuff ");
-        behaviours.forEach(be -> Destroy.LOGGER.info("Ive got "+be));
         behaviours.remove(getInputTank());
         behaviours.remove(getOutputTank());
         setInputTank(
@@ -54,7 +51,8 @@ public abstract class BasinBlockEntityMixin implements IHaveHoveringInformation 
      * Add the 'Basin too full' pop-up if a Basin will not be able to react.
      */
     public boolean addToTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        if (((BasinBlockEntity)(Object)this).getBehaviour(ExtendedBasinBehaviour.TYPE).tooFullToReact) {
+        ExtendedBasinBehaviour behaviour = ((BasinBlockEntity)(Object)this).getBehaviour(ExtendedBasinBehaviour.TYPE);
+        if (behaviour != null && behaviour.tooFullToReact) {
             DestroyLang.translate("tooltip.basin.too_full.title").style(ChatFormatting.GOLD).forGoggles(tooltip);
             TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.basin.too_full").component(), TooltipHelper.Palette.GRAY_AND_WHITE).forEach(component -> {
                 DestroyLang.builder().add(component.copy()).forGoggles(tooltip);

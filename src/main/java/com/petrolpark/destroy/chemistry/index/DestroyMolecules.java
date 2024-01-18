@@ -308,7 +308,7 @@ public final class DestroyMolecules {
 
     CUBANEDICARBOXYLIC_ACID = builder()
         .id("cubanedicarboxylic_acid")
-        .structure(Formula.deserialize("destroy:cubane:C(=O)OH,,,C(=O)OH,,,"))
+        .structure(Formula.deserialize("destroy:cubane:C(=O)OH,,,,,,C(=O)OH"))
         .boilingPoint(457.4f)
         .density(2400f)
         .tag(Tags.SMOG)
@@ -1035,7 +1035,7 @@ public final class DestroyMolecules {
     
     TRINITROTOLUENE = builder()
         .id("tnt")
-        .structure(Formula.deserialize("destroy:benzene:C,N~(~O)O,C,N~(~O)O,,N~(~O)O"))
+        .structure(Formula.deserialize("destroy:benzene:C,N~(~O)O,,N~(~O)O,,N~(~O)O"))
         .color(0xD0FCF1E8)
         .boilingPoint(240f) // Decomposes
         .density(1654f)

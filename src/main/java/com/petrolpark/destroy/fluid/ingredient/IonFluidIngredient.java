@@ -21,24 +21,25 @@ public class IonFluidIngredient extends MoleculeFluidIngredient {
 
     @Override
     protected boolean testMixture(Mixture mixture) {
-        return mixture.hasUsableMolecule(molecule, concentration, m -> m.getCharge() != 0 && Math.signum(m.getCharge()) != Math.signum(molecule.getCharge()));
+        return mixture.hasUsableMolecule(molecule, minConcentration, maxConcentration, m -> m.getCharge() != 0 && Math.signum(m.getCharge()) != Math.signum(molecule.getCharge()));
     };
 
     @Override
-    protected String getMixtureFluidIngredientSubtype() {
+    public String getMixtureFluidIngredientSubtype() {
         return "mixtureFluidWithIon";
     };
 
     @Override
     public List<Component> getDescription(CompoundTag fluidTag) {
         String moleculeID = fluidTag.getString("MoleculeRequired");
-        float concentration = fluidTag.getFloat("ConcentrationRequired");
+        float minConc = fluidTag.getFloat("MinimumConcentration");
+        float maxConc = fluidTag.getFloat("MaximumConcentration");
 
         Molecule molecule = Molecule.getMolecule(moleculeID);
         Component moleculeName = molecule == null ? DestroyLang.translate("tooltip.unknown_molecule").component() : molecule.getName(DestroyAllConfigs.CLIENT.chemistry.iupacNames.get());
         boolean anion = molecule != null && molecule.getCharge() < 0;
 
-        return TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient." + (anion ? "anion" : "cation"), moleculeName, concentration).string(), Palette.GRAY_AND_WHITE);
+        return TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient." + (anion ? "anion" : "cation"), moleculeName, df.format(minConc), df.format(maxConc)).string(), Palette.GRAY_AND_WHITE);
     };
     
 };

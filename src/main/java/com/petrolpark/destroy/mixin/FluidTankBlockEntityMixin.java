@@ -13,8 +13,8 @@ import net.minecraftforge.fluids.FluidStack;
 @Mixin(FluidTankBlockEntity.class)
 public abstract class FluidTankBlockEntityMixin {
     
-    @Overwrite
-    public SmartFluidTank createInventory() {
+    @Overwrite(remap = false)
+    protected SmartFluidTank createInventory() {
         return new GeniusFluidTank(FluidTankBlockEntity.getCapacityMultiplier(), this::invokeOnFluidStackChanged);
     };
 

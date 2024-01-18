@@ -2,11 +2,10 @@ package com.petrolpark.destroy.config;
 
 public class DestroyCommonConfigs extends DestroyConfigBase {
 
+	public final ConfigBool automaticGoggles = b(true, Comments.autoGoggles);
     public final DestroyWorldGenerationConfigs worldGen = nested(0, DestroyWorldGenerationConfigs::new, Comments.worldGen);
 	public final DestroySubstancesConfigs substances = nested(0, DestroySubstancesConfigs::new, Comments.substances);
 	public final DestroyPollutionConfigs pollution = nested(0, DestroyPollutionConfigs::new, Comments.pollution);
-
-	public final ConfigBool automaticGoggles = b(true, Comments.autoGoggles);
 
 	@Override
 	public String getName() {

@@ -31,7 +31,7 @@ public class RefrigerantDummyFluidIngredient extends MoleculeTagFluidIngredient 
     };
 
     @Override
-    protected String getMixtureFluidIngredientSubtype() {
+    public String getMixtureFluidIngredientSubtype() {
         return "mixtureFluidWithRefrigerants";
     };
 

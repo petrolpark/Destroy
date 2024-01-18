@@ -89,14 +89,6 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.CYCLOHEXENE)
         .build(),
 
-    BENZENE_NITRATION = builder()
-        .id("benzene_nitration")
-        .addReactant(DestroyMolecules.BENZENE)
-        .addReactant(DestroyMolecules.NITRONIUM, 3, 1)
-        .addProduct(DestroyMolecules.TRINITROTOLUENE)
-        .addProduct(DestroyMolecules.PROTON, 3)
-        .build(),
-
     BUTADIENE_CARBONYLATION = builder()
         .id("butadiene_carbonylation")
         .addReactant(DestroyMolecules.BUTADIENE)
@@ -405,8 +397,6 @@ public class DestroyReactions {
         .addCatalyst(DestroyMolecules.PROTON, 1)
         .addProduct(DestroyMolecules.SALICYLIC_ACID)
         .build(),
-    
-    //TODO add hydrogenation of nitriles to amines as generic reaction
 
     MERCURY_FULMINATION = builder()
         .id("mercury_fulmination")
@@ -416,7 +406,7 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.CARBON_DIOXIDE, 2)
         .addProduct(DestroyMolecules.WATER, 18)
         .addProduct(DestroyMolecules.NITROGEN_DIOXIDE, 6)
-        .withResult(1f, PrecipitateReactionResult.of(DestroyItems.FULMINATED_MERCURY::asStack)) //TODO figure out actual molar ratios
+        .withResult(1f, PrecipitateReactionResult.of(DestroyItems.FULMINATED_MERCURY::asStack))
         .build(),
 
     METAXYLENE_TRANSALKYLATION = builder()
@@ -543,6 +533,14 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.WATER, 2)
         .build(),
 
+    PHENOL_NITRATION = builder()
+        .id("phenol_nitration")
+        .addReactant(DestroyMolecules.PHENOL)
+        .addReactant(DestroyMolecules.NITRONIUM, 3, 1)
+        .addProduct(DestroyMolecules.PICRIC_ACID)
+        .addProduct(DestroyMolecules.PROTON, 3)
+        .build(),
+
     PHOSGENE_FORMATION = builder()
         .id("phosgene_formation")
         .addReactant(DestroyMolecules.CARBON_MONOXIDE)
@@ -619,6 +617,14 @@ public class DestroyReactions {
         .withResult(3f, PrecipitateReactionResult.of(DestroyItems.POLYTETRAFLUOROETHENE::asStack))
         .preexponentialFactor(10f)
         .activationEnergy(10f)
+        .build(),
+
+    TOLUENE_NITRATION = builder()
+        .id("toluene_nitration")
+        .addReactant(DestroyMolecules.TOLUENE)
+        .addReactant(DestroyMolecules.NITRONIUM, 3, 1)
+        .addProduct(DestroyMolecules.TRINITROTOLUENE)
+        .addProduct(DestroyMolecules.PROTON, 3)
         .build(),
 
     TOLUENE_TRANSALKYLATION = builder()

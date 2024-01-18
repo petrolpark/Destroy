@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.gson.JsonObject;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.naming.NamedSalt;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.foundation.item.TooltipHelper;
@@ -17,11 +18,10 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
 
-public class SaltFluidIngredient extends MixtureFluidIngredient {
+public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient {
 
     protected Molecule cation;
     protected Molecule anion;
-    protected float concentration;
 
     @Override
     public MixtureFluidIngredient getNew() {
@@ -29,31 +29,30 @@ public class SaltFluidIngredient extends MixtureFluidIngredient {
     };
 
     @Override
-    protected String getMixtureFluidIngredientSubtype() {
+    public String getMixtureFluidIngredientSubtype() {
         return "mixtureFluidWithSalt";
     };
 
     @Override
     public void addNBT(CompoundTag fluidTag) {
+        super.addNBT(fluidTag);
         fluidTag.putString("RequiredCation", cation.getFullID());
         fluidTag.putString("RequiredAnion", anion.getFullID());
-        fluidTag.putFloat("RequiredConcentration", concentration);
     };
 
     @Override
     public List<Component> getDescription(CompoundTag fluidTag) {
         String cationID = fluidTag.getString("RequiredCation");
         String anionID = fluidTag.getString("RequiredAnion");
-        float concentration = fluidTag.getFloat("RequiredConcentration");
+        float minConc = fluidTag.getFloat("MinimumConcentration");
+        float maxConc = fluidTag.getFloat("MaximumConcentration");
         boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
 
         Molecule cation = Molecule.getMolecule(cationID);
         Molecule anion = Molecule.getMolecule(anionID);
-        Component compoundName = (cation == null || anion == null) ? DestroyLang.translate("tooltip.unknown_molecule").component() : 
-            DestroyLang.translate("mixture.simple_salt", cation.getName(iupac).getString(), anion.getName(iupac).getString()).component()
-        ;
+        Component compoundName = (cation == null || anion == null) ? DestroyLang.translate("tooltip.unknown_molecule").component() : new NamedSalt(cation, anion).getName(iupac);
 
-        return TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule", compoundName, concentration).string(), Palette.GRAY_AND_WHITE);
+        return TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule", compoundName, df.format(minConc), df.format(maxConc)).string(), Palette.GRAY_AND_WHITE);
     };
 
     @Override
@@ -70,42 +69,38 @@ public class SaltFluidIngredient extends MixtureFluidIngredient {
 
     @Override
     protected boolean testMixture(Mixture mixture) {
-        return mixture.hasUsableMolecule(cation, concentration * cation.getCharge(), (molecule) -> molecule == anion) && mixture.hasUsableMolecule(anion, concentration * -anion.getCharge(), (molecule) -> molecule == cation);
+        return mixture.hasUsableMolecule(cation, minConcentration * cation.getCharge(), maxConcentration * cation.getCharge(), (molecule) -> molecule == anion) && mixture.hasUsableMolecule(anion, minConcentration * -anion.getCharge(), maxConcentration * -anion.getCharge(), (molecule) -> molecule == cation);
     };
 
     @Override
     protected void readInternal(FriendlyByteBuf buffer) {
+        super.readInternal(buffer);
         cation = Molecule.getMolecule(buffer.readUtf());
         anion = Molecule.getMolecule(buffer.readUtf());
-        concentration = buffer.readFloat();
     };
 
     @Override
     protected void writeInternal(FriendlyByteBuf buffer) {
+        super.writeInternal(buffer);
         buffer.writeUtf(cation.getFullID());
         buffer.writeUtf(anion.getFullID());
-        buffer.writeFloat(concentration);
     };
 
     @Override
     protected void readInternal(JsonObject json) {
+        super.readInternal(json);
         if (!json.has("cation") || !json.has("anion")) throw new IllegalStateException("Salt Mixture Ingredients must declare a cation and anion");
         cation = Molecule.getMolecule(GsonHelper.getAsString(json, "cation"));
-        if (cation.getCharge() <= 0) throw new IllegalStateException("Cations miust be positively charged.");
+        if (cation.getCharge() <= 0) throw new IllegalStateException("Cations must be positively charged.");
         anion = Molecule.getMolecule(GsonHelper.getAsString(json, "anion"));
         if (anion.getCharge() >= 0) throw new IllegalStateException("Anions must be negatively charged.");
-        if (json.has("concentration")) {
-            concentration = GsonHelper.getAsFloat(json, "concentration");
-        } else {
-            concentration = 1f; // Default to 1 mol/B
-        };
     };
 
     @Override
     protected void writeInternal(JsonObject json) {
+        super.writeInternal(json);
         json.addProperty("cation", cation.getFullID());
         json.addProperty("anion", anion.getFullID());
-        json.addProperty("concentration", concentration);
     };
     
 };

@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
 
 import com.jozufozu.flywheel.util.Color;
 import com.petrolpark.destroy.Destroy;
@@ -197,6 +200,39 @@ public class ReadOnlyMixture {
             total += concentration;
         };
         return total;
+    };
+
+    /**
+     * Checks that this Mixture contains a suitable concentration of the given {@link Molecule}, and that all other substances present are solvents or low-concentration impurities.
+     * This is used in Recipes.
+     * @param molecule Only known (non-novel) Molecules (i.e. those with a name space) will be detected
+     * @param concentration
+     * @param ignoreableMolecules Molecules other than solvents and low-concentration impurities that should be ignored should return {@code true}. The predicate can be {@code null} if there are no other Molecules that can be ignored
+     */
+    public boolean hasUsableMolecule(Molecule molecule, float minConcentration, float maxConcentration, @Nullable Predicate<Molecule> ignore) {
+        return hasUsableMolecules(molecule::equals, minConcentration, maxConcentration, ignore);
+    };
+
+    /**
+     * Checks that this Mixture contains a suitable concentration of {@link Molecule Molecules} that pass a given predicate, and that all other substances present are solvents
+     * or low-concentration impurities. This is used in Recipes.
+     * @param molecules The check for Molecules that should contribute to the total concentration
+     * @param concentration
+     * @param ignore Molecules other than solvents and low-concentration impurities that should be ignored should return {@code true}. The predicate can be {@code null} if there are no other Molecules that can be ignored
+     */
+    public boolean hasUsableMolecules(Predicate<Molecule> molecules, float minConcentration, float maxConcentration, @Nullable Predicate<Molecule> ignore) {
+        if (ignore == null) ignore = (m) -> false;
+        float combinedConcentration = 0f;
+        for (Entry<Molecule, Float> entry : contents.entrySet()) {
+            if (ignore.test(entry.getKey())) continue; // If this Molecule is specified as ignoreable, ignore it.
+            if (molecules.test(entry.getKey())) {
+                combinedConcentration += entry.getValue(); // If this passes the test, add it to the total
+                continue; // Then move on
+            };
+            if (entry.getKey().hasTag(DestroyMolecules.Tags.SOLVENT)) continue; // If this is a solvent, ignore it
+            if (entry.getValue() > IMPURITY_THRESHOLD) return false; // If this illegal impurity is in high-enough concentration, this Mixture is unsuitable
+        };
+        return (combinedConcentration > maxConcentration + 0.05 || combinedConcentration < minConcentration - 0.05f); // The  0.05 accounts for rounding errors
     };
 
     /**

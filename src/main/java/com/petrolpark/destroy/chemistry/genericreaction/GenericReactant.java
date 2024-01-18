@@ -5,8 +5,8 @@ import com.petrolpark.destroy.chemistry.Molecule;
 
 public class GenericReactant<G extends Group<G>> {
 
-    private Molecule molecule;
-    private G group;
+    public final Molecule molecule;
+    public final G group;
 
     public GenericReactant(Molecule molecule, G group) {
         this.molecule = molecule;

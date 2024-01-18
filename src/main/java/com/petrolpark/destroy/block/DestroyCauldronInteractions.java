@@ -12,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -28,7 +29,7 @@ public class DestroyCauldronInteractions {
         URINE.put(Items.GLASS_BOTTLE, (blockState, level, blockPos, player, interactionHand, itemStack) -> {
             if (!level.isClientSide) {
                Item item = itemStack.getItem();
-               player.setItemInHand(interactionHand, DestroyItems.URINE_BOTTLE.asStack());
+               player.setItemInHand(interactionHand, ItemUtils.createFilledResult(itemStack, player, DestroyItems.URINE_BOTTLE.asStack()));
                player.awardStat(Stats.USE_CAULDRON);
                player.awardStat(Stats.ITEM_USED.get(item));
                level.setBlockAndUpdate(blockPos, Blocks.CAULDRON.defaultBlockState());

@@ -7,6 +7,8 @@ import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
 import com.petrolpark.destroy.block.entity.VatSideBlockEntity.DisplayType;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
+import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntityTicker;
 
@@ -31,7 +33,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-public class VatSideBlock extends CopycatBlock {
+public class VatSideBlock extends CopycatBlock implements ISpecialBlockItemRequirement {
 
     public VatSideBlock(Properties properties) {
         super(properties);
@@ -108,13 +110,20 @@ public class VatSideBlock extends CopycatBlock {
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        withBlockEntityDo(level, pos, be -> {
+            if (!isMoving && !be.getMaterial().equals(newState) && !state.equals(newState)) Block.popResource(level, pos, be.getConsumedItem());
+        });
         IBE.onRemove(state, level, pos, newState);
         super.onRemove(state, level, pos, newState, isMoving);
     };
 
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        // Do nothing (this Block should never be placed by a Player)
+        if (placer == null) {
+            withBlockEntityDo(level, pos, be -> {
+                level.setBlockAndUpdate(pos, be.getMaterial());
+            });
+        };
     };
 
     @Override
@@ -161,6 +170,11 @@ public class VatSideBlock extends CopycatBlock {
     @Override
     public BlockEntityType<? extends CopycatBlockEntity> getBlockEntityType() {
         return DestroyBlockEntityTypes.VAT_SIDE.get();
+    }
+
+    @Override
+    public ItemRequirement getRequiredItems(BlockState state, BlockEntity blockEntity) {
+        return ItemRequirement.NONE;
     };
     
 };

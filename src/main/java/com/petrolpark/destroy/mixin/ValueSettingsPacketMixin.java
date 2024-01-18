@@ -11,7 +11,9 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBehavio
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsPacket;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBehaviour.ValueSettings;
 
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 
 @Mixin(ValueSettingsPacket.class)
 public class ValueSettingsPacketMixin {
@@ -22,13 +24,18 @@ public class ValueSettingsPacketMixin {
      */
     @Overwrite(remap = false)
 	protected void applySettings(ServerPlayer player, SmartBlockEntity be) {
+		InteractionHand hand = ((ValueSettingsPacketAccessor)this).getInteractHand();
+		Direction side = ((ValueSettingsPacketAccessor)this).getSide();
 		for (BlockEntityBehaviour behaviour : be.getAllBehaviours()) {
 			if (!(behaviour instanceof ValueSettingsBehaviour valueSettingsBehaviour))
 				continue;
 			if (!valueSettingsBehaviour.acceptsValueSettings())
 				continue;
+			if (hand != null) {
+				valueSettingsBehaviour.onShortInteract(player, hand, side);
+			};
             if (valueSettingsBehaviour instanceof SmartValueSettingsBehaviour smartValueSettingsBehaviour) {
-                smartValueSettingsBehaviour.acceptAccessInformation(((ValueSettingsPacketAccessor)this).getInteractHand(), ((ValueSettingsPacketAccessor)this).getSide());
+                smartValueSettingsBehaviour.acceptAccessInformation(hand, side);
             };
 			valueSettingsBehaviour.setValueSettings(player, new ValueSettings(((ValueSettingsPacketAccessor)this).getRow(), ((ValueSettingsPacketAccessor)this).getValue()), ((ValueSettingsPacketAccessor)this).getCtrlDown());
 			return;

@@ -7,6 +7,8 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 import com.google.gson.JsonObject;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 
+import net.minecraft.network.FriendlyByteBuf;
+
 @Mixin(FluidIngredient.class)
 public interface FluidIngredientAccessor {
     
@@ -21,4 +23,10 @@ public interface FluidIngredientAccessor {
 		remap = false
 	)
 	void invokeReadInternal(JsonObject json);
+
+	@Invoker(
+		value = "readInternal",
+		remap = false
+	)
+	void invokeReadInternal(FriendlyByteBuf buffer);
 };

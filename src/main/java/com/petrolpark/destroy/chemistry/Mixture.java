@@ -7,9 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Predicate;
-
-import javax.annotation.Nullable;
 
 import java.util.Set;
 
@@ -29,6 +26,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
+
 
 public class Mixture extends ReadOnlyMixture {
 
@@ -51,7 +49,7 @@ public class Mixture extends ReadOnlyMixture {
      */
     protected List<Reaction> possibleReactions;
 
-    /**
+    /**`
      * Every {@link Molecule} in this Mixture that has a {@link Group functional Group}, indexed by the {@link Group#getType Type} of that Group.
      * Molecules are stored as {@link com.petrolpark.destroy.chemistry.genericReaction.GenericReactant Generic Reactants}.
      * Molecules which have multiple of the same Group are indexed for each occurence of the Group.
@@ -267,49 +265,6 @@ public class Mixture extends ReadOnlyMixture {
     @Override
     public float getConcentrationOf(Molecule molecule) {
         return super.getConcentrationOf(molecule);
-    };
-
-    /**
-     * Checks that this Mixture contains a suitable concentration of the given {@link Molecule}, and that all other substances present are solvents or low-concentration impurities.
-     * This is used in Recipes.
-     * @param molecule Only known (non-novel) Molecules (i.e. those with a name space) will be detected
-     * @param concentration
-     * @param ignoreableMolecules Molecules other than solvents and low-concentration impurities that should be ignored should return {@code true}. The predicate can be {@code null} if there are no other Molecules that can be ignored
-     */
-    public boolean hasUsableMolecule(Molecule molecule, float concentration, @Nullable Predicate<Molecule> ignore) {
-        if (!contents.containsKey(molecule)) return false;
-        if (ignore == null) ignore = (m) -> false;
-        if (Math.abs(concentration - getConcentrationOf(molecule)) > IMPURITY_THRESHOLD) return false; //TODO replace with a more lenient check
-        for (Entry<Molecule, Float> otherMolecule : contents.entrySet()) {
-            if (ignore.test(otherMolecule.getKey())) continue; // If this molecule is specified as ignoreable, ignore it
-            if (otherMolecule.getKey() == molecule) continue; // If this is the Molecule we want, ignore it.
-            if (otherMolecule.getKey().hasTag(DestroyMolecules.Tags.SOLVENT)) continue; // If this is a solvent, ignore it
-            if (otherMolecule.getValue() < IMPURITY_THRESHOLD) continue; // If this impurity is in low-enough concentration, ignore it.
-            return false;
-        };
-        return true;
-    };
-
-    /**
-     * Checks that this Mixture contains a suitable concentration of {@link Molecule Molecules} with the given {@link MoleculeTag}, and that all other substances present are solvents
-     * or low-concentration impurities. This is used in Recipes.
-     * @param tag
-     * @param concentration
-     * @param ignore Molecules other than solvents and low-concentration impurities that should be ignored should return {@code true}. The predicate can be {@code null} if there are no other Molecules that can be ignored
-     */
-    public boolean hasUsableTaggedMolecules(MoleculeTag tag, float concentration, @Nullable Predicate<Molecule> ignore) {
-        if (ignore == null) ignore = (m) -> false;
-        float combinedConcentration = 0f;
-        for (Entry<Molecule, Float> entry : contents.entrySet()) {
-            if (ignore.test(entry.getKey())) continue; // If this Molecule is specified as ignoreable, ignore it.
-            if (entry.getKey().hasTag(tag)) {
-                combinedConcentration += entry.getValue(); // If this has the Tag, add it to the total
-                continue; // Then move on
-            };
-            if (entry.getKey().hasTag(DestroyMolecules.Tags.SOLVENT)) continue; // If this is a solvent, ignore it
-            if (entry.getValue() > IMPURITY_THRESHOLD) return false; // If this illegal impurity is in high-enough concentration, this Mixture is unsuitable
-        };
-        return (Math.abs(combinedConcentration - concentration) < IMPURITY_THRESHOLD); //TODO replace with a more lenient check
     };
 
     /**

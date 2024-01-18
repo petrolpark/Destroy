@@ -30,7 +30,7 @@ public class BadgeHandler {
     public static final String GET_BADGES_URL = "https://us-central1.gcp.data.mongodb-api.com/app/destroybadges-qojlw/endpoint/GetBadges";
 
     public static final String EARLY_BIRD_URL = "https://us-central1.gcp.data.mongodb-api.com/app/destroybadges-qojlw/endpoint/AddEarlyBird";
-    public static final boolean EARLY_BIRD_VIABLE = true; // Whether the Early Bird badge is still available in this release
+    public static final boolean EARLY_BIRD_VIABLE = false; // Whether the Early Bird badge is still available in this release
 
     public static void getAndAddBadges(Player player) {
         HttpClient client = HttpClient.newHttpClient();

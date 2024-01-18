@@ -15,10 +15,11 @@ import com.petrolpark.destroy.fluid.ingredient.MixtureFluidIngredient;
 import com.petrolpark.destroy.mixin.accessor.FluidIngredientAccessor;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 
 @Mixin(FluidIngredient.class)
-public class FluidIngredientMixin {
+public abstract class FluidIngredientMixin extends FluidIngredient {
 
 	private static final String
 	fluidTagMemberName = "fluidTag",
@@ -82,5 +83,38 @@ public class FluidIngredientMixin {
 		((FluidIngredientAccessor)ingredient).setAmountRequired(GsonHelper.getAsInt(json, "amount"));
 
 		return ingredient;
-	}
+	};
+
+	@Overwrite(remap = false)
+	public void write(FriendlyByteBuf buffer) {
+		FluidIngredient $this = (FluidIngredient)(Object)this;
+		String ingredientType = null;
+		if ($this instanceof FluidStackIngredient) {
+			ingredientType = fluidMemberName;
+		} else if ($this instanceof FluidTagIngredient) {
+			ingredientType = fluidTagMemberName;
+		} else if ($this instanceof MixtureFluidIngredient mixtureFluid) {
+			ingredientType = mixtureFluid.getMixtureFluidIngredientSubtype();
+		};
+		if (ingredientType == null) throw new IllegalStateException("Unknown Fluid ingredient subtype");
+		buffer.writeUtf(ingredientType);
+		buffer.writeVarInt(amountRequired);
+		writeInternal(buffer);
+	};
+
+	@Overwrite(remap = false)
+	public static FluidIngredient read(FriendlyByteBuf buffer) {
+		String ingredientType = buffer.readUtf();
+		FluidIngredient ingredient = null;
+		if (ingredientType.equals(fluidMemberName)) {
+			ingredient = new FluidStackIngredient();
+		} else if (ingredientType.equals(fluidTagMemberName)) {
+			ingredient = new FluidTagIngredient();
+		} else {
+			ingredient = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(ingredientType);
+		};
+		((FluidIngredientAccessor)ingredient).setAmountRequired(buffer.readInt());
+		((FluidIngredientAccessor)ingredient).invokeReadInternal(buffer);
+		return ingredient;
+	};
 };

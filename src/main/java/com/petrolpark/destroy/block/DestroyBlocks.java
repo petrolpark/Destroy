@@ -217,6 +217,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_ORANGE)
             .noOcclusion()
+            .isSuffocating((state, level, pos) -> false)
         ).transform(TagGen.pickaxeOnly())
         .transform(BlockStressDefaults.setImpact(8.0))
         .item(PumpjackBlockItem::new)
@@ -228,6 +229,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_ORANGE)
             .noOcclusion()
+            .isSuffocating((state, level, pos) -> false)
         ).transform(TagGen.pickaxeOnly())
         .blockstate(BlockStateGen.horizontalAxisBlockProvider(false))
         .register();

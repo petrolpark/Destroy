@@ -54,7 +54,7 @@ public abstract class MixtureFluidIngredient extends FluidIngredient {
 
     protected abstract boolean testMixture(Mixture mixture);
 
-    protected abstract String getMixtureFluidIngredientSubtype();
+    public abstract String getMixtureFluidIngredientSubtype();
 
     /**
      * Add data to the NBT of the Fluid Ingredient when it is displayed in JEI. The only use of this is to control the

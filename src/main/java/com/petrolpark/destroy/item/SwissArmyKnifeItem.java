@@ -54,7 +54,6 @@ import net.minecraftforge.common.ToolActions;
 
 public class SwissArmyKnifeItem extends DiggerItem {
 
-    @OnlyIn(Dist.CLIENT)
     private static int timeUntilToolPutAway = 20;
 
     @Nullable

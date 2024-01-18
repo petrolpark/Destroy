@@ -16,10 +16,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
 
-public class MoleculeFluidIngredient extends MixtureFluidIngredient {
+public class MoleculeFluidIngredient extends ConcentrationRangeFluidIngredient {
 
     protected Molecule molecule;
-    protected float concentration;
 
     @Override
     public MixtureFluidIngredient getNew() {
@@ -27,25 +26,26 @@ public class MoleculeFluidIngredient extends MixtureFluidIngredient {
     };
 
     @Override
-    protected String getMixtureFluidIngredientSubtype() {
+    public String getMixtureFluidIngredientSubtype() {
         return "mixtureFluidWithMolecule";
     };
 
     @Override
     public void addNBT(CompoundTag fluidTag) {
+        super.addNBT(fluidTag);
         fluidTag.putString("MoleculeRequired", molecule.getFullID());
-        fluidTag.putFloat("ConcentrationRequired", concentration);
     };
 
     @Override
     public List<Component> getDescription(CompoundTag fluidTag) {
         String moleculeID = fluidTag.getString("MoleculeRequired");
-        float concentration = fluidTag.getFloat("ConcentrationRequired");
+        float minConc = fluidTag.getFloat("MinimumConcentration");
+        float maxConc = fluidTag.getFloat("MaximumConcentration");
 
         Molecule molecule = Molecule.getMolecule(moleculeID);
         Component moleculeName = molecule == null ? DestroyLang.translate("tooltip.unknown_molecule").component() : molecule.getName(DestroyAllConfigs.CLIENT.chemistry.iupacNames.get());
 
-        return TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule", moleculeName, concentration).string(), Palette.GRAY_AND_WHITE);
+        return TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule", moleculeName, df.format(minConc), df.format(maxConc)).string(), Palette.GRAY_AND_WHITE);
     };
 
     @Override
@@ -58,35 +58,31 @@ public class MoleculeFluidIngredient extends MixtureFluidIngredient {
 
     @Override
     protected boolean testMixture(Mixture mixture) {
-        return mixture.hasUsableMolecule(molecule, concentration, null);
+        return mixture.hasUsableMolecule(molecule, minConcentration, maxConcentration, null);
     };
 
     @Override
     protected void readInternal(FriendlyByteBuf buffer) {
+        super.readInternal(buffer);
         molecule = Molecule.getMolecule(buffer.readUtf());
-        concentration = buffer.readFloat();
     };
 
     @Override
     protected void writeInternal(FriendlyByteBuf buffer) {
-       buffer.writeUtf(molecule.getFullID());
-       buffer.writeFloat(concentration);
+        super.writeInternal(buffer);
+        buffer.writeUtf(molecule.getFullID());
     };
 
     @Override
     protected void readInternal(JsonObject json) {
+        super.readInternal(json);
         molecule = Molecule.getMolecule(GsonHelper.getAsString(json, "molecule"));
-        if (json.has("concentration")) {
-            concentration = GsonHelper.getAsFloat(json, "concentration");
-        } else {
-            concentration = 1f; // Default to 1 mol/B
-        };
     };
 
     @Override
     protected void writeInternal(JsonObject json) {
+        super.writeInternal(json);
         json.addProperty("molecule", molecule.getFullID());
-        json.addProperty("concentration", concentration);
     };
 
 };

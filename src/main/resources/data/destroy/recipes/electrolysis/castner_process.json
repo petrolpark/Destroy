@@ -29,7 +29,7 @@
                     },
                     {
                         "Molecule": "destroy:sodium_metal",
-                        "Concentration": 0.00045
+                        "Concentration": 1.0
                     }
                 ]
             } 
