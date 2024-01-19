@@ -11,27 +11,45 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class DifferentialBlock extends CogWheelBlock {
 
+    public static final BooleanProperty FULL_MODEL = BooleanProperty.create("full_model");
+
     public DifferentialBlock(Properties properties) {
         super(true, properties);
+        registerDefaultState(defaultBlockState().setValue(FULL_MODEL, true));
     };
 
     @Override
     protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(DirectionalRotatedPillarKineticBlock.POSITIVE_AXIS_DIRECTION);
+        builder.add(FULL_MODEL);
+    };
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return super.getStateForPlacement(context).setValue(FULL_MODEL, false);
+    };
+
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        if (state.getValue(FULL_MODEL)) level.setBlockAndUpdate(pos, state.setValue(FULL_MODEL, false));
+        super.onPlace(state, level, pos, oldState, isMoving);
     };
 
     @Override
@@ -74,7 +92,7 @@ public class DifferentialBlock extends CogWheelBlock {
 
     @Override
     public boolean isDedicatedCogWheel() {
-        return false;
+        return true;
     };
 
     @Override

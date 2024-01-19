@@ -7,11 +7,13 @@ import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.util.BlockExtrusion;
+import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
 import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.contraptions.render.ContraptionMatrices;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.render.BakedModelRenderHelper;
+import com.simibubi.create.foundation.render.SuperByteBuffer;
 import com.simibubi.create.foundation.utility.VecHelper;
 
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -45,7 +47,8 @@ public class ExtrudableMovementBehaviour implements MovementBehaviour {
         CompoundTag data = context.data;
         if (data.getBoolean("Extruding")) {
             Direction direction = getDirection(context);
-            if (!VecHelper.isVecPointingTowards(motion, direction) && !VecHelper.isVecPointingTowards(motion, direction.getOpposite())) abandonExtrusion(context);
+            if (!VecHelper.isVecPointingTowards(motion, direction) && !VecHelper.isVecPointingTowards(motion, direction.getOpposite()))
+                abandonExtrusion(context);
         };
     };
 
@@ -74,13 +77,14 @@ public class ExtrudableMovementBehaviour implements MovementBehaviour {
 
             BlockPos diePos = NbtUtils.readBlockPos(data.getCompound("ExtrusionDiePos"));
             Direction direction = getDirection(context);
+
+            if (context.contraption.entity instanceof OrientedContraptionEntity oce && oce.getInitialYaw() != oce.yaw) direction = direction.getOpposite();
             
             if (pos.equals(diePos.relative(direction))) {
                 context.contraption.getBlocks().put(context.localPos, new StructureBlockInfo(context.localPos, getBlockState(context), null));
                 if (!context.world.isClientSide()) {
                     DestroyAdvancementBehaviour advancementBehaviour = BlockEntityBehaviour.get(context.world, diePos, DestroyAdvancementBehaviour.TYPE);
-                    if (advancementBehaviour != null) 
-                        advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.EXTRUDE);
+                    if (advancementBehaviour != null) advancementBehaviour.awardDestroyAdvancement(DestroyAdvancements.EXTRUDE);
                 };
                 data.putBoolean("Extruded", true);
             };
@@ -95,6 +99,7 @@ public class ExtrudableMovementBehaviour implements MovementBehaviour {
 
         if (!data.getBoolean("Extruding") && !data.getBoolean("Extruded")) return;
         PoseStack ms = matrices.getViewProjection();
+        PoseStack modelTransform = matrices.getModel();
         VertexConsumer vbSolid = buffer.getBuffer(RenderType.solid());
 
         Direction direction = getDirection(context);
@@ -106,15 +111,20 @@ public class ExtrudableMovementBehaviour implements MovementBehaviour {
             BlockPos diePos = NbtUtils.readBlockPos(data.getCompound("ExtrusionDiePos"));
             Vec3 displacement = context.position.subtract(Vec3.atLowerCornerOf(diePos)); // Vector between center of Die and of Block being extruded
             progress = (float)direction.getAxis().choose(displacement.x(), displacement.y(), displacement.z());
-            if (direction.getAxisDirection() == AxisDirection.POSITIVE) progress = 1f - progress;
+            boolean invertProgess = direction.getAxisDirection() == AxisDirection.POSITIVE;
+            if (context.contraption.entity instanceof OrientedContraptionEntity oce) {
+                if (oce.yaw != oce.getInitialYaw()) invertProgess = !invertProgess;
+            };
+            if (invertProgess) progress = 1f - progress;
         };
 
         // Making a new model every frame seems like a bad idea but it changes shape continually and I'm not smart enough to do it another way
         ms.pushPose();
-        ms.translate(context.localPos.getX(), context.localPos.getY(), context.localPos.getZ());
         BakedModel model = new ExtrudedBlockModel(getBlockState(context), direction, progress);
-		BakedModelRenderHelper.standardModelRender(model, Blocks.AIR.defaultBlockState())
-            .renderInto(ms, vbSolid);
+		SuperByteBuffer extrudedBlockBuffer = BakedModelRenderHelper.standardModelRender(model, Blocks.AIR.defaultBlockState());
+        if (modelTransform != null) extrudedBlockBuffer.transform(modelTransform);
+        
+        extrudedBlockBuffer.renderInto(ms, vbSolid);
         ms.popPose();
     };
 

@@ -1,7 +1,26 @@
 {
     "variants": {
-        "": {
+        "full_model=false,axis=x": {
             "model": "destroy:block/differential/block"
+        },
+        "full_model=false,axis=y": {
+            "model": "destroy:block/differential/block"
+        },
+        "full_model=false,axis=z": {
+            "model": "destroy:block/differential/block"
+        },
+        "full_model=true,axis=x": {
+            "model": "destroy:block/differential/all",
+            "x": 90,
+            "y": 90
+        },
+        "full_model=true,axis=y": {
+            "model": "destroy:block/differential/all"
+        },
+        "full_model=true,axis=z": {
+            "model": "destroy:block/differential/all",
+            "x": 90,
+            "y": 180
         }
     }
   }

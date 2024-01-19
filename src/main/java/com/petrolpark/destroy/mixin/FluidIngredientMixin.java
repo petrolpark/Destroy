@@ -14,12 +14,14 @@ import com.google.gson.JsonSyntaxException;
 import com.petrolpark.destroy.fluid.ingredient.MixtureFluidIngredient;
 import com.petrolpark.destroy.mixin.accessor.FluidIngredientAccessor;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
+import com.simibubi.create.foundation.fluid.FluidIngredient.FluidStackIngredient;
+import com.simibubi.create.foundation.fluid.FluidIngredient.FluidTagIngredient;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 
 @Mixin(FluidIngredient.class)
-public abstract class FluidIngredientMixin extends FluidIngredient {
+public abstract class FluidIngredientMixin {
 
 	private static final String
 	fluidTagMemberName = "fluidTag",
@@ -98,8 +100,8 @@ public abstract class FluidIngredientMixin extends FluidIngredient {
 		};
 		if (ingredientType == null) throw new IllegalStateException("Unknown Fluid ingredient subtype");
 		buffer.writeUtf(ingredientType);
-		buffer.writeVarInt(amountRequired);
-		writeInternal(buffer);
+		buffer.writeVarInt(((FluidIngredientAccessor)this).getAmountRequired());
+		((FluidIngredientAccessor)this).invokeWriteInternal(buffer);
 	};
 
 	@Overwrite(remap = false)

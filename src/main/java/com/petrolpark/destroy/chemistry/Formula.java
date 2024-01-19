@@ -726,7 +726,7 @@ public class Formula implements Cloneable {
         try {
 
             Formula newFormula = (Formula) super.clone();
-            newFormula.structure = new HashMap<>();
+            newFormula.structure = new HashMap<>(structure.size());
             newFormula.structure = shallowCopyStructure(structure); // Shallow copy the Structure
             newFormula.groups = new ArrayList<>(groups); // Shallow copy the Groups
             newFormula.topology = this.topology; // Shallow copy the Topology
@@ -773,7 +773,12 @@ public class Formula implements Cloneable {
     private static Map<Atom, List<Bond>> shallowCopyStructure(Map<Atom, List<Bond>> structureToCopy) {
         Map<Atom, List<Bond>> newStructure = new HashMap<>();
         for (Atom atom : structureToCopy.keySet()) {
-            newStructure.put(atom, new ArrayList<>(structureToCopy.get(atom)));
+            List<Bond> oldBonds = structureToCopy.get(atom);
+            List<Bond> newBonds = new ArrayList<>();
+            for (Bond oldBond : oldBonds) {
+                newBonds.add(new Bond(atom, oldBond.getDestinationAtom(), oldBond.getType()));
+            };
+            newStructure.put(atom, newBonds);
         };
         return newStructure;
     };

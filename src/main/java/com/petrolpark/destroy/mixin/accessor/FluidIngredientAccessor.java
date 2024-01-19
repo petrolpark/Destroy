@@ -18,6 +18,12 @@ public interface FluidIngredientAccessor {
 	)
 	void setAmountRequired(int amountRequired);
 
+	@Accessor(
+		value = "amountRequired",
+		remap = false
+	)
+	int getAmountRequired();
+
 	@Invoker(
 		value = "readInternal",
 		remap = false
@@ -29,4 +35,10 @@ public interface FluidIngredientAccessor {
 		remap = false
 	)
 	void invokeReadInternal(FriendlyByteBuf buffer);
+
+	@Invoker(
+		value = "writeInternal",
+		remap = false
+	)
+	void invokeWriteInternal(FriendlyByteBuf buffer);
 };

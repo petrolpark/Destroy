@@ -239,6 +239,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_ORANGE)
             .noOcclusion()
+            .isSuffocating((state, level, pos) -> false)
         ).transform(TagGen.pickaxeOnly())
         .blockstate((c, p) -> p.getVariantBuilder(c.get())
             .forAllStatesExcept(BlockStateGen.mapToAir(p), PumpjackStructuralBlock.FACING)

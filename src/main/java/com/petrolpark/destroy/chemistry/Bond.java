@@ -12,7 +12,7 @@ public class Bond {
     /**
      * Whether this Bond is {@link BondType single, double, triple, etc}.
      */
-    private BondType type;
+    private volatile BondType type;
 
     /**
      * The {@link Atom} from which this Bond is.
