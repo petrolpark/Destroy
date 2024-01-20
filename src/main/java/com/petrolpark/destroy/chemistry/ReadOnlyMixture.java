@@ -375,7 +375,7 @@ public class ReadOnlyMixture {
         // Check for salts
         if (cations.size() != 0 || anions.size() != 0) {
             if (cations.size() == 1 && anions.size() == 1) { // Single simple salt (one cation, one anion)
-                products.add(new NamedSalt(cations.get(0), anions.get(0)));
+                if (cations.get(0) != DestroyMolecules.PROTON || anions.get(0) != DestroyMolecules.HYDROXIDE) products.add(new NamedSalt(cations.get(0), anions.get(0)));
             } else { // Multiple salts
                 products.add(b -> DestroyLang.translate("mixture.salts").component());
             };
@@ -395,7 +395,7 @@ public class ReadOnlyMixture {
             } else if (thereAreSolvents) { // Many solvents, no products
                 name = DestroyLang.translate("mixture.solvents").component();
             };
-            if (thereAreImpurities) name = DestroyLang.translate("mixture.dirty", name.getString()).component();
+            if (thereAreImpurities && name != null) name = DestroyLang.translate("mixture.dirty", name.getString()).component();
 
         } else if (products.size() <= 2) { // If there are not enough products to just call it "Mixture"
             if (products.size() == 1) {

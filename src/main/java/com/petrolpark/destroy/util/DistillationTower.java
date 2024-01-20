@@ -189,6 +189,7 @@ public class DistillationTower {
         for (boolean simulate : Iterate.trueAndFalse) { // First simulate to check if all the Fluids can actually fit, then execute if they do. 
 
             // Check if heat requirement is fulfilled
+            if (!lastRecipe.getRequiredHeat().testBlazeBurner(BasinBlockEntity.getHeatLevelOf(controller.getLevel().getBlockState(controller.getBlockPos().below(1))))) return false;
 
             // Check if required Fluid is present
             int requiredFluidAmount = lastRecipe.getRequiredFluid().getRequiredAmount();
