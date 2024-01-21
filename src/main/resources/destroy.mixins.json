@@ -42,7 +42,6 @@
         "KineticBlockEntityMixin",
         "MechanicalMixerBlockEntityMixin",
         "MixingCategoryMixin",
-        "MultiPlayerGameModeMixin",
         "PackingCategoryMixin",
         "PipeConnectionMixin",
         "PonderTagScreenMixin",
@@ -69,6 +68,7 @@
         "HeartTypeMixin",
         "ItemRendererMixin",
         "LevelRendererMixin",
+        "MultiPlayerGameModeMixin",
         "ProcessingRecipeMixin"
     ],
     "injectors": {

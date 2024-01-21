@@ -115,7 +115,7 @@ public abstract class FluidIngredientMixin {
 		} else {
 			ingredient = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(ingredientType);
 		};
-		((FluidIngredientAccessor)ingredient).setAmountRequired(buffer.readInt());
+		((FluidIngredientAccessor)ingredient).setAmountRequired(buffer.readVarInt());
 		((FluidIngredientAccessor)ingredient).invokeReadInternal(buffer);
 		return ingredient;
 	};

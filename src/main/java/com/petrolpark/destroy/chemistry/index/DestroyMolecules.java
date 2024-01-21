@@ -546,7 +546,7 @@ public final class DestroyMolecules {
         .id("hydrogen")
         .structure(Formula.atom(Element.HYDROGEN).addAtom(Element.HYDROGEN))
         .boilingPointInKelvins(20.271f)
-        .density(0.08988f)
+        .density(70.85f)
         .molarHeatCapacity(28.84f)
         .build(),
 
@@ -675,7 +675,7 @@ public final class DestroyMolecules {
         .id("methane")
         .structure(Formula.deserialize("destroy:linear:C"))
         .boilingPoint(-161.5f)
-        .density(0.657f)
+        .density(424f)
         .molarHeatCapacity(35.7f)
         .tag(Tags.GREENHOUSE)
         .tag(Tags.SMOG)

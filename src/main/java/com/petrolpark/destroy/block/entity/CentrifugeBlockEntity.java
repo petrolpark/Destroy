@@ -226,9 +226,14 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IDirect
                 ReadOnlyMixture lightMixture = new ReadOnlyMixture();
                 ReadOnlyMixture denseMixture = new ReadOnlyMixture();
 
+                float totalMoles = 0f;
+                for (Molecule molecule : neutralMolecules) {
+                    totalMoles += mixture.getConcentrationOf(molecule) * totalVolume;
+                };
+
                 for (Molecule molecule : neutralMolecules) {
                     float moles = mixture.getConcentrationOf(molecule) * totalVolume;
-                    float volume = moles / molecule.getPureConcentration(); // Volume of this Molecule present in the original Mixture in Buckets
+                    float volume = totalVolume * moles / totalMoles; // Volume of this Molecule present in the original Mixture in Buckets
                     float volumeInDenseMixture = Math.min((totalVolume / 2f) - volumeOfDenseMixture, volume); // What volume of this Molecule gets put in the dense portion, in Buckets
                     volumeOfDenseMixture += volumeInDenseMixture; // Increase the amount of dense Fluid made
                     denseMixture.addMolecule(molecule, 2f * (moles * volumeInDenseMixture / volume) / totalVolume);

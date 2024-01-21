@@ -94,7 +94,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddPackFindersEvent;
-import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -646,11 +645,6 @@ public class DestroyCommonEvents {
         for (PollutionType pollutionType : PollutionType.values()) {
             if (event.level.random.nextInt(100) == 0) PollutionHelper.changePollution(event.level, pollutionType, -1);
         };
-    };
-
-    @SubscribeEvent
-    public static void addReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(SaltNameOverrides.MANAGER);
     };
 
     @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
