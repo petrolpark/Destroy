@@ -25,7 +25,16 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
     static {
         df.setMinimumFractionDigits(2);
         df.setMaximumFractionDigits(2);
-    }
+    };
+
+    /**
+     * Whether to display Molecule quantities as a number of moles rather than a concentration.
+     */
+    protected final boolean molesNotConcentration;
+
+    public MixtureContentsDisplaySource(boolean molesNotConcentration) {
+        this.molesNotConcentration = molesNotConcentration;
+    };
 
     @Override
     public List<MutableComponent> provideText(DisplayLinkContext context, DisplayTargetStats stats) {
@@ -47,7 +56,7 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
 
             name = mixture.getName().copy();
             temperature = temperatureUnit.of(mixture.getTemperature());
-            tooltip.addAll(mixture.getContentsTooltip(iupac, true, df).stream().map(c -> c.copy()).toList());
+            tooltip.addAll(mixture.getContentsTooltip(iupac, true, molesNotConcentration, df).stream().map(c -> c.copy()).toList());
         };
 
         tooltip.add(0, name.append(" "+fluidStack.getAmount()).append(Lang.translateDirect("generic.unit.millibuckets")).append(" "+temperature));

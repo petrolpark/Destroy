@@ -7,8 +7,11 @@ import java.util.List;
 import com.google.gson.JsonObject;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
+import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.naming.NamedSalt;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
+import com.petrolpark.destroy.fluid.ingredient.mixturesubtype.MixtureFluidIngredientSubType;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipHelper.Palette;
@@ -18,19 +21,16 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
 
-public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient {
+public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient<SaltFluidIngredient> {
+
+    public static final Type TYPE = new Type();
 
     protected Molecule cation;
     protected Molecule anion;
 
     @Override
-    public MixtureFluidIngredient getNew() {
-        return new SaltFluidIngredient();
-    };
-
-    @Override
-    public String getMixtureFluidIngredientSubtype() {
-        return "mixtureFluidWithSalt";
+    public MixtureFluidIngredientSubType<SaltFluidIngredient> getType() {
+        return TYPE;
     };
 
     @Override
@@ -38,33 +38,6 @@ public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient {
         super.addNBT(fluidTag);
         fluidTag.putString("RequiredCation", cation.getFullID());
         fluidTag.putString("RequiredAnion", anion.getFullID());
-    };
-
-    @Override
-    public List<Component> getDescription(CompoundTag fluidTag) {
-        String cationID = fluidTag.getString("RequiredCation");
-        String anionID = fluidTag.getString("RequiredAnion");
-        float minConc = fluidTag.getFloat("MinimumConcentration");
-        float maxConc = fluidTag.getFloat("MaximumConcentration");
-        boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
-
-        Molecule cation = Molecule.getMolecule(cationID);
-        Molecule anion = Molecule.getMolecule(anionID);
-        Component compoundName = (cation == null || anion == null) ? DestroyLang.translate("tooltip.unknown_molecule").component() : new NamedSalt(cation, anion).getName(iupac);
-
-        return TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule", compoundName, df.format(minConc), df.format(maxConc)).string(), Palette.GRAY_AND_WHITE);
-    };
-
-    @Override
-    public Collection<Molecule> getContainedMolecules(CompoundTag fluidTag) {
-        String cationID = fluidTag.getString("RequiredCation");
-        String anionID = fluidTag.getString("RequiredAnion");
-        Molecule cation = Molecule.getMolecule(cationID);
-        Molecule anion = Molecule.getMolecule(anionID);
-        List<Molecule> molecules = new ArrayList<>(2);
-        if (cation != null) molecules.add(cation);
-        if (anion != null) molecules.add(anion);
-        return molecules;
     };
 
     @Override
@@ -101,6 +74,57 @@ public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient {
         super.writeInternal(json);
         json.addProperty("cation", cation.getFullID());
         json.addProperty("anion", anion.getFullID());
+    };
+
+    @Override
+    public List<ReadOnlyMixture> getExampleMixtures() {
+        ReadOnlyMixture mixture = new ReadOnlyMixture();
+        float targetConcentration = getTargetConcentration();
+        mixture.addMolecule(DestroyMolecules.WATER, DestroyMolecules.WATER.getPureConcentration()); // We're assuming the ions have 0 density
+        mixture.addMolecule(cation, targetConcentration);
+        mixture.addMolecule(anion, targetConcentration);
+        return List.of(mixture);
+    };
+
+    protected static class Type extends MixtureFluidIngredientSubType<SaltFluidIngredient> {
+
+        @Override
+        public SaltFluidIngredient getNew() {
+            return new SaltFluidIngredient();
+        };
+
+        @Override
+        public String getMixtureFluidIngredientSubtype() {
+            return "mixtureFluidWithSalt";
+        };
+
+        @Override
+        public List<Component> getDescription(CompoundTag fluidTag) {
+            String cationID = fluidTag.getString("RequiredCation");
+            String anionID = fluidTag.getString("RequiredAnion");
+            float minConc = fluidTag.getFloat("MinimumConcentration");
+            float maxConc = fluidTag.getFloat("MaximumConcentration");
+            boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
+    
+            Molecule cation = Molecule.getMolecule(cationID);
+            Molecule anion = Molecule.getMolecule(anionID);
+            Component compoundName = (cation == null || anion == null) ? DestroyLang.translate("tooltip.unknown_molecule").component() : new NamedSalt(cation, anion).getName(iupac);
+    
+            return TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule", compoundName, df.format(minConc), df.format(maxConc)).string(), Palette.GRAY_AND_WHITE);
+        };
+    
+        @Override
+        public Collection<Molecule> getContainedMolecules(CompoundTag fluidTag) {
+            String cationID = fluidTag.getString("RequiredCation");
+            String anionID = fluidTag.getString("RequiredAnion");
+            Molecule cation = Molecule.getMolecule(cationID);
+            Molecule anion = Molecule.getMolecule(anionID);
+            List<Molecule> molecules = new ArrayList<>(2);
+            if (cation != null) molecules.add(cation);
+            if (anion != null) molecules.add(anion);
+            return molecules;
+        };
+
     };
     
 };

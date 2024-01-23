@@ -40,7 +40,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
-public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
+public class ReactionCategory<T extends ReactionRecipe> extends HoverableTextCategory<T> {
 
     private static final int yOffset = 32;
 
@@ -48,13 +48,13 @@ public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
     public static final Palette WHITE_AND_AQUA = Palette.ofColors(ChatFormatting.WHITE, ChatFormatting.AQUA);
     public static final Palette WHITE_AND_WHITE = Palette.ofColors(ChatFormatting.WHITE, ChatFormatting.WHITE);
 
-    public static RecipeType<ReactionRecipe> TYPE;
+    public static RecipeType<? extends ReactionRecipe> TYPE;
 
     public static final Map<Reaction, ReactionRecipe> RECIPES = new HashMap<>();
 
-    public ReactionCategory(Info<ReactionRecipe> info, IJeiHelpers helpers) {
+    public ReactionCategory(Info<T> info, IJeiHelpers helpers) {
         super(info, helpers);
-        TYPE = info.recipeType();
+        if (TYPE == null) TYPE = info.recipeType();
     };
 
     /**
@@ -101,7 +101,7 @@ public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
     };
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, ReactionRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup focuses) {
         super.setRecipe(builder, recipe, focuses);
         Reaction reaction = recipe.getReaction();
 
@@ -244,7 +244,7 @@ public class ReactionCategory extends HoverableTextCategory<ReactionRecipe> {
     };
 
     @Override
-    public void draw(ReactionRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
         DestroyGuiTextures.JEI_LINE.render(graphics, 2, 12);
         DestroyGuiTextures.JEI_LINE.render(graphics, 2, 85);

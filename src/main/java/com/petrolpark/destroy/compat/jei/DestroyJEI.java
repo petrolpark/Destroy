@@ -37,6 +37,7 @@ import com.petrolpark.destroy.recipe.ExtrusionRecipe;
 import com.petrolpark.destroy.recipe.MutationRecipe;
 import com.petrolpark.destroy.recipe.ObliterationRecipe;
 import com.petrolpark.destroy.recipe.ReactionRecipe;
+import com.petrolpark.destroy.recipe.ReactionRecipe.GenericReactionRecipe;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.CreateJEI;
@@ -166,7 +167,7 @@ public class DestroyJEI implements IModPlugin {
             .emptyBackground(180, 125)
             .build("reaction", ReactionCategory::new),
 
-        genericReaction = builder(ReactionRecipe.class)
+        genericReaction = builder(GenericReactionRecipe.class)
             .addRecipes(GenericReactionCategory.RECIPES::values)
             // Doesn't accept Mixtures as Generic Reactions involve Molecules, not Mixtures.
             .catalyst(AllBlocks.MECHANICAL_MIXER::get)

@@ -7,6 +7,8 @@ import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.badge.BadgeHandler;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
+import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
 import com.petrolpark.destroy.block.entity.behaviour.ExtendedBasinBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.capability.chunk.ChunkCrudeOil;
@@ -20,7 +22,6 @@ import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddiction
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
 import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositions;
 import com.petrolpark.destroy.capability.player.previousposition.PlayerPreviousPositionsProvider;
-import com.petrolpark.destroy.chemistry.naming.SaltNameOverrides;
 import com.petrolpark.destroy.commands.BabyBlueAddictionCommand;
 import com.petrolpark.destroy.commands.CrudeOilCommand;
 import com.petrolpark.destroy.commands.PollutionCommand;
@@ -28,7 +29,9 @@ import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.item.DestroyItems;
+import com.petrolpark.destroy.item.RedstoneProgrammerBlockItem;
 import com.petrolpark.destroy.item.SyringeItem;
+import com.petrolpark.destroy.item.TestTubeItem;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
 import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
@@ -38,6 +41,7 @@ import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
 import com.petrolpark.destroy.util.InebriationHelper;
 import com.petrolpark.destroy.util.PollutionHelper;
+import com.petrolpark.destroy.util.RedstoneProgrammerItemHandler;
 import com.petrolpark.destroy.world.damage.DestroyDamageSources;
 import com.petrolpark.destroy.world.entity.goal.BuildSandCastleGoal;
 import com.petrolpark.destroy.world.village.DestroyTrades;
@@ -52,10 +56,15 @@ import com.simibubi.create.content.fluids.drain.ItemDrainBlockEntity;
 import com.simibubi.create.content.fluids.spout.SpoutBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlockItem;
+import com.simibubi.create.content.redstone.link.LinkBehaviour;
+import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.ModFilePackResources;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.utility.Components;
+import com.simibubi.create.foundation.utility.Couple;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
@@ -73,6 +82,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -86,12 +96,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -114,6 +126,7 @@ import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -550,6 +563,53 @@ public class DestroyCommonEvents {
     };
 
     /**
+     * Allow Redstone Link Frequencies to be added to Redstone Programmers without setting the Programmer itself as a Frequency,
+     * and allow empty Test Tubes to be filled from Fluid Tanks
+     */
+    @SubscribeEvent
+    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        BlockPos pos = event.getPos();
+        Level level = event.getLevel();
+        ItemStack stack = event.getItemStack();
+        Player player = event.getEntity();
+
+        // Redstone Programmers
+        LinkBehaviour link = BlockEntityBehaviour.get(level, pos, LinkBehaviour.TYPE);
+        if (event.getItemStack().getItem() instanceof RedstoneProgrammerBlockItem && link != null) {
+            if (player.isShiftKeyDown()) return;
+            RedstoneProgrammerBlockItem.getProgram(stack, level, player).ifPresent((program) -> {
+                Couple<Frequency> key = link.getNetworkKey();
+                if (program.getChannels().stream().anyMatch(channel -> channel.getNetworkKey().equals(key))) {
+                    event.setCancellationResult(InteractionResult.FAIL);
+                    if (level.isClientSide()) player.displayClientMessage(DestroyLang.translate("tooltip.redstone_programmer.add_frequency.failure").style(ChatFormatting.RED).component(), true); 
+                } else {
+                    program.addBlankChannel(link.getNetworkKey());
+                    RedstoneProgrammerBlockItem.setProgram(stack, program);
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    if (level.isClientSide()) player.displayClientMessage(DestroyLang.translate("tooltip.redstone_programmer.add_frequency.success", key.getFirst().getStack().getHoverName(), key.getSecond().getStack().getHoverName()).component(), true); 
+                };
+            });
+            event.setCanceled(true);
+        };
+
+        // Fill Test Tubes from any Fluid-containing block
+        if (stack.getItem() instanceof TestTubeItem && TestTubeItem.isEmpty(stack) && player.isCreative()) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (!(be instanceof VatSideBlockEntity) && !(be instanceof VatControllerBlockEntity) && be.getCapability(ForgeCapabilities.FLUID_HANDLER, event.getFace()).map(handler -> {
+                FluidStack drained = handler.drain(200, FluidAction.SIMULATE);
+                if (DestroyFluids.isMixture(drained)) {
+                    player.setItemInHand(event.getHand(), TestTubeItem.of(drained));
+                    return true;
+                };
+                return false;
+            }).orElse(false)) {
+                event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide()));
+                event.setCanceled(true);  
+            };
+        };
+    };
+
+    /**
      * Trigger Handheld Seismometers when there are nearby Explosions.
      */
     @SubscribeEvent
@@ -583,7 +643,7 @@ public class DestroyCommonEvents {
      */
     @SubscribeEvent
     public static void onBabyBirthed(BabyEntitySpawnEvent event) {
-        if (!PollutionHelper.pollutionEnabled() || !DestroyAllConfigs.COMMON.pollution.breedingAffected.get()) return;
+        if (!PollutionHelper.pollutionEnabled() || !DestroyAllConfigs.SERVER.pollution.breedingAffected.get()) return;
         Level level = event.getParentA().level();
         RandomSource random = event.getParentA().getRandom();
         if (event.getParentA().getRandom().nextInt(PollutionType.SMOG.max) <= PollutionHelper.getPollution(level, PollutionType.SMOG)) { // 0% chance of failure for 0 smog, 100% chance for full smog
@@ -603,7 +663,7 @@ public class DestroyCommonEvents {
      */
     @SubscribeEvent
     public static void onPlantGrows(CropGrowEvent.Pre event) {
-        if (!PollutionHelper.pollutionEnabled() || !DestroyAllConfigs.COMMON.pollution.growingAffected.get()) return;
+        if (!PollutionHelper.pollutionEnabled() || !DestroyAllConfigs.SERVER.pollution.growingAffected.get()) return;
         if (!(event.getLevel() instanceof Level level)) return;
         for (PollutionType pollutionType : new PollutionType[]{PollutionType.SMOG, PollutionType.GREENHOUSE, PollutionType.ACID_RAIN}) {
             if (level.random.nextInt(pollutionType.max) <= PollutionHelper.getPollution(level, pollutionType)) {
@@ -638,12 +698,19 @@ public class DestroyCommonEvents {
     };
 
     /**
-     * Naturally decrease Pollution over time.
+     * Remove dead Redstone Programmer items and naturally decrease Pollution over time.
      */
     @SubscribeEvent
     public static void onTick(TickEvent.LevelTickEvent event) {
+
+        Level level = event.level;
+
+        // Redstone Programmers
+        RedstoneProgrammerItemHandler.tick(level);
+
+        // Pollution
         for (PollutionType pollutionType : PollutionType.values()) {
-            if (event.level.random.nextInt(100) == 0) PollutionHelper.changePollution(event.level, pollutionType, -1);
+            if (level.random.nextInt(100) == 0) PollutionHelper.changePollution(event.level, pollutionType, -1);
         };
     };
 

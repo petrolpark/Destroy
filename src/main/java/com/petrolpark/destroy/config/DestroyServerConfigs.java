@@ -2,8 +2,9 @@ package com.petrolpark.destroy.config;
 
 public class DestroyServerConfigs extends DestroyConfigBase {
 
-    public final ConfigGroup infrastructure = group(0, "infrastructure", Comments.infrastructure);
     public final DestroyContraptionsConfigs contraptions = nested(0, DestroyContraptionsConfigs::new, Comments.contraptions);
+	public final DestroyPollutionConfigs pollution = nested(0, DestroyPollutionConfigs::new, Comments.pollution);
+    public final ConfigBool automaticGoggles = b(true, Comments.autoGoggles);
     
     @Override
     public String getName() {
@@ -11,7 +12,12 @@ public class DestroyServerConfigs extends DestroyConfigBase {
     };
 
     private static class Comments {
-        static String infrastructure = "Behind the magic";
-        static String contraptions = "Destroy's processing machines";
+        static String
+
+        contraptions = "Destroy's processing machines",
+
+		pollution = "Change the effects of pollution on the world",
+
+		autoGoggles = "Players in Creative mode are treated as if they are wearing Engineer's Goggles even if they are not";
     };
 }

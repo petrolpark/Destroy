@@ -552,7 +552,7 @@ public class Reaction {
 
         /**
          * Set the activation energy (in kJ) for this Reaction.
-         * If no activation energy is given, defaults to 100kJ.
+         * If no activation energy is given, defaults to 50kJ.
          * @param activationEnergy
          * @return This Reaction Builder
          */
@@ -605,7 +605,7 @@ public class Reaction {
                 .addCatalyst(DestroyMolecules.WATER, 0)
                 .addProduct(DestroyMolecules.PROTON)
                 .addProduct(conjugateBase)
-                .activationEnergy(0)
+                .activationEnergy(GAS_CONSTANT * 0.298f) // Makes the pKa accurate at room temperature
                 .preexponentialFactor((float)Math.pow(10, -pKa))
                 .dontIncludeInJei()
                 .build();
@@ -616,7 +616,7 @@ public class Reaction {
                 .addReactant(conjugateBase)
                 .addReactant(DestroyMolecules.PROTON)
                 .addProduct(acid)
-                .activationEnergy(0)
+                .activationEnergy(GAS_CONSTANT * 0.298f)
                 .preexponentialFactor(1f)
                 .dontIncludeInJei()
                 .build();
@@ -684,8 +684,8 @@ public class Reaction {
                 throw e("Reaction is missing an ID.");
             };
 
-            if (!hasForcedActivationEnergy || reaction.activationEnergy <= 0f) {
-                reaction.activationEnergy = 50f;
+            if (!hasForcedActivationEnergy) {
+                reaction.activationEnergy = 25f;
                 //Destroy.LOGGER.warn("Activation energy of reaction '"+reactionString()+"' was missing or invalid, so estimated as 50kJ.");
             };
 

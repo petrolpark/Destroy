@@ -9,6 +9,7 @@
 			"name": "Needle",
 			"from": [5, 8, 5],
 			"to": [6, 9, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 8, 5]},
 			"faces": {
 				"north": {"uv": [1.5, 11.5, 2, 12], "texture": "#0"},
 				"east": {"uv": [1.5, 11.5, 3.5, 12], "texture": "#0"},

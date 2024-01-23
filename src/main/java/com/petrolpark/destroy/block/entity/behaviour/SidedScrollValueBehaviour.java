@@ -5,6 +5,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.google.common.collect.ImmutableList;
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
@@ -25,6 +26,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayer;
 
+@MoveToPetrolparkLibrary
 public class SidedScrollValueBehaviour extends BlockEntityBehaviour implements SmartValueSettingsBehaviour {
 
     public static final BehaviourType<SidedScrollValueBehaviour> TYPE = new BehaviourType<>();

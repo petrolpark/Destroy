@@ -10,6 +10,7 @@ import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.fluid.ingredient.MixtureFluidIngredient;
+import com.petrolpark.destroy.fluid.ingredient.mixturesubtype.MixtureFluidIngredientSubType;
 import com.petrolpark.destroy.util.vat.VatMaterial;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipHelper.Palette;
@@ -157,9 +158,9 @@ public class DestroyLang {
     public static List<Component> mixtureIngredientTooltip(CompoundTag fluidTag) {
         List<Component> tooltip = new ArrayList<>();
 
-        MixtureFluidIngredient fluidIngredient = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(fluidTag.getString("MixtureFluidIngredientSubtype"));
+        MixtureFluidIngredientSubType<?> fluidIngredientType = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(fluidTag.getString("MixtureFluidIngredientSubtype"));
 
-        tooltip.addAll(fluidIngredient.getDescription(fluidTag));
+        tooltip.addAll(fluidIngredientType.getDescription(fluidTag));
 
         return tooltip;
     };

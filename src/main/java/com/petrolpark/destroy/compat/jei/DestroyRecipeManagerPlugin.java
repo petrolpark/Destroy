@@ -1,15 +1,18 @@
 package com.petrolpark.destroy.compat.jei;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.Molecule;
+import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.compat.jei.category.GenericReactionCategory;
 import com.petrolpark.destroy.compat.jei.category.ReactionCategory;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.ingredient.MixtureFluidIngredient;
+import com.petrolpark.destroy.fluid.ingredient.mixturesubtype.MixtureFluidIngredientSubType;
 import com.petrolpark.destroy.recipe.ReactionRecipe;
 
 import mezz.jei.api.forge.ForgeTypes;
@@ -38,7 +41,7 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
             // Mixture ingredients (which contain a single Molecule)
             || (focus.checkedCast(ForgeTypes.FLUID_STACK).map(fluidFocus -> {
                 FluidStack fluidStack = fluidFocus.getTypedValue().getIngredient();
-                return DestroyFluids.isMixture(fluidStack) && fluidStack.getOrCreateTag().contains("MixtureFluidIngredientSubtype");
+                return DestroyFluids.isMixture(fluidStack);
             }).orElse(false))
         ) {
             recipeTypes.add(ReactionCategory.TYPE); // Add the Reaction Recipe type
@@ -53,20 +56,26 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
     public <T, V> List<T> getRecipes(IRecipeCategory<T> recipeCategory, IFocus<V> focus) {
         List<T> recipes = new ArrayList<>();
 
-        // Mixtures
-        // For Mixture inputs (which have a single Molecule required), simply replace this lookup with the lookup for that Molecule
+        // Mixture ingredients and outputs
+        // For Mixture inputs and outputs simply replace this lookup with the lookup for the Molecules the Mixture can/does contain
         focus.checkedCast(ForgeTypes.FLUID_STACK).ifPresent(fluidFocus -> { // Check to see if it's a Fluid ingredient
             FluidStack fluidStack = fluidFocus.getTypedValue().getIngredient();
             if (!DestroyFluids.isMixture(fluidStack)) return;
-            MixtureFluidIngredient ingredientType = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(fluidStack.getOrCreateTag().getString("MixtureFluidIngredientSubtype"));
-            if (ingredientType == null) return;
-            MixtureFluidIngredient ingredient = ingredientType.getNew();
-            if (ingredient == null) return;
+            MixtureFluidIngredientSubType<?> ingredientType = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(fluidStack.getOrCreateTag().getString("MixtureFluidIngredientSubtype"));
+            
+            Collection<Molecule> molecules = List.of();
 
             //TODO replace with disambiguation page of all contained Molecules, rather than just include the uses/recipes of all component Molecules in one
-            ingredient.getContainedMolecules(fluidStack.getOrCreateTag()).forEach(molecule -> {
+            if (ingredientType != null) { // Mixture ingredients
+                molecules = ingredientType.getContainedMolecules(fluidStack.getOrCreateTag());
+            } else if (fluidStack.getOrCreateTag().contains("Mixture")) { // Mixture outputs
+                molecules = ReadOnlyMixture.readNBT(fluidStack.getOrCreateChildTag("Mixture")).getContents(true);
+            };
+
+            molecules.forEach(molecule -> {
                 recipes.addAll(getRecipes(recipeCategory, helpers.getFocusFactory().createFocus(focus.getRole(), MoleculeJEIIngredient.TYPE, molecule)));
             });
+
         });
 
         // Molecules

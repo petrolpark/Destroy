@@ -1,7 +1,6 @@
 package com.petrolpark.destroy.util;
 
 import com.petrolpark.destroy.block.IChainableBlock;
-import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.network.DestroyMessages;
 import com.petrolpark.destroy.network.packet.ChainCogwheelsC2SPacket;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
@@ -63,6 +62,10 @@ public class CogwheelChainingHandler {
 
     public static boolean canConnect(BlockPos pos1, Axis axis1, BlockPos pos2, Axis axis2) {
         if (pos1 == null || axis1 == null || pos2 == null || axis2 == null) return false;
-        return axis1 == axis2 && !pos1.equals(pos2) && pos1.get(axis1) == pos2.get(axis1) && pos1.distToCenterSqr(pos2.getCenter()) <= Math.pow(DestroyAllConfigs.SERVER.contraptions.maxChainLength.get(), 2);
+        return axis1 == axis2
+            && !pos1.equals(pos2)
+            && pos1.get(axis1) == pos2.get(axis1)
+            //&& pos1.distToCenterSqr(pos2.getCenter()) <= Math.pow(DestroyAllConfigs.SERVER.contraptions.maxChainLength.get(), 2) //TODO uncomment once chains fully implemented
+        ;
     };
 };

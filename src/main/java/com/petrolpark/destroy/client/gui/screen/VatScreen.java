@@ -5,12 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
-
 import com.ibm.icu.text.DecimalFormat;
 import com.jozufozu.flywheel.util.transform.TransformStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.VatControllerBlock;
@@ -23,6 +19,7 @@ import com.petrolpark.destroy.client.gui.MoleculeRenderer;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.item.MoleculeDisplayItem;
 import com.petrolpark.destroy.util.DestroyLang;
+import com.petrolpark.destroy.util.GuiHelper;
 import com.petrolpark.destroy.util.vat.Vat;
 import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllIcons;
@@ -33,7 +30,6 @@ import com.simibubi.create.foundation.utility.Pair;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.Direction;
@@ -208,7 +204,7 @@ public class VatScreen extends AbstractSimiScreen {
         UIRenderHelper.swapAndBlitColor(minecraft.getMainRenderTarget(), UIRenderHelper.framebuffer);
         
         // Molecule entries
-        startStencil(graphics, moleculeScrollArea.getX(), moleculeScrollArea.getY(), moleculeScrollArea.getWidth(), moleculeScrollArea.getHeight());
+        GuiHelper.startStencil(graphics, moleculeScrollArea.getX(), moleculeScrollArea.getY(), moleculeScrollArea.getWidth(), moleculeScrollArea.getHeight());
         ms.pushPose();
         ms.translate(guiLeft + 25, guiTop + 20 + scrollOffset, 0);
         for (Pair<Molecule, Float> pair : orderedMolecules) {
@@ -222,7 +218,7 @@ public class VatScreen extends AbstractSimiScreen {
             ms.translate(0, CARD_HEIGHT, 0);
         };
         ms.popPose();
-        endStencil();
+        GuiHelper.endStencil();
 
         // Scroll dot
         DestroyGuiTextures.VAT_SCROLL_DOT.render(graphics, guiLeft + 15, guiTop + 20 + (int)(moleculeScroll.getValue(partialTicks) * 158 / maxMoleculeScroll));
@@ -235,18 +231,18 @@ public class VatScreen extends AbstractSimiScreen {
         if (selectedMolecule != null) {
             ms.pushPose();
             ms.translate(guiLeft + 131, guiTop + 16, 100);
-            startStencil(graphics, 0, 0, 114, 85);
+            GuiHelper.startStencil(graphics, 0, 0, 114, 85);
             MoleculeRenderer renderer = selectedMolecule.getRenderer();
             ms.translate((double)-renderer.getWidth() / 2, (double)-renderer.getHeight() / 2, 0);
             renderer.render(56, 42, graphics);
-            endStencil();
+            GuiHelper.endStencil();
             ms.popPose();
         };
 
         // Molecule name and info
         textHeight = font.lineHeight;
         textWidth = 0f;
-        startStencil(graphics, textArea.getX(), textArea.getY(), textArea.getWidth(), textArea.getHeight());
+        GuiHelper.startStencil(graphics, textArea.getX(), textArea.getY(), textArea.getWidth(), textArea.getHeight());
         ms.pushPose();
         ms.translate(guiLeft + 135 - (int)horizontalTextScroll.getValue(partialTicks), guiTop + 106 - (int)textScroll.getValue(partialTicks), 0);
         if (selectedMolecule != null) {
@@ -262,7 +258,7 @@ public class VatScreen extends AbstractSimiScreen {
             graphics.drawString(font, DestroyLang.translate(orderedMolecules.isEmpty() ? "tooltip.vat.menu.empty" : "tooltip.vat.menu.select").component(), 0, 0, 0xFFFFFF);            
         };
         ms.popPose();
-        endStencil();
+        GuiHelper.endStencil();
 
         UIRenderHelper.swapAndBlitColor(UIRenderHelper.framebuffer, minecraft.getMainRenderTarget());
         
@@ -280,40 +276,4 @@ public class VatScreen extends AbstractSimiScreen {
         ms.popPose();
     };
 
-    /**
-     * Copied from the {@link com.simibubi.create.content.trains.schedule.ScheduleScreen#startStencil Create source code}.
-     * Confines all rendered pixels to a rectangle.
-     * @param graphics The graphics renderer
-     * @param x The left position of the box
-     * @param y The top position of the box
-     * @param w The width of the box
-     * @param h The height of the box
-     */
-    protected void startStencil(GuiGraphics graphics, float x, float y, float w, float h) {
-		RenderSystem.clear(GL30.GL_STENCIL_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX);
-
-		GL11.glDisable(GL11.GL_STENCIL_TEST);
-		RenderSystem.stencilMask(~0);
-		RenderSystem.clear(GL11.GL_STENCIL_BUFFER_BIT, Minecraft.ON_OSX);
-		GL11.glEnable(GL11.GL_STENCIL_TEST);
-		RenderSystem.stencilOp(GL11.GL_REPLACE, GL11.GL_KEEP, GL11.GL_KEEP);
-		RenderSystem.stencilMask(0xFF);
-		RenderSystem.stencilFunc(GL11.GL_NEVER, 1, 0xFF);
-
-		PoseStack matrixStack = graphics.pose();
-		matrixStack.pushPose();
-		matrixStack.translate(x, y, 0);
-		matrixStack.scale(w, h, 1);
-		graphics.fillGradient(0, 0, 1, 1, -100, 0xff000000, 0xff000000);
-		matrixStack.popPose();
-
-		GL11.glEnable(GL11.GL_STENCIL_TEST);
-		RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-		RenderSystem.stencilFunc(GL11.GL_EQUAL, 1, 0xFF);
-	};
-
-	protected void endStencil() {
-		GL11.glDisable(GL11.GL_STENCIL_TEST);
-	};
-    
 };

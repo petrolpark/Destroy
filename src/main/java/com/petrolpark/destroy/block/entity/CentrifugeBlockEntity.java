@@ -345,6 +345,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IDirect
         private final String tankId;
 
         private CentrifugeDisplaySource(String tankId, Function<CentrifugeBlockEntity, SmartFluidTank> tankGetter) {
+            super(false);
             this.tankId = tankId;
             this.tankGetter = tankGetter;
         };

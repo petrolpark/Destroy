@@ -5,7 +5,6 @@ import java.util.Collection;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.petrolpark.destroy.capability.player.babyblue.PlayerBabyBlueAddictionProvider;
-import com.petrolpark.destroy.config.DestroyAllConfigs;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -20,7 +19,7 @@ public class BabyBlueAddictionCommand {
             .then(Commands.literal("query").then(Commands.argument("targets", EntityArgument.player()).executes(context -> {
                 return queryBabyBlueAddiction(context.getSource(), EntityArgument.getPlayer(context, "targets"));
             })))
-            .then(Commands.literal("set").then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("amount", IntegerArgumentType.integer(0, DestroyAllConfigs.COMMON.substances.maxAddictionLevel.get())).executes(context -> {
+            .then(Commands.literal("set").then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("amount", IntegerArgumentType.integer(0)).executes(context -> {
                 return setBabyBlueAddiction(context.getSource(), EntityArgument.getPlayers(context, "targets"), IntegerArgumentType.getInteger(context, "amount"));
             }))))
         );

@@ -83,7 +83,7 @@ public class DestroyReactions {
 
     BENZENE_HYDROGENATION = builder()
         .id("benzene_hydrogenation")
-        .addReactant(DestroyMolecules.TOLUENE)
+        .addReactant(DestroyMolecules.BENZENE)
         .addReactant(DestroyMolecules.HYDROGEN, 2, 1)
         .addSimpleItemTagCatalyst(AllTags.forgeItemTag("dusts/nickel"), 1f)
         .addProduct(DestroyMolecules.CYCLOHEXENE)
@@ -356,6 +356,14 @@ public class DestroyReactions {
         .requireUV() //TODO add reverse reaction
         .build(),
 
+    IODIDE_DISPLACEMENT = builder()
+        .id("iodide_displacement")
+        .addReactant(DestroyMolecules.IODIDE, 2, 1)
+        .addReactant(DestroyMolecules.CHLORINE)
+        .addProduct(DestroyMolecules.IODINE)
+        .addProduct(DestroyMolecules.CHLORIDE, 2)
+        .build(),
+
     IODINE_DISSOLUTION = builder()
         .id("iodine_dissolution")
         .addReactant(DestroyMolecules.WATER, 0)
@@ -455,18 +463,18 @@ public class DestroyReactions {
 
     NICKEL_DISSOLUTION = builder() //TODO replace with redox
         .id("nickel_dissolution")
-        .addReactant(DestroyMolecules.PROTON, 6, 1)
+        .addReactant(DestroyMolecules.PROTON, 2, 1)
         .addSimpleItemTagReactant(AllTags.forgeItemTag("dusts/nickel"), 0.9f)
-        .addProduct(DestroyMolecules.HYDROGEN, 3)
-        .addProduct(DestroyMolecules.IRON_III, 2)
+        .addProduct(DestroyMolecules.HYDROGEN)
+        .addProduct(DestroyMolecules.NICKEL_ION)
         .build(),
 
     NICKEL_ORE_DISSOLUTION = builder() //TODO replace with redox
         .id("nickel_ore_dissolution")
-        .addReactant(DestroyMolecules.PROTON, 6, 1)
-        .addSimpleItemReactant(AllItems.CRUSHED_NICKEL::get, 0.75f)
-        .addProduct(DestroyMolecules.HYDROGEN, 3)
-        .addProduct(DestroyMolecules.IRON_III, 2)
+        .addReactant(DestroyMolecules.PROTON, 2, 1)
+        .addSimpleItemReactant(AllItems.CRUSHED_NICKEL::get, 1.5f)
+        .addProduct(DestroyMolecules.HYDROGEN)
+        .addProduct(DestroyMolecules.NICKEL_ION)
         .build(),
 
     NITRONIUM_FORMATION = builder()

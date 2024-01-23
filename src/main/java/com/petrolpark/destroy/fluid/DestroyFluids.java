@@ -66,7 +66,7 @@ public class DestroyFluids {
     };
 
     public static boolean isMixture(FluidStack stack) {
-        return isMixture(stack.getFluid()) && stack.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND);
+        return !stack.isEmpty() && isMixture(stack.getFluid()) && stack.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND);
     };
 
     public static boolean isMixture(Fluid fluid) {

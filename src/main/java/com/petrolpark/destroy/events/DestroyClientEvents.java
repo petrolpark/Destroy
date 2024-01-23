@@ -86,7 +86,7 @@ public class DestroyClientEvents {
     };
 
     public static boolean smogEnabled() {
-        return PollutionHelper.pollutionEnabled() && DestroyAllConfigs.COMMON.pollution.smog.get();
+        return PollutionHelper.pollutionEnabled() && DestroyAllConfigs.SERVER.pollution.smog.get();
     };
 
     /**

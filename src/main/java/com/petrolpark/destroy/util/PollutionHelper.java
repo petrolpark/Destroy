@@ -27,7 +27,7 @@ public class PollutionHelper {
      * Whether Pollution is enabled in this world.
      */
     public static boolean pollutionEnabled() {
-        return DestroyAllConfigs.COMMON.pollution.enablePollution.get();
+        return DestroyAllConfigs.SERVER.pollution.enablePollution.get();
     };
 
     /**

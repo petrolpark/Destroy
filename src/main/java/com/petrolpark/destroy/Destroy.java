@@ -164,7 +164,7 @@ public class Destroy {
         DestroyGenericReactions.register();
 
         // Config
-        GogglesItem.addIsWearingPredicate(player -> player.isCreative() && DestroyAllConfigs.COMMON.automaticGoggles.get());
+        GogglesItem.addIsWearingPredicate(player -> player.isCreative() && DestroyAllConfigs.SERVER.automaticGoggles.get());
     };
 
     public static void clientInit(final FMLClientSetupEvent event) {

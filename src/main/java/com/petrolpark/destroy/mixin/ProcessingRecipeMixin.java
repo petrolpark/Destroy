@@ -35,10 +35,10 @@ public abstract class ProcessingRecipeMixin {
     public void inInit(IRecipeTypeInfo typeInfo, ProcessingRecipeParams params, CallbackInfo ci) {
         if (!DestroyJEI.MOLECULE_RECIPES_NEED_PROCESSING) return;
         for (FluidIngredient ingredient : ((ProcessingRecipeParamsAccessor)params).getFluidIngredients()) {
-            if (ingredient instanceof MixtureFluidIngredient mixtureFluidIngredient) {
+            if (ingredient instanceof MixtureFluidIngredient<?> mixtureFluidIngredient) {
                 CompoundTag fluidTag = new CompoundTag();
                 mixtureFluidIngredient.addNBT(fluidTag);
-                for (Molecule molecule : mixtureFluidIngredient.getContainedMolecules(fluidTag)) {
+                for (Molecule molecule : mixtureFluidIngredient.getType().getContainedMolecules(fluidTag)) {
                     DestroyJEI.MOLECULES_INPUT.putIfAbsent(molecule, new ArrayList<>()); // Create the List if it's not there
                     DestroyJEI.MOLECULES_INPUT.get(molecule).add((ProcessingRecipe<RecipeWrapper>)(Object)this); // Unchecked conversion (fine because this is a Mixin)
                 };

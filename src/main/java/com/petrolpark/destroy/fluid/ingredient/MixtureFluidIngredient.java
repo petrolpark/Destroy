@@ -1,35 +1,33 @@
 package com.petrolpark.destroy.fluid.ingredient;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.petrolpark.destroy.chemistry.Mixture;
-import com.petrolpark.destroy.chemistry.Molecule;
-import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
+import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
+import com.petrolpark.destroy.fluid.ingredient.mixturesubtype.MixtureFluidIngredientSubType;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraftforge.fluids.FluidStack;
 
-public abstract class MixtureFluidIngredient extends FluidIngredient {
+public abstract class MixtureFluidIngredient<T extends MixtureFluidIngredient<T>> extends FluidIngredient {
 
-    public static Map<String,MixtureFluidIngredient> MIXTURE_FLUID_INGREDIENT_SUBTYPES = new HashMap<>();
+    public static Map<String, MixtureFluidIngredientSubType<?>> MIXTURE_FLUID_INGREDIENT_SUBTYPES = new HashMap<>();
 
     static {
-        registerMixtureFluidIngredientSubtype(new MoleculeFluidIngredient());
-        registerMixtureFluidIngredientSubtype(new SaltFluidIngredient());
-        registerMixtureFluidIngredientSubtype(new MoleculeTagFluidIngredient());
-        registerMixtureFluidIngredientSubtype(new RefrigerantDummyFluidIngredient());
-        registerMixtureFluidIngredientSubtype(new IonFluidIngredient());
+        registerMixtureFluidIngredientSubType(MoleculeFluidIngredient.TYPE);
+        registerMixtureFluidIngredientSubType(SaltFluidIngredient.TYPE);
+        registerMixtureFluidIngredientSubType(MoleculeTagFluidIngredient.TYPE);
+        registerMixtureFluidIngredientSubType(RefrigerantDummyFluidIngredient.TYPE);
+        registerMixtureFluidIngredientSubType(IonFluidIngredient.TYPE);
     };
 
-    public static void registerMixtureFluidIngredientSubtype(MixtureFluidIngredient mixtureFluidIngredient) {
-        MIXTURE_FLUID_INGREDIENT_SUBTYPES.put(mixtureFluidIngredient.getMixtureFluidIngredientSubtype(), mixtureFluidIngredient);
+    public static void registerMixtureFluidIngredientSubType(MixtureFluidIngredientSubType<?> ingredientType) {
+        MIXTURE_FLUID_INGREDIENT_SUBTYPES.put(ingredientType.getMixtureFluidIngredientSubtype(), ingredientType);
     };
 
     @Override
@@ -41,43 +39,33 @@ public abstract class MixtureFluidIngredient extends FluidIngredient {
     };
 
     @Override
-    protected List<FluidStack> determineMatchingFluidStacks() {
-        Mixture mixture = new Mixture();
-        mixture.addMolecule(DestroyMolecules.WATER, 55.56f); //TODO get generated Mixture
-        FluidStack stack = MixtureFluid.of(amountRequired, mixture);
-        stack.getOrCreateTag().putString("MixtureFluidIngredientSubtype", getMixtureFluidIngredientSubtype());
-        addNBT(stack.getOrCreateTag());
-        return List.of(stack);
+    protected final List<FluidStack> determineMatchingFluidStacks() {
+        return getExampleMixtures().stream().map(mixture -> {
+            FluidStack stack = MixtureFluid.of(amountRequired, mixture);
+            stack.getOrCreateTag().putString("MixtureFluidIngredientSubtype", getType().getMixtureFluidIngredientSubtype());
+            addNBT(stack.getOrCreateTag());
+            return stack;
+        }).toList();
     };
 
-    public abstract MixtureFluidIngredient getNew();
+    public abstract MixtureFluidIngredientSubType<T> getType();
 
     protected abstract boolean testMixture(Mixture mixture);
 
-    public abstract String getMixtureFluidIngredientSubtype();
-
     /**
      * Add data to the NBT of the Fluid Ingredient when it is displayed in JEI. The only use of this is to control the
-     * {@link MixtureFluidIngredient#getDescription description}. Careful not to overwite the tags {@code Mixture} or 
+     * {@link MixtureFluidIngredientSubType#getDescription description}. Careful not to overwite the tags {@code Mixture} or 
      * {@code MixtureFluidIngredientSubtype}.
      * @param fluidTag
      */
     public abstract void addNBT(CompoundTag fluidTag);
 
     /**
-     * Generate a tooltip to act as the description of an ingredient in JEI. This method should be effectively static.
-     * Do not call any local variables; all data should come from {@code fluidTag}. You should add this data {@link
-     * MixtureFluidIngredient#addNBT here}.
-     * @param fluidTag
+     * Get the Mixtures this ingredient should cycle through when shown in JEI.
+     * @return
      */
-    public abstract List<Component> getDescription(CompoundTag fluidTag);
-
-    /**
-     * Get the Molecules which this ingredient could contain, so if this Ingredient is clicked in JEI, it knows
-     * which Molecules to look up. This method should be effectively static. Do not call any local variables; all
-     * data should come from {@code fluidTag}. You should add this data {@link MixtureFluidIngredient#addNBT here}.
-     * @param fluidTag
-     */
-    public abstract Collection<Molecule> getContainedMolecules(CompoundTag fluidTag);
+    public List<ReadOnlyMixture> getExampleMixtures() {
+        return List.of();
+    };
     
 };

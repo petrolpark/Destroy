@@ -89,7 +89,6 @@ public class MoleculeJEIIngredient {
     };
 
     public static final IIngredientRenderer<Molecule> RENDERER = new IIngredientRenderer<Molecule>() {
-        private static boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
 
         @Override
         public void render(GuiGraphics graphics, Molecule ingredient) {
@@ -99,7 +98,7 @@ public class MoleculeJEIIngredient {
         @Override
         public List<Component> getTooltip(Molecule ingredient, TooltipFlag tooltipFlag) {
             List<Component> tooltips = new ArrayList<>();
-            tooltips.add(ingredient.getName(iupac));
+            tooltips.add(ingredient.getName(DestroyAllConfigs.CLIENT.chemistry.iupacNames.get()));
             tooltips.addAll(MoleculeDisplayItem.getLore(ingredient));
             return tooltips;
         };

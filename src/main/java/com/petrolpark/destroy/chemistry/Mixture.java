@@ -284,66 +284,71 @@ public class Mixture extends ReadOnlyMixture {
     /**
      * Reacts the contents of this Mixture for one tick, if it is not already at {@link Mixture#equilibrium equilibrium}.
      * @param context
+     * @param cycles Number of times each tick the reactions should be enacted
      */
-    public void reactForTick(ReactionContext context) {
+    public void reactForTick(ReactionContext context, int cycles) {
 
-        if (equilibrium) return; // If we have already reached equilibrium, nothing more is going to happen, so don't bother reacting
+        for (int cycle = 0; cycle < cycles; cycle++) {
 
-        equilibrium = true; // Start by assuming we have reached equilibrium
-        boolean shouldRefreshPossibleReactions = false; // Rather than refreshing the possible Reactions every time a new Molecule is added or removed, start by assuming we won't need to, and flag for refreshing if we ever do
+            if (equilibrium) return; // If we have already reached equilibrium, nothing more is going to happen, so don't bother reacting
 
-        Map<Molecule, Float> oldContents = new HashMap<>(contents); // Copy all the old concentrations of everything
+            equilibrium = true; // Start by assuming we have reached equilibrium
+            boolean shouldRefreshPossibleReactions = false; // Rather than refreshing the possible Reactions every time a new Molecule is added or removed, start by assuming we won't need to, and flag for refreshing if we ever do
 
-        Map<Reaction, Float> reactionRates = new HashMap<>(); // Rates of all Reactions
-        List<Reaction> orderedReactions = new ArrayList<>(); // A list of Reactions in the order of their current rate, fastest first
+            Map<Molecule, Float> oldContents = new HashMap<>(contents); // Copy all the old concentrations of everything
 
-        orderEachReaction: for (Reaction possibleReaction : possibleReactions) {
-            if (possibleReaction.consumesItem()) continue orderEachReaction; // Don't include Reactions which CONSUME Items at this stage
+            Map<Reaction, Float> reactionRates = new HashMap<>(); // Rates of all Reactions
+            List<Reaction> orderedReactions = new ArrayList<>(); // A list of Reactions in the order of their current rate, fastest first
 
-            for (IItemReactant itemReactant : possibleReaction.getItemReactants()) { // Check all Reactions have the necessary Item catalysts
-                boolean validStackFound = false; // Start by assuming we won't have the required Item Stack...
-                checkAllItems: for (ItemStack stack : context.availableItemStacks) {
-                    if (itemReactant.isItemValid(stack)) {
-                        validStackFound = true; // ...If we do, correct this assumption
-                        break checkAllItems;
+            orderEachReaction: for (Reaction possibleReaction : possibleReactions) {
+                if (possibleReaction.consumesItem()) continue orderEachReaction; // Don't include Reactions which CONSUME Items at this stage
+
+                for (IItemReactant itemReactant : possibleReaction.getItemReactants()) { // Check all Reactions have the necessary Item catalysts
+                    boolean validStackFound = false; // Start by assuming we won't have the required Item Stack...
+                    checkAllItems: for (ItemStack stack : context.availableItemStacks) {
+                        if (itemReactant.isItemValid(stack)) {
+                            validStackFound = true; // ...If we do, correct this assumption
+                            break checkAllItems;
+                        };
+                    };
+                    if (!validStackFound) continue orderEachReaction; // If we don't have the requesite Item Stacks, don't do this Reaction
+                };
+
+                reactionRates.put(possibleReaction, calculateReactionRate(possibleReaction, context) / cycles); // Calculate the Reaction data for this tick
+                orderedReactions.add(possibleReaction); // Add the Reaction to the rate-ordered list, which is currently not sorted
+            };
+
+            Collections.sort(orderedReactions, (r1, r2) -> reactionRates.get(r1).compareTo(reactionRates.get(r2))); // Sort the Reactions by rate
+
+            doEachReaction: for (Reaction reaction : orderedReactions) { // Go through each Reaction, fastest first
+
+                Float molesOfReaction = reactionRates.get(reaction); // We are reacting over one tick, so moles of Reaction that take place in this time = rate of Reaction in M per tick
+
+                for (Molecule reactant : reaction.getReactants()) {
+                    int reactantMolarRatio = reaction.getReactantMolarRatio(reactant);
+                    float reactantConcentration = getConcentrationOf(reactant);
+                    if (reactantConcentration < reactantMolarRatio * molesOfReaction) { // Determine the limiting reagent, if there is one
+                        molesOfReaction = reactantConcentration / (float) reactantMolarRatio; // If there is a new limiting reagent, alter the moles of reaction which will take place
+                        shouldRefreshPossibleReactions = true; // If there is a new limiting reagent, one Molecule is going to be used up, so the possible Reactions will change
                     };
                 };
-                if (!validStackFound) continue orderEachReaction; // If we don't have the requesite Item Stacks, don't do this Reaction
+
+                if (molesOfReaction <= 0f) continue doEachReaction; // Don't bother going any further if this Reaction won't happen
+
+                shouldRefreshPossibleReactions |= doReaction(reaction, molesOfReaction); // Increment the amount of this Reaction which has occured, add all products and remove all reactants
             };
 
-            reactionRates.put(possibleReaction, calculateReactionRate(possibleReaction, context)); // Calculate the Reaction data for this tick
-            orderedReactions.add(possibleReaction); // Add the Reaction to the rate-ordered list, which is currently not sorted
-        };
-
-        Collections.sort(orderedReactions, (r1, r2) -> reactionRates.get(r1).compareTo(reactionRates.get(r2))); // Sort the Reactions by rate
-
-        doEachReaction: for (Reaction reaction : orderedReactions) { // Go through each Reaction, fastest first
-
-            Float molesOfReaction = reactionRates.get(reaction); // We are reacting over one tick, so moles of Reaction that take place in this time = rate of Reaction in M per tick
-
-            for (Molecule reactant : reaction.getReactants()) {
-                int reactantMolarRatio = reaction.getReactantMolarRatio(reactant);
-                float reactantConcentration = getConcentrationOf(reactant);
-                if (reactantConcentration < reactantMolarRatio * molesOfReaction) { // Determine the limiting reagent, if there is one
-                    molesOfReaction = reactantConcentration / (float) reactantMolarRatio; // If there is a new limiting reagent, alter the moles of reaction which will take place
-                    shouldRefreshPossibleReactions = true; // If there is a new limiting reagent, one Molecule is going to be used up, so the possible Reactions will change
+            // Check now if we have actually reached equilibrium or if that was a false assumption at the start
+            for (Molecule molecule : oldContents.keySet()) {
+                if (!areVeryClose(oldContents.get(molecule), getConcentrationOf(molecule))) { // If there's something that has changed concentration noticeably in this tick...
+                    equilibrium = false; // ...we cannot have reached equilibrium
                 };
             };
 
-            if (molesOfReaction <= 0f) continue doEachReaction; // Don't bother going any further if this Reaction won't happen
-
-            shouldRefreshPossibleReactions |= doReaction(reaction, molesOfReaction); // Increment the amount of this Reaction which has occured, add all products and remove all reactants
-        };
-
-        // Check now if we have actually reached equilibrium or if that was a false assumption at the start
-        for (Molecule molecule : oldContents.keySet()) {
-            if (!areVeryClose(oldContents.get(molecule), getConcentrationOf(molecule))) { // If there's something that has changed concentration noticeably in this tick...
-                equilibrium = false; // ...we cannot have reached equilibrium
+            if (shouldRefreshPossibleReactions) { // If we added a new Molecule or removed an old one at any point
+                refreshPossibleReactions();
             };
-        };
 
-        if (shouldRefreshPossibleReactions) { // If we added a new Molecule or removed an old one at any point
-            refreshPossibleReactions();
         };
 
         updateName();
@@ -673,7 +678,7 @@ public class Mixture extends ReadOnlyMixture {
             if (Math.abs(energyChange) > 0.0001f) {
                 heat(1000 * energyChange / volume); // 1000 converts getFluidAmount() in mB to Buckets
             };
-            reactForTick(context);
+            reactForTick(context, 1);
             ticks++;
         };
 

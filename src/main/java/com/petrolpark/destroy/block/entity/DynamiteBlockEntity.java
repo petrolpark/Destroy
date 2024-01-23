@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.petrolpark.destroy.block.entity.behaviour.SidedScrollValueBehaviour;
-import com.petrolpark.destroy.block.entity.behaviour.WhenTargetedBehaviour;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -24,13 +23,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class DynamiteBlockEntity extends SmartBlockEntity {
+public class DynamiteBlockEntity extends SmartBlockEntity implements ISpecialWhenHovered {
 
     public BlockPos excavationAreaUpperCorner;
     public BlockPos excavationAreaLowerCorner;
     protected SidedScrollValueBehaviour scrollValueBehaviour;
-    protected WhenTargetedBehaviour targetedBehaviour;
 
     private int initializationTicks;
 
@@ -51,9 +51,6 @@ public class DynamiteBlockEntity extends SmartBlockEntity {
         behaviours.add(scrollValueBehaviour);
 
         updateExcavationArea();
-
-        targetedBehaviour = new WhenTargetedBehaviour(this, this::showExcavationArea);
-        behaviours.add(targetedBehaviour);
     };
 
     @Override
@@ -79,7 +76,9 @@ public class DynamiteBlockEntity extends SmartBlockEntity {
         tag.put("LowerCorner", NbtUtils.writeBlockPos(excavationAreaLowerCorner));
     };
 
-    private void showExcavationArea(LocalPlayer player, BlockHitResult blockHitResult) {
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void whenLookedAt(LocalPlayer player, BlockHitResult blockHitResult) {
         CreateClient.OUTLINER.chaseAABB(Pair.of("excavationArea", getBlockPos()), new AABB(excavationAreaLowerCorner, excavationAreaUpperCorner))
             .colored(0xFF_d80051);
     };

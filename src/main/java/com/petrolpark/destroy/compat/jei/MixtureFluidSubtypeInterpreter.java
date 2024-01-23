@@ -12,7 +12,7 @@ public class MixtureFluidSubtypeInterpreter implements IIngredientSubtypeInterpr
     @Override
     public String apply(FluidStack ingredient, UidContext context) {
         if (!ingredient.hasTag()) return IIngredientSubtypeInterpreter.NONE;
-        return ingredient.getOrCreateChildTag("Mixture").getAsString();
+        return ingredient.getOrCreateTag().getAsString();
     };
     
 };

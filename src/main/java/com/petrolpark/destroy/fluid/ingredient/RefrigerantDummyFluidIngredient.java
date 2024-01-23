@@ -16,13 +16,8 @@ import net.minecraft.network.chat.Component;
 public class RefrigerantDummyFluidIngredient extends MoleculeTagFluidIngredient {
 
     public RefrigerantDummyFluidIngredient() {
-        super(DestroyMolecules.Tags.REFRIGERANT, 1f);
+        super(DestroyMolecules.Tags.REFRIGERANT, 0.9f, 1.1f);
         amountRequired = 1000;
-    };
-
-    @Override
-    public MixtureFluidIngredient getNew() {
-        return new RefrigerantDummyFluidIngredient();
     };
 
     @Override
@@ -31,23 +26,32 @@ public class RefrigerantDummyFluidIngredient extends MoleculeTagFluidIngredient 
     };
 
     @Override
-    public String getMixtureFluidIngredientSubtype() {
-        return "mixtureFluidWithRefrigerants";
-    };
-
-    @Override
-    public List<Component> getDescription(CompoundTag fluidTag) {
-        List<Component> tooltip = new ArrayList<>();
-        tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule_tag_1").string(), Palette.GRAY_AND_WHITE));
-        tooltip.add(DestroyMolecules.Tags.REFRIGERANT.getFormattedName());
-        tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.refrigerants").string(), Palette.GRAY_AND_WHITE));
-        return tooltip;
-    };
-
-    @Override
     protected void readInternal(JsonObject json) {};
 
     @Override
     protected void writeInternal(JsonObject json) {};
+
+    protected static class Type extends MoleculeTagFluidIngredient.Type {
+
+        @Override
+        public RefrigerantDummyFluidIngredient getNew() {
+            return new RefrigerantDummyFluidIngredient();
+        };
+
+        @Override
+        public String getMixtureFluidIngredientSubtype() {
+            return "mixtureFluidWithRefrigerants";
+        };
+    
+        @Override
+        public List<Component> getDescription(CompoundTag fluidTag) {
+            List<Component> tooltip = new ArrayList<>();
+            tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule_tag_1").string(), Palette.GRAY_AND_WHITE));
+            tooltip.add(DestroyMolecules.Tags.REFRIGERANT.getFormattedName());
+            tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.refrigerants").string(), Palette.GRAY_AND_WHITE));
+            return tooltip;
+        };
+
+    };
     
 };

@@ -18,9 +18,9 @@ import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.resources.ResourceLocation;
 
-public class GenericReactionCategory extends ReactionCategory {
+public class GenericReactionCategory extends ReactionCategory<GenericReactionRecipe> {
 
-    public static RecipeType<ReactionRecipe> TYPE;
+    public static RecipeType<GenericReactionRecipe> TYPE;
 
     /**
      * Each {@link com.petrolpark.destroy.chemistry.GroupType Group Type} mapped to the Set of {@link com.petrolpark.destroy.chemistry.genericreaction.GenericReaction Generic Reactions} that can produce it.
@@ -33,11 +33,11 @@ public class GenericReactionCategory extends ReactionCategory {
      * The set of all {@link com.petrolpark.destroy.chemistry.genericreaction.GenericReaction#getExampleReaction example} {@link com.petrolpark.destroy.chemistry.Reaction Reactions}, mapped to
      * the {@link com.petrolpark.destroy.chemistry.genericreaction.GenericReaction Generic Reactions} of which they are the example.
      */
-    public static Map<GenericReaction, ReactionRecipe> RECIPES = new HashMap<>();
+    public static Map<GenericReaction, GenericReactionRecipe> RECIPES = new HashMap<>();
 
-    public GenericReactionCategory(Info<ReactionRecipe> info, IJeiHelpers helpers) {
+    public GenericReactionCategory(Info<GenericReactionRecipe> info, IJeiHelpers helpers) {
         super(info, helpers);
-        TYPE = info.recipeType();
+        GenericReactionCategory.TYPE = info.recipeType();
     };
 
     @Override

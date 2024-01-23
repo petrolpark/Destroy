@@ -3,6 +3,7 @@ package com.petrolpark.destroy.chemistry;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.function.Function;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +25,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * A {@link com.petrolpark.destroy.chemistry.Mixture Mixture} which cannot react.
@@ -232,7 +231,7 @@ public class ReadOnlyMixture {
             if (entry.getKey().hasTag(DestroyMolecules.Tags.SOLVENT)) continue; // If this is a solvent, ignore it
             if (entry.getValue() > IMPURITY_THRESHOLD) return false; // If this illegal impurity is in high-enough concentration, this Mixture is unsuitable
         };
-        return (combinedConcentration > maxConcentration + 0.05 || combinedConcentration < minConcentration - 0.05f); // The  0.05 accounts for rounding errors
+        return (combinedConcentration < maxConcentration + 0.05f && combinedConcentration > minConcentration - 0.05f); // The  0.05 accounts for rounding errors
     };
 
     /**
@@ -284,17 +283,20 @@ public class ReadOnlyMixture {
      * The tooltip listing the {@link ReadOnlyMixture#contents contents} of this Mixture.
      * @param iupac Whether to use IUPAC names instead of common names
      * @param monospace Whether to add extra whitespace so all Molecule names line up
+     * @param moles Whether to use moles instead of molar for the units
      * @param concentrationFormatter The formatter that determines the number of decimals places for concentration to display
      */
-    public List<Component> getContentsTooltip(boolean iupac, boolean monospace, DecimalFormat concentrationFormatter) {
+    public List<Component> getContentsTooltip(boolean iupac, boolean monospace, boolean useMoles, DecimalFormat concentrationFormatter) {
         int i = 0;
         List<Component> tooltip = new ArrayList<>();
         List<Molecule> molecules = new ArrayList<>(contents.keySet());
         Collections.sort(molecules, (m1, m2) -> contents.get(m2).compareTo(contents.get(m1)));
         for (Molecule molecule : molecules) {
+            Function<Float, String> quantityTranslator = q -> DestroyLang.translate(useMoles ? "tooltip.mixture_contents.moles" : "tooltip.mixture_contents.concentration", concentrationFormatter.format(q)).string();
+            int quantityLabelLength = quantityTranslator.apply(0f).length() + 2;
             tooltip.add(i, DestroyLang.builder()
                 .space().space()
-                .add(Component.literal(monospace ? String.format("%1$6s", concentrationFormatter.format(contents.get(molecule))+"M") : concentrationFormatter.format(contents.get(molecule))+"M")) // Show concentration
+                .add(Component.literal(monospace ? String.format("%1$"+quantityLabelLength+"s", quantityTranslator.apply(contents.get(molecule))) : quantityTranslator.apply(contents.get(molecule)))) // Show concentration
                 .space()
                 .add(molecule.getName(iupac).plainCopy())
                 .add(Component.literal(
@@ -330,7 +332,6 @@ public class ReadOnlyMixture {
     /**
      * Update the {@link ReadOnlyMixture#name name} of this Mixture to reflect what's in it.
      */
-    @OnlyIn(Dist.CLIENT)
     protected void updateName() {
 
         if (translationKey != "") {

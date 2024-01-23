@@ -20,10 +20,7 @@ public class RedstoneProgrammerBlockEntity extends SmartBlockEntity {
     };
 
     @Override
-    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {};
-
-    @Override
-    public void addBehavioursDeferred(List<BlockEntityBehaviour> behaviours) {
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         programmer = new RedstoneProgrammerBehaviour(this, () -> getBlockState().getValue(RedstoneProgrammerBlock.POWERED));
         behaviours.add(programmer);
     };

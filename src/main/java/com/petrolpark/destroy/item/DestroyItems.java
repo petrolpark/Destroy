@@ -34,12 +34,10 @@ import net.minecraftforge.common.Tags;
 public class DestroyItems {
 
     public static final ItemEntry<Item> LOGO = REGISTRATE.item("logo", Item::new)
-        .tab(null)
         .removeTab(CreativeModeTabs.SEARCH)
         .register();
 
     public static final ItemEntry<MoleculeDisplayItem> MOLECULE_DISPLAY = REGISTRATE.item("molecule_display", MoleculeDisplayItem::new)
-        .tab(null)
         .removeTab(CreativeModeTabs.SEARCH)
         .register();
 

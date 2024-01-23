@@ -12,6 +12,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.petrolpark.destroy.fluid.ingredient.MixtureFluidIngredient;
+import com.petrolpark.destroy.fluid.ingredient.mixturesubtype.MixtureFluidIngredientSubType;
 import com.petrolpark.destroy.mixin.accessor.FluidIngredientAccessor;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.fluid.FluidIngredient.FluidStackIngredient;
@@ -68,9 +69,9 @@ public abstract class FluidIngredientMixin {
 		
 		// Deserialize Molecule-involving ingredients
 		} else {
-			for (Entry<String, MixtureFluidIngredient> mixtureFluidIngredient : MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.entrySet()) {
-				if (json.has(mixtureFluidIngredient.getKey())) {
-					ingredient = mixtureFluidIngredient.getValue().getNew();
+			for (Entry<String, MixtureFluidIngredientSubType<?>> mixtureFluidIngredientType : MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.entrySet()) {
+				if (json.has(mixtureFluidIngredientType.getKey())) {
+					ingredient = mixtureFluidIngredientType.getValue().getNew();
 				};
 			};
 		};
@@ -96,7 +97,7 @@ public abstract class FluidIngredientMixin {
 		} else if ($this instanceof FluidTagIngredient) {
 			ingredientType = fluidTagMemberName;
 		} else if ($this instanceof MixtureFluidIngredient mixtureFluid) {
-			ingredientType = mixtureFluid.getMixtureFluidIngredientSubtype();
+			ingredientType = mixtureFluid.getType().getMixtureFluidIngredientSubtype();
 		};
 		if (ingredientType == null) throw new IllegalStateException("Unknown Fluid ingredient subtype");
 		buffer.writeUtf(ingredientType);
@@ -113,7 +114,7 @@ public abstract class FluidIngredientMixin {
 		} else if (ingredientType.equals(fluidTagMemberName)) {
 			ingredient = new FluidTagIngredient();
 		} else {
-			ingredient = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(ingredientType);
+			ingredient = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(ingredientType).getNew();
 		};
 		((FluidIngredientAccessor)ingredient).setAmountRequired(buffer.readVarInt());
 		((FluidIngredientAccessor)ingredient).invokeReadInternal(buffer);

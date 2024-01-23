@@ -12,6 +12,7 @@ import com.petrolpark.destroy.entity.PrimedBomb;
 import com.petrolpark.destroy.item.CoaxialGearBlockItem;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.petrolpark.destroy.item.PumpjackBlockItem;
+import com.petrolpark.destroy.item.RedstoneProgrammerBlockItem;
 import com.petrolpark.destroy.sound.DestroySoundTypes;
 import com.petrolpark.destroy.util.DestroyTags.DestroyBlockTags;
 import com.petrolpark.destroy.util.DestroyTags.DestroyItemTags;
@@ -188,7 +189,10 @@ public class DestroyBlocks {
         .initialProperties(SharedProperties::wooden)
         .properties(p -> p
             .noOcclusion()
-        ).register();
+        ).item(RedstoneProgrammerBlockItem::new)
+        .removeTab(CreativeModeTabs.SEARCH) //TODO remove once finished
+        .build()
+        .register();
 
     public static final BlockEntry<PlanetaryGearsetBlock> PLANETARY_GEARSET = REGISTRATE.block("planetary_gearset", PlanetaryGearsetBlock::new)
         .initialProperties(AllBlocks.LARGE_COGWHEEL)

@@ -133,7 +133,7 @@ public class LevelPollution {
 
     public void updateTemperature() {
         outdoorTemperature = 289f;
-        if (!PollutionHelper.pollutionEnabled() || !DestroyAllConfigs.COMMON.pollution.temperatureAffected.get()) return;
+        if (!PollutionHelper.pollutionEnabled() || !DestroyAllConfigs.SERVER.pollution.temperatureAffected.get()) return;
         outdoorTemperature +=
             (levels.get(PollutionType.GREENHOUSE) / PollutionType.GREENHOUSE.max) * 20f
           + (levels.get(PollutionType.OZONE_DEPLETION) / PollutionType.OZONE_DEPLETION.max) * 4f;

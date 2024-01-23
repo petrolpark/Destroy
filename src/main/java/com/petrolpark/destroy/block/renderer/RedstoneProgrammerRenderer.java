@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 
 public class RedstoneProgrammerRenderer extends SafeBlockEntityRenderer<RedstoneProgrammerBlockEntity> {
 
@@ -33,11 +34,18 @@ public class RedstoneProgrammerRenderer extends SafeBlockEntityRenderer<Redstone
             .rotateY(AngleHelper.horizontalAngle(direction))
             .unCentre();
 
+        float rotation = be.programmer.program.paused ? 0f : AnimationTickHolder.getRenderTime();
+
         cylinder
             .translate(0, 6 / 16d, 10 / 16d)
-            .rotateX(AnimationTickHolder.getRenderTime())
+            .rotateX(rotation)
             .translateBack(0, 6 / 16d, 10 / 16d);
-        
+
+        needle
+            .translate(0d, 8.5 / 16d, 5.5 / 16d)
+            .rotateX(-2 + 8 * -Mth.sin(4 * AngleHelper.rad(rotation)))
+            .translateBack(0d, 8.5 / 16d, 5.5 / 16d);
+
         cylinder.renderInto(ms, vc);
         needle.renderInto(ms, vc);
     };

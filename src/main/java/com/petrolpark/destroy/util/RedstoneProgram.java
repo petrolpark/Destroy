@@ -115,12 +115,20 @@ public abstract class RedstoneProgram {
     };
 
     public void addBlankChannel(Couple<Frequency> frequencies) {
+        if (!isValidWorld(getWorld())) return;
         Channel channel = new Channel(frequencies, new int[length]);
         getHandler().addToNetwork(getWorld(), channel);
+
+        // Temporary
+        for (int i = 0; i < length; i++) channel.sequence[i] = 15 * ((i/2) % 2);
+        paused = false;
+        mode = PlayMode.LOOP;
+
         channels.add(channel);
     };
 
     public boolean remove(Channel channel) {
+        if (!isValidWorld(getWorld())) return false;
         boolean removed = channels.remove(channel);
         if (removed) getHandler().removeFromNetwork(getWorld(), channel);
         return removed;
@@ -131,11 +139,13 @@ public abstract class RedstoneProgram {
     };
 
     public void load() {
+        if (!isValidWorld(getWorld())) return;
         channels.forEach(channel -> getHandler().addToNetwork(getWorld(), channel));
         notifiedChange = false;
     };
 
     public void unload() {
+        if (!isValidWorld(getWorld())) return;
         channels.forEach(channel -> getHandler().removeFromNetwork(getWorld(), channel));
     };
 
@@ -155,18 +165,18 @@ public abstract class RedstoneProgram {
         tag.putBoolean("PoweredLastTick", poweredLastTick);
 
         ListTag sequencesTag = new ListTag();
-        // As redstone powers only go up to 16, we can fit eight of them in one integer.
+        // As redstone powers only go up to 16, we can fit eight of them in one integer. We only fit seven to avoid messing with the sign bit.
         for (Channel channel : channels) {
-            int[] encodedStrengths = new int[(length / 8) + 1];
+            int[] encodedStrengths = new int[(length / 7) + 1];
             int i = 0;
             while (i < length) {
                 int encodedStrength = 0;
-                encodeStrengths: for (int j = 0; j < 8; j++) {
-                    if (i >= length) break encodeStrengths;
-                    encodedStrength += channel.sequence[i] << j;
+                for (int j = 6; j >= 0; j--) {
+                    int strength = i < length ? channel.sequence[i] : 0;
+                    encodedStrength += strength << 4 * j;
                     i++;
                 };
-                encodedStrengths[i / 8] = encodedStrength;
+                encodedStrengths[(i - 1) / 7] = encodedStrength;
             };
             
             CompoundTag sequenceTag = new CompoundTag();
@@ -193,13 +203,12 @@ public abstract class RedstoneProgram {
             CompoundTag sequenceTag = (CompoundTag)t;
             int[] sequence = new int[program.length];
             int[] encodedStrengths = sequenceTag.getIntArray("Sequence");
-            
             int i = 0;
             for (int encodedStrength : encodedStrengths) {
-                decodeStrengths: for (int j = 7; j >= 0; j--) {
+                decodeStrengths: for (int j = 6; j >= 0; j--) {
                     if (i >= program.length) break decodeStrengths;
-                    int strength = encodedStrength >> j;
-                    encodedStrength -= strength;
+                    int strength = encodedStrength >> 4 * j;
+                    encodedStrength -= strength << 4 * j;
                     sequence[i] = strength;
                     i++;
                 };
@@ -223,6 +232,10 @@ public abstract class RedstoneProgram {
         return Create.REDSTONE_LINK_NETWORK_HANDLER;
     };
 
+    protected static boolean isValidWorld(LevelAccessor level) {
+        return level != null && !level.isClientSide();
+    };
+
     public class Channel implements IRedstoneLinkable {
 
         public final Couple<Frequency> networkKey;
@@ -234,6 +247,7 @@ public abstract class RedstoneProgram {
         };
 
         protected void updateNetwork() {
+            if (!isValidWorld(getWorld())) return;
             if (playtime != 0 && sequence[playtime] != sequence[playtime - 1]) getHandler().updateNetworkOf(getWorld(), this); // If we've changed signal, update the Network
         };
 

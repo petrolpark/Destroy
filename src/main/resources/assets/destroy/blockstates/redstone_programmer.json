@@ -16,18 +16,18 @@
             "y": 90
         },
         "facing=north,powered=true": {
-            "model": "destroy:block/redstone_programmer/block",
+            "model": "destroy:block/redstone_programmer/block_powered",
             "y": 180
         },
         "facing=east,powered=true": {
-            "model": "destroy:block/redstone_programmer/block",
+            "model": "destroy:block/redstone_programmer/block_powered",
             "y": 270
         },
         "facing=south,powered=true": {
-            "model": "destroy:block/redstone_programmer/block"
+            "model": "destroy:block/redstone_programmer/block_powered"
         },
         "facing=west,powered=true": {
-            "model": "destroy:block/redstone_programmer/block",
+            "model": "destroy:block/redstone_programmer/block_powered",
             "y": 90
         }
     }

@@ -109,6 +109,6 @@ public class LevelRendererMixin {
     };
 
     private static boolean rainColorAffected() {
-        return PollutionHelper.pollutionEnabled() && DestroyAllConfigs.COMMON.pollution.rainColorChanges.get();
+        return PollutionHelper.pollutionEnabled() && DestroyAllConfigs.SERVER.pollution.rainColorChanges.get();
     };
 };

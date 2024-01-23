@@ -15,6 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
@@ -29,6 +30,10 @@ public class RedstoneProgrammerBehaviour extends BlockEntityBehaviour implements
         super(be);
         this.powerChecker = powerChecker;
         this.program = new BehaviourRedstoneProgram();
+        program.addBlankChannel(Couple.create(
+            Frequency.of(new ItemStack(Items.DIAMOND)),
+            Frequency.of(new ItemStack(Items.DIAMOND))
+        ));
     };
 
     @Override
@@ -54,7 +59,11 @@ public class RedstoneProgrammerBehaviour extends BlockEntityBehaviour implements
     @Override
     public void read(CompoundTag nbt, boolean clientPacket) {
         super.read(nbt, clientPacket);
-        program = RedstoneProgram.read(BehaviourRedstoneProgram::new, nbt.getCompound("Program"));
+        setProgram(nbt.getCompound("Program"));
+    };
+
+    public void setProgram(CompoundTag tag) {
+        program = RedstoneProgram.read(BehaviourRedstoneProgram::new, tag);
     };
 
     @Override
@@ -82,12 +91,9 @@ public class RedstoneProgrammerBehaviour extends BlockEntityBehaviour implements
         public boolean shouldTransmit() {
             Level level = RedstoneProgrammerBehaviour.super.getWorld();
             BlockPos pos = getPos();
-            if (blockEntity.isChunkUnloaded())
-                return false;
-            if (blockEntity.isRemoved())
-                return false;
-            if (!level.isLoaded(pos))
-                return false;
+            if (blockEntity.isChunkUnloaded()) return false;
+            if (blockEntity.isRemoved()) return false;
+            if (!level.isLoaded(pos)) return false;
             return level.getBlockEntity(pos) == blockEntity;
         };
 

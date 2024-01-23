@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.util.RedstoneProgram;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.utility.Color;
 
@@ -36,6 +37,14 @@ public class DestroyIcons extends AllIcons {
 
 		QUESTION_MARK = new DestroyIcons(0, 1);
 
+	private static final DestroyIcons[] redstoneProgrammerModeIcons = new DestroyIcons[RedstoneProgram.PlayMode.values().length];
+	static {
+		for (int i = 0; i < redstoneProgrammerModeIcons.length; i++) redstoneProgrammerModeIcons[i] = new DestroyIcons(i, 2);
+	};
+
+	public static DestroyIcons get(RedstoneProgram.PlayMode mode) {
+		return redstoneProgrammerModeIcons[mode.ordinal()];
+	};
 
     public DestroyIcons(int x, int y) {
         super(x, y);
