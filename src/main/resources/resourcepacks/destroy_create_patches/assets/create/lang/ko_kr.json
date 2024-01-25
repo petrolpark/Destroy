@@ -1,0 +1,8 @@
+{
+  "block.create.schematicannon.tooltip.summary": "장착된 설계도를 바탕으로 블록들을 _발포_합니다. _폭발물_을 연료로 사용하고 주변 보관함에서 아이템을 사용합니다.",
+
+  "create.gui.schematicannon.gunpowderLevel": "폭발물 용량 %1$s%%",
+  "create.gui.schematicannon.slot.gunpowder": "폭발물을 넣어 대포 연료를 채우세요",
+
+  "create.schematicannon.status.noGunpowder": "폭발물이 부족함"
+}

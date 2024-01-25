@@ -1,0 +1,97 @@
+{
+    "destroy:acetate": {
+        "generic": "destroy.chemical.acetic_acid"
+    },
+    "destroy:ammonium": {
+        "generic": "destroy.chemical.ammonium.salt"
+    },
+    "destroy:calcium_ion": {
+        "generic": "destroy.chemical.calcium.salt"
+    },
+    "destroy:chloride": {
+        "generic": "destroy.chemical.chloride.salt"
+    },
+    "destroy:chloroaurate": {
+        "generic": "destroy.chemical.chloroauric_acid"
+    },
+    "destroy:copper_i": {
+        "generic": "destroy.chemical.cuprous"
+    },
+    "destroy:copper_ii": {
+        "generic": "destroy.chemical.cupric"
+    },
+    "destroy:cyanide": {
+        "generic": "destroy.chemical.cyanide.salt"
+    },
+    "destroy:cyclopentadienide": {
+        "generic": "destroy.chemical.cyclopentadienide.salt"
+    },
+    "destroy:fluoride": {
+        "generic": "destroy.chemical.fluoride.salt"
+    },
+    "destroy:hydrogensulfate": {
+        "generic": "destroy.chemical.hydrogensulfate.salt"
+    },
+    "destroy:hydroxide": {
+        "generic": "destroy.chemical.hydroxide.salt"
+    },
+    "destroy:hypochlorite": {
+        "generic": "destroy.chemical.hypochlorous_acid"
+    },
+    "destroy:iodide": {
+        "generic": "destroy.chemical.iodide.salt"
+    },
+    "destroy:iron_ii": {
+        "generic": "destroy.chemical.ferrous"
+    },
+    "destroy:iron_iii": {
+        "generic": "destroy.chemical.ferric"
+    },
+    "destroy:nickel_ion": {
+        "generic": "destroy.chemical.nickel.salt"
+    },
+    "destroy:nitrate": {
+        "generic": "destroy.chemical.nitric_acid"
+    },
+    "destroy:nitronium": {
+        "generic": "destroy.chemical.nitronium.salt"
+    },
+    "destroy:oxide": {
+        "generic": "destroy.chemical.oxide.salt"
+    },
+    "destroy:potassium_ion": {
+        "generic": "destroy.chemical.potassium.salt",
+        "specifics": {
+            "destroy:nitrate": "destroy.chemical.saltpeter"
+        }
+    },
+    "destroy:proton": {
+        "specifics": {
+            "destroy:acetate": "destroy.chemical.acetic_acid",
+            "destroy:chloride": "destroy.chemical.hydrochloric_acid",
+            "destroy:chloroaurate": "destroy.chemical.chloroauric_acid",
+            "destroy:cyanide": "destroy.chemical.hydrogen_cyanide",
+            "destroy:fluoride": "destroy.chemical.hydrofluoric_acid",
+            "destroy:hydrogensulfate": "destroy.chemical.sulfuric_acid",
+            "destroy:hypochlorite": "destroy.chemical.hydrochlorous_acid",
+            "destroy:iodide": "destroy.chemical.hydrogen_iodide",
+            "destroy:nitrate": "destroy.chemical.nitric_acid",
+            "destroy:sulfate": "destroy.chemical.sulfuric_acid"
+        }
+    },
+    "destroy:sodium_ion": {
+        "generic": "destroy.chemical.sodium",
+        "specifics": {
+            "destroy:chloride": "fluid.destroy.brine"
+        }
+    },
+    "destroy:sulfate": {
+        "generic": "destroy.chemical.sulfate.salt"
+    },
+    "destroy:sulfide": {
+        "generic": "destroy.chemical.sulfide.salt"
+    },
+    "destroy:zinc_ion": {
+        "generic": "destroy.chemical.zinc.salt"
+    }
+}
