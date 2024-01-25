@@ -1,6 +1,7 @@
 {
   "values": [
     "#destroy:explosive/primary",
-    "#destroy:explosive/secondary"
+    "#destroy:explosive/secondary",
+    "minecraft:gunpowder"
   ]
 }

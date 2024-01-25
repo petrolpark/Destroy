@@ -1,25 +1,28 @@
 package com.petrolpark.destroy.client.gui.screen;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.petrolpark.destroy.client.gui.DestroyGuiTextures;
 import com.petrolpark.destroy.client.gui.DestroyIcons;
+import com.petrolpark.destroy.client.gui.menu.RedstoneProgrammerMenu;
+import com.petrolpark.destroy.network.DestroyMessages;
+import com.petrolpark.destroy.network.packet.RedstoneProgramSyncC2SPacket;
 import com.petrolpark.destroy.util.RedstoneProgram;
 import com.petrolpark.destroy.util.RedstoneProgram.Channel;
 import com.petrolpark.destroy.util.RedstoneProgram.PlayMode;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllIcons;
+import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 
-public abstract class RedstoneProgrammerScreen extends AbstractSimiScreen {
+public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<RedstoneProgrammerMenu> {
 
     protected final RedstoneProgram program;
-    protected boolean changed; // Whether to send an update next tick
 
     private DestroyGuiTextures background;
 
@@ -33,10 +36,13 @@ public abstract class RedstoneProgrammerScreen extends AbstractSimiScreen {
     private IconButton clearButton;
     private Map<PlayMode, IconButton> modeButtons;
 
-    public RedstoneProgrammerScreen(RedstoneProgram program) {
-        this.program = program;
+    
+    public RedstoneProgrammerScreen(RedstoneProgrammerMenu container, Inventory inv, Component title) {
+        super(container, inv, title);
+        program = container.contentHolder;
 
-        modeButtons = new HashMap<>(PlayMode.values().length);
+        background = DestroyGuiTextures.REDSTONE_PROGRAMMER;
+        modeButtons = Map.of();
     };
 
     @Override
@@ -45,7 +51,7 @@ public abstract class RedstoneProgrammerScreen extends AbstractSimiScreen {
         super.init();
         clearWidgets();
 
-        playPauseButton = new IconButton(guiLeft + 10,  guiTop + 20, AllIcons.I_PLAY);
+        playPauseButton = new IconButton(leftPos + 10,  topPos + 20, AllIcons.I_PLAY);
         playPauseButton.withCallback(change(() -> {
             program.paused = !program.paused;
             program.mode = PlayMode.MANUAL;
@@ -53,18 +59,18 @@ public abstract class RedstoneProgrammerScreen extends AbstractSimiScreen {
         }));
         addRenderableWidget(playPauseButton);
 
-        confirmButton = new IconButton(guiLeft + background.width - 33, guiTop + background.height - 24, AllIcons.I_CONFIRM);
+        confirmButton = new IconButton(leftPos + background.width - 33, topPos + background.height - 24, AllIcons.I_CONFIRM);
 		confirmButton.withCallback(() -> {
             if (minecraft != null && minecraft.player != null) minecraft.player.closeContainer(); // It thinks minecraft and player might be null
         }); 
 		addRenderableWidget(confirmButton);
 
-        clearButton = new IconButton(guiLeft + background.width - 33 - 18, guiTop + background.height - 24, AllIcons.I_TRASH);
+        clearButton = new IconButton(leftPos + background.width - 33 - 18, topPos + background.height - 24, AllIcons.I_TRASH);
         addRenderableWidget(clearButton);
 
         modeButtons.clear();
         for (PlayMode mode : PlayMode.values()) {
-            IconButton button = new IconButton(guiLeft + 16 + mode.ordinal() * 18, guiTop + background.height - 24, DestroyIcons.get(mode));
+            IconButton button = new IconButton(leftPos + 16 + mode.ordinal() * 18, topPos + background.height - 24, DestroyIcons.get(mode));
             button.setToolTip(mode.description);
             button.withCallback(change(() -> program.mode = mode));
             modeButtons.put(mode, button);
@@ -73,8 +79,8 @@ public abstract class RedstoneProgrammerScreen extends AbstractSimiScreen {
     };
 
     @Override
-    public void tick() {
-        super.tick();
+    public void containerTick() {
+        super.containerTick();
 
         // Tick chasers
         verticalScroll.tickChaser();
@@ -91,7 +97,11 @@ public abstract class RedstoneProgrammerScreen extends AbstractSimiScreen {
     };
 
     @Override
-    protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+
+        // Background
+        background.render(graphics, leftPos, topPos);
+
         float xOffset = horizontalScroll.getValue(partialTicks);
         float yOffset = -verticalScroll.getValue(partialTicks);
 
@@ -104,7 +114,7 @@ public abstract class RedstoneProgrammerScreen extends AbstractSimiScreen {
     protected Runnable change(Runnable runnable) {
         return () -> {
             runnable.run();
-            changed = true;
+            DestroyMessages.sendToServer(new RedstoneProgramSyncC2SPacket(program));
         };
     };
     

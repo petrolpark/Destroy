@@ -2,6 +2,7 @@ package com.petrolpark.destroy.block.entity.behaviour;
 
 import java.util.function.BooleanSupplier;
 
+import com.petrolpark.destroy.client.gui.menu.RedstoneProgrammerMenu;
 import com.petrolpark.destroy.util.RedstoneProgram;
 import com.simibubi.create.content.equipment.clipboard.ClipboardCloneable;
 import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
@@ -13,13 +14,17 @@ import com.simibubi.create.foundation.utility.Couple;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
-public class RedstoneProgrammerBehaviour extends BlockEntityBehaviour implements ClipboardCloneable {
+public class RedstoneProgrammerBehaviour extends BlockEntityBehaviour implements ClipboardCloneable, MenuProvider {
 
     public static BehaviourType<RedstoneProgrammerBehaviour> TYPE = new BehaviourType<>();
 
@@ -126,6 +131,16 @@ public class RedstoneProgrammerBehaviour extends BlockEntityBehaviour implements
         if (program.getChannels().stream().anyMatch(channel -> channel.networkKey.equals(frequencies))) return false;
         if (!simulate) program.addBlankChannel(frequencies);
         return true;
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
+        return RedstoneProgrammerMenu.create(containerId, playerInventory, program);
+    };
+
+    @Override
+    public Component getDisplayName() {
+        return Component.empty();
     };
     
 };

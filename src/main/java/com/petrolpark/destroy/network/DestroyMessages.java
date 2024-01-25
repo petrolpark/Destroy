@@ -9,6 +9,7 @@ import com.petrolpark.destroy.network.packet.ChemicalPoisonS2CPacket;
 import com.petrolpark.destroy.network.packet.CryingS2CPacket;
 import com.petrolpark.destroy.network.packet.EvaporatingFluidS2CPacket;
 import com.petrolpark.destroy.network.packet.LevelPollutionS2CPacket;
+import com.petrolpark.destroy.network.packet.RedstoneProgramSyncC2SPacket;
 import com.petrolpark.destroy.network.packet.S2CPacket;
 import com.petrolpark.destroy.network.packet.SeismometerSpikeS2CPacket;
 import com.petrolpark.destroy.network.packet.SwissArmyKnifeToolC2SPacket;
@@ -48,6 +49,7 @@ public class DestroyMessages {
 
         addC2SPacket(net, SwissArmyKnifeToolC2SPacket.class, SwissArmyKnifeToolC2SPacket::new);
         addC2SPacket(net, ChainCogwheelsC2SPacket.class, ChainCogwheelsC2SPacket::new);
+        addC2SPacket(net, RedstoneProgramSyncC2SPacket.class, RedstoneProgramSyncC2SPacket::new);
     };
 
     public static <T extends S2CPacket> void addS2CPacket(SimpleChannel net, Class<T> clazz, Function<FriendlyByteBuf, T> decoder) {

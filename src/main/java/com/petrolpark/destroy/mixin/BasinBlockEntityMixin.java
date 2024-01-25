@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.petrolpark.destroy.block.entity.behaviour.ExtendedBasinBehaviour;
-import com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour.GeniusFluidTankBehaviour;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
@@ -32,19 +31,19 @@ public abstract class BasinBlockEntityMixin implements IHaveHoveringInformation 
         remap = false
     )
     public void inAddBehaviours(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
-        behaviours.remove(getInputTank());
-        behaviours.remove(getOutputTank());
-        setInputTank(
-            new GeniusFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, (BasinBlockEntity)(Object)this, 2, 1000, true)
-                .whenFluidUpdates(() -> setContentsChanged(true))
-        );
-        setOutputTank(
-            new GeniusFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, (BasinBlockEntity)(Object)this, 2, 1000, true)
-                .whenFluidUpdates(() -> setContentsChanged(true))
-                .forbidInsertion()
-        );
-        behaviours.add(getInputTank());
-        behaviours.add(getOutputTank());
+        // behaviours.remove(getInputTank());
+        // behaviours.remove(getOutputTank());
+        // setInputTank(
+        //     new GeniusFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, (BasinBlockEntity)(Object)this, 2, 1000, true)
+        //         .whenFluidUpdates(() -> setContentsChanged(true))
+        // );
+        // setOutputTank(
+        //     new GeniusFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, (BasinBlockEntity)(Object)this, 2, 1000, true)
+        //         .whenFluidUpdates(() -> setContentsChanged(true))
+        //         .forbidInsertion()
+        // );
+        // behaviours.add(getInputTank());
+        // behaviours.add(getOutputTank());
     };
     
     /**

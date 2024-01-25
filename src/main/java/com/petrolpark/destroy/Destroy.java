@@ -12,6 +12,7 @@ import com.petrolpark.destroy.chemistry.index.DestroyGroupFinder;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.index.DestroyReactions;
 import com.petrolpark.destroy.chemistry.index.DestroyTopologies;
+import com.petrolpark.destroy.client.gui.menu.DestroyMenuTypes;
 import com.petrolpark.destroy.client.particle.DestroyParticleTypes;
 import com.petrolpark.destroy.client.ponder.DestroyPonderIndex;
 import com.petrolpark.destroy.client.ponder.DestroyPonderTags;
@@ -113,6 +114,7 @@ public class Destroy {
         DestroyBlocks.register();
         DestroyMobEffects.register(modEventBus);
         DestroyItems.register();
+        DestroyMenuTypes.register();
         DestroyRecipeTypes.register(modEventBus);
         DestroyParticleTypes.register(modEventBus);
         DestroyFluids.register();

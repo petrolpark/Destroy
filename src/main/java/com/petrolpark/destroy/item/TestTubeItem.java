@@ -135,7 +135,7 @@ public class TestTubeItem extends ItemFluidContainer implements ILayerTintsWithA
 
                 boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
                 temperature = df.format(mixture.getTemperature());
-                tooltip.addAll(mixture.getContentsTooltip(iupac, false, false, df).stream().map(c -> c.copy()).toList());
+                tooltip.addAll(mixture.getContentsTooltip(iupac, false, false, fluidStack.getAmount(), df).stream().map(c -> c.copy()).toList());
             };
 
             tooltip.add(2, Component.literal(" "+fluidStack.getAmount()).withStyle(ChatFormatting.GRAY).append(Lang.translateDirect("generic.unit.millibuckets")).append(" "+temperature+"K"));

@@ -105,7 +105,8 @@ public class ReadOnlyMixture {
             CompoundTag moleculeTag = new CompoundTag();
             moleculeTag.putString("Molecule", entry.getKey().getFullID());
             moleculeTag.putFloat("Concentration", entry.getValue());
-            moleculeTag.putFloat("Gaseous", states.get(entry.getKey()));
+            float gaseous = states.get(entry.getKey());
+            if (gaseous != 1f && gaseous != 0f) moleculeTag.putFloat("Gaseous", states.get(entry.getKey())); // Only put the state if its not obvious from the temperature
             return moleculeTag;
         }));
         return compound;
@@ -283,20 +284,22 @@ public class ReadOnlyMixture {
      * The tooltip listing the {@link ReadOnlyMixture#contents contents} of this Mixture.
      * @param iupac Whether to use IUPAC names instead of common names
      * @param monospace Whether to add extra whitespace so all Molecule names line up
-     * @param moles Whether to use moles instead of molar for the units
+     * @param useMoles Whether to use moles instead of molar for the units
+     * @param amount The size of the Fluid Stack. If {@code useMoles} is {@code false}, this is ignored
      * @param concentrationFormatter The formatter that determines the number of decimals places for concentration to display
      */
-    public List<Component> getContentsTooltip(boolean iupac, boolean monospace, boolean useMoles, DecimalFormat concentrationFormatter) {
+    public List<Component> getContentsTooltip(boolean iupac, boolean monospace, boolean useMoles, int amount, DecimalFormat concentrationFormatter) {
         int i = 0;
         List<Component> tooltip = new ArrayList<>();
         List<Molecule> molecules = new ArrayList<>(contents.keySet());
         Collections.sort(molecules, (m1, m2) -> contents.get(m2).compareTo(contents.get(m1)));
+        Function<Float, String> quantityTranslator = q -> DestroyLang.translate(useMoles ? "tooltip.mixture_contents.moles" : "tooltip.mixture_contents.concentration", concentrationFormatter.format(q)).string();
+        int quantityLabelLength = quantityTranslator.apply(0f).length() + 2;
         for (Molecule molecule : molecules) {
-            Function<Float, String> quantityTranslator = q -> DestroyLang.translate(useMoles ? "tooltip.mixture_contents.moles" : "tooltip.mixture_contents.concentration", concentrationFormatter.format(q)).string();
-            int quantityLabelLength = quantityTranslator.apply(0f).length() + 2;
+            float quantity = contents.get(molecule) * (useMoles ? amount / 1000f: 1);
             tooltip.add(i, DestroyLang.builder()
                 .space().space()
-                .add(Component.literal(monospace ? String.format("%1$"+quantityLabelLength+"s", quantityTranslator.apply(contents.get(molecule))) : quantityTranslator.apply(contents.get(molecule)))) // Show concentration
+                .add(Component.literal(monospace ? String.format("%1$"+quantityLabelLength+"s", quantityTranslator.apply(quantity)) : quantityTranslator.apply(quantity))) // Show concentration
                 .space()
                 .add(molecule.getName(iupac).plainCopy())
                 .add(Component.literal(
@@ -333,6 +336,10 @@ public class ReadOnlyMixture {
      * Update the {@link ReadOnlyMixture#name name} of this Mixture to reflect what's in it.
      */
     protected void updateName() {
+
+        try {
+
+        
 
         if (translationKey != "") {
             name = Component.translatable(translationKey);
@@ -413,5 +420,9 @@ public class ReadOnlyMixture {
         if (name == null) name = DestroyLang.translate("mixture.mixture").component();
 
         if (!thereAreNeutralMolecules && name != null) name = DestroyLang.translate("mixture.supersaturated", name.getString()).component();
+
+        } catch (Throwable e) {
+            name = DestroyLang.translate("mixture.mixture").component();
+        };
     };
 };

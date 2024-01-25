@@ -129,7 +129,11 @@ public class Mixture extends ReadOnlyMixture {
             CompoundTag moleculeTag = (CompoundTag) tag;
             Molecule molecule = Molecule.getMolecule(moleculeTag.getString("Molecule"));
             mixture.internalAddMolecule(molecule, moleculeTag.getFloat("Concentration"), false);
-            mixture.states.put(molecule, moleculeTag.getFloat("Gaseous"));
+            if (moleculeTag.contains("Gaseous",Tag.TAG_FLOAT)) {
+                mixture.states.put(molecule, moleculeTag.getFloat("Gaseous"));
+            } else { // If we're not told the state, guess it
+                mixture.states.put(molecule, molecule.getBoilingPoint() < mixture.temperature ? 1f : 0f);
+            };
         });
 
         mixture.equilibrium = compound.getBoolean("AtEquilibrium");

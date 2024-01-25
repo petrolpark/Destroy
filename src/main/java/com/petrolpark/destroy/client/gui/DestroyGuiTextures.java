@@ -20,6 +20,9 @@ public enum DestroyGuiTextures implements ScreenElement {
 	VAT_CARD_ARROW("vat", 218, 226, 25, 30),
 	VAT_SCROLL_DOT("vat", 100, 226, 7, 8),
 
+	REDSTONE_PROGRAMMER("redstone_programmer", 0, 0, 314, 256),
+
+
     // JEI
     JEI_SHORT_DOWN_ARROW("jei/widgets", 0, 64, 18, 18),
     JEI_SHORT_RIGHT_ARROW("jei/widgets", 0, 82, 18, 16),

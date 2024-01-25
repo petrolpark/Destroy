@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.google.common.collect.ImmutableList;
+import com.petrolpark.destroy.Destroy;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.redstone.link.IRedstoneLinkable;
 import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler;
@@ -17,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
@@ -165,24 +167,12 @@ public abstract class RedstoneProgram {
         tag.putBoolean("PoweredLastTick", poweredLastTick);
 
         ListTag sequencesTag = new ListTag();
-        // As redstone powers only go up to 16, we can fit eight of them in one integer. We only fit seven to avoid messing with the sign bit.
+
         for (Channel channel : channels) {
-            int[] encodedStrengths = new int[(length / 7) + 1];
-            int i = 0;
-            while (i < length) {
-                int encodedStrength = 0;
-                for (int j = 6; j >= 0; j--) {
-                    int strength = i < length ? channel.sequence[i] : 0;
-                    encodedStrength += strength << 4 * j;
-                    i++;
-                };
-                encodedStrengths[(i - 1) / 7] = encodedStrength;
-            };
-            
             CompoundTag sequenceTag = new CompoundTag();
             sequenceTag.put("FrequencyFirst", channel.networkKey.getFirst().getStack().save(new CompoundTag()));
 		    sequenceTag.put("FrequencyLast", channel.networkKey.getSecond().getStack().save(new CompoundTag()));
-            sequenceTag.putIntArray("Sequence", encodedStrengths);
+            sequenceTag.putIntArray("Sequence", getEncodedSequence(channel));
             sequencesTag.add(sequenceTag);
         };
 
@@ -201,18 +191,7 @@ public abstract class RedstoneProgram {
 
         tag.getList("Sequences", Tag.TAG_COMPOUND).forEach(t -> {
             CompoundTag sequenceTag = (CompoundTag)t;
-            int[] sequence = new int[program.length];
-            int[] encodedStrengths = sequenceTag.getIntArray("Sequence");
-            int i = 0;
-            for (int encodedStrength : encodedStrengths) {
-                decodeStrengths: for (int j = 6; j >= 0; j--) {
-                    if (i >= program.length) break decodeStrengths;
-                    int strength = encodedStrength >> 4 * j;
-                    encodedStrength -= strength << 4 * j;
-                    sequence[i] = strength;
-                    i++;
-                };
-            };
+            int[] sequence = decodeSequence(program.length, sequenceTag.getIntArray("Sequence"));
 
             program.channels.add(
                 program.new Channel(
@@ -226,6 +205,76 @@ public abstract class RedstoneProgram {
         });
 
         return program;
+    };
+
+    public final void write(FriendlyByteBuf buf) {
+        buf.writeInt(mode.ordinal());
+        buf.writeVarInt(length);
+        buf.writeVarInt(playtime);
+        buf.writeBoolean(paused);
+        buf.writeBoolean(poweredLastTick);
+        buf.writeVarInt(channels.size());
+        for (Channel channel : channels) {
+            buf.writeItem(channel.networkKey.getFirst().getStack());
+            buf.writeItem(channel.networkKey.getSecond().getStack());
+            buf.writeVarIntArray(getEncodedSequence(channel));
+        };
+    };
+
+    public void read(FriendlyByteBuf buf) {
+        mode = PlayMode.values()[buf.readInt()];
+        length = buf.readVarInt();
+        playtime = buf.readVarInt();
+        paused = buf.readBoolean();
+        poweredLastTick = buf.readBoolean();
+        int channels = buf.readVarInt();
+        Destroy.LOGGER.info("Channels");
+        for (int i = 0; i < channels; i++) {
+            this.channels.add(new Channel(
+                Couple.create(Frequency.of(buf.readItem()), Frequency.of(buf.readItem())),
+                decodeSequence(length, buf.readVarIntArray())
+            ));
+        };
+    };
+
+    public void copyFrom(RedstoneProgram otherProgram) {
+        mode = otherProgram.mode;
+        length = otherProgram.length;
+        playtime = otherProgram.playtime;
+        paused = otherProgram.paused;
+        poweredLastTick = otherProgram.poweredLastTick;
+        channels = otherProgram.channels;
+    };
+
+    // As redstone powers only go up to 16, we can fit eight of them in one integer. We only fit seven to avoid messing with the sign bit.
+    private int[] getEncodedSequence(Channel channel) {
+        int[] encodedStrengths = new int[(length / 7) + 1];
+        int i = 0;
+        while (i < length) {
+            int encodedStrength = 0;
+            for (int j = 6; j >= 0; j--) {
+                int strength = i < length ? channel.sequence[i] : 0;
+                encodedStrength += strength << 4 * j;
+                i++;
+            };
+            encodedStrengths[(i - 1) / 7] = encodedStrength;
+        };
+        return encodedStrengths;
+    };
+
+    protected static int[] decodeSequence(int length, int[] encodedSequence) {
+        int[] sequence = new int[length];
+        int i = 0;
+        for (int encodedStrength : encodedSequence) {
+            decodeStrengths: for (int j = 6; j >= 0; j--) {
+                if (i >= length) break decodeStrengths;
+                int strength = encodedStrength >> 4 * j;
+                encodedStrength -= strength << 4 * j;
+                sequence[i] = strength;
+                i++;
+            };
+        };
+        return sequence;
     };
 
     protected static RedstoneLinkNetworkHandler getHandler() {

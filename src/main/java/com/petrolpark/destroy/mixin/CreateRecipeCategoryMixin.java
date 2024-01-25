@@ -122,11 +122,11 @@ public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
                     if (!mixtureTag.isEmpty()) {
                         ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(mixtureTag);
                         name = mixture.getName();
-                        mixtureTooltip = mixture.getContentsTooltip(iupac, false, df);
+                        mixtureTooltip = mixture.getContentsTooltip(iupac, false, false, mbAmount, df);
                     } else {
                         mixtureTooltip = List.of(DestroyLang.translate("mixture.empty").component());
                     };
-                };
+                }; 
 
                 if (tooltip.isEmpty()) {
 					tooltip.add(0, name);

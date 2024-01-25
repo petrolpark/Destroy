@@ -5,23 +5,54 @@ import java.util.UUID;
 
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.RedstoneProgrammerBlock;
+import com.petrolpark.destroy.client.gui.menu.RedstoneProgrammerMenu;
 import com.petrolpark.destroy.util.RedstoneProgram;
 import com.petrolpark.destroy.util.RedstoneProgrammerItemHandler;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraftforge.network.NetworkHooks;
 
 public class RedstoneProgrammerBlockItem extends BlockItem {
 
     public RedstoneProgrammerBlockItem(RedstoneProgrammerBlock block, Properties properties) {
         super(block, properties);
         properties.stacksTo(1);
+    };
+
+    @Override
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+        Player player = context.getPlayer();
+        Level level = context.getLevel();
+        if (player.isShiftKeyDown()) return super.onItemUseFirst(stack, context);
+        getProgram(stack, level, player).ifPresent(program -> {
+            if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+                NetworkHooks.openScreen(serverPlayer, new ItemStackRedstoneProgramMenuOpener(program), program::write);
+            };
+        });
+        return InteractionResult.SUCCESS;
+    };
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+        
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(usedHand));
     };
 
     @Override
@@ -115,6 +146,20 @@ public class RedstoneProgrammerBlockItem extends BlockItem {
         @Override
         public LevelAccessor getWorld() {
             return player.level();
+        };
+
+    };
+
+    public static record ItemStackRedstoneProgramMenuOpener(RedstoneProgram program) implements MenuProvider {
+
+        @Override
+        public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+            return RedstoneProgrammerMenu.create(id, inv, program);
+        };
+
+        @Override
+        public Component getDisplayName() {
+            return Component.empty();
         };
 
     };

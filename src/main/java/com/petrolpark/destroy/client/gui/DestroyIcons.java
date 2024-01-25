@@ -35,7 +35,11 @@ public class DestroyIcons extends AllIcons {
         GREENHOUSE = new DestroyIcons(3, 0),
         SMOG = new DestroyIcons(4, 0),
 
-		QUESTION_MARK = new DestroyIcons(0, 1);
+		QUESTION_MARK = new DestroyIcons(0, 1),
+
+		VAT_SOLUTION = new DestroyIcons(0, 3),
+		VAT_GAS = new DestroyIcons(1, 3),
+		VAT_ALL = new DestroyIcons(2, 3);
 
 	private static final DestroyIcons[] redstoneProgrammerModeIcons = new DestroyIcons[RedstoneProgram.PlayMode.values().length];
 	static {
