@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:air"
+          "name": "destroy:keypunch"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "destroy:blocks/cordite"
+  "random_sequence": "destroy:blocks/keypunch"
 }

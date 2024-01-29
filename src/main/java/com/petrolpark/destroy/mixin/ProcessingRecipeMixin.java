@@ -46,7 +46,7 @@ public abstract class ProcessingRecipeMixin {
         };
         for (FluidStack fluidResult : ((ProcessingRecipeParamsAccessor)params).getFluidResults()) {
             if (DestroyFluids.isMixture(fluidResult)) {
-                ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(fluidResult.getOrCreateTag().getCompound("Mixture"));
+                ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(ReadOnlyMixture::new, fluidResult.getOrCreateTag().getCompound("Mixture"));
                 for (Molecule molecule : mixture.getContents(true)) {
                     DestroyJEI.MOLECULES_OUTPUT.putIfAbsent(molecule, new ArrayList<>()); // Create the List if it's not there
                     DestroyJEI.MOLECULES_OUTPUT.get(molecule).add((ProcessingRecipe<RecipeWrapper>)(Object)this); // Unchecked conversion (fine because this is a Mixin)

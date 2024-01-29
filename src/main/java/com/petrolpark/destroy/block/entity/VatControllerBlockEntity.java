@@ -9,6 +9,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
+import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.VatControllerBlock;
@@ -190,8 +191,9 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                 float energyChange = heatingPower;
                 energyChange += (LevelPollution.getLocalTemperature(getLevel(), getBlockPos()) - cachedMixture.getTemperature()) * vat.getConductance(); // Fourier's Law (sort of), the divide by 20 is for 20 ticks per second
                 energyChange /= 20 * cyclesPerTick;
-                if (Math.abs(energyChange) > 0.0001f && fluidAmount != 0d) {
-                    cachedMixture.heat(energyChange / (float)fluidAmount); 
+                if (Math.abs(energyChange / (fluidAmount * cachedMixture.getVolumetricHeatCapacity())) > 0.001f && fluidAmount != 0d) { // Only bother heating if the temperature change will be somewhat significant
+                    cachedMixture.heat(energyChange / (float)fluidAmount);
+                    shouldUpdateFluidMixture = true;
                 } else {
                     break;
                 };
@@ -593,7 +595,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         if (getGasTank().isEmpty()) {
             return getLiquidTank().isEmpty() ? 0f : AIR_PRESSURE; // Return 0 for a vacuum, and normal air pressure for a full Vat
         };
-        return Reaction.GAS_CONSTANT * getTemperature() * ReadOnlyMixture.readNBT(getGasTank().getFluid().getOrCreateChildTag("Mixture")).getTotalConcentration() - AIR_PRESSURE;
+        return Reaction.GAS_CONSTANT * getTemperature() * ReadOnlyMixture.readNBT(ReadOnlyMixture::new, getGasTank().getFluid().getOrCreateChildTag("Mixture")).getTotalConcentration() - AIR_PRESSURE;
     };
 
     /**

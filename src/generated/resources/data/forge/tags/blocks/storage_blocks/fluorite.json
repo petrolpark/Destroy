@@ -1,6 +1,5 @@
 {
   "values": [
-    "destroy:fluorite_block",
-    "destroy:agar_block"
+    "destroy:fluorite_block"
   ]
 }

@@ -103,14 +103,14 @@ public class VatFluidTankBehaviour extends GeniusFluidTankBehaviour {
 
         FluidStack liquidStack = getLiquidHandler().getFluid();
         if (!liquidStack.isEmpty()) {
-            ReadOnlyMixture liquidMixture = ReadOnlyMixture.readNBT(liquidStack.getOrCreateChildTag("Mixture"));
+            ReadOnlyMixture liquidMixture = ReadOnlyMixture.readNBT(ReadOnlyMixture::new, liquidStack.getOrCreateChildTag("Mixture"));
             liquidMixture.getContents(false).forEach(molecule -> moleculesAndMoles.merge(molecule, liquidMixture.getConcentrationOf(molecule) * liquidStack.getAmount(), (f1, f2) -> f1 + f2));
             totalVolume += liquidStack.getAmount();  
         };
 
         FluidStack gasStack = getGasHandler().getFluid();
         if (!gasStack.isEmpty()) {
-            ReadOnlyMixture gasMixture = ReadOnlyMixture.readNBT(gasStack.getOrCreateChildTag("Mixture"));
+            ReadOnlyMixture gasMixture = ReadOnlyMixture.readNBT(ReadOnlyMixture::new, gasStack.getOrCreateChildTag("Mixture"));
             gasMixture.getContents(false).forEach(molecule -> moleculesAndMoles.merge(molecule, gasMixture.getConcentrationOf(molecule) * gasStack.getAmount(), (f1, f2) -> f1 + f2));
             totalVolume += gasStack.getAmount();
         };

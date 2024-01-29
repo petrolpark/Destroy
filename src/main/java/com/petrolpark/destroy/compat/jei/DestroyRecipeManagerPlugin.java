@@ -69,7 +69,7 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
             if (ingredientType != null) { // Mixture ingredients
                 molecules = ingredientType.getContainedMolecules(fluidStack.getOrCreateTag());
             } else if (fluidStack.getOrCreateTag().contains("Mixture")) { // Mixture outputs
-                molecules = ReadOnlyMixture.readNBT(fluidStack.getOrCreateChildTag("Mixture")).getContents(true);
+                molecules = ReadOnlyMixture.readNBT(ReadOnlyMixture::new, fluidStack.getOrCreateChildTag("Mixture")).getContents(true);
             };
 
             molecules.forEach(molecule -> {
