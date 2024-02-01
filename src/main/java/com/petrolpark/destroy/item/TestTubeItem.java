@@ -11,6 +11,7 @@ import com.petrolpark.destroy.block.VatSideBlock;
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
 import com.petrolpark.destroy.block.entity.VatSideBlockEntity;
+import com.petrolpark.destroy.chemistry.ClientMixture;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.fluid.MixtureFluid;
@@ -131,7 +132,7 @@ public class TestTubeItem extends ItemFluidContainer implements ILayerTintsWithA
         
             CompoundTag mixtureTag = fluidStack.getOrCreateTag().getCompound("Mixture");
             if (!mixtureTag.isEmpty()) { // If this is a Mixture
-                ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(mixtureTag);
+                ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(ClientMixture::new, mixtureTag);
 
                 boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
                 temperature = df.format(mixture.getTemperature());

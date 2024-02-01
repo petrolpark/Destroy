@@ -12,6 +12,7 @@ import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.VatControllerBlock;
 import com.petrolpark.destroy.block.entity.VatControllerBlockEntity;
 import com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour.VatFluidTankBehaviour.VatTankSegment.VatFluidTank;
+import com.petrolpark.destroy.chemistry.ClientMixture;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.client.gui.DestroyGuiTextures;
@@ -184,7 +185,7 @@ public class VatScreen extends AbstractSimiScreen {
                 if (tank != null) {
                     amount = tank.getFluidAmount();
                     FluidStack stack = tank.getFluid();
-                    if (DestroyFluids.isMixture(stack)) mixture = ReadOnlyMixture.readNBT(stack.getOrCreateChildTag("Mixture"));
+                    if (DestroyFluids.isMixture(stack)) mixture = ReadOnlyMixture.readNBT(ClientMixture::new, stack.getOrCreateChildTag("Mixture"));
                 };
             };
         };
@@ -384,8 +385,8 @@ public class VatScreen extends AbstractSimiScreen {
 
     protected enum View {
         BOTH(DestroyIcons.VAT_ALL, DestroyLang.translate("tooltip.vat.menu.view.both").component()),
-        LIQUID(DestroyIcons.VAT_SOLUTION, DestroyLang.translate("tooltip.vat.menu.view.gas").component()),
-        GAS(DestroyIcons.VAT_GAS, DestroyLang.translate("tooltip.vat.menu.view.liquid").component());
+        LIQUID(DestroyIcons.VAT_SOLUTION, DestroyLang.translate("tooltip.vat.menu.view.liquid").component()),
+        GAS(DestroyIcons.VAT_GAS, DestroyLang.translate("tooltip.vat.menu.view.gas").component());
 
         public final DestroyIcons icon;
         public final Component tooltip;

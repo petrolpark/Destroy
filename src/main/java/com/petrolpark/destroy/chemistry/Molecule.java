@@ -668,7 +668,7 @@ public class Molecule implements INameableProduct {
          * @return This Molecule Builder
          */
         public MoleculeBuilder specificHeatCapacity(float specificHeatCapacity) {
-            return molarHeatCapacity(specificHeatCapacity * 1000 / calculateMass());
+            return molarHeatCapacity(specificHeatCapacity / calculateMass());
         };
 
         /**

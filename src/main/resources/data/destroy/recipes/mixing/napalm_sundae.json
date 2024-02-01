@@ -5,7 +5,7 @@
         "item": "destroy:polystyrene"
       },
       {
-        "fluid": "destroy:crude_oil",
+        "fluidTag": "forge:crude_oil",
         "amount": 250
       },
       {

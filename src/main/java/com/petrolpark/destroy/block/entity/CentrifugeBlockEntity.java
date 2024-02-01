@@ -204,7 +204,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IDirect
     public void process() {
         if (lastRecipe == null) { // If there is no Recipe
             if (DestroyFluids.isMixture(getInputTank().getFluid())) { // If there are Fluids to Centrifuge
-                ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(getInputTank().getFluid().getOrCreateChildTag("Mixture"));
+                ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(ReadOnlyMixture::new, getInputTank().getFluid().getOrCreateChildTag("Mixture"));
                 if (mixture == null) return;
                 if (!(DestroyFluids.isMixture(getDenseOutputTank().getFluid()) || getDenseOutputTank().isEmpty()) || !(DestroyFluids.isMixture(getLightOutputTank().getFluid()) || getLightOutputTank().isEmpty())) return; // Don't go any further if either output tank can't take Mixture
                 int amount = IntStream.of(new int[]{getInputTank().getFluidAmount(), getDenseOutputTank().getSpace() * 2, getLightOutputTank().getSpace() * 2}).min().getAsInt(); // Determine how much can be processed

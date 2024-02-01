@@ -2,7 +2,7 @@
     "type": "create:mixing",
     "ingredients": [
       {
-        "fluid": "destroy:crude_oil",
+        "fluidTag": "forge:crude_oil",
         "amount": 500
       },
       {

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.petrolpark.destroy.chemistry.ClientMixture;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.petrolpark.destroy.util.DestroyLang.TemperatureUnit;
@@ -52,7 +53,7 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
         } else { // If this is a Mixture
             boolean iupac = !context.sourceConfig().getBoolean("MoleculeNameType");
             TemperatureUnit temperatureUnit = TemperatureUnit.values()[context.sourceConfig().getInt("TemperatureUnit")];
-            ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(mixtureTag);
+            ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(ClientMixture::new, mixtureTag);
 
             name = mixture.getName().copy();
             temperature = temperatureUnit.of(mixture.getTemperature());

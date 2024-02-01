@@ -2,6 +2,7 @@ package com.petrolpark.destroy.fluid;
 
 import javax.annotation.Nullable;
 
+import com.petrolpark.destroy.chemistry.ClientMixture;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
@@ -82,7 +83,7 @@ public class MixtureFluid extends VirtualFluid {
 
         @Override
         public Component getDescription(FluidStack stack) {
-            return ReadOnlyMixture.readNBT(stack.getChildTag("Mixture")).getName();
+            return ReadOnlyMixture.readNBT(ClientMixture::new, stack.getChildTag("Mixture")).getName();
         };
 
     };
@@ -90,7 +91,7 @@ public class MixtureFluid extends VirtualFluid {
     public static int getTintColor(FluidStack stack) {
         if (stack.isEmpty()) return 0x00FFFFFF; // Transparent
         if (!stack.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND)) return -1;
-        return ReadOnlyMixture.readNBT(stack.getChildTag("Mixture")).getColor();
+        return ReadOnlyMixture.readNBT(ClientMixture::new, stack.getChildTag("Mixture")).getColor();
     };
 
     

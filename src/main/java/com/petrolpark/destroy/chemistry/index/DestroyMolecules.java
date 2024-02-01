@@ -973,7 +973,7 @@ public final class DestroyMolecules {
         .id("sulfur_dioxide")
         .structure(Formula.deserialize("destroy:linear:O=S=O"))
         .boilingPoint(-10f)
-        .density(2.6288f)
+        .density(2628.8f)
         .molarHeatCapacity(39.87f)
         .tag(Tags.ACUTELY_TOXIC)
         .tag(Tags.ACID_RAIN)

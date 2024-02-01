@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:air"
+          "name": "destroy:redstone_programmer"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "destroy:blocks/cordite"
+  "random_sequence": "destroy:blocks/redstone_programmer"
 }
