@@ -1,23 +1,22 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "create:block/axis_top",
-		"1": "create:block/axis",
-		"particle": "create:block/axis_top"
+		"0": "create:block/axis",
+		"1": "create:block/axis_top",
+		"particle": "create:block/axis"
 	},
 	"elements": [
 		{
-			"name": "Shaft",
+			"name": "Top Shaft",
 			"from": [6, 6, 15],
 			"to": [10, 10, 16],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [6, 6, 10, 10], "texture": "#0"},
-				"east": {"uv": [6, 15, 10, 16], "rotation": 90, "texture": "#1"},
-				"south": {"uv": [6, 6, 10, 10], "texture": "#0"},
-				"west": {"uv": [6, 15, 10, 16], "rotation": 90, "texture": "#1"},
-				"up": {"uv": [6, 15, 10, 16], "rotation": 180, "texture": "#1"},
-				"down": {"uv": [6, 15, 10, 16], "rotation": 180, "texture": "#1"}
+				"north": {"uv": [6, 6, 10, 10], "texture": "#1"},
+				"east": {"uv": [6, 15, 10, 16], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [6, 6, 10, 10], "texture": "#1"},
+				"west": {"uv": [6, 15, 10, 16], "rotation": 90, "texture": "#0"},
+				"up": {"uv": [6, 15, 10, 16], "texture": "#0"},
+				"down": {"uv": [6, 15, 10, 16], "texture": "#0"}
 			}
 		}
 	]

@@ -182,9 +182,8 @@ public class DestroyReactions {
         .id("contact_process")
         .addReactant(DestroyMolecules.SULFUR_DIOXIDE, 2, 1)
         .addReactant(DestroyMolecules.OXYGEN)
-        .addReactant(DestroyMolecules.WATER, 2, 1)
-        .addSimpleItemCatalyst(DestroyItems.MAGIC_OXIDANT::get, 1f)
-        .addProduct(DestroyMolecules.SULFURIC_ACID, 2)
+        .addSimpleItemTagCatalyst(AllTags.forgeItemTag("dusts/platinum"), 3f)
+        .addProduct(DestroyMolecules.SULFUR_TRIOXIDE, 2)
         .build(),
 
     CORDITE_PRECIPITATION = builder()
@@ -493,6 +492,25 @@ public class DestroyReactions {
         .withResult(3f, PrecipitateReactionResult.of(DestroyItems.NYLON::asStack)) //TODO work out proportions
         .build(),
 
+    OLEUM_FORMATION = builder()
+        .id("oleum_formation")
+        .addReactant(DestroyMolecules.SULFURIC_ACID)
+        .addReactant(DestroyMolecules.SULFUR_TRIOXIDE)
+        .addProduct(DestroyMolecules.OLEUM)
+        .preexponentialFactor(2e4f) 
+        .reverseReaction(r -> r
+            .preexponentialFactor(5e3f)
+        ).build(),
+
+    OLEUM_HYDRATION = builder()
+        .id("oleum_hydration")
+        .addReactant(DestroyMolecules.OLEUM)
+        .addReactant(DestroyMolecules.WATER)
+        .addProduct(DestroyMolecules.SULFURIC_ACID, 2)
+        .preexponentialFactor(1e10f)
+        .activationEnergy(2f)
+        .build(),
+
     ORTHOXYLENE_OXIDATION = builder()
         .id("orthoxylene_oxidation")
         .addReactant(DestroyMolecules.ORTHOXYLENE)
@@ -610,11 +628,24 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.SULFUR_DIOXIDE, 8)
         .build(), //TODO replace with half-equation
 
+    SULFUR_TRIOXIDE_HYDRATION = builder()
+        .id("sulfur_trioxide_hydration")
+        .addReactant(DestroyMolecules.SULFUR_TRIOXIDE)
+        .addReactant(DestroyMolecules.WATER)
+        .addProduct(DestroyMolecules.SULFURIC_ACID)
+        .activationEnergy(10f)
+        .enthalpyChange(-200f)
+        .reverseReaction(r -> r
+            .preexponentialFactor(1e3f) // Hydrated form preferred
+            .activationEnergy(210f)
+            .enthalpyChange(200f)
+        ).build(),
+
     TATP = builder()
         .id("tatp")
         .addReactant(DestroyMolecules.ACETONE)
         .addReactant(DestroyMolecules.HYDROGEN_PEROXIDE)
-        // TODO acid catalyst
+        .addCatalyst(DestroyMolecules.PROTON, 1)
         .withResult(3f, PrecipitateReactionResult.of(DestroyItems.ACETONE_PEROXIDE::asStack))
         .build(),
 

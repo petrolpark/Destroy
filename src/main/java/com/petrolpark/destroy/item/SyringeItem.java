@@ -60,16 +60,18 @@ public class SyringeItem extends Item implements CustomUseEffectsItem {
             return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStack);
         };
 
-
         return new InteractionResultHolder<>(InteractionResult.FAIL, itemStack);
     };
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        if (entity instanceof LivingEntity && !entity.level().isClientSide()) {
-            onInject(stack, entity.level(), (LivingEntity) entity);
-            player.getInventory().removeItem(stack);
-            player.getInventory().add(new ItemStack(DestroyItems.SYRINGE.get()));
+        if (entity instanceof LivingEntity livingEntity && !entity.level().isClientSide()) {
+            onInject(stack, entity.level(), livingEntity);
+            if (!player.isCreative()) {
+                player.getInventory().removeItem(stack);
+                player.getInventory().add(new ItemStack(DestroyItems.SYRINGE.get()));
+            };
+            return true;
         };
         return super.onLeftClickEntity(stack, player, entity);
     };
@@ -77,6 +79,11 @@ public class SyringeItem extends Item implements CustomUseEffectsItem {
     @Override
     public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity entity) {
         onInject(itemStack, level, entity);
+        if (entity instanceof Player player){
+            if (player.isCreative()) return itemStack;
+        } else {
+            return itemStack;
+        }
         if (!(entity instanceof Player)) return itemStack;
         itemStack.getOrCreateTag().remove("Injecting");
         return new ItemStack(DestroyItems.SYRINGE.get());

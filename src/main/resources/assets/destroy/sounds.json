@@ -124,6 +124,15 @@
     ],
     "subtitle": "destroy.subtitle.pumpjack_creak"
   },
+  "silence": {
+    "sounds": [
+      {
+        "name": "minecraft:block.stone.step",
+        "type": "file",
+        "volume": 0.0000001
+      }
+    ]
+  },
   "spray_bottle_spray": {
     "sounds": [
       {

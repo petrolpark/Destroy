@@ -807,6 +807,16 @@ public final class DestroyMolecules {
         .tag(Tags.SMOG)
         .build(),
 
+    OLEUM = builder()
+        .id("oleum")
+        .structure(Formula.deserialize("destroy:linear:HOS(=O)(=O)OS(=O)(=O)OH"))
+        .boilingPoint(10f)
+        .density(1820f) // Estimate
+        .specificHeatCapacity(2600f) // Estimate
+        .tag(Tags.ACID_RAIN)
+        .tag(Tags.ACUTELY_TOXIC)
+        .build(),
+
     ORTHOXYLENE = builder()
         .id("orthoxylene")
         .structure(Formula.deserialize("destroy:benzene:C,C,,,,"))
@@ -985,6 +995,16 @@ public final class DestroyMolecules {
         .boilingPoint(337f)
         .density(1830.2f)
         .molarHeatCapacity(83.68f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.ACID_RAIN)
+        .build(),
+
+    SULFUR_TRIOXIDE = builder()
+        .id("sulfur_trioxide")
+        .structure(Formula.deserialize("destroy:linear:S=(=O)(=O)O"))
+        .boilingPoint(45f)
+        .density(1920f)
+        .specificHeatCapacity(50.6f)
         .tag(Tags.ACUTELY_TOXIC)
         .tag(Tags.ACID_RAIN)
         .build(),

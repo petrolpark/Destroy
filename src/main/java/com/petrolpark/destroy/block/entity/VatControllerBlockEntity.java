@@ -9,7 +9,6 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
-import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.block.VatControllerBlock;
@@ -229,12 +228,6 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                 ItemHandlerHelper.insertItemStacked(inventory, itemStack, false);
             };
 
-            // Releasing gas if there is an open vent
-            VatSideBlockEntity openVent = getOpenVent();
-            if (openVent != null && !getGasTank().isEmptyOrFullOfAir()) {
-                PollutionHelper.pollute(getLevel(), openVent.getBlockPos().relative(openVent.direction), 10, tankBehaviour.flush(cachedMixture.getTemperature()));
-            };
-
             inventoryChanged = false;
 
             if (shouldUpdateFluidMixture) {
@@ -243,6 +236,13 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                     for (int i = 0; i < entry.getValue(); i++) entry.getKey().onVatReaction(getLevel(), this);
                 });
                 updateFluidMixture();
+            };
+
+            // Releasing gas if there is an open vent
+            VatSideBlockEntity openVent = getOpenVent();
+            if (openVent != null && !getGasTank().isEmptyOrFullOfAir()) {
+                PollutionHelper.pollute(getLevel(), openVent.getBlockPos().relative(openVent.direction), 10, tankBehaviour.flush(cachedMixture.getTemperature()));
+                updateCachedMixture();
             };
 
             // Check for Explosion
