@@ -18,6 +18,7 @@ import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.fluidTankBehaviour.GeniusFluidTankBehaviour;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
+import com.petrolpark.destroy.chemistry.index.DestroyMolecules;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.MixtureFluid;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
@@ -240,7 +241,8 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IDirect
                     lightMixture.addMolecule(molecule, 2f * (moles * (volume - volumeInDenseMixture) / volume) / totalVolume);
                 };
 
-                //TODO charged molecules
+                ReadOnlyMixture ionMixture = denseMixture.getConcentrationOf(DestroyMolecules.WATER) > 0f || lightMixture.getConcentrationOf(DestroyMolecules.WATER) <= 0f ? denseMixture : lightMixture; // Stick charged molecules with water if there is any, or the dense mixture if not //TODO replace with consideration of dielectrics
+                chargedMolecules.forEach(molecule -> ionMixture.addMolecule(molecule, 2 * mixture.getConcentrationOf(molecule)));
 
                 // If we've got to this point, the Fluid can be succesfully processed
                 getInputTank().drain(amount, FluidAction.EXECUTE);

@@ -192,7 +192,6 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                 energyChange /= 20 * cyclesPerTick;
                 if (Math.abs(energyChange / (fluidAmount * cachedMixture.getVolumetricHeatCapacity())) > 0.001f && fluidAmount != 0d) { // Only bother heating if the temperature change will be somewhat significant
                     cachedMixture.heat(energyChange / (float)fluidAmount);
-                    shouldUpdateFluidMixture = true;
                 } else {
                     break;
                 };

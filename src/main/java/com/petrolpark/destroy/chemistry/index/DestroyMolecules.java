@@ -726,6 +726,7 @@ public final class DestroyMolecules {
         .id("nickel_ion")
         .translationKey("nickel")
         .structure(Formula.atom(Element.NICKEL))
+        .color(0xE09BEAAB)
         .charge(2)
         .tag(Tags.CARCINOGEN)
         .build(),

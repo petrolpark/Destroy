@@ -321,6 +321,16 @@ public class DestroyReactions {
         .addProduct(DestroyMolecules.HYDROCHLORIC_ACID, 2)
         .requireUV()
         .build(),
+
+    HYDROGEN_COMBUSTION = builder()
+        .id("hydrogen_combustion")
+        .addReactant(DestroyMolecules.HYDROGEN, 2, 1)
+        .addReactant(DestroyMolecules.OXYGEN)
+        .addProduct(DestroyMolecules.WATER, 2)
+        .preexponentialFactor(1e10f)
+        .activationEnergy(100f)
+        .enthalpyChange(-500f)
+        .build(),
     
     HYDROGEN_IODIDE_SYNTHESIS = builder()
         .id("hydrogen_iodide_synthesis")

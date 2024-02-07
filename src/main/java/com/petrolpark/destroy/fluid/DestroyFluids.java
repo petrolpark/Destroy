@@ -67,7 +67,7 @@ public class DestroyFluids {
     };
 
     private static FluidBuilder<VirtualFluid, CreateRegistrate> coloredWaterFluid(String name, int color) {
-        return REGISTRATE.virtualFluid(name, (properties, stillTexture, flowingTexture) -> new ColoredFluidType(properties, new ResourceLocation("minecraft", "block/water_still"), new ResourceLocation("minecraft", "block/water_flowing"), color), VirtualFluid::new);
+        return REGISTRATE.virtualFluid(name, (properties, stillTexture, flowingTexture) -> new ColoredFluidType(properties, new ResourceLocation("minecraft", "block/water_still"), new ResourceLocation("minecraft", "block/water_flow"), color), VirtualFluid::new);
     };
 
     public static boolean isMixture(FluidStack stack) {
