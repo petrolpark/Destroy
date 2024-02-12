@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -77,6 +78,12 @@ public class Mixture extends ReadOnlyMixture {
      */
     Pair<Float, Molecule> nextLowerBoilingPoint;
 
+    /**
+     * Some Molecules which get removed get swiftly added back in the next tick. To prevent refreshing the Reactions every time, we keep hold of them for a while until we know they're definitely gone.
+     * This maps Molecules which have 0 concentration to the ticks they have left to live.
+     */
+    Map<Molecule, Integer> moleculesToRemove;
+
     public Mixture() {
         super();
 
@@ -89,6 +96,7 @@ public class Mixture extends ReadOnlyMixture {
 
         nextHigherBoilingPoint = Pair.of(Float.MAX_VALUE, null);
         nextLowerBoilingPoint = Pair.of(0f, null);
+        moleculesToRemove = new HashMap<>();
 
         equilibrium = false;
     };
@@ -212,6 +220,10 @@ public class Mixture extends ReadOnlyMixture {
         return this;
     };
 
+    public List<Molecule> getContents(boolean excludeNovel) {
+        return contents.keySet().stream().filter(molecule -> getConcentrationOf(molecule) > 0f && (!molecule.isNovel() || !excludeNovel)).toList();
+    };
+
     /**
      * Creates a new Mixture by mixing together existing ones. This does not give the volume of the new Mixture.
      * @param mixtures A Map of all Mixtures to their volumes (in Buckets)
@@ -292,9 +304,14 @@ public class Mixture extends ReadOnlyMixture {
      */
     public void reactForTick(ReactionContext context, int cycles) {
 
+        boolean shouldUpdateDisplay = true;
+
         for (int cycle = 0; cycle < cycles; cycle++) {
 
-            if (equilibrium) return; // If we have already reached equilibrium, nothing more is going to happen, so don't bother reacting
+            if (equilibrium) { // If we have already reached equilibrium, nothing more is going to happen, so don't bother reacting
+                shouldUpdateDisplay = false;
+                break; 
+            };
 
             equilibrium = true; // Start by assuming we have reached equilibrium
             boolean shouldRefreshPossibleReactions = false; // Rather than refreshing the possible Reactions every time a new Molecule is added or removed, start by assuming we won't need to, and flag for refreshing if we ever do
@@ -333,7 +350,6 @@ public class Mixture extends ReadOnlyMixture {
                     float reactantConcentration = getConcentrationOf(reactant);
                     if (reactantConcentration < reactantMolarRatio * molesOfReaction) { // Determine the limiting reagent, if there is one
                         molesOfReaction = reactantConcentration / (float) reactantMolarRatio; // If there is a new limiting reagent, alter the moles of reaction which will take place
-                        shouldRefreshPossibleReactions = true; // If there is a new limiting reagent, one Molecule is going to be used up, so the possible Reactions will change
                     };
                 };
 
@@ -349,14 +365,30 @@ public class Mixture extends ReadOnlyMixture {
                 };
             };
 
-            if (shouldRefreshPossibleReactions) { // If we added a new Molecule or removed an old one at any point
+            if (shouldRefreshPossibleReactions) { // If we added a new Molecule at any point
                 refreshPossibleReactions();
             };
 
         };
 
-        updateName();
-        updateColor();
+        // Purge removed Molecules
+        boolean shouldUpdateReactions = false;
+        Iterator<Entry<Molecule, Integer>> iterator = moleculesToRemove.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Entry<Molecule, Integer> entry = iterator.next();
+            entry.setValue(entry.getValue() - 1);
+            if (entry.getValue() <= 0) {
+                removeMolecule(entry.getKey()); // Completely remove the Molecule from the Mixture if its TTL has expired
+                iterator.remove();  
+                shouldUpdateReactions = true; // Now we know the Molecule isn't coming back, we can update the reactions to reflect its removal
+            };
+        };
+        if (shouldUpdateReactions) refreshPossibleReactions();
+        
+        if (shouldUpdateDisplay) {
+            updateName();
+            updateColor();
+        };
     };
 
     /**
@@ -761,16 +793,16 @@ public class Mixture extends ReadOnlyMixture {
      * @param shouldRefreshReactions Whether to {@link Mixture#refreshPossibleReactions refresh possible Reactions} -
      * this should only be set to false when multiple Molecules are being added/removed at once (such as when {@link Mixture#reactForTick reacting})
      * and it makes sense to only refresh the Reactions once
-     * @return {@code true} if a brand new Molecule that was not already in this Mixture was added; {@code false} otherwise
+     * @return {@code true} if the possible reactions need to be refreshed (because a new Molecule was added); {@code false} otherwise
      * @see Mixture#addMolecule The wrapper for this method
      * @see Mixture#changeConcentrationOf Modifying the concentration of pre-existing Molecule
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private boolean internalAddMolecule(Molecule molecule, float concentration, Boolean shouldRefreshReactions) {
+    private boolean internalAddMolecule(Molecule molecule, float concentration, boolean shouldRefreshReactions) {
 
         boolean newMoleculeAdded = true; // Start by assuming we're adding a brand new Molecule to this solution
 
-        if (getConcentrationOf(molecule) != 0f) { // Just in case this Molecule is already in the Mixture, increase its concentration
+        if (contents.containsKey(molecule)) { // Just in case this Molecule is already in the Mixture, increase its concentration
             changeConcentrationOf(molecule, concentration, shouldRefreshReactions);
             return false;
         };
@@ -836,7 +868,7 @@ public class Mixture extends ReadOnlyMixture {
         if (molecule.isNovel()) novelMolecules.remove(molecule);
 
         contents.remove(molecule);
-        equilibrium = false; // As we have removed a Molecule the position equilibrium is likely to change
+        equilibrium = false; // As we have removed a Molecule the position of equilibrium is likely to change
         updateNextBoilingPoints();
 
         return this;
@@ -852,21 +884,14 @@ public class Mixture extends ReadOnlyMixture {
     private Mixture changeConcentrationOf(Molecule molecule, float change, boolean shouldRefreshReactions) {
         Float currentConcentration = getConcentrationOf(molecule);
 
-        if (currentConcentration == 0f) {
-            if (change > 0f) {
-                internalAddMolecule(molecule, change, shouldRefreshReactions);
-            } else if (change < 0f) {
-                throw new IllegalArgumentException("Attempted to decrease concentration of Molecule '" + molecule.getFullID()+"', which was not in a Mixture. The Mixture contains " + getContentsString());
-            };
-        };
+        if (!contents.containsKey(molecule) && change > 0f) internalAddMolecule(molecule, change, shouldRefreshReactions);
 
-        float newConcentration = currentConcentration + change;
-        if (newConcentration <= 0f) {
-            removeMolecule(molecule);
-        } else {
-            contents.replace(molecule, newConcentration);
-        };
-        
+        if (currentConcentration <= 0f && change < 0f) throw new IllegalArgumentException("Attempted to decrease concentration of Molecule '" + molecule.getFullID()+"', which was not in a Mixture. The Mixture contains " + getContentsString());
+
+        float newConcentration = Math.max(currentConcentration + change, 0f);
+        contents.replace(molecule, newConcentration);
+        if (newConcentration <= 0f) moleculesToRemove.put(molecule, 10); // Mark this Molecule as imminent for removal - but don't actually remove it in case it gets added back soon
+        if (newConcentration > 0f) moleculesToRemove.remove(molecule); // This molecule no longer needs to be removed if it was going to be
         return this;
     };
 
