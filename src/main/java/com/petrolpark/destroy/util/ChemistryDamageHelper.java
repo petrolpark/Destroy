@@ -31,7 +31,7 @@ public class ChemistryDamageHelper {
      */
     public static void damage(Level level, LivingEntity entity, FluidStack stack, boolean skinContact) {
         if (!DestroyFluids.isMixture(stack)) return;
-        ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(stack.getOrCreateChildTag("Mixture"));
+        ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(ReadOnlyMixture::new, stack.getOrCreateChildTag("Mixture"));
         if (mixture.isEmpty()) return;
 
         boolean burning = mixture.getConcentrationOf(DestroyMolecules.PROTON) > 0.01f || mixture.getConcentrationOf(DestroyMolecules.HYDROXIDE) > 0.01f;

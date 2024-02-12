@@ -43,6 +43,7 @@ public class DoubleCardanShaftRenderer extends KineticBlockEntityRenderer<Double
         Direction shaft1Direction = directions[0];
         Direction shaft2Direction = directions[1];
         boolean facesHaveSameSign = shaft1Direction.getAxisDirection() == shaft2Direction.getAxisDirection();
+        boolean secondaryPositive = state.getValue(DoubleCardanShaftBlock.AXIS_ALONG_FIRST_COORDINATE);
 
         Axis axis = getAxis(shaft1Direction, shaft2Direction);
 
@@ -93,8 +94,10 @@ public class DoubleCardanShaftRenderer extends KineticBlockEntityRenderer<Double
 
             .translateBack(DoubleCardanShaftInstance.gimbalTranslation(shaft1Direction))
             .rotate(DoubleCardanShaftInstance.gimbalRotation(shaft1Direction, axis == Axis.Z), gimbal1FluctuatingAngle)
+            .rotateY(axis == Axis.Z && !secondaryPositive ? 90 : 0)
+            .rotateX(axis == Axis.Z ? 90 : 0)
             .translate(DoubleCardanShaftInstance.gimbalTranslation(shaft1Direction))
-
+    
             .unCentre()
             .unCentre()
             .renderInto(ms, vbSolid);
@@ -102,7 +105,6 @@ public class DoubleCardanShaftRenderer extends KineticBlockEntityRenderer<Double
         CachedBufferer.partialFacing(DestroyPartials.DCS_GIMBAL, state, shaft2Direction)
             
             .centre()
-
             .rotate(Direction.get(AxisDirection.POSITIVE, shaft2Direction.getAxis()), gimbal2Angle)
             .centre()
 

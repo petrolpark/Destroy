@@ -530,6 +530,15 @@ public class Reaction {
         };
 
         /**
+         * Show a double-headed arrow for this Reaction in JEI. To actually make this a reversible reaction, use {@link ReactionBuilder#reverseReaction this}.
+         * @return This Reaction Builder
+         */
+        public ReactionBuilder displayAsReversible() {
+            reaction.displayAsReversible = true;
+            return this;
+        };
+
+        /**
          * Set the ID for the Reaction. The title and description of the Reaction will be looked for at {@code "<namespace>.reaction.<id>"}.
          * @param id A unique string
          * @return This Reaction Builder
@@ -685,12 +694,12 @@ public class Reaction {
             };
 
             if (!hasForcedActivationEnergy) {
-                reaction.activationEnergy = 25f;
+                reaction.activationEnergy = 2.5f;
                 //Destroy.LOGGER.warn("Activation energy of reaction '"+reactionString()+"' was missing or invalid, so estimated as 50kJ.");
             };
 
             if (!hasForcedPreExponentialFactor || reaction.preexponentialFactor <= 0f) {
-                reaction.preexponentialFactor = 1e8f;
+                reaction.preexponentialFactor = 1e4f;
             };
 
             if (!hasForcedEnthalpyChange) reaction.enthalpyChange = 0f;

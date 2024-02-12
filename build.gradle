@@ -81,7 +81,7 @@ minecraft {
         data {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
+            //property 'forge.logging.console.level', 'debug'
             args '--mod', 'destroy', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources')
             mods {
                 destroy {

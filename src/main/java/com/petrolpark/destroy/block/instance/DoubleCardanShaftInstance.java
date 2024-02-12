@@ -39,12 +39,14 @@ public class DoubleCardanShaftInstance extends KineticBlockEntityInstance<Double
     protected final Direction shaft2Direction;
 
     protected Direction sourceFacing;
+    protected boolean secondaryPositive;
 
     public DoubleCardanShaftInstance(MaterialManager materialManager, DoubleCardanShaftBlockEntity blockEntity) {
         super(materialManager, blockEntity);
         Material<ModelData> modelMaterial = getTransformMaterial();
         Material<RotatingData> rotatingMaterial = getRotatingMaterial();
         Direction[] directions = DoubleCardanShaftBlock.getDirectionsConnectedByState(blockEntity.getBlockState());
+        secondaryPositive = blockEntity.getBlockState().getValue(DoubleCardanShaftBlock.AXIS_ALONG_FIRST_COORDINATE);
         
         shaft1Direction = directions[0];
         shaft2Direction = directions[1];
@@ -137,6 +139,8 @@ public class DoubleCardanShaftInstance extends KineticBlockEntityInstance<Double
 
             .translateBack(gimbalTranslation(shaft1Direction))
             .rotate(gimbalRotation(shaft1Direction, axis == Axis.Z), gimbal1FluctuatingAngle)
+            .rotateY(axis == Axis.Z && !secondaryPositive ? 90 : 0)
+            .rotateX(axis == Axis.Z ? 90 : 0)
             .translate(gimbalTranslation(shaft1Direction))
 
             .unCentre()

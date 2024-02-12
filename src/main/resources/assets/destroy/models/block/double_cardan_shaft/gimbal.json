@@ -1,45 +1,23 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "create:block/axis",
-		"particle": "create:block/axis_top"
+		"2": "destroy:block/double_cardan_shaft",
+		"particle": "create:block/axis"
 	},
 	"elements": [
 		{
-			"name": "Side Axis",
-			"from": [7, 7.5, 12.5],
-			"to": [9, 8.5, 13.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"name": "Top Gimball",
+			"from": [6, 7, 12],
+			"to": [10, 9, 14],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
 			"faces": {
-				"north": {"uv": [8, 4, 9, 6], "rotation": 90, "texture": "#1"},
-				"east": {"uv": [8, 5, 9, 6], "texture": "#1"},
-				"south": {"uv": [8, 4, 9, 6], "rotation": 90, "texture": "#1"},
-				"west": {"uv": [8, 4, 9, 5], "texture": "#1"},
-				"up": {"uv": [8, 4, 9, 6], "rotation": 270, "texture": "#1"},
-				"down": {"uv": [8, 4, 9, 6], "rotation": 270, "texture": "#1"}
+				"north": {"uv": [6, 2, 8, 6], "rotation": 270, "texture": "#2"},
+				"east": {"uv": [6, 0, 8, 2], "rotation": 270, "texture": "#2"},
+				"south": {"uv": [6, 2, 8, 6], "rotation": 90, "texture": "#2"},
+				"west": {"uv": [6, 6, 8, 8], "rotation": 90, "texture": "#2"},
+				"up": {"uv": [6, 2, 8, 6], "rotation": 270, "texture": "#2"},
+				"down": {"uv": [6, 2, 8, 6], "rotation": 90, "texture": "#2"}
 			}
-		},
-		{
-			"name": "Diagonal Axis",
-			"from": [7.5, 7, 12.5],
-			"to": [8.5, 9, 13.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
-			"faces": {
-				"north": {"uv": [8, 4, 9, 6], "texture": "#1"},
-				"east": {"uv": [8, 4, 9, 6], "texture": "#1"},
-				"south": {"uv": [8, 4, 9, 6], "texture": "#1"},
-				"west": {"uv": [8, 4, 9, 6], "texture": "#1"},
-				"up": {"uv": [8, 4, 9, 5], "rotation": 180, "texture": "#1"},
-				"down": {"uv": [8, 5, 9, 6], "rotation": 180, "texture": "#1"}
-			}
-		}
-	],
-	"groups": [
-		{
-			"name": "Gimball",
-			"origin": [0, 0, 0],
-			"color": 0,
-			"children": [0, 1]
 		}
 	]
 }

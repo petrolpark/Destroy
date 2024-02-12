@@ -4,7 +4,7 @@
       {
         "mixtureFluidWithMolecule": "destroy:mixture",
         "molecule": "destroy:mercury",
-        "concentration": 67.5,
+        "concentration": 67.46759721,
         "amount": 250
       },
       {
@@ -25,11 +25,11 @@
                 "Contents": [
                     {
                         "Molecule": "destroy:mercury",
-                        "Concentration": 66.825
+                        "Concentration": 66.02485004
                     },
                     {
-                        "Molecule": "destroy:sodium_metal",
-                        "Concentration": 1.0
+                        "Molecule": "destroy:sodium_metal", 
+                        "Concentration": 0.9
                     }
                 ]
             } 
@@ -44,15 +44,15 @@
                 "Contents": [
                     {
                       "Molecule": "destroy:hydrochloric_acid",
-                      "Concentration": 1.0
+                      "Concentration": 0.9
                     },
                     {
                       "Molecule": "destroy:hypochlorous_acid",
-                      "Concentration": 1.0
+                      "Concentration": 0.9
                     },
                     {
                       "Molecule": "destroy:water",
-                      "Concentration": 55.5
+                      "Concentration": 55.55555556
                     }
                 ]
             } 

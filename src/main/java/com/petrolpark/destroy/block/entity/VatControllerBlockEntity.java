@@ -190,8 +190,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                 float energyChange = heatingPower;
                 energyChange += (LevelPollution.getLocalTemperature(getLevel(), getBlockPos()) - cachedMixture.getTemperature()) * vat.getConductance(); // Fourier's Law (sort of), the divide by 20 is for 20 ticks per second
                 energyChange /= 20 * cyclesPerTick;
-                if (Math.abs(energyChange) > 0.0001f && fluidAmount != 0d) {
-                    cachedMixture.heat(energyChange / (float)fluidAmount); 
+                if (Math.abs(energyChange / (fluidAmount * cachedMixture.getVolumetricHeatCapacity())) > 0.001f && fluidAmount != 0d) { // Only bother heating if the temperature change will be somewhat significant
+                    cachedMixture.heat(energyChange / (float)fluidAmount);
                 } else {
                     break;
                 };
@@ -227,12 +227,6 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                 ItemHandlerHelper.insertItemStacked(inventory, itemStack, false);
             };
 
-            // Releasing gas if there is an open vent
-            VatSideBlockEntity openVent = getOpenVent();
-            if (openVent != null && !getGasTank().isEmptyOrFullOfAir()) {
-                PollutionHelper.pollute(getLevel(), openVent.getBlockPos().relative(openVent.direction), 10, tankBehaviour.flush(cachedMixture.getTemperature()));
-            };
-
             inventoryChanged = false;
 
             if (shouldUpdateFluidMixture) {
@@ -241,6 +235,13 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
                     for (int i = 0; i < entry.getValue(); i++) entry.getKey().onVatReaction(getLevel(), this);
                 });
                 updateFluidMixture();
+            };
+
+            // Releasing gas if there is an open vent
+            VatSideBlockEntity openVent = getOpenVent();
+            if (openVent != null && !getGasTank().isEmptyOrFullOfAir()) {
+                PollutionHelper.pollute(getLevel(), openVent.getBlockPos().relative(openVent.direction), 10, tankBehaviour.flush(cachedMixture.getTemperature()));
+                updateCachedMixture();
             };
 
             // Check for Explosion
@@ -591,9 +592,9 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveG
         if (getLevel().isClientSide()) return pressure.getChaseTarget(); // It thinks getLevel() might be null (it's not)
         if (!getVatOptional().isPresent() || getOpenVent() != null) return 0f;
         if (getGasTank().isEmpty()) {
-            return getLiquidTank().isEmpty() ? 0f : AIR_PRESSURE; // Return 0 for a vacuum, and normal air pressure for a full Vat
+            return getLiquidTank().getFluidAmount() == getLiquidTank().getCapacity() ? 0f : AIR_PRESSURE; // Return 0 for a vacuum, and normal air pressure for a full Vat
         };
-        return Reaction.GAS_CONSTANT * getTemperature() * ReadOnlyMixture.readNBT(getGasTank().getFluid().getOrCreateChildTag("Mixture")).getTotalConcentration() - AIR_PRESSURE;
+        return Reaction.GAS_CONSTANT * getTemperature() * ReadOnlyMixture.readNBT(ReadOnlyMixture::new, getGasTank().getFluid().getOrCreateChildTag("Mixture")).getTotalConcentration() - AIR_PRESSURE;
     };
 
     /**

@@ -726,6 +726,7 @@ public final class DestroyMolecules {
         .id("nickel_ion")
         .translationKey("nickel")
         .structure(Formula.atom(Element.NICKEL))
+        .color(0xE09BEAAB)
         .charge(2)
         .tag(Tags.CARCINOGEN)
         .build(),
@@ -805,6 +806,16 @@ public final class DestroyMolecules {
         .molarHeatCapacity(21.64f)
         .tag(Tags.SMELLY)
         .tag(Tags.SMOG)
+        .build(),
+
+    OLEUM = builder()
+        .id("oleum")
+        .structure(Formula.deserialize("destroy:linear:HOS(=O)(=O)OS(=O)(=O)OH"))
+        .boilingPoint(10f)
+        .density(1820f) // Estimate
+        .specificHeatCapacity(2600f) // Estimate
+        .tag(Tags.ACID_RAIN)
+        .tag(Tags.ACUTELY_TOXIC)
         .build(),
 
     ORTHOXYLENE = builder()
@@ -973,7 +984,7 @@ public final class DestroyMolecules {
         .id("sulfur_dioxide")
         .structure(Formula.deserialize("destroy:linear:O=S=O"))
         .boilingPoint(-10f)
-        .density(2.6288f)
+        .density(2628.8f)
         .molarHeatCapacity(39.87f)
         .tag(Tags.ACUTELY_TOXIC)
         .tag(Tags.ACID_RAIN)
@@ -985,6 +996,16 @@ public final class DestroyMolecules {
         .boilingPoint(337f)
         .density(1830.2f)
         .molarHeatCapacity(83.68f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.ACID_RAIN)
+        .build(),
+
+    SULFUR_TRIOXIDE = builder()
+        .id("sulfur_trioxide")
+        .structure(Formula.deserialize("destroy:linear:S=(=O)(=O)O"))
+        .boilingPoint(45f)
+        .density(1920f)
+        .specificHeatCapacity(50.6f)
         .tag(Tags.ACUTELY_TOXIC)
         .tag(Tags.ACID_RAIN)
         .build(),

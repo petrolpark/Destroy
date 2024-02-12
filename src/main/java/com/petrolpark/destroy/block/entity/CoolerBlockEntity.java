@@ -87,7 +87,7 @@ public class CoolerBlockEntity extends SmartBlockEntity implements IHaveGoggleIn
         if (DestroyFluids.isMixture(fluidStack)) {
 
             int amount = fluidStack.getAmount();
-            ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(fluidStack.getOrCreateChildTag("Mixture"));
+            ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(ReadOnlyMixture::new, fluidStack.getOrCreateChildTag("Mixture"));
 
             float totalMolesPerBucket = 0f;
             float totalRefrigerantMolesPerBucket = 0f;

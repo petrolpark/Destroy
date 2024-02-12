@@ -4,6 +4,7 @@ import static com.petrolpark.destroy.Destroy.REGISTRATE;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.fluid.MixtureFluid.MixtureFluidType;
+import com.simibubi.create.AllTags;
 import com.simibubi.create.content.fluids.VirtualFluid;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.builders.FluidBuilder;
@@ -39,6 +40,10 @@ public class DestroyFluids {
     CREAM = virtualFluid("cream")
         .register(),
     CRUDE_OIL = virtualFluid("crude_oil")
+        .tag(AllTags.forgeFluidTag("crude_oil"))
+        .bucket()
+        .tag(AllTags.forgeItemTag("buckets/crude_oil"))
+        .build()
         .register(),
     MOLTEN_CINNABAR = virtualFluid("molten_cinnabar")
         .register(),
@@ -62,7 +67,7 @@ public class DestroyFluids {
     };
 
     private static FluidBuilder<VirtualFluid, CreateRegistrate> coloredWaterFluid(String name, int color) {
-        return REGISTRATE.virtualFluid(name, (properties, stillTexture, flowingTexture) -> new ColoredFluidType(properties, new ResourceLocation("minecraft", "block/water_still"), new ResourceLocation("minecraft", "block/water_flowing"), color), VirtualFluid::new);
+        return REGISTRATE.virtualFluid(name, (properties, stillTexture, flowingTexture) -> new ColoredFluidType(properties, new ResourceLocation("minecraft", "block/water_still"), new ResourceLocation("minecraft", "block/water_flow"), color), VirtualFluid::new);
     };
 
     public static boolean isMixture(FluidStack stack) {

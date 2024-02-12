@@ -150,7 +150,7 @@ public class DistillationTower {
         FluidStack fluidStack = getControllerBubbleCap().getTank().getFluid();
         if (fluidStack.isEmpty()) return false;
         if (DestroyFluids.isMixture(fluidStack.getFluid()) && fluidStack.getOrCreateTag().contains("Mixture", Tag.TAG_COMPOUND)) {
-            ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(fluidStack.getOrCreateTag().getCompound("Mixture"));
+            ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(ReadOnlyMixture::new, fluidStack.getOrCreateTag().getCompound("Mixture"));
             List<FluidStack> fractions = getFractionsOfMixture(mixture, fluidStack.getAmount(), getHeight() - 1);
             if (fractions.size() <= 1) return false; // If the only result is the residue, there is no point distilling
             for (boolean simulate : Iterate.trueAndFalse) {
@@ -319,7 +319,7 @@ public class DistillationTower {
                 break;
             default:
         };
-        return Math.max(temperature, roomTemperature);
+        return temperature;
     };
 
 };

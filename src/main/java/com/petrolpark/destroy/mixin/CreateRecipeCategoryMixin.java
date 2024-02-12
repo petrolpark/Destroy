@@ -120,7 +120,7 @@ public class CreateRecipeCategoryMixin<T extends Recipe<?>> {
                 } else if (view.getRole() == RecipeIngredientRole.OUTPUT) {
                     CompoundTag mixtureTag = fluidTag.getCompound("Mixture");
                     if (!mixtureTag.isEmpty()) {
-                        ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(mixtureTag);
+                        ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(ReadOnlyMixture::new, mixtureTag);
                         name = mixture.getName();
                         mixtureTooltip = mixture.getContentsTooltip(iupac, false, false, mbAmount, df);
                     } else {
