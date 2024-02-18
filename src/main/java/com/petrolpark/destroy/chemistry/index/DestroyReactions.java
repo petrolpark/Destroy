@@ -1,7 +1,5 @@
 package com.petrolpark.destroy.chemistry.index;
 
-import com.blamejared.crafttweaker.api.annotation.ZenRegister;
-import com.blamejared.crafttweaker_annotations.annotations.Document;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancements;
 import com.petrolpark.destroy.block.DestroyBlocks;
@@ -13,16 +11,12 @@ import com.petrolpark.destroy.chemistry.reactionresult.PrecipitateReactionResult
 import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags;
-
 import net.minecraft.world.item.Items;
 import org.openzen.zencode.java.ZenCodeType;
 
-@ZenRegister
-@ZenCodeType.Name("mods.destroy.Reactions")
-@Document("mods/destroy/Reactions")
+
 public class DestroyReactions {
 
-    @ZenCodeType.Field
     public static final Reaction
 
     ABS_COPOLYMERIZATION = builder()
@@ -741,8 +735,7 @@ public class DestroyReactions {
         builder().acid(DestroyMolecules.SULFURIC_ACID, DestroyMolecules.HYDROGENSULFATE, -2.18f);
     };
 
-    @ZenCodeType.Method("create")
-    public static ReactionBuilder builder() {
+    private static ReactionBuilder builder() {
         return new ReactionBuilder(Destroy.MOD_ID);
     };
 

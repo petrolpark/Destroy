@@ -13,12 +13,8 @@ import com.petrolpark.destroy.chemistry.Molecule.MoleculeBuilder;
 import net.minecraft.ChatFormatting;
 import org.openzen.zencode.java.ZenCodeType;
 
-@ZenRegister
-@ZenCodeType.Name("mods.destroy.Molecules")
-@Document("mods/destroy/Molecules")
 public final class DestroyMolecules {
 
-    @ZenCodeType.Field
     public static final Molecule 
     
     ACETAMIDE = builder()
