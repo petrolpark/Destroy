@@ -115,6 +115,11 @@ repositories {
         url = "https://maven.jaackson.me"
     }
 
+    maven {
+        url = 'https://maven.blamejared.com'
+        name = 'BlameJared Maven'
+    }
+
     exclusiveContent {
         forRepository {
             maven {
@@ -176,7 +181,11 @@ dependencies {
     compileOnly fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
     implementation fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
 
-
+    // CraftTweaker
+    var tweaker = "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${crafttweaker_version}"
+    compileOnly fg.deobf(tweaker)
+    annotationProcessor(tweaker)
+    compileOnly("com.blamejared.crafttweaker:CraftTweaker-common-${minecraft_version}:${crafttweaker_version}")
     // ANNOTATION PROCESSORS
 
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"

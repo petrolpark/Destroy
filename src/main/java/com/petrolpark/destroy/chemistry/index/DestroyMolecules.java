@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.chemistry.index;
 
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import com.blamejared.crafttweaker_annotations.annotations.Document;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Formula;
@@ -9,9 +11,14 @@ import com.petrolpark.destroy.chemistry.Bond.BondType;
 import com.petrolpark.destroy.chemistry.Molecule.MoleculeBuilder;
 
 import net.minecraft.ChatFormatting;
+import org.openzen.zencode.java.ZenCodeType;
 
+@ZenRegister
+@ZenCodeType.Name("mods.destroy.Molecules")
+@Document("mods/destroy/Molecules")
 public final class DestroyMolecules {
 
+    @ZenCodeType.Field
     public static final Molecule 
     
     ACETAMIDE = builder()
@@ -1100,7 +1107,8 @@ public final class DestroyMolecules {
         .charge(1)
         .build();
 
-    private static final MoleculeBuilder builder() {
+    @ZenCodeType.Method("create")
+    public static MoleculeBuilder builder() {
         return new MoleculeBuilder(Destroy.MOD_ID);
     };
 
