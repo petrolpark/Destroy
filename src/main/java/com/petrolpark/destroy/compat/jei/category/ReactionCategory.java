@@ -88,7 +88,7 @@ public class ReactionCategory<T extends ReactionRecipe> extends HoverableTextCat
 
     protected String getTranslationKey(ReactionRecipe recipe) {
         Reaction reaction = recipe.getReaction();
-        return reaction.getNameSpace() + ".reaction." + reaction.getId();
+        return reaction.getNamespace() + ".reaction." + reaction.getId();
     };
 
     @Override

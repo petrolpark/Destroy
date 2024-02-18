@@ -1,11 +1,5 @@
 package com.petrolpark.destroy.chemistry;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.annotation.Nullable;
 
@@ -57,9 +51,9 @@ public class Molecule implements INameableProduct {
     /**
      * The name space of the mod by which this Molecule was defined.
      */
-    public final String nameSpace;
+    public final String namespace;
     /**
-     * The {@link Molecule#getFullID ID} of this Molecule, not including its {@link Molecule#nameSpace name space}.
+     * The {@link Molecule#getFullID ID} of this Molecule, not including its {@link Molecule#namespace name space}.
      */
     private String id;
 
@@ -105,16 +99,16 @@ public class Molecule implements INameableProduct {
     /**
      * The {@link MoleculeTag tags} which apply to this Molecule.
      */
-    private Set<MoleculeTag> tags;
+    private final Set<MoleculeTag> tags;
 
     /**
      * The specific {@link Reaction Reactions} in which this Molecule is a {@link Reaction#getReactants reactant}.
      */
-    private List<Reaction> reactantReactions;
+    private final List<Reaction> reactantReactions;
     /**
      * The specific {@link Reaction Reactions} in which this Molecule is a {@link Reaction#getProducts product}.
      */
-    private List<Reaction> productReactions;
+    private final List<Reaction> productReactions;
 
     // DISPLAY PROPERTIES
 
@@ -144,7 +138,7 @@ public class Molecule implements INameableProduct {
     private MoleculeRenderer renderer;
 
     private Molecule(String nameSpace) {
-        this.nameSpace = nameSpace;
+        this.namespace = nameSpace;
         id = null;
         structure = null;
 
@@ -199,7 +193,7 @@ public class Molecule implements INameableProduct {
              */
             return structure.serialize();
         } else {
-            return nameSpace+":"+id;
+            return namespace +":"+id;
         }
     };
 
@@ -307,8 +301,8 @@ public class Molecule implements INameableProduct {
     };
 
     /**
-     * Whether this Molecule is {@link MoleculeTag tagged} as being {@link DestroyMolecules.Tags.HYPOTHETICAL hypothetical}.
-     * This is typically any {@link Group#getExampleMolecule exemplar Molecule} for a {@link Group functional Group},
+     * Whether this Molecule is {@link MoleculeTag tagged} as being {@link DestroyMolecules.Tags#HYPOTHETICAL hypothetical}.
+     * This is typically any exemplar Molecule for a {@link Group functional Group},
      * something than contains {@link Element#R_GROUP R-groups}, or a Molecule that can't actually exist.
      */
     public boolean isHypothetical() {
@@ -317,7 +311,7 @@ public class Molecule implements INameableProduct {
 
     /**
      * Get all the {@link MoleculeTag tags} this Molecule has.
-     * @return
+     * @return Molecule tags
      */
     public ImmutableSet<MoleculeTag> getTags() {
         return ImmutableSet.copyOf(tags);
@@ -337,7 +331,7 @@ public class Molecule implements INameableProduct {
      * @see Molecule What a novel Molecule is
      */
     public boolean isNovel() {
-        return this.nameSpace == "novel";
+        return this.namespace == "novel";
     };
 
     /**
@@ -432,7 +426,7 @@ public class Molecule implements INameableProduct {
     };
 
     /**
-     * Get the {@link Molecule#name display name} of this Molecule.
+     * Get the display name of this Molecule.
      * @param iupac Whether to use the IUPAC systematic name rather than the common one
      */
     @Override
@@ -443,7 +437,7 @@ public class Molecule implements INameableProduct {
 
     public String getTranslationKey(boolean iupac) {
         if (isNovel()) return "destroy.chemical.unknown";
-        String key = nameSpace + ".chemical." + translationKey;
+        String key = namespace + ".chemical." + translationKey;
         String iupacKey = key + ".iupac";
         if (iupac && I18n.exists(iupacKey)) {
             key = iupacKey;
@@ -543,7 +537,7 @@ public class Molecule implements INameableProduct {
      * A class for constructing {@link Molecule Molecules}. This is typically used for:<ul>
      * <li>Declaring known Molecules ({@link DestroyMolecules example})</li>
      * <li>Constructing novel Molecules for {@link com.petrolpark.destroy.chemistry.genericreaction.GenericReaction Generic Reactions}
-     * ({@link com.petrolpark.destroy.chemistry.index.genericreaction.HydroxideSubstitutions#generateReaction example}).</li>
+     * ({@link com.petrolpark.destroy.chemistry.index.genericreaction.AlcoholDehydration#generateReaction example}).</li>
      * </ul>
      * <p>Use {@code build()} to build get the Molecule.</p>
      */
@@ -561,13 +555,13 @@ public class Molecule implements INameableProduct {
 
         /**
          * A {@link Molecule} constructor.
-         * @param nameSpace The {@link Molecule#nameSpace name space} to which all Molecules constructed with this builder will belong
+         * @param nameSpace The {@link Molecule#namespace name space} to which all Molecules constructed with this builder will belong
          * @throws IllegalArgumentException If a {@link Molecule#FORBIDDEN_NAMESPACES forbidden name space} is used, for example {@code novel}.
          */
         public MoleculeBuilder(String nameSpace) {
             molecule = new Molecule(nameSpace);
             if (FORBIDDEN_NAMESPACES.contains(nameSpace)) {
-                throw e("Cannot use name space '"+nameSpace+"'.");
+                error("Cannot use name space '" + nameSpace + "'.");
             };
             NAMESPACES.add(nameSpace);
             molecule.charge = 0; //default
@@ -600,7 +594,8 @@ public class Molecule implements INameableProduct {
                 molecule.structure = structure;
                 return this;
             } catch (FormulaModificationException e) {
-                throw e("Cannot use structure.", e);
+                error("Cannot use structure.", e);
+                return null;
             }
         };
 
@@ -630,7 +625,7 @@ public class Molecule implements INameableProduct {
 
         /**
          * Set the {@link Molecule#boilingPoint boiling point} in degrees Celsius.
-         * If not supplied, the boiling point will be very loosely {@link MoleculeBuilder#calculateBoilingPoint estimated}, but setting one is recommended.
+         * If not supplied, the boiling point will be very loosely given value, but setting one is recommended.
          * @param boilingPoint In degrees Celcius
          * @return This Molecule Builder
          */
@@ -640,7 +635,7 @@ public class Molecule implements INameableProduct {
 
         /**
          * Set the {@link Molecule#boilingPoint boiling point} in kelvins.
-         * If not supplied, the boiling point will be very loosely {@link MoleculeBuilder#calculateBoilingPoint estimated}, but setting one is recommended.
+         * If not supplied, the boiling point will be very loosely {@link MoleculeBuilder#boilingPoint estimated}, but setting one is recommended.
          * @param boilingPoint In kelvins
          * @return This Molecule Builder
          */
@@ -652,7 +647,7 @@ public class Molecule implements INameableProduct {
 
         /**
          * Set the {@link Molecule#dipoleMoment dipole moment} of this Molecule.
-         * If not supplied, a dipole moment will be very loosely {@link MoleculeBuilder#calculateDipoleMoment estimated}, but setting one is recommended.
+         * If not supplied, a dipole moment will be very loosely given value, but setting one is recommended.
          * @return This Molecule Builder
          */
         public MoleculeBuilder dipoleMoment(int dipoleMoment) {
@@ -674,11 +669,11 @@ public class Molecule implements INameableProduct {
         /**
          * Set the {@link Molecule#molarHeatCapacity molar heat capacity} for this Molecule,
          * in joules per mole-kelvin.
-         * @param molarHeatCapacity
+         * @param molarHeatCapacity New capacity
          * @return This Molecule Builder
          */
         public MoleculeBuilder molarHeatCapacity(float molarHeatCapacity) {
-            if (molarHeatCapacity <= 0f) throw e("Molar heat capacity must be greater than 0.");
+            if (molarHeatCapacity <= 0f) error("Molar heat capacity must be greater than 0.");
             molecule.molarHeatCapacity = molarHeatCapacity;
             hasForcedMolarHeatCapacity = true;
             return this;
@@ -691,7 +686,7 @@ public class Molecule implements INameableProduct {
          * @return This Molecule Builder
          */
         public MoleculeBuilder latentHeat(float latentHeat) {
-            if (latentHeat <= 0f) throw e("Latent heat of fusion must be greater than 0.");
+            if (latentHeat <= 0f) error("Latent heat of fusion must be greater than 0.");
             molecule.latentHeat = latentHeat;
             hasForcedLatentHeat = true;
             return this;
@@ -743,7 +738,7 @@ public class Molecule implements INameableProduct {
          * </ul><p>This is the only safe way to declare a Molecule.</p>
          * @return A new Molecule instance
          * @throws IllegalArgumentException If the Molecule's {@link Formula structure} was not {@link MoleculeBuilder#structure declared},
-         * or it is not novel and the {@link Molecule#nameSpace name space} was not declared.
+         * or it is not novel and the {@link Molecule#namespace name space} was not declared.
          */
         public Molecule build() {
 
@@ -751,12 +746,12 @@ public class Molecule implements INameableProduct {
             molecule.translationKey = translationKey;
 
             if (molecule.structure == null) {
-                throw e("Molecule's structure has not been declared.");
+                error("Molecule's structure has not been declared.");
             };
 
-            if (molecule.getAtoms().size() >= 100) throw e("Molecule has too many Atoms");
-
-            if (molecule.nameSpace == "novel") {
+            if (molecule.getAtoms().size() >= 100) error("Molecule has too many Atoms");
+            boolean isNovelNamespace = Objects.equals(molecule.namespace, "novel");
+            if (isNovelNamespace) {
                 Molecule equivalentMolecule = molecule.getEquivalent();
                 if (equivalentMolecule != molecule) {
                     return equivalentMolecule;
@@ -780,11 +775,11 @@ public class Molecule implements INameableProduct {
             molecule.refreshFunctionalGroups();
             molecule.structure.updateSideChainStructures();
 
-            if (molecule.nameSpace != "novel") {
+            if (!isNovelNamespace) {
                 if (molecule.id == null) {
-                    throw e("Molecule's ID has not been declared.");
+                    error("Molecule's ID has not been declared.");
                 } else {
-                    MOLECULES.put(molecule.nameSpace+":"+molecule.id, molecule);
+                    MOLECULES.put(molecule.namespace +":"+molecule.id, molecule);
                 };
             };
 
@@ -835,7 +830,7 @@ public class Molecule implements INameableProduct {
             return 0;
         };
 
-        public class MoleculeConstructionException extends ChemistryException {
+        public static class MoleculeConstructionException extends ChemistryException {
 
             private MoleculeConstructionException(String message) {
                 super(message);
@@ -847,16 +842,16 @@ public class Molecule implements INameableProduct {
 
         };
 
-        private MoleculeConstructionException e(String message) {
-            return new MoleculeConstructionException(addInfoToMessage(message));
+        private void error(String message) {
+            throw new MoleculeConstructionException(addInfoToMessage(message));
         };
 
-        private MoleculeConstructionException e(String message, Throwable e) {
-            return new MoleculeConstructionException(addInfoToMessage(message), e);
+        private void error(String message, Throwable e) {
+            throw new MoleculeConstructionException(addInfoToMessage(message), e);
         };
 
         private String addInfoToMessage(String message) {
-            String id = molecule.id == null ? "Unknown ID" : molecule.nameSpace + ":" + molecule.id;
+            String id = molecule.id == null ? "Unknown ID" : molecule.namespace + ":" + molecule.id;
             return "Problem building Molecule (" + id + "): " + message;
         };
     };

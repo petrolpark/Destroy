@@ -29,7 +29,7 @@ public abstract class Group<G extends Group<G>> {
      * Get the {@link GenericReaction Generic Reactions} in which the given functional Group participates.
      * @param group
      */
-    public static final Set<GenericReaction> getReactionsOf(Group<?> group) {
+    public static Set<GenericReaction> getReactionsOf(Group<?> group) {
         return groupTypesAndReactions.get(group.getType());
     };
 
@@ -37,9 +37,9 @@ public abstract class Group<G extends Group<G>> {
 
     /**
      * Get the {@link GenericReaction Generic Reactions} which the functional Group identified by the given ID participates in.
-     * @param ID The {@link Group#getID String ID} of the functional Group.
+     * @param type ID of the group
      */
-    public static final Set<GenericReaction> getReactionsOfGroupByID(GroupType<?> type) {
+    public static Set<GenericReaction> getReactionsOfGroupByID(GroupType<?> type) {
         return groupTypesAndReactions.get(type);
     };
 

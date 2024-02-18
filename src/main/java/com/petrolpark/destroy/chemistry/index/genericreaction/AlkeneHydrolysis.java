@@ -29,6 +29,4 @@ public class AlkeneHydrolysis extends AlkeneAddition {
             .addCatalyst(DestroyMolecules.SULFURIC_ACID, 1)
             .activationEnergy(200f);
     };
-
-    
 };
