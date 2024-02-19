@@ -954,7 +954,7 @@ public class Mixture extends ReadOnlyMixture {
              * This checks if all necessary Reactants were present before proceeding, however this leads to some infinite loops
              * where one half of a reversible Reaction would happen one tick, then the other one the next, etc.
              */ 
-            Boolean reactionHasAllReactants = true;
+            boolean reactionHasAllReactants = true;
             for (Molecule necessaryReactantOrCatalyst : reaction.getOrders().keySet()) {
                 if (getConcentrationOf(necessaryReactantOrCatalyst) == 0) {
                     reactionHasAllReactants = false;

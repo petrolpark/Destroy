@@ -1,11 +1,6 @@
 package com.petrolpark.destroy.chemistry;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -122,15 +117,15 @@ public class Reaction {
     /**
      * Whether this Molecule gets consumed in this Reaction (does not include catalysts).
      */
-    public Boolean containsReactant(Molecule molecule) {
+    public boolean containsReactant(Molecule molecule) {
         return this.reactants.keySet().contains(molecule);
     };
 
     /**
      * Whether this Molecule is created in this Reaction.
      */
-    public Boolean containsProduct(Molecule molecule) {
-        return this.products.keySet().contains(molecule);
+    public boolean containsProduct(Molecule molecule) {
+        return this.products.containsKey(molecule);
     };
 
     /**
@@ -282,7 +277,7 @@ public class Reaction {
      * @param reactant
      * @return {@code 0} if this Molecule is not a reactant
      */
-    public Integer getReactantMolarRatio(Molecule reactant) {
+    public int getReactantMolarRatio(Molecule reactant) {
         if (!reactants.keySet().contains(reactant)) {
             return 0;
         } else {
@@ -295,12 +290,8 @@ public class Reaction {
      * @param product
      * @return {@code 0} if this Molecule is not a product
      */
-    public Integer getProductMolarRatio(Molecule product) {
-        if (!products.keySet().contains(product)) {
-            return 0;
-        } else {
-            return products.get(product);
-        }
+    public int getProductMolarRatio(Molecule product) {
+        return Objects.requireNonNullElse(products.get(product), 0);
     };
 
     /**

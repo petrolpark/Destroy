@@ -12,8 +12,6 @@ import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags;
 import net.minecraft.world.item.Items;
-import org.openzen.zencode.java.ZenCodeType;
-
 
 public class DestroyReactions {
 

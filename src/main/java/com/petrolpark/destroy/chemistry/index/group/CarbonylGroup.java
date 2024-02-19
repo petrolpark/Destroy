@@ -15,7 +15,7 @@ public class CarbonylGroup extends Group<CarbonylGroup> {
      */
     public final boolean isKetone;
 
-    public CarbonylGroup(Atom carbon, Atom oxygen, Boolean isKetone) {
+    public CarbonylGroup(Atom carbon, Atom oxygen, boolean isKetone) {
         super();
         this.carbon = carbon;
         this.oxygen = oxygen;

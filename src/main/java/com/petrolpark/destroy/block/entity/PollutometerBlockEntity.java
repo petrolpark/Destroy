@@ -56,7 +56,7 @@ public class PollutometerBlockEntity extends SmartBlockEntity {
         return pollutionType;
     };
 
-    private void setPollutionType(Integer pollutionTypeIndex) {
+    private void setPollutionType(int pollutionTypeIndex) {
         this.pollutionType = PollutionType.values()[pollutionTypeIndex];
     };
 

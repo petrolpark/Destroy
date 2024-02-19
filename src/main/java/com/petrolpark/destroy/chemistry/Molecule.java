@@ -545,11 +545,11 @@ public class Molecule implements INameableProduct {
 
         private Molecule molecule;
 
-        private Boolean hasForcedDensity = false; // Whether this molecule has a custom density or it should be calculated
-        private Boolean hasForcedBoilingPoint = false; // Whether this molecule has a custom boiling point or it should be calculated
-        private Boolean hasForcedDipoleMoment = false; // Whether this molecule has a forced dipole moment or it should be calculated
-        private Boolean hasForcedMolarHeatCapacity = false; // Whether this molecule has a forced specific heat capacity or it should be calculated
-        private Boolean hasForcedLatentHeat = false; // Whether this molecule has a forced latent heat of fusion or it should be calculated
+        private boolean hasForcedDensity = false; // Whether this molecule has a custom density or it should be calculated
+        private boolean hasForcedBoilingPoint = false; // Whether this molecule has a custom boiling point or it should be calculated
+        private boolean hasForcedDipoleMoment = false; // Whether this molecule has a forced dipole moment or it should be calculated
+        private boolean hasForcedMolarHeatCapacity = false; // Whether this molecule has a forced specific heat capacity or it should be calculated
+        private boolean hasForcedLatentHeat = false; // Whether this molecule has a forced latent heat of fusion or it should be calculated
 
         private String translationKey;
 

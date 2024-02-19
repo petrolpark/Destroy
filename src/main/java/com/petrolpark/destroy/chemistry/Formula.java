@@ -274,7 +274,7 @@ public class Formula implements Cloneable {
      * @see Formula#startingAtom How sub-Formulae are added
      * @see Formula#joinFormulae Connecting Formulae of which you are unaware of the specific structure of each Formula, such as in {@link GenericReaction Generic Reactions}
      */
-    public Formula addGroup(Formula group, Boolean isSideGroup, BondType bondType) {
+    public Formula addGroup(Formula group, boolean isSideGroup, BondType bondType) {
         if (topology.atomsAndLocations.stream().anyMatch(pair -> pair.getSecond() == currentAtom)) {
             throw new FormulaModificationException(this, "Cannot modify Atoms in cycle");
         };
@@ -801,7 +801,7 @@ public class Formula implements Cloneable {
 
         Branch maximumBranch = new Branch(currentNode);
 
-        Boolean nodesAdded = true;
+        boolean nodesAdded = true;
         while (nodesAdded) {
             nodesAdded = false;
             Map<Node, BondType> connectedUnvisitedNodesAndTheirBondTypes = new HashMap<>();
@@ -920,7 +920,7 @@ public class Formula implements Cloneable {
     private static Formula groupFromString(List<String> symbols) {
 
         Formula formula = Formula.nothing();
-        Boolean hasFormulaBeenInstantiated = false;
+        boolean hasFormulaBeenInstantiated = false;
 
         BondType nextAtomBond = BondType.SINGLE;
 
@@ -943,7 +943,7 @@ public class Formula implements Cloneable {
                 List<String> subSymbols = new ArrayList<>();
                 while (brackets > 0) { //Keep going until the closing bracket is found
                     i++; //move to next Atom
-                    Boolean added = false;
+                    boolean added = false;
                     for (int j = 0; j < symbols.get(i).length(); j++) {
                         char c = symbols.get(i).charAt(j);
                         if (c == ')') {
@@ -968,7 +968,7 @@ public class Formula implements Cloneable {
                 symbol = symbols.get(i);
             };
 
-            Boolean stripBond = true; //start by assuming by a =/#/~ will have to be taken off the end of the Symbol
+            boolean stripBond = true; //start by assuming by a =/#/~ will have to be taken off the end of the Symbol
             nextAtomBond = BondType.SINGLE; //start by assuming the next Bond will be single
             switch (symbol.charAt(symbol.length() - 1)) {
                 case '=':

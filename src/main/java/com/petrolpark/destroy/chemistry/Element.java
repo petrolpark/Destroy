@@ -70,7 +70,7 @@ public enum Element {
         return this.electronegativity;
     };
 ;
-    public Boolean isValidValency(double valency) {
+    public boolean isValidValency(double valency) {
         for (double possibleValency : valencies) {
             if (Math.abs(possibleValency - valency) < 0.000001d) return true;
         };

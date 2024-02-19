@@ -6,13 +6,12 @@ public class Edge {
     public BondType bondType;  
     private Node srcNode;
     private Node destNode;
-    public Boolean marked;
+    public boolean marked = false;
 
     public Edge(Node srcNode, Node destNode, BondType bondType) {
         this.srcNode = srcNode;
         this.destNode = destNode;
         this.bondType = bondType;
-        marked = false;
     };
 
     public Node getSourceNode() {
