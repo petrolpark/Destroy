@@ -1,13 +1,6 @@
 package com.petrolpark.destroy.world.explosion;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
@@ -87,7 +80,7 @@ public class SmartExplosion extends Explosion {
         ExplosionResult result = getExplosionResult();  // 'Do' the Explosion
         toBlow.addAll(result.blocksToDestroy()); // Mark all the Exploded Block States for removal
 
-        List<Entity> entities = result.entities().keySet().stream().toList();
+        List<Entity> entities = new ArrayList<>(result.entities().keySet()); // a small fix, .toList() generates an immutable collection
         ForgeEventFactory.onExplosionDetonate(level, this, entities, radius * 2); // Allow events to modify affected entities
         for (Entity entity : entities) { // Explode each Entity
             explodeEntity(entity, result.entities().get(entity));
@@ -308,15 +301,12 @@ public class SmartExplosion extends Explosion {
     };
 
     /**
-     * @param blocksToDestroy The Blocks which this Explosion should remove
-     * @param entities The Entities this Explosion should affect mapped to how strongly they are affected:
-     * {@code 0} is not affected at all and {@code 1} is as if they were standing directly next
-     * to the center of Explosion with nothing in the way
-     */
-    public static record ExplosionResult(Collection<BlockPos> blocksToDestroy, Map<Entity, Float> entities) {
-        public ExplosionResult {
-            Objects.requireNonNullElse(blocksToDestroy, List.of());
-            Objects.requireNonNullElse(entities, Map.of());
-        };
-    };
+         *
+         */
+    public record ExplosionResult(Collection<BlockPos> blocksToDestroy, Map<Entity, Float> entities) {
+        public ExplosionResult(Collection<BlockPos> blocksToDestroy, Map<Entity, Float> entities) {
+            this.blocksToDestroy = Objects.requireNonNullElse(blocksToDestroy, new ArrayList<>());
+            this.entities = Objects.requireNonNullElse(entities, new HashMap<>());
+        }
+    }
 };

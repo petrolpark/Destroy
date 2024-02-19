@@ -53,10 +53,12 @@ public class ExtendedBasinBehaviour extends BlockEntityBehaviour {
     };
 
     public void enactReactionResults(BasinBlockEntity basin) {
-        
-        for (ReactionResult result : reactionResults.keySet()) {
-            for (int i = 0; i < reactionResults.get(result); i++) result.onBasinReaction(basin.getLevel(), basin);
-        };
+        for(Map.Entry<ReactionResult, Integer> reactionEntry : reactionResults.entrySet()) {
+            ReactionResult result = reactionEntry.getKey();
+            for(int i = 0; i < reactionEntry.getValue(); i++) {
+                result.onBasinReaction(basin.getLevel(), basin);
+            }
+        }
         reactionResults.clear();
 
         if (!evaporatedFluid.isEmpty()) {

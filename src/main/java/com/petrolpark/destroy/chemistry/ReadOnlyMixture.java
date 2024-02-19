@@ -180,11 +180,7 @@ public class ReadOnlyMixture {
      * @return 0 if the Mixture does not contain the given Molecule
      */
     public float getConcentrationOf(Molecule molecule) {
-        if (contents.containsKey(molecule)) {
-            return contents.get(molecule);
-        } else {
-            return 0f;
-        }
+        return contents.getOrDefault(molecule, 0f);
     };
 
     /**
@@ -289,7 +285,7 @@ public class ReadOnlyMixture {
         int i = 0;
         List<Component> tooltip = new ArrayList<>();
         List<Molecule> molecules = new ArrayList<>(contents.keySet());
-        Collections.sort(molecules, (m1, m2) -> contents.get(m2).compareTo(contents.get(m1)));
+        molecules.sort((m1, m2) -> contents.get(m2).compareTo(contents.get(m1)));
         Function<Float, String> quantityTranslator = q -> DestroyLang.translate(useMoles ? "tooltip.mixture_contents.moles" : "tooltip.mixture_contents.concentration", concentrationFormatter.format(q)).string();
         int quantityLabelLength = quantityTranslator.apply(0f).length() + 2;
         for (Molecule molecule : molecules) {

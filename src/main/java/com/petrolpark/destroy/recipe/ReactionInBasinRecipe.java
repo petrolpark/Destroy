@@ -114,7 +114,7 @@ public class ReactionInBasinRecipe extends MixingRecipe {
 
             Map<ReactionResult, Integer> reactionResults = new HashMap<>();
 
-            gatherReactionResults(result.reactionresults(), reactionResults, builder); // Gather all 
+            gatherReactionResults(result.reactionResults(), reactionResults, builder); // Gather all
 
             ExtendedBasinBehaviour behaviour = basin.getBehaviour(ExtendedBasinBehaviour.TYPE);
             behaviour.setReactionResults(reactionResults); // Schedule the Reaction Results to occur once the Mixing has finished
@@ -132,19 +132,23 @@ public class ReactionInBasinRecipe extends MixingRecipe {
     };
 
     private static void gatherReactionResults(Map<ReactionResult, Integer> resultsOfReaction, Map<ReactionResult, Integer> resultsToEnact, ProcessingRecipeBuilder<ReactionInBasinRecipe> builder) {
-        for (ReactionResult reactionresult : resultsOfReaction.keySet()) {
-            if (reactionresult instanceof CombinedReactionResult combinedResult) {
+        for(Map.Entry<ReactionResult, Integer> resultEntry : resultsOfReaction.entrySet()) {
+            ReactionResult reactionResult = resultEntry.getKey();
+            if (reactionResult instanceof CombinedReactionResult combinedResult) {
                 Map<ReactionResult, Integer> childMap = new HashMap<>();
                 for (ReactionResult childResult : combinedResult.getChildren()) {
                     childMap.put(childResult, resultsOfReaction.get(combinedResult));
                 };
                 gatherReactionResults(childMap, resultsToEnact, builder);
-            } else if (reactionresult instanceof PrecipitateReactionResult precipitationResult) {
+                continue;
+            }
+            if (reactionResult instanceof PrecipitateReactionResult precipitationResult) {
                 builder.output(precipitationResult.getPrecipitate());
-            } else { // Don't deal with precipitations in the normal way
-                resultsToEnact.put(reactionresult, resultsOfReaction.get(reactionresult));
-            };
-        };
+                continue;
+            }
+            // Don't deal with precipitations in the normal way
+            resultsToEnact.put(reactionResult, resultEntry.getValue());
+        }
     };
 
     @Override
@@ -155,9 +159,9 @@ public class ReactionInBasinRecipe extends MixingRecipe {
     /**
      * The outcome of {@link com.petrolpark.destroy.chemistry.Reaction reacting} a {@link com.petrolpark.destroy.chemistry.Reaction Mixture} in a Basin.
      * @param ticks The number of ticks it took for the Mixture to reach equilibrium
-     * @param reactionresults The {@link com.petrolpark.destroy.chemistry.ReactionResult results} of Reacting this Mixture
+     * @param reactionResults The {@link com.petrolpark.destroy.chemistry.ReactionResult results} of Reacting this Mixture
      * @param amount The amount (in mB) of resultant Mixture
      */
-    public static record ReactionInBasinResult(int ticks, Map<ReactionResult, Integer> reactionresults, int amount) {};
+    public record ReactionInBasinResult(int ticks, Map<ReactionResult, Integer> reactionResults, int amount) {};
     
 };

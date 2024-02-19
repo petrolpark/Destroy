@@ -118,7 +118,7 @@ public class Reaction {
      * Whether this Molecule gets consumed in this Reaction (does not include catalysts).
      */
     public boolean containsReactant(Molecule molecule) {
-        return this.reactants.keySet().contains(molecule);
+        return this.reactants.containsKey(molecule);
     };
 
     /**
@@ -278,11 +278,7 @@ public class Reaction {
      * @return {@code 0} if this Molecule is not a reactant
      */
     public int getReactantMolarRatio(Molecule reactant) {
-        if (!reactants.keySet().contains(reactant)) {
-            return 0;
-        } else {
-            return reactants.get(reactant);
-        }
+        return reactants.getOrDefault(reactant, 0);
     };
 
     /**
@@ -291,7 +287,7 @@ public class Reaction {
      * @return {@code 0} if this Molecule is not a product
      */
     public int getProductMolarRatio(Molecule product) {
-        return Objects.requireNonNullElse(products.get(product), 0);
+        return products.getOrDefault(product, 0);
     };
 
     /**
@@ -398,7 +394,7 @@ public class Reaction {
          * @see ReactionBuilder#addCatalyst(Molecule, int) Adding order with respect to a Molecule that is not a reactant (i.e. a catalyst)
          */
         public ReactionBuilder setOrder(Molecule molecule, int order) {
-            if (!reaction.reactants.keySet().contains(molecule)) error("Cannot modify order of a Molecule ("+ molecule.getFullID() +") that is not a reactant.");
+            if (!reaction.reactants.containsKey(molecule)) error("Cannot modify order of a Molecule ("+ molecule.getFullID() +") that is not a reactant.");
             addCatalyst(molecule, order);
             return this;
         };

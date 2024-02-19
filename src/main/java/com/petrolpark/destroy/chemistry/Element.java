@@ -37,20 +37,20 @@ public enum Element {
     //LEAD("Pb", 207.20f, 1.8f)
     ;
 
-    private String symbol;
-    private Float mass;
-    private Float electronegativity;
-    private double[] valencies;
+    private final String symbol;
+    private final float mass;
+    private final float electronegativity;
+    private final double[] valencies;
 
-    private Function<Integer, Geometry> geometryOverride;
+    private final Function<Integer, Geometry> geometryOverride;
 
     private PartialModel partial;
 
-    private Element(String symbol, Float mass, Float electronegativity, double[] valencies) {
+    Element(String symbol, Float mass, Float electronegativity, double[] valencies) {
         this(symbol, mass, electronegativity, valencies, null);
     };
 
-    private Element(String symbol, Float mass, Float electronegativity, double[] valencies, Function<Integer, Geometry> geometryOverride) {
+    Element(String symbol, Float mass, Float electronegativity, double[] valencies, Function<Integer, Geometry> geometryOverride) {
         this.symbol = symbol;
         this.mass = mass;
         this.electronegativity = electronegativity;

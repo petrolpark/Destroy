@@ -492,8 +492,10 @@ public class Formula implements Cloneable {
                 if (structure.get(atom) == null) continue checkAllAtomsInSideChain; // If this Atom has no Bonds, don't do anything
                 addAllBondsForAtom: for (Bond bond : structure.get(atom)) {
                     Atom potentialNewAtom = bond.getDestinationAtom();
-                    if (topology.formula.structure.keySet().contains(potentialNewAtom)) continue addAllBondsForAtom; // Don't add Bonds to Atoms which are part of the Topology (and therefore not part of the side branch)
-                    if (!sideChainFormula.structure.keySet().contains(potentialNewAtom)) newSideChainFormula.structure.put(potentialNewAtom, structure.get(potentialNewAtom)); // Add any as-of-yet unknown Atoms to the side branch's structure
+                    if (topology.formula.structure.containsKey(potentialNewAtom)) continue addAllBondsForAtom; // Don't add Bonds to Atoms which are part of the Topology (and therefore not part of the side branch)
+                    if (!sideChainFormula.structure.containsKey(potentialNewAtom)) {
+                        newSideChainFormula.structure.put(potentialNewAtom, structure.get(potentialNewAtom)); // Add any as-of-yet unknown Atoms to the side branch's structure
+                    }
                     bonds.add(bond);
                 };
                 newSideChainFormula.structure.put(atom, bonds);
@@ -772,14 +774,15 @@ public class Formula implements Cloneable {
      */
     private static Map<Atom, List<Bond>> shallowCopyStructure(Map<Atom, List<Bond>> structureToCopy) {
         Map<Atom, List<Bond>> newStructure = new HashMap<>();
-        for (Atom atom : structureToCopy.keySet()) {
-            List<Bond> oldBonds = structureToCopy.get(atom);
-            List<Bond> newBonds = new ArrayList<>();
+        for(Entry<Atom, List<Bond>> moleculeEntry : structureToCopy.entrySet()) {
+            Atom atom = moleculeEntry.getKey();
+            List<Bond> oldBonds = moleculeEntry.getValue();
+            List<Bond> newBonds = new ArrayList<>(oldBonds.size());
             for (Bond oldBond : oldBonds) {
                 newBonds.add(new Bond(atom, oldBond.getDestinationAtom(), oldBond.getType()));
             };
             newStructure.put(atom, newBonds);
-        };
+        }
         return newStructure;
     };
 
@@ -813,16 +816,17 @@ public class Formula implements Cloneable {
             };
 
             if (connectedUnvisitedNodesAndTheirBondTypes.size() == 1) {
-                Node onlyNode = connectedUnvisitedNodesAndTheirBondTypes.keySet().iterator().next();
-                maximumBranch.add(onlyNode, connectedUnvisitedNodesAndTheirBondTypes.get(onlyNode));
+                Entry<Node, BondType> nodeEntry = connectedUnvisitedNodesAndTheirBondTypes.entrySet().iterator().next();
+                Node onlyNode = nodeEntry.getKey();
+                maximumBranch.add(onlyNode, nodeEntry.getValue());
                 currentNode = onlyNode;
                 nodesAdded = true;
 
-            } else if (connectedUnvisitedNodesAndTheirBondTypes.size() != 0) {
+            } else if (!connectedUnvisitedNodesAndTheirBondTypes.isEmpty()) {
 
                 Map<Branch, BondType> connectedBranchesAndTheirBondTypes = new HashMap<>();
-                for (Node node : connectedUnvisitedNodesAndTheirBondTypes.keySet()) {
-
+                for(Entry<Node, BondType> nodeBondEntry : connectedUnvisitedNodesAndTheirBondTypes.entrySet()) {
+                    Node node = nodeBondEntry.getKey();
                     Map<Atom, List<Bond>> newStructure = shallowCopyStructure(structure); // Create a new Structure which does not include the current Node
                     Bond bondToRemove = null;
                     for (Bond bond : structure.get(node.getAtom())) {
@@ -836,15 +840,13 @@ public class Formula implements Cloneable {
                     };
 
                     newStructure.remove(currentNode.getAtom());
-                    
+
                     Branch branch = getMaximumBranch(node.getAtom(), newStructure);
-                    connectedBranchesAndTheirBondTypes.put(branch, connectedUnvisitedNodesAndTheirBondTypes.get(node));
-                };
+                    connectedBranchesAndTheirBondTypes.put(branch, nodeBondEntry.getValue());
+                }
 
                 List<Branch> orderedConnectedBranches = new ArrayList<>(connectedBranchesAndTheirBondTypes.keySet());
-                Collections.sort(orderedConnectedBranches, (b1, b2) -> {
-                    return b2.getMass().compareTo(b1.getMass());
-                });
+                orderedConnectedBranches.sort((b1, b2) -> b2.getMass().compareTo(b1.getMass()));
 
                 Branch biggestBranch = orderedConnectedBranches.get(0);
                 maximumBranch.add(biggestBranch, connectedBranchesAndTheirBondTypes.get(biggestBranch));
@@ -854,10 +856,7 @@ public class Formula implements Cloneable {
                 for (Branch sideBranch : orderedConnectedBranches) {
                     currentNode.addSideBranch(sideBranch, connectedBranchesAndTheirBondTypes.get(sideBranch));
                 };
-
-            } else {
-
-            };
+            }
         };
 
         return maximumBranch;
@@ -1003,9 +1002,9 @@ public class Formula implements Cloneable {
                 hasFormulaBeenInstantiated = true;
             };
 
-            for (Formula group : groupsToAdd.keySet()) { //add all side Groups to the current Atom
-                formula.addGroup(group, true, groupsToAdd.get(group));
-            };
+            for(Entry<Formula, BondType> groupEntry : groupsToAdd.entrySet()) {
+                formula.addGroup(groupEntry.getKey(), true, groupEntry.getValue());
+            }
 
             i++; //move to the next Atom
         };
@@ -1028,17 +1027,17 @@ public class Formula implements Cloneable {
      */
     private static Map<Atom, List<Bond>> stripHydrogens(Map<Atom, List<Bond>> structure) {
         Map<Atom, List<Bond>> newStructure = new HashMap<>();
-        for (Atom atom : structure.keySet()) {
-            List<Bond> bondsToAdd = new ArrayList<>();
-            for (Bond bond : structure.get(atom)) {
-                if (!bond.getDestinationAtom().isHydrogen()) {
-                    bondsToAdd.add(bond);
-                };
-            };
-            if (!atom.isHydrogen()) {
-                newStructure.put(atom, bondsToAdd);
-            };
-        };
+        for(Entry<Atom, List<Bond>> moleculeEntry : structure.entrySet()) {
+            Atom atom = moleculeEntry.getKey();
+            if(atom.isHydrogen()) continue;
+            List<Bond> bondStructure = moleculeEntry.getValue();
+            List<Bond> bondsToAdd = new ArrayList<>(bondStructure.size());
+            for(Bond bond : bondStructure) {
+                if(bond.getDestinationAtom().isHydrogen()) continue;
+                bondsToAdd.add(bond);
+            }
+            newStructure.put(atom, bondsToAdd);
+        }
         return newStructure;
     };
 
