@@ -9,6 +9,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
@@ -24,6 +25,12 @@ public class ReactionRecipe extends ProcessingRecipe<RecipeWrapper> {
 
     public static ReactionRecipe create(Reaction reaction) {
         ReactionRecipe recipe = new ProcessingRecipeBuilder<>(ReactionRecipe::new, Destroy.asResource("reaction_"+counter++)).build();
+        recipe.reaction = reaction;
+        return recipe;
+    };
+
+    public static ReactionRecipe create(String namespace, Reaction reaction) {
+        ReactionRecipe recipe = new ProcessingRecipeBuilder<>(ReactionRecipe::new, new ResourceLocation(namespace, "reaction_"+counter++)).build();
         recipe.reaction = reaction;
         return recipe;
     };

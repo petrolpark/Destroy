@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.chemistry.genericreaction;
 
+import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.Atom;
 import com.petrolpark.destroy.chemistry.Element;
@@ -17,7 +18,7 @@ public abstract class SingleGroupGenericReaction<G extends Group<G>> extends Gen
 
     public SingleGroupGenericReaction(ResourceLocation id, GroupType<G> type) {
         super(id);
-        this.type = type;;
+        this.type = type;
         Group.groupTypesAndReactions.get(type).add(this);
         GENERIC_REACTIONS.add(this); // Add this to the list of all known Generic Reactions
     };

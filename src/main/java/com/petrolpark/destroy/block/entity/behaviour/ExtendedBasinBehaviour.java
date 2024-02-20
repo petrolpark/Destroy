@@ -105,7 +105,7 @@ public class ExtendedBasinBehaviour extends BlockEntityBehaviour {
 
         nbt.put("Results", NBTHelper.writeCompoundList(reactionResults.entrySet(), entry -> {
             CompoundTag resultTag = new CompoundTag();
-            resultTag.putString("Result", entry.getKey().getReaction().getFullId());
+            resultTag.putString("Result", entry.getKey().getReaction().getFullID());
             resultTag.putInt("Count", entry.getValue());
             return resultTag;
         }));

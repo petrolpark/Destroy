@@ -14,7 +14,6 @@ import net.minecraft.ChatFormatting;
 import org.openzen.zencode.java.ZenCodeType;
 
 public final class DestroyMolecules {
-
     public static final Molecule 
     
     ACETAMIDE = builder()
@@ -1103,7 +1102,6 @@ public final class DestroyMolecules {
         .charge(1)
         .build();
 
-    @ZenCodeType.Method("create")
     public static MoleculeBuilder builder() {
         return new MoleculeBuilder(Destroy.MOD_ID);
     };

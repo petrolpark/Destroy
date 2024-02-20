@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.chemistry;
 import java.util.*;
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -331,7 +332,7 @@ public class Molecule implements INameableProduct {
      * @see Molecule What a novel Molecule is
      */
     public boolean isNovel() {
-        return this.namespace == "novel";
+        return Objects.equals(this.namespace, "novel");
     };
 
     /**
@@ -387,7 +388,7 @@ public class Molecule implements INameableProduct {
      * @param isCarbanion Whether this calculation should be inverted (to calculate the relative stability of a carbanion)
      * @return A value typically from 0-216
      */
-    public Float getCarbocationStability(Atom carbon, boolean isCarbanion) {
+    public float getCarbocationStability(Atom carbon, boolean isCarbanion) {
         return structure.getCarbocationStability(carbon, isCarbanion);
     };
 
@@ -779,10 +780,9 @@ public class Molecule implements INameableProduct {
                 if (molecule.id == null) {
                     error("Molecule's ID has not been declared.");
                 } else {
-                    MOLECULES.put(molecule.namespace +":"+molecule.id, molecule);
+                    MOLECULES.put(molecule.getFullID(), molecule);
                 };
             };
-
             return molecule;
         };
 
@@ -799,7 +799,7 @@ public class Molecule implements INameableProduct {
          * Very loosely estimate the density of an organic molecule.
          * @return A density in kilograms per metre cubed
          */
-        private static final float estimateDensity(Molecule molecule) {
+        private static float estimateDensity(Molecule molecule) {
             return 1000f; // Assume the density is similar to water, which is true for a lot of organic molecules.
         };
 
@@ -865,5 +865,9 @@ public class Molecule implements INameableProduct {
         return MoreObjects.toStringHelper(this).add("ID", getFullID()).toString();
     };
 
+    @Override
+    public int hashCode() {
+        return getFullID().hashCode();
+    }
 };
 

@@ -16,7 +16,7 @@ public interface IItemReactant {
      * This should return {@code true} if the Item Stack is a valid reactant for this {@link Reaction}.
      * @param stack
      */
-    public boolean isItemValid(ItemStack stack);
+    boolean isItemValid(ItemStack stack);
 
     /**
      * Deal with 'consuming' this Item Stack - usually, this will involve shrinking the Stack by one,
@@ -24,7 +24,7 @@ public interface IItemReactant {
      * untouched. If this is a {@link IItemReactant#isCatalyst catalyst}, this method is not called.
      * @param stack
      */
-    public default void consume(ItemStack stack) {
+    default void consume(ItemStack stack) {
         stack.shrink(1);
     };
 
@@ -32,17 +32,17 @@ public interface IItemReactant {
      * Get the List of Item Stacks through which the JEI slot should cycle. For Tag Reactants for 
      * example, this should be a List of all Item Stacks in that Tag.
      */
-    public List<ItemStack> getDisplayedItemStacks();
+    List<ItemStack> getDisplayedItemStacks();
 
     /**
      * Whether this Item Reactant is a catalyst. If so, it will not be consumed, but just required
      * for the {@link Reaction} to occur.
      */
-    public default boolean isCatalyst() {
+    default boolean isCatalyst() {
         return false;
     };
 
-    public class SimpleItemReactant implements IItemReactant {
+    class SimpleItemReactant implements IItemReactant {
 
         protected final Supplier<Item> item;
 
@@ -62,7 +62,7 @@ public interface IItemReactant {
 
     };
 
-    public class SimpleItemCatalyst extends SimpleItemReactant {
+    class SimpleItemCatalyst extends SimpleItemReactant {
 
         public SimpleItemCatalyst(Supplier<Item> item) {
             super(item);
@@ -78,7 +78,7 @@ public interface IItemReactant {
 
     };
  
-    public class SimpleItemTagReactant implements IItemReactant {
+    class SimpleItemTagReactant implements IItemReactant {
         
         protected final TagKey<Item> tag;
 
@@ -101,7 +101,7 @@ public interface IItemReactant {
 
     };
 
-    public class SimpleItemTagCatalyst extends SimpleItemTagReactant {
+    class SimpleItemTagCatalyst extends SimpleItemTagReactant {
 
         public SimpleItemTagCatalyst(TagKey<Item> tag) {
             super(tag);

@@ -27,7 +27,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
-import org.checkerframework.checker.units.qual.A;
 
 
 public class Mixture extends ReadOnlyMixture {
@@ -173,7 +172,7 @@ public class Mixture extends ReadOnlyMixture {
         if (!reactionResults.isEmpty()) {
             tag.put("Results", NBTHelper.writeCompoundList(reactionResults.entrySet(), entry -> {
                 CompoundTag resultTag = new CompoundTag();
-                resultTag.putString("Result", entry.getKey().getReaction().getFullId());
+                resultTag.putString("Result", entry.getKey().getReaction().getFullID());
                 resultTag.putFloat("MolesPerBucket", entry.getValue());
                 return resultTag;
             }));

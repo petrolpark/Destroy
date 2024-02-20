@@ -97,7 +97,7 @@ public class ReactionCategory<T extends ReactionRecipe> extends HoverableTextCat
     };
 
     private static void tooManyMoleculesWarning(boolean reactants, Reaction reaction) {
-        Destroy.LOGGER.warn("Reaction '"+reaction.getFullId()+"' has too many " + (reactants ? "reactants" : "products") + " to fit on JEI.");
+        Destroy.LOGGER.warn("Reaction '"+reaction.getFullID()+"' has too many " + (reactants ? "reactants" : "products") + " to fit on JEI.");
     };
 
     @Override

@@ -102,7 +102,7 @@ public class Reaction {
     private Reaction reverseReaction;
 
     /**
-     * Get the Reaction with the given {@link Reaction#getFullId ID}.
+     * Get the Reaction with the given {@link Reaction#getFullID ID}.
      * @param reactionId In the format {@code <namespace>:<id>}
      * @return {@code null} if no Reaction exists with that ID
      */
@@ -226,7 +226,7 @@ public class Reaction {
      * also acts as its translation key. {@code <namespace>.reaction.<id>} should hold
      * the name of this Reaction, and {@code <namespace>.reaction.<id>.description}
      * should hold the description of this Reaction.
-     * @see Reaction#getFullId Get the full ID
+     * @see Reaction#getFullID Get the full ID
      */
     public String getId() {
         return id;
@@ -236,7 +236,7 @@ public class Reaction {
      * Get the fully unique ID for this Reaction, in the format {@code <namespace>:
      * <id>}, for example {@code destroy:chloroform_fluorination}.
      */
-    public String getFullId() {
+    public String getFullID() {
         return namespace + ":" + id;
     };
 
@@ -702,11 +702,12 @@ public class Reaction {
                 for (Molecule product : reaction.products.keySet()) {
                     product.addProductReaction(reaction);
                 };
-                REACTIONS.put(reaction.getFullId(), reaction);
+                REACTIONS.put(reaction.getFullID(), reaction);
             };
             
             return reaction;
         };
+
 
         public static class ReactionConstructionException extends ChemistryException {
 
@@ -736,4 +737,9 @@ public class Reaction {
             return reactionString.toString();
         };
     };
+
+    @Override
+    public int hashCode() {
+        return getFullID().hashCode();
+    }
 }

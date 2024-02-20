@@ -65,7 +65,7 @@ public class SmartExplosion extends Explosion {
     public SmartExplosion(Level level, @Nullable Entity source, @Nullable DamageSource damageSource, @Nullable ExplosionDamageCalculator damageCalculator, Vec3 position, float radius, float smoothness) {
         super(level, source, damageSource, damageCalculator, position.x, position.y, position.z, radius, false, Explosion.BlockInteraction.KEEP);
         this.position = position;
-        this.smoothness = smoothness > 1f ? 1f : smoothness;
+        this.smoothness = Math.min(smoothness, 1f);
         stacksToCreate = new HashMap<>();
     };
 

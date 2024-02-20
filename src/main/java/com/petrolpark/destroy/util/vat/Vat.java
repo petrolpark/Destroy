@@ -38,8 +38,8 @@ public class Vat {
         VatMaterial.registerDestroyVatMaterials();
     };
 
-    private BlockPos lowerCorner;
-    private BlockPos upperCorner;
+    private final BlockPos lowerCorner;
+    private final BlockPos upperCorner;
 
     private ImmutableList<BlockPos> sides; // NOT synced server/client
 

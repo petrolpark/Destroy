@@ -748,14 +748,14 @@ public class Formula implements Cloneable {
      * @param isCarbanion
      * @see Molecule#getCarbocationStability The wrapper for this Method
      */
-    public Float getCarbocationStability(Atom carbon, boolean isCarbanion) {
-        Float totalElectronegativity = 0f;
+    public float getCarbocationStability(Atom carbon, boolean isCarbanion) {
+        float totalElectronegativity = 0f;
         for (Bond bond : structure.get(carbon)) {
             totalElectronegativity += bond.getDestinationAtom().getElement().getElectronegativity() * bond.getType().getEquivalent();
         };
-        Float relativeElectronegativity = totalElectronegativity - (Element.CARBON.getElectronegativity() * 4);
-        Float relativeStability = 1f + ((float)Math.pow(relativeElectronegativity, 4) / (float)Math.abs(relativeElectronegativity));
-        return isCarbanion ^ relativeElectronegativity < 0 ? 1f / (Float)relativeStability : (Float)relativeStability;
+        float relativeElectronegativity = totalElectronegativity - (Element.CARBON.getElectronegativity() * 4);
+        float relativeStability = 1f + ((float)Math.pow(relativeElectronegativity, 4) / Math.abs(relativeElectronegativity));
+        return isCarbanion ^ relativeElectronegativity < 0 ? 1f / relativeStability : relativeStability;
     };
 
     /**

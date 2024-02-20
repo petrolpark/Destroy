@@ -33,14 +33,14 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 @MoveToPetrolparkLibrary
 public class DestroyLang {
 
-    private static DecimalFormat df = new DecimalFormat();
+    private static final DecimalFormat df = new DecimalFormat();
     static {
         df.setMaximumFractionDigits(2);
         df.setMinimumFractionDigits(2);
     };
 
-    private static String[] subscriptNumbers = new String[]{"\u2080", "\u2081", "\u2082", "\u2083", "\u2084", "\u2085", "\u2086", "\u2087", "\u2088", "\u2089"};
-    private static String[] superscriptNumbers = new String[]{"\u2070", "\u00b9", "\u00b2", "\u00b3", "\u2074", "\u2075", "\u2076", "\u2077", "\u2078", "\u2079"};
+    private static final String[] subscriptNumbers = new String[]{"\u2080", "\u2081", "\u2082", "\u2083", "\u2084", "\u2085", "\u2086", "\u2087", "\u2088", "\u2089"};
+    private static final String[] superscriptNumbers = new String[]{"\u2070", "\u00b9", "\u00b2", "\u00b3", "\u2074", "\u2075", "\u2076", "\u2077", "\u2078", "\u2079"};
 
     public static LangBuilder builder() {
         return new LangBuilder(Destroy.MOD_ID);
@@ -156,13 +156,10 @@ public class DestroyLang {
      * @param fluidTag The NBT of the Fluid Stack
      */
     public static List<Component> mixtureIngredientTooltip(CompoundTag fluidTag) {
-        List<Component> tooltip = new ArrayList<>();
 
         MixtureFluidIngredientSubType<?> fluidIngredientType = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(fluidTag.getString("MixtureFluidIngredientSubtype"));
 
-        tooltip.addAll(fluidIngredientType.getDescription(fluidTag));
-
-        return tooltip;
+        return new ArrayList<>(fluidIngredientType.getDescription(fluidTag));
     };
 
     private static final float pressureMin = 0f;
@@ -253,15 +250,15 @@ public class DestroyLang {
      * @param value Should only be passed strings containing numbers, {@code +} and {@code -}.
      */
     public static String toSuperscript(String value) {
-        String string = "";
+        StringBuilder string = new StringBuilder();
         for (char c : value.toCharArray()) {
-            if (c == '-') string += "\u207b";
-            if (c == '+') string += "\u207a";
+            if (c == '-') string.append("\u207b");
+            if (c == '+') string.append("\u207a");
             try {
-                string += superscriptNumbers[Integer.valueOf(String.valueOf(c))];
+                string.append(superscriptNumbers[Integer.parseInt(String.valueOf(c))]);
             } catch (Throwable e) {};
         };
-        return string;
+        return string.toString();
     };
 
     public static enum TemperatureUnit {
@@ -276,8 +273,8 @@ public class DestroyLang {
             df.setMaximumFractionDigits(1);
         };
 
-        private UnaryOperator<Float> conversionFromKelvins;
-        private String symbol;
+        private final UnaryOperator<Float> conversionFromKelvins;
+        private final String symbol;
 
         TemperatureUnit(UnaryOperator<Float> conversionFromKelvins, String symbol) {
             this.conversionFromKelvins = conversionFromKelvins;
