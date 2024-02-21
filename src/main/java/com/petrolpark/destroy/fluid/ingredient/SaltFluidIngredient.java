@@ -25,8 +25,8 @@ public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient<SaltF
 
     public static final Type TYPE = new Type();
 
-    protected Molecule cation;
-    protected Molecule anion;
+    public Molecule cation;
+    public Molecule anion;
 
     @Override
     public MixtureFluidIngredientSubType<SaltFluidIngredient> getType() {
@@ -42,7 +42,17 @@ public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient<SaltF
 
     @Override
     protected boolean testMixture(Mixture mixture) {
-        return mixture.hasUsableMolecule(cation, minConcentration * cation.getCharge(), maxConcentration * cation.getCharge(), (molecule) -> molecule == anion) && mixture.hasUsableMolecule(anion, minConcentration * -anion.getCharge(), maxConcentration * -anion.getCharge(), (molecule) -> molecule == cation);
+        return mixture.hasUsableMolecule(
+            cation,
+            minConcentration * cation.getCharge(),
+            maxConcentration * cation.getCharge(),
+            (molecule) -> molecule == anion
+        ) && mixture.hasUsableMolecule(
+            anion,
+            minConcentration * -anion.getCharge(),
+            maxConcentration * -anion.getCharge(),
+            (molecule) -> molecule == cation
+        );
     };
 
     @Override

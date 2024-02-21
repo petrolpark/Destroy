@@ -28,7 +28,9 @@ public class CentrifugationRecipeHandler implements IDestroyRecipeHandler<Centri
             "<recipetype:destroy:centrifugation>.addRecipe(\"%s\", <constant:create:heat_condition:%s>, %s, [%s]);",
             recipe.getId(),
             recipe.getRequiredHeat().name().toLowerCase(Locale.ENGLISH),
-            recipe.getRequiredFluid(),
+            CTDestroy.getMatchingFluidStacks(recipe.getRequiredFluid()).stream()
+                .map(IFluidStack::getCommandString)
+                .collect(Collectors.joining(", ")),
             recipe.getFluidResults()
                 .stream()
                 .map(fluid -> IFluidStack.of(fluid).getCommandString())

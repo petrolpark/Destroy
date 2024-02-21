@@ -23,7 +23,7 @@ public class MoleculeTagFluidIngredient extends ConcentrationRangeFluidIngredien
 
     public static final Type TYPE = new Type();
 
-    protected MoleculeTag tag;
+    public MoleculeTag tag;
 
     public MoleculeTagFluidIngredient(MoleculeTag tag, float minConc, float maxConc) {
         this.tag = tag;

@@ -577,7 +577,7 @@ public class Mixture extends ReadOnlyMixture {
         reactionResults.replaceAll((reactionResult, molesPerBucket) -> molesPerBucket / volumeIncreaseFactor);
     };
 
-    public static record Phases(Mixture gasMixture, Double gasVolume, Mixture liquidMixture, Double liquidVolume) {};
+    public record Phases(Mixture gasMixture, Double gasVolume, Mixture liquidMixture, Double liquidVolume) {};
 
     /**
      * Get two new Mixtures from one - one containing all gas, one containing all liquid.

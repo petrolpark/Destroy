@@ -22,7 +22,7 @@ public class MoleculeFluidIngredient extends ConcentrationRangeFluidIngredient<M
 
     public static final Type TYPE = new Type();
 
-    protected Molecule molecule;
+    public Molecule molecule;
 
     @Override
     public MixtureFluidIngredientSubType<MoleculeFluidIngredient> getType() {

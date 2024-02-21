@@ -2,6 +2,7 @@ package com.petrolpark.destroy.compat.crafttweaker.recipes.handler;
 
 import com.blamejared.crafttweaker.api.fluid.CTFluidIngredient;
 import com.blamejared.crafttweaker.api.fluid.IFluidStack;
+import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.recipe.component.BuiltinRecipeComponents;
 import com.blamejared.crafttweaker.api.recipe.component.IDecomposedRecipe;
 import com.blamejared.crafttweaker.api.recipe.handler.IRecipeHandler;
@@ -13,10 +14,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @IRecipeHandler.For(DistillationRecipe.class)
@@ -25,13 +23,15 @@ public class DistillationRecipeHandler implements IDestroyRecipeHandler<Distilla
     public String dumpToCommandString(IRecipeManager<? super DistillationRecipe> manager, DistillationRecipe recipe) {
         return String.format(
             "<recipetype:destroy:distillation>.addRecipe(\"%s\", <constant:create:heat_condition:%s>, %s, [%s]);",
-                recipe.getId(),
-                recipe.getRequiredHeat().name().toLowerCase(Locale.ENGLISH),
-                recipe.getRequiredFluid(),
-                recipe.getFluidResults()
-                    .stream()
-                    .map(fluid -> IFluidStack.of(fluid).getCommandString())
-                    .collect(Collectors.joining(", "))
+            recipe.getId(),
+            recipe.getRequiredHeat().name().toLowerCase(Locale.ENGLISH),
+            CTDestroy.getMatchingFluidStacks(recipe.getRequiredFluid()).stream()
+                .map(IFluidStack::getCommandString)
+                .collect(Collectors.joining(", ")),
+            recipe.getFluidResults()
+                .stream()
+                .map(fluid -> IFluidStack.of(fluid).getCommandString())
+                .collect(Collectors.joining(", "))
         );
     }
 

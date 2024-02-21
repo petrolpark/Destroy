@@ -1,12 +1,8 @@
 package com.petrolpark.destroy.chemistry;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.function.Function;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -79,12 +75,14 @@ public class ReadOnlyMixture {
      */
     protected Map<Molecule, Float> states;
 
+    public static final float BASE_TEMPERATURE = 298f;
+
     public ReadOnlyMixture() {
         translationKey = "";
     
         contents = new HashMap<>();
         
-        temperature = 298f;
+        temperature = BASE_TEMPERATURE;
 
         states = new HashMap<>();
     };
@@ -94,7 +92,7 @@ public class ReadOnlyMixture {
      */
     public CompoundTag writeNBT() {
         CompoundTag compound = new CompoundTag();
-        if (translationKey != "" && translationKey != null) {
+        if (!Objects.equals(translationKey, "") && translationKey != null) {
             compound.putString("TranslationKey", translationKey);
         };
         compound.putFloat("Temperature", temperature);
@@ -265,10 +263,10 @@ public class ReadOnlyMixture {
      * (Used for debugging).
      */
     public String getContentsString() {
-        String string = "";
-        if (contents.isEmpty()) return string;
+        StringBuilder string = new StringBuilder();
+        if (contents.isEmpty()) return string.toString();
         for (Entry<Molecule, Float> entry : contents.entrySet()) {
-            string += entry.getKey().getFullID() + " (" + entry.getValue() + "M), ";
+            string.append(entry.getKey().getFullID()).append(" (").append(entry.getValue()).append("M), ");
         };
         return string.substring(0, string.length() - 2);
     };
