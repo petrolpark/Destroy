@@ -14,12 +14,7 @@ public class AgingRecipe extends SingleFluidRecipe {
     @Override
     protected int getMaxInputCount() {
         return 2;
-    };
-
-    @Override
-    protected int getMaxOutputCount() {
-        return 0;
-    };
+    }
 
     @Override
     protected int getMaxFluidOutputCount() {
@@ -35,5 +30,4 @@ public class AgingRecipe extends SingleFluidRecipe {
     public String getRecipeTypeName() {
         return "aging";
     };
-    
 }
