@@ -67,7 +67,7 @@ public class CTMixture {
         ReadOnlyMixture resulting = ingredient.getMixtureOfRightConcentration(molecule);
         CompoundTag tag = getTag(ingredient);
         tag.put("Mixture", resulting.writeNBT());
-        IFluidStack stack = IFluidStack.ofMutable(DestroyFluids.MIXTURE.get(), amount, tag);
+        IFluidStack stack = IFluidStack.of(DestroyFluids.MIXTURE.get(), amount, tag);
         CTDestroy.getLogger().info(tag.toString());
         return new CTFluidIngredient.FluidStackIngredient(stack);
     }

@@ -88,6 +88,10 @@ public abstract class FluidIngredientMixin {
 		return ingredient;
 	};
 
+	/**
+	 * @author
+	 * @reason
+	 */
 	@Overwrite(remap = false)
 	public void write(FriendlyByteBuf buffer) {
 		FluidIngredient $this = (FluidIngredient)(Object)this;
@@ -105,6 +109,10 @@ public abstract class FluidIngredientMixin {
 		((FluidIngredientAccessor)this).invokeWriteInternal(buffer);
 	};
 
+	/**
+	 * @author
+	 * @reason
+	 */
 	@Overwrite(remap = false)
 	public static FluidIngredient read(FriendlyByteBuf buffer) {
 		String ingredientType = buffer.readUtf();
