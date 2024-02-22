@@ -1,6 +1,7 @@
 package com.petrolpark.destroy.compat.crafttweaker.natives;
 
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import com.blamejared.crafttweaker.api.util.random.Percentaged;
 import com.blamejared.crafttweaker_annotations.annotations.Document;
 import com.blamejared.crafttweaker_annotations.annotations.NativeTypeRegistration;
 import com.petrolpark.destroy.chemistry.Atom;
@@ -166,5 +167,20 @@ public class CTMolecule {
     @ZenCodeType.Method
     public static List<Reaction> getProductReactions(Molecule internal) {
         return internal.getProductReactions();
+    }
+
+    @ZenCodeType.Getter("commandString")
+    public static String getCommandString(Molecule expanded) {
+        return "<molecule:%s>".formatted(expanded.getFullID());
+    }
+
+    @ZenCodeType.Operator(ZenCodeType.OperatorType.MUL)
+    public static Percentaged<Molecule> opMul(Molecule expanded, double amount) {
+        return new Percentaged<>(expanded, amount, CTMolecule::getCommandString);
+    }
+
+    @ZenCodeType.Caster(implicit = true)
+    public static Percentaged<Molecule> castPercentaged(Molecule expanded) {
+        return opMul(expanded, 100.0D);
     }
 }

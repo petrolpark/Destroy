@@ -34,11 +34,14 @@ public class CTMoleculeManager {
 
     @ZenCodeType.Method
     @BracketResolver("molecule")
-    public static Object getMolecule(String tokens) {
-        if(tokens.startsWith("tag:")) {
-            return MoleculeTag.MOLECULE_TAGS.get(tokens.replaceFirst("tag:", ""));
-        }
+    public static Molecule getMolecule(String tokens) {
         return getMoleculeById(tokens);
+    }
+
+    @ZenCodeType.Method
+    @BracketResolver("moleculetag")
+    public static MoleculeTag getMoleculeTag(String tokens) {
+        return MoleculeTag.MOLECULE_TAGS.get(tokens);
     }
 
     @ZenCodeType.Method

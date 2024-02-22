@@ -4,6 +4,7 @@ import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.annotation.BracketResolver;
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker_annotations.annotations.Document;
+import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.Reaction;
 import com.petrolpark.destroy.compat.crafttweaker.action.RemoveMoleculeAction;
 import com.petrolpark.destroy.compat.crafttweaker.action.RemoveReactionAction;

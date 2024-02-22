@@ -12,7 +12,7 @@ public class AddReactionAction extends DestroyAction {
     }
     @Override
     public void undo() {
-        Reaction.REACTIONS.remove(reaction.getFullID());
+        Reaction.unregisterReaction(reaction);
         ReactionCategory.RECIPES.remove(reaction);
     }
 

@@ -696,14 +696,8 @@ public class Reaction {
             };
 
             if (!generated) {
-                for (Molecule reactant : reaction.reactants.keySet()) {
-                    reactant.addReactantReaction(reaction);
-                };
-                for (Molecule product : reaction.products.keySet()) {
-                    product.addProductReaction(reaction);
-                };
-                REACTIONS.put(reaction.getFullID(), reaction);
-            };
+                unregisterReaction(reaction);
+            }
             
             return reaction;
         };
@@ -737,6 +731,36 @@ public class Reaction {
             return reactionString.toString();
         };
     };
+
+    public static void registerReaction(Reaction reaction) {
+        if(reaction == null) {
+            Destroy.LOGGER.warn("Tried to register a null reaction");
+            return;
+        }
+        Reaction.REACTIONS.put(reaction.getFullID(), reaction);
+        for(Molecule product : reaction.getProducts()) {
+            product.addProductReaction(reaction);
+        }
+
+        for(Molecule reactant : reaction.getReactants()) {
+            reactant.addReactantReaction(reaction);
+        }
+    }
+
+    public static void unregisterReaction(Reaction reaction) {
+        if(reaction == null) {
+            Destroy.LOGGER.warn("Tried to unregister a null reaction");
+            return;
+        }
+        Reaction.REACTIONS.remove(reaction.getFullID());
+        for(Molecule product : reaction.products.keySet()) {
+            product.removeProductReaction(reaction);
+        }
+
+        for(Molecule reactant : reaction.reactants.keySet()) {
+            reactant.removeReactantReaction(reaction);
+        }
+    }
 
     @Override
     public int hashCode() {

@@ -15,7 +15,7 @@ public class RemoveReactionAction extends DestroyAction {
 
     @Override
     public void undo() {
-        Reaction.REACTIONS.put(reaction.getFullID(), reaction);
+        Reaction.registerReaction(reaction);
         if(reactionRecipe != null) {
             ReactionCategory.RECIPES.put(reaction, reactionRecipe);
         }
@@ -33,7 +33,7 @@ public class RemoveReactionAction extends DestroyAction {
 
     @Override
     public void apply() {
-        Reaction.REACTIONS.remove(reaction.getFullID());
+        Reaction.unregisterReaction(reaction);
         ReactionCategory.RECIPES.remove(reaction);
     }
 }

@@ -183,7 +183,7 @@ dependencies {
 
     // CraftTweaker
     var tweaker = "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${crafttweaker_version}"
-    compileOnly fg.deobf(tweaker)
+    implementation fg.deobf(tweaker)
     annotationProcessor(tweaker)
     compileOnly("com.blamejared.crafttweaker:CraftTweaker-common-${minecraft_version}:${crafttweaker_version}")
     // ANNOTATION PROCESSORS

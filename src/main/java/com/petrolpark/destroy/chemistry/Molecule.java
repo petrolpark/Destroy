@@ -410,6 +410,14 @@ public class Molecule implements INameableProduct {
         if (reaction.containsProduct(this)) productReactions.add(reaction);
     };
 
+    public void removeProductReaction(Reaction reaction) {
+        productReactions.remove(reaction);
+    }
+
+    public void removeReactantReaction(Reaction reaction) {
+        reactantReactions.remove(reaction);
+    }
+
     /**
      * Get the list of {@link Reaction Reactions} of which this Molecule is a necessary Reactant.
      * @return List of Reactions ordered by declaration

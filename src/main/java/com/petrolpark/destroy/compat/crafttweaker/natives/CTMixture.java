@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.compat.crafttweaker.natives;
 
+import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.fluid.CTFluidIngredient;
 import com.blamejared.crafttweaker.api.fluid.IFluidStack;
@@ -7,10 +8,13 @@ import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.util.random.Percentaged;
 import com.blamejared.crafttweaker_annotations.annotations.Document;
 import com.blamejared.crafttweaker_annotations.annotations.NativeTypeRegistration;
+import com.petrolpark.destroy.Destroy;
+import com.petrolpark.destroy.block.DestroyCauldronInteractions;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.MoleculeTag;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
+import com.petrolpark.destroy.compat.crafttweaker.CTDestroy;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.ingredient.*;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
@@ -19,6 +23,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import org.openzen.zencode.java.ZenCodeType;
+import org.openzen.zenscript.codemodel.OperatorType;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -58,13 +63,22 @@ public class CTMixture {
     }
 
     @ZenCodeType.StaticExpansionMethod
+    public static CTFluidIngredient createMoleculeFluidIngredient(Percentaged<Molecule> moleculeData, @ZenCodeType.OptionalInt(1000) int amount) {
+        return createMoleculeFluidIngredient(moleculeData.getData(), (float) moleculeData.getPercentage(), amount);
+    }
+
+    @ZenCodeType.StaticExpansionMethod
     public static CTFluidIngredient createMoleculeFluidIngredient(Molecule molecule, float concentration, @ZenCodeType.OptionalInt(1000) int amount) {
-        MoleculeFluidIngredient result = new MoleculeFluidIngredient();
-        result.molecule = molecule;
-        result.setConcentrations(concentration);
-        FluidStack fluidStack = new FluidStack(DestroyFluids.MIXTURE.get(), amount);
-        result.addNBT(fluidStack.getOrCreateTag());
-        return new CTFluidIngredient.FluidStackIngredient(IFluidStack.of(fluidStack));
+        MoleculeFluidIngredient ingredient = new MoleculeFluidIngredient();
+        ingredient.molecule = molecule;
+        ingredient.setConcentrations(concentration);
+        ReadOnlyMixture resulting = ingredient.getMixtureOfRightConcentration(molecule);
+        CompoundTag tag = new CompoundTag();
+        ingredient.addNBT(tag);
+        tag.put("Mixture", resulting.writeNBT());
+        tag.putString("MixtureFluidIngredientSubtype", ingredient.getType().getMixtureFluidIngredientSubtype());
+        IFluidStack stack = IFluidStack.ofMutable(DestroyFluids.MIXTURE.get(), amount, tag);
+        return new CTFluidIngredient.FluidStackIngredient(stack);
     }
 
     @ZenCodeType.StaticExpansionMethod
@@ -198,5 +212,15 @@ public class CTMixture {
     @ZenCodeType.Method
     public static List<Component> getContentsTooltip(Mixture internal, boolean iupac, boolean monospace, boolean useMoles, int amount, DecimalFormat concentrationFormatter) {
         return internal.getContentsTooltip(iupac, monospace, useMoles, amount, concentrationFormatter);
+    }
+
+    @ZenCodeType.Operator(ZenCodeType.OperatorType.MUL)
+    public static IFluidStack mulMod(Mixture internal, int amount) {
+        return createMixtureStack(internal, amount);
+    }
+
+    @ZenCodeType.Caster(implicit = true)
+    public static IFluidStack castToFluid(Mixture expanded) {
+        return mulMod(expanded, 1000);
     }
 }
