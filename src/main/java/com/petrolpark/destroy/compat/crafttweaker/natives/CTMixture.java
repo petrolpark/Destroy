@@ -1,15 +1,11 @@
 package com.petrolpark.destroy.compat.crafttweaker.natives;
 
-import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.fluid.CTFluidIngredient;
 import com.blamejared.crafttweaker.api.fluid.IFluidStack;
-import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.util.random.Percentaged;
 import com.blamejared.crafttweaker_annotations.annotations.Document;
 import com.blamejared.crafttweaker_annotations.annotations.NativeTypeRegistration;
-import com.petrolpark.destroy.Destroy;
-import com.petrolpark.destroy.block.DestroyCauldronInteractions;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.MoleculeTag;
@@ -17,19 +13,15 @@ import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
 import com.petrolpark.destroy.compat.crafttweaker.CTDestroy;
 import com.petrolpark.destroy.fluid.DestroyFluids;
 import com.petrolpark.destroy.fluid.ingredient.*;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import org.openzen.zencode.java.ZenCodeType;
-import org.openzen.zenscript.codemodel.OperatorType;
 
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.OptionalInt;
 import java.util.function.Predicate;
 
 @ZenRegister
@@ -73,45 +65,49 @@ public class CTMixture {
         ingredient.molecule = molecule;
         ingredient.setConcentrations(concentration);
         ReadOnlyMixture resulting = ingredient.getMixtureOfRightConcentration(molecule);
-        CompoundTag tag = new CompoundTag();
-        ingredient.addNBT(tag);
+        CompoundTag tag = getTag(ingredient);
         tag.put("Mixture", resulting.writeNBT());
-        tag.putString("MixtureFluidIngredientSubtype", ingredient.getType().getMixtureFluidIngredientSubtype());
         IFluidStack stack = IFluidStack.ofMutable(DestroyFluids.MIXTURE.get(), amount, tag);
+        CTDestroy.getLogger().info(tag.toString());
         return new CTFluidIngredient.FluidStackIngredient(stack);
     }
 
     @ZenCodeType.StaticExpansionMethod
     public static CTFluidIngredient createSaltFluidIngredient(Molecule cation, Molecule anion, float concentration, @ZenCodeType.OptionalInt(1000) int amount) {
-        SaltFluidIngredient result = new SaltFluidIngredient();
-        result.cation = cation;
-        result.anion = anion;
-        result.setConcentrations(concentration);
-        FluidStack fluidStack = new FluidStack(DestroyFluids.MIXTURE.get(), amount);
-        result.addNBT(fluidStack.getOrCreateTag());
-        return new CTFluidIngredient.FluidStackIngredient(IFluidStack.of(fluidStack));
+        SaltFluidIngredient ingredient = new SaltFluidIngredient();
+        ingredient.cation = cation;
+        ingredient.anion = anion;
+        ingredient.setConcentrations(concentration);
+        CompoundTag tag = getTag(ingredient);
+        IFluidStack stack = IFluidStack.of(DestroyFluids.MIXTURE.get(), amount, tag);
+        return new CTFluidIngredient.FluidStackIngredient(stack);
     }
 
     @ZenCodeType.StaticExpansionMethod
     public static CTFluidIngredient createMoleculeTagFluidIngredient(MoleculeTag tag, float concentration, @ZenCodeType.OptionalInt(1000) int amount) {
-        MoleculeTagFluidIngredient result = new MoleculeTagFluidIngredient();
-        result.tag = tag;
-        result.setConcentrations(concentration);
-        FluidStack fluidStack = new FluidStack(DestroyFluids.MIXTURE.get(), amount);
-        result.addNBT(fluidStack.getOrCreateTag());
-        return new CTFluidIngredient.FluidStackIngredient(IFluidStack.of(fluidStack));
+        MoleculeTagFluidIngredient ingredient = new MoleculeTagFluidIngredient();
+        ingredient.tag = tag;
+        ingredient.setConcentrations(concentration);
+        CompoundTag resultTag = getTag(ingredient);
+        IFluidStack stack = IFluidStack.of(DestroyFluids.MIXTURE.get(), amount, resultTag);
+        return new CTFluidIngredient.FluidStackIngredient(stack);
     }
 
     @ZenCodeType.StaticExpansionMethod
     public static CTFluidIngredient createIonFluidIngredient(float concentration, @ZenCodeType.OptionalInt(1000) int amount) {
-        IonFluidIngredient result = new IonFluidIngredient();
-        result.setConcentrations(concentration);
-        FluidStack fluidStack = new FluidStack(DestroyFluids.MIXTURE.get(), amount);
-        result.addNBT(fluidStack.getOrCreateTag());
-        return new CTFluidIngredient.FluidStackIngredient(IFluidStack.of(fluidStack));
+        IonFluidIngredient ingredient = new IonFluidIngredient();
+        ingredient.setConcentrations(concentration);
+        CompoundTag tag = getTag(ingredient);
+        IFluidStack stack = IFluidStack.of(DestroyFluids.MIXTURE.get(), amount, tag);
+        return new CTFluidIngredient.FluidStackIngredient(stack);
     }
 
-//    private static Mixture internal, ;
+    private static CompoundTag getTag(MixtureFluidIngredient<?> ingredient) {
+        CompoundTag tag = new CompoundTag();
+        ingredient.addNBT(tag);
+        tag.putString("MixtureFluidIngredientSubtype", ingredient.getType().getMixtureFluidIngredientSubtype());
+        return tag;
+    }
 
     @ZenCodeType.StaticExpansionMethod
     public static Mixture pure(Molecule molecule) {

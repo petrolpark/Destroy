@@ -593,6 +593,7 @@ public class DestroyCommonEvents {
         // Fill Test Tubes from any Fluid-containing block
         if (stack.getItem() instanceof TestTubeItem && TestTubeItem.isEmpty(stack) && player.isCreative()) {
             BlockEntity be = level.getBlockEntity(pos);
+            if(be == null) return; // fix a crash
             if (!(be instanceof VatSideBlockEntity) && !(be instanceof VatControllerBlockEntity) && be.getCapability(ForgeCapabilities.FLUID_HANDLER, event.getFace()).map(handler -> {
                 FluidStack drained = handler.drain(200, FluidAction.SIMULATE);
                 if (DestroyFluids.isMixture(drained)) {
