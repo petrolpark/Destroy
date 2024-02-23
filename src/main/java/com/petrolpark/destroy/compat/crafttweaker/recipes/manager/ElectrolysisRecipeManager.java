@@ -5,13 +5,11 @@ import com.blamejared.crafttweaker.api.action.recipe.ActionAddRecipe;
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.fluid.CTFluidIngredient;
 import com.blamejared.crafttweaker.api.fluid.IFluidStack;
-import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.ingredient.IIngredientWithAmount;
 import com.blamejared.crafttweaker.api.item.IItemStack;
 import com.blamejared.crafttweaker.api.util.random.Percentaged;
 import com.blamejared.crafttweaker_annotations.annotations.Document;
 import com.petrolpark.destroy.compat.crafttweaker.CTDestroy;
-import com.petrolpark.destroy.recipe.ChargingRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.recipe.ElectrolysisRecipe;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
@@ -31,7 +29,7 @@ import java.util.List;
 public class ElectrolysisRecipeManager implements IDestroyRecipeManager<ElectrolysisRecipe> {
 
     /**
-     * Adds a mixing recipe that outputs ItemStacks.
+     * Adds an Electrolysis recipe that outputs ItemStacks.
      *
      * @param name        The name of the recipe.
      * @param heat        The required heat of the recipe.
@@ -40,7 +38,7 @@ public class ElectrolysisRecipeManager implements IDestroyRecipeManager<Electrol
      * @param fluidInputs The optional fluid inputs of the recipe.
      * @param duration    The duration of the recipe in ticks.
      *
-     * @docParam name "mixed"
+     * @docParam name "electrolysed"
      * @docParam heat <constant:create:heat_condition:heated>
      * @docParam outputs [<item:minecraft:diamond> % 50, <item:minecraft:apple>, (<item:minecraft:dirt> * 2) % 12]
      * @docParam itemInputs [<item:minecraft:glass> * 2]
@@ -78,7 +76,7 @@ public class ElectrolysisRecipeManager implements IDestroyRecipeManager<Electrol
     }
 
     /**
-     * Adds a mixing recipe that outputs FluidStacks.
+     * Adds an electrolysis recipe that outputs FluidStacks.
      *
      * @param name        The name of the recipe.
      * @param heat        The required heat of the recipe.
@@ -87,7 +85,7 @@ public class ElectrolysisRecipeManager implements IDestroyRecipeManager<Electrol
      * @param fluidInputs The optional fluid inputs of the recipe.
      * @param duration    The duration of the recipe in ticks.
      *
-     * @docParam name "fluid_mixed"
+     * @docParam name "fluid_electrolysed"
      * @docParam heat <constant:create:heat_condition:none>
      * @docParam outputs [<fluid:minecraft:water> * 200]
      * @docParam itemInputs [<item:minecraft:glass> * 2]

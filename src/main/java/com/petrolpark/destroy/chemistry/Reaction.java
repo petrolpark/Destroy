@@ -737,7 +737,7 @@ public class Reaction {
             Destroy.LOGGER.warn("Tried to register a null reaction");
             return;
         }
-        Reaction.REACTIONS.put(reaction.getFullID(), reaction);
+        addReaction(reaction);
         for(Molecule product : reaction.getProducts()) {
             product.addProductReaction(reaction);
         }
@@ -752,7 +752,7 @@ public class Reaction {
             Destroy.LOGGER.warn("Tried to unregister a null reaction");
             return;
         }
-        Reaction.REACTIONS.remove(reaction.getFullID());
+        removeReaction(reaction);
         for(Molecule product : reaction.products.keySet()) {
             product.removeProductReaction(reaction);
         }
@@ -760,6 +760,22 @@ public class Reaction {
         for(Molecule reactant : reaction.reactants.keySet()) {
             reactant.removeReactantReaction(reaction);
         }
+    }
+
+    /**
+     * Makes reaction visible to the rest of the code. Does nothing else
+     * @param reaction Reaction to make visible
+     */
+    public static void addReaction(Reaction reaction) {
+        REACTIONS.put(reaction.getFullID(), reaction);
+    }
+
+    /**
+     * Makes reaction not possible to do in a vat. Does nothing else
+     * @param reaction Reaction to make invisible
+     */
+    public static void removeReaction(Reaction reaction) {
+        REACTIONS.remove(reaction.getFullID());
     }
 
     @Override

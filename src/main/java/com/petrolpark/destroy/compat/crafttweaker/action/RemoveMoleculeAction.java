@@ -11,7 +11,7 @@ public class RemoveMoleculeAction extends DestroyAction {
     }
     @Override
     public void undo() {
-        Molecule.MOLECULES.put(molecule.getFullID(), molecule);
+        Molecule.addMolecule(molecule);
     }
 
     @Override
@@ -26,6 +26,6 @@ public class RemoveMoleculeAction extends DestroyAction {
 
     @Override
     public void apply() {
-        Molecule.MOLECULES.remove(molecule.getFullID());
+        Molecule.removeMolecule(molecule);
     }
 }

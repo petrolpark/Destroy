@@ -11,7 +11,7 @@ public class AddMoleculeAction extends DestroyAction {
     }
     @Override
     public void undo() {
-        Molecule.MOLECULES.remove(molecule.getFullID());
+        Molecule.removeMolecule(molecule);
     }
 
     @Override

@@ -542,6 +542,26 @@ public class Molecule implements INameableProduct {
         return renderer;
     };
 
+    public static void addMolecule(Molecule molecule) {
+        MOLECULES.put(molecule.getFullID(), molecule);
+        for(Reaction reaction : molecule.reactantReactions) {
+            Reaction.addReaction(reaction);
+        }
+        for(Reaction reaction : molecule.productReactions) {
+            Reaction.addReaction(reaction);
+        }
+    }
+
+    public static void removeMolecule(Molecule molecule) {
+        MOLECULES.remove(molecule.getFullID());
+        for(Reaction reaction : molecule.reactantReactions) {
+            Reaction.removeReaction(reaction);
+        }
+        for(Reaction reaction : molecule.productReactions) {
+            Reaction.removeReaction(reaction);
+        }
+    }
+
     /**
      * A class for constructing {@link Molecule Molecules}. This is typically used for:<ul>
      * <li>Declaring known Molecules ({@link DestroyMolecules example})</li>

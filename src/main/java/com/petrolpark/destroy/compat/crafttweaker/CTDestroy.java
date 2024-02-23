@@ -51,7 +51,6 @@ public class CTDestroy {
         return FluidIngredient.fromFluidStack(stack.getInternal());
     }
 
-
     public static Percentaged<IItemStack> mapProcessingResult(ProcessingOutput result) {
         return IItemStack.of(result.getStack()).percent(result.getChance() * 100);
     }

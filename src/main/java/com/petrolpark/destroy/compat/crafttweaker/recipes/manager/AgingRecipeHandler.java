@@ -20,8 +20,22 @@ import org.openzen.zencode.java.ZenCodeType;
 @ZenCodeType.Name("mods.destroy.AgingManager")
 public class AgingRecipeHandler implements IDestroyRecipeManager<AgingRecipe> {
 
+    /**
+     * Adds an aging recipe to the aging barrel
+     * @param name Name of the recipe
+     * @param input Input fluid of the recipe
+     * @param items Additional items to the aging process
+     * @param result Resulting fluid
+     * @param processingTime Processing time of the recipe in ticks
+     *
+     * @docParam name "wine_aging"
+     * @docParam input <fluid:minecraft:water>
+     * @docParam items [<item:minecraft:apple>, <item:minecraft:bonemeal>]
+     * @docParam result <fluid:minecraft:lava> per 1 bucket of input
+     * @docParam processingTime 1200
+     */
     @ZenCodeType.Method
-    public void addRecipe(String name, CTFluidIngredient input, IIngredient[] items, IFluidStack result) {
+    public void addRecipe(String name, CTFluidIngredient input, IIngredient[] items, IFluidStack result, @ZenCodeType.OptionalInt(1200) int processingTime) {
         name = fixRecipeName(name);
         ResourceLocation resourceLocation = new ResourceLocation("crafttweaker", name);
         ProcessingRecipeBuilder<AgingRecipe> builder = new ProcessingRecipeBuilder<>(getSerializer().getFactory(), resourceLocation);

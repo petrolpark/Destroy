@@ -22,6 +22,16 @@ import org.openzen.zencode.java.ZenCodeType;
 @ZenCodeType.Name("mods.destroy.ChargingManager")
 public class ChargingRecipeManager implements IDestroyRecipeManager<ChargingRecipe> {
 
+    /**
+     * Adds a recipe to the dynamo machine. (This feature is likely to get removed or heavily modified in future release of Destroy)
+     * @param name Name of the recipe
+     * @param input Item to charge
+     * @param output Output item
+     *
+     * @docParam name "charge_iron"
+     * @docParam input <item:minecraft:coal>
+     * @docParam output <item:minecraft:iron_ingot>
+     */
     @ZenCodeType.Method
     public void addRecipe(String name, IIngredient input, IItemStack output) {
         name = fixRecipeName(name);

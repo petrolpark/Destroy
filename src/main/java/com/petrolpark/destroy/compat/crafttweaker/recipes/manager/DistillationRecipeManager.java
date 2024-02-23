@@ -13,6 +13,7 @@ import com.petrolpark.destroy.recipe.DistillationRecipe;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import org.openzen.zencode.java.ZenCodeType;
 
@@ -22,15 +23,22 @@ import org.openzen.zencode.java.ZenCodeType;
 public class DistillationRecipeManager implements IDestroyRecipeManager<DistillationRecipe> {
 
     /**
-     * Adds recipe to the destillation tower
+     * Adds recipe to the distillation tower.
      * @param name Name of the recipe
      * @param heat Heat required
-     * @param input Input fluid (DOES NOT ALLOW MIXTURES)
-     * @param fractions How much of other fluids should be created per 1 mB of input fluid
+     * @param input Input fluid, can't be a mixture
+     * @param fractions How much of other fluids should be created per 1 mB of input
+     *
+     * @docParam name "distill_fluid"
+     * @docParam heat <constant:create:heat_condition:none>
+     * @docParam input <fluid:minecraft:lava>
      */
     @ZenCodeType.Method
     public void addRecipe(String name, HeatCondition heat, CTFluidIngredient input, IFluidStack[] fractions) {
         name = fixRecipeName(name);
+
+        checkMixture(input);
+
         ResourceLocation resourceLocation = new ResourceLocation("crafttweaker", name);
         ProcessingRecipeBuilder<DistillationRecipe> builder = new ProcessingRecipeBuilder<>(getSerializer().getFactory(), resourceLocation);
         builder.withFluidIngredients(CTDestroy.mapFluidIngredients(input));
@@ -40,6 +48,7 @@ public class DistillationRecipeManager implements IDestroyRecipeManager<Distilla
         builder.requiresHeat(heat);
         CraftTweakerAPI.apply(new ActionAddRecipe<>(this, builder.build()));
     }
+
     @Override
     public DestroyRecipeTypes getDestroyRecipeType() {
         return DestroyRecipeTypes.DISTILLATION;
