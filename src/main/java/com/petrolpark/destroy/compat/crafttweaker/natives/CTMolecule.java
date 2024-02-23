@@ -141,9 +141,9 @@ public class CTMolecule {
     }
 
     /**
-     * Mark this Molecule as being a necessary reactant in the given {@link Reaction}.
-     * There should never be any need to call this method (it is done automatically when {@link Reaction.ReactionBuilder#build building} a Reaction).
-     * @param reaction
+     * Mark this Molecule as being a necessary reactant in the given {@link CTReaction}.
+     * There should never be any need to call this method (it is done automatically when {@link CTReactionBuilder#build building} a Reaction).
+     * @param reaction Reaction
      */
 
     @ZenCodeType.Method
@@ -152,7 +152,7 @@ public class CTMolecule {
     }
 
     /**
-     * Get the list of {@link Reaction Reactions} of which this Molecule is a necessary Reactant.
+     * Get the list of {@link CTReaction} of which this Molecule is a necessary Reactant.
      * @return List of Reactions ordered by declaration
      */
     @ZenCodeType.Method
@@ -161,7 +161,7 @@ public class CTMolecule {
     }
 
     /**
-     * Get the list of {@link Reaction Reactions} by which this Molecule is made.
+     * Get the list of {@link CTReaction} by which this Molecule is made.
      * @return List of Reactions ordered by declaration
      */
     @ZenCodeType.Method

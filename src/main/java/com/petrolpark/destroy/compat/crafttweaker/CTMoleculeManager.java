@@ -20,7 +20,7 @@ import org.openzen.zencode.java.ZenCodeType;
  * Use {@link CTMoleculeManager#create(String)} to create a {@link com.petrolpark.destroy.compat.crafttweaker.natives.CTMoleculeBuilder}
  * if you want to create your own molecule
  * <p>
- * Use {@link CTMoleculeManager#removeMolecule(Molecule)} to remove a molecule (all reactions involving this molecule will also be removed)
+ * Use {@link CTMoleculeManager#removeMolecule(com.petrolpark.destroy.compat.crafttweaker.natives.CTMolecule)} to remove a molecule (all reactions involving this molecule will also be removed)
  */
 @ZenRegister
 @ZenCodeType.Name("mods.destroy.Molecules")
@@ -32,7 +32,7 @@ public class CTMoleculeManager {
      * @param id ID of the new molecule
      * @return The {@link com.petrolpark.destroy.compat.crafttweaker.natives.CTMoleculeBuilder}
      *
-     * @docParam "tellurium_copper"
+     * @docParam id "tellurium_copper"
      */
     @ZenCodeType.Method
     public static Molecule.MoleculeBuilder create(String id) {

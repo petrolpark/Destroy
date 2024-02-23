@@ -48,7 +48,7 @@ public class CTReaction {
     }
 
     /**
-     * Whether this Reaction needs any Item Stack as a {@link IItemReactant reactant}. Even if this is
+     * Whether this Reaction needs any Item Stack as a {@link IItemReactant}. Even if this is
      * {@code true}, the Reaction may still have {@link IItemReactant#isCatalyst Item Stack catalysts}.
      */
     @ZenCodeType.Method
@@ -57,7 +57,7 @@ public class CTReaction {
     }
 
     /**
-     * Get the {@link IItemReactant required Items} for this Reaction.
+     * Get the {@link IItemReactant} for this Reaction.
      */
     @ZenCodeType.Method
     public static List<IItemReactant> getItemReactants(Reaction internal) {
@@ -109,7 +109,7 @@ public class CTReaction {
     }
 
     /**
-     * Whether this Reaction has a {@link ReactionResult Result}.
+     * Whether this Reaction has a {@link com.petrolpark.destroy.compat.crafttweaker.natives.reactionresult.CTReactionResult}.
      */
     @ZenCodeType.Method
     public static boolean hasResult(Reaction internal) {
@@ -117,7 +117,7 @@ public class CTReaction {
     }
 
     /**
-     * The {@link ReactionResult Result} of this Reaction, which occurs once a set
+     * The {@link com.petrolpark.destroy.compat.crafttweaker.natives.reactionresult.CTReactionResult} of this Reaction, which occurs once a set
      * number of moles of Reaction have occured.
      *
      * @return {@code null} if this Reaction has no result.
@@ -164,7 +164,7 @@ public class CTReaction {
     }
 
     /**
-     * Get the stoichometric ratio of this {@link Molecule reactant} or catalyst in this Reaction.
+     * Get the stoichometric ratio of this {@link CTMolecule} or catalyst in this Reaction.
      *
      * @param reactant
      * @return {@code 0} if this Molecule is not a reactant
@@ -175,7 +175,7 @@ public class CTReaction {
     }
 
     /**
-     * Get the stoichometric ratio of this {@link Molecule product} in this Reaction.
+     * Get the stoichometric ratio of this {@link CTMolecule} in this Reaction.
      *
      * @param product
      * @return {@code 0} if this Molecule is not a product
@@ -186,7 +186,7 @@ public class CTReaction {
     }
 
     /**
-     * Get every {@link Molecule reactant} and catalyst in this Reaction, mapped to their
+     * Get every {@link CTMolecule} reactant and catalyst in this Reaction, mapped to their
      * orders in the rate equation.
      */
     @ZenCodeType.Method
