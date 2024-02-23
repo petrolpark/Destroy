@@ -60,6 +60,10 @@ public class CTDestroy {
         return new ProcessingOutput(stack.getData().getInternal(), (float) stack.getPercentage());
     }
 
+    public static ProcessingOutput mapItemStackToProcessingOutput(IItemStack stack) {
+        return new ProcessingOutput(stack.getInternal(), 1);
+    }
+
     public static <T extends ProcessingRecipe<? extends Container>> ProcessingRecipeBuilder<T> withFluidOutputs(ProcessingRecipeBuilder<T> builder, List<IFluidStack> fluidOutputs) {
 
         builder.withFluidOutputs(fluidOutputs.stream()

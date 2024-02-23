@@ -42,7 +42,7 @@ public interface IDestroyRecipeHandler<T extends ProcessingRecipe<?>> extends IR
                 .map(CTDestroy::mapProcessingResult));
         }
 
-        return String.format("<recipetype:destroy:" + getRecipeTypeName() + ">.addRecipe(\"%s\", <constant:create:heat_condition:%s>, [%s], [%s], [%s], [%s]);",
+        return String.format("<recipetype:destroy:" + getRecipeTypeName() + ">.addRecipe(\"%s\", <constant:create:heat_condition:%s>, [%s], [%s], [%s], [%s], %s);",
             recipe.getId(),
             recipe.getRequiredHeat().name().toLowerCase(Locale.ENGLISH),
             result.map(results -> results.map(Percentaged::getCommandString)
@@ -60,7 +60,8 @@ public interface IDestroyRecipeHandler<T extends ProcessingRecipe<?>> extends IR
                 .collect(Collectors.joining(", ")),
             CTDestroy.streamFluidResults(recipe)
                 .map(IFluidStack::getCommandString)
-                .collect(Collectors.joining(", "))
+                .collect(Collectors.joining(", ")),
+            recipe.getProcessingDuration()
         );
     }
     @Override

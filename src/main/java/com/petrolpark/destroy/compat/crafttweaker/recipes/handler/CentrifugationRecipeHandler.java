@@ -25,16 +25,16 @@ public class CentrifugationRecipeHandler implements IDestroyRecipeHandler<Centri
     @Override
     public String dumpToCommandString(IRecipeManager<? super CentrifugationRecipe> manager, CentrifugationRecipe recipe) {
         return String.format(
-            "<recipetype:destroy:centrifugation>.addRecipe(\"%s\", <constant:create:heat_condition:%s>, %s, [%s]);",
+            "<recipetype:destroy:centrifugation>.addRecipe(\"%s\", %s, [%s], %s);",
             recipe.getId(),
-            recipe.getRequiredHeat().name().toLowerCase(Locale.ENGLISH),
             CTDestroy.getMatchingFluidStacks(recipe.getRequiredFluid()).stream()
                 .map(IFluidStack::getCommandString)
                 .collect(Collectors.joining(", ")),
             recipe.getFluidResults()
                 .stream()
                 .map(fluid -> IFluidStack.of(fluid).getCommandString())
-                .collect(Collectors.joining(", "))
+                .collect(Collectors.joining(", ")),
+            recipe.getProcessingDuration()
         );
     }
 
@@ -47,6 +47,7 @@ public class CentrifugationRecipeHandler implements IDestroyRecipeHandler<Centri
         IDecomposedRecipe result = IDecomposedRecipe.builder()
             .with(BuiltinRecipeComponents.Input.FLUID_INGREDIENTS, List.of(IFluidStack.of(recipe.getRequiredFluid()).asFluidIngredient()))
             .with(BuiltinRecipeComponents.Output.FLUIDS, results)
+            .with(BuiltinRecipeComponents.Processing.TIME, recipe.getProcessingDuration())
             .build();
         return Optional.of(result);
     }
@@ -57,6 +58,7 @@ public class CentrifugationRecipeHandler implements IDestroyRecipeHandler<Centri
         CTFluidIngredient source = recipe.getOrThrow(BuiltinRecipeComponents.Input.FLUID_INGREDIENTS).get(0);
         builder.withFluidIngredients(CTDestroy.mapFluidIngredients(source));
         CTDestroy.withFluidOutputs(builder, recipe.getOrThrow(BuiltinRecipeComponents.Output.FLUIDS));
+        builder.duration(recipe.getOrThrow(BuiltinRecipeComponents.Processing.TIME).get(0));
         return Optional.of(builder.build());
     }
     @Override
