@@ -70,12 +70,22 @@ public class MoleculeFluidIngredient extends ConcentrationRangeFluidIngredient<M
         return List.of(getMixtureOfRightConcentration(molecule));
     };
 
-    protected static class Type extends MixtureFluidIngredientSubType<MoleculeFluidIngredient> {
+    public static class Type extends MixtureFluidIngredientSubType<MoleculeFluidIngredient> {
 
         @Override
         public MoleculeFluidIngredient getNew() {
             return new MoleculeFluidIngredient();
-        };
+        }
+
+        @Override
+        public MoleculeFluidIngredient fromNBT(CompoundTag tag) {
+            MoleculeFluidIngredient result = new MoleculeFluidIngredient();
+            result.molecule = Molecule.getMolecule(tag.getString("MoleculeRequired"));
+            result.minConcentration = tag.getFloat("MinimumConcentration");
+            result.maxConcentration = tag.getFloat("MaximumConcentration");
+            return result;
+        }
+
 
         @Override
         public String getMixtureFluidIngredientSubtype() {

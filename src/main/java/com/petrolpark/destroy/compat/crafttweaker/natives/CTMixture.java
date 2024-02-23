@@ -64,9 +64,7 @@ public class CTMixture {
         MoleculeFluidIngredient ingredient = new MoleculeFluidIngredient();
         ingredient.molecule = molecule;
         ingredient.setConcentrations(concentration);
-        ReadOnlyMixture resulting = ingredient.getMixtureOfRightConcentration(molecule);
         CompoundTag tag = getTag(ingredient);
-        tag.put("Mixture", resulting.writeNBT());
         IFluidStack stack = IFluidStack.of(DestroyFluids.MIXTURE.get(), amount, tag);
         CTDestroy.getLogger().info(tag.toString());
         return new CTFluidIngredient.FluidStackIngredient(stack);
@@ -78,8 +76,7 @@ public class CTMixture {
         ingredient.cation = cation;
         ingredient.anion = anion;
         ingredient.setConcentrations(concentration);
-        CompoundTag tag = getTag(ingredient);
-        IFluidStack stack = IFluidStack.of(DestroyFluids.MIXTURE.get(), amount, tag);
+        IFluidStack stack = IFluidStack.of(DestroyFluids.MIXTURE.get(), amount, getTag(ingredient));
         return new CTFluidIngredient.FluidStackIngredient(stack);
     }
 
@@ -88,8 +85,7 @@ public class CTMixture {
         MoleculeTagFluidIngredient ingredient = new MoleculeTagFluidIngredient();
         ingredient.tag = tag;
         ingredient.setConcentrations(concentration);
-        CompoundTag resultTag = getTag(ingredient);
-        IFluidStack stack = IFluidStack.of(DestroyFluids.MIXTURE.get(), amount, resultTag);
+        IFluidStack stack = IFluidStack.of(DestroyFluids.MIXTURE.get(), amount, getTag(ingredient));
         return new CTFluidIngredient.FluidStackIngredient(stack);
     }
 
@@ -97,8 +93,7 @@ public class CTMixture {
     public static CTFluidIngredient createIonFluidIngredient(float concentration, @ZenCodeType.OptionalInt(1000) int amount) {
         IonFluidIngredient ingredient = new IonFluidIngredient();
         ingredient.setConcentrations(concentration);
-        CompoundTag tag = getTag(ingredient);
-        IFluidStack stack = IFluidStack.of(DestroyFluids.MIXTURE.get(), amount, tag);
+        IFluidStack stack = IFluidStack.of(DestroyFluids.MIXTURE.get(), amount, getTag(ingredient));
         return new CTFluidIngredient.FluidStackIngredient(stack);
     }
 

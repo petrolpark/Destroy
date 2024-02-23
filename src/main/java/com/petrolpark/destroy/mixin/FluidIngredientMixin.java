@@ -5,6 +5,9 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraftforge.fluids.FluidStack;
+import org.checkerframework.checker.units.qual.A;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -20,13 +23,18 @@ import com.simibubi.create.foundation.fluid.FluidIngredient.FluidTagIngredient;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FluidIngredient.class)
 public abstract class FluidIngredientMixin {
 
-	private static final String
-	fluidTagMemberName = "fluidTag",
-	fluidMemberName = "fluid";
+	@Unique
+	private static final String destroy$fluidTagMemberName = "fluidTag";
+	@Unique
+	private static final String destroy$fluidMemberName = "fluid";
     
 	/**
 	 * Overwriting of {@link com.simibubi.create.foundation.fluid.FluidIngredient#isFluidIngredient FluidIngredient} to
@@ -40,7 +48,7 @@ public abstract class FluidIngredientMixin {
 		if (!je.isJsonObject())
 			return false;
 		JsonObject json = je.getAsJsonObject();
-		if (json.has(fluidTagMemberName) || json.has(fluidMemberName) || MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.keySet().stream().anyMatch(json::has)) {
+		if (json.has(destroy$fluidTagMemberName) || json.has(destroy$fluidMemberName) || MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.keySet().stream().anyMatch(json::has)) {
             return true;
         };
 		return false;
@@ -61,9 +69,9 @@ public abstract class FluidIngredientMixin {
 
 		JsonObject json = je.getAsJsonObject(); // It thinks 'je' might be null (it can't be at this point)
 		FluidIngredient ingredient = null;
-		if (json.has(fluidMemberName)) {
+		if (json.has(destroy$fluidMemberName)) {
 			ingredient = new FluidIngredient.FluidStackIngredient();
-		} else if (json.has(fluidTagMemberName)) {
+		} else if (json.has(destroy$fluidTagMemberName)) {
 			ingredient = new FluidIngredient.FluidTagIngredient();
 		//
 		
@@ -97,9 +105,9 @@ public abstract class FluidIngredientMixin {
 		FluidIngredient $this = (FluidIngredient)(Object)this;
 		String ingredientType = null;
 		if ($this instanceof FluidStackIngredient) {
-			ingredientType = fluidMemberName;
+			ingredientType = destroy$fluidMemberName;
 		} else if ($this instanceof FluidTagIngredient) {
-			ingredientType = fluidTagMemberName;
+			ingredientType = destroy$fluidTagMemberName;
 		} else if ($this instanceof MixtureFluidIngredient mixtureFluid) {
 			ingredientType = mixtureFluid.getType().getMixtureFluidIngredientSubtype();
 		};
@@ -117,9 +125,9 @@ public abstract class FluidIngredientMixin {
 	public static FluidIngredient read(FriendlyByteBuf buffer) {
 		String ingredientType = buffer.readUtf();
 		FluidIngredient ingredient = null;
-		if (ingredientType.equals(fluidMemberName)) {
+		if (ingredientType.equals(destroy$fluidMemberName)) {
 			ingredient = new FluidStackIngredient();
-		} else if (ingredientType.equals(fluidTagMemberName)) {
+		} else if (ingredientType.equals(destroy$fluidTagMemberName)) {
 			ingredient = new FluidTagIngredient();
 		} else {
 			ingredient = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(ingredientType).getNew();
@@ -128,4 +136,15 @@ public abstract class FluidIngredientMixin {
 		((FluidIngredientAccessor)ingredient).invokeReadInternal(buffer);
 		return ingredient;
 	};
+
+	@Inject(method = "fromFluidStack", at = @At("HEAD"), cancellable = true, remap = false)
+	private static void checkForCustomIngredients(FluidStack fluidStack, CallbackInfoReturnable<FluidIngredient> cir) {
+		CompoundTag tag = fluidStack.getTag();
+		if(tag == null) return;
+		String subtypeName = tag.getString("MixtureFluidIngredientSubtype");
+		if(subtypeName.isEmpty()) return;
+		MixtureFluidIngredientSubType<?> subtype = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(subtypeName);
+		if(subtype == null) return;
+		cir.setReturnValue(subtype.fromNBT(tag));
+	}
 };

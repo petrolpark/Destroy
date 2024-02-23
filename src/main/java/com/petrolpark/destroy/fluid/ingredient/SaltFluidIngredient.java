@@ -96,12 +96,22 @@ public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient<SaltF
         return List.of(mixture);
     };
 
-    protected static class Type extends MixtureFluidIngredientSubType<SaltFluidIngredient> {
+    public static class Type extends MixtureFluidIngredientSubType<SaltFluidIngredient> {
 
         @Override
         public SaltFluidIngredient getNew() {
             return new SaltFluidIngredient();
         };
+
+        @Override
+        public SaltFluidIngredient fromNBT(CompoundTag tag) {
+            SaltFluidIngredient result = new SaltFluidIngredient();
+            result.cation = Molecule.getMolecule(tag.getString("RequiredCation"));
+            result.anion = Molecule.getMolecule(tag.getString("RequiredAnion"));
+            result.minConcentration = tag.getFloat("MinimumConcentration");
+            result.maxConcentration = tag.getFloat("MaximumConcentration");
+            return result;
+        }
 
         @Override
         public String getMixtureFluidIngredientSubtype() {

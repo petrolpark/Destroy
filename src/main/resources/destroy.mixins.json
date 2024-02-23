@@ -1,5 +1,5 @@
 {
-  "required": "true",
+  "required": true,
   "package": "com.petrolpark.destroy.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "destroy.refmap.json",

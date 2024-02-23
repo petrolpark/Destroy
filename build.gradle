@@ -120,6 +120,10 @@ repositories {
         name = 'BlameJared Maven'
     }
 
+    maven {
+        url = 'https://www.jitpack.io'
+    }
+
     exclusiveContent {
         forRepository {
             maven {
@@ -187,6 +191,7 @@ dependencies {
     annotationProcessor(tweaker)
     compileOnly("com.blamejared.crafttweaker:CraftTweaker-common-${minecraft_version}:${crafttweaker_version}")
     // ANNOTATION PROCESSORS
+//    implementation fg.deobf("com.blamejared:CreateTweaker:1.0.0.12")
 
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }
