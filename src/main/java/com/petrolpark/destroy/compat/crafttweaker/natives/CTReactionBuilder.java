@@ -2,6 +2,10 @@ package com.petrolpark.destroy.compat.crafttweaker.natives;
 
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import com.blamejared.crafttweaker.api.ingredient.IIngredient;
+import com.blamejared.crafttweaker.api.item.IItemStack;
+import com.blamejared.crafttweaker.api.tag.manager.ITagManager;
+import com.blamejared.crafttweaker.api.tag.type.KnownTag;
 import com.blamejared.crafttweaker_annotations.annotations.Document;
 import com.blamejared.crafttweaker_annotations.annotations.NativeTypeRegistration;
 import com.petrolpark.destroy.chemistry.IItemReactant;
@@ -11,13 +15,12 @@ import com.petrolpark.destroy.chemistry.ReactionResult;
 import com.petrolpark.destroy.compat.crafttweaker.action.AddReactionAction;
 import net.minecraft.world.item.Item;
 import org.openzen.zencode.java.ZenCodeType;
+import org.openzen.zencode.shared.Tag;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-
-// todo: TagKey compat
 @ZenRegister
 @Document("mods/destroy/ReactionBuilder")
 @NativeTypeRegistration(value = Reaction.ReactionBuilder.class, zenCodeName = "mods.destroy.ReactionBuilder")
@@ -43,8 +46,8 @@ public class CTReactionBuilder {
     }
 
     @ZenCodeType.Method
-    public static Reaction.ReactionBuilder addItemReactant(Reaction.ReactionBuilder internal, IItemReactant itemReactant, float moles) {
-        return internal.addItemReactant(itemReactant, moles);
+    public static Reaction.ReactionBuilder addItemReactant(Reaction.ReactionBuilder internal, IItemStack itemReactant, float moles) {
+        return internal.addItemReactant(new IItemReactant.SimpleItemReactant(() -> itemReactant.getInternal().getItem()), moles);
     }
 
     @ZenCodeType.Method
@@ -52,20 +55,20 @@ public class CTReactionBuilder {
         return internal.addSimpleItemReactant(item, moles);
     }
 
-//    @ZenCodeType.Method
-//    public static Reaction.ReactionBuilder addSimpleItemTagReactant(Reaction.ReactionBuilder internal, TagKey<Item> tag, float moles) {
-//        return internal.addSimpleItemTagReactant(tag, moles);
-//    }
+    @ZenCodeType.Method
+    public static Reaction.ReactionBuilder addSimpleItemTagReactant(Reaction.ReactionBuilder internal, KnownTag<Item> tag, float moles) {
+        return internal.addSimpleItemTagReactant(tag.getTagKey(), moles);
+    }
 
     @ZenCodeType.Method
     public static Reaction.ReactionBuilder addSimpleItemCatalyst(Reaction.ReactionBuilder internal, Supplier<Item> item, float moles) {
         return internal.addSimpleItemCatalyst(item, moles);
     }
 
-//    @ZenCodeType.Method
-//    public static Reaction.ReactionBuilder addSimpleItemTagCatalyst(Reaction.ReactionBuilder internal, TagKey<Item> tag, float moles) {
-//        return internal.addSimpleItemTagCatalyst(tag, moles);
-//    }
+    @ZenCodeType.Method
+    public static Reaction.ReactionBuilder addSimpleItemTagCatalyst(Reaction.ReactionBuilder internal, KnownTag<Item> tag, float moles) {
+        return internal.addSimpleItemTagCatalyst(tag.getTagKey(), moles);
+    }
 
     @ZenCodeType.Method
     public static Reaction.ReactionBuilder requireUV(Reaction.ReactionBuilder internal) {

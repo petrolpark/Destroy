@@ -46,6 +46,7 @@ public interface IDestroyRecipeManager <T extends ProcessingRecipe<?>> extends I
             return;
         }
         CompoundTag internalTag = fluidStack.getMatchingStacks().get(0).getInternalTag();
+        if(internalTag == null) return;
         if(internalTag.contains("MaximumConcentration") || internalTag.contains("Mixture")) {
             throw new IllegalArgumentException("Input fluid cannot be a mixture");
         }

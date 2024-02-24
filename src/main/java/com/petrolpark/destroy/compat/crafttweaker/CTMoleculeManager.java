@@ -11,16 +11,22 @@ import com.petrolpark.destroy.compat.crafttweaker.action.RemoveMoleculeAction;
 import org.openzen.zencode.java.ZenCodeType;
 
 /**
- * Use Molecules to manage molecules of the mod. Use <molecule> bracket handler to query
+ * Use this class to manage molecules of the mod. Use <molecule> bracket handler to query
  * a molecule. Example: <molecule:destroy:water>
- * <p>
- * When creating a molecule, you may want to specify how does the molecule impact the environment, use
- * <moleculetag> bracket handler. Example: <moleculetag:destroy:acutely_toxic> (specifies that the molecule is toxic)
  * <p>
  * Use {@link CTMoleculeManager#create(String)} to create a {@link com.petrolpark.destroy.compat.crafttweaker.natives.CTMoleculeBuilder}
  * if you want to create your own molecule
  * <p>
- * Use {@link CTMoleculeManager#removeMolecule(com.petrolpark.destroy.compat.crafttweaker.natives.CTMolecule)} to remove a molecule (all reactions involving this molecule will also be removed)
+ * When creating a molecule, you may want to specify how does the molecule impact the environment, use
+ * <moleculetag> bracket handler. Example: <moleculetag:destroy:acutely_toxic> (specifies that the molecule is toxic)
+ * For more details on creation go to {@link com.petrolpark.destroy.compat.crafttweaker.natives.CTMoleculeBuilder}
+ * <p>
+ * Use {@link CTMoleculeManager#removeMolecule(Molecule)} to remove a molecule (all reactions involving this molecule will also be removed)
+ * <p>
+ * If you want to explicitly define a structure of molecule, you may use a structure builder. To access elements in a structure builder
+ * use <element> bracket handler. Example: <element:hydrogen>. Please note, you unfortunately can't create your own elements.
+ *
+ * @docParam this <molecule:destroy:water>
  */
 @ZenRegister
 @ZenCodeType.Name("mods.destroy.Molecules")

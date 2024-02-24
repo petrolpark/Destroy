@@ -10,6 +10,16 @@ import com.petrolpark.destroy.compat.crafttweaker.action.RemoveMoleculeAction;
 import com.petrolpark.destroy.compat.crafttweaker.action.RemoveReactionAction;
 import org.openzen.zencode.java.ZenCodeType;
 
+/**
+ * Use this class to manage Reactions of this mod. Use <reaction> bracket handler to query an existing reaction.
+ * Example: <reaction:destroy:abs_polymerization>
+ * <p>
+ * Use {@link CTReactionManager#create(String)} to create a {@link com.petrolpark.destroy.compat.crafttweaker.natives.CTReactionBuilder}
+ * if you want to create a new reaction
+ * <p>
+ * For reaction
+ * @docParam this <reaction:destroy:abs_polymerization>
+ */
 @ZenRegister
 @ZenCodeType.Name("mods.destroy.Reactions")
 @Document("mods/destroy/Reactions")
