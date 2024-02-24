@@ -696,7 +696,7 @@ public class Reaction {
             };
 
             if (!generated) {
-                unregisterReaction(reaction);
+                registerReaction(reaction);
             }
             
             return reaction;
