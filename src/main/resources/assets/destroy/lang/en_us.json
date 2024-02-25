@@ -767,7 +767,7 @@
     "destroy.reaction.tetrafluoroethene_polymerization": "PTFE Polymerization",
     "destroy.reaction.tetrafluoroethene_polymerization.description": "The {free-radical, destroy:radical} {addition polymerization, destroy:addition_polymer} of [destroy:tetrafluoroethene].",
     "destroy.reaction.toluene_nitration": "[destroy:toluene] Nitration",
-    "destroy.reaction.toluene_nitration.description": "A method for the production of [destroy:tnt] by reacting [destroy:toluene] with [destroy:nitric_acid] and [destroy:sulfuric_acid].",
+    "destroy.reaction.toluene_nitration.description": "A method for the production of [destroy:trinitrotoluene] by reacting [destroy:toluene] with [destroy:nitric_acid] and [destroy:sulfuric_acid].",
     "destroy.reaction.toluene_transalkylation": "[destroy:toluene] Transalkylation",
     "destroy.reaction.toluene_transalkylation.description": "The {transalkylation, destroy:transalkylation} of [destroy:toluene] to produce {mixed xylenes, destroy:mixed_xylenes} and [destroy:benzene].",
     "destroy.reaction.touch_powder_synthesis": "Touch Powder Synthesis",
