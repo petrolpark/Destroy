@@ -78,11 +78,12 @@ public class MoleculeFluidIngredient extends ConcentrationRangeFluidIngredient<M
         }
 
         @Override
-        public MoleculeFluidIngredient fromNBT(CompoundTag tag) {
+        public MoleculeFluidIngredient fromNBT(CompoundTag tag, int amount) {
             MoleculeFluidIngredient result = new MoleculeFluidIngredient();
             result.molecule = Molecule.getMolecule(tag.getString("MoleculeRequired"));
             result.minConcentration = tag.getFloat("MinimumConcentration");
             result.maxConcentration = tag.getFloat("MaximumConcentration");
+            result.amountRequired = amount;
             return result;
         }
 

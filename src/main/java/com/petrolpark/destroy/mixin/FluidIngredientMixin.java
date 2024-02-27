@@ -145,6 +145,6 @@ public abstract class FluidIngredientMixin {
 		if(subtypeName.isEmpty()) return;
 		MixtureFluidIngredientSubType<?> subtype = MixtureFluidIngredient.MIXTURE_FLUID_INGREDIENT_SUBTYPES.get(subtypeName);
 		if(subtype == null) return;
-		cir.setReturnValue(subtype.fromNBT(tag));
+		cir.setReturnValue(subtype.fromNBT(tag, fluidStack.getAmount()));
 	}
 };

@@ -104,12 +104,13 @@ public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient<SaltF
         };
 
         @Override
-        public SaltFluidIngredient fromNBT(CompoundTag tag) {
+        public SaltFluidIngredient fromNBT(CompoundTag tag, int amount) {
             SaltFluidIngredient result = new SaltFluidIngredient();
             result.cation = Molecule.getMolecule(tag.getString("RequiredCation"));
             result.anion = Molecule.getMolecule(tag.getString("RequiredAnion"));
             result.minConcentration = tag.getFloat("MinimumConcentration");
             result.maxConcentration = tag.getFloat("MaximumConcentration");
+            result.amountRequired = amount;
             return result;
         }
 
