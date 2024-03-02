@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-**Before submitting a bug report, ensure you are familiar with the [rules](https://github.com/petrolpark/destroy/issues/1).**
+**Before submitting a bug report, ensure you are familiar with the [rules](https://github.com/petrolpark/destroy/issues/1).** Do not include this line in the bug report.
 
 **Describe the bug**
 
