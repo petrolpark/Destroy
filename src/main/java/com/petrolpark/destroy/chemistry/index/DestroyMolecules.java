@@ -188,7 +188,7 @@ public final class DestroyMolecules {
         .id("carbon_dioxide")
         .structure(Formula.deserialize("destroy:linear:O=C=O"))
         .boilingPoint(-78.4645f) // Sublimes, doesn't "boil"
-        .density(1.977f) // Gas density
+        .density(1101) // Liquid density
         .molarHeatCapacity(37.135f)
         .tag(Tags.GREENHOUSE)
         .build(),
@@ -227,7 +227,7 @@ public final class DestroyMolecules {
         .structure(Formula.deserialize("destroy:linear:ClCl"))
         .color(0x20F9FCC2)
         .boilingPoint(-34.04f)
-        .density(3.2f) // Gas density
+        .density(1562.5f) // Liquid density
         .molarHeatCapacity(33.949f)
         .tag(Tags.ACUTELY_TOXIC)
         .tag(Tags.OZONE_DEPLETER)
@@ -245,7 +245,7 @@ public final class DestroyMolecules {
         .id("chlorodifluoromethane")
         .structure(Formula.deserialize("destroy:linear:ClC(F)F"))
         .boilingPoint(-40.7f)
-        .density(3.66f) // Gas density
+        .density(1413f) // Liquid density @ -40.7 C
         .molarHeatCapacity(112.6f)
         .tag(Tags.OZONE_DEPLETER)
         .tag(Tags.REFRIGERANT)
@@ -535,7 +535,7 @@ public final class DestroyMolecules {
     HYDROFLUORIC_ACID = builder()
         .id("hydrofluoric_acid")
         .structure(Formula.deserialize("destroy:linear:FH"))
-        .density(1.15f)
+        .density(1150f) // 48% solution
         .boilingPoint(19.5f)
         // Heat capacity unknown
         .tag(Tags.ACUTELY_TOXIC)
@@ -546,7 +546,7 @@ public final class DestroyMolecules {
         .id("hydrogen")
         .structure(Formula.atom(Element.HYDROGEN).addAtom(Element.HYDROGEN))
         .boilingPointInKelvins(20.271f)
-        .density(70.85f)
+        .density(70.85f) // Liquid H2, Wikipedia
         .molarHeatCapacity(28.84f)
         .build(),
 
@@ -675,7 +675,7 @@ public final class DestroyMolecules {
         .id("methane")
         .structure(Formula.deserialize("destroy:linear:C"))
         .boilingPoint(-161.5f)
-        .density(424f)
+        .density(422.8f) // Liquid, -162C, Wikipedia
         .molarHeatCapacity(35.7f)
         .tag(Tags.GREENHOUSE)
         .tag(Tags.SMOG)
@@ -750,7 +750,7 @@ public final class DestroyMolecules {
                 .addAtom(Element.HYDROGEN)
             ) //TODO maybe add color (though this should come from a decomposition)
         ).boilingPoint(83f)
-        .density(1510f)
+        .density(1513f) // Anhydrous, Wikipedia
         .molarHeatCapacity(53.29f)
         .tag(Tags.ACUTELY_TOXIC)
         .tag(Tags.ACID_RAIN)
@@ -760,7 +760,7 @@ public final class DestroyMolecules {
         .id("nitrogen")
         .structure(Formula.deserialize("destroy:linear:N#N"))
         .boilingPointInKelvins(77.355f)
-        .density(807f)
+        .density(807f) // Liquid, -196C
         .molarHeatCapacity(29.12f)
         .tag(Tags.ABUNDANT_IN_AIR)
         .build(),
@@ -837,7 +837,7 @@ public final class DestroyMolecules {
         .id("oxygen")
         .structure(Formula.deserialize("destroy:linear:O=O"))
         .boilingPointInKelvins(90.188f)
-        .density(1141f)
+        .density(1141f) // Liquid, -183, Wikipedia
         .molarHeatCapacity(29.378f)
         .tag(Tags.ABUNDANT_IN_AIR)
         .build(),

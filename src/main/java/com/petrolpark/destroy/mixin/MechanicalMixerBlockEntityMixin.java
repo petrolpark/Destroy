@@ -3,6 +3,7 @@ package com.petrolpark.destroy.mixin;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,7 +26,7 @@ import net.minecraftforge.items.IItemHandler;
 public class MechanicalMixerBlockEntityMixin {
     
     /**
-     * Injection into {@link com.simibubi.create.content.contraptions.components.mixer.MechanicalMixerBlockEntity Mechanical Mixers}
+     * Injection into {@link com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity Mechanical Mixers}
      * to allow them to recognise Mixtures that are able to React.
      * @see com.petrolpark.destroy.recipe.ReactionInBasinRecipe Reactions in Basins
      */

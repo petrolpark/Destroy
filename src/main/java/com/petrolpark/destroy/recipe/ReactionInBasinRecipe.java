@@ -84,14 +84,17 @@ public class ReactionInBasinRecipe extends MixingRecipe {
             Phases phases = mixture.separatePhases(result.amount());
 
             // Add the resultant Mixture to the results for this Recipe
-            FluidStack outputMixtureStack = MixtureFluid.of((int)Math.round(phases.liquidVolume()), phases.liquidMixture());
-            builder.output(outputMixtureStack);
+            // Something left as liquid
+            if (!phases.liquidMixture().isEmpty()) {
+                FluidStack outputMixtureStack = MixtureFluid.of((int)Math.round(phases.liquidVolume()), phases.liquidMixture());
+                builder.output(outputMixtureStack);
 
-            // Let the Player know if the Reaction cannot occur because the output Fluid will not fit
-            if (outputMixtureStack.getAmount() > BASIN_MAX_OUTPUT) {
-                isBasinTooFullToReact = true;
-                canReact = false;
-            };
+                // Let the Player know if the Reaction cannot occur because the output Fluid will not fit
+                if (outputMixtureStack.getAmount() > BASIN_MAX_OUTPUT) {
+                    isBasinTooFullToReact = true;
+                    canReact = false;
+                };
+            }
 
             int duration = Mth.clamp(result.ticks(), 40, 600); // Ensure this takes at least 2 seconds and less than 30 seconds
 
