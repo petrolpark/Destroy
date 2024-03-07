@@ -1,6 +1,7 @@
 package com.petrolpark.destroy.mixin;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,8 +40,7 @@ public abstract class ProcessingRecipeMixin {
                 CompoundTag fluidTag = new CompoundTag();
                 mixtureFluidIngredient.addNBT(fluidTag);
                 for (Molecule molecule : mixtureFluidIngredient.getType().getContainedMolecules(fluidTag)) {
-                    DestroyJEI.MOLECULES_INPUT.putIfAbsent(molecule, new ArrayList<>()); // Create the List if it's not there
-                    DestroyJEI.MOLECULES_INPUT.get(molecule).add((ProcessingRecipe<RecipeWrapper>)(Object)this); // Unchecked conversion (fine because this is a Mixin)
+                    DestroyJEI.MOLECULES_INPUT.computeIfAbsent(molecule, e -> new HashSet<>()).add((ProcessingRecipe<RecipeWrapper>)(Object)this);
                 };
             };
         };
@@ -48,8 +48,7 @@ public abstract class ProcessingRecipeMixin {
             if (DestroyFluids.isMixture(fluidResult)) {
                 ReadOnlyMixture mixture = ReadOnlyMixture.readNBT(ReadOnlyMixture::new, fluidResult.getOrCreateTag().getCompound("Mixture"));
                 for (Molecule molecule : mixture.getContents(true)) {
-                    DestroyJEI.MOLECULES_OUTPUT.putIfAbsent(molecule, new ArrayList<>()); // Create the List if it's not there
-                    DestroyJEI.MOLECULES_OUTPUT.get(molecule).add((ProcessingRecipe<RecipeWrapper>)(Object)this); // Unchecked conversion (fine because this is a Mixin)
+                    DestroyJEI.MOLECULES_OUTPUT.computeIfAbsent(molecule, e -> new HashSet<>()).add((ProcessingRecipe<RecipeWrapper>)(Object)this);
                 };
             };
         };

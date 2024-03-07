@@ -11,7 +11,6 @@ import com.petrolpark.destroy.chemistry.reactionresult.PrecipitateReactionResult
 import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags;
-
 import net.minecraft.world.item.Items;
 
 public class DestroyReactions {

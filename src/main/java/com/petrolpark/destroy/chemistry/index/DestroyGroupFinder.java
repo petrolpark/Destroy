@@ -32,6 +32,7 @@ public class DestroyGroupFinder extends GroupFinder {
         List<Atom> carbonsToIgnore = new ArrayList<>();
         List<Atom> carbonsToIgnoreForAlkenes = new ArrayList<>();
 
+        // this is scary
         for (Atom carbon : structure.keySet()) {
 
             if (carbon.getElement() != Element.CARBON || carbonsToIgnore.contains(carbon)) {

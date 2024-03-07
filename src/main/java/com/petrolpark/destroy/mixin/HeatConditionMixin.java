@@ -57,7 +57,7 @@ public abstract class HeatConditionMixin {
     public void inTestBlazeBurner(HeatLevel heatLevel, CallbackInfoReturnable<Boolean> ci) {
         HeatCondition thisHeatCondition = (HeatCondition) (Object) (this);
         if (thisHeatCondition == COOLED) {
-            ci.setReturnValue(heatLevel.name() == "FROSTING");
+            ci.setReturnValue(heatLevel.name().equals("FROSTING"));
         };
     };
 };

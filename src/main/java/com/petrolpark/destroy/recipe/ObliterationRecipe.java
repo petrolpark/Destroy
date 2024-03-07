@@ -1,8 +1,10 @@
 package com.petrolpark.destroy.recipe;
 
+import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
 
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
@@ -30,5 +32,15 @@ public class ObliterationRecipe extends ProcessingRecipe<RecipeWrapper> {
     protected int getMaxOutputCount() {
         return 1;
     };
+
+    public Ingredient getInput() {
+        if(ingredients.isEmpty()) return null;
+        return ingredients.get(0);
+    }
+
+    public ProcessingOutput getResult() {
+        if(results.isEmpty()) return null;
+        return results.get(0);
+    }
     
 };

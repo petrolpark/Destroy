@@ -31,7 +31,7 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer {
 
     private Boolean spike;
     private static int spikeNextPage; // Whether the next page to be shown should have a spike on it
-    private static LerpedFloat angle;
+    private static final LerpedFloat angle;
 
     static {
         angle = LerpedFloat.angular().startWithValue(0d);

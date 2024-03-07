@@ -46,7 +46,7 @@ public class Atom {
     /**
      * Whether this is Atom is a {@link Element#HYDROGEN Hydrogen}.
      */
-    public Boolean isHydrogen() {
+    public boolean isHydrogen() {
         return element == Element.HYDROGEN;
     };
 

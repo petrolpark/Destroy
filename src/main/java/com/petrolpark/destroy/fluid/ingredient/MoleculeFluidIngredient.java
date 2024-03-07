@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.petrolpark.destroy.chemistry.Mixture;
 import com.petrolpark.destroy.chemistry.Molecule;
 import com.petrolpark.destroy.chemistry.ReadOnlyMixture;
+import com.petrolpark.destroy.compat.crafttweaker.CTDestroy;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.fluid.ingredient.mixturesubtype.MixtureFluidIngredientSubType;
 import com.petrolpark.destroy.util.DestroyLang;
@@ -22,7 +23,7 @@ public class MoleculeFluidIngredient extends ConcentrationRangeFluidIngredient<M
 
     public static final Type TYPE = new Type();
 
-    protected Molecule molecule;
+    public Molecule molecule;
 
     @Override
     public MixtureFluidIngredientSubType<MoleculeFluidIngredient> getType() {
@@ -39,6 +40,11 @@ public class MoleculeFluidIngredient extends ConcentrationRangeFluidIngredient<M
     protected boolean testMixture(Mixture mixture) {
         return mixture.hasUsableMolecule(molecule, minConcentration, maxConcentration, null);
     };
+
+    @Override
+    public List<Molecule> getMoleculeParticipants() {
+        return List.of(molecule);
+    }
 
     @Override
     protected void readInternal(FriendlyByteBuf buffer) {
@@ -69,12 +75,23 @@ public class MoleculeFluidIngredient extends ConcentrationRangeFluidIngredient<M
         return List.of(getMixtureOfRightConcentration(molecule));
     };
 
-    protected static class Type extends MixtureFluidIngredientSubType<MoleculeFluidIngredient> {
+    public static class Type extends MixtureFluidIngredientSubType<MoleculeFluidIngredient> {
 
         @Override
         public MoleculeFluidIngredient getNew() {
             return new MoleculeFluidIngredient();
-        };
+        }
+
+        @Override
+        public MoleculeFluidIngredient fromNBT(CompoundTag tag, int amount) {
+            MoleculeFluidIngredient result = new MoleculeFluidIngredient();
+            result.molecule = Molecule.getMolecule(tag.getString("MoleculeRequired"));
+            result.minConcentration = tag.getFloat("MinimumConcentration");
+            result.maxConcentration = tag.getFloat("MaximumConcentration");
+            result.amountRequired = amount;
+            return result;
+        }
+
 
         @Override
         public String getMixtureFluidIngredientSubtype() {

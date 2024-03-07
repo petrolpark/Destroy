@@ -1,11 +1,6 @@
 package com.petrolpark.destroy.compat.jei;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -86,12 +81,12 @@ public class DestroyJEI implements IModPlugin {
      * A map of Molecules to the Recipes in which they are inputs.
      * This does not include {@link com.petrolpark.destroy.chemistry.Reaction Reactions}.
      */
-    public static final Map<Molecule, List<Recipe<?>>> MOLECULES_INPUT = new HashMap<>();
+    public static final Map<Molecule, Set<Recipe<?>>> MOLECULES_INPUT = new HashMap<>();
     /**
      * A map of Molecules to the Recipes in which they are outputs.
      * This does not include {@link com.petrolpark.destroy.chemistry.Reaction Reactions}.
      */
-    public static final Map<Molecule, List<Recipe<?>>> MOLECULES_OUTPUT = new HashMap<>();
+    public static final Map<Molecule, Set<Recipe<?>>> MOLECULES_OUTPUT = new HashMap<>();
     /**
      * Whether Recipes have not yet been added to {@link DestroyJEI#MOLECULES_INPUT} and {@link DestroyJEI#MOLECULES_OUTPUT}.
      */
@@ -368,7 +363,7 @@ public class DestroyJEI implements IModPlugin {
                 return recipes;
             };
 
-            mezz.jei.api.recipe.RecipeType<T> type = new mezz.jei.api.recipe.RecipeType<T>(Destroy.asResource(name), recipeClass);
+            mezz.jei.api.recipe.RecipeType<T> type = new mezz.jei.api.recipe.RecipeType<>(Destroy.asResource(name), recipeClass);
 
             Info<T> info = new Info<T>(
                 type,

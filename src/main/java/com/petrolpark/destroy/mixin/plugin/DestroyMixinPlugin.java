@@ -28,6 +28,9 @@ public class DestroyMixinPlugin implements IMixinConfigPlugin {
         onlyLoadIfModPresent("com.petrolpark.destroy.mixin.ProcessingRecipeMixin", "jei");
         onlyLoadIfModPresent("com.petrolpark.destroy.mixin.TooltipRendererMixin", "jei");
 
+        // CraftTweaker
+        onlyLoadIfModPresent("com.petrolpark.destroy.mixin.RecipeListMixin", "crafttweaker");
+
         // Farmers' Delight mixins
         onlyLoadIfModPresent("com.petrolpark.destroy.mixin.CuttingBoardMixin", "farmersdelight");
     };
