@@ -1022,7 +1022,7 @@ public class Mixture extends ReadOnlyMixture {
             return reactions;
     };
 
-    public static boolean areVeryClose(Float f1, Float f2) {
+    public static boolean areVeryClose(float f1, float f2) {
         return Math.abs(f1 - f2) <= 0.0001f;
     };
 

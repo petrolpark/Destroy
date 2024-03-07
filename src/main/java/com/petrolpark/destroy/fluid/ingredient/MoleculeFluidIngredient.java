@@ -42,6 +42,11 @@ public class MoleculeFluidIngredient extends ConcentrationRangeFluidIngredient<M
     };
 
     @Override
+    public List<Molecule> getMoleculeParticipants() {
+        return List.of(molecule);
+    }
+
+    @Override
     protected void readInternal(FriendlyByteBuf buffer) {
         super.readInternal(buffer);
         molecule = Molecule.getMolecule(buffer.readUtf());

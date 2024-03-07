@@ -96,6 +96,11 @@ public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient<SaltF
         return List.of(mixture);
     };
 
+    @Override
+    public List<Molecule> getMoleculeParticipants() {
+        return List.of(cation, anion);
+    }
+
     public static class Type extends MixtureFluidIngredientSubType<SaltFluidIngredient> {
 
         @Override

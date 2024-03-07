@@ -70,7 +70,8 @@
     "LevelRendererMixin",
     "MultiPlayerGameModeMixin",
     "ProcessingRecipeMixin",
-    "accessor.ItemRendererAccessor"
+    "accessor.ItemRendererAccessor",
+    "RecipeListMixin"
   ],
   "injectors": {
     "defaultRequire": 1

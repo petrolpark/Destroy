@@ -1,6 +1,7 @@
 package com.petrolpark.destroy.fluid.ingredient;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 import com.google.gson.JsonObject;
 import com.petrolpark.destroy.chemistry.Molecule;
@@ -62,6 +63,10 @@ public abstract class ConcentrationRangeFluidIngredient<T extends MixtureFluidIn
         json.addProperty("min_concentration", minConcentration);
         json.addProperty("max_concentration", maxConcentration);
     };
+
+    public List<Molecule> getMoleculeParticipants() {
+        return List.of();
+    }
 
     public float getTargetConcentration() {
         return (minConcentration + maxConcentration) / 2f;

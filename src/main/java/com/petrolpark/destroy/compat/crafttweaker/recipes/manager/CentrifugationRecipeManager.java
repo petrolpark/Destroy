@@ -9,7 +9,6 @@ import com.blamejared.crafttweaker_annotations.annotations.Document;
 import com.petrolpark.destroy.compat.crafttweaker.CTDestroy;
 import com.petrolpark.destroy.recipe.CentrifugationRecipe;
 import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
-import com.petrolpark.destroy.recipe.DistillationRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import org.openzen.zencode.java.ZenCodeType;
@@ -34,7 +33,7 @@ public class CentrifugationRecipeManager implements IDestroyRecipeManager<Centri
     public void addRecipe(String name, CTFluidIngredient input, IFluidStack[] output, @ZenCodeType.OptionalInt(1200) int processingTime) {
         name = fixRecipeName(name);
 
-        checkMixture(input);
+        checkMixtureOrThrow(input);
         if(output.length != 2) {
             throw new IllegalArgumentException("Centrifugation recipe should have exactly 2 outputs");
         }
