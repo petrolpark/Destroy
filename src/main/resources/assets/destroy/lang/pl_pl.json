@@ -1,7 +1,7 @@
 {
     "advancement.destroy.root": "Destroy",
     "advancement.destroy.aging_barrel": "Diabelska zupa grzybowa",
-    "advancement.destroy.aging_barrel.description": "Użyj beczki leżakującej by wyprodukować sfermentowany napój",
+    "advancement.destroy.aging_barrel.description": "Użyj beczki by wyprodukować sfermentowany napój",
     "advancement.destroy.all_plastic": "Zbierz je wszystkie",
     "advancement.destroy.all_plastic.description": "Zbierz każdy rodzaj plastiku",
     "advancement.destroy.baby_blue": "Jesse, musimy gotować",
@@ -13,7 +13,7 @@
     "advancement.destroy.capture_stray": "Mrozi",
     "advancement.destroy.capture_stray.description": "Złap Stray'a pustym płomiennym palnikiem",
     "advancement.destroy.centrifuge": "Siła odśrodkowa",
-    "advancement.destroy.centrifuge.description": "Użyj sepatatora by rozdzielić dwie ciecze",
+    "advancement.destroy.centrifuge.description": "Użyj separatora by rozdzielić dwie ciecze",
     "advancement.destroy.centrifuge_lubricated": "Śmiga jak po maśle",
     "advancement.destroy.centrifuge_lubricated.description": "W pełni nasmaruj separator aby był w pełni efektywna",
     "advancement.destroy.cut_onions": "Płacz i zgrzytanie zębów",
@@ -30,7 +30,7 @@
     "advancement.destroy.every_explosive.description": "Zsyntetyzuj wszystkie materiały wybochowe Destroy",
     "advancement.destroy.every_plastic": "Mistrz plastiku",
     "advancement.destroy.every_plastic.description": "Zsyntetyzuj wszystkie tworzywa sztuczne Destroy",
-    "advancement.destroy.explosive": "Wybuch rozdzerający ziemię",
+    "advancement.destroy.explosive": "Wybuch rozdzierający ziemię",
     "advancement.destroy.explosive.description": "Odpal ładunek wybuchowy",
     "advancement.destroy.extrude": "Ścisk",
     "advancement.destroy.extrude.description": "Przepchnij blok przez matrycę do wytłaczania",
@@ -66,7 +66,7 @@
     "advancement.destroy.vat.description": "Przereaguj chemikalia w kadzi",
     "advancement.destroy.very_drunk": "Ponad dzwadzieścia jeden promili",
     "advancement.destroy.very_drunk.description": "Osiągnij 10 poziom nietrzeźwości",
-    
+
     "badge.destroy.patreon_1": "Dame of Demolition",
     "badge.destroy.patreon_1.description": "Pledge to the first tier on the Destroy Patreon",
     "badge.destroy.patreon_2": "Duke of Devastation",
@@ -75,23 +75,23 @@
     "badge.destroy.patreon_3.description": "Show ultimate support by pledging to the highest tier on the Destroy Patreon",
 
     "badge.petrolpark.beta_tester": "Beta Tester",
-    "badge.petrolpark.beta_tester.description": "Help test upcoming features of Destroy",
+    "badge.petrolpark.beta_tester.description": "Pomóż w testowaniu nadchodzących funkcji",
     "badge.petrolpark.bestie": "Bestie",
     "badge.petrolpark.bestie.description": "Be a bestie",
     "badge.petrolpark.competition_winner": "Winner Winner Chicken Dinner",
     "badge.petrolpark.competition_winner.description": "Win a community event",
-    "badge.petrolpark.content_creator": "Demonetized",
-    "badge.petrolpark.content_creator.description": "Give Destroy free promotion by featuring it as a content creator",
-    "badge.petrolpark.developer": "Developer",
-    "badge.petrolpark.developer.description": "Create code or art for Destroy",
+    "badge.petrolpark.content_creator": "Demonetyzacja",
+    "badge.petrolpark.content_creator.description": "Wspomóż Destroy, poprzez przedstawienie go jako twórca treści",
+    "badge.petrolpark.developer": "Deweloper",
+    "badge.petrolpark.developer.description": "Bądź artystą albo programistą dla Destroy",
     "badge.petrolpark.early_bird": "Early Bird, Getter of Worms",
-    "badge.petrolpark.early_bird.description": "Be among the first 1000 Players to play a major update to Destroy",
+    "badge.petrolpark.early_bird.description": "Bądź wśród pierwszych 1000 graczy, którzy zagrali na ważnej aktualizacji",
     "badge.petrolpark.nitro": "CH\u2083NO\u2082",
-    "badge.petrolpark.nitro.description": "Boost the Discord server with Nitro",
-    "badge.petrolpark.suggestion": "Good Suggestion",
-    "badge.petrolpark.suggestion.description": "Contribute a new idea for Destroy that ends up getting implemented",
-    "badge.petrolpark.translator": "Cunning Linguist",
-    "badge.petrolpark.translator.description": "Make an significant contribution to the localizations of Destroy",
+    "badge.petrolpark.nitro.description": "Boostuj serwer Discord z Nitro",
+    "badge.petrolpark.suggestion": "Dobra propozycja",
+    "badge.petrolpark.suggestion.description": "Bierz udział w nowym pomyśle do Destroy, który zostanie dodany",
+    "badge.petrolpark.translator": "Przebiegły lingwista",
+    "badge.petrolpark.translator.description": "Zrób znaczący wkład w ulepszenie tłumaczeń w Destroy",
 
     "block.destroy.agar_block": "Blok Agaru",
     "block.destroy.agar_block.tooltip": "BLOK_AGARU",
@@ -365,7 +365,7 @@
     "destroy.chemical.water": "Woda",
     "destroy.chemical.zinc": "Cynk (II)",
     "destroy.chemical.zirconium": "Cyrkon",
-    
+
     "destroy.chemistry.acid": "Kwasy to związki, które mogą oddawać jony wodoru ({protony, destroy:proton}) innym związkom. Reagują z {zasadami, destroy:base}.",
     "destroy.chemistry.addition": "Reakcja addycji to taka, w której grupa jest dodawana do {cząsteczki, destroy:molecule}.",
     "destroy.chemistry.addition_elimination": "Reakcja addycji-eliminacji to taka, w której jedna grupa jest usuwana z {cząsteczki, destroy:molecule}, a dopiero potem dodawana jest inna - w odróżnieniu od reakcji {podstawienia, destroy:substitution}, w której obie zachodzą jednocześnie.",
@@ -592,7 +592,7 @@
     "destroy.ponder.uv.text_1": "Niektóre reakcje wymagają światła ultrafioletowego jako katalizatora.",
     "destroy.ponder.uv.text_2": "Kadzie odbierają promieniowanie UV poprzez przezroczyste bloki w górnej części, niezależnie od pory dnia.",
     "destroy.ponder.uv.text_3": "Więcej promieniowania UV jest dostarczana przez czarne światła umieszczone bezpośrednio przy przezroczystych bokach kadzi.",
-    
+
     "destroy.generic_reaction.acyl_chloride_esterification": "Esteryfikacja {chlorku acylu, destroy:acyl_chloride}",
     "destroy.generic_reaction.acyl_chloride_esterification.description": "Połączenie {chlorku acylu, destroy:acyl_chloride} i {alkoholu, destroy:alcohol} w celu utworzenia {estru, destroy:ester}.",
     "destroy.generic_reaction.acyl_chloride_formation": "Tworzenie {chlorku acylu, destroy:acyl_chloride}",
@@ -897,7 +897,7 @@
     "destroy.tooltip.vat_material.transparent": "Przezroczysty:",
     "destroy.tooltip.vat_material.transparent.description": "Przezroczyste bloki mogą przepuszczać światło ultrafioletowe, które jest potrzebne do niektórych reakcji.",
     "destroy.tooltip.vat_material.vat_controller": "Do utworzenia kadzi potrzebny jest _pojedynczy_ kontroler kadzi. Wytrzymują każdą różnicę ciśnień, _nie przewodzą_ ciepła i są _nieprzezroczyste_.",
-    
+
     "effect.destroy.cancer": "Świadomość raka",
     "effect.destroy.cancer.description": "_Nie ma wpływu na grę_. Wiele rzeczy w Destroy to żarty, ale _rak nie jest jednym z nich. Ma to na celu _podniesienie świadomości_ na temat wzrostu ryzyka raka związanego z narażeniem zawodowym, i z _szkodą dla warstwy ozonowej_. Skorzystaj z profesjonalnego źródła, takiego jak '_cancerresearchuk.org_'. Ten efekt można usunąć za pomocą _cisplatyny_.",
     "effect.destroy.chemical_poison.molecule": "Zatrucie: %1$s",
@@ -942,7 +942,7 @@
     "fluid.destroy.twice_distilled_moonshine": "Podwójnie destylowany bimber",
     "fluid.destroy.undistilled_moonshine": "Niedestylowany bimber",
     "fluid.destroy.urine": "Mocz",
-    
+
     "itemGroup.destroy.base": "Destroy",
 
     "item.destroy.abs": "ABS",
