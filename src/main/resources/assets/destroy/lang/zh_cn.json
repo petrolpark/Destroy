@@ -431,7 +431,7 @@
     "destroy.chemistry.condensation_polymer": "缩聚是脱去一个小{分子, destroy:molecule}（如[destroy:water]）形成{聚合物, destroy:polymer}的过程，如DNA和尼龙。",
     "destroy.chemistry.cycle": "一个环状{分子, destroy:molecule}在其结构中至少有一个环。",
     "destroy.chemistry.decarboxylation": "脱羧反应是从一个{分子, destroy:molecule}中[destroy:carbon_dioxide]被{消去, destroy:elimination}的过程。它与{羧化反应, destroy:carboxylation}相对。",
-    "destroy.chemistry.degree": "级数是指与一个原子{成键, destroy:bond}的碳{原子, destroy:atom}的个数。例如，与另外两个碳原子成键的碳原子被称为“仲碳原子” (又称二级碳)。伯仲叔季分别对应一至四级。",
+    "destroy.chemistry.degree": "级反应了一个原子周围与其{成键, destroy:bond}的碳{原子, destroy:atom}个数。例如，一个连接了两个碳的碳原子被称为“仲碳” (二级碳原子)。伯仲叔季分别对应一至四级。",
     "destroy.chemistry.diene": "一个二烯体{分子, destroy:molecule}至少包含两个被一个{单键, destroy:bond}分开的{双键, destroy:double_bond}。",
     "destroy.chemistry.dienophile": "亲二烯体指的是被{二烯体, destroy:diene}吸引的{分子, destroy:molecule}。一些[destroy:alkene]和炔烃是亲二烯体。",
     "destroy.chemistry.disproportionation": "歧化是指同一物质在反应中既发生{氧化反应, destroy:oxidation}，也发生{还原反应, destroy:reduction}。",
