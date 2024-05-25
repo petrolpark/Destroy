@@ -1,5 +1,6 @@
 {
   "values": [
-    "destroy:nickel_ore"
+    "destroy:nickel_ore",
+    "destroy:deepslate_nickel_ore"
   ]
 }
