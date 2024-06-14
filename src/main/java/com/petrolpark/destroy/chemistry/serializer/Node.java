@@ -12,22 +12,19 @@ import com.petrolpark.destroy.chemistry.Element;
 import com.petrolpark.destroy.chemistry.Bond.BondType;
 
 public class Node {
-    private Atom atom;
-    public Boolean visited;
-    private List<Edge> edges;
+    private final Atom atom;
+    public boolean visited = false;
     private Branch branch;
-    private Map<Branch, BondType> sideBranches;
+    private final List<Edge> edges = new ArrayList<>();
+    private final Map<Branch, BondType> sideBranches = new HashMap<>();
 
     public Node(Atom atom) {
         this.atom = atom;
-        visited = false;
-        edges = new ArrayList<>();
-        sideBranches = new HashMap<>();
     };
 
     public String serialize() {
         String string = getAtom().getElement().getSymbol();
-        Boolean isTerminal = true;
+        boolean isTerminal = true;
         Edge nextEdge = null;
         for (Edge edge : edges) {
             if (edge.getSourceNode() == this) {

@@ -21,7 +21,7 @@ public class CentrifugationRecipe extends SingleFluidRecipe {
     };
 
     private void checkForValidOutputs() {
-        if (fluidResults.isEmpty() || fluidResults.size() != 2) throw new IllegalStateException("Centrifugation Recipe " + id + " contains the wrong number of output fluids.");
+        if (fluidResults.size() != 2) throw new IllegalStateException("Centrifugation Recipe " + id + " contains the wrong number of output fluids.");
     };
 
     @Override

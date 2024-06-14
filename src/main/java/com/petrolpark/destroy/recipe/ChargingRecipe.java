@@ -8,11 +8,13 @@ import com.petrolpark.destroy.block.DestroyBlocks;
 import com.petrolpark.destroy.compat.jei.category.AssemblyChargingSubCategory;
 import com.petrolpark.destroy.util.DestroyLang;
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory;
+import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -36,16 +38,21 @@ public class ChargingRecipe extends ProcessingRecipe<RecipeWrapper> implements I
         return 1;
     };
 
+    public Ingredient getInput() {
+        if(ingredients.isEmpty()) return null;
+        return ingredients.get(0);
+    }
+
+    public ProcessingOutput getResult() {
+        if(results.isEmpty()) return null;
+        return results.get(0);
+    }
+
     @Override
     public boolean matches(RecipeWrapper inv, Level level) {
         if (inv.isEmpty()) return false;
 		return ingredients.get(0).test(inv.getItem(0));
-    };
-
-    @Override
-    protected boolean canSpecifyDuration() {
-        return false;
-    };
+    };;
 
     @Override
     @OnlyIn(Dist.CLIENT)

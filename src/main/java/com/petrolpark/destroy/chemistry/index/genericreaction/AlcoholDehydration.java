@@ -32,7 +32,7 @@ public class AlcoholDehydration extends SingleGroupGenericReaction<AlcoholGroup>
         for (Atom carbon : structure.moveTo(alcohol.carbon).getBondedAtomsOfElement(Element.CARBON)) {
             List<Atom> hydrogens = structure.moveTo(carbon).getBondedAtomsOfElement(Element.HYDROGEN);
             List<Atom> carbons = structure.getBondedAtomsOfElement(Element.CARBON);
-            if (hydrogens.size() + carbons.size() != 4 || hydrogens.size() == 0) continue; // Don't form from non-sp3 alkyl carbons
+            if (hydrogens.size() + carbons.size() != 4 || hydrogens.isEmpty()) continue; // Don't form from non-sp3 alkyl carbons
             Formula productStructure = structure.shallowCopy();
             productStructure
                 .remove(hydrogens.get(0))

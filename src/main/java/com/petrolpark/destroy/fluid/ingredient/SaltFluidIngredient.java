@@ -25,8 +25,8 @@ public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient<SaltF
 
     public static final Type TYPE = new Type();
 
-    protected Molecule cation;
-    protected Molecule anion;
+    public Molecule cation;
+    public Molecule anion;
 
     @Override
     public MixtureFluidIngredientSubType<SaltFluidIngredient> getType() {
@@ -42,7 +42,17 @@ public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient<SaltF
 
     @Override
     protected boolean testMixture(Mixture mixture) {
-        return mixture.hasUsableMolecule(cation, minConcentration * cation.getCharge(), maxConcentration * cation.getCharge(), (molecule) -> molecule == anion) && mixture.hasUsableMolecule(anion, minConcentration * -anion.getCharge(), maxConcentration * -anion.getCharge(), (molecule) -> molecule == cation);
+        return mixture.hasUsableMolecule(
+            cation,
+            minConcentration * cation.getCharge(),
+            maxConcentration * cation.getCharge(),
+            (molecule) -> molecule == anion
+        ) && mixture.hasUsableMolecule(
+            anion,
+            minConcentration * -anion.getCharge(),
+            maxConcentration * -anion.getCharge(),
+            (molecule) -> molecule == cation
+        );
     };
 
     @Override
@@ -86,12 +96,28 @@ public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient<SaltF
         return List.of(mixture);
     };
 
-    protected static class Type extends MixtureFluidIngredientSubType<SaltFluidIngredient> {
+    @Override
+    public List<Molecule> getMoleculeParticipants() {
+        return List.of(cation, anion);
+    }
+
+    public static class Type extends MixtureFluidIngredientSubType<SaltFluidIngredient> {
 
         @Override
         public SaltFluidIngredient getNew() {
             return new SaltFluidIngredient();
         };
+
+        @Override
+        public SaltFluidIngredient fromNBT(CompoundTag tag, int amount) {
+            SaltFluidIngredient result = new SaltFluidIngredient();
+            result.cation = Molecule.getMolecule(tag.getString("RequiredCation"));
+            result.anion = Molecule.getMolecule(tag.getString("RequiredAnion"));
+            result.minConcentration = tag.getFloat("MinimumConcentration");
+            result.maxConcentration = tag.getFloat("MaximumConcentration");
+            result.amountRequired = amount;
+            return result;
+        }
 
         @Override
         public String getMixtureFluidIngredientSubtype() {

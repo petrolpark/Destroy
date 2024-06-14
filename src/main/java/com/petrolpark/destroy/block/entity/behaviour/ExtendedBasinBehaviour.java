@@ -53,10 +53,12 @@ public class ExtendedBasinBehaviour extends BlockEntityBehaviour {
     };
 
     public void enactReactionResults(BasinBlockEntity basin) {
-        
-        for (ReactionResult result : reactionResults.keySet()) {
-            for (int i = 0; i < reactionResults.get(result); i++) result.onBasinReaction(basin.getLevel(), basin);
-        };
+        for(Map.Entry<ReactionResult, Integer> reactionEntry : reactionResults.entrySet()) {
+            ReactionResult result = reactionEntry.getKey();
+            for(int i = 0; i < reactionEntry.getValue(); i++) {
+                result.onBasinReaction(basin.getLevel(), basin);
+            }
+        }
         reactionResults.clear();
 
         if (!evaporatedFluid.isEmpty()) {
@@ -103,7 +105,7 @@ public class ExtendedBasinBehaviour extends BlockEntityBehaviour {
 
         nbt.put("Results", NBTHelper.writeCompoundList(reactionResults.entrySet(), entry -> {
             CompoundTag resultTag = new CompoundTag();
-            resultTag.putString("Result", entry.getKey().getReaction().getFullId());
+            resultTag.putString("Result", entry.getKey().getReaction().getFullID());
             resultTag.putInt("Count", entry.getValue());
             return resultTag;
         }));

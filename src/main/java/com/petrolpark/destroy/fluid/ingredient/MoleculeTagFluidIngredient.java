@@ -23,7 +23,7 @@ public class MoleculeTagFluidIngredient extends ConcentrationRangeFluidIngredien
 
     public static final Type TYPE = new Type();
 
-    protected MoleculeTag tag;
+    public MoleculeTag tag;
 
     public MoleculeTagFluidIngredient(MoleculeTag tag, float minConc, float maxConc) {
         this.tag = tag;
@@ -82,12 +82,22 @@ public class MoleculeTagFluidIngredient extends ConcentrationRangeFluidIngredien
         return MoleculeTag.MOLECULES_WITH_TAGS.get(tag).stream().map(this::getMixtureOfRightConcentration).toList();
     };
 
-    protected static class Type extends MixtureFluidIngredientSubType<MoleculeTagFluidIngredient> {
+    public static class Type extends MixtureFluidIngredientSubType<MoleculeTagFluidIngredient> {
 
         @Override
         public MoleculeTagFluidIngredient getNew() {
             return new MoleculeTagFluidIngredient();
         };
+
+        @Override
+        public MoleculeTagFluidIngredient fromNBT(CompoundTag tag, int amount) {
+            MoleculeTagFluidIngredient result = new MoleculeTagFluidIngredient();
+            result.tag = MoleculeTag.MOLECULE_TAGS.get(tag.getString("MoleculeTag"));
+            result.minConcentration = tag.getFloat("MinimumConcentration");
+            result.maxConcentration = tag.getFloat("MaximumConcentration");
+            result.amountRequired = amount;
+            return result;
+        }
 
         @Override
         public String getMixtureFluidIngredientSubtype() {

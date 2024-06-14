@@ -124,10 +124,9 @@ public class DistillationTower {
         if (lastRecipe == null || !lastRecipe.getRequiredFluid().test(inputTank.getFluid())) { // If the Recipe has changed
             List<Recipe<?>> possibleRecipes = RecipeFinder.get(distillationRecipeKey, level, r -> r.getType() == DestroyRecipeTypes.DISTILLATION.getType()).stream().filter(r -> {
                 DistillationRecipe recipe = (DistillationRecipe) r;
-                if (!recipe.getRequiredFluid().test(inputTank.getFluid())) return false; // If there is insufficient input Fluid
-                return true;
-            }).collect(Collectors.toList());
-            if (possibleRecipes.size() >= 1) {
+                return recipe.getRequiredFluid().test(inputTank.getFluid()); // If there is insufficient input Fluid
+            }).toList();
+            if (!possibleRecipes.isEmpty()) {
                 lastRecipe = (DistillationRecipe)possibleRecipes.get(0);
             } else {
                 lastRecipe = null;
@@ -222,7 +221,7 @@ public class DistillationTower {
      * @param mixture The Mixture being distilled
      * @param mixtureAmount The amount (in mB) of this Mixture
      * @param numberOfFractions The maximum number of fractions this should be separated into, not including any possible residue
-     * @param heatLevel The Heat Level of the Blaze Burner (or lack thereof) which is heating the controller Bubble Cap
+//     * @param heatLevel The Heat Level of the Blaze Burner (or lack thereof) which is heating the controller Bubble Cap
      * @return A list of Fluid Stacks of maximum size {@code numberOfFractions + 1}, with the first being the residue, and the rest being subsequent fractions
      */
     private List<FluidStack> getFractionsOfMixture(ReadOnlyMixture mixture, int mixtureAmount, int numberOfFractions) {

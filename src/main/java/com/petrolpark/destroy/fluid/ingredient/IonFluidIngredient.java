@@ -40,7 +40,7 @@ public class IonFluidIngredient extends MoleculeFluidIngredient {
         return List.of(mixture);
     };
 
-    protected static class Type extends MoleculeFluidIngredient.Type {
+    public static class Type extends MoleculeFluidIngredient.Type {
 
         @Override
         public IonFluidIngredient getNew() {

@@ -45,8 +45,7 @@ public class RefrigerantDummyFluidIngredient extends MoleculeTagFluidIngredient 
     
         @Override
         public List<Component> getDescription(CompoundTag fluidTag) {
-            List<Component> tooltip = new ArrayList<>();
-            tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule_tag_1").string(), Palette.GRAY_AND_WHITE));
+            List<Component> tooltip = new ArrayList<>(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule_tag_1").string(), Palette.GRAY_AND_WHITE));
             tooltip.add(DestroyMolecules.Tags.REFRIGERANT.getFormattedName());
             tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.refrigerants").string(), Palette.GRAY_AND_WHITE));
             return tooltip;

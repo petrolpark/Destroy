@@ -123,9 +123,7 @@ public class LevelPollution {
     };
   
     public void loadNBTData(CompoundTag tag) {
-        levels.keySet().forEach((pollutionType) -> {
-            levels.replace(pollutionType, tag.getInt(pollutionType.name()));
-        });
+        levels.replaceAll((pollutionType, level) -> tag.getInt(pollutionType.name()));
         hasPollutionEverBeenMaxed = tag.getBoolean("EverMaxed");
         hasPollutionEverBeenFullyReduced = tag.getBoolean("EverReduced");
         updateTemperature();
@@ -135,8 +133,8 @@ public class LevelPollution {
         outdoorTemperature = 289f;
         if (!PollutionHelper.pollutionEnabled() || !DestroyAllConfigs.SERVER.pollution.temperatureAffected.get()) return;
         outdoorTemperature +=
-            (levels.get(PollutionType.GREENHOUSE) / PollutionType.GREENHOUSE.max) * 20f
-          + (levels.get(PollutionType.OZONE_DEPLETION) / PollutionType.OZONE_DEPLETION.max) * 4f;
+            ((float) levels.get(PollutionType.GREENHOUSE) / PollutionType.GREENHOUSE.max) * 20f
+          + ((float) levels.get(PollutionType.OZONE_DEPLETION) / PollutionType.OZONE_DEPLETION.max) * 4f;
     };
 
     /**

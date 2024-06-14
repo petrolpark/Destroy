@@ -1,6 +1,7 @@
 package com.petrolpark.destroy.fluid.ingredient;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 import com.google.gson.JsonObject;
 import com.petrolpark.destroy.chemistry.Molecule;
@@ -19,8 +20,8 @@ public abstract class ConcentrationRangeFluidIngredient<T extends MixtureFluidIn
         df.setMaximumFractionDigits(1);
     };
 
-    protected float minConcentration;
-    protected float maxConcentration;
+    public float minConcentration;
+    public float maxConcentration;
 
     @Override
     public void addNBT(CompoundTag fluidTag) {
@@ -43,9 +44,7 @@ public abstract class ConcentrationRangeFluidIngredient<T extends MixtureFluidIn
     @Override
     protected void readInternal(JsonObject json) {
         if (json.has("concentration")) {
-            float concentration = GsonHelper.getAsFloat(json, "concentration");
-            minConcentration = Math.max(0f, concentration - 0.1f);
-            maxConcentration = concentration + 0.1f;
+            setConcentrations(GsonHelper.getAsFloat(json, "concentration"));
         } else if (json.has("min_concentration") && json.has("max_concentration")) {
             minConcentration = GsonHelper.getAsFloat(json, "min_concentration");
             maxConcentration = GsonHelper.getAsFloat(json, "max_concentration");
@@ -54,11 +53,20 @@ public abstract class ConcentrationRangeFluidIngredient<T extends MixtureFluidIn
         };
     };
 
+    public void setConcentrations(float concentration) {
+        minConcentration = Math.max(0f, concentration - ReadOnlyMixture.IMPURITY_THRESHOLD);
+        maxConcentration = concentration + ReadOnlyMixture.IMPURITY_THRESHOLD;
+    }
+
     @Override
     protected void writeInternal(JsonObject json) {
         json.addProperty("min_concentration", minConcentration);
         json.addProperty("max_concentration", maxConcentration);
     };
+
+    public List<Molecule> getMoleculeParticipants() {
+        return List.of();
+    }
 
     public float getTargetConcentration() {
         return (minConcentration + maxConcentration) / 2f;

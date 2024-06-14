@@ -1,9 +1,6 @@
 package com.petrolpark.destroy.compat.jei;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.petrolpark.destroy.chemistry.Group;
 import com.petrolpark.destroy.chemistry.Molecule;
@@ -72,9 +69,9 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
                 molecules = ReadOnlyMixture.readNBT(ReadOnlyMixture::new, fluidStack.getOrCreateChildTag("Mixture")).getContents(true);
             };
 
-            molecules.forEach(molecule -> {
+            for(Molecule molecule : molecules) {
                 recipes.addAll(getRecipes(recipeCategory, helpers.getFocusFactory().createFocus(focus.getRole(), MoleculeJEIIngredient.TYPE, molecule)));
-            });
+            }
 
         });
 
@@ -102,7 +99,7 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
                     };
                     
                     // Add non-Reaction Recipes
-                    List<Recipe<?>> recipeUses = DestroyJEI.MOLECULES_INPUT.get(molecule); // Recipes in which a Mixture containing this Molecule is required
+                    Set<Recipe<?>> recipeUses = DestroyJEI.MOLECULES_INPUT.get(molecule); // Recipes in which a Mixture containing this Molecule is required
                     if (recipeUses != null) {
                         recipes.addAll(recipeUses.stream()
                             .filter(recipe -> recipe.getClass().equals(DestroyJEI.RECIPE_TYPES.get(recipeCategory.getRecipeType()))) // Check for Recipes that match this category
@@ -130,7 +127,7 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
                     }); // This is an unchecked conversion but I think it's fine
                 
                     // Add non-Reaction Recipes
-                    List<Recipe<?>> recipeProductions = DestroyJEI.MOLECULES_OUTPUT.get(molecule); // Recipes in which a Mixture containing this Molecule is produced
+                    Set<Recipe<?>> recipeProductions = DestroyJEI.MOLECULES_OUTPUT.get(molecule); // Recipes in which a Mixture containing this Molecule is produced
                     if (recipeProductions != null) recipes.addAll(recipeProductions.stream()
                         .filter(recipe -> recipe.getClass().equals(DestroyJEI.RECIPE_TYPES.get(recipeCategory.getRecipeType()))) // Check for Recipes that match this category
                         .map(recipe -> (T) recipe) // Cast these Recipes (unchecked conversion, but should be okay as we just checked the class)
@@ -152,6 +149,5 @@ public class DestroyRecipeManagerPlugin implements IRecipeManagerPlugin {
     @Override
     public <T> List<T> getRecipes(IRecipeCategory<T> recipeCategory) {
         return List.of();
-        
     };
 };

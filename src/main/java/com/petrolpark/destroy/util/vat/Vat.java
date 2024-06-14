@@ -1,10 +1,6 @@
 package com.petrolpark.destroy.util.vat;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import javax.annotation.Nullable;
 
@@ -42,8 +38,8 @@ public class Vat {
         VatMaterial.registerDestroyVatMaterials();
     };
 
-    private BlockPos lowerCorner;
-    private BlockPos upperCorner;
+    private final BlockPos lowerCorner;
+    private final BlockPos upperCorner;
 
     private ImmutableList<BlockPos> sides; // NOT synced server/client
 
@@ -95,12 +91,7 @@ public class Vat {
         EnumMap<Direction, Integer> dimensions = new EnumMap<>(Direction.class) {
             @Override
             public Integer get(Object key) {
-                Integer value = super.get(key);
-                if (value == null) {
-                    return 0;
-                } else {
-                    return value;
-                }
+                return Objects.requireNonNullElse(super.get(key), 0);
             };
         };
 

@@ -16,6 +16,7 @@ buildscript {
 
 plugins {
     id 'com.matthewprenger.cursegradle' version "${cursegradle_version}"
+//    id 'com.blamejared.createtweaker.default'
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
@@ -115,6 +116,15 @@ repositories {
         url = "https://maven.jaackson.me"
     }
 
+    maven {
+        url = 'https://maven.blamejared.com'
+        name = 'BlameJared Maven'
+    }
+
+    maven {
+        url = 'https://www.jitpack.io'
+    }
+
     exclusiveContent {
         forRepository {
             maven {
@@ -176,9 +186,14 @@ dependencies {
     compileOnly fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
     implementation fg.deobf("com.teamabnormals:blueprint:${minecraft_version}-${blueprint_version}")
 
-
+    // CraftTweaker
+    var tweaker = "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${crafttweaker_version}"
+    implementation fg.deobf(tweaker)
+    annotationProcessor(tweaker)
+    compileOnly("com.blamejared.crafttweaker:CraftTweaker-common-${minecraft_version}:${crafttweaker_version}")
     // ANNOTATION PROCESSORS
-
+//    implementation fg.deobf("com.blamejared:CreateTweaker:1.0.0.12")
+    annotationProcessor("com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.15")
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }
 
@@ -195,6 +210,10 @@ jar {
                 "MixinConfigs"            : 'destroy.mixins.json'
         ])
     }
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
 }
 
 // Example configuration to allow publishing using the maven-publish plugin

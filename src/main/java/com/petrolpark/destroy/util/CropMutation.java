@@ -4,10 +4,7 @@ import javax.annotation.Nullable;
 
 import com.simibubi.create.AllTags;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 import net.minecraft.world.level.block.Block;
@@ -67,35 +64,28 @@ public class CropMutation {
      * Let the system know that this Mutation exists.
      */
     private void register() {
-        if (!MUTATIONS.keySet().contains(startCrop.get())) {
-            MUTATIONS.put(startCrop.get(), new ArrayList<>());
-        };
-        MUTATIONS.get(startCrop.get()).add(this);
+        MUTATIONS.computeIfAbsent(startCrop.get(), e -> new ArrayList<>()).add(this);
     };
 
     public static CropMutation getMutation(BlockState cropBlockState, BlockState blockUnder) {
         Block cropBlock = cropBlockState.getBlock();
         CropMutation mutation = null;
-        checkAllEntries: for (Block crop : MUTATIONS.keySet()) {
-            if (crop == cropBlock) {
-                for (CropMutation possibleMutation : MUTATIONS.get(crop)) {
-                    if (possibleMutation.oreSpecific) {
-                        Supplier<Block> ore = possibleMutation.ore;
-                        if (ore != null && blockUnder.is(ore.get())) { // This is the bit it thinks is null
-                            mutation = possibleMutation;
-                            break checkAllEntries; // Prioritize Ore-specific Mutations
-                        };
-                    } else {
-                        mutation = possibleMutation;
-                    };
+        checker: for(Map.Entry<Block, List<CropMutation>> mutationEntry : MUTATIONS.entrySet()) {
+            Block crop = mutationEntry.getKey();
+            if(!crop.equals(cropBlock)) continue;
+            for(CropMutation possibleMutation : mutationEntry.getValue()) {
+                if(!possibleMutation.oreSpecific) {
+                    mutation = possibleMutation;
+                    continue;
+                }
+                Supplier<Block> ore = possibleMutation.ore;
+                if (ore != null && blockUnder.is(ore.get())) { // This is the bit it thinks is null
+                    mutation = possibleMutation;
+                    break checker; // Prioritize Ore-specific Mutations
                 };
-            };
-        };
-        if (mutation == null) {
-            return new CropMutation(cropBlockState);
-        } else {
-            return mutation;
+            }
         }
+        return Objects.requireNonNullElse(mutation, new CropMutation(cropBlockState));
     };
 
     public Supplier<Block> getStartCropSupplier() {

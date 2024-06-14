@@ -14,6 +14,13 @@ public abstract class MixtureFluidIngredientSubType<T extends MixtureFluidIngred
     public abstract T getNew();
 
     /**
+     * Gets a MixtureFluidIngredient from FluidStack NBT
+     * @param tag Tag to parse ingredient from
+     * @return Destroy's native FluidIngredient
+     */
+    public abstract T fromNBT(CompoundTag tag, int amount);
+
+    /**
      * Get the string which is used to identify this ingredient type in the JSON recipe deserializer.
      * @return
      */
