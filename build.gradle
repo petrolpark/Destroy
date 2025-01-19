@@ -185,7 +185,7 @@ dependencies {
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 
     // Petrolpark Library (temporary)
-    implementation "com.petrolpark:petrolpark:${minecraft_version}-${petrolpark_library_version}"
+    implementation "maven.modrinth:petrolpark:${minecraft_version}-${petrolpark_library_version}"
 
     // CDK
     //implementation "org.openscience.cdk:cdk-bundle:2.9"
