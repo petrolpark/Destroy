@@ -612,6 +612,12 @@ public class DestroyItems {
     NICKEL_INFUSED_BEETROOT = REGISTRATE.item("nickel_infused_beetroot", p -> new WithSecondaryItem(p, i -> RAW_NICKEL.asStack()))
         .tag(DestroyItemTags.HEFTY_BEETROOTS.tag)
         .register(),
+    NETHER_CROCOITE_INFUSED_BEETROOT = REGISTRATE.item("nether_crocoite_infused_beetroot", p -> new WithSecondaryItem(p, i -> NETHER_CROCOITE.asStack()))
+        .tag(DestroyItemTags.HEFTY_BEETROOTS.tag)
+        .register(),
+    QUARTZ_INFUSED_BEETROOT = REGISTRATE.item("quartz_infused_beetroot", p -> new WithSecondaryItem(p, i -> new ItemStack(Items.QUARTZ)))
+        .tag(DestroyItemTags.HEFTY_BEETROOTS.tag)
+        .register(),
     REDSTONE_INFUSED_BEETROOT = REGISTRATE.item("redstone_infused_beetroot", p -> new WithSecondaryItem(p, i -> new ItemStack(Items.REDSTONE)))
         .tag(DestroyItemTags.HEFTY_BEETROOTS.tag)
         .register(),
@@ -653,7 +659,13 @@ public class DestroyItems {
     LAPIS_INFUSED_BEETROOT_ASHES = REGISTRATE.item("lapis_infused_beetroot_ashes", p -> new WithSecondaryItem(p, i -> new ItemStack(Items.LAPIS_LAZULI)))
         .tag(DestroyItemTags.BEETROOT_ASHES.tag)
         .register(),
+    NETHER_CROCOITE_INFUSED_BEETROOT_ASHES = REGISTRATE.item("nether_crocoite_infused_beetroot_ashes", p -> new WithSecondaryItem(p, i -> NETHER_CROCOITE.asStack()))
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register(),
     NICKEL_INFUSED_BEETROOT_ASHES = REGISTRATE.item("nickel_infused_beetroot_ashes", p -> new WithSecondaryItem(p, i -> RAW_NICKEL.asStack()))
+        .tag(DestroyItemTags.BEETROOT_ASHES.tag)
+        .register(),
+    QUARTZ_INFUSED_BEETROOT_ASHES = REGISTRATE.item("quartz_infused_beetroot_ashes", p -> new WithSecondaryItem(p, i -> new ItemStack(Items.QUARTZ)))
         .tag(DestroyItemTags.BEETROOT_ASHES.tag)
         .register(),
     REDSTONE_INFUSED_BEETROOT_ASHES = REGISTRATE.item("redstone_infused_beetroot_ashes", p -> new WithSecondaryItem(p, i -> new ItemStack(Items.REDSTONE)))

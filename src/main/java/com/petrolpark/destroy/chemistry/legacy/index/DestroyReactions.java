@@ -1021,6 +1021,48 @@ public class DestroyReactions {
         .addSimpleItemReactant(AllItems.CRUSHED_ZINC::get, 15f)
         .addProduct(DestroyMolecules.HYDROGEN)
         .addProduct(DestroyMolecules.ZINC_ION)
+        .build(),
+    
+
+    // Methane chlorinations
+    METHANE_CHLORINATION = builder()
+        .id("methane_uv_chlorination")
+        .addReactant(DestroyMolecules.METHANE)
+        .addReactant(DestroyMolecules.CHLORINE)
+        .requireUV()
+        .addProduct(DestroyMolecules.CHLOROMETHANE)
+        .addProduct(DestroyMolecules.HYDROCHLORIC_ACID)
+        .activationEnergy(22.5f)
+        .build(),
+
+    CHLOROMETHANE_CHLORINATION = builder()
+        .id("methane_uv_chlorination")
+        .addReactant(DestroyMolecules.CHLOROMETHANE)
+        .addReactant(DestroyMolecules.CHLORINE)
+        .requireUV()
+        .addProduct(DestroyMolecules.DICHLOROMETHANE)
+        .addProduct(DestroyMolecules.HYDROCHLORIC_ACID)
+        .activationEnergy(25f)
+        .build(),
+
+    DICHLOROMETHANE_CHLORINATION = builder()
+        .id("methane_uv_chlorination")
+        .addReactant(DestroyMolecules.DICHLOROMETHANE)
+        .addReactant(DestroyMolecules.CHLORINE)
+        .requireUV()
+        .addProduct(DestroyMolecules.CHLOROFORM)
+        .addProduct(DestroyMolecules.HYDROCHLORIC_ACID)
+        .activationEnergy(27.5f)
+        .build(),
+
+    CHLOROFORM_CHLORINATION = builder()
+        .id("methane_uv_chlorination")
+        .addReactant(DestroyMolecules.CHLOROFORM)
+        .addReactant(DestroyMolecules.CHLORINE)
+        .requireUV()
+        .addProduct(DestroyMolecules.CARBON_TETRACHLORIDE)
+        .addProduct(DestroyMolecules.HYDROCHLORIC_ACID)
+        .activationEnergy(30f)
         .build();
 
     // Acids

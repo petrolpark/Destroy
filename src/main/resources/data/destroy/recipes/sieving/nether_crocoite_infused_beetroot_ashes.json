@@ -1,0 +1,30 @@
+{
+    "type": "destroy:sieving",
+    "ingredients": [
+      {
+        "item": "destroy:nether_crocoite_infused_beetroot_ashes"
+      }
+    ],
+    "results": [
+      {
+        "item": "destroy:nether_crocoite",
+        "count": 1
+      },
+      {
+        "item": "destroy:nether_crocoite",
+        "count": 1,
+        "chance": 0.5
+      },
+      {
+        "item": "destroy:crushed_raw_chromium",
+        "count": 1,
+        "chance": 0.1
+      },
+      {
+        "item": "destroy:beetroot_ashes",
+        "count": 1,
+        "chance": 0.5
+      }
+    ],
+    "processingTime": 12800
+  }

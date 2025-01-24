@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+      "item": "destroy:nether_crocoite_infused_beetroot"
+    },
+    "result": "destroy:nether_crocoite_infused_beetroot_ashes",
+    "cookingtime": 200
+  }

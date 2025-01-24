@@ -3,7 +3,7 @@
     "ingredients": [
       {
         "mixtureFluidWithTaggedMolecules": "destroy:mixture",
-        "amount": 100,
+        "amount": 1,
         "tag": "destroy:flame_retardant",
         "min_concentration": 1.0,
         "max_concentration": 3.0

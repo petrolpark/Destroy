@@ -662,9 +662,9 @@ public class LegacyReaction {
         };
 
         /**
-         * Registers an acid. This automatially registers two {@link LegacyReaction Reactions} (one for the association,
-         * one for the dissociation). The pKa is assumed to be temperature-independent - if this is not wanted, manually register
-         * the two Reactions.
+         * Registers an acid. This automatially registers four {@link LegacyReaction Reactions} (one for the association,
+         * two for the dissociation (with both water and hydroxide)).
+         * The pKa is assumed to be temperature-independent - if this is not wanted, manually register the two Reactions.
          * @param acid
          * @param conjugateBase This should have a charge one less than the acid and should ideally conserve Atoms
          * @param pKa
@@ -674,7 +674,7 @@ public class LegacyReaction {
 
             if (conjugateBase.getCharge() + 1 != acid.getCharge()) throw e("Acids must not violate the conservation of charge.");
 
-            // Dissociation
+            // Dissociation with water
             LegacyReaction dissociationReaction = this
                 .id(acid.getFullID().split(":")[1] + ".dissociation")
                 .addReactant(acid)
@@ -682,7 +682,19 @@ public class LegacyReaction {
                 .addProduct(DestroyMolecules.PROTON)
                 .addProduct(conjugateBase)
                 .activationEnergy(GAS_CONSTANT * 0.298f) // Makes the pKa accurate at room temperature
-                .preexponentialFactor((float)Math.pow(10, -pKa))
+                .preexponentialFactor(0.5f * (float)Math.pow(10, -pKa))
+                .dontIncludeInJei()
+                .build();
+            
+            // Neutralization with hydroxide (temporary fix while API gets rewritten)
+            new ReactionBuilder(namespace)
+                .id(acid.getFullID().split(":")[1] + ".neutralization")
+                .addReactant(acid)
+                .addReactant(DestroyMolecules.HYDROXIDE)
+                .addProduct(conjugateBase)
+                .addProduct(DestroyMolecules.WATER)
+                .activationEnergy(GAS_CONSTANT * 0.298f) // Makes the pKa accurate at room temperature
+                .preexponentialFactor(0.5f * (float)Math.pow(10, -pKa))
                 .dontIncludeInJei()
                 .build();
 

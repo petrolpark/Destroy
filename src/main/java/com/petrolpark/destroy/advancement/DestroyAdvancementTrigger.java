@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.advancement;
 
+import com.petrolpark.advancement.SimpleAdvancementTrigger;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.legacy.LegacyReaction;
 import com.petrolpark.destroy.chemistry.legacy.ReactionResult;
@@ -68,12 +69,12 @@ public enum DestroyAdvancementTrigger {
 
     private String triggerId;
     private String[] advancementIds;
-    private SimpleDestroyTrigger trigger;
+    private SimpleAdvancementTrigger trigger;
 
     DestroyAdvancementTrigger() {
         triggerId = Lang.asId(name());
         advancementIds = new String[]{Lang.asId(name())};
-        trigger = new SimpleDestroyTrigger(triggerId);
+        trigger = new SimpleAdvancementTrigger(Destroy.asResource(triggerId));
     };
 
     DestroyAdvancementTrigger(String triggerAndAdvancementId) {
@@ -83,7 +84,7 @@ public enum DestroyAdvancementTrigger {
     DestroyAdvancementTrigger(String triggerId, String ...advancementIds) {
         this.triggerId = triggerId;
         this.advancementIds = advancementIds;
-        trigger = new SimpleDestroyTrigger(triggerId);
+        trigger = new SimpleAdvancementTrigger(Destroy.asResource(triggerId));
     };
 
     public void award(Level level, Player player) {

@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.mixin.compat.jei;
+package com.petrolpark.destroy.mixin.compat.jei.client;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

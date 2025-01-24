@@ -63,20 +63,20 @@
         "VillagerMixin"
     ],
     "client": [
-        "compat.jei.GhostIngredientHandlerMixin",
-        "compat.jei.JeiProcessingRecipeMixin",
-        "compat.embeddium.WorldSliceMixin",
-        "ClientLevelMixin",
-        "CreativeModeInventoryScreenMixin",
-        "EffectRenderingInventoryScreenMixin",
-        "ForgeMod$2$1Mixin",
-        "GuiMixin",
-        "HeartTypeMixin",
-        "LevelRendererMixin",
-        "MinecraftMixin",
-        "MultiPlayerGameModeMixin",
-        "PonderWorldMixin",
-        "RecipeBookComponentMixin"
+        "compat.jei.client.GhostIngredientHandlerMixin",
+        "compat.jei.client.JeiProcessingRecipeMixin",
+        "compat.embeddium.client.WorldSliceMixin",
+        "client.ClientLevelMixin",
+        "client.CreativeModeInventoryScreenMixin",
+        "client.EffectRenderingInventoryScreenMixin",
+        "client.ForgeMod$2$1Mixin",
+        "client.GuiMixin",
+        "client.HeartTypeMixin",
+        "client.LevelRendererMixin",
+        "client.MinecraftMixin",
+        "client.MultiPlayerGameModeMixin",
+        "client.PonderWorldMixin",
+        "client.RecipeBookComponentMixin"
     ],
     "injectors": {
         "defaultRequire": 1

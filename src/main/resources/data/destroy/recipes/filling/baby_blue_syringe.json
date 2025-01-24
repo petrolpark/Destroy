@@ -13,7 +13,7 @@
       },
       {
         "mixtureFluidWithMolecule": "destroy:mixture",
-        "amount": 200,
+        "amount": 2,
         "molecule": "destroy:methyl_salicylate",
         "concentration": 5.0
       }

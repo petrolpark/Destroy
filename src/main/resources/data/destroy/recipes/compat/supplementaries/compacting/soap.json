@@ -9,7 +9,7 @@
     "ingredients": [
       {
         "mixtureFluidWithSalt": "destroy:mixture",
-        "amount": 250,
+        "amount": 25,
         "anion": "destroy:hydroxide",
         "cation": "destroy:sodium_ion",
         "concentration": 5.0

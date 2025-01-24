@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.mixin;
+package com.petrolpark.destroy.mixin.client;
 
 import java.util.function.Supplier;
 

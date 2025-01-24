@@ -4,6 +4,7 @@
     "destroy:catalytic_converter",
     "destroy:centrifuge",
     "destroy:cooler",
+    "destroy:creative_pump",
     "destroy:dynamo",
     "destroy:arc_furnace_lid",
     "destroy:element_tank",

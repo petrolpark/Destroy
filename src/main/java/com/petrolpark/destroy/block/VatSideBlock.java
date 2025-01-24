@@ -1,5 +1,8 @@
 package com.petrolpark.destroy.block;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.block.entity.DestroyBlockEntityTypes;
@@ -19,6 +22,7 @@ import com.simibubi.create.foundation.gui.ScreenOpener;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,6 +39,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootParams.Builder;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -149,11 +159,22 @@ public class VatSideBlock extends CopycatBlock implements ISpecialBlockItemRequi
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        withBlockEntityDo(level, pos, be -> {
-            if (!isMoving && !be.getMaterial().equals(newState) && !state.equals(newState)) Block.popResource(level, pos, be.getConsumedItem());
-        });
         IBE.onRemove(state, level, pos, newState);
-        super.onRemove(state, level, pos, newState, isMoving);
+        level.removeBlockEntity(pos);
+    };
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, Builder paramsBuilder) {
+        BlockEntity be = paramsBuilder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        if ((be instanceof VatSideBlockEntity vatSide)) {
+            ResourceLocation lootResourceLocation = vatSide.getMaterial().getBlock().getLootTable();
+            if (lootResourceLocation != BuiltInLootTables.EMPTY) {
+                LootParams params = paramsBuilder.withParameter(LootContextParams.BLOCK_STATE, vatSide.getMaterial()).create(LootContextParamSets.BLOCK);
+                LootTable lootTable = params.getLevel().getServer().getLootData().getLootTable(lootResourceLocation);
+                return lootTable.getRandomItems(params); // Return loot table of wrapped Block so Glass does not drop without Silk Touch etc.
+            };
+        };
+        return Collections.emptyList();
     };
 
     @Override

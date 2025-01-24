@@ -690,7 +690,7 @@ public class DestroyBlocks {
         .transform(TagGen.pickaxeOnly())
         .loot((lt, b) -> lt.add(b, RegistrateBlockLootTables.createSilkTouchDispatchTable(b, lt.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.NETHER_CROCOITE.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0f, 5.0f))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))))))
         .tag(BlockTags.NEEDS_IRON_TOOL)
-        .tag(Tags.Blocks.ORES)
+        .tag(Tags.Blocks.ORES, Tags.Blocks.ORES_IN_GROUND_NETHERRACK, Tags.Blocks.ORE_BEARING_GROUND_NETHERRACK)
         .item()
         .tag(Tags.Items.ORES)
         .build()
@@ -763,6 +763,16 @@ public class DestroyBlocks {
         .register(),
 
     NICKEL_INFUSED_BEETROOT = REGISTRATE.block("nickel_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.NICKEL_INFUSED_BEETROOT))
+        .initialProperties(HEFTY_BEETROOT)
+        .tag(DestroyBlockTags.BEETROOTS.tag)
+        .register(),
+
+    NETHER_CROCOITE_INFUSED_BEETROOT = REGISTRATE.block("nether_crocoite_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.NETHER_CROCOITE_INFUSED_BEETROOT))
+        .initialProperties(HEFTY_BEETROOT)
+        .tag(DestroyBlockTags.BEETROOTS.tag)
+        .register(),
+
+    QUARTZ_INFUSED_BEETROOT = REGISTRATE.block("quartz_infused_beetroot", p -> new HeftyBeetrootBlock(p, DestroyItems.QUARTZ_INFUSED_BEETROOT))
         .initialProperties(HEFTY_BEETROOT)
         .tag(DestroyBlockTags.BEETROOTS.tag)
         .register(),

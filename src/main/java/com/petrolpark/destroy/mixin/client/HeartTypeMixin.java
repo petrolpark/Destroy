@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.mixin;
+package com.petrolpark.destroy.mixin.client;
 
 import java.util.ArrayList;
 import java.util.Arrays;

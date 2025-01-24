@@ -3,12 +3,14 @@ package com.petrolpark.destroy.effect;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.item.DestroyItems;
 
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.*;
 import net.minecraft.world.item.ItemStack;
 
+@MoveToPetrolparkLibrary
 public class HangoverMobEffect extends DestroyMobEffect {
     public HangoverMobEffect() {
         super(MobEffectCategory.HARMFUL, 0x59390B);

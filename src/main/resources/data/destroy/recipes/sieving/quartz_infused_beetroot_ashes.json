@@ -1,0 +1,30 @@
+{
+    "type": "destroy:sieving",
+    "ingredients": [
+      {
+        "item": "destroy:quartz_infused_beetroot_ashes"
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:quartz",
+        "count": 3
+      },
+      {
+        "item": "minecraft:quartz",
+        "count": 2,
+        "chance": 0.5
+      },
+      {
+        "item": "minecraft:gold_nugget",
+        "count": 3,
+        "chance": 0.5
+      },
+      {
+        "item": "destroy:beetroot_ashes",
+        "count": 1,
+        "chance": 0.5
+      }
+    ],
+    "processingTime": 12800
+  }

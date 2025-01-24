@@ -1,5 +1,6 @@
 {
     "preservationProportion": 0.8,
-    "color": "16733525",
-    "absentColor": "16733525"
+    "color": 16733525,
+    "absentColor": 16733525,
+    "children": []
 }

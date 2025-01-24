@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.effect;
 
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.advancement.DestroyAdvancementTrigger;
 import com.petrolpark.destroy.world.damage.DestroyDamageSources;
 
@@ -9,6 +10,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
+@MoveToPetrolparkLibrary
 public class InebriationMobEffect extends UncurableMobEffect {
     
     public InebriationMobEffect() {
@@ -20,7 +22,7 @@ public class InebriationMobEffect extends UncurableMobEffect {
         int pDuration = livingEntity.getEffect(DestroyMobEffects.INEBRIATION.get()).getDuration(); // This is the bit it says is null
         if (!livingEntity.level().isClientSide()) {
             if (amplifier >= 3) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 205, (amplifier - 2), true, false, false));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 25, (amplifier - 2), true, false, false));
             };
             if (amplifier >= 6) {
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 25, (amplifier - 6), true, false, false));

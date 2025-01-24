@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.mixin.compat.embeddium;
+package com.petrolpark.destroy.mixin.compat.embeddium.client;
 
 import me.jellysquid.mods.sodium.client.world.WorldSlice;
 import net.minecraft.client.multiplayer.ClientLevel;

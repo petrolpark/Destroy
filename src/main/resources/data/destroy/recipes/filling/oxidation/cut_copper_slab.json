@@ -6,7 +6,7 @@
       },
       {
         "mixtureFluidWithMolecule": "destroy:mixture",
-        "amount": 50,
+        "amount": 5,
         "molecule": "destroy:acetic_acid",
         "concentration": 1.0
       }

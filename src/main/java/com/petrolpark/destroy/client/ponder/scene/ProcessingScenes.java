@@ -408,13 +408,11 @@ public class ProcessingScenes {
             .getDefaultState()
             .setValue(BubbleCapBlock.BOTTOM, false)
             .setValue(BubbleCapBlock.TOP, false)
-            .setValue(BubbleCapBlock.PIPE_FACE, Direction.EAST)
         , false);
         scene.world.setBlock(util.grid.at(1, 6, 1), DestroyBlocks.BUBBLE_CAP
             .getDefaultState()
             .setValue(BubbleCapBlock.BOTTOM, false)
             .setValue(BubbleCapBlock.TOP, false)
-            .setValue(BubbleCapBlock.PIPE_FACE, Direction.EAST)
         , false);
         scene.idle(20);
 

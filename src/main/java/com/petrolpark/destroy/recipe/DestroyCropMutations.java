@@ -38,6 +38,8 @@ public class DestroyCropMutations {
     LAPIS_INFUSED_BEETROOT_DEEPSLATE = new CropMutation(() -> Blocks.BEETROOTS, () -> DestroyBlocks.LAPIS_INFUSED_BEETROOT.getDefaultState(), () -> Blocks.DEEPSLATE_LAPIS_ORE),
     NICKEL_INFUSED_BEETROOT = new CropMutation(() -> Blocks.BEETROOTS, () -> DestroyBlocks.NICKEL_INFUSED_BEETROOT.getDefaultState(), DestroyBlocks.NICKEL_ORE),
     NICKEL_INFUSED_BEETROOT_DEEPSLATE = new CropMutation(() -> Blocks.BEETROOTS, () -> DestroyBlocks.NICKEL_INFUSED_BEETROOT.getDefaultState(), DestroyBlocks.DEEPSLATE_NICKEL_ORE),
+    NETHER_CROCOITE_INFUSED_BEETROOT = new CropMutation(() -> Blocks.BEETROOTS, DestroyBlocks.NETHER_CROCOITE_INFUSED_BEETROOT::getDefaultState, DestroyBlocks.NETHER_CROCOITE_BLOCK),
+    QUARTZ_INFUSED_BEETROOT = new CropMutation(() -> Blocks.BEETROOTS, DestroyBlocks.QUARTZ_INFUSED_BEETROOT::getDefaultState, () -> Blocks.NETHER_QUARTZ_ORE),
     REDSTONE_INFUSED_BEETROOT = new CropMutation(() -> Blocks.BEETROOTS, () -> DestroyBlocks.REDSTONE_INFUSED_BEETROOT.getDefaultState(), () -> Blocks.REDSTONE_ORE),
     REDSTONE_INFUSED_BEETROOT_DEEPSLATE = new CropMutation(() -> Blocks.BEETROOTS, () -> DestroyBlocks.REDSTONE_INFUSED_BEETROOT.getDefaultState(), () -> Blocks.DEEPSLATE_REDSTONE_ORE),
     ZINC_INFUSED_BEETROOT = new CropMutation(() -> Blocks.BEETROOTS, () -> DestroyBlocks.ZINC_INFUSED_BEETROOT.getDefaultState(), AllBlocks.ZINC_ORE),

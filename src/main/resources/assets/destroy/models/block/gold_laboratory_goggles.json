@@ -3,6 +3,6 @@
 	"parent": "destroy:block/laboratory_goggles",
 	"textures": {
 		"0": "destroy:entity/armor/gold_laboratory_goggles",
-		"particle": "destroy:entity/gold/gold_laboratory_goggles"
+		"particle": "destroy:entity/armor/gold_laboratory_goggles"
 	}
 }

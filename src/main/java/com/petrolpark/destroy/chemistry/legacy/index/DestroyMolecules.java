@@ -290,6 +290,16 @@ public final class DestroyMolecules {
         .tag(Tags.CARCINOGEN)
         .build(),
 
+    CHLOROMETHANE = builder()
+        .id("chloromethane")
+        .structure(LegacyMolecularStructure.deserialize("destroy:linear:CCl"))
+        .boilingPoint(-23.8f)
+        .density(1.003f)
+        .molarHeatCapacity(81.2f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.REFRIGERANT)
+        .build(),
+
     CHLOROFORM = builder()
         .id("chloroform")
         .structure(LegacyMolecularStructure.deserialize("destroy:linear:ClC(Cl)Cl"))
@@ -431,6 +441,17 @@ public final class DestroyMolecules {
         .tag(Tags.GREENHOUSE)
         .tag(Tags.OZONE_DEPLETER)
         .tag(Tags.REFRIGERANT)
+        .build(),
+
+    DICHLOROMETHANE = builder()
+        .id("dichloromethane")
+        .structure(LegacyMolecularStructure.deserialize("destroy:linear:ClCCl"))
+        .boilingPoint(39.6f)
+        .density(1.3266f)
+        .molarHeatCapacity(81.2f)
+        .tag(Tags.ACUTELY_TOXIC)
+        .tag(Tags.CARCINOGEN)
+        .tag(Tags.SOLVENT)
         .build(),
 
     DICHROMATE = builder()

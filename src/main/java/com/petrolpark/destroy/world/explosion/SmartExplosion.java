@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.world.explosion;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
@@ -131,7 +133,7 @@ public class SmartExplosion extends Explosion {
         ExplosionResult result = getExplosionResult();  // 'Do' the Explosion
         toBlow.addAll(result.blocksToDestroy()); // Mark all the Exploded Block States for removal
 
-        List<Entity> entities = result.entities().keySet().stream().toList();
+        List<Entity> entities = result.entities().keySet().stream().collect(Collectors.toCollection(ArrayList::new));
         ForgeEventFactory.onExplosionDetonate(level, this, entities, radius * 2); // Allow events to modify affected entities
         for (Entity entity : entities) { // Explode each Entity
             explodeEntity(entity, result.entities().get(entity));

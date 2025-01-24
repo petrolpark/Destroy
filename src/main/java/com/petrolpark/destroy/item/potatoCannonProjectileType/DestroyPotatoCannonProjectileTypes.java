@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.block.DestroyBlocks;
+import com.petrolpark.destroy.effect.DestroyMobEffects;
 import com.petrolpark.destroy.item.DestroyItems;
 import com.simibubi.create.content.equipment.potatoCannon.PotatoCannonProjectileType;
 
@@ -64,12 +65,11 @@ public class DestroyPotatoCannonProjectileTypes {
         .registerAndAssign(DestroyItems.COPPER_INFUSED_BEETROOT.get()),
 
     DIAMOND_INFUSED_BEETROOT = create("coal_infused_beetroot")
-        .damage(5)
+        .damage(12)
         .reloadTicks(20)
         .velocity(0.9f)
         .knockback(1.5f)
         .renderTowardMotion(140, 1)
-        .onEntityHit(setEffect(MobEffects.POISON, 0, 100, false))
         .registerAndAssign(DestroyItems.DIAMOND_INFUSED_BEETROOT.get()),
 
     EMERALD_INFUSED_BEETROOT = create("emerald_infused_beetroot")
@@ -78,7 +78,7 @@ public class DestroyPotatoCannonProjectileTypes {
         .velocity(0.9f)
         .knockback(1.5f)
         .renderTowardMotion(140, 1)
-        .onEntityHit(setEffect(MobEffects.JUMP, 0, 100, false))
+        .onEntityHit(setEffect(MobEffects.POISON, 0, 100, false))
         .registerAndAssign(DestroyItems.EMERALD_INFUSED_BEETROOT.get()),
 
     FLUORITE_INFUSED_BEETROOT = create("fluorite_infused_beetroot")
@@ -157,6 +157,15 @@ public class DestroyPotatoCannonProjectileTypes {
         .preEntityHit(setFire(5))
         .registerAndAssign(DestroyItems.NAPALM_SUNDAE.get()),
 
+    NETHER_CROCOITE_INFUSED_BEETROOT = create("nether_crocoite_infused_beetroot")
+        .damage(5)
+        .reloadTicks(20)
+        .velocity(0.9f)
+        .knockback(1.5f)
+        .renderTowardMotion(140, 1)
+        .onEntityHit(setEffect(DestroyMobEffects.LEAD_POISONING.get(), 0, 100, false))
+        .registerAndAssign(DestroyItems.NETHER_CROCOITE_INFUSED_BEETROOT.get()),
+
     NICKEL_INFUSED_BEETROOT = create("nickel_infused_beetroot")
         .damage(5)
         .reloadTicks(20)
@@ -165,6 +174,15 @@ public class DestroyPotatoCannonProjectileTypes {
         .renderTowardMotion(140, 1)
         .onEntityHit(setEffect(MobEffects.HUNGER, 0, 100, false))
         .registerAndAssign(DestroyItems.NICKEL_INFUSED_BEETROOT.get()),
+
+    QUARTZ_INFUSED_BEETROOT = create("quartz_infused_beetroot")
+        .damage(5)
+        .reloadTicks(20)
+        .velocity(0.9f)
+        .knockback(1.5f)
+        .renderTowardMotion(140, 1)
+        .onEntityHit(setEffect(MobEffects.WATER_BREATHING, 0, 100, false))
+        .registerAndAssign(DestroyItems.QUARTZ_INFUSED_BEETROOT.get()),
 
     RAW_FRIES = create("raw_fries")
         .damage(1)

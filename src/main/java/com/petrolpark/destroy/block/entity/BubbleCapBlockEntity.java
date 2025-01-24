@@ -10,7 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.advancement.DestroyAdvancementTrigger;
-import com.petrolpark.destroy.block.BubbleCapBlock;
 import com.petrolpark.destroy.block.display.MixtureContentsDisplaySource;
 import com.petrolpark.destroy.block.entity.behaviour.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.block.entity.behaviour.PollutingBehaviour;
@@ -20,8 +19,8 @@ import com.petrolpark.destroy.client.particle.data.GasParticleData;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.sound.DestroySoundEvents;
 import com.petrolpark.destroy.util.DestroyLang;
-import com.petrolpark.destroy.util.DistillationTower;
 import com.petrolpark.destroy.util.DestroyLang.TemperatureUnit;
+import com.petrolpark.destroy.util.DistillationTower;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.thresholdSwitch.ThresholdSwitchObservable;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -35,9 +34,9 @@ import com.simibubi.create.foundation.utility.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -59,7 +58,6 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveLabGo
 
     private static final int TRANSFER_SPEED = 20; // The rate (mB/tick) at which Fluid is transferred from the internal Tank to the actual Tank
 
-    private Direction pipeFace;
     private int fraction; // Where in the Tower this Bubble Cap is (0 = base (controller), 1 = first fraction, etc)
     private int ticksToFill; // How long before this Bubble Cap should start transferring from its internal Tank to its actual Tank (allowing for the illusion of Fluid 'moving up' the Tower)
     public FluidStack particleFluid; // Which Fluid to use if we have to make particles
@@ -78,7 +76,6 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveLabGo
 
     public BubbleCapBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
-        pipeFace = state.getValue(BubbleCapBlock.PIPE_FACE);
         fraction = 0;
         isController = false;
         towerControllerPos = pos; // Temporary assignment
@@ -145,7 +142,6 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveLabGo
         };
 
         ticksToFill = compound.getInt("TicksToFill");
-        pipeFace = getBlockState().getValue(BubbleCapBlock.PIPE_FACE);
         initializationTicks = compound.getInt("InitializationTicks");
     };
 
@@ -277,8 +273,8 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveLabGo
      * Used when the Bubble Cap is placed or the Bubble Cap below is broken.
      * @param level The Level in which this Bubble Cap is
      */
-    public void createOrAddToTower(LevelReader level) {
-        BlockEntity belowBE = level.getBlockEntity(getBlockPos().below());
+    public void createOrAddToTower() {
+        BlockEntity belowBE = getLevel().getBlockEntity(getBlockPos().below());
         if (belowBE == null || !(belowBE instanceof BubbleCapBlockEntity bubbleCapBelow) || bubbleCapBelow.getDistillationTower() == null) { // If this should start a new Distillation Tower
             tower = new DistillationTower(getLevel(), getBlockPos());
         } else { // If this should add to an existing Distillation Tower (because it has just been placed, or because the Bubble Cap below has just become part of a different Distillation Tower)
@@ -302,10 +298,10 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveLabGo
     @SuppressWarnings("null")
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.FLUID_HANDLER) {
-            if (side == pipeFace) {
-                return tank.getCapability().cast();
-            } else if (side == null) { // For Polluting Behaviour, we need access to all Fluid Tanks
+            if (side == null) { // For Polluting Behaviour, we need access to all Fluid Tanks
                 return allFluidCapability.cast();
+            } else if (side.getAxis() != Axis.Y) {
+                return tank.getCapability().cast();
             };
 
         };
@@ -316,24 +312,6 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveLabGo
     public void invalidate() {
         super.invalidate();
         allFluidCapability.invalidate();
-    };
-
-    /**
-     * Attempts to rotate the Bubble Cap so that it faces a new face which also has a Pipe. If no Pipe is available, just rotates it anyway.
-     * @param shouldSwitch Whether the rotation should prioritise switching faces or staying on the current face
-     * @return Whether the Bubble Cap was rotated
-     */
-    @SuppressWarnings("null")
-    public boolean attemptRotation(boolean shouldSwitch) {
-        if (!hasLevel()) return false;
-        if (getLevel().setBlockAndUpdate(getBlockPos(), ((BubbleCapBlock)getBlockState().getBlock()).stateForPositionInTower(getLevel(), getBlockPos()) // Refresh the top/bottom
-            .setValue(BubbleCapBlock.PIPE_FACE, refreshDirection(this, shouldSwitch ? pipeFace.getClockWise() : pipeFace, getTank(), !isController))) // Change the pipe face
-        ) { // If the input/output Direction can be successfully changed
-            pipeFace = getBlockState().getValue(BubbleCapBlock.PIPE_FACE);
-            notifyUpdate(); // Block State has changed
-            return true;
-        };
-        return false;
     };
 
     @Override
