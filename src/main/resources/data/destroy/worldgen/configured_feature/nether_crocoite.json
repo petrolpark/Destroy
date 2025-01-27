@@ -6,7 +6,7 @@
       "targets": [
         {
           "state": {
-            "Name": "destroy:nether_crocoite_block"
+            "Name": "destroy:nether_crocoite_ore"
           },
           "target": {
             "block": "minecraft:netherrack",

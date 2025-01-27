@@ -2,10 +2,10 @@ package com.petrolpark.destroy.chemistry.api.reactor;
 
 import java.util.Optional;
 
-import com.petrolpark.destroy.chemistry.api.reaction.IReacting;
-import com.petrolpark.destroy.chemistry.api.reaction.IReaction;
-import com.petrolpark.destroy.chemistry.api.reaction.context.IReactionContextProvider;
-import com.petrolpark.destroy.chemistry.api.reaction.result.IReactionResult;
+import com.petrolpark.destroy.chemistry.api.transformation.context.IReactionContextProvider;
+import com.petrolpark.destroy.chemistry.api.transformation.reaction.IReacting;
+import com.petrolpark.destroy.chemistry.api.transformation.reaction.IReaction;
+import com.petrolpark.destroy.chemistry.api.transformation.reaction.result.IReactionResult;
 
 /**
  * A vessel in which {@link IReacting something} can {@link IReaction react}.

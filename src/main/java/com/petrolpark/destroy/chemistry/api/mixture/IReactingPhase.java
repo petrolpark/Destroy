@@ -1,6 +1,6 @@
 package com.petrolpark.destroy.chemistry.api.mixture;
 
-import com.petrolpark.destroy.chemistry.api.reaction.IReacting;
+import com.petrolpark.destroy.chemistry.api.transformation.reaction.IReacting;
 
 /**
  * @since Destroy 0.1.0

@@ -1,10 +1,11 @@
-package com.petrolpark.destroy.chemistry.api.reaction;
+package com.petrolpark.destroy.chemistry.api.transformation.reaction;
 
 import com.petrolpark.destroy.chemistry.api.mixture.IMixture;
 import com.petrolpark.destroy.chemistry.api.mixture.IMixtureComponent;
 import com.petrolpark.destroy.chemistry.api.property.ITemperature;
-import com.petrolpark.destroy.chemistry.api.reaction.context.IReactionContext;
-import com.petrolpark.destroy.chemistry.api.reaction.context.IReactionContextProvider;
+import com.petrolpark.destroy.chemistry.api.transformation.ITemperatureDependentTransformation;
+import com.petrolpark.destroy.chemistry.api.transformation.context.IReactionContext;
+import com.petrolpark.destroy.chemistry.api.transformation.context.IReactionContextProvider;
 
 /**
  * Reactions use up some {@link IMixtureComponent}s and produce others.

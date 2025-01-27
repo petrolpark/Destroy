@@ -1,4 +1,7 @@
-package com.petrolpark.destroy.chemistry.api.reaction;
+package com.petrolpark.destroy.chemistry.api.transformation;
+
+import com.petrolpark.destroy.chemistry.api.transformation.reaction.IReacting;
+import com.petrolpark.destroy.chemistry.api.transformation.reaction.IReaction;
 
 /**
  * A {@link ITransformation} is some (physical or chemical) change to a {@link IReacting system} which proceeds at a finite {@link IRateTransformation#getRate(IReacting) rate}.

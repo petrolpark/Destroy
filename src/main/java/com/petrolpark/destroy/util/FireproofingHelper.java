@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.util;
 
+import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.contamination.Contaminables;
 import com.petrolpark.contamination.Contaminant;
 import com.petrolpark.contamination.ItemContamination;
@@ -8,6 +9,7 @@ import com.petrolpark.destroy.recipe.DestroyRecipeTypes;
 import com.petrolpark.destroy.recipe.SingleFluidRecipe;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -21,8 +23,8 @@ public class FireproofingHelper {
 
     private static final RecipeWrapper WRAPPER = new RecipeWrapper(new ItemStackHandler());
 
-    public static final Contaminant getFireproofContaminanant() {
-        return Contaminant.get(CONTAMINANT_RL);
+    public static final Contaminant getFireproofContaminanant(RegistryAccess registryAccess) {
+        return registryAccess.registry(PetrolparkRegistries.Keys.CONTAMINANT).orElseThrow().get(CONTAMINANT_RL);
     };
 
     public static boolean canApply(Level world, ItemStack stack) {
@@ -30,8 +32,7 @@ public class FireproofingHelper {
     };
 
     public static boolean couldApply(Level world, ItemStack stack) {
-        if (getFireproofContaminanant() == null) return false;
-        if (stack.getItem().isFireResistant() || isFireproof(stack)) return false;
+        if (stack.getItem().isFireResistant() || isFireproof(world.registryAccess(), stack)) return false;
         return Contaminables.ITEM.isContaminableStack(stack);
     };
 
@@ -62,11 +63,11 @@ public class FireproofingHelper {
     };
 
     public static void apply(Level world, ItemStack stack) {
-        if (getFireproofContaminanant() != null) ItemContamination.get(stack).contaminate(getFireproofContaminanant());
+        if (getFireproofContaminanant(world.registryAccess()) != null) ItemContamination.get(stack).contaminate(getFireproofContaminanant(world.registryAccess()));
     };
 
-    public static boolean isFireproof(ItemStack stack) {
-        if (getFireproofContaminanant() == null) return false;
-        return ItemContamination.get(stack).has(getFireproofContaminanant());
+    public static boolean isFireproof(RegistryAccess registryAccess, ItemStack stack) {
+        if (getFireproofContaminanant(registryAccess) == null) return false;
+        return ItemContamination.get(stack).has(getFireproofContaminanant(registryAccess));
     };
 };

@@ -7,6 +7,7 @@ import com.petrolpark.destroy.chemistry.api.util.Namespace;
  * @since Destroy 0.1.0
  * @author petrolpark
  */
+@FunctionalInterface
 public interface INamespace {
     
     /**

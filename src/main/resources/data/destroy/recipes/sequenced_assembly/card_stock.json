@@ -17,7 +17,7 @@
             "mixtureFluidWithTaggedMolecules": "destroy:mixture",
             "tag": "destroy:bleach",
             "concentration": 5.0,
-            "amount": 100
+            "amount": 1
           }
         ],
         "results": [

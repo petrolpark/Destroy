@@ -1,8 +1,9 @@
-package com.petrolpark.destroy.chemistry.api.reaction;
+package com.petrolpark.destroy.chemistry.api.transformation.reaction;
 
 import com.petrolpark.destroy.chemistry.api.reactor.IReactor;
+import com.petrolpark.destroy.chemistry.api.transformation.ITransformation;
+import com.petrolpark.destroy.chemistry.api.transformation.context.IReactionContextProvider;
 import com.petrolpark.destroy.chemistry.api.mixture.IMixture;
-import com.petrolpark.destroy.chemistry.api.reaction.context.IReactionContextProvider;
 
 /**
  * Something in which {@link IReaction}s or other {@link ITransformation}s occur, typically a {@link IMixture}.

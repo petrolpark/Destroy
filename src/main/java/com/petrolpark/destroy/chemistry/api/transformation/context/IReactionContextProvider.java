@@ -1,8 +1,8 @@
-package com.petrolpark.destroy.chemistry.api.reaction.context;
-
-import com.petrolpark.destroy.chemistry.api.reaction.IReaction;
+package com.petrolpark.destroy.chemistry.api.transformation.context;
 
 import java.util.Optional;
+
+import com.petrolpark.destroy.chemistry.api.transformation.reaction.IReaction;
 
 /**
  * Something which can provide additional information for {@link IReaction}s, such as UV power.

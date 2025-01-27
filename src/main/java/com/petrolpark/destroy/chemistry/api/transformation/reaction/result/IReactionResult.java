@@ -1,7 +1,7 @@
-package com.petrolpark.destroy.chemistry.api.reaction.result;
+package com.petrolpark.destroy.chemistry.api.transformation.reaction.result;
 
-import com.petrolpark.destroy.chemistry.api.reaction.IReaction;
 import com.petrolpark.destroy.chemistry.api.reactor.IReactor;
+import com.petrolpark.destroy.chemistry.api.transformation.reaction.IReaction;
 
 /**
  * Something which comes about as a result of an {@link IReaction}, other than a {@link IMoleculeComponent} being {@link IReaction#getProduct(com.petrolpark.destroy.chemistry.api.mixture.IMixtureComponent) produced} or {@link IHeatable heating} occuring.

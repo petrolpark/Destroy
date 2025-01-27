@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.chemistry.api.reaction.context;
+package com.petrolpark.destroy.chemistry.api.transformation.context;
 
 import com.petrolpark.destroy.chemistry.minecraft.reaction.context.MinecraftReactionContextTypes;
 
@@ -9,11 +9,11 @@ import com.petrolpark.destroy.chemistry.minecraft.reaction.context.MinecraftReac
  * @see SimpleValueReactionContext Wrapping an object
  * @see MinecraftReactionContextTypes#SIMPLE_UV_POWER Example usage
  */
-public abstract class PrimitiveDoubleReactionContext implements IReactionContext<PrimitiveDoubleReactionContext> {
+public abstract class DoubleReactionContext implements IReactionContext<DoubleReactionContext> {
     
     protected final double value;
 
-    protected PrimitiveDoubleReactionContext(double value) {
+    protected DoubleReactionContext(double value) {
         this.value = value;
     };
 
@@ -21,22 +21,22 @@ public abstract class PrimitiveDoubleReactionContext implements IReactionContext
         return value;
     };
 
-    public static class Type implements IReactionContextType<PrimitiveDoubleReactionContext> {
+    public static class Type implements IReactionContextType<DoubleReactionContext> {
 
         protected final Factory factory;
-        protected final PrimitiveDoubleReactionContext defaultContext;
+        protected final DoubleReactionContext defaultContext;
 
         public Type(Factory reactionContextFactory, double defaultValue) {
             factory = reactionContextFactory;
             defaultContext = of(defaultValue);
         };
 
-        public PrimitiveDoubleReactionContext of(double value) {
+        public DoubleReactionContext of(double value) {
             return factory.create(value);
         };
 
         @Override
-        public PrimitiveDoubleReactionContext getDefault(IReactionContextProvider reactionContextProvider) {
+        public DoubleReactionContext getDefault(IReactionContextProvider reactionContextProvider) {
             return defaultContext;
         };
         
@@ -44,6 +44,6 @@ public abstract class PrimitiveDoubleReactionContext implements IReactionContext
 
     @FunctionalInterface
     public static interface Factory {
-        public PrimitiveDoubleReactionContext create(double value);
+        public DoubleReactionContext create(double value);
     };
 };

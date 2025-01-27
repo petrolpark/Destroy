@@ -1,4 +1,6 @@
-package com.petrolpark.destroy.chemistry.api.reaction;
+package com.petrolpark.destroy.chemistry.api.transformation;
+
+import com.petrolpark.destroy.chemistry.api.transformation.reaction.IReacting;
 
 /**
  * An {@link ITransformation} which occurs at a {@link IRateTransformation#getRate(IReacting) rate} that depends on properties of {@link IReacting where it occurs}.

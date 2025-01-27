@@ -1,12 +1,12 @@
-package com.petrolpark.destroy.chemistry.api.reaction.cacher;
+package com.petrolpark.destroy.chemistry.api.transformation.cacher;
 
 import java.util.stream.Stream;
 
 import com.petrolpark.destroy.chemistry.api.mixture.IMixture;
 import com.petrolpark.destroy.chemistry.api.mixture.IMixtureComponent;
-import com.petrolpark.destroy.chemistry.api.reaction.IReacting;
-import com.petrolpark.destroy.chemistry.api.reaction.ITransformation;
-import com.petrolpark.destroy.chemistry.api.reaction.context.IReactionContext;
+import com.petrolpark.destroy.chemistry.api.transformation.ITransformation;
+import com.petrolpark.destroy.chemistry.api.transformation.context.IReactionContext;
+import com.petrolpark.destroy.chemistry.api.transformation.reaction.IReacting;
 
 /**
  * A store of {@link ITransformation}s possible in an {@link IReacting} {@link IMixture}, to avoid recalculating them repeatedly.

@@ -1,9 +1,9 @@
-package com.petrolpark.destroy.chemistry.api.reaction.context;
+package com.petrolpark.destroy.chemistry.api.transformation.context;
 
 import com.petrolpark.destroy.chemistry.api.mixture.IMixture;
 import com.petrolpark.destroy.chemistry.api.property.ITemperature;
+import com.petrolpark.destroy.chemistry.api.transformation.reaction.IReaction;
 import com.petrolpark.destroy.chemistry.api.mixture.IMixtureComponent;
-import com.petrolpark.destroy.chemistry.api.reaction.IReaction;
 
 /**
  * A condition which will affect the rate or possibility of an {@link IReaction}, such as the amount of UV light or any soluble solids.
@@ -20,7 +20,7 @@ import com.petrolpark.destroy.chemistry.api.reaction.IReaction;
  * @since Destroy 0.1.0
  * @author petrolpark
  * @see SimpleValueReactionContext Default implementation which wraps another object
- * @see PrimitiveDoubleReactionContext Implementation which wraps a {@code double} primitive
+ * @see DoubleReactionContext Implementation which wraps a {@code double} primitive
  */
 public interface IReactionContext<RC extends IReactionContext<? super RC>> {
      

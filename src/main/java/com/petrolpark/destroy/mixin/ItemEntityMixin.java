@@ -31,7 +31,7 @@ public abstract class ItemEntityMixin extends Entity {
         cancellable = true
     )
     public void inFireImmune(CallbackInfoReturnable<Boolean> cir) {
-        if (FireproofingHelper.isFireproof(getItem())) cir.setReturnValue(true);
+        if (FireproofingHelper.isFireproof(level().registryAccess(), getItem())) cir.setReturnValue(true);
     };
     
 

@@ -2,7 +2,7 @@
     "type": "create:crushing",
     "ingredients": [
       {
-        "item": "destroy:nether_crocoite_block"
+        "item": "destroy:nether_crocoite_ore"
       }
     ],
     "results": [

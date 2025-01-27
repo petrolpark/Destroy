@@ -2,8 +2,7 @@ package com.petrolpark.destroy.chemistry.api.species;
 
 import com.petrolpark.destroy.chemistry.api.property.ICharge;
 import com.petrolpark.destroy.chemistry.api.property.IRelativeAtomicMass;
-
-import com.petrolpark.destroy.chemistry.api.reaction.IReaction;
+import com.petrolpark.destroy.chemistry.api.transformation.reaction.IReaction;
 
 /**
  * A distinguisher of two {@link ISpecies}.

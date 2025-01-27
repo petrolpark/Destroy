@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.chemistry.api.reaction.context;
+package com.petrolpark.destroy.chemistry.api.transformation.context;
 
 /**
  * A type of {@link IReactionContext}.

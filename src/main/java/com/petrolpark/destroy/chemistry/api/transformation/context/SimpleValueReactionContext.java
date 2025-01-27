@@ -1,11 +1,11 @@
-package com.petrolpark.destroy.chemistry.api.reaction.context;
+package com.petrolpark.destroy.chemistry.api.transformation.context;
 
 /**
  * Default implementation of {@link IReactionContext} which just wraps another object.
  * It is recommended that this is used for objects defined by other libraries and that native objects should just implement {@link IReactionContext}.
  * @since Destroy 0.1.0
  * @author petrolpark
- * @see PrimitiveDoubleReactionContext Implementation which wraps a {@code double} primitive
+ * @see DoubleReactionContext Implementation which wraps a {@code double} primitive
  */
 public abstract class SimpleValueReactionContext<T> implements IReactionContext<SimpleValueReactionContext<T>> {
 

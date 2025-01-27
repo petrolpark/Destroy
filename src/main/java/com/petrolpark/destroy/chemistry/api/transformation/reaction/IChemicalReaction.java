@@ -1,4 +1,4 @@
-package com.petrolpark.destroy.chemistry.api.reaction;
+package com.petrolpark.destroy.chemistry.api.transformation.reaction;
 
 import com.petrolpark.destroy.chemistry.api.species.ISpecies;
 

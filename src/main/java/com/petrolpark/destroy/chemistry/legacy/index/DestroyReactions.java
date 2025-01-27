@@ -148,6 +148,15 @@ public class DestroyReactions {
         .reversible()
         .build(),
 
+    BOROHYDRIDE_IODINE_OXIDATION = builder() //TODO replace with generic redox
+        .id("borohydride_iodine_oxidation")
+        .addReactant(DestroyMolecules.BOROHYDRIDE, 2)
+        .addReactant(DestroyMolecules.IODINE)
+        .addProduct(DestroyMolecules.DIBORANE)
+        .addProduct(DestroyMolecules.IODIDE, 2)
+        .addProduct(DestroyMolecules.HYDROGEN)
+        .build(),
+
     BROWN_SCHLESINGER_PROCESS = builder()
         .id("brown_schlesinger_process")
         .addReactant(DestroyMolecules.TRIMETHYL_BORATE)
@@ -1036,7 +1045,7 @@ public class DestroyReactions {
         .build(),
 
     CHLOROMETHANE_CHLORINATION = builder()
-        .id("methane_uv_chlorination")
+        .id("chloromethane_uv_chlorination")
         .addReactant(DestroyMolecules.CHLOROMETHANE)
         .addReactant(DestroyMolecules.CHLORINE)
         .requireUV()
@@ -1046,7 +1055,7 @@ public class DestroyReactions {
         .build(),
 
     DICHLOROMETHANE_CHLORINATION = builder()
-        .id("methane_uv_chlorination")
+        .id("dichloromethane_uv_chlorination")
         .addReactant(DestroyMolecules.DICHLOROMETHANE)
         .addReactant(DestroyMolecules.CHLORINE)
         .requireUV()
@@ -1056,7 +1065,7 @@ public class DestroyReactions {
         .build(),
 
     CHLOROFORM_CHLORINATION = builder()
-        .id("methane_uv_chlorination")
+        .id("chloroform_uv_chlorination")
         .addReactant(DestroyMolecules.CHLOROFORM)
         .addReactant(DestroyMolecules.CHLORINE)
         .requireUV()

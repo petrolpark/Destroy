@@ -506,7 +506,7 @@ public class DestroyCommonEvents {
         };
 
         // Fireproof Flint and Steel
-        if (stack.getItem() == Items.FLINT_AND_STEEL && FireproofingHelper.isFireproof(stack)) {
+        if (stack.getItem() == Items.FLINT_AND_STEEL && FireproofingHelper.isFireproof(player.level().registryAccess(), stack)) {
             DestroyAdvancementTrigger.FIREPROOF_FLINT_AND_STEEL.award(player.level(), player);
             stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(event.getHand()));
             event.setCanceled(true);

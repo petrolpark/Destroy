@@ -44,6 +44,7 @@ public class ReactionInBasinRecipe extends BasinRecipe {
         super(params);
     };
 
+    //TODO replace with apply()
     @Nullable
     public static ReactionInBasinRecipe create(Collection<FluidStack> availableFluids, Collection<ItemStack> availableItems, BasinBlockEntity basin) {
         ProcessingRecipeBuilder<ReactionInBasinRecipe> builder = new ProcessingRecipeBuilder<>(ReactionInBasinRecipe::new, Destroy.asResource("reaction_in_basin_"));
@@ -51,7 +52,7 @@ public class ReactionInBasinRecipe extends BasinRecipe {
         List<ItemStack> availableItemsCopy = availableItems.stream().map(ItemStack::copy).filter(stack -> !stack.isEmpty()).toList();
 
         boolean canReact = true; // Start by assuming we will be able to React
-        boolean containsMixtures = false; // If the ONLY thing we have are non-Mixtures, even if they can be converted to Mixtures we don't want to react
+        boolean containsRawMixtures = false; // If the ONLY thing we have are non-Mixtures, even if they can be converted to Mixtures we don't want to react
 
         boolean isBasinTooFullToReact = false;
         
@@ -59,6 +60,8 @@ public class ReactionInBasinRecipe extends BasinRecipe {
         BlockPos pos = basin.getBlockPos();
         float heatingPower = IVatHeaterBlock.getHeatingPower(level, pos.below(), Direction.UP);
         float outsideTemperature = Pollution.getLocalTemperature(level, pos);
+        ExtendedBasinBehaviour behaviour = basin.getBehaviour(ExtendedBasinBehaviour.TYPE);
+        boolean shouldUpdateBasin = false;
 
         Map<LegacyMixture, Double> mixtures = new HashMap<>(availableFluids.size()); // A Map of all available Mixtures to the volume of them available (in Buckets)
         int totalAmount = 0; // How much Mixture there is
@@ -70,7 +73,7 @@ public class ReactionInBasinRecipe extends BasinRecipe {
             if (DestroyFluids.isMixture(fluidStack)) {
                 // True Mixtures
                 mixture = LegacyMixture.readNBT(fluidStack.getOrCreateTag().getCompound("Mixture"));
-                containsMixtures = true;
+                containsRawMixtures = true;
             } else {
                 // Non-Mixture -> Mixture conversions
                 MixtureConversionRecipe recipe = RecipeFinder.get(recipeCacheKey, basin.getLevel(), r -> r.getType() == DestroyRecipeTypes.MIXTURE_CONVERSION.getType())
@@ -92,7 +95,7 @@ public class ReactionInBasinRecipe extends BasinRecipe {
             mixtures.put(mixture, (double)amount / Constants.MILLIBUCKETS_PER_LITER);
         };
 
-        if (!containsMixtures) canReact = false; // Don't react without Mixtures, even if there are fluids which could be converted into Mixtures 
+        if (!containsRawMixtures && mixtures.size() == 1) canReact = false; // Don't react without Mixtures, even if there are fluids which could be converted into Mixtures 
 
         tryReact: if (canReact) {
             // TODO modify temp according to Heat Level
@@ -140,18 +143,19 @@ public class ReactionInBasinRecipe extends BasinRecipe {
 
             gatherReactionResults(result.reactionResults(), reactionResults, builder); // Gather all 
 
-            ExtendedBasinBehaviour behaviour = basin.getBehaviour(ExtendedBasinBehaviour.TYPE);
             behaviour.setReactionResults(reactionResults); // Schedule the Reaction Results to occur once the Mixing has finished
             behaviour.evaporatedFluid = MixtureFluid.of((int)Math.round(phases.gasVolume()), phases.gasMixture());
+            shouldUpdateBasin = true;
         };
 
-        basin.getBehaviour(ExtendedBasinBehaviour.TYPE).tooFullToReact = isBasinTooFullToReact;
-        basin.sendData();
-
-        if (!canReact) {
-            return null;
+        if (behaviour.tooFullToReact != isBasinTooFullToReact) {
+            behaviour.tooFullToReact = isBasinTooFullToReact;
+            shouldUpdateBasin = true;
         };
+        if (shouldUpdateBasin) basin.sendData();
 
+        if (!canReact) return null;
+        
         return builder.build();
     };
 

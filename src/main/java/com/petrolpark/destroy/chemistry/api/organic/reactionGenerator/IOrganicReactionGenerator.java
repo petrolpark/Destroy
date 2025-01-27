@@ -2,10 +2,10 @@ package com.petrolpark.destroy.chemistry.api.organic.reactionGenerator;
 
 import com.petrolpark.destroy.chemistry.api.organic.IFunctionalGroup;
 import com.petrolpark.destroy.chemistry.api.organic.IFunctionalGroupInstance;
-import com.petrolpark.destroy.chemistry.api.reaction.IReaction;
 import com.petrolpark.destroy.chemistry.api.registry.IRegisteredChemistryObject;
 import com.petrolpark.destroy.chemistry.api.species.ISpecies;
 import com.petrolpark.destroy.chemistry.api.species.NamespacedId;
+import com.petrolpark.destroy.chemistry.api.transformation.reaction.IReaction;
 
 /**
  * A generator for {@link IReaction}s involving one or more {@link IFunctionalGroup}s.

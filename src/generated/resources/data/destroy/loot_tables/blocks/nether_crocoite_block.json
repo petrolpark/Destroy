@@ -24,7 +24,7 @@
                   }
                 }
               ],
-              "name": "destroy:nether_crocoite_block"
+              "name": "destroy:nether_crocoite_ore"
             },
             {
               "type": "minecraft:item",

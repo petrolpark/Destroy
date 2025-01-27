@@ -49,7 +49,7 @@ public class DestroyCreativeModeTabs {
 				n(), d(Items.COPPER_INGOT), d(Blocks.COPPER_BLOCK), i(DestroyItems.COPPER_POWDER), d(AllItems.CRUSHED_COPPER), d(AllItems.COPPER_SHEET), d(Items.RAW_COPPER), d(Blocks.RAW_COPPER_BLOCK), d(Items.COPPER_ORE), d(Blocks.DEEPSLATE_COPPER_ORE), 
 				n(), i(DestroyItems.STAINLESS_STEEL_INGOT), r(DestroyBlocks.STAINLESS_STEEL_BLOCK), e(), e(), i(DestroyItems.STAINLESS_STEEL_SHEET), i(DestroyItems.STAINLESS_STEEL_ROD), i(DestroyBlocks.STAINLESS_STEEL_RODS), i(DestroyItems.MOLTEN_STAINLESS_STEEL_BUCKET),
 				n(), d(Items.IRON_INGOT), d(Blocks.IRON_BLOCK), i(DestroyItems.IRON_POWDER), d(AllItems.CRUSHED_IRON), d(AllItems.IRON_SHEET),d(Items.RAW_IRON), d(Blocks.RAW_IRON_BLOCK), d(Blocks.IRON_ORE), d(Blocks.DEEPSLATE_IRON_ORE),
-				n(), i(DestroyItems.LEAD_INGOT), i(DestroyBlocks.LEAD_BLOCK), i(DestroyItems.LEAD_POWDER), d(AllItems.CRUSHED_LEAD), e(), i(DestroyItems.NETHER_CROCOITE), e(), i(DestroyBlocks.NETHER_CROCOITE_BLOCK),
+				n(), i(DestroyItems.LEAD_INGOT), i(DestroyBlocks.LEAD_BLOCK), i(DestroyItems.LEAD_POWDER), d(AllItems.CRUSHED_LEAD), e(), i(DestroyItems.NETHER_CROCOITE), i(DestroyBlocks.NETHER_CROCOITE_BLOCK), i(DestroyBlocks.NETHER_CROCOITE_ORE),
 				n(), i(DestroyItems.NICKEL_INGOT), i(DestroyBlocks.NICKEL_BLOCK), i(DestroyItems.NICKEL_POWDER), d(AllItems.CRUSHED_NICKEL), e(), i(DestroyItems.RAW_NICKEL), i(DestroyBlocks.RAW_NICKEL_BLOCK), d(DestroyBlocks.NICKEL_ORE), d(DestroyBlocks.DEEPSLATE_NICKEL_ORE),
 				n(), i(DestroyItems.PALLADIUM_INGOT), i(DestroyBlocks.PALLADIUM_BLOCK), i(DestroyItems.PALLADIUM_POWDER), i(DestroyItems.CRUSHED_RAW_PALLADIUM),
 				n(), i(DestroyItems.PLATINUM_INGOT), i(DestroyBlocks.PLATINUM_BLOCK), i(DestroyItems.PLATINUM_POWDER), d(AllItems.CRUSHED_PLATINUM),

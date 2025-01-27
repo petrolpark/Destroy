@@ -485,9 +485,20 @@ public class DestroyBlocks {
             .mapColor(MapColor.COLOR_GRAY)
             .strength(2f, 2f)
         ).transform(TagGen.pickaxeOnly())
-        .tag(BlockTags.NEEDS_STONE_TOOL)
-        .tag(Tags.Blocks.STORAGE_BLOCKS)
+        .tag(BlockTags.NEEDS_STONE_TOOL, Tags.Blocks.STORAGE_BLOCKS)
         .transform(TagGen.tagBlockAndItem("storage_blocks/iodine"))
+        .tag(Tags.Items.STORAGE_BLOCKS)
+        .build()
+        .register(),
+
+    NETHER_CROCOITE_BLOCK = REGISTRATE.block("nether_crocoite_block", Block::new)
+        .initialProperties(() -> Blocks.RAW_IRON_BLOCK)
+        .properties(p -> p
+            .mapColor(MapColor.COLOR_ORANGE)
+            .strength(2f, 2f)
+        ).transform(TagGen.pickaxeOnly())
+        .tag(BlockTags.NEEDS_IRON_TOOL, Tags.Blocks.STORAGE_BLOCKS)
+        .item()
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register(),
@@ -679,7 +690,7 @@ public class DestroyBlocks {
         .build()
         .register();
 
-    public static final BlockEntry<Block> NETHER_CROCOITE_BLOCK = REGISTRATE.block("nether_crocoite_block", Block::new)
+    public static final BlockEntry<Block> NETHER_CROCOITE_ORE = REGISTRATE.block("nether_crocoite_ore", Block::new)
         .initialProperties(() -> Blocks.NETHER_QUARTZ_ORE)
         .properties(p -> p
             .mapColor(MapColor.COLOR_ORANGE)

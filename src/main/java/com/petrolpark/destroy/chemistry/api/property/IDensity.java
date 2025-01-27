@@ -5,6 +5,7 @@ package com.petrolpark.destroy.chemistry.api.property;
  * @since Destroy 0.1.0
  * @author petrolpark
  */
+@FunctionalInterface
 public interface IDensity {
     
     /**
