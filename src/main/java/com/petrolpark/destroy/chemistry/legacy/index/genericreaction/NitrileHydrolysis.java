@@ -30,15 +30,16 @@ public class NitrileHydrolysis extends SingleGroupGenericReaction<NitrileGroup> 
             .remove(group.nitrogen)
             .addCarbonyl()
             .addGroup(
-                LegacyMolecularStructure.atom(LegacyElement.NITROGEN)
+                LegacyMolecularStructure.alcohol()
                 .addAtom(LegacyElement.HYDROGEN)
                 .addAtom(LegacyElement.HYDROGEN)
             );
         return reactionBuilder()
             .addReactant(reactant.getMolecule())
-            .addReactant(DestroyMolecules.WATER)
+            .addReactant(DestroyMolecules.WATER, 2)
             .addCatalyst(DestroyMolecules.PROTON, 1)
             .addProduct(moleculeBuilder().structure(structure).build())
+            .addProduct(DestroyMolecules.AMMONIA)
             .build();
     };
     

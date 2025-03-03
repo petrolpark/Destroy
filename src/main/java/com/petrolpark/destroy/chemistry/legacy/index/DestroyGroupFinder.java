@@ -123,7 +123,7 @@ public class DestroyGroupFinder extends GroupFinder {
                             if (isocyanateOxygens.size() == 1) groups.add(new IsocyanateGroup(carbon, nitrogen, isocyanateCarbon, isocyanateOxygens.get(0)));
                         } else if (aromaticBondedOxygens.size() == 2) { // Nitros
                             groups.add(new NitroGroup(carbon, nitrogen, aromaticBondedOxygens.get(0), aromaticBondedOxygens.get(1)));
-                        } else if (nitrileNitrogens.size() == 0) { // Don't allow amines that also have a nitrile on the same carbon
+                        } else if (nitrileNitrogens.size() == 0 && doubleBondedNitrogens.size() == 0) { // Don't allow amines that also have a nitrile or a double bonded nitrogen on the same carbon
                             List<LegacyAtom> amineHydrogens = bondedAtomsOfElementTo(structure, nitrogen, LegacyElement.HYDROGEN);
                             for (LegacyAtom hydrogen : amineHydrogens) {
                                 groups.add(new NonTertiaryAmineGroup(carbon, nitrogen, hydrogen));

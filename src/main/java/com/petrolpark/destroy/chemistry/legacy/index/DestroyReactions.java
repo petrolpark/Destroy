@@ -386,6 +386,7 @@ public class DestroyReactions {
     CREATINE_PRECIPITATION = builder()
         .id("creatine_precipitation")
         .addReactant(DestroyMolecules.CREATINE)
+        .addCatalyst(DestroyMolecules.WATER, 1)
         .withResult(10f, PrecipitateReactionResult.of(DestroyItems.CREATINE::asStack))
         .build(),
 
