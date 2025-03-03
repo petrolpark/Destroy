@@ -89,7 +89,6 @@ public class DestroyItems {
     // PLASTICS
     
     POLYETHENE_TEREPHTHALATE = REGISTRATE.item("polyethene_terephthalate", Item::new)
-        .tag(DestroyTags.Items.PLASTICS.tag, DestroyTags.Items.TEXTILE_PLASTICS.tag)
         .register(),
     POLYVINYL_CHLORIDE = REGISTRATE.item("polyvinyl_chloride", Item::new)
         .tag(DestroyTags.Items.PLASTICS.tag, DestroyTags.Items.RIGID_PLASTICS.tag)
