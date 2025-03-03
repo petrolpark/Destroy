@@ -43,9 +43,8 @@ public class CarboxylicAcidEsterification extends DoubleGroupGenericReaction<Car
         return reactionBuilder()
             .addReactant(firstReactant.getMolecule())
             .addReactant(secondReactant.getMolecule(), 1, 0)
-            .addReactant(DestroyMolecules.OLEUM, 1)
+            .addCatalyst(DestroyMolecules.SULFURIC_ACID, 1)
             .addProduct(ester)
-            .addProduct(DestroyMolecules.SULFURIC_ACID, 2)
             //TODO rate constants
             .build();
     };
