@@ -36,8 +36,8 @@ public class CyanideNucleophilicAddition extends SingleGroupGenericReaction<Carb
         ).build();
         return reactionBuilder()
             .addReactant(reactantMolecule)
-            .addReactant(DestroyMolecules.CYANIDE)
-            .addReactant(DestroyMolecules.PROTON)
+            .addReactant(DestroyMolecules.HYDROGEN_CYANIDE)
+            .addCatalyst(DestroyMolecules.CYANIDE, 1)
             .addProduct(productMolecule)
             //TODO rate constants
             .build();

@@ -50,6 +50,7 @@ public class DestroyGroupFinder extends GroupFinder {
                 List<LegacyAtom> carbonylOxygens = bondedAtomsOfElementTo(structure, carbon, LegacyElement.OXYGEN, BondType.DOUBLE);
                 List<LegacyAtom> singleBondOxygens = bondedAtomsOfElementTo(structure, carbon, LegacyElement.OXYGEN, BondType.SINGLE);
                 List<LegacyAtom> chlorines = bondedAtomsOfElementTo(structure, carbon, LegacyElement.CHLORINE, BondType.SINGLE);
+                List<LegacyAtom> fluorines = bondedAtomsOfElementTo(structure, carbon, LegacyElement.FLUORINE, BondType.SINGLE);
                 List<LegacyAtom> halogens = new ArrayList<>(chlorines);
                 halogens.addAll(bondedAtomsOfElementTo(structure, carbon, LegacyElement.IODINE, BondType.SINGLE));
                 List<LegacyAtom> nitrogens = bondedAtomsOfElementTo(structure, carbon, LegacyElement.NITROGEN, BondType.SINGLE);
@@ -102,7 +103,9 @@ public class DestroyGroupFinder extends GroupFinder {
                     };
                 } else { // Alcohols, halides, nitriles, amines, isocyanates, nitros, boranes, borate esters
                     for (LegacyAtom halogen : halogens) {
-                        groups.add(new HalideGroup(carbon, halogen, carbons.size()));
+                        if (chlorines.size() < 3 && fluorines.size() == 0) { // Targeting the chlorines on Carbon Tetrachloride, Chloroform and the various CFCs to make them nonreactive
+                            groups.add(new HalideGroup(carbon, halogen, carbons.size()));
+                        }
                     };
                     for (LegacyAtom oxygen : singleBondOxygens) { // Alcohols
                         if (bondedAtomsOfElementTo(structure, oxygen, LegacyElement.HYDROGEN).size() == 1) {
