@@ -1,21 +1,16 @@
 package com.petrolpark.destroy.core.block.entity.instance;
 
-import com.jozufozu.flywheel.api.Instancer;
-import com.jozufozu.flywheel.api.MaterialManager;
+import com.petrolpark.destroy.client.DestroyPartials;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.content.kinetics.base.SingleRotatingInstance;
-import com.simibubi.create.content.kinetics.base.flwdata.RotatingData;
+import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
+import dev.engine_room.flywheel.api.visualization.VisualizationContext;
+import dev.engine_room.flywheel.lib.model.Models;
 
-public class HorizontalShaftlessCogwheelInstance extends SingleRotatingInstance<KineticBlockEntity> {
+public class HorizontalShaftlessCogwheelInstance extends SingleAxisRotatingVisual<KineticBlockEntity> {
 
-    public HorizontalShaftlessCogwheelInstance(MaterialManager materialManager, KineticBlockEntity blockEntity) {
-        super(materialManager, blockEntity);
-    };
-
-    @Override
-    protected Instancer<RotatingData> getModel() {
-        return getRotatingMaterial().getModel(AllPartialModels.SHAFTLESS_COGWHEEL);
+    public HorizontalShaftlessCogwheelInstance(VisualizationContext ctx, KineticBlockEntity blockEntity, float partialTick) {
+        super(ctx, blockEntity, partialTick, Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL));
     };
     
 };

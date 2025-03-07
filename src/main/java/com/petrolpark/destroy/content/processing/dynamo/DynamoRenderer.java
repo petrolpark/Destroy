@@ -4,16 +4,18 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.client.DestroyPartials;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import static com.petrolpark.compat.create.CreateClient.OUTLINER;
 
 public class DynamoRenderer extends KineticBlockEntityRenderer<DynamoBlockEntity> {
 
@@ -39,15 +41,15 @@ public class DynamoRenderer extends KineticBlockEntityRenderer<DynamoBlockEntity
             Vec3 firstRandomPos = randomPointOnPlane(directPath, electrodePos.add(directPath.scale(rand.nextFloat() / 2f)), 0.5f, rand);
             Vec3 secondRandomPos = randomPointOnPlane(directPath, electrodePos.add(directPath.scale(0.5f + (rand.nextFloat() / 2f))), 0.5f, rand);
 
-            CreateClient.OUTLINER.showLine("dynamo_line_0_" + (whichElectrode ? "0" : "1"), electrodePos, firstRandomPos)
+            OUTLINER.showLine("dynamo_line_0_" + (whichElectrode ? "0" : "1"), electrodePos, firstRandomPos)
                 .colored(0xa3f0f7)
                 .lineWidth(1 / 64f)
                 .disableCull();
-            CreateClient.OUTLINER.showLine("dynamo_line_1_" + (whichElectrode ? "0" : "1"), firstRandomPos, secondRandomPos)
+            OUTLINER.showLine("dynamo_line_1_" + (whichElectrode ? "0" : "1"), firstRandomPos, secondRandomPos)
                 .colored(0xa3f0f7)
                 .lineWidth(1 / 64f)
                 .disableCull();
-            CreateClient.OUTLINER.showLine("dynamo_line_2_" + (whichElectrode ? "0" : "1"), secondRandomPos, targetPos)
+            OUTLINER.showLine("dynamo_line_2_" + (whichElectrode ? "0" : "1"), secondRandomPos, targetPos)
                 .colored(0xa3f0f7)
                 .lineWidth(1 / 64f)
                 .disableCull();
@@ -64,7 +66,7 @@ public class DynamoRenderer extends KineticBlockEntityRenderer<DynamoBlockEntity
 
     @Override
     protected SuperByteBuffer getRotatedModel(DynamoBlockEntity be, BlockState state) {
-        return CachedBufferer.partial(state.getValue(DynamoBlock.ARC_FURNACE) ? DestroyPartials.ARC_FURNACE_SHAFT : DestroyPartials.DYNAMO_SHAFT, state);
+        return CachedBuffers.partial(state.getValue(DynamoBlock.ARC_FURNACE) ? DestroyPartials.ARC_FURNACE_SHAFT : DestroyPartials.DYNAMO_SHAFT, state);
     };
 
     @Override

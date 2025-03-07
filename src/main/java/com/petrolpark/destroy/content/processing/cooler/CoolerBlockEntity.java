@@ -2,6 +2,10 @@ package com.petrolpark.destroy.content.processing.cooler;
 
 import java.util.List;
 
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.math.VecHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +18,6 @@ import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.core.pollution.PollutionHelper;
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.fluids.tank.FluidTankBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
@@ -22,11 +25,7 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
+import net.createmod.catnip.lang.Lang;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -215,10 +214,10 @@ public class CoolerBlockEntity extends SmartBlockEntity implements IHaveGoggleIn
             target = AngleHelper.deg(-Mth.atan2(dz, dx)) - 90;
         };
         target = headAngle.getValue() + AngleHelper.getShortestAngleDiff(headAngle.getValue(), target);
-        headAngle.chase(target, 0.25f, Chaser.exp(5)); // Follow the Player
+        headAngle.chase(target, 0.25f, LerpedFloat.Chaser.exp(5)); // Follow the Player
         headAngle.tickChaser();
 
-		headAnimation.chase(validBlockAbove() ? 1 : 0, 0.25f, Chaser.exp(0.25f)); // Ensure the Head is at the right level if there's a Basin above
+		headAnimation.chase(validBlockAbove() ? 1 : 0, 0.25f, LerpedFloat.Chaser.exp(0.25f)); // Ensure the Head is at the right level if there's a Basin above
 		headAnimation.tickChaser();
 	};
 

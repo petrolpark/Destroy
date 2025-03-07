@@ -13,7 +13,7 @@ public class ElementTankRenderer extends SafeBlockEntityRenderer<ElementTankBloc
 
     @Override
     protected void renderSafe(ElementTankBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        if (!be.getRenderedFluid().isEmpty()) FluidRenderer.renderFluidBox(be.getRenderedFluid(), 1 / 16f, 1 / 16f, 1 / 16f, 15 / 16f, (1f + 14f * be.getFluidLevel(partialTicks)) / 16f, 15 / 16f, bufferSource, ms, light, true);
+        if (!be.getRenderedFluid().isEmpty()) FluidRenderer.renderFluidBox(be.getRenderedFluid().getFluid(), be.getRenderedFluid().getAmount(), 1 / 16f, 1 / 16f, 1 / 16f, 15 / 16f, (1f + 14f * be.getFluidLevel(partialTicks)) / 16f, 15 / 16f, bufferSource, ms, light, true, true);
     };
     
 };

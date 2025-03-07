@@ -24,8 +24,8 @@ import com.petrolpark.destroy.chemistry.legacy.genericreaction.GenericReaction;
 import com.petrolpark.destroy.chemistry.legacy.LegacyMolecularStructure.Topology.SideChainInformation;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Node;
-import com.simibubi.create.foundation.utility.Pair;
 
+import net.createmod.catnip.data.Pair;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.stream.Collectors;

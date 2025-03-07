@@ -3,7 +3,7 @@ package com.petrolpark.destroy.config;
 import java.util.EnumMap;
 import java.util.function.Function;
 
-import com.simibubi.create.foundation.config.ConfigBase;
+import net.createmod.catnip.config.ConfigBase;
 
 public class DestroyConfigBase extends ConfigBase {
 

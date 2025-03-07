@@ -3,8 +3,8 @@ package com.petrolpark.destroy.content.processing.trypolithography;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.core.item.tooltip.DestroyTooltipComponent;
 import com.petrolpark.util.BinaryMatrix4x4;
-import com.simibubi.create.foundation.gui.element.ScreenElement;
 
+import net.createmod.catnip.gui.element.ScreenElement;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;

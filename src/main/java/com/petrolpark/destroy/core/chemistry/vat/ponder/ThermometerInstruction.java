@@ -5,18 +5,15 @@ import java.util.function.Consumer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.client.DestroyGuiTextures;
-import com.simibubi.create.foundation.gui.Theme;
-import com.simibubi.create.foundation.gui.element.BoxElement;
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.SceneBuilder;
-import com.simibubi.create.foundation.ponder.PonderScene.SceneTransform;
-import com.simibubi.create.foundation.ponder.element.AnimatedOverlayElement;
-import com.simibubi.create.foundation.ponder.instruction.FadeInOutInstruction;
-import com.simibubi.create.foundation.ponder.ui.PonderUI;
-import com.simibubi.create.foundation.utility.Color;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.gui.element.BoxElement;
+import net.createmod.catnip.theme.Color;
+import net.createmod.ponder.api.scene.SceneBuilder;
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.element.AnimatedOverlayElementBase;
+import net.createmod.ponder.foundation.instruction.FadeInOutInstruction;
+import net.createmod.ponder.foundation.ui.PonderUI;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
@@ -80,7 +77,7 @@ public class ThermometerInstruction extends FadeInOutInstruction {
         element.tick(scene);
     };
 
-    public static class ThermometerElement extends AnimatedOverlayElement {
+    public static class ThermometerElement extends AnimatedOverlayElementBase {
 
         protected LerpedFloat temperature = LerpedFloat.linear();
         protected Vec3 pointingAt;
@@ -90,13 +87,13 @@ public class ThermometerInstruction extends FadeInOutInstruction {
         };
 
         public void chaseTemperature(float temperature, float speed) {
-            this.temperature.chase(Mth.clamp(temperature, 0f, 1f), speed, Chaser.LINEAR);
+            this.temperature.chase(Mth.clamp(temperature, 0f, 1f), speed, LerpedFloat.Chaser.LINEAR);
         };
 
         @Override
-        protected void render(PonderScene scene, PonderUI screen, GuiGraphics graphics, float partialTicks, float fade) {
+        public void render(PonderScene scene, PonderUI screen, GuiGraphics graphics, float partialTicks, float fade) {
             if (fade < 1 / 16f) return;
-            SceneTransform transform = scene.getTransform();
+            PonderScene.SceneTransform transform = scene.getTransform();
             Vec2 pointingAtScreen = transform.sceneToScreen(pointingAt, partialTicks);
             boolean settled = transform.xRotation.settled() && transform.yRotation.settled();
             float pY = settled ? (int) pointingAtScreen.y : pointingAtScreen.y;
@@ -113,8 +110,8 @@ public class ThermometerInstruction extends FadeInOutInstruction {
 
             // Box
             ms.translate(pointingAtScreen.x, pY, 400f);
-            new BoxElement().withBackground(Theme.c(Theme.Key.PONDER_BACKGROUND_FLAT))
-			    .gradientBorder(Theme.p(Theme.Key.TEXT_WINDOW_BORDER))
+            new BoxElement().withBackground(BoxElement.COLOR_BACKGROUND_FLAT)
+			    .gradientBorder(BoxElement.COLOR_VANILLA_BORDER)
 			    .at(-boxWidth / 2f, boxBottom - boxHeight, 100f)
 			    .withBounds((int)boxWidth, (int)boxHeight)
 			    .render(graphics);
@@ -143,7 +140,6 @@ public class ThermometerInstruction extends FadeInOutInstruction {
 
         @Override
         public void tick(PonderScene scene) {
-            super.tick(scene);
             temperature.tickChaser();
         };
     };

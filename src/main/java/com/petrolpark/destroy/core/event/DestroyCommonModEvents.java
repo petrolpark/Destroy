@@ -5,12 +5,12 @@ import com.petrolpark.destroy.DestroyAttributes;
 import com.petrolpark.destroy.content.processing.trypolithography.RegenerateCircuitPatternCommand.CircuitPatternIdArgument;
 import com.petrolpark.destroy.content.processing.trypolithography.recipe.CircuitDeployerApplicationRecipe;
 import com.petrolpark.destroy.content.processing.trypolithography.recipe.CircuitPatternIngredient;
-import com.simibubi.create.foundation.ModFilePackResources;
-import com.simibubi.create.foundation.utility.Components;
 
+import com.simibubi.create.foundation.pack.ModFilePackResources;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
@@ -51,13 +51,13 @@ public class DestroyCommonModEvents {
         if (event.getPackType() == PackType.CLIENT_RESOURCES) {
             // Resource packs
             event.addRepositorySource(consumer -> {
-                Pack pack = Pack.readMetaAndCreate(Destroy.asResource("create_patches").toString(), Components.literal("Destroy Patches For Create"), true, id -> new ModFilePackResources(id, modFile, "resourcepacks/create_patches"), PackType.CLIENT_RESOURCES, Pack.Position.TOP, PackSource.BUILT_IN);
+                Pack pack = Pack.readMetaAndCreate(Destroy.asResource("create_patches").toString(), Component.literal("Destroy Patches For Create"), true, id -> new ModFilePackResources(id, modFile, "resourcepacks/create_patches"), PackType.CLIENT_RESOURCES, Pack.Position.TOP, PackSource.BUILT_IN);
                 if (pack != null) consumer.accept(pack);
             });
         } else {
             // Datapacks
             event.addRepositorySource(consumer -> {
-                Pack pack = Pack.readMetaAndCreate(Destroy.asResource("tfmg_compat").toString(), Components.literal("Destroy Compat With Create: TFMG"), false, id -> new ModFilePackResources(id, modFile, "datapacks/tfmg_compat"), PackType.SERVER_DATA, Pack.Position.TOP, PackSource.DEFAULT);
+                Pack pack = Pack.readMetaAndCreate(Destroy.asResource("tfmg_compat").toString(), Component.literal("Destroy Compat With Create: TFMG"), false, id -> new ModFilePackResources(id, modFile, "datapacks/tfmg_compat"), PackType.SERVER_DATA, Pack.Position.TOP, PackSource.DEFAULT);
                 if (pack != null) consumer.accept(pack);
             });
         };

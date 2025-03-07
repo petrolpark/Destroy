@@ -1,0 +1,10 @@
+{
+  "damage": 1,
+  "items": "destroy:mashed_potato",
+  "velocity": 0.8,
+  "reload_ticks": 3,
+  "sticky": true,
+  "render_mode": {
+    "type": "create:tumble"
+  }
+}

@@ -3,11 +3,11 @@ package com.petrolpark.destroy.core.pollution.pollutometer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.client.DestroyPartials;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import net.createmod.catnip.animation.AnimationTickHolder;
 
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -28,18 +28,18 @@ public class PollutometerRenderer extends SafeBlockEntityRenderer<PollutometerBl
         VertexConsumer vc = bufferSource.getBuffer(RenderType.cutout());
 
         ms.pushPose();
-        SuperByteBuffer anenometerBuffer = CachedBufferer.partial(DestroyPartials.POLLUTOMETER_ANEMOMETER, blockState);
+        SuperByteBuffer anenometerBuffer = CachedBuffers.partial(DestroyPartials.POLLUTOMETER_ANEMOMETER, blockState);
         draw(anenometerBuffer, -renderTick / 8f, ms, vc, light);
         ms.popPose();
 
         ms.pushPose();
-        SuperByteBuffer weathervaneBuffer = CachedBufferer.partial(DestroyPartials.POLLUTOMETER_WEATHERVANE, blockState);
+        SuperByteBuffer weathervaneBuffer = CachedBuffers.partial(DestroyPartials.POLLUTOMETER_WEATHERVANE, blockState);
         draw(weathervaneBuffer, Mth.PI / 4 + Mth.sin((float) ((renderTick / 16) % (2 * Math.PI))) / 24f, ms, vc, light);
         ms.popPose();
     };
 
     private static void draw(SuperByteBuffer buffer, float horizontalAngle, PoseStack ms, VertexConsumer vc, int light) {
-		buffer.rotateCentered(Direction.UP, horizontalAngle)
+		buffer.rotateCentered(horizontalAngle, Direction.UP)
 			.light(light)
 			.renderInto(ms, vc);
 	};

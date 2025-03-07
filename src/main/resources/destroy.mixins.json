@@ -10,9 +10,9 @@
         "accessor.BasinOperatingBlockEntityAccessor",
         "accessor.FluidIngredientAccessor",
         "accessor.FluidNetworkAccessor",
-        "accessor.ItemAttributeAccessor",
         "accessor.MenuRowsAccessor",
         "accessor.PipeConnectionAccessor",
+        "accessor.PonderSceneRegistryAccessor",
         "accessor.PonderTagScreenAccessor",
         "accessor.ProcessingRecipeAccessor",
         "accessor.ProcessingRecipeParamsAccessor",
@@ -76,7 +76,7 @@
         "client.LevelRendererMixin",
         "client.MinecraftMixin",
         "client.MultiPlayerGameModeMixin",
-        "client.PonderWorldMixin",
+        "client.PonderLevelMixin",
         "client.RecipeBookComponentMixin"
     ],
     "injectors": {

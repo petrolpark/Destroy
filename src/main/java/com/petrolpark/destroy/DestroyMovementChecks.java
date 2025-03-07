@@ -7,8 +7,8 @@ import com.petrolpark.destroy.core.chemistry.vat.VatControllerBlock;
 import com.petrolpark.destroy.core.chemistry.vat.VatControllerBlockEntity;
 import com.petrolpark.destroy.core.chemistry.vat.VatSideBlock;
 import com.petrolpark.destroy.core.chemistry.vat.VatSideBlockEntity;
-import com.simibubi.create.content.contraptions.BlockMovementChecks;
-import com.simibubi.create.foundation.utility.Iterate;
+import com.simibubi.create.api.contraption.BlockMovementChecks;
+import net.createmod.catnip.data.Iterate;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

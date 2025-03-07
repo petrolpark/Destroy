@@ -14,8 +14,8 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.gui.ScreenOpener;
 
+import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;

@@ -36,7 +36,7 @@ public class ChargingCategory extends PetrolparkRecipeCategory<ChargingRecipe> {
 			builder.addSlot(RecipeIngredientRole.OUTPUT, 131 + 19 * i, 50)
 					.setBackground(getRenderedSlot(output), -1, -1)
 					.addItemStack(output.getStack())
-					.addTooltipCallback(addStochasticTooltip(output));
+					.addRichTooltipCallback(addStochasticTooltip(output));
 			i++;
 		};
     };

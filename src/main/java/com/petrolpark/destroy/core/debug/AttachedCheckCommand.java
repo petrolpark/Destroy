@@ -3,9 +3,9 @@ package com.petrolpark.destroy.core.debug;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.petrolpark.destroy.client.DestroyLang;
-import com.simibubi.create.content.contraptions.BlockMovementChecks;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import com.simibubi.create.api.contraption.BlockMovementChecks;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;

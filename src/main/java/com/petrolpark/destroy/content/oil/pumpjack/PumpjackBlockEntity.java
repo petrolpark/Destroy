@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import org.jetbrains.annotations.NotNull;
 
 import com.petrolpark.compat.create.block.entity.behaviour.AbstractRememberPlacerBehaviour;
@@ -16,7 +17,6 @@ import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.content.oil.ChunkCrudeOil;
 import com.petrolpark.destroy.core.data.advancement.DestroyAdvancementBehaviour;
 import com.petrolpark.destroy.core.pollution.PollutingBehaviour;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
@@ -141,7 +141,7 @@ public class PumpjackBlockEntity extends SmartBlockEntity implements IHaveGoggle
 
         Direction facing = PumpjackBlock.getFacing(blockState);
 		Axis axis = KineticBlockEntityRenderer.getRotationAxisOf(cam);
-		angle = KineticBlockEntityRenderer.getAngleForTe(cam, cam.getBlockPos(), axis);
+		angle = KineticBlockEntityRenderer.getAngleForBe(cam, cam.getBlockPos(), axis);
 
         if (axis.isHorizontal() && (facing.getAxis() == Axis.X ^ facing.getAxisDirection() == AxisDirection.NEGATIVE))
 			angle *= -1;

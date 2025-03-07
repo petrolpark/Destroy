@@ -9,15 +9,17 @@ import com.petrolpark.destroy.DestroyItems;
 import com.petrolpark.destroy.core.explosion.mixedexplosive.MixedExplosiveBlockEntity;
 import com.petrolpark.destroy.core.explosion.mixedexplosive.IDyeableMixedExplosiveBlockEntity;
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.foundation.ponder.ElementLink;
-import com.simibubi.create.foundation.ponder.PonderPalette;
-import com.simibubi.create.foundation.ponder.SceneBuilder;
-import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
-import com.simibubi.create.foundation.ponder.element.EntityElement;
-import com.simibubi.create.foundation.ponder.element.InputWindowElement;
-import com.simibubi.create.foundation.ponder.element.WorldSectionElement;
-import com.simibubi.create.foundation.utility.Pointing;
 
+import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
+import net.createmod.catnip.math.Pointing;
+import net.createmod.ponder.api.PonderPalette;
+import net.createmod.ponder.api.element.ElementLink;
+import net.createmod.ponder.api.element.EntityElement;
+import net.createmod.ponder.api.element.WorldSectionElement;
+import net.createmod.ponder.api.scene.SceneBuilder;
+import net.createmod.ponder.api.scene.SceneBuildingUtil;
+import net.createmod.ponder.foundation.element.InputWindowElement;
+import net.createmod.ponder.foundation.instruction.FadeOutOfSceneInstruction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -43,54 +45,54 @@ public class ExplosivesPonderScenes {
         scene.showBasePlate();
 
         scene.idle(5);
-        scene.world.showSection(util.select.position(craftingTable), Direction.DOWN);
+        scene.world().showSection(util.select().position(craftingTable), Direction.DOWN);
         scene.idle(5);
-        scene.overlay.showText(100)
+        scene.overlay().showText(100)
             .text("This text is defined in a language file.")
-            .pointAt(util.vector.blockSurface(craftingTable, Direction.WEST));
+            .pointAt(util.vector().blockSurface(craftingTable, Direction.WEST));
         scene.idle(10);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(craftingTable), Pointing.DOWN).withItem(stack.get()), 40);
+        scene.overlay().showControls(util.vector().topOf(craftingTable), Pointing.DOWN, 40).withItem(stack.get());
         scene.idle(50);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(craftingTable), Pointing.DOWN).withItem(DestroyItems.CORDITE.asStack()), 40);
+        scene.overlay().showControls(util.vector().topOf(craftingTable), Pointing.DOWN, 40).withItem(DestroyItems.CORDITE.asStack());
         scene.idle(60);
 
-        scene.world.showSection(util.select.position(first), Direction.DOWN);
+        scene.world().showSection(util.select().position(first), Direction.DOWN);
         scene.idle(20);
-        scene.overlay.showText(100)
+        scene.overlay().showText(100)
             .text("This text is defined in a language file")
-            .pointAt(util.vector.blockSurface(first, Direction.WEST))
+            .pointAt(util.vector().blockSurface(first, Direction.WEST))
             .attachKeyFrame();
         scene.idle(20);
-        ElementLink<WorldSectionElement> funnel = scene.world.showIndependentSection(util.select.position(first.above()), Direction.DOWN);
+        ElementLink<WorldSectionElement> funnel = scene.world().showIndependentSection(util.select().position(first.above()), Direction.DOWN);
         scene.idle(20);
-        ElementLink<EntityElement> itemEntity = scene.world.createItemEntity(util.vector.centerOf(first.above(3)), Vec3.ZERO, DestroyItems.PICRIC_ACID_TABLET.asStack());
+        ElementLink<EntityElement> itemEntity = scene.world().createItemEntity(util.vector().centerOf(first.above(3)), Vec3.ZERO, DestroyItems.PICRIC_ACID_TABLET.asStack());
         scene.idle(30);
-        scene.world.modifyEntity(itemEntity, Entity::kill);
+        scene.world().modifyEntity(itemEntity, Entity::kill);
         scene.idle(30);
-        scene.world.hideIndependentSection(funnel, Direction.UP);
+        scene.world().hideIndependentSection(funnel, Direction.UP);
         scene.idle(20);
 
-        scene.overlay.showText(100)
+        scene.overlay().showText(100)
             .text("This text is defined in a language file")
-            .pointAt(util.vector.blockSurface(first, Direction.WEST))
+            .pointAt(util.vector().blockSurface(first, Direction.WEST))
             .attachKeyFrame();
         scene.idle(20);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(first), Pointing.DOWN).rightClick(), 80);
+        scene.overlay().showControls(util.vector().topOf(first), Pointing.DOWN, 80).rightClick();
         scene.idle(100);
 
-        scene.world.showSection(util.select.position(second), Direction.DOWN);
-        scene.overlay.showText(170)
+        scene.world().showSection(util.select().position(second), Direction.DOWN);
+        scene.overlay().showText(170)
             .text("This text is defined in a language file.")
             .independent()
             .attachKeyFrame();
         scene.idle(20);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(first), Pointing.DOWN).rightClick().withItem(AllBlocks.CLIPBOARD.asStack()), 40);
+        scene.overlay().showControls(util.vector().topOf(first), Pointing.DOWN, 40).rightClick().withItem(AllBlocks.CLIPBOARD.asStack());
         scene.idle(50);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(second), Pointing.DOWN).leftClick().withItem(AllBlocks.CLIPBOARD.asStack()), 40);
+        scene.overlay().showControls(util.vector().topOf(second), Pointing.DOWN, 40).leftClick().withItem(AllBlocks.CLIPBOARD.asStack());
         scene.idle(50);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(second), Pointing.DOWN).withItem(DestroyItems.CORDITE.asStack()), 20);
+        scene.overlay().showControls(util.vector().topOf(second), Pointing.DOWN, 20).withItem(DestroyItems.CORDITE.asStack());
         scene.idle(30);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(second), Pointing.DOWN).withItem(DestroyItems.PICRIC_ACID_TABLET.asStack()), 20);
+        scene.overlay().showControls(util.vector().topOf(second), Pointing.DOWN, 20).withItem(DestroyItems.PICRIC_ACID_TABLET.asStack());
         scene.idle(40);
         
         scene.markAsFinished();
@@ -113,47 +115,47 @@ public class ExplosivesPonderScenes {
         scene.showBasePlate();
 
         scene.idle(10);
-        ElementLink<WorldSectionElement> bomb = scene.world.showIndependentSection(util.select.position(second), Direction.DOWN);
+        ElementLink<WorldSectionElement> bomb = scene.world().showIndependentSection(util.select().position(second), Direction.DOWN);
         scene.idle(20);
-        scene.overlay.showText(100)
+        scene.overlay().showText(100)
             .text("This text is defined in a language file.")
-            .pointAt(util.vector.blockSurface(second, Direction.WEST));
+            .pointAt(util.vector().blockSurface(second, Direction.WEST));
         scene.idle(40);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(second), Pointing.DOWN).withItem(getFireworkStar()), 40);
+        scene.overlay().showControls(util.vector().topOf(second), Pointing.DOWN, 40).withItem(getFireworkStar());
         scene.idle(80);
 
-        scene.world.showSection(util.select.fromTo(0, 1, 1, 2, 1, 3), Direction.DOWN);
+        scene.world().showSection(util.select().fromTo(0, 1, 1, 2, 1, 3), Direction.DOWN);
         scene.idle(20);
-        scene.overlay.showText(100)
+        scene.overlay().showText(100)
             .text("This text is defined in a language file.")
             .independent();
         scene.idle(60);
-        scene.effects.emitParticles(util.vector.centerOf(second), PetrolparkEmitters.fireworkBall(0.25f, 4, new int[]{0xFF41CD34}, new int[0], false, false), 1f, 1);
-        scene.world.hideIndependentSectionImmediately(bomb);
+        scene.effects().emitParticles(util.vector().centerOf(second), PetrolparkEmitters.fireworkBall(0.25f, 4, new int[]{0xFF41CD34}, new int[0], false, false), 1f, 1);
+        scene.addInstruction(new FadeOutOfSceneInstruction<>(0, Direction.DOWN, bomb));
         scene.idle(5);
-        scene.world.destroyBlock(util.grid.at(2, 1, 2));
-        scene.world.destroyBlock(first);
-        scene.world.createItemEntity(util.vector.centerOf(util.grid.at(2, 1, 2)), util.vector.of(0d, 0.3d, -0.1d), new ItemStack(Blocks.GLASS));
+        scene.world().destroyBlock(util.grid().at(2, 1, 2));
+        scene.world().destroyBlock(first);
+        scene.world().createItemEntity(util.vector().centerOf(util.grid().at(2, 1, 2)), util.vector().of(0d, 0.3d, -0.1d), new ItemStack(Blocks.GLASS));
         scene.idle(55);
 
-        scene.world.hideSection(util.select.position(1, 1, 1).add(util.select.position(0, 1, 2)).add(util.select.position(1, 1, 3)), Direction.UP);
+        scene.world().hideSection(util.select().position(1, 1, 1).add(util.select().position(0, 1, 2)).add(util.select().position(1, 1, 3)), Direction.UP);
         scene.idle(20);
-        ElementLink<WorldSectionElement> coal = scene.world.showIndependentSection(util.select.position(first.above()), Direction.DOWN);
-        scene.world.moveSection(coal, util.vector.of(0d, -1d, 0d), 0);
-        bomb = scene.world.showIndependentSection(util.select.position(second), Direction.DOWN);
+        ElementLink<WorldSectionElement> coal = scene.world().showIndependentSection(util.select().position(first.above()), Direction.DOWN);
+        scene.world().moveSection(coal, util.vector().of(0d, -1d, 0d), 0);
+        bomb = scene.world().showIndependentSection(util.select().position(second), Direction.DOWN);
         scene.idle(20);
 
-        scene.overlay.showText(100)
+        scene.overlay().showText(100)
             .text("This text is defined in a language file.")
             .attachKeyFrame()
-            .pointAt(util.vector.blockSurface(first, Direction.WEST));
+            .pointAt(util.vector().blockSurface(first, Direction.WEST));
         scene.idle(40);
-        scene.effects.emitParticles(util.vector.centerOf(second), PetrolparkEmitters.fireworkBall(0.25f, 4, new int[]{0xFF41CD34}, new int[0], false, false), 1f, 1);
-        scene.world.hideIndependentSectionImmediately(bomb);
+        scene.effects().emitParticles(util.vector().centerOf(second), PetrolparkEmitters.fireworkBall(0.25f, 4, new int[]{0xFF41CD34}, new int[0], false, false), 1f, 1);
+        scene.addInstruction(new FadeOutOfSceneInstruction<>(0, Direction.DOWN, bomb));
         scene.idle(5);
-        scene.world.modifyEntities(ItemEntity.class, Entity::kill);
-        scene.world.hideIndependentSectionImmediately(coal);
-        scene.world.createItemEntity(util.vector.centerOf(first), util.vector.of(0.05d, 0.3d, 0.1d), DestroyItems.NANODIAMONDS.asStack());
+        scene.world().modifyEntities(ItemEntity.class, Entity::kill);
+        scene.addInstruction(new FadeOutOfSceneInstruction<>(0, Direction.DOWN, coal));
+        scene.world().createItemEntity(util.vector().centerOf(first), util.vector().of(0.05d, 0.3d, 0.1d), DestroyItems.NANODIAMONDS.asStack());
         scene.idle(75);
 
         scene.markAsFinished();
@@ -168,42 +170,42 @@ public class ExplosivesPonderScenes {
         scene.showBasePlate();
 
         scene.idle(5);
-        scene.world.showSection(util.select.position(craftingTable), Direction.DOWN);
+        scene.world().showSection(util.select().position(craftingTable), Direction.DOWN);
         scene.idle(5);
-        scene.overlay.showText(100)
+        scene.overlay().showText(100)
             .text("This text is defined in a language file.")
-            .pointAt(util.vector.blockSurface(craftingTable, Direction.WEST));
+            .pointAt(util.vector().blockSurface(craftingTable, Direction.WEST));
         scene.idle(10);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(craftingTable), Pointing.DOWN).withItem(stack.get()), 40);
+        scene.overlay().showControls(util.vector().topOf(craftingTable), Pointing.DOWN, 40).withItem(stack.get());
         scene.idle(50);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(craftingTable), Pointing.DOWN).withItem(new ItemStack(Items.RED_DYE)), 40);
+        scene.overlay().showControls(util.vector().topOf(craftingTable), Pointing.DOWN, 40).withItem(new ItemStack(Items.RED_DYE));
         scene.idle(60);
 
-        scene.world.modifyBlockEntity(first, BlockEntity.class, be -> ((IDyeableMixedExplosiveBlockEntity)be).setColor(red));
-        scene.world.showSection(util.select.position(first), Direction.DOWN);
+        scene.world().modifyBlockEntity(first, BlockEntity.class, be -> ((IDyeableMixedExplosiveBlockEntity)be).setColor(red));
+        scene.world().showSection(util.select().position(first), Direction.DOWN);
         scene.idle(20);
 
-        scene.overlay.showText(80)
+        scene.overlay().showText(80)
             .text("This text is defined in a language file.")
-            .pointAt(util.vector.blockSurface(first, Direction.WEST));
+            .pointAt(util.vector().blockSurface(first, Direction.WEST));
         scene.idle(40);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(first), Pointing.DOWN).rightClick().withItem(new ItemStack(Items.BLUE_DYE)), 40);
+        scene.overlay().showControls(util.vector().topOf(first), Pointing.DOWN, 40).rightClick().withItem(new ItemStack(Items.BLUE_DYE));
         scene.idle(5);
-        scene.world.modifyBlockEntity(first, BlockEntity.class, be -> ((IDyeableMixedExplosiveBlockEntity)be).setColor(purple));
+        scene.world().modifyBlockEntity(first, BlockEntity.class, be -> ((IDyeableMixedExplosiveBlockEntity)be).setColor(purple));
         scene.addInstruction(s -> s.forEach(WorldSectionElement.class, WorldSectionElement::queueRedraw));
         scene.idle(55);
 
-        scene.world.showSection(util.select.position(second), Direction.DOWN);
-        scene.overlay.showText(80)
+        scene.world().showSection(util.select().position(second), Direction.DOWN);
+        scene.overlay().showText(80)
             .text("This text is defined in a language file.")
             .independent()
             .attachKeyFrame();
         scene.idle(20);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(first), Pointing.DOWN).rightClick().withItem(AllBlocks.CLIPBOARD.asStack()), 40);
+        scene.overlay().showControls(util.vector().topOf(first), Pointing.DOWN, 40).rightClick().withItem(AllBlocks.CLIPBOARD.asStack());
         scene.idle(50);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(second), Pointing.DOWN).leftClick().withItem(AllBlocks.CLIPBOARD.asStack()), 40);
+        scene.overlay().showControls(util.vector().topOf(second), Pointing.DOWN, 40).leftClick().withItem(AllBlocks.CLIPBOARD.asStack());
         scene.idle(5);
-        scene.world.modifyBlockEntity(second, BlockEntity.class, be -> ((IDyeableMixedExplosiveBlockEntity)be).setColor(purple));
+        scene.world().modifyBlockEntity(second, BlockEntity.class, be -> ((IDyeableMixedExplosiveBlockEntity)be).setColor(purple));
         scene.addInstruction(s -> s.forEach(WorldSectionElement.class, WorldSectionElement::queueRedraw));
         scene.idle(25);
 
@@ -216,44 +218,44 @@ public class ExplosivesPonderScenes {
         scene.showBasePlate();
 
         scene.idle(5);
-        scene.world.showSection(util.select.position(anvil), Direction.DOWN);
+        scene.world().showSection(util.select().position(anvil), Direction.DOWN);
         scene.idle(5);
-        scene.overlay.showText(120)
+        scene.overlay().showText(120)
             .text("This text is defined in a language file.")
-            .pointAt(util.vector.blockSurface(anvil, Direction.WEST));
+            .pointAt(util.vector().blockSurface(anvil, Direction.WEST));
         scene.idle(10);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(anvil), Pointing.DOWN).withItem(DestroyBlocks.CUSTOM_EXPLOSIVE_MIX.asStack()), 40);
+        scene.overlay().showControls(util.vector().topOf(anvil), Pointing.DOWN, 40).withItem(DestroyBlocks.CUSTOM_EXPLOSIVE_MIX.asStack());
         scene.idle(70);
         ItemStack namedStack = DestroyBlocks.CUSTOM_EXPLOSIVE_MIX.asStack();
         Component name = Component.literal("TNX");
         namedStack.setHoverName(name);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(anvil), Pointing.DOWN).withItem(namedStack), 40);
+        scene.overlay().showControls(util.vector().topOf(anvil), Pointing.DOWN, 40).withItem(namedStack);
         scene.idle(60);
 
-        scene.world.modifyBlockEntity(first, MixedExplosiveBlockEntity.class, be -> be.setCustomName(name));
-        scene.world.showSection(util.select.position(first), Direction.DOWN);
+        scene.world().modifyBlockEntity(first, MixedExplosiveBlockEntity.class, be -> be.setCustomName(name));
+        scene.world().showSection(util.select().position(first), Direction.DOWN);
         scene.idle(20);
 
-        scene.overlay.showText(80)
+        scene.overlay().showText(80)
             .text("This text is defined in a language file.")
-            .pointAt(util.vector.blockSurface(first, Direction.WEST));
+            .pointAt(util.vector().blockSurface(first, Direction.WEST));
         scene.idle(100);
 
-        scene.world.showSection(util.select.position(second), Direction.DOWN);
-        scene.overlay.showText(110)
+        scene.world().showSection(util.select().position(second), Direction.DOWN);
+        scene.overlay().showText(110)
             .text("This text is defined in a language file.")
             .independent()
             .attachKeyFrame();
         scene.idle(20);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(first), Pointing.DOWN).rightClick().withItem(AllBlocks.CLIPBOARD.asStack()), 40);
+        scene.overlay().showControls(util.vector().topOf(first), Pointing.DOWN, 40).rightClick().withItem(AllBlocks.CLIPBOARD.asStack());
         scene.idle(50);
-        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(second), Pointing.DOWN).leftClick().withItem(AllBlocks.CLIPBOARD.asStack()), 40);
+        scene.overlay().showControls(util.vector().topOf(second), Pointing.DOWN, 40).leftClick().withItem(AllBlocks.CLIPBOARD.asStack());
         scene.idle(5);
-        scene.world.modifyBlockEntity(second, MixedExplosiveBlockEntity.class, be -> be.setCustomName(name));
+        scene.world().modifyBlockEntity(second, MixedExplosiveBlockEntity.class, be -> be.setCustomName(name));
         scene.idle(55);
 
         if (CompatMods.BIG_CANNONS.isLoaded()) {
-            scene.overlay.showText(100)
+            scene.overlay().showText(100)
                 .text("This text is defined in a language file.")
                 .colored(PonderPalette.RED)
                 .independent();

@@ -10,7 +10,7 @@ import com.petrolpark.destroy.core.block.entity.ISpecialWhenHoveredBlockEntity;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Pair;
+import net.createmod.catnip.data.Pair;
 
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -27,6 +27,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
+
+import static com.petrolpark.compat.create.CreateClient.OUTLINER;
 
 public class TestTubeRackBlockEntity extends SmartBlockEntity implements ISpecialWhenHoveredBlockEntity {
 
@@ -80,7 +82,7 @@ public class TestTubeRackBlockEntity extends SmartBlockEntity implements ISpecia
     public void whenLookedAt(LocalPlayer player, BlockHitResult result) {
         int tube = TestTubeRackBlock.getTargetedTube(getBlockState(), getBlockPos(), player);
         if (tube == -1) return;
-        if (inv.isItemValid(tube, player.getItemInHand(InteractionHand.MAIN_HAND)) || !inv.getStackInSlot(tube).isEmpty()) CreateClient.OUTLINER.showAABB(Pair.of("test_tube_rack_" + tube, getBlockPos()), TestTubeRackBlock.getTubeBox(getBlockState(), getBlockPos(), tube), 1)
+        if (inv.isItemValid(tube, player.getItemInHand(InteractionHand.MAIN_HAND)) || !inv.getStackInSlot(tube).isEmpty()) OUTLINER.showAABB(Pair.of("test_tube_rack_" + tube, getBlockPos()), TestTubeRackBlock.getTubeBox(getBlockState(), getBlockPos(), tube), 1)
             .lineWidth(1 / 64f)
             .colored(0xFF7F7F7F);
     };

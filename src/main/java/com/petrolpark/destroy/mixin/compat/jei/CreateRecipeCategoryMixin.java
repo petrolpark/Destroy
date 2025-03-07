@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,11 +28,9 @@ import com.simibubi.create.content.fluids.transfer.FillingRecipe;
 import com.simibubi.create.content.kinetics.mixer.CompactingRecipe;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import net.createmod.catnip.lang.Lang;
 
 import mezz.jei.api.forge.ForgeTypes;
-import mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -40,7 +39,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-@Mixin(CreateRecipeCategory.class)
+@Mixin(value = CreateRecipeCategory.class, remap = false)
 public abstract class CreateRecipeCategoryMixin<T extends Recipe<?>> {
 
     private static final DecimalFormat df = new DecimalFormat();
@@ -87,7 +86,7 @@ public abstract class CreateRecipeCategoryMixin<T extends Recipe<?>> {
      */
     @Overwrite(remap = false)
     @SuppressWarnings("removal")
-    public static IRecipeSlotTooltipCallback addFluidTooltip(int mbAmount) {
+    public static IRecipeSlotRichTooltipCallback addFluidTooltip(int mbAmount) {
         return (view, tooltip) -> {
             Optional<FluidStack> displayed = view.getDisplayedIngredient(ForgeTypes.FLUID_STACK);
 			if (displayed.isEmpty()) return;
@@ -98,15 +97,11 @@ public abstract class CreateRecipeCategoryMixin<T extends Recipe<?>> {
             // All this potion stuff is copied from the Create source code
 			if (fluid.isSame(AllFluids.POTION.get())) {
 				Component name = fluidStack.getDisplayName();
-				if (tooltip.isEmpty()) {
-					tooltip.add(0, name);
-                } else {
-					tooltip.set(0, name);
-                };
+                tooltip.add(name);
 
 				ArrayList<Component> potionTooltip = new ArrayList<>();
 				PotionFluidHandler.addPotionTooltip(fluidStack, potionTooltip, 1);
-				tooltip.addAll(1, potionTooltip.stream().toList());
+				tooltip.addAll(potionTooltip.stream().toList());
             //
 
 			} else if (DestroyFluids.isMixture(fluid)) {
@@ -127,26 +122,15 @@ public abstract class CreateRecipeCategoryMixin<T extends Recipe<?>> {
                     } else {
                         mixtureTooltip = List.of(DestroyLang.translate("mixture.empty").component());
                     };
-                }; 
-
-                if (tooltip.isEmpty()) {
-					tooltip.add(0, name);
-                } else {
-					tooltip.set(0, name);
                 };
-                tooltip.addAll(1, mixtureTooltip);
+                tooltip.add(name);
+                tooltip.addAll(mixtureTooltip);
             };
 
             // Generic for all Fluids - here onwards is copied from the Create source code
 			int amount = mbAmount == -1 ? fluidStack.getAmount() : mbAmount;
-			Component text = Components.literal(String.valueOf(amount)).append(Lang.translateDirect("generic.unit.millibuckets")).withStyle(ChatFormatting.GOLD);
-			if (tooltip.isEmpty())
-				tooltip.add(0, text);
-			else {
-				List<Component> siblings = tooltip.get(0).getSiblings();
-				siblings.add(Components.literal(" "));
-				siblings.add(text);
-			};
+			Component text = Component.literal(String.valueOf(amount)).append(DestroyLang.translateDirect("generic.unit.millibuckets")).withStyle(ChatFormatting.GOLD);
+            tooltip.add(text);
         };
     };
 };

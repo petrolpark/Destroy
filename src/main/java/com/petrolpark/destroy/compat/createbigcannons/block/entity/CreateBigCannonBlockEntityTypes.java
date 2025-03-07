@@ -15,12 +15,12 @@ public class CreateBigCannonBlockEntityTypes {
         .validBlock(CreateBigCannonsBlocks.CUSTOM_EXPLOSIVE_MIX_CHARGE)
         .register();
 
-    public static final BlockEntityEntry<CustomExplosiveMixShellBlockEntity> CUSTOM_EXPLOSIVE_MIX_SHELL = REGISTRATE
+    /*public static final BlockEntityEntry<CustomExplosiveMixShellBlockEntity> CUSTOM_EXPLOSIVE_MIX_SHELL = REGISTRATE
         .blockEntity("custom_explosive_mix_shell", CustomExplosiveMixShellBlockEntity::new)
-        .instance(() -> FuzedBlockInstance::new)
+        .visual(() -> FuzedBlockInstance::new) // TODO: CBC
 		.renderer(() -> FuzedBlockEntityRenderer::new)
         .validBlock(CreateBigCannonsBlocks.CUSTOM_EXPLOSIVE_MIX_SHELL)
-        .register();
+        .register();*/ // TODO: CBC
 
     public static void register() {};
     

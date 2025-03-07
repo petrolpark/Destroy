@@ -1,6 +1,6 @@
 package com.petrolpark.destroy.core.block;
 
-import com.simibubi.create.content.contraptions.ITransformableBlock;
+import com.simibubi.create.api.contraption.transformable.TransformableBlock;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 
@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
-public class FlippableRotatedPillarBlock extends RotatedPillarBlock implements ITransformableBlock, IWrenchable {
+public class FlippableRotatedPillarBlock extends RotatedPillarBlock implements TransformableBlock, IWrenchable {
 
     public static final BooleanProperty FLIPPED = BooleanProperty.create("flipped"); // For Y, false = X and true = Z. For X and Z false = Y
     

@@ -5,11 +5,11 @@ import java.util.List;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.petrolpark.destroy.client.DestroyGuiTextures;
 import com.petrolpark.destroy.client.DestroyLang;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 
+import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;

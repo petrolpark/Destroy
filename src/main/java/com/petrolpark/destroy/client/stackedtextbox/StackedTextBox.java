@@ -7,10 +7,9 @@ import com.google.common.base.Strings;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.simibubi.create.foundation.gui.RemovedGuiUtils;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Pair;
 
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -22,7 +21,7 @@ public class StackedTextBox extends AbstractStackedTextBox {
 
     private static final int PERMANENCE_LIFETIME = 15;
 
-    private Palette palette;
+    private FontHelper.Palette palette;
     private String plainText = "";
 
     private Area activationArea;
@@ -48,7 +47,7 @@ public class StackedTextBox extends AbstractStackedTextBox {
 
         this.minecraft = minecraft;
 
-        palette = Palette.GRAY_AND_WHITE;
+        palette = FontHelper.Palette.GRAY_AND_WHITE;
 
         activationArea = new Area(x, y, width, height);
         isActivationAreaHovered = true; // Should always be true when first opened, but this is set just in case
@@ -59,7 +58,7 @@ public class StackedTextBox extends AbstractStackedTextBox {
         lines = new ArrayList<>();
     };
 
-    public StackedTextBox withPalette(Palette palette) {
+    public StackedTextBox withPalette(FontHelper.Palette palette) {
         this.palette = palette;
         return this;
     };
@@ -179,6 +178,6 @@ public class StackedTextBox extends AbstractStackedTextBox {
         String bars = "";
         bars += ChatFormatting.GRAY + Strings.repeat("|", current);
         bars += ChatFormatting.DARK_GRAY + Strings.repeat("|", total - current);
-        return Components.literal(bars);
+        return Component.literal(bars);
     };
 };

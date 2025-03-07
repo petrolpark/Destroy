@@ -1,0 +1,13 @@
+{
+  "damage": 6,
+  "items": "destroy:thermite_brownie",
+  "velocity": 1.0,
+  "reload_ticks": 15,
+  "render_mode": {
+    "type": "create:tumble"
+  },
+  "pre_entity_hit": {
+    "type": "create:set_on_fire",
+    "ticks": 140
+  }
+}

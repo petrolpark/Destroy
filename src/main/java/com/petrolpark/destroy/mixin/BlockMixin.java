@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.petrolpark.destroy.core.pollution.PollutionHelper;
 import com.petrolpark.destroy.DestroyTags;
 import com.petrolpark.destroy.core.pollution.Pollution.PollutionType;
-import com.simibubi.create.foundation.utility.Pair;
+import net.createmod.catnip.data.Pair;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;

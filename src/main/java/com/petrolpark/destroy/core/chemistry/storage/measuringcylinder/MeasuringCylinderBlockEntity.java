@@ -1,10 +1,10 @@
 package com.petrolpark.destroy.core.chemistry.storage.measuringcylinder;
 
+import net.createmod.catnip.data.Couple;
 import org.joml.Vector3f;
 
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.core.chemistry.storage.SimpleMixtureTankBlockEntity;
-import com.simibubi.create.foundation.utility.Couple;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;

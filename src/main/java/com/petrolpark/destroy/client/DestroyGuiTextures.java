@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.client;
 
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.theme.Color;
 import org.joml.Matrix4f;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -11,8 +13,6 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.petrolpark.client.rendering.IGuiTexture;
 import com.petrolpark.destroy.Destroy;
-import com.simibubi.create.foundation.gui.UIRenderHelper;
-import com.simibubi.create.foundation.utility.Color;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;

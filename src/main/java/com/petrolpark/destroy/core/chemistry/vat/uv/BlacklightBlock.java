@@ -3,7 +3,7 @@ package com.petrolpark.destroy.core.chemistry.vat.uv;
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.DestroyVoxelShapes;
-import com.simibubi.create.content.contraptions.ITransformableBlock;
+import com.simibubi.create.api.contraption.transformable.TransformableBlock;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
@@ -27,7 +27,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BlacklightBlock extends Block implements IUVLampBlock, IWrenchable, ITransformableBlock, ProperWaterloggedBlock {
+public class BlacklightBlock extends Block implements IUVLampBlock, IWrenchable, TransformableBlock, ProperWaterloggedBlock {
 
     public static final DirectionProperty SIDE = BlockStateProperties.FACING;
     public static final BooleanProperty FLIPPED = BooleanProperty.create("flipped");

@@ -29,7 +29,7 @@ public class GlassblowingCategory extends PetrolparkRecipeCategory<GlassblowingR
             .setSlotName("input")
             .setBackground(getRenderedSlot(), -1, -1)
             .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(recipe.getFluidIngredients().get(0).getMatchingFluidStacks()))
-            .addTooltipCallback(addFluidTooltip(recipe.getFluidIngredients().get(0).getRequiredAmount()));
+            .addRichTooltipCallback(addFluidTooltip(recipe.getFluidIngredients().get(0).getRequiredAmount()));
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 107, 32)
             .setBackground(getRenderedSlot(), -1, -1)

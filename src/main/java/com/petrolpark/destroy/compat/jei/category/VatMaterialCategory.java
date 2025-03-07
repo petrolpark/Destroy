@@ -12,7 +12,7 @@ import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.core.chemistry.vat.material.VatMaterial;
 import com.petrolpark.recipe.ingredient.BlockIngredient;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
+import net.createmod.catnip.lang.FontHelper.Palette;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;

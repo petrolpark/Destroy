@@ -31,28 +31,33 @@ public class DestroyFluids {
         new ResourceLocation("destroy", "fluid/mixture_still"),
         new ResourceLocation("destroy", "fluid/mixture_flow"),
         MixtureFluidType::new,
-        MixtureFluid::new
+        MixtureFluid::createSource,
+        MixtureFluid::createFlowing
         ).register();
 
     public static final FluidEntry<MixtureFluid> GAS_MIXTURE = REGISTRATE.virtualFluid("gas", // For display purposes only
         new ResourceLocation("destroy", "fluid/gas"),
         new ResourceLocation("destroy", "fluid/gas"),
         MixtureFluidType::new,
-        MixtureFluid::new
+        MixtureFluid::createSource,
+        MixtureFluid::createFlowing
         ).register();
 
     public static final FluidEntry<MoltenStainlessSteelFluid> MOLTEN_STAINLESS_STEEL = REGISTRATE.virtualFluid("molten_stainless_steel",
         Destroy.asResource("block/molten_stainless_steel"),
         Destroy.asResource("block/molten_stainless_steel"),
         CreateRegistrate::defaultFluidType,
-        MoltenStainlessSteelFluid::new
+        MoltenStainlessSteelFluid::createSource,
+            MoltenStainlessSteelFluid::createFlowing
+
         ).register();
 
     public static final FluidEntry<MoltenBorosilicateGlassFluid> MOLTEN_BOROSILICATE_GLASS = REGISTRATE.virtualFluid("molten_borosilicate_glass",
         Destroy.asResource("block/molten_borosilicate_glass"),
         Destroy.asResource("block/molten_borosilicate_glass"),
         CreateRegistrate::defaultFluidType,
-        MoltenBorosilicateGlassFluid::new
+        MoltenBorosilicateGlassFluid::createSource,
+            MoltenBorosilicateGlassFluid::createFlowing
         ).register();
 
     public static final FluidEntry<VirtualFluid>
@@ -119,7 +124,7 @@ public class DestroyFluids {
     };
 
     private static FluidBuilder<VirtualFluid, CreateRegistrate> coloredFluid(String name, int color, ResourceLocation stillTexture, ResourceLocation flowingTexture) {
-        return REGISTRATE.virtualFluid(name, stillTexture, flowingTexture, (properties, st, ft) -> new ColoredFluidType(properties, st, ft, color), VirtualFluid::new);
+        return REGISTRATE.virtualFluid(name, stillTexture, flowingTexture, (properties, st, ft) -> new ColoredFluidType(properties, st, ft, color), VirtualFluid::createSource, VirtualFluid::createFlowing);
     };
 
     public static boolean isMixture(FluidStack stack) {

@@ -1,10 +1,10 @@
 package com.petrolpark.destroy.core.pollution;
 
 import com.petrolpark.destroy.core.pollution.Pollution.PollutionType;
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.element.WorldSectionElement;
-import com.simibubi.create.foundation.ponder.instruction.PonderInstruction;
 
+import net.createmod.ponder.api.element.WorldSectionElement;
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.instruction.PonderInstruction;
 import net.minecraft.util.Mth;
 
 public class SmogPonderInstruction extends PonderInstruction {

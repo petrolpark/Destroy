@@ -30,14 +30,14 @@ description='''A destructive chemistry-based add-on to Create.'''
     
 [[dependencies.destroy]]
 	modId="create"
-	mandatory=true
+	mandatory=false
 	versionRange="[0.5.1.h,)"
 	ordering="AFTER"
 	side="BOTH"
 
 [[dependencies.destroy]]
 	modId="petrolpark"
-	mandatory=true
+	mandatory=false
 	versionRange="[1.4.2,1.5.0)"
 	ordering="AFTER"
 	side="BOTH"

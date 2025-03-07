@@ -2,12 +2,12 @@ package com.petrolpark.destroy.mixin.client;
 
 import java.util.function.Supplier;
 
+import net.createmod.ponder.api.level.PonderLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.simibubi.create.foundation.ponder.PonderWorld;
 
 import net.minecraft.client.multiplayer.ClientLevel.ClientLevelData;
 import net.minecraft.core.Holder;
@@ -18,10 +18,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.storage.WritableLevelData;
 
-@Mixin(PonderWorld.class)
-public abstract class PonderWorldMixin extends Level {
+@Mixin(PonderLevel.class)
+public abstract class PonderLevelMixin extends Level {
 
-    protected PonderWorldMixin(WritableLevelData pLevelData, ResourceKey<Level> pDimension, RegistryAccess pRegistryAccess, Holder<DimensionType> pDimensionTypeRegistration, Supplier<ProfilerFiller> pProfiler, boolean pIsClientSide, boolean pIsDebug, long pBiomeZoomSeed, int pMaxChainedNeighborUpdates) {
+    protected PonderLevelMixin(WritableLevelData pLevelData, ResourceKey<Level> pDimension, RegistryAccess pRegistryAccess, Holder<DimensionType> pDimensionTypeRegistration, Supplier<ProfilerFiller> pProfiler, boolean pIsClientSide, boolean pIsDebug, long pBiomeZoomSeed, int pMaxChainedNeighborUpdates) {
         super(pLevelData, pDimension, pRegistryAccess, pDimensionTypeRegistration, pProfiler, pIsClientSide, pIsDebug, pBiomeZoomSeed, pMaxChainedNeighborUpdates);
         throw new AssertionError();
     };

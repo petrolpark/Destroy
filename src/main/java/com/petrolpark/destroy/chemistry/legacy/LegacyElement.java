@@ -2,7 +2,7 @@ package com.petrolpark.destroy.chemistry.legacy;
 
 import java.util.function.Function;
 
-import com.jozufozu.flywheel.core.PartialModel;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import com.petrolpark.destroy.core.chemistry.MoleculeRenderer.Geometry;
 
 /**

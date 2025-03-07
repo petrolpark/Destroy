@@ -2,7 +2,7 @@ package com.petrolpark.destroy.content.product.periodictable;
 
 import java.util.function.Supplier;
 
-import com.petrolpark.destroy.client.DestroyPonderIndex;
+import com.petrolpark.destroy.client.DestroyPonderScenes;
 import com.petrolpark.network.packet.S2CPacket;
 
 import net.minecraft.network.FriendlyByteBuf;
@@ -19,7 +19,7 @@ public class RefreshPeriodicTablePonderSceneS2CPacket extends S2CPacket {
 
     @Override
     public boolean handle(Supplier<Context> supplier) {
-        supplier.get().enqueueWork(DestroyPonderIndex::refreshPeriodicTableBlockScenes);
+        supplier.get().enqueueWork(DestroyPonderScenes::refreshPeriodicTableBlockScenes);
         return true;
     };
     

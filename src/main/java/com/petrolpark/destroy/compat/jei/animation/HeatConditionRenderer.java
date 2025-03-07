@@ -10,7 +10,7 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
-import com.simibubi.create.foundation.utility.Lang;
+import net.createmod.catnip.lang.Lang;
 
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -31,7 +31,7 @@ public class HeatConditionRenderer {
         if ("COOLED".equals(requiredHeat.name())) { // Scuffed but okay keep your opinions to yourself
             name = DestroyLang.translate(requiredHeat.getTranslationKey()).component();
         } else {
-            name = Lang.translate(requiredHeat.getTranslationKey()).component();
+            name = DestroyLang.translate(requiredHeat.getTranslationKey()).component();
         };
         graphics.drawString(font, name, x, y, requiredHeat.getColor(), false); // This is equivalent of the line being overwritten
     };
@@ -52,7 +52,7 @@ public class HeatConditionRenderer {
             builder
                 .addSlot(RecipeIngredientRole.CATALYST, x + 19, y)
                 .addIngredients(ForgeTypes.FLUID_STACK, refrigerantIngredient.getMatchingFluidStacks())
-                .addTooltipCallback(CreateRecipeCategory.addFluidTooltip());
+                .addRichTooltipCallback(CreateRecipeCategory.addFluidTooltip());
         } else if (requiredHeat != HeatCondition.NONE) { // This one is copied right from Create; it renders the Blaze Burner
             builder
                 .addSlot(RecipeIngredientRole.RENDER_ONLY, x, y)

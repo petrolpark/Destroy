@@ -41,12 +41,12 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -547,6 +547,18 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IDirect
             this.tankGetter = tankGetter;
         };
 
+        public static CentrifugeDisplaySource createInput() {
+            return new CentrifugeDisplaySource("input", CentrifugeBlockEntity::getInputTank);
+        }
+
+        public static CentrifugeDisplaySource createDenseOutput() {
+            return new CentrifugeDisplaySource("dense_output", CentrifugeBlockEntity::getDenseOutputTank);
+        }
+
+        public static CentrifugeDisplaySource createLightOutput() {
+            return new CentrifugeDisplaySource("light_output", CentrifugeBlockEntity::getLightOutputTank);
+        }
+
         @Override
         public FluidStack getFluidStack(DisplayLinkContext context) {
             if (context.getSourceBlockEntity() instanceof CentrifugeBlockEntity centrifuge) {
@@ -560,10 +572,4 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IDirect
             return DestroyLang.translate("display_source.centrifuge."+tankId).component();
         };
     };
- 
-    public static CentrifugeDisplaySource INPUT_DISPLAY_SOURCE = new CentrifugeDisplaySource("input", CentrifugeBlockEntity::getInputTank);
-    public static CentrifugeDisplaySource DENSE_OUTPUT_DISPLAY_SOURCE = new CentrifugeDisplaySource("dense_output", CentrifugeBlockEntity::getDenseOutputTank);
-    public static CentrifugeDisplaySource LIGHT_OUTPIT_DISPLAY_SOURCE = new CentrifugeDisplaySource("light_output", CentrifugeBlockEntity::getLightOutputTank);
-
-    
 };

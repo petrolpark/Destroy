@@ -2,9 +2,10 @@ package com.petrolpark.destroy.content.oil.pumpjack;
 
 import java.util.Set;
 
+import com.petrolpark.destroy.client.DestroyLang;
 import com.simibubi.create.CreateClient;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.Pair;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.lang.Lang;
 
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -17,6 +18,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
+
+import static com.petrolpark.compat.create.CreateClient.OUTLINER;
 
 public class PumpjackBlockItem extends BlockItem {
 
@@ -38,9 +41,9 @@ public class PumpjackBlockItem extends BlockItem {
 		BlockPos pos = context.getClickedPos();
 		Direction facing = context.getHorizontalDirection().getCounterClockWise(Axis.Y);
 		if (!(context.getPlayer()instanceof LocalPlayer localPlayer)) return;
-		CreateClient.OUTLINER.showCluster(Pair.of("pumpjack", pos), Set.of(pos, pos.relative(facing), pos.relative(facing.getOpposite()), pos.above()))
+		OUTLINER.showCluster(Pair.of("pumpjack", pos), Set.of(pos, pos.relative(facing), pos.relative(facing.getOpposite()), pos.above()))
             .colored(0xFF_ff5d6c);;
-		Lang.translate("large_water_wheel.not_enough_space")
+		DestroyLang.translate("large_water_wheel.not_enough_space")
 			.color(0xFF_ff5d6c)
 			.sendStatus(localPlayer);
 	};

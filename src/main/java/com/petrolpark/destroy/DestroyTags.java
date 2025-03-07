@@ -1,7 +1,7 @@
 package com.petrolpark.destroy;
 
-import com.simibubi.create.foundation.utility.Lang;
 
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;

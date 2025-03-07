@@ -35,7 +35,7 @@ public class ObliterationCategory extends PetrolparkRecipeCategory<ObliterationR
         builder.addSlot(RecipeIngredientRole.OUTPUT, 131, 51)
             .setBackground(getRenderedSlot(output), -1, -1)
 			.addItemStack(output.getStack())
-			.addTooltipCallback(addStochasticTooltip(output));
+			.addRichTooltipCallback(addStochasticTooltip(output));
     };
 
     @Override

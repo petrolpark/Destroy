@@ -7,6 +7,13 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
+import com.simibubi.create.api.equipment.goggles.IHaveHoveringInformation;
+import com.simibubi.create.foundation.utility.CreateLang;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.lang.FontHelper;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.ponder.api.level.PonderLevel;
+import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 
@@ -22,7 +29,6 @@ import com.petrolpark.destroy.core.pollution.PollutionHelper;
 import com.petrolpark.destroy.core.pollution.Pollution.PollutionType;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
-import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.fluids.FluidFX;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour.AttachmentTypes;
@@ -30,10 +36,6 @@ import com.simibubi.create.content.redstone.thresholdSwitch.ThresholdSwitchObser
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.ponder.PonderWorld;
-import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -239,7 +241,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveLabGo
         if (clientPacket) {
             spoutingTicks = tag.getInt("SpoutingTicks");
             spoutingFluid = FluidStack.loadFluidStackFromNBT(tag.getCompound("SpoutingFluid"));
-            ventOpenness.chase(displayType == DisplayType.OPEN_VENT ? 1f : 0f, 0.3f, Chaser.EXP);
+            ventOpenness.chase(displayType == DisplayType.OPEN_VENT ? 1f : 0f, 0.3f, LerpedFloat.Chaser.EXP);
         };
         redstoneMonitor.withLabel(getDisplayType().quantityLabel);
     };
@@ -276,11 +278,30 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveLabGo
     /**
      * Inhertited from {@link ThresholdSwitchObservable}
      */
+
+
     @Override
-    public float getPercent() {
-        if (getController() == null) return 0f;
-        return getController().getPercent();
-    };
+    public int getMaxValue() {
+        if (getController() == null) return 0;
+        return getController().getMaxValue();
+    }
+
+    @Override
+    public int getMinValue() {
+        if (getController() == null) return 0;
+        return getController().getMinValue();
+    }
+
+    @Override
+    public int getCurrentValue() {
+        if (getController() == null) return 0;
+        return getController().getCurrentValue();
+    }
+
+    @Override
+    public MutableComponent format(int value) {
+        return DestroyLang.translateDirect("gui.vat.vat_liquid_amount", value);
+    }
 
     /**
      * @see VatControllerBlockEntity#getPercentagePressure()
@@ -401,7 +422,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveLabGo
         this.displayType = displayType;
         if (!hasLevel()) return;
 
-        if (getLevel().isClientSide()) ventOpenness.chase(displayType == DisplayType.OPEN_VENT ? 1f : 0f, 0.3f, Chaser.EXP);
+        if (getLevel().isClientSide()) ventOpenness.chase(displayType == DisplayType.OPEN_VENT ? 1f : 0f, 0.3f, LerpedFloat.Chaser.EXP);
 
         if (!getLevel().isClientSide()) getBlockState().updateNeighbourShapes(getLevel(), getBlockPos(), 3);
         updateDisplayType(getBlockPos().relative(direction)); // Check for a Pipe
@@ -440,7 +461,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveLabGo
     @SuppressWarnings("null")
     public void updateDisplayType(BlockPos neighborPos) {
         if (getController() == null) return;
-        if (getLevel() instanceof PonderWorld) return; // Don't automatically update in Ponder World - the type is forced
+        if (getLevel() instanceof PonderLevel) return; // Don't automatically update in Ponder World - the type is forced
         FluidTransportBehaviour behaviour = BlockEntityBehaviour.get(getLevel(), neighborPos, FluidTransportBehaviour.TYPE);
         boolean nextToPipe = false;
         if (behaviour != null) {
@@ -484,8 +505,8 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveLabGo
     };
 
     @Override
-    public void transform(StructureTransform transform) {
-        super.transform(transform);
+    public void transform(BlockEntity blockEntity, StructureTransform transform) {
+        super.transform(blockEntity, transform);
         controllerPosition = transform.apply(controllerPosition.offset(transform.unapply(getBlockPos()).subtract(getBlockPos())));
     };
 
@@ -532,7 +553,7 @@ public class VatSideBlockEntity extends CopycatBlockEntity implements IHaveLabGo
         if (getDisplayType() == DisplayType.PIPE) {
             if (!isPipeSubmerged(false, null)) {
                 DestroyLang.translate("tooltip.vat.not_submerged.header").style(ChatFormatting.GOLD).forGoggles(tooltip);
-                TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.vat.not_submerged").component(), TooltipHelper.Palette.GRAY_AND_WHITE).forEach(component -> DestroyLang.builder().add(component.copy()).forGoggles(tooltip));
+                TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.vat.not_submerged").component(), FontHelper.Palette.GRAY_AND_WHITE).forEach(component -> DestroyLang.builder().add(component.copy()).forGoggles(tooltip));
                 tooltip.add(Component.literal(""));
             };
         };

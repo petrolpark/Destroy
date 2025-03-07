@@ -2,9 +2,9 @@ package com.petrolpark.destroy.core.chemistry.vat.ponder;
 
 import com.petrolpark.destroy.core.chemistry.vat.VatSideBlockEntity;
 import com.petrolpark.destroy.core.chemistry.vat.VatSideBlockEntity.DisplayType;
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.instruction.PonderInstruction;
 
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.instruction.PonderInstruction;
 import net.minecraft.core.BlockPos;
 
 public class SetVatSideTypePonderInstruction extends PonderInstruction {

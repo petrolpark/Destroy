@@ -3,8 +3,8 @@ package com.petrolpark.destroy.content.oil.seismology;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.DestroyMessages;
 import com.petrolpark.destroy.content.oil.seismology.SeismographItem.Seismograph;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 
+import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.InteractionHand;

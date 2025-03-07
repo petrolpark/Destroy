@@ -5,8 +5,8 @@ import com.mojang.math.Axis;
 import com.petrolpark.destroy.DestroyBlocks;
 import com.petrolpark.destroy.client.DestroyPartials;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
+import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;

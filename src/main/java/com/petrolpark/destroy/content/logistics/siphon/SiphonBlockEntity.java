@@ -16,10 +16,9 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsFormatter;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueBehaviour;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.VecHelper;
+import net.createmod.catnip.lang.Lang;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,6 +27,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -151,7 +151,7 @@ public class SiphonBlockEntity extends SmartBlockEntity implements IHaveLabGoggl
         @Override
         public ValueSettingsBoard createBoard(Player player, BlockHitResult hitResult) {
             return new ValueSettingsBoard(label, 100, 10,
-			Lang.translatedOptions("generic.unit", "millibuckets", "buckets"),
+			DestroyLang.translatedOptions("generic.unit", "millibuckets", "buckets"),
 			new ValueSettingsFormatter(this::formatSettings));
         };
 
@@ -177,9 +177,9 @@ public class SiphonBlockEntity extends SmartBlockEntity implements IHaveLabGoggl
         };
 
         public MutableComponent formatSettings(ValueSettings settings) {
-            return Components.literal(switch (settings.row()) {
-                case 0 -> String.valueOf(settings.value()) + Lang.translateDirect("generic.unit.millibuckets").getString();
-                case 1 -> df.format(settings.value() / 10f) + Lang.translateDirect("generic.unit.buckets").getString();
+            return Component.literal(switch (settings.row()) {
+                case 0 -> String.valueOf(settings.value()) + DestroyLang.translateDirect("generic.unit.millibuckets").getString();
+                case 1 -> df.format(settings.value() / 10f) + DestroyLang.translateDirect("generic.unit.buckets").getString();
                 default -> String.valueOf(settings.value());
             });
         };
@@ -192,11 +192,11 @@ public class SiphonBlockEntity extends SmartBlockEntity implements IHaveLabGoggl
             };
     
             @Override
-            public Vec3 getLocalOffset(BlockState state) {
+            public Vec3 getLocalOffset(LevelAccessor level, BlockPos pos, BlockState state) {
                 if (getSide().getAxis() == Direction.Axis.Y) {
                     return VecHelper.voxelSpace(8d, getSide() == Direction.UP ? 15.5d : 0.5d, 8d);
                 };
-                return super.getLocalOffset(state);
+                return super.getLocalOffset(level, pos, state);
             };
             
         };

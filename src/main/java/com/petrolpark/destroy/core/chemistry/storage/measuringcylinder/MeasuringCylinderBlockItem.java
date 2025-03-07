@@ -3,6 +3,10 @@ package com.petrolpark.destroy.core.chemistry.storage.measuringcylinder;
 import java.util.Collections;
 import java.util.function.Consumer;
 
+import com.petrolpark.destroy.core.bettervaluesettings.BetterValueSettingsBehaviour;
+import com.petrolpark.destroy.core.bettervaluesettings.SidedScrollValueBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.*;
+import net.createmod.catnip.gui.ScreenOpener;
 import org.joml.Vector3f;
 
 import com.petrolpark.destroy.client.DestroyLang;
@@ -13,12 +17,9 @@ import com.petrolpark.destroy.core.chemistry.storage.PlaceableMixtureTankItem;
 import com.petrolpark.destroy.core.chemistry.storage.SimpleMixtureTankItemRenderer;
 import com.petrolpark.destroy.core.chemistry.storage.SimpleMixtureTankRenderer.ISimpleMixtureTankRenderInformation;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBehaviour.ValueSettings;
-import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
-import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsFormatter;
-import com.simibubi.create.foundation.gui.ScreenOpener;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Lang;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.lang.Lang;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -61,18 +62,18 @@ public class MeasuringCylinderBlockItem extends PlaceableMixtureTankItem<Measuri
             Component itemName = mixtureItem.getNameRegardlessOfFluid(stack);
             Component blockName = state.getBlock().getName();
 
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
-                openTransferScreen(pos, face, hand, 
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> openTransferScreen(pos, face, hand,
                     new ValueSettingsBoard(
-                        DestroyLang.translate("tooltip.measuring_cylinder", blockToItem ? blockName : itemName, blockToItem ? itemName : blockName).component(),
-                        maxTransfer,
-                        50,
-                        Collections.singletonList(Lang.translateDirect("generic.unit.millibuckets")),
-                        new ValueSettingsFormatter(ValueSettings::format)
+                            DestroyLang.translate("tooltip.measuring_cylinder", blockToItem ? blockName : itemName, blockToItem ? itemName : blockName).component(),
+                            maxTransfer,
+                            50,
+                            Collections.singletonList(DestroyLang.translateDirect("generic.unit.millibuckets")),
+                            new ValueSettingsFormatter(ValueSettings::format)
                     ),
                     new ValueSettings(0, maxTransfer),
-                    blockToItem
-                )
+                    blockToItem,
+                    0 // TODO: What does netId do?
+            )
             );
             return InteractionResult.SUCCESS;
         };
@@ -80,8 +81,8 @@ public class MeasuringCylinderBlockItem extends PlaceableMixtureTankItem<Measuri
     };
 
     @OnlyIn(Dist.CLIENT)
-    protected static void openTransferScreen(BlockPos pos, Direction sideAccessed, InteractionHand hand, ValueSettingsBoard board, ValueSettings valueSettings, boolean blockToItem) {
-        ScreenOpener.open(new TransferFluidScreen(pos, sideAccessed, hand, board, valueSettings, blockToItem));
+    protected static void openTransferScreen(BlockPos pos, Direction sideAccessed, InteractionHand hand, ValueSettingsBoard board, ValueSettings valueSettings, boolean blockToItem, int netId) {
+        ScreenOpener.open(new TransferFluidScreen(pos, sideAccessed, hand, board, valueSettings, blockToItem, netId));
     };
 
     @Override

@@ -6,12 +6,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.client.DestroyPartials;
 import com.petrolpark.destroy.content.processing.cooler.CoolerBlockEntity.ColdnessLevel;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import net.createmod.catnip.animation.AnimationTickHolder;
 
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -53,7 +53,7 @@ public class CoolerRenderer extends SafeBlockEntityRenderer<CoolerBlockEntity> {
 
         ms.pushPose();
 
-        SuperByteBuffer headBuffer = CachedBufferer.partial(DestroyPartials.STRAY_SKULL, blockState);
+        SuperByteBuffer headBuffer = CachedBuffers.partial(DestroyPartials.STRAY_SKULL, blockState);
 		if (modelTransform != null)
 			headBuffer.transform(modelTransform);
 		headBuffer.translate(0, headY, 0);
@@ -63,7 +63,7 @@ public class CoolerRenderer extends SafeBlockEntityRenderer<CoolerBlockEntity> {
     };
 
     private static void draw(SuperByteBuffer buffer, float horizontalAngle, PoseStack ms, VertexConsumer vc) {
-		buffer.rotateCentered(Direction.UP, horizontalAngle)
+		buffer.rotateCentered(horizontalAngle, Direction.UP)
 			.light(LightTexture.FULL_BRIGHT)
 			.renderInto(ms, vc);
 	};

@@ -3,17 +3,17 @@ package com.petrolpark.destroy.content.processing.glassblowing;
 import java.util.List;
 import java.util.Optional;
 
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.DestroyMessages;
 import com.petrolpark.destroy.client.DestroyFluidRenderer;
 import com.petrolpark.destroy.client.DestroyGuiTextures;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
-import com.simibubi.create.foundation.gui.widget.AbstractSimiWidget;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
-import com.simibubi.create.foundation.utility.Lang;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.gui.AbstractSimiScreen;
+import net.createmod.catnip.gui.widget.AbstractSimiWidget;
+import net.createmod.catnip.lang.Lang;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -96,7 +96,7 @@ public class BlowpipeScreen extends AbstractSimiScreen {
             // Tooltips
             if (mouseY >= y && mouseY <= y + 16) {
                 if (mouseX >= 9 && mouseX <= 27) {
-                    graphics.renderTooltip(font, List.of(fluidStack.getDisplayName(), Lang.builder().add(Component.literal(""+ingredient.getRequiredAmount())).add(Lang.translate("generic.unit.millibuckets")).style(ChatFormatting.GRAY).component()), Optional.empty(), mouseX, mouseY);
+                    graphics.renderTooltip(font, List.of(fluidStack.getDisplayName(), DestroyLang.builder().add(Component.literal(""+ingredient.getRequiredAmount())).add(DestroyLang.translate("generic.unit.millibuckets")).style(ChatFormatting.GRAY).component()), Optional.empty(), mouseX, mouseY);
                 };
                 if (mouseX >= 56 && mouseX <= 72) {
                     graphics.renderTooltip(font, stack, mouseX, mouseY);

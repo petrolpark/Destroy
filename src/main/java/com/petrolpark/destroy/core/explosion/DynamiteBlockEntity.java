@@ -11,9 +11,9 @@ import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.VecHelper;
+import net.createmod.catnip.data.Pair;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,6 +27,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import static com.petrolpark.compat.create.CreateClient.OUTLINER;
 
 public class DynamiteBlockEntity extends SmartBlockEntity implements ISpecialWhenHoveredBlockEntity {
 
@@ -81,7 +83,7 @@ public class DynamiteBlockEntity extends SmartBlockEntity implements ISpecialWhe
     @OnlyIn(Dist.CLIENT)
     @Override
     public void whenLookedAt(LocalPlayer player, BlockHitResult blockHitResult) {
-        CreateClient.OUTLINER.chaseAABB(Pair.of("excavationArea", getBlockPos()), new AABB(excavationAreaLowerCorner, excavationAreaUpperCorner))
+        OUTLINER.chaseAABB(Pair.of("excavationArea", getBlockPos()), new AABB(excavationAreaLowerCorner, excavationAreaUpperCorner))
             .colored(0xFF_d80051);
     };
 
@@ -102,7 +104,7 @@ public class DynamiteBlockEntity extends SmartBlockEntity implements ISpecialWhe
     protected class DynamiteValueBox extends ValueBoxTransform.Sided {
         @Override
         protected Vec3 getSouthLocation() {
-            return VecHelper.voxelSpace(8, 8, 15.5);  
+            return VecHelper.voxelSpace(8, 8, 15.5);
         };
     };
     

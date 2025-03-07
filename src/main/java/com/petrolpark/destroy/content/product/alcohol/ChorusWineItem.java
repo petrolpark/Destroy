@@ -5,7 +5,7 @@ import com.petrolpark.destroy.config.DestroySubstancesConfigs;
 import com.petrolpark.destroy.core.item.tooltip.IDynamicItemDescription;
 import com.petrolpark.destroy.core.player.PlayerPreviousPositionsCapability;
 import com.simibubi.create.foundation.item.ItemDescription;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
+import net.createmod.catnip.lang.FontHelper.Palette;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

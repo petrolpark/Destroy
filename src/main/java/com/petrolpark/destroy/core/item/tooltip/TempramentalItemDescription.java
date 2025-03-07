@@ -5,7 +5,7 @@ import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipModifier;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
+import net.createmod.catnip.lang.FontHelper.Palette;
 
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;

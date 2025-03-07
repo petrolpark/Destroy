@@ -4,9 +4,9 @@ import java.util.function.Supplier;
 
 import com.petrolpark.destroy.core.chemistry.hazard.ChemistryHazardHelper;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
-import com.simibubi.create.foundation.config.ConfigBase.ConfigInt;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 
+import net.createmod.catnip.config.ConfigBase;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.DispenserBlock;
 
 public class ChemistryProtectionHeadwearItem extends Item implements Equipable {
 
-    protected Supplier<ConfigInt> configuredDurability;
+    protected Supplier<ConfigBase.ConfigInt> configuredDurability;
     protected boolean goggles;
     protected Supplier<Ingredient> repairMaterial;
     protected boolean enchantable;
@@ -87,7 +87,7 @@ public class ChemistryProtectionHeadwearItem extends Item implements Equipable {
         };
     };
 
-    public static NonNullConsumer<ChemistryProtectionHeadwearItem> durability(Supplier<ConfigInt> durability) {
+    public static NonNullConsumer<ChemistryProtectionHeadwearItem> durability(Supplier<ConfigBase.ConfigInt> durability) {
         return item -> item.configuredDurability = durability;
     };
 

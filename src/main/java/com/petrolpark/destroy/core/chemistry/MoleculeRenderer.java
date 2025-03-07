@@ -7,12 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.gui.ILightingSettings;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import org.joml.Math;
 import org.joml.Quaternionf;
 
 import com.google.common.collect.ImmutableList;
-import com.jozufozu.flywheel.util.AnimationTickHolder;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.chemistry.legacy.LegacyAtom;
 import com.petrolpark.destroy.chemistry.legacy.LegacySpecies;
@@ -22,9 +25,6 @@ import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Edge;
 import com.petrolpark.destroy.chemistry.serializer.Node;
 import com.petrolpark.util.MathsHelper;
-import com.simibubi.create.foundation.gui.ILightingSettings;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
-import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.phys.Vec3;
@@ -158,8 +158,8 @@ public class MoleculeRenderer {
         PoseStack poseStack = graphics.pose();
         poseStack.pushPose();
         poseStack.translate(xPosition + ((float)width / 2f), yPosition + yOffset, -200);
-        TransformStack.cast(poseStack)
-            .rotateY(AnimationTickHolder.getRenderTime()); // Rotation
+        TransformStack.of(poseStack)
+            .rotateYDegrees(AnimationTickHolder.getRenderTime()); // Rotation
         poseStack.translate(-((float)width) / 2f + xOffset, 0f, 0f);
         for (Pair<Vec3, IRenderableMoleculePart> pair : RENDERED_OBJECTS) {
             pair.getSecond().render(graphics, pair.getFirst());
@@ -380,7 +380,7 @@ public class MoleculeRenderer {
             PoseStack poseStack = graphics.pose();
             poseStack.pushPose();
             poseStack.translate(location.x, location.y, location.z);
-            TransformStack.cast(poseStack)
+            TransformStack.of(poseStack)
                 .rotateCentered(rotation);
             GuiGameElement.of(type().getPartial())
                 .lighting(ILightingSettings.DEFAULT_FLAT)

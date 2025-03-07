@@ -6,14 +6,16 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.destroy.client.DestroyParticleTypes;
 import com.simibubi.create.foundation.particle.ICustomParticleDataWithSprite;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 
+import net.createmod.catnip.platform.ForgeRegisteredObjectsHelper;
+import net.createmod.catnip.platform.services.RegisteredObjectsHelper;
 import net.minecraft.client.particle.ParticleEngine.SpriteParticleRegistration;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.IForgeRegistry;
 
 
 public class GasParticleData implements ParticleOptions, ICustomParticleDataWithSprite<GasParticleData> {
@@ -49,7 +51,7 @@ public class GasParticleData implements ParticleOptions, ICustomParticleDataWith
      * A Particle with the apperance of a cloud of smoke and the color of a given Fluid.
      * @param type See {@link com.petrolpark.destroy.client.DestroyParticleTypes here}
      * @param fluid The Fluid of which this Particle should take the appearance
-     * @param blocks How many blocks upward this Particle should float before disappearing (used for the {@link com.petrolpark.destroy.content.processing.distillation.BubbleCapBlockEntity#spawnParticles Distillation Tower})
+     * @param blockHeight How many blocks upward this Particle should float before disappearing (used for the {@link com.petrolpark.destroy.content.processing.distillation.BubbleCapBlockEntity#spawnParticles Distillation Tower})
      */
     @SuppressWarnings("unchecked")
     public GasParticleData(ParticleType<?> type, FluidStack fluid, float blockHeight) {
@@ -113,7 +115,8 @@ public class GasParticleData implements ParticleOptions, ICustomParticleDataWith
 
     @Override
     public String writeToString() {
-        return RegisteredObjects.getKeyOrThrow(type) + " " + RegisteredObjects.getKeyOrThrow(fluid.getFluid());
+        RegisteredObjectsHelper<IForgeRegistry> o = new ForgeRegisteredObjectsHelper();
+        return o.getKeyOrThrow(type) + " " + o.getKeyOrThrow(fluid.getFluid());
     };
 
     @Override

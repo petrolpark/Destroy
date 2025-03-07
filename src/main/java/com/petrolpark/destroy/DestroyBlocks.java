@@ -2,11 +2,13 @@ package com.petrolpark.destroy;
 
 import static com.petrolpark.destroy.Destroy.REGISTRATE;
 import static com.simibubi.create.AllTags.forgeItemTag;
+import static com.simibubi.create.api.behaviour.display.DisplaySource.displaySource;
 import static com.simibubi.create.foundation.data.CreateRegistrate.casingConnectivity;
 import static com.simibubi.create.foundation.data.CreateRegistrate.connectedTextures;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 
 import com.petrolpark.destroy.config.DestroyAllConfigs;
+import com.petrolpark.destroy.config.DestroyStress;
 import com.petrolpark.destroy.content.logistics.creativepump.CreativePumpBlock;
 import com.petrolpark.destroy.content.logistics.siphon.SiphonBlock;
 import com.petrolpark.destroy.content.oil.pumpjack.PumpjackBlock;
@@ -70,9 +72,7 @@ import com.simibubi.create.AllTags;
 import com.simibubi.create.AllTags.AllBlockTags;
 import com.simibubi.create.content.decoration.encasing.CasingBlock;
 import com.simibubi.create.content.decoration.encasing.EncasedCTBehaviour;
-import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
-import com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours;
 import com.simibubi.create.foundation.block.connected.SimpleCTBehaviour;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BlockStateGen;
@@ -100,6 +100,7 @@ import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
@@ -139,7 +140,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_ORANGE)
             .noOcclusion()
-        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(BubbleCapBlockEntity.DISPLAY_SOURCE, "bubble_cap"))
+        ).transform(displaySource(DestroyDisplaySources.BUBBLE_CAP))
         .transform(TagGen.pickaxeOnly())
         .item()
         .transform(customItemModel())
@@ -157,12 +158,12 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.COLOR_ORANGE)
             .noOcclusion()
-        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(CentrifugeBlockEntity.INPUT_DISPLAY_SOURCE, "centrifuge_input"))
-        .onRegister(AllDisplayBehaviours.assignDataBehaviour(CentrifugeBlockEntity.DENSE_OUTPUT_DISPLAY_SOURCE, "centrifuge_dense_output"))
-        .onRegister(AllDisplayBehaviours.assignDataBehaviour(CentrifugeBlockEntity.LIGHT_OUTPIT_DISPLAY_SOURCE, "centrifuge_light_output"))
+        ).transform(displaySource(DestroyDisplaySources.CENTRIFUGE_INPUT))
+        .transform(displaySource(DestroyDisplaySources.CENTRIFUGE_DENSE_OUTPUT))
+        .transform(displaySource(DestroyDisplaySources.CENTRIFUGE_LIGHT_OUTPUT))
         .blockstate((c,p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c,p)))
         .transform(TagGen.pickaxeOnly())
-        .transform(BlockStressDefaults.setImpact(5.0))
+        .transform(DestroyStress.setImpact(5.0))
         .item()
         .transform(customItemModel())
         .register();
@@ -170,7 +171,7 @@ public class DestroyBlocks {
     public static final BlockEntry<ColorimeterBlock> COLORIMETER = REGISTRATE.block("colorimeter", ColorimeterBlock::new)
         .initialProperties(() -> Blocks.OBSERVER)
         .transform(TagGen.pickaxeOnly())
-        .onRegister(AllDisplayBehaviours.assignDataBehaviour(new ColorimeterBlockEntity.ColorimeterDisplaySource()))
+        .transform(displaySource(DestroyDisplaySources.COLORIMETER))
         .item()
         .build()
         .register();
@@ -213,7 +214,7 @@ public class DestroyBlocks {
             .mapColor(MapColor.GOLD)
             .noOcclusion()
         ).transform(TagGen.pickaxeOnly())
-        .transform(BlockStressDefaults.setImpact(6.0))
+        .transform(DestroyStress.setImpact(6.0))
         .item(AssemblyOperatorBlockItem::new)
         .tag(DestroyTags.Items.LIABLE_TO_CHANGE.tag)
         .transform(customItemModel())
@@ -241,8 +242,7 @@ public class DestroyBlocks {
 
     public static final BlockEntry<ExtrusionDieBlock> EXTRUSION_DIE = REGISTRATE.block("extrusion_die", ExtrusionDieBlock::new)
         .initialProperties(SharedProperties::softMetal)
-        .properties(p -> p
-            .noCollission()
+        .properties(BlockBehaviour.Properties::noCollission
         ).transform(TagGen.pickaxeOnly())
         .item()
         .transform(customItemModel())
@@ -250,8 +250,7 @@ public class DestroyBlocks {
 
     public static final BlockEntry<KeypunchBlock> KEYPUNCH = REGISTRATE.block("keypunch", KeypunchBlock::new)
         .initialProperties(SharedProperties::softMetal)
-        .properties(p -> p
-            .noOcclusion()
+        .properties(BlockBehaviour.Properties::noOcclusion
         ).transform(TagGen.axeOrPickaxe())
         .item(AssemblyOperatorBlockItem::new)
         .transform(customItemModel())
@@ -266,9 +265,8 @@ public class DestroyBlocks {
 
     public static final BlockEntry<MechanicalSieveBlock> MECHANICAL_SIEVE = REGISTRATE.block("mechanical_sieve", MechanicalSieveBlock::new)
         .initialProperties(SharedProperties::stone)
-        .properties(p -> p
-            .noOcclusion()
-        ).transform(BlockStressDefaults.setImpact(0.5d))
+        .properties(BlockBehaviour.Properties::noOcclusion
+        ).transform(DestroyStress.setImpact(0.5d))
         .transform(TagGen.axeOrPickaxe())
         .item()
         .transform(customItemModel())
@@ -279,7 +277,7 @@ public class DestroyBlocks {
         .properties(p -> p
             .mapColor(MapColor.NONE)
             .noOcclusion()
-        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(new PollutometerDisplaySource(), "pollutometer"))
+        ).transform(displaySource(DestroyDisplaySources.POLLUTOMETER))
         .transform(TagGen.pickaxeOnly())
         .item()
         .transform(customItemModel())
@@ -292,7 +290,7 @@ public class DestroyBlocks {
             .noOcclusion()
             .isSuffocating((state, level, pos) -> false)
         ).transform(TagGen.pickaxeOnly())
-        .transform(BlockStressDefaults.setImpact(8.0))
+        .transform(DestroyStress.setImpact(8.0))
         .item(PumpjackBlockItem::new)
         .transform(customItemModel())
         .register();
@@ -363,14 +361,13 @@ public class DestroyBlocks {
 
     public static final BlockEntry<VatControllerBlock> VAT_CONTROLLER = REGISTRATE.block("vat_controller", VatControllerBlock::new)
         .initialProperties(SharedProperties::copperMetal)
-        .properties(p -> p
-            .noOcclusion()
+        .properties(BlockBehaviour.Properties::noOcclusion
         ).onRegister(CreateRegistrate.connectedTextures(() -> new EncasedCTBehaviour(DestroySpriteShifts.STAINLESS_STEEL_BLOCK)))
         .onRegister(CreateRegistrate.casingConnectivity((block, cc) -> cc.make(block, DestroySpriteShifts.STAINLESS_STEEL_BLOCK,
 			(s, f) -> f != s.getValue(VatControllerBlock.FACING)))
-        ).onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.ALL_DISPLAY_SOURCE, "vat_controller_all_contents"))
-        .onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.SOLUTION_DISPLAY_SOURCE, "vat_controller_solution_contents"))
-        .onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.GAS_DISPLAY_SOURCE, "vat_controller_gas_contents"))
+        ).transform(displaySource(DestroyDisplaySources.VAT_CONTROLLER_ALL))
+        .transform(displaySource(DestroyDisplaySources.VAT_CONTROLLER_SOLUTION))
+        .transform(displaySource(DestroyDisplaySources.VAT_CONTROLLER_GAS))
         .transform(TagGen.pickaxeOnly())
         .item()
         .build()
@@ -381,9 +378,9 @@ public class DestroyBlocks {
         .properties(p -> p
             .isViewBlocking(DestroyBlocks::never)
         ).onRegister(CreateRegistrate.blockModel(() -> CopycatFullBlockModel::new))
-        .onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.ALL_DISPLAY_SOURCE, "vat_side_all_contents"))
-        .onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.SOLUTION_DISPLAY_SOURCE, "vat_side_solution_contents"))
-        .onRegister(AllDisplayBehaviours.assignDataBehaviour(VatControllerBlockEntity.GAS_DISPLAY_SOURCE, "vat_side_gas_contents"))
+        .transform(displaySource(DestroyDisplaySources.VAT_SIDE_ALL))
+        .transform(displaySource(DestroyDisplaySources.VAT_SIDE_SOLUTION))
+        .transform(displaySource(DestroyDisplaySources.VAT_SIDE_GAS))
         .register();
 
     public static final BlockEntry<UrineCauldronBlock> URINE_CAULDRON = REGISTRATE.block("urine_cauldron", p -> new UrineCauldronBlock(p, DestroyCauldronInteractions.URINE))

@@ -2,6 +2,7 @@ package com.petrolpark.destroy.mixin;
 
 import java.util.Iterator;
 
+import net.createmod.catnip.math.BlockFace;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,8 +14,7 @@ import com.petrolpark.destroy.mixin.accessor.FluidNetworkAccessor;
 import com.simibubi.create.content.fluids.FluidNetwork;
 import com.simibubi.create.content.fluids.PipeConnection;
 import com.simibubi.create.content.fluids.PipeConnection.Flow;
-import com.simibubi.create.foundation.utility.BlockFace;
-import com.simibubi.create.foundation.utility.Pair;
+import net.createmod.catnip.data.Pair;
 
 import net.minecraftforge.fluids.FluidStack;
 

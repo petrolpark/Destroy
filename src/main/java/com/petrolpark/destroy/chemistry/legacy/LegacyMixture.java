@@ -22,9 +22,9 @@ import com.petrolpark.destroy.chemistry.legacy.genericreaction.SingleGroupGeneri
 import com.petrolpark.destroy.chemistry.legacy.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.legacy.reactionresult.NovelCompoundSynthesizedReactionResult;
 import com.petrolpark.destroy.core.chemistry.basinreaction.ReactionInBasinRecipe.ReactionInBasinResult;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.Pair;
 
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;

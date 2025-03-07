@@ -7,8 +7,8 @@ import com.petrolpark.destroy.chemistry.legacy.ReactionResult;
 import com.petrolpark.destroy.core.chemistry.vat.VatControllerBlockEntity;
 import com.petrolpark.destroy.core.explosion.SmartExplosion;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;

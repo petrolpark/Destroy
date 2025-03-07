@@ -1,0 +1,10 @@
+{
+  "damage": 1,
+  "items": "destroy:raw_fries",
+  "velocity": 1.1,
+  "reload_ticks": 10,
+  "render_mode": {
+    "type": "create:tumble"
+  },
+  "sound_pitch": 1.5
+}

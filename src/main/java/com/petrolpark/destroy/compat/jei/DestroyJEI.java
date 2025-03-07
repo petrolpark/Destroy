@@ -70,7 +70,6 @@ import com.petrolpark.destroy.core.explosion.mixedexplosive.MixedExplosiveBlockI
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
-import com.simibubi.create.foundation.utility.Pair;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -88,6 +87,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.library.plugins.vanilla.anvil.AnvilRecipe;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;

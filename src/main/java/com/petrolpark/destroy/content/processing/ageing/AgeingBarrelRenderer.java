@@ -3,16 +3,16 @@ package com.petrolpark.destroy.content.processing.ageing;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.DestroyTags.Items;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour.TankSegment;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import com.simibubi.create.foundation.utility.VecHelper;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -74,9 +74,9 @@ public class AgeingBarrelRenderer extends SmartBlockEntityRenderer<AgeingBarrelB
             //spacing the Items out if there are multiple
             Vec3 itemPosition = VecHelper.rotate(new Vec3(itemStacks.size() == 1 ? 0f : 0.1f, Mth.clamp(fluidLevel - 0.05f, 0.125f, 0.8f), 0f), anglePartition * i, Axis.Y);
 			ms.translate(itemPosition.x, itemPosition.y, itemPosition.z);
-            TransformStack.cast(ms)
-				.rotateY(anglePartition * i + 35)
-				.rotateX(65);
+            TransformStack.of(ms)
+				.rotateYDegrees(anglePartition * i + 35)
+				.rotateXDegrees(65);
             renderItem(barrel, partialTicks, ms, buffer, light, overlay, itemStacks.get(i - 1));
             ms.popPose(); 
         };
@@ -106,7 +106,7 @@ public class AgeingBarrelRenderer extends SmartBlockEntityRenderer<AgeingBarrelB
         float units = tank.getTotalUnits(partialTicks);
         float maxY = minY + (Mth.clamp(units / barrel.getTank().getCapacity(), 0, 1) * 8 / 12f);
         if (units < 1 || tank.getRenderedFluid().isEmpty()) return minY;
-        FluidRenderer.renderFluidBox(tank.getRenderedFluid(), 2 / 16f, minY, 2 / 16f, 14 / 16f, maxY, 14 / 16f, buffer, ms, light, false);
+        FluidRenderer.renderFluidBox(tank.getRenderedFluid().getFluid(), tank.getRenderedFluid().getAmount(), 2 / 16f, minY, 2 / 16f, 14 / 16f, maxY, 14 / 16f, buffer, ms, light, false, true);
         return maxY;
     };
 

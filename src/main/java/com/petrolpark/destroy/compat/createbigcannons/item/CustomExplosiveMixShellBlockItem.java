@@ -1,6 +1,6 @@
 package com.petrolpark.destroy.compat.createbigcannons.item;
 
-import com.petrolpark.destroy.compat.createbigcannons.block.entity.CustomExplosiveMixShellBlockEntity;
+/*import com.petrolpark.destroy.compat.createbigcannons.block.entity.CustomExplosiveMixShellBlockEntity; // TODO: CBC
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.core.explosion.mixedexplosive.DyeableMixedExplosiveBlockItem;
 import com.petrolpark.destroy.core.explosion.mixedexplosive.ExplosiveProperties.ExplosivePropertyCondition;
@@ -23,4 +23,4 @@ public class CustomExplosiveMixShellBlockItem extends DyeableMixedExplosiveBlock
         return CustomExplosiveMixShellBlockEntity.EXPLOSIVE_PROPERTY_CONDITIONS;
     };
     
-};
+};*/ // TODO: CBC

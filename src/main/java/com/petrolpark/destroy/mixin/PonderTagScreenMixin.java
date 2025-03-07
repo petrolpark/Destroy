@@ -2,6 +2,7 @@ package com.petrolpark.destroy.mixin;
 
 import java.util.Optional;
 
+import net.createmod.ponder.foundation.ui.PonderTagScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,7 +13,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.client.DestroyPonderTags;
 import com.petrolpark.destroy.mixin.accessor.PonderTagScreenAccessor;
-import com.simibubi.create.foundation.ponder.ui.PonderTagScreen;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 public class PonderTagScreenMixin {
     
     /**
-     * Mostly copied from the {@link com.simibubi.create.foundation.ponder.ui.PonderTagScreen Create source code}.
+     * Mostly copied from the {@link net.createmod.ponder.foundation.ui.PonderTagScreen Create source code}.
      * This replaces the Tooltips of Blocks and Items in the Vat Materials category to show their Vat Material
      * properties.
      * @param graphics
@@ -32,13 +32,13 @@ public class PonderTagScreenMixin {
      * @param ci
      */
     @Inject(
-        method = "Lcom/simibubi/create/foundation/ponder/ui/PonderTagScreen;renderWindowForeground(Lnet/minecraft/client/gui/GuiGraphics;IIF)V",
+        method = "Lnet/createmod/ponder/foundation/ui/PonderTagScreen;renderWindowForeground(Lnet/minecraft/client/gui/GuiGraphics;IIF)V",
         at = @At("HEAD"),
         cancellable = true,
         remap = false
     )
     public void inRenderWindowForeground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-        if (((PonderTagScreenAccessor)this).getTag() == DestroyPonderTags.VAT_SIDE_BLOCKS) {
+        if (DestroyPonderTags.VAT_SIDE_BLOCKS.equals(((PonderTagScreenAccessor)this).getTag().getId())) {
             ItemStack hoveredItem = ((PonderTagScreenAccessor)this).getHoveredItem();
             if (hoveredItem.isEmpty()) return;
             

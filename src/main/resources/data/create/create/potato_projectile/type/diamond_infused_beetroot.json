@@ -1,0 +1,12 @@
+{
+  "damage": 12,
+  "items": "destroy:diamond_infused_beetroot",
+  "velocity": 0.9,
+  "knockback": 1.5,
+  "reload_ticks": 20,
+  "render_mode": {
+    "type": "create:toward_motion",
+    "spin": 1.0,
+    "sprite_angle_offset": 140
+  }
+}

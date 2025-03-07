@@ -4,7 +4,7 @@ import com.petrolpark.data.advancement.SimpleAdvancementTrigger;
 import com.petrolpark.destroy.chemistry.legacy.LegacyReaction;
 import com.petrolpark.destroy.chemistry.legacy.ReactionResult;
 import com.petrolpark.destroy.chemistry.legacy.reactionresult.DestroyAdvancementReactionResult;
-import com.simibubi.create.foundation.utility.Lang;
+import net.createmod.catnip.lang.Lang;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriteriaTriggers;

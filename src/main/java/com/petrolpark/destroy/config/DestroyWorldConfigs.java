@@ -1,5 +1,8 @@
 package com.petrolpark.destroy.config;
 
+import com.simibubi.create.infrastructure.config.CKinetics;
+import com.simibubi.create.infrastructure.config.CServer;
+
 public class DestroyWorldConfigs extends DestroyConfigBase {
 
     public final ConfigBool automaticGoggles = b(true, "automaticGoggles", "Players in Creative mode are treated as if they are wearing Engineer's Goggles even if they are not");
@@ -9,6 +12,7 @@ public class DestroyWorldConfigs extends DestroyConfigBase {
     public final DestroySubstancesConfigs substances = nested(0, DestroySubstancesConfigs::new, "Destroy's drugs and medicines");
     public final DestroyEquipmentConfigs equipment = nested(0, DestroyEquipmentConfigs::new, "Destroy's armor and tools");
     public final DestroyCompatConfigs compat = nested(0, DestroyCompatConfigs::new, "Compatibility with other mods");
+    public final DestroyKinetics kinetics = nested(0, DestroyKinetics::new, "Parameters and abilities of Destroy's kinetic mechanisms");
     
     @Override
     public String getName() {

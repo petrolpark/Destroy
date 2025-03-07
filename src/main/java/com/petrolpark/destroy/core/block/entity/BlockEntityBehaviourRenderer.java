@@ -3,15 +3,16 @@ package com.petrolpark.destroy.core.block.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.core.bettervaluesettings.SidedScrollValueBehaviour;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBox.TextValueBox;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import net.createmod.catnip.lang.Lang;
 
+import net.createmod.catnip.outliner.Outliner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -26,6 +27,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+
+import static com.petrolpark.compat.create.CreateClient.OUTLINER;
 
 /**
  * Mostly a copy of the non-side-specific {@link com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueRenderer Scroll-value renderer}.
@@ -56,7 +59,7 @@ public class BlockEntityBehaviourRenderer {
 			SidedScrollValueBehaviour behaviour = BlockEntityBehaviour.get(world, pos, SidedScrollValueBehaviour.TYPE);
 			if (behaviour == null) return;
 			if (!behaviour.isActive()) {
-				CreateClient.OUTLINER.remove(pos);
+				OUTLINER.remove(pos);
 				return;
 			};
 			ItemStack mainhandItem = player.getItemInHand(InteractionHand.MAIN_HAND); // It thinks player might be null (it's not)
@@ -72,7 +75,7 @@ public class BlockEntityBehaviourRenderer {
 
 			List<MutableComponent> tip = new ArrayList<>();
 			tip.add(behaviour.label.copy());
-			tip.add(Lang.translateDirect("gui.value_settings.hold_to_edit"));
+			tip.add(DestroyLang.translateDirect("gui.value_settings.hold_to_edit"));
 			CreateClient.VALUE_SETTINGS_HANDLER.showHoverTip(tip);
 		};
 	}
@@ -83,11 +86,10 @@ public class BlockEntityBehaviourRenderer {
 			.contract(0, 0, -.5f)
 			.move(0, 0, -.125f);
 		Component label = behaviour.label;
-		TextValueBox box = new TextValueBox(label, bb, pos, Components.literal(behaviour.formatValue(face)));
+		TextValueBox box = new TextValueBox(label, bb, pos, Component.literal(behaviour.formatValue(face)));
 
 		box.passive(!highlight).wideOutline();
 
-		CreateClient.OUTLINER.showValueBox(pos, box.transform(behaviour.getSlotPositioning()))
-			.highlightFace(face);
+		OUTLINER.showOutline(pos, box.transform(behaviour.getSlotPositioning())).highlightFace(face);
 	}
 };

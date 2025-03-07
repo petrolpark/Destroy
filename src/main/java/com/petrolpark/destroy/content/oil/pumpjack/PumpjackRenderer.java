@@ -1,14 +1,14 @@
 package com.petrolpark.destroy.content.oil.pumpjack;
 
-import com.jozufozu.flywheel.core.PartialModel;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.client.DestroyPartials;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.AngleHelper;
 
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -36,51 +36,51 @@ public class PumpjackRenderer extends SafeBlockEntityRenderer<PumpjackBlockEntit
 
         transformed(DestroyPartials.PUMPJACK_CAM, blockState, facing)
             .translate(0d, 0d, 1d)
-            .centre()
-            .rotateXRadians(angle - Mth.HALF_PI)
-            .centre()
+            .center()
+            .rotateX(angle - Mth.HALF_PI)
+            .center()
             .translate(0d, 0d, -1d)
-            .unCentre()
-            .unCentre()
+            .uncenter()
+            .uncenter()
             .light(light)
 			.renderInto(ms, vbSolid);
 
         transformed(DestroyPartials.PUMPJACK_LINKAGE, blockState, facing)
             .translate(0d, -4.5 / 16d, 1d)
             .translate(0d, Mth.sin(angle) * 5 / 16d, -Mth.cos(angle) * 5 / 16d)
-            .centre()
-            .rotateXRadians((Mth.cos(angle)) * beamRotation * 0.73d)
-            .centre()
+            .center()
+            .rotateX((float)((Mth.cos(angle)) * beamRotation * 0.73d))
+            .center()
             .translate(0d, 0d, -1d)
-            .unCentre()
-            .unCentre()
+            .uncenter()
+            .uncenter()
             .light(light)
 			.renderInto(ms, vbSolid);
 
         transformed(DestroyPartials.PUMPJACK_BEAM, blockState, facing)
             .translate(0d, 1d, 0d)
-            .centre()
-            .rotateXRadians((Mth.sin(angle)) * -beamRotation)
-            .centre()
+            .center()
+            .rotateX((float)((Mth.sin(angle)) * -beamRotation))
+            .center()
             .translate(0d, -1d, 0d)
-            .unCentre()
-            .unCentre()
+            .uncenter()
+            .uncenter()
             .light(light)
 			.renderInto(ms, vbCutout);
 
         transformed(DestroyPartials.PUMPJACK_PUMP, blockState, facing)
-            .translate(0d, (3 / 16) - (Mth.sin(angle) * 3 / 16d), 0d)
+            .translate(0d, (3 / 16d) - (Mth.sin(angle) * 3 / 16d), 0d)
             .light(light)
 			.renderInto(ms, vbSolid);
         
     };
 
     private SuperByteBuffer transformed(PartialModel model, BlockState blockState, Direction facing) {
-		return CachedBufferer.partial(model, blockState)
-			.centre()
-			.rotateY(AngleHelper.horizontalAngle(facing))
-			.rotateX(AngleHelper.verticalAngle(facing))
-			.unCentre();
+		return CachedBuffers.partial(model, blockState)
+			.center()
+			.rotateYDegrees(AngleHelper.horizontalAngle(facing))
+			.rotateXDegrees(AngleHelper.verticalAngle(facing))
+			.uncenter();
 	};
 	
 	@Override

@@ -61,10 +61,10 @@ import com.simibubi.create.content.processing.burner.BlazeBurnerBlockItem;
 import com.simibubi.create.content.redstone.link.LinkBehaviour;
 import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.ponder.PonderWorld;
-import com.simibubi.create.foundation.utility.Couple;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.createmod.catnip.data.Couple;
+import net.createmod.ponder.api.level.PonderLevel;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -131,7 +131,7 @@ public class DestroyCommonEvents {
     public static final void onAttachCapabilitiesLevel(AttachCapabilitiesEvent<Level> event) {
         Level level = event.getObject();
         if (!level.getCapability(Pollution.CAPABILITY).isPresent()) {
-            event.addCapability(Destroy.asResource("pollution"), level instanceof PonderWorld ? new Pollution.PonderCapabilityProvider() : new Pollution.Level.Provider());
+            event.addCapability(Destroy.asResource("pollution"), level instanceof PonderLevel ? new Pollution.PonderCapabilityProvider() : new Pollution.Level.Provider());
         };
     };
 

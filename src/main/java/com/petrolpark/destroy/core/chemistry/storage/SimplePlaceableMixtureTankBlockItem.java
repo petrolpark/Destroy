@@ -6,7 +6,7 @@ import org.joml.Vector3f;
 
 import com.petrolpark.destroy.core.chemistry.storage.SimpleMixtureTankRenderer.ISimpleMixtureTankRenderInformation;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
-import com.simibubi.create.foundation.utility.Couple;
+import net.createmod.catnip.data.Couple;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;

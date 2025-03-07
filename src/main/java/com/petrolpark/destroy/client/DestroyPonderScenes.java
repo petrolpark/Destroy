@@ -1,7 +1,5 @@
 package com.petrolpark.destroy.client;
 
-import java.util.List;
-
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.DestroyBlocks;
 import com.petrolpark.destroy.DestroyItems;
@@ -13,23 +11,28 @@ import com.petrolpark.destroy.content.product.periodictable.PeriodicTableBlock;
 import com.petrolpark.destroy.core.chemistry.ChemistryPonderScenes;
 import com.petrolpark.destroy.core.explosion.ExplosivesPonderScenes;
 import com.petrolpark.destroy.core.pollution.PollutionPonderScenes;
+import com.petrolpark.destroy.mixin.accessor.PonderSceneRegistryAccessor;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.Create;
-import com.simibubi.create.foundation.ponder.PonderRegistrationHelper;
-import com.simibubi.create.foundation.ponder.PonderRegistry;
-import com.simibubi.create.foundation.ponder.PonderStoryBoardEntry;
-import com.simibubi.create.infrastructure.ponder.AllPonderTags;
+import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
 import com.simibubi.create.infrastructure.ponder.scenes.fluid.PumpScenes;
 
+import com.tterrag.registrate.util.entry.ItemProviderEntry;
+import com.tterrag.registrate.util.entry.RegistryEntry;
+import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 
-public class DestroyPonderIndex {
+public class DestroyPonderScenes {
 
-    public static final PonderRegistrationHelper CREATE_HELPER = new PonderRegistrationHelper(Create.ID);
-    public static final PonderRegistrationHelper HELPER = new PonderRegistrationHelper(Destroy.MOD_ID);
+    private static PonderSceneRegistrationHelper<ResourceLocation> helper = null;
+    private static PonderSceneRegistrationHelper<ItemProviderEntry<?>> CREATE_HELPER = null;
 
-    public static void register() {
+    public static void register(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+        DestroyPonderScenes.helper = helper;
+        PonderSceneRegistrationHelper<ItemProviderEntry<?>>HELPER = helper.withKeyFunction(RegistryEntry::getId);
+        CREATE_HELPER = helper.withKeyFunction((s) -> ResourceLocation.tryParse(Create.ID));
 
         // Aging Barrel
         HELPER.forComponents(DestroyBlocks.AGING_BARREL)
@@ -91,7 +94,7 @@ public class DestroyPonderIndex {
         // Dynamo
         HELPER.forComponents(DestroyBlocks.DYNAMO)
             .addStoryBoard("processing/dynamo/redstone", DynamoPonderScenes::dynamoRedstone)
-            .addStoryBoard("processing/dynamo/charging", DynamoPonderScenes::dynamoCharging, AllPonderTags.KINETIC_APPLIANCES)
+            .addStoryBoard("processing/dynamo/charging", DynamoPonderScenes::dynamoCharging, AllCreatePonderTags.KINETIC_APPLIANCES)
             .addStoryBoard("processing/dynamo/electrolysis", DynamoPonderScenes::dynamoElectrolysis)
             .addStoryBoard("processing/dynamo/arc_furnace", DynamoPonderScenes::arcFurnace);
 
@@ -139,7 +142,7 @@ public class DestroyPonderIndex {
         // Pumpjack
         HELPER.forComponents(DestroyBlocks.PUMPJACK)
             .addStoryBoard("oil/seismometer", OilPonderScenes::seismometer)
-            .addStoryBoard("oil/pumpjack", OilPonderScenes::pumpjack, AllPonderTags.KINETIC_APPLIANCES);
+            .addStoryBoard("oil/pumpjack", OilPonderScenes::pumpjack, AllCreatePonderTags.KINETIC_APPLIANCES);
 
         // Redstone Programmer
         HELPER.forComponents(DestroyBlocks.REDSTONE_PROGRAMMER)
@@ -166,7 +169,7 @@ public class DestroyPonderIndex {
         // Vat Controller
         HELPER.forComponents(DestroyBlocks.VAT_CONTROLLER)
             .addStoryBoard("vat/construction", ChemistryPonderScenes::vatConstruction)
-            .addStoryBoard("vat/fluids", ChemistryPonderScenes::vatFluids, AllPonderTags.FLUIDS)
+            .addStoryBoard("vat/fluids", ChemistryPonderScenes::vatFluids, AllCreatePonderTags.FLUIDS)
             .addStoryBoard("vat/items", ChemistryPonderScenes::vatItems)
             .addStoryBoard("reactions", ChemistryPonderScenes::reactions, DestroyPonderTags.CHEMISTRY)
             .addStoryBoard("vat/temperature", ChemistryPonderScenes::vatTemperature)
@@ -186,9 +189,11 @@ public class DestroyPonderIndex {
         PeriodicTableBlock.ELEMENTS.forEach(entry -> {
             entry.blocks().forEach(block -> {
                 ResourceLocation rl = BuiltInRegistries.ITEM.getKey(block.asItem());
-                List<PonderStoryBoardEntry> list = PonderRegistry.ALL.get(rl);
-                if (list != null) list.removeIf(storyBoard -> storyBoard.getSchematicLocation().equals(periodicTableSchematicLocation));
-                HELPER.addStoryBoard(rl, periodicTableSchematicLocation, ChemistryPonderScenes::periodicTable);
+                if(PonderIndex.getSceneAccess().doScenesExistForId(rl)) {
+                    ((PonderSceneRegistryAccessor) PonderIndex.getSceneAccess()).getScenes().get(rl).removeIf(storyBoard -> storyBoard.getSchematicLocation().equals(periodicTableSchematicLocation));
+                }
+
+                helper.forComponents(rl).addStoryBoard(periodicTableSchematicLocation, ChemistryPonderScenes::periodicTable);
             });
         });
     };

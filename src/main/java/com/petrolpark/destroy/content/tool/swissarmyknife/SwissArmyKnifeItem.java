@@ -10,9 +10,8 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.DestroyMessages;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
+import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -198,7 +197,7 @@ public class SwissArmyKnifeItem extends DiggerItem {
         stack.removeTagKey("ActiveTool");
         if (tool != null) stack.getOrCreateTag().putInt("ActiveTool", tool.ordinal());
         Map<Tool, LerpedFloat> chasers = getChasers(stack);
-        chasers.entrySet().forEach(entry -> entry.getValue().chase(entry.getKey() == tool ? 1d : 0d, 0.4d, Chaser.EXP));
+        chasers.entrySet().forEach(entry -> entry.getValue().chase(entry.getKey() == tool ? 1d : 0d, 0.4d, LerpedFloat.Chaser.EXP));
         putChasers(stack, chasers);
     };
 
@@ -208,7 +207,7 @@ public class SwissArmyKnifeItem extends DiggerItem {
         if (!stack.getOrCreateTag().contains("ToolAnimations", Tag.TAG_LIST)) return Tool.ALL_RETRACTED;
         for (Tag t : stack.getOrCreateTag().getList("ToolAnimations", Tag.TAG_COMPOUND)) {
             CompoundTag tag = (CompoundTag)t;
-            LerpedFloat toolAngle = LerpedFloat.angular().chase(tag.getFloat("Target"), 0.4d, Chaser.EXP);
+            LerpedFloat toolAngle = LerpedFloat.angular().chase(tag.getFloat("Target"), 0.4d, LerpedFloat.Chaser.EXP);
             toolAngle.setValue(tag.getFloat("Value"));
             map.put(Tool.values()[ordinal], toolAngle);
             ordinal++;
@@ -221,7 +220,7 @@ public class SwissArmyKnifeItem extends DiggerItem {
         for (Tool tool : Tool.values()) {
             CompoundTag tag = new CompoundTag();
             LerpedFloat toolAngle = chasers.get(tool);
-            if (toolAngle == null) toolAngle = LerpedFloat.angular().chase(0d, 0.4d, Chaser.EXP);
+            if (toolAngle == null) toolAngle = LerpedFloat.angular().chase(0d, 0.4d, LerpedFloat.Chaser.EXP);
             tag.putFloat("Target", toolAngle.getChaseTarget());
             tag.putFloat("Value", toolAngle.getValue());
             list.add(tag);
@@ -236,9 +235,9 @@ public class SwissArmyKnifeItem extends DiggerItem {
         HOE(ToolActions.DEFAULT_HOE_ACTIONS,() -> new ItemStack(Items.IRON_HOE)),
         SHEARS(ToolActions.DEFAULT_SHEARS_ACTIONS, () -> new ItemStack(Items.IRON_PICKAXE));
 
-        public static Map<Tool, LerpedFloat> ALL_RETRACTED = new EnumMap<>(Tool.class);
+        public static final Map<Tool, LerpedFloat> ALL_RETRACTED = new EnumMap<>(Tool.class);
         static {
-            for (Tool tool : values()) ALL_RETRACTED.put(tool, LerpedFloat.angular().chase(0d, 0.4d, Chaser.EXP));
+            for (Tool tool : values()) ALL_RETRACTED.put(tool, LerpedFloat.angular().chase(0d, 0.4d, LerpedFloat.Chaser.EXP));
         };
 
         public final Set<ToolAction> actions;

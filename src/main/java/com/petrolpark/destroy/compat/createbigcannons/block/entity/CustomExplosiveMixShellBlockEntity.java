@@ -24,7 +24,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.items.IItemHandler;
-import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockEntity;
+/*import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockEntity;
 
 public class CustomExplosiveMixShellBlockEntity extends FuzedBlockEntity implements IDyeableMixedExplosiveBlockEntity {
 
@@ -135,4 +135,4 @@ public class CustomExplosiveMixShellBlockEntity extends FuzedBlockEntity impleme
         return EXPLOSIVE_PROPERTY_CONDITIONS;
     };
     
-};
+};*/ // TODO: CBC

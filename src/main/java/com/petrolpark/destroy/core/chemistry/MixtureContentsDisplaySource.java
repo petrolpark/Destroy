@@ -10,12 +10,12 @@ import com.petrolpark.destroy.chemistry.legacy.ClientMixture;
 import com.petrolpark.destroy.chemistry.legacy.ReadOnlyMixture;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.client.DestroyLang.TemperatureUnit;
+import com.simibubi.create.api.behaviour.display.DisplaySource;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
-import com.simibubi.create.content.redstone.displayLink.source.DisplaySource;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
-import com.simibubi.create.foundation.utility.Lang;
 
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.fluids.FluidStack;
@@ -60,7 +60,7 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
             tooltip.addAll(mixture.getContentsTooltip(iupac, true, molesNotConcentration, fluidStack.getAmount(), df).stream().map(c -> c.copy()).toList());
         };
 
-        if (!molesNotConcentration) name.append(" "+fluidStack.getAmount()).append(Lang.translateDirect("generic.unit.millibuckets"));
+        if (!molesNotConcentration) name.append(" "+fluidStack.getAmount()).append(DestroyLang.translateDirect("generic.unit.millibuckets"));
 
         tooltip.add(0, name
             .append(" "+temperature)

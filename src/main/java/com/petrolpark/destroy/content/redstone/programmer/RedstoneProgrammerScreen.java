@@ -18,13 +18,12 @@ import com.petrolpark.destroy.content.redstone.programmer.RedstoneProgram.PlayMo
 import com.petrolpark.destroy.util.GuiHelper;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.gui.UIRenderHelper;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.gui.UIRenderHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.Rect2i;
@@ -107,7 +106,7 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
                 playhead.setValue(0f);
                 if (!followPlayHead) {
                     horizontalScroll.setValue(0d);
-                    horizontalScroll.chase(0d, 1d, Chaser.LINEAR);
+                    horizontalScroll.chase(0d, 1d, LerpedFloat.Chaser.LINEAR);
                 };
                 shouldSend = true;
             });
@@ -181,7 +180,7 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
 
         // Tick chasers
         float speed = (float)noteWidth / program.getTicksPerBeat();
-        playhead.chase((float)noteWidth * (float)program.getAbsolutePlaytime() / program.getTicksPerBeat(), speed, Chaser.LINEAR);
+        playhead.chase((float)noteWidth * (float)program.getAbsolutePlaytime() / program.getTicksPerBeat(), speed, LerpedFloat.Chaser.LINEAR);
         if (followPlayHead) clampHorizontalScroll(playhead.getChaseTarget() - 20d, speed);
         if (Math.abs(playhead.getValue() - playhead.getChaseTarget()) > speed * 2f) playhead.setValue(playhead.getChaseTarget());
         if (followPlayHead && Math.abs(horizontalScroll.getValue() - horizontalScroll.getChaseTarget()) > speed * 2f) horizontalScroll.setValue(horizontalScroll.getChaseTarget());
@@ -534,7 +533,7 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
     };
 
     public void clampHorizontalScroll(double newScroll, double speed) {
-        horizontalScroll.chase(Mth.clamp(newScroll, 0d, Math.max(46d - NOTE_AREA.getWidth() + program.getLength() * noteWidth, 0d)), speed, Chaser.LINEAR);
+        horizontalScroll.chase(Mth.clamp(newScroll, 0d, Math.max(46d - NOTE_AREA.getWidth() + program.getLength() * noteWidth, 0d)), speed, LerpedFloat.Chaser.LINEAR);
     };
 
     public void setPlayPauseButtonIcon() {

@@ -15,7 +15,7 @@ import com.petrolpark.destroy.core.pollution.Pollution;
 import com.petrolpark.destroy.core.pollution.PollutionHelper;
 import com.petrolpark.destroy.core.pollution.SyncChunkPollutionS2CPacket;
 import com.petrolpark.destroy.core.pollution.Pollution.PollutionType;
-import com.simibubi.create.foundation.utility.Couple;
+import net.createmod.catnip.data.Couple;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;

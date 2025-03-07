@@ -6,18 +6,21 @@ import com.petrolpark.destroy.DestroyFluids;
 import com.petrolpark.destroy.DestroyMessages;
 import com.petrolpark.destroy.core.fluid.gasparticle.EvaporatingFluidS2CPacket;
 import com.petrolpark.destroy.core.pollution.Pollution.PollutionType;
+import com.simibubi.create.api.effect.OpenPipeEffectHandler;
 import com.simibubi.create.content.fluids.OpenEndedPipe;
-import com.simibubi.create.content.fluids.OpenEndedPipe.IEffectHandler;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 
-public class PollutingOpenEndedPipeEffectHandler implements IEffectHandler {
+public class PollutingOpenEndedPipeEffectHandler implements OpenPipeEffectHandler {
 
     private static final Random random = new Random();
 
-    @Override
     @SuppressWarnings("deprecation")
-    public boolean canApplyEffects(OpenEndedPipe pipe, FluidStack fluid) {
+    public boolean canApplyEffects(FluidStack fluid) {
         if (DestroyFluids.isMixture(fluid)) return true;
         for (PollutionType pollutionType : PollutionType.values()) {
             if (fluid.getFluid().is(pollutionType.fluidTag)) return true;
@@ -26,9 +29,11 @@ public class PollutingOpenEndedPipeEffectHandler implements IEffectHandler {
     };
 
     @Override
-    public void applyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-        PollutionHelper.pollute(pipe.getWorld(), pipe.getOutputPos(), fluid);
-        if (random.nextInt(20) == 0) DestroyMessages.sendToAllClients(new EvaporatingFluidS2CPacket(pipe.getOutputPos(), fluid));
-    };
-    
+    public void apply(Level level, AABB area, FluidStack fluid) {
+        if(!canApplyEffects(fluid)) return;
+        BlockPos pollutionAt = new BlockPos((int) area.minX, (int) area.maxY - 1, (int) area.minZ);
+        PollutionHelper.pollute(level, pollutionAt, fluid);
+        if (random.nextInt(20) == 0) DestroyMessages.sendToAllClients(new EvaporatingFluidS2CPacket(pollutionAt, fluid));
+    }
+
 };

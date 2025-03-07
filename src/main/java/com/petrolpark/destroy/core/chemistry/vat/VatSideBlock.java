@@ -11,14 +11,15 @@ import com.petrolpark.destroy.core.chemistry.storage.ISpecialMixtureContainerBlo
 import com.petrolpark.destroy.core.chemistry.vat.VatSideBlockEntity.DisplayType;
 import com.petrolpark.destroy.core.chemistry.vat.observation.RedstoneMonitorVatSideScreen;
 import com.simibubi.create.AllItems;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockEntityItemRequirement;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
-import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntityTicker;
-import com.simibubi.create.foundation.gui.ScreenOpener;
 
+import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -54,7 +55,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.DistExecutor;
 
-public class VatSideBlock extends CopycatBlock implements ISpecialBlockItemRequirement, ISpecialMixtureContainerBlock {
+public class VatSideBlock extends CopycatBlock implements SpecialBlockItemRequirement, ISpecialMixtureContainerBlock {
 
     public VatSideBlock(Properties properties) {
         super(properties);

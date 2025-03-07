@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.DestroyBlocks;
@@ -21,17 +20,17 @@ import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.core.chemistry.MoleculeDisplayItem;
 import com.petrolpark.destroy.core.chemistry.MoleculeRenderer;
 import com.petrolpark.destroy.util.GuiHelper;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.gui.UIRenderHelper;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.widget.IconButton;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
+import dev.engine_room.flywheel.lib.transform.PoseTransformStack;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.data.Pair;
 
+import net.createmod.catnip.gui.AbstractSimiScreen;
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
@@ -127,7 +126,7 @@ public class VatScreen extends AbstractSimiScreen {
             i++;
         };
 
-        filter = new EditBox(font, guiLeft + 114, guiTop + background.height - 19, 95, 10, Components.immutableEmpty());
+        filter = new EditBox(font, guiLeft + 114, guiTop + background.height - 19, 95, 10, Component.empty());
         filter.setBordered(false);
         filter.setMaxLength(35);
 		filter.setFocused(false);
@@ -211,9 +210,9 @@ public class VatScreen extends AbstractSimiScreen {
             if (max >= 0) {
                 chaseTarget -= delta * 12;
                 chaseTarget = Mth.clamp(chaseTarget, 0, max);
-                moleculeScroll.chase((int) chaseTarget, 0.7f, Chaser.EXP);
+                moleculeScroll.chase((int) chaseTarget, 0.7f, LerpedFloat.Chaser.EXP);
             } else {
-                moleculeScroll.chase(0, 0.7f, Chaser.EXP);
+                moleculeScroll.chase(0, 0.7f, LerpedFloat.Chaser.EXP);
             };
             
             maxMoleculeScroll = max;
@@ -226,9 +225,9 @@ public class VatScreen extends AbstractSimiScreen {
                 if (max >= 0) {
                     chaseTarget -= delta * 6;
                     chaseTarget = Mth.clamp(chaseTarget, 0, max);
-                    horizontalTextScroll.chase((int) chaseTarget, 0.7f, Chaser.EXP);
+                    horizontalTextScroll.chase((int) chaseTarget, 0.7f, LerpedFloat.Chaser.EXP);
                 } else {
-                    horizontalTextScroll.chase(0, 0.7f, Chaser.EXP);
+                    horizontalTextScroll.chase(0, 0.7f, LerpedFloat.Chaser.EXP);
                 };
             } else {
                 float chaseTarget = textScroll.getChaseTarget();
@@ -237,9 +236,9 @@ public class VatScreen extends AbstractSimiScreen {
                 if (max >= 0) {
                     chaseTarget -= delta * 6;
                     chaseTarget = Mth.clamp(chaseTarget, 0, max);
-                    textScroll.chase((int) chaseTarget, 0.7f, Chaser.EXP);
+                    textScroll.chase((int) chaseTarget, 0.7f, LerpedFloat.Chaser.EXP);
                 } else {
-                    textScroll.chase(0, 0.7f, Chaser.EXP);
+                    textScroll.chase(0, 0.7f, LerpedFloat.Chaser.EXP);
                 };
             };
         };
@@ -267,8 +266,8 @@ public class VatScreen extends AbstractSimiScreen {
                     } else {
                         selectedMolecule = molecule;
                     };
-                    textScroll.chase(0, 0.7, Chaser.EXP);
-                    horizontalTextScroll.chase(0, 0.7, Chaser.EXP);
+                    textScroll.chase(0, 0.7, LerpedFloat.Chaser.EXP);
+                    horizontalTextScroll.chase(0, 0.7, LerpedFloat.Chaser.EXP);
                     return true;
                 };
             };
@@ -368,12 +367,12 @@ public class VatScreen extends AbstractSimiScreen {
         // Show 3D Vat controller
         if (!blockEntity.hasLevel()) return;
         ms.pushPose();
-        TransformStack msr = TransformStack.cast(ms);
+        TransformStack<PoseTransformStack> msr = TransformStack.of(ms);
         msr.pushPose()
 			.translate(guiLeft + background.width + 4, guiTop + background.height + 4, 100)
 			.scale(40)
-			.rotateX(-22)
-			.rotateY(63);
+			.rotateXDegrees(-22)
+			.rotateYDegrees(63);
         GuiGameElement.of(DestroyBlocks.VAT_CONTROLLER.getDefaultState().setValue(VatControllerBlock.FACING, Direction.WEST))
             .render(graphics);
         ms.popPose();

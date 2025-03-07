@@ -9,13 +9,14 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -63,7 +64,7 @@ public class PollutometerBlockEntity extends SmartBlockEntity {
     private static final ValueBoxTransform.Sided slot = new ValueBoxTransform.Sided() {
 
         @Override
-        public Vec3 getLocalOffset(BlockState state) {
+        public Vec3 getLocalOffset(LevelAccessor level, BlockPos pos, BlockState state) {
             return VecHelper.rotateCentered(getSouthLocation(), AngleHelper.horizontalAngle(getSide()), Axis.Y);
         };
 

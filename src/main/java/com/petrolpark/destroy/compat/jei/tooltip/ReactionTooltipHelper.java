@@ -7,7 +7,7 @@ import com.petrolpark.destroy.chemistry.legacy.reactionresult.PrecipitateReactio
 import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
+import net.createmod.catnip.lang.FontHelper.Palette;
 
 import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import net.minecraft.ChatFormatting;

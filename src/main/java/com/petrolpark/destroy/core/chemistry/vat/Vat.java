@@ -12,9 +12,9 @@ import com.google.common.collect.ImmutableList;
 import com.petrolpark.destroy.core.chemistry.vat.material.VatMaterial;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.contraptions.StructureTransform;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.AxisDirection;
@@ -30,6 +30,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import static com.petrolpark.compat.create.CreateClient.OUTLINER;
 
 /**
  * A physical Vat and the Blocks that make it up. Handling of the contents of the Vat and the actual chemistry
@@ -348,7 +350,7 @@ public class Vat {
 
     @OnlyIn(Dist.CLIENT)
     public void showBoundingBox() {
-        CreateClient.OUTLINER.showAABB(Pair.of("outliner", lowerCorner), new AABB(lowerCorner, upperCorner), 100)
+        OUTLINER.showAABB(Pair.of("outliner", lowerCorner), new AABB(lowerCorner, upperCorner), 100)
             .colored(0xFF_ebd31e);
     };
 };

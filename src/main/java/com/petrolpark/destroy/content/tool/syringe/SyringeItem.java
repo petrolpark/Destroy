@@ -8,6 +8,7 @@ import com.petrolpark.destroy.DestroyItems;
 import com.simibubi.create.foundation.item.CustomUseEffectsItem;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 
+import net.createmod.catnip.data.TriState;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.util.RandomSource;
@@ -95,8 +96,8 @@ public class SyringeItem extends Item implements CustomUseEffectsItem {
     };
 
     @Override
-	public Boolean shouldTriggerUseEffects(ItemStack stack, LivingEntity entity) {
-		return true;
+	public TriState shouldTriggerUseEffects(ItemStack stack, LivingEntity entity) {
+		return TriState.TRUE;
 	};
 
     @Override

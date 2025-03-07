@@ -22,8 +22,8 @@ import com.petrolpark.destroy.chemistry.naming.INameableProduct;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.core.chemistry.MoleculeRenderer;
-import com.simibubi.create.foundation.utility.Pair;
 
+import net.createmod.catnip.data.Pair;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;

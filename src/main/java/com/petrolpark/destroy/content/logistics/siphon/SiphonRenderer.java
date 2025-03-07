@@ -18,9 +18,9 @@ public class SiphonRenderer extends SafeBlockEntityRenderer<SiphonBlockEntity> {
         FluidStack fs = be.tank.getPrimaryHandler().getFluid();
         float fluidTop = 2f + 12f * be.tank.getPrimaryTank().getFluidLevel().getValue(partialTicks);
         if (fluidTop < 11f && be.leftToDrain > 0) {
-            FluidRenderer.renderFluidBox(fs, 6 / 16f, fluidTop / 16f, 6 / 16f, 10 / 16f, 11 / 16f - 1 / 128f, 10 / 16f, bufferSource, ms, light, false);
+            FluidRenderer.renderFluidBox(fs.getFluid(), fs.getAmount(), 6 / 16f, fluidTop / 16f, 6 / 16f, 10 / 16f, 11 / 16f - 1 / 128f, 10 / 16f, bufferSource, ms, light, false, true);
         };
-        FluidRenderer.renderFluidBox(fs, 1 / 16f + 1 / 128f, 2 / 16f, 1 / 16f + 1 / 128f, 15 / 16f - 1 / 128f, fluidTop / 16f, 15 / 16f - 1 / 128f, bufferSource, ms, light, false);
+        FluidRenderer.renderFluidBox(fs.getFluid(), fs.getAmount(), 1 / 16f + 1 / 128f, 2 / 16f, 1 / 16f + 1 / 128f, 15 / 16f - 1 / 128f, fluidTop / 16f, 15 / 16f - 1 / 128f, bufferSource, ms, light, false, true);
     };
     
 };

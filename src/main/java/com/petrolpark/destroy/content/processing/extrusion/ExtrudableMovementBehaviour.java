@@ -1,22 +1,26 @@
 package com.petrolpark.destroy.content.processing.extrusion;
 
-import com.jozufozu.flywheel.core.virtual.VirtualRenderWorld;
+import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.DestroyAdvancementTrigger;
 import com.petrolpark.destroy.DestroyBlocks;
+import com.petrolpark.destroy.client.DestroyPartials;
 import com.petrolpark.destroy.core.data.advancement.DestroyAdvancementBehaviour;
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
-import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.contraptions.render.ContraptionMatrices;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.render.BakedModelRenderHelper;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
+import dev.engine_room.flywheel.lib.model.ModelUtil;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.render.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,6 +36,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.renderable.BakedModelRenderable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ExtrudableMovementBehaviour implements MovementBehaviour {
 
@@ -120,7 +127,7 @@ public class ExtrudableMovementBehaviour implements MovementBehaviour {
         // Making a new model every frame seems like a bad idea but it changes shape continually and I'm not smart enough to do it another way
         ms.pushPose();
         BakedModel model = new ExtrudedBlockModel(getBlockState(context), direction, progress);
-		SuperByteBuffer extrudedBlockBuffer = BakedModelRenderHelper.standardModelRender(model, Blocks.AIR.defaultBlockState());
+		SuperByteBuffer extrudedBlockBuffer = SuperBufferFactory.getInstance().createForBlock(model, Blocks.AIR.defaultBlockState());
         if (modelTransform != null) extrudedBlockBuffer.transform(modelTransform);
         
         extrudedBlockBuffer.renderInto(ms, vbSolid);

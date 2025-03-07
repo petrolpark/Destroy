@@ -8,8 +8,8 @@ import com.petrolpark.destroy.chemistry.legacy.LegacyMixture;
 import com.petrolpark.destroy.chemistry.legacy.index.DestroyMolecules;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 
+import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 
@@ -48,9 +48,9 @@ public class RefrigerantDummyFluidIngredient extends MoleculeTagFluidIngredient 
         @Override
         public List<Component> getDescription(CompoundTag fluidTag) {
             List<Component> tooltip = new ArrayList<>();
-            tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule_tag_1").string(), Palette.GRAY_AND_WHITE));
+            tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.molecule_tag_1").string(), FontHelper.Palette.GRAY_AND_WHITE));
             tooltip.add(DestroyMolecules.Tags.REFRIGERANT.getFormattedName());
-            tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.refrigerants").string(), Palette.GRAY_AND_WHITE));
+            tooltip.addAll(TooltipHelper.cutStringTextComponent(DestroyLang.translate("tooltip.mixture_ingredient.refrigerants").string(), FontHelper.Palette.GRAY_AND_WHITE));
             return tooltip;
         };
 

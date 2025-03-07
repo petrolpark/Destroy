@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import com.petrolpark.compat.create.block.entity.behaviour.AbstractRememberPlacerBehaviour;
 import com.petrolpark.destroy.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.DestroyVoxelShapes;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.foundation.block.IBE;
@@ -82,7 +83,7 @@ public class CentrifugeBlock extends KineticBlock implements IBE<CentrifugeBlock
             CentrifugeBlockEntity be = getBlockEntity(context.getLevel(), context.getClickedPos());
             if (be == null) return InteractionResult.PASS;
             if (be.attemptRotation(true)) {
-                playRotateSound(context.getLevel(), context.getClickedPos());
+                IWrenchable.playRotateSound(context.getLevel(), context.getClickedPos());
                 updateAfterWrenched(state, context);
                 return InteractionResult.SUCCESS;
             };

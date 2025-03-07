@@ -12,12 +12,15 @@ import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.core.chemistry.vat.material.VatMaterial;
 import com.petrolpark.destroy.core.recipe.ingredient.fluid.MixtureFluidIngredient;
 import com.petrolpark.destroy.core.recipe.ingredient.fluid.MixtureFluidIngredientSubType;
+import com.simibubi.create.Create;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.LangBuilder;
-import com.simibubi.create.foundation.utility.LangNumberFormat;
 
+import com.simibubi.create.foundation.utility.CreateLang;
+import net.createmod.catnip.lang.FontHelper;
+import net.createmod.catnip.lang.FontHelper.Palette;
+import net.createmod.catnip.lang.Lang;
+import net.createmod.catnip.lang.LangBuilder;
+import net.createmod.catnip.lang.LangNumberFormat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.core.Direction;
@@ -56,12 +59,27 @@ public class DestroyLang {
         return builder().translate(langKey, args);
     };
 
+    public static MutableComponent translateDirect(String langKey, Object... args) {
+        Object[] args1 = LangBuilder.resolveBuilders(args);
+        return Component.translatable(Destroy.MOD_ID + "." + langKey, args1);
+    }
+
+    public static List<Component> translatedOptions(String prefix, String... keys) {
+        List<Component> result = new ArrayList<>(keys.length);
+        for (String key : keys)
+            result.add(translate((prefix != null ? prefix + "." : "") + key).component());
+        return result;
+    }
+
     public static LangBuilder number(double d) {
         return builder().text(LangNumberFormat.format(d));
     };
 
+    public static LangBuilder fluidName(FluidStack stack) {
+        return builder().add(stack.getDisplayName().copy());
+    }
     public static LangBuilder direction(Direction direction) {
-        return translate("generic.direction."+Lang.asId(direction.name())+"");
+        return translate("generic.direction."+ Lang.asId(direction.name())+"");
     };
 
     /**
@@ -85,7 +103,7 @@ public class DestroyLang {
     };
 
     public static void fluidContainerInfoHeader(List<Component> tooltip) {
-        Lang.translate("gui.goggles.fluid_container")
+        DestroyLang.translate("gui.goggles.fluid_container")
             .forGoggles(tooltip);
     };
 
@@ -94,30 +112,30 @@ public class DestroyLang {
     };
 
     public static void tankInfoTooltip(List<Component> tooltip, LangBuilder tankName, FluidStack contents, int capacity) {
-        LangBuilder mb = Lang.translate("generic.unit.millibuckets");
+        LangBuilder mb = DestroyLang.builder().translate("generic.unit.millibuckets");
 
         tankName
             .style(ChatFormatting.GRAY)
             .forGoggles(tooltip, 0);
 
         if (contents.isEmpty()) {
-            Lang.translate("gui.goggles.fluid_container.capacity")
-			.add(Lang.number(capacity)
+            DestroyLang.builder().translate("gui.goggles.fluid_container.capacity")
+			.add(DestroyLang.number(capacity)
 				.add(mb)
 				.style(ChatFormatting.GOLD))
 			.style(ChatFormatting.GRAY)
 			.forGoggles(tooltip, 1);
         } else {
-            Lang.fluidName(contents)
+            DestroyLang.fluidName(contents)
             .style(ChatFormatting.GRAY)
             .forGoggles(tooltip, 1);
 
-            Lang.builder()
-                .add(Lang.number(contents.getAmount())
+            DestroyLang.builder()
+                .add(DestroyLang.number(contents.getAmount())
                     .add(mb)
                     .style(ChatFormatting.GOLD))
                 .text(ChatFormatting.GRAY, " / ")
-                .add(Lang.number(capacity)
+                .add(DestroyLang.number(capacity)
                     .add(mb)
                     .style(ChatFormatting.DARK_GRAY))
                 .forGoggles(tooltip, 1);

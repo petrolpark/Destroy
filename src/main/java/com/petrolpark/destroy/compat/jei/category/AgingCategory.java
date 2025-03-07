@@ -3,6 +3,7 @@ package com.petrolpark.destroy.compat.jei.category;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.createmod.catnip.data.Pair;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -16,7 +17,6 @@ import com.petrolpark.destroy.content.processing.ageing.AgingBarrelBlock;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.utility.Pair;
 
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -56,7 +56,7 @@ public class AgingCategory extends PetrolparkRecipeCategory<AgeingRecipe> {
         builder.addSlot(RecipeIngredientRole.INPUT, xOffset, 33)
             .setBackground(getRenderedSlot(), -1, -1)
             .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(fluidIngredient.getMatchingFluidStacks()))
-            .addTooltipCallback(addFluidTooltip(fluidIngredient.getRequiredAmount()));
+            .addRichTooltipCallback(addFluidTooltip(fluidIngredient.getRequiredAmount()));
 
         // Add the Item Ingredient(s)
         for (Pair<Ingredient, MutableInt> pair : condensedIngredients) {
@@ -80,7 +80,7 @@ public class AgingCategory extends PetrolparkRecipeCategory<AgeingRecipe> {
         builder.addSlot(RecipeIngredientRole.OUTPUT, 142, 35)
             .setBackground(getRenderedSlot(), -1, -1)
             .addIngredient(ForgeTypes.FLUID_STACK, withImprovedVisibility(resultantFluid))
-            .addTooltipCallback(addFluidTooltip(resultantFluid.getAmount()));
+            .addRichTooltipCallback(addFluidTooltip(resultantFluid.getAmount()));
     };
 
     @Override

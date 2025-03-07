@@ -14,8 +14,8 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.deployer.DeployerBlockEntity;
 import com.simibubi.create.content.kinetics.deployer.DeployerFakePlayer;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.AxisDirection;

@@ -14,9 +14,9 @@ import com.petrolpark.destroy.core.chemistry.vat.observation.AbstractQuantityObs
 import com.petrolpark.destroy.core.chemistry.vat.observation.RedstoneQuantityMonitorThresholdChangeC2SPacket;
 import com.petrolpark.destroy.util.GuiHelper;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.gui.UIRenderHelper;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 
+import net.createmod.catnip.gui.UIRenderHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 

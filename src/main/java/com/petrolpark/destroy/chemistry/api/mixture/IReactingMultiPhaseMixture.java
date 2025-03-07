@@ -7,8 +7,8 @@ import com.petrolpark.destroy.chemistry.api.transformation.reaction.IReacting;
  * @author petrolpark
  */
 public interface IReactingMultiPhaseMixture <
-    P extends IReactingPhase<? super R, ? super C>,
-    R extends IReactingMultiPhaseMixture<? super P, ? super R, ? super C>,
+    P extends IReactingPhase<R, ? super C>,
+    R extends IReactingMultiPhaseMixture<? super P, ? super R, ? super C> & IReactingPhase<? super R, ? super C>,
     C extends IMixtureComponent
 > extends
     IReacting<R>,

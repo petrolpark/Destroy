@@ -1,8 +1,7 @@
 package com.petrolpark.destroy.core.explosion;
 
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.instruction.PonderInstruction;
-
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.instruction.PonderInstruction;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 

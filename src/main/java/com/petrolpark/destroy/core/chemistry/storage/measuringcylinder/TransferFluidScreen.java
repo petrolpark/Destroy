@@ -14,8 +14,8 @@ public class TransferFluidScreen extends BetterValueSettingsScreen {
 
     protected final boolean blockToItem; // True if filling the Item, false if Emptying
 
-    public TransferFluidScreen(BlockPos pos, Direction sideAccessed, InteractionHand interactionHand, ValueSettingsBoard board, ValueSettings valueSettings, boolean blockToItem) {
-        super(pos, sideAccessed, interactionHand, board, valueSettings, s -> {});
+    public TransferFluidScreen(BlockPos pos, Direction sideAccessed, InteractionHand interactionHand, ValueSettingsBoard board, ValueSettings valueSettings, boolean blockToItem, int netId) {
+        super(pos, sideAccessed, interactionHand, board, valueSettings, s -> {}, netId);
         this.blockToItem = blockToItem;
     };
 

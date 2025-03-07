@@ -11,7 +11,7 @@ import com.petrolpark.destroy.chemistry.legacy.LegacySpeciesTag;
 import com.petrolpark.destroy.chemistry.legacy.ReadOnlyMixture;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
+import net.createmod.catnip.lang.FontHelper.Palette;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

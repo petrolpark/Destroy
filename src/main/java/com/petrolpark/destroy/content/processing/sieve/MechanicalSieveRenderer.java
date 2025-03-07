@@ -1,13 +1,13 @@
 package com.petrolpark.destroy.content.processing.sieve;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.client.DestroyPartials;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
@@ -28,23 +28,23 @@ public class MechanicalSieveRenderer extends KineticBlockEntityRenderer<Mechanic
         BlockState state = be.getBlockState();
         boolean x = state.getValue(MechanicalSieveBlock.X);
         VertexConsumer vc = buffer.getBuffer(RenderType.cutoutMipped());
-        float angle = getAngleForTe(be, be.getBlockPos(), x ? Axis.X : Axis.Z);
+        float angle = getAngleForBe(be, be.getBlockPos(), x ? Axis.X : Axis.Z);
 
         ms.pushPose();
-        if (x) TransformStack.cast(ms)
-            .rotateY(90d);
+        if (x) TransformStack.of(ms)
+            .rotateYDegrees(90);
         ms.pushPose();
 
         ms.translate(Mth.sin(angle) * 2 / 16d + (x ? -1d : 0d), 0d , 0d);
-        CachedBufferer.partial(DestroyPartials.MECHANICAL_SIEVE, state)
+        CachedBuffers.partial(DestroyPartials.MECHANICAL_SIEVE, state)
             .renderInto(ms, vc);
 
         ms.pushPose();
-        TransformStack.cast(ms)
-            .centre()
-            .rotateZRadians(-angle)
-            .unCentre();
-        CachedBufferer.partial(DestroyPartials.MECHANICAL_SIEVE_LINKAGES, state)
+        TransformStack.of(ms)
+            .center()
+            .rotateZ(-angle)
+            .uncenter();
+        CachedBuffers.partial(DestroyPartials.MECHANICAL_SIEVE_LINKAGES, state)
             .renderInto(ms, vc);
         ms.popPose();
 
@@ -56,7 +56,7 @@ public class MechanicalSieveRenderer extends KineticBlockEntityRenderer<Mechanic
 
     @Override
     protected SuperByteBuffer getRotatedModel(MechanicalSieveBlockEntity be, BlockState state) {
-        return CachedBufferer.partialFacingVertical(DestroyPartials.MECHANICAL_SIEVE_SHAFT, state, state.getValue(MechanicalSieveBlock.X) ? Direction.EAST : Direction.SOUTH);
+        return CachedBuffers.partialFacingVertical(DestroyPartials.MECHANICAL_SIEVE_SHAFT, state, state.getValue(MechanicalSieveBlock.X) ? Direction.EAST : Direction.SOUTH);
     };
     
 };

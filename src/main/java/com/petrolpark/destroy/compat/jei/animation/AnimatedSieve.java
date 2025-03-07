@@ -1,12 +1,12 @@
 package com.petrolpark.destroy.compat.jei.animation;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.petrolpark.destroy.DestroyBlocks;
 import com.petrolpark.destroy.client.DestroyPartials;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 
@@ -22,25 +22,25 @@ public class AnimatedSieve extends AnimatedKinetics {
 		ms.scale(23, 23, 23);
 
         ms.pushPose();
-        TransformStack.cast(ms)
+        TransformStack.of(ms)
             .translate(0d, -0.5d, 0.5d)
-            .rotateZ(90)
-            .rotateY(getCurrentAngle())
+            .rotateZDegrees(90)
+            .rotateYDegrees(getCurrentAngle())
             .translateBack(0.5d, 0d, 0.5d);
 		blockElement(DestroyPartials.MECHANICAL_SIEVE_SHAFT)
 			.render(graphics);
         ms.popPose();
 
         ms.pushPose();
-        TransformStack.cast(ms)
-            .rotateY(90);
+        TransformStack.of(ms)
+            .rotateYDegrees(90);
         ms.translate(-1f + Mth.sin(getCurrentAngle() * Mth.PI / 180f) * 2 / 16d, 0d, 0d);
         blockElement(DestroyPartials.MECHANICAL_SIEVE)
             .render(graphics);
         ms.pushPose();
-        TransformStack.cast(ms)
+        TransformStack.of(ms)
             .translate(0.5d, -0.5d, 0d)
-            .rotateZ(getCurrentAngle())
+            .rotateZDegrees(getCurrentAngle())
             .translateBack(0.5d, -0.5d, 0d);
         blockElement(DestroyPartials.MECHANICAL_SIEVE_LINKAGES)
             .render(graphics);

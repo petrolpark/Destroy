@@ -2,8 +2,7 @@ package com.petrolpark.destroy.core.explosion.mixedexplosive;
 
 import javax.annotation.Nullable;
 
-import com.simibubi.create.foundation.utility.Iterate;
-
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;

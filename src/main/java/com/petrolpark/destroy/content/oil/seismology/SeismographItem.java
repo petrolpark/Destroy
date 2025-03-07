@@ -8,10 +8,10 @@ import javax.annotation.Nullable;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.DestroyAdvancementTrigger;
 import com.petrolpark.destroy.client.DestroyGuiTextures;
-import com.simibubi.create.foundation.gui.ScreenOpener;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.nbt.CompoundTag;

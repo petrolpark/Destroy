@@ -1,12 +1,12 @@
 package com.petrolpark.destroy.core.chemistry.storage;
 
+import net.createmod.catnip.data.Couple;
 import org.joml.Vector3f;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
 import com.simibubi.create.foundation.render.RenderTypes;
-import com.simibubi.create.foundation.utility.Couple;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -26,7 +26,7 @@ public class SimpleMixtureTankRenderer<T extends SimpleMixtureTankBlockEntity> e
         if (fs.isEmpty()) return;
         Vector3f l = renderInfo.getFluidBoxDimensions().getFirst();
         Vector3f u = renderInfo.getFluidBoxDimensions().getSecond();
-        FluidRenderer.renderFluidBox(fs, l.x / 16f, l.y / 16f, l.z / 16f, u.x / 16f, (l.y + (u.y - l.y) * renderInfo.getFluidLevel(container, partialTicks)) / 16f, u.z / 16f, bufferSource.getBuffer(RenderTypes.getFluid()), ms, light, true);
+        FluidRenderer.renderFluidBox(fs.getFluid(), fs.getAmount(), l.x / 16f, l.y / 16f, l.z / 16f, u.x / 16f, (l.y + (u.y - l.y) * renderInfo.getFluidLevel(container, partialTicks)) / 16f, u.z / 16f, bufferSource.getBuffer(RenderTypes.entityTranslucentBlockMipped()), ms, light, true, true);
     };
 
     public static interface ISimpleMixtureTankRenderInformation<C> {

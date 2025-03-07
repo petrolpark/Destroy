@@ -40,7 +40,7 @@ public class DistillationCategory extends PetrolparkRecipeCategory<DistillationR
         builder.addSlot(RecipeIngredientRole.INPUT, 18, 81)
             .setBackground(getRenderedSlot(), -1, -1)
             .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(recipe.getRequiredFluid().getMatchingFluidStacks()))
-            .addTooltipCallback(addFluidTooltip(recipe.getRequiredFluid().getRequiredAmount()));
+            .addRichTooltipCallback(addFluidTooltip(recipe.getRequiredFluid().getRequiredAmount()));
 
         // Fluid results
         for (int i = 0; i < fractions; i++) {
@@ -48,7 +48,7 @@ public class DistillationCategory extends PetrolparkRecipeCategory<DistillationR
             builder.addSlot(RecipeIngredientRole.OUTPUT, i % 2 == 0 ? 94 : 74, 74 - (12 * i))
                 .setBackground(getRenderedSlot(), -1, -1)
                 .addIngredient(ForgeTypes.FLUID_STACK, withImprovedVisibility(result))
-                .addTooltipCallback(addFluidTooltip(result.getAmount()));
+                .addRichTooltipCallback(addFluidTooltip(result.getAmount()));
         };
 
         HeatConditionRenderer.addHeatConditionSlots(builder, 80, 103, recipe.getRequiredHeat());

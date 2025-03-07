@@ -48,7 +48,7 @@ public class FlameRetardantApplicationCategory extends PetrolparkRecipeCategory<
 		builder.addSlot(RecipeIngredientRole.INPUT, 27, 32)
             .setBackground(getRenderedSlot(), -1, -1)
             .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(recipe.getRequiredFluid().getMatchingFluidStacks()))
-            .addTooltipCallback(addFluidTooltip(recipe.getRequiredFluid().getRequiredAmount()));
+            .addRichTooltipCallback(addFluidTooltip(recipe.getRequiredFluid().getRequiredAmount()));
 		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 132, 51)
             .setBackground(getRenderedSlot(), -1, -1)
             .addItemStacks(items.stream().map(i -> {

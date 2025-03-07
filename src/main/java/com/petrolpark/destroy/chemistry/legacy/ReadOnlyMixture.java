@@ -16,8 +16,8 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.api.util.Constants;
 import com.petrolpark.destroy.chemistry.legacy.index.DestroyMolecules;
 import com.petrolpark.destroy.client.DestroyLang;
-import com.simibubi.create.foundation.utility.NBTHelper;
 
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;

@@ -24,7 +24,7 @@ public class ElementTankFillingCategory extends PetrolparkRecipeCategory<Element
         builder.addSlot(RecipeIngredientRole.INPUT, 2, 2)
             .setBackground(getRenderedSlot(), -1, -1)
             .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(recipe.getRequiredFluid().getMatchingFluidStacks()))
-            .addTooltipCallback(addFluidTooltip(recipe.getRequiredFluid().getRequiredAmount()));
+            .addRichTooltipCallback(addFluidTooltip(recipe.getRequiredFluid().getRequiredAmount()));
 
         builder.addSlot(RecipeIngredientRole.INPUT, 25, 22)
             .setBackground(getRenderedSlot(), -1, -1)

@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
+import net.createmod.catnip.lang.FontHelper.Palette;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

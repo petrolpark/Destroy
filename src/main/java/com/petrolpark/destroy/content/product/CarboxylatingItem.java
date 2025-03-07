@@ -2,14 +2,14 @@ package com.petrolpark.destroy.content.product;
 
 import java.util.function.Supplier;
 
-import com.petrolpark.item.decay.ConfiguredDecayingItem;
-import com.simibubi.create.foundation.config.ConfigBase.ConfigInt;
 
+import com.petrolpark.item.decay.ConfiguredDecayingItem;
+import net.createmod.catnip.config.ConfigBase;
 import net.minecraft.world.item.ItemStack;
 
 public class CarboxylatingItem extends ConfiguredDecayingItem {
 
-    public CarboxylatingItem(Properties properties, Supplier<ItemStack> decayProduct, Supplier<ConfigInt> lifetime) {
+    public CarboxylatingItem(Properties properties, Supplier<ItemStack> decayProduct, Supplier<ConfigBase.ConfigInt> lifetime) {
         super(properties, decayProduct, lifetime);
     };
 

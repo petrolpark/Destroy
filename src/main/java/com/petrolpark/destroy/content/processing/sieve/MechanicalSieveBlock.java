@@ -4,7 +4,7 @@ import com.petrolpark.compat.create.block.entity.behaviour.AbstractRememberPlace
 import com.petrolpark.destroy.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.DestroyBlocks;
 import com.petrolpark.destroy.DestroyVoxelShapes;
-import com.simibubi.create.content.contraptions.ITransformableBlock;
+import com.simibubi.create.api.contraption.transformable.TransformableBlock;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.foundation.block.IBE;
@@ -30,7 +30,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class MechanicalSieveBlock extends KineticBlock implements IBE<MechanicalSieveBlockEntity>, ITransformableBlock {
+public class MechanicalSieveBlock extends KineticBlock implements IBE<MechanicalSieveBlockEntity>, TransformableBlock {
 
     public static final BooleanProperty X = BooleanProperty.create("x");
 
