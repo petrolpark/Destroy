@@ -16,6 +16,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsFormatter;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueBehaviour;
+import com.simibubi.create.foundation.utility.CreateLang;
 import net.createmod.catnip.lang.Lang;
 
 import net.createmod.catnip.math.VecHelper;
@@ -178,8 +179,8 @@ public class SiphonBlockEntity extends SmartBlockEntity implements IHaveLabGoggl
 
         public MutableComponent formatSettings(ValueSettings settings) {
             return Component.literal(switch (settings.row()) {
-                case 0 -> String.valueOf(settings.value()) + DestroyLang.translateDirect("generic.unit.millibuckets").getString();
-                case 1 -> df.format(settings.value() / 10f) + DestroyLang.translateDirect("generic.unit.buckets").getString();
+                case 0 -> String.valueOf(settings.value()) + CreateLang.translateDirect("generic.unit.millibuckets").getString();
+                case 1 -> df.format(settings.value() / 10f) + CreateLang.translateDirect("generic.unit.buckets").getString();
                 default -> String.valueOf(settings.value());
             });
         };

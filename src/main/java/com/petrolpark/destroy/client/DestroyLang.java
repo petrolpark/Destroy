@@ -112,7 +112,7 @@ public class DestroyLang {
     };
 
     public static void tankInfoTooltip(List<Component> tooltip, LangBuilder tankName, FluidStack contents, int capacity) {
-        LangBuilder mb = DestroyLang.builder().translate("generic.unit.millibuckets");
+        LangBuilder mb = CreateLang.builder().translate("generic.unit.millibuckets");
 
         tankName
             .style(ChatFormatting.GRAY)

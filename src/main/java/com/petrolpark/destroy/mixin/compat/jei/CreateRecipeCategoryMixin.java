@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.simibubi.create.foundation.utility.CreateLang;
 import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -129,7 +130,7 @@ public abstract class CreateRecipeCategoryMixin<T extends Recipe<?>> {
 
             // Generic for all Fluids - here onwards is copied from the Create source code
 			int amount = mbAmount == -1 ? fluidStack.getAmount() : mbAmount;
-			Component text = Component.literal(String.valueOf(amount)).append(DestroyLang.translateDirect("generic.unit.millibuckets")).withStyle(ChatFormatting.GOLD);
+			Component text = Component.literal(String.valueOf(amount)).append(CreateLang.translateDirect("generic.unit.millibuckets")).withStyle(ChatFormatting.GOLD);
             tooltip.add(text);
         };
     };

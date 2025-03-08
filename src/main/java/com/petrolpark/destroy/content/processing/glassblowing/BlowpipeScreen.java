@@ -10,6 +10,7 @@ import com.petrolpark.destroy.client.DestroyGuiTextures;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
+import com.simibubi.create.foundation.utility.CreateLang;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.createmod.catnip.gui.widget.AbstractSimiWidget;
@@ -96,7 +97,7 @@ public class BlowpipeScreen extends AbstractSimiScreen {
             // Tooltips
             if (mouseY >= y && mouseY <= y + 16) {
                 if (mouseX >= 9 && mouseX <= 27) {
-                    graphics.renderTooltip(font, List.of(fluidStack.getDisplayName(), DestroyLang.builder().add(Component.literal(""+ingredient.getRequiredAmount())).add(DestroyLang.translate("generic.unit.millibuckets")).style(ChatFormatting.GRAY).component()), Optional.empty(), mouseX, mouseY);
+                    graphics.renderTooltip(font, List.of(fluidStack.getDisplayName(), DestroyLang.builder().add(Component.literal(""+ingredient.getRequiredAmount())).add(CreateLang.translate("generic.unit.millibuckets")).style(ChatFormatting.GRAY).component()), Optional.empty(), mouseX, mouseY);
                 };
                 if (mouseX >= 56 && mouseX <= 72) {
                     graphics.renderTooltip(font, stack, mouseX, mouseY);

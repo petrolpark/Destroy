@@ -15,6 +15,7 @@ import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
 
+import com.simibubi.create.foundation.utility.CreateLang;
 import net.createmod.catnip.lang.Lang;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
@@ -60,7 +61,7 @@ public abstract class MixtureContentsDisplaySource extends DisplaySource {
             tooltip.addAll(mixture.getContentsTooltip(iupac, true, molesNotConcentration, fluidStack.getAmount(), df).stream().map(c -> c.copy()).toList());
         };
 
-        if (!molesNotConcentration) name.append(" "+fluidStack.getAmount()).append(DestroyLang.translateDirect("generic.unit.millibuckets"));
+        if (!molesNotConcentration) name.append(" "+fluidStack.getAmount()).append(CreateLang.translateDirect("generic.unit.millibuckets"));
 
         tooltip.add(0, name
             .append(" "+temperature)

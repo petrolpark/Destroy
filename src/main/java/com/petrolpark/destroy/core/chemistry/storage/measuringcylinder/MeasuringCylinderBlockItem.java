@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import com.petrolpark.destroy.core.bettervaluesettings.BetterValueSettingsBehaviour;
 import com.petrolpark.destroy.core.bettervaluesettings.SidedScrollValueBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.*;
+import com.simibubi.create.foundation.utility.CreateLang;
 import net.createmod.catnip.gui.ScreenOpener;
 import org.joml.Vector3f;
 
@@ -67,7 +68,7 @@ public class MeasuringCylinderBlockItem extends PlaceableMixtureTankItem<Measuri
                             DestroyLang.translate("tooltip.measuring_cylinder", blockToItem ? blockName : itemName, blockToItem ? itemName : blockName).component(),
                             maxTransfer,
                             50,
-                            Collections.singletonList(DestroyLang.translateDirect("generic.unit.millibuckets")),
+                            Collections.singletonList(CreateLang.translateDirect("generic.unit.millibuckets")),
                             new ValueSettingsFormatter(ValueSettings::format)
                     ),
                     new ValueSettings(0, maxTransfer),
