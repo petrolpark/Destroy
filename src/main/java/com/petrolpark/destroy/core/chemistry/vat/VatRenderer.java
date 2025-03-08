@@ -121,22 +121,6 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
             };
         };
 
-        // Fluids
-        FluidStack fluidStack = controller.getLiquidTankContents();
-        if (!fluidStack.isEmpty()) {
-            FluidRenderer.renderFluidBox(fluidStack.getRawFluid(), fluidStack.getAmount(),
-                (float)relativeInternalLowerCorner.x + 1 / 32f, (float)relativeInternalLowerCorner.y, (float)relativeInternalLowerCorner.z + 1 / 32f,
-                (float)relativeInternalUpperCorner.x - 1 / 32f, relativeFluidLevel, (float)relativeInternalUpperCorner.z - 1 / 32f,
-                    bufferSource, ms, light, true, true, fluidStack.getTag());
-        };
-        FluidStack gasStack = MixtureFluid.gasOf(controller.getGasTankContents());
-        if (!gasStack.isEmpty()) {
-            FluidRenderer.renderFluidBox(gasStack.getRawFluid(), gasStack.getAmount(),
-                (float)relativeInternalLowerCorner.x + 1 / 32f, relativeFluidLevel, (float)relativeInternalLowerCorner.z + 1 / 32f,
-                (float)relativeInternalUpperCorner.x - 1 / 32f, (float)relativeInternalUpperCorner.y, (float)relativeInternalUpperCorner.z - 1 / 32f,
-                    bufferSource, ms, light, true, true, gasStack.getTag());
-        };
-
         // Items
         int itemCount = 0;
 		for (int slot = 0; slot < inv.getSlots(); slot++) if (!inv.getStackInSlot(slot).isEmpty()) itemCount += inv.getStackInSlot(slot).getCount();
@@ -166,6 +150,22 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
                     angle += 10 + 270.f / nthItem;
                 };
             };
+        };
+
+        // Fluids
+        FluidStack fluidStack = controller.getLiquidTankContents();
+        if (!fluidStack.isEmpty()) {
+            FluidRenderer.renderFluidBox(fluidStack.getRawFluid(), fluidStack.getAmount(),
+                    (float)relativeInternalLowerCorner.x + 1 / 32f, (float)relativeInternalLowerCorner.y, (float)relativeInternalLowerCorner.z + 1 / 32f,
+                    (float)relativeInternalUpperCorner.x - 1 / 32f, relativeFluidLevel, (float)relativeInternalUpperCorner.z - 1 / 32f,
+                    bufferSource, ms, light, true, true, fluidStack.getTag());
+        };
+        FluidStack gasStack = MixtureFluid.gasOf(controller.getGasTankContents());
+        if (!gasStack.isEmpty()) {
+            FluidRenderer.renderFluidBox(gasStack.getRawFluid(), gasStack.getAmount(),
+                    (float)relativeInternalLowerCorner.x + 1 / 32f, relativeFluidLevel, (float)relativeInternalLowerCorner.z + 1 / 32f,
+                    (float)relativeInternalUpperCorner.x - 1 / 32f, (float)relativeInternalUpperCorner.y, (float)relativeInternalUpperCorner.z - 1 / 32f,
+                    bufferSource, ms, light, true, true, gasStack.getTag());
         };
     };
 
