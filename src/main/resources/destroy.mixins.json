@@ -17,6 +17,7 @@
         "accessor.ProcessingRecipeAccessor",
         "accessor.ProcessingRecipeParamsAccessor",
         "accessor.ValueSettingsPacketAccessor",
+        "accessor.ValueSettingsScreenAccessor",
         "accessor.VillagerAccessor",
         "compat.farmersdelight.CuttingBoardMixin",
         "compat.jei.BasinCategoryMixin",

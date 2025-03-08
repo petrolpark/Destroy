@@ -5,12 +5,14 @@ import java.util.Optional;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.DestroyBlockEntityTypes;
+import com.petrolpark.destroy.DestroyFluids;
+import com.petrolpark.destroy.chemistry.legacy.ReadOnlyMixture;
 import com.petrolpark.destroy.chemistry.minecraft.MixtureFluid;
 import com.petrolpark.destroy.client.DestroyPartials;
-import com.petrolpark.destroy.client.DestroyRenderTypes;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
 import com.simibubi.create.foundation.item.SmartInventory;
+import com.simibubi.create.foundation.render.RenderTypes;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import net.createmod.catnip.animation.AnimationTickHolder;
 
@@ -30,6 +32,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntity> {
 
@@ -121,17 +124,17 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
         // Fluids
         FluidStack fluidStack = controller.getLiquidTankContents();
         if (!fluidStack.isEmpty()) {
-            FluidRenderer.renderFluidBox(fluidStack.getFluid(), fluidStack.getAmount(),
+            FluidRenderer.renderFluidBox(fluidStack.getRawFluid(), fluidStack.getAmount(),
                 (float)relativeInternalLowerCorner.x + 1 / 32f, (float)relativeInternalLowerCorner.y, (float)relativeInternalLowerCorner.z + 1 / 32f,
                 (float)relativeInternalUpperCorner.x - 1 / 32f, relativeFluidLevel, (float)relativeInternalUpperCorner.z - 1 / 32f,
-                bufferSource.getBuffer(DestroyRenderTypes.fluidNoCull()), ms, light, true, true);
+                    bufferSource, ms, light, true, true, fluidStack.getTag());
         };
         FluidStack gasStack = MixtureFluid.gasOf(controller.getGasTankContents());
         if (!gasStack.isEmpty()) {
-            FluidRenderer.renderFluidBox(gasStack.getFluid(), gasStack.getAmount(),
+            FluidRenderer.renderFluidBox(gasStack.getRawFluid(), gasStack.getAmount(),
                 (float)relativeInternalLowerCorner.x + 1 / 32f, relativeFluidLevel, (float)relativeInternalLowerCorner.z + 1 / 32f,
                 (float)relativeInternalUpperCorner.x - 1 / 32f, (float)relativeInternalUpperCorner.y, (float)relativeInternalUpperCorner.z - 1 / 32f,
-                bufferSource.getBuffer(DestroyRenderTypes.fluidNoCull()), ms, light, true, true);
+                    bufferSource, ms, light, true, true, gasStack.getTag());
         };
 
         // Items
@@ -172,7 +175,7 @@ public class VatRenderer extends SafeBlockEntityRenderer<VatControllerBlockEntit
 	};
 
     @Override
-    public boolean shouldRenderOffScreen(VatControllerBlockEntity controller) {
+    public boolean shouldRenderOffScreen(@NotNull VatControllerBlockEntity controller) {
         return true;
     };
     

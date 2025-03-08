@@ -28,16 +28,16 @@ public class DestroyFluids {
     };
     
     public static final FluidEntry<MixtureFluid> MIXTURE = REGISTRATE.virtualFluid("mixture",
-        new ResourceLocation("destroy", "fluid/mixture_still"),
-        new ResourceLocation("destroy", "fluid/mixture_flow"),
+        Destroy.asResource( "fluid/mixture_still"),
+        Destroy.asResource( "fluid/mixture_flow"),
         MixtureFluidType::new,
         MixtureFluid::createSource,
         MixtureFluid::createFlowing
         ).register();
 
     public static final FluidEntry<MixtureFluid> GAS_MIXTURE = REGISTRATE.virtualFluid("gas", // For display purposes only
-        new ResourceLocation("destroy", "fluid/gas"),
-        new ResourceLocation("destroy", "fluid/gas"),
+        Destroy.asResource("fluid/gas"),
+        Destroy.asResource("fluid/gas"),
         MixtureFluidType::new,
         MixtureFluid::createSource,
         MixtureFluid::createFlowing

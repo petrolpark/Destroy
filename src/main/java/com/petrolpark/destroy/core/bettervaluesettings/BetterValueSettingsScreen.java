@@ -2,6 +2,7 @@ package com.petrolpark.destroy.core.bettervaluesettings;
 
 import java.util.function.Consumer;
 
+import com.petrolpark.destroy.mixin.accessor.ValueSettingsScreenAccessor;
 import com.simibubi.create.AllKeys;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
@@ -39,8 +40,8 @@ public class BetterValueSettingsScreen extends ValueSettingsScreen {
     protected void saveAndClose(double mouseX, double mouseY) {
 		ValueSettings closest = getClosestCoordinate((int) mouseX, (int) mouseY);
 		AllPackets.getChannel()
-			.sendToServer(new ValueSettingsPacket(pos, closest.row(), closest.value(), hand, (BlockHitResult)null, sideAccessed,
-				AllKeys.ctrlDown(), 0)); // TODO: Debug
+			.sendToServer(new ValueSettingsPacket(pos, closest.row(), closest.value(), hand, null, sideAccessed,
+				AllKeys.ctrlDown(), ((ValueSettingsScreenAccessor) this).getNetId()));
 		onClose();
 	};
     
