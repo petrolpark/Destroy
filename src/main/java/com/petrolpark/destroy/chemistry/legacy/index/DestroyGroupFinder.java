@@ -137,7 +137,17 @@ public class DestroyGroupFinder extends GroupFinder {
                     };
                     // Nitriles
                     if (nitrileNitrogens.size() == 1 && carbons.size() == 1) {
-                        groups.add(new NitrileGroup(carbon, nitrileNitrogens.get(0)));
+                        LegacyAtom secondCarbon = carbons.get(0);
+                        LegacyAtom nitrogen = atom;
+
+                        if(bondedAtomsOfElementTo(structure, secondCarbon, LegacyElement.NITROGEN, BondType.SINGLE).size() == 1){ // all of this is purely to exclude AIBN from having nitriles
+                            LegacyAtom firstNitrogen = getNitrogenBondedToCarbonWhichIsntThisCarbonInThisStructure(secondCarbon, nitrogen, structure);
+                            if (bondedAtomsOfElementTo(structure, firstNitrogen, LegacyElement.NITROGEN, BondType.DOUBLE).size() == 0){
+                                groups.add(new NitrileGroup(carbon, nitrileNitrogens.get(0)));
+                            }
+                        } else if(bondedAtomsOfElementTo(structure, secondCarbon, LegacyElement.NITROGEN, BondType.SINGLE).size() == 0){
+                            groups.add(new NitrileGroup(carbon, nitrileNitrogens.get(0)));
+                        }
                     };
                     // Boranes
                     for (LegacyAtom boron : borons) { 
@@ -204,6 +214,12 @@ public class DestroyGroupFinder extends GroupFinder {
         carbonsBondedToOxygen.remove(carbon); //remove the carbonyl one
         return carbonsBondedToOxygen.get(0);
     };
+
+    private LegacyAtom getNitrogenBondedToCarbonWhichIsntThisCarbonInThisStructure(LegacyAtom carbon, LegacyAtom nitrogen, Map<LegacyAtom, List<LegacyBond>> structure) { //i can do you one better
+        List<LegacyAtom> nitrogensBondedToCarbon = bondedAtomsOfElementTo(structure, carbon, LegacyElement.NITROGEN); //get both carbons and the nitrogen
+        return nitrogensBondedToCarbon.get(0);
+    };
+
 
     public static void register() {
         new DestroyGroupFinder();
