@@ -79,7 +79,7 @@ public class DestroyLang {
         return builder().add(stack.getDisplayName().copy());
     }
     public static LangBuilder direction(Direction direction) {
-        return translate("generic.direction."+ Lang.asId(direction.name())+"");
+        return translate("generic.direction." + Lang.asId(direction.name()));
     };
 
     /**
@@ -103,7 +103,7 @@ public class DestroyLang {
     };
 
     public static void fluidContainerInfoHeader(List<Component> tooltip) {
-        DestroyLang.translate("gui.goggles.fluid_container")
+        CreateLang.translate("gui.goggles.fluid_container")
             .forGoggles(tooltip);
     };
 
@@ -119,7 +119,7 @@ public class DestroyLang {
             .forGoggles(tooltip, 0);
 
         if (contents.isEmpty()) {
-            DestroyLang.builder().translate("gui.goggles.fluid_container.capacity")
+            CreateLang.builder().translate("gui.goggles.fluid_container.capacity")
 			.add(DestroyLang.number(capacity)
 				.add(mb)
 				.style(ChatFormatting.GOLD))

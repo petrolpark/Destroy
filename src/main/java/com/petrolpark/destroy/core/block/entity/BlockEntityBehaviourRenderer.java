@@ -10,6 +10,7 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBox.TextValueBox;
+import com.simibubi.create.foundation.utility.CreateLang;
 import net.createmod.catnip.lang.Lang;
 
 import net.createmod.catnip.outliner.Outliner;
@@ -75,7 +76,7 @@ public class BlockEntityBehaviourRenderer {
 
 			List<MutableComponent> tip = new ArrayList<>();
 			tip.add(behaviour.label.copy());
-			tip.add(DestroyLang.translateDirect("gui.value_settings.hold_to_edit"));
+			tip.add(CreateLang.translateDirect("gui.value_settings.hold_to_edit"));
 			CreateClient.VALUE_SETTINGS_HANDLER.showHoverTip(tip);
 		};
 	}

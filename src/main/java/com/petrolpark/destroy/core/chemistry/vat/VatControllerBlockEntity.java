@@ -46,6 +46,7 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
+import com.simibubi.create.foundation.utility.CreateLang;
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.data.Pair;
 import net.createmod.catnip.lang.FontHelper;
@@ -716,7 +717,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveL
     };
 
     public static void vatFluidTooltip(VatControllerBlockEntity vatController, List<Component> tooltip) {
-        DestroyLang.translate("gui.goggles.fluid_container")
+        CreateLang.translate("gui.goggles.fluid_container")
 			.forGoggles(tooltip);
         DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.vat.contents_liquid"), vatController.getLiquidTank().getFluid(), vatController.getCapacity());
         DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.vat.contents_gas"), vatController.getGasTank().getFluid(), vatController.getCapacity());
