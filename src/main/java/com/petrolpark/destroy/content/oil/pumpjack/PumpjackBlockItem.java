@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.petrolpark.destroy.client.DestroyLang;
 import com.simibubi.create.CreateClient;
+import com.simibubi.create.foundation.utility.CreateLang;
 import net.createmod.catnip.data.Pair;
 import net.createmod.catnip.lang.Lang;
 
@@ -43,7 +44,7 @@ public class PumpjackBlockItem extends BlockItem {
 		if (!(context.getPlayer()instanceof LocalPlayer localPlayer)) return;
 		OUTLINER.showCluster(Pair.of("pumpjack", pos), Set.of(pos, pos.relative(facing), pos.relative(facing.getOpposite()), pos.above()))
             .colored(0xFF_ff5d6c);;
-		DestroyLang.translate("large_water_wheel.not_enough_space")
+		CreateLang.translate("large_water_wheel.not_enough_space")
 			.color(0xFF_ff5d6c)
 			.sendStatus(localPlayer);
 	};

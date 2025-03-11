@@ -152,7 +152,7 @@ public class SiphonBlockEntity extends SmartBlockEntity implements IHaveLabGoggl
         @Override
         public ValueSettingsBoard createBoard(Player player, BlockHitResult hitResult) {
             return new ValueSettingsBoard(label, 100, 10,
-			DestroyLang.translatedOptions("generic.unit", "millibuckets", "buckets"),
+			CreateLang.translatedOptions("generic.unit", "millibuckets", "buckets"),
 			new ValueSettingsFormatter(this::formatSettings));
         };
 

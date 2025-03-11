@@ -7,6 +7,7 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.DestroyItems;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
+import com.simibubi.create.foundation.utility.CreateLang;
 import net.createmod.catnip.lang.Lang;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -62,7 +63,7 @@ public class CartographyTableCategory extends PetrolparkRecipeCategory<Cartograp
         builder.addSlot(RecipeIngredientRole.INPUT, 21, 2)
             .setBackground(getRenderedSlot(), -1, -1)
             .addIngredients(recipe.getIngredients().get(1))
-            .addRichTooltipCallback((view, tt) -> { if (recipe.getId().equals(seismographRecipeId)) tt.add(DestroyLang.translateDirect("recipe.deploying.not_consumed").withStyle(ChatFormatting.GOLD)); });
+            .addRichTooltipCallback((view, tt) -> { if (recipe.getId().equals(seismographRecipeId)) tt.add(CreateLang.translateDirect("recipe.deploying.not_consumed").withStyle(ChatFormatting.GOLD)); });
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 107, 2)
             .setBackground(getRenderedSlot(), -1, -1)
