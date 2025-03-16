@@ -51,6 +51,9 @@ public class CircuitPatternIngredient extends AbstractIngredient {
     };
 
     @Override
+    public boolean isEmpty() { return false; };
+
+    @Override
     public IIngredientSerializer<CircuitPatternIngredient> getSerializer() {
         return SERIALIZER;
     };
