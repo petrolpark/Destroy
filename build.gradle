@@ -189,6 +189,9 @@ dependencies {
     // Petrolpark Library (temporary)
     implementation "com.petrolpark:petrolpark:${minecraft_version}-${petrolpark_library_version}"
 
+    // JGraphT
+    jarJar(implementation("org.jgrapht:jgrapht-core:1.5.1"))
+
     // CDK
     //implementation "org.openscience.cdk:cdk-bundle:2.9"
 
