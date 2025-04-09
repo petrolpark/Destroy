@@ -142,6 +142,7 @@ public class DestroyPonderScenes {
         // Pumpjack
         HELPER.forComponents(DestroyBlocks.PUMPJACK)
             .addStoryBoard("oil/seismometer", OilPonderScenes::seismometer)
+            .addStoryBoard("oil/seismograph", OilPonderScenes::seismograph)
             .addStoryBoard("oil/pumpjack", OilPonderScenes::pumpjack, AllCreatePonderTags.KINETIC_APPLIANCES);
 
         // Redstone Programmer

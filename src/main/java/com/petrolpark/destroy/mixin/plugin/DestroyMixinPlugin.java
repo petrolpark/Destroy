@@ -1,6 +1,5 @@
 package com.petrolpark.destroy.mixin.plugin;
 
-import com.petrolpark.compat.CompatMods;
 import com.petrolpark.mixin.plugin.PetrolparkMixinPlugin;
 
 public class DestroyMixinPlugin extends PetrolparkMixinPlugin {
@@ -12,8 +11,7 @@ public class DestroyMixinPlugin extends PetrolparkMixinPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
-        // TFMG mixins
-        requireMultipleMods("AdvancedDistillationCategoryMixin", CompatMods.TFMG, CompatMods.JEI);
+
     };
     
 };

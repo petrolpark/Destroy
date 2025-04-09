@@ -395,7 +395,7 @@ public abstract class RedstoneProgram {
 
         @Override
         public int getTransmittedStrength() {
-            if (paused || playtime >= length) return 0;
+            if (playtime >= length) return 0;
             return sequence[playtime];
         };
 

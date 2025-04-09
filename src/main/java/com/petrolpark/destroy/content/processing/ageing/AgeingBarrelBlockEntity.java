@@ -71,6 +71,7 @@ public class AgeingBarrelBlockEntity extends SmartBlockEntity implements IHaveGo
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         tank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.TYPE, this, 1, TANK_CAPACITY, true)
             .whenFluidUpdates(() -> {
+                checkRecipe();
                 sendData();
                 if (timer == 0) timer = -1;
                 onTimerChange();

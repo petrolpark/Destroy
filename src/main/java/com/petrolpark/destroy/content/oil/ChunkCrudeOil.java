@@ -40,7 +40,7 @@ public class ChunkCrudeOil {
         // Generate the noise value for this Chunk
         double value = (PerlinNoise.create(random, -2, 1d).getValue(chunkX * 1.5d, chunkZ * 1.5d, 0));
         // Don't generate any oil if the value is less than a threshold
-        return value < 0.3d ? 0 : (int)(value * 100000d);
+        return value < 0.3d ? 0 : (int)(value * 10000000d);
     };
 
     /**

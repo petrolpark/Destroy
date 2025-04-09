@@ -11,7 +11,6 @@ import com.petrolpark.destroy.chemistry.legacy.LegacyMixture;
 import com.petrolpark.destroy.chemistry.legacy.LegacySpecies;
 import com.petrolpark.destroy.chemistry.legacy.ReadOnlyMixture;
 import com.petrolpark.destroy.chemistry.minecraft.MixtureFluid;
-import com.petrolpark.destroy.compat.tfmg.SharedDistillationRecipes;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.core.pollution.Pollution;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
@@ -130,7 +129,6 @@ public class DistillationTower {
                 DistillationRecipe recipe = (DistillationRecipe) r;
                 return (recipe.getRequiredFluid().test(inputTank.getFluid())) && recipe.isValidAt(level, getControllerPos()); // If there is sufficient input Fluid and we're in the right biome
             }).collect(Collectors.toList());
-            possibleRecipes.addAll(SharedDistillationRecipes.getTFMGToDestroyRecipes(level));
             if (possibleRecipes.size() >= 1) {
                 lastRecipe = (DistillationRecipe)possibleRecipes.get(0);
             } else {
