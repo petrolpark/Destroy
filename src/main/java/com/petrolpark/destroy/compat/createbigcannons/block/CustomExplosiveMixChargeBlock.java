@@ -173,7 +173,7 @@ public class CustomExplosiveMixChargeBlock extends PowderChargeBlock implements 
             recoil += explosiveProperties.get(property).value * chargeProperties.propellantPropertyModifiers().get(property).addedRecoil();
             spread += explosiveProperties.get(property).value * chargeProperties.propellantPropertyModifiers().get(property).addedSpread();
         };
-        return new BigCannonPropellantPropertiesComponent(strength, stress, recoil, spread);
+        return new BigCannonPropellantPropertiesComponent(strength, stress, recoil, spread, BigCannonPropellantPropertiesComponent.DEFAULT.explosionPower(), BigCannonPropellantPropertiesComponent.DEFAULT.strength(), BigCannonPropellantPropertiesComponent.DEFAULT.dampAmmoDoesntIgniteAsStarter());
     };
     
 };

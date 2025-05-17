@@ -130,6 +130,10 @@ repositories {
         dirs "../petrolpark_local_maven/petrolpark/petrolpark-${minecraft_version}/${petrolpark_library_version}"
     }
 
+    flatDir {
+        dirs "../petrolpark_local_maven/cbc-${minecraft_version}/"
+    }
+
     maven {
         // Curios
         url = "https://maven.theillusivec4.top/"
@@ -213,7 +217,7 @@ dependencies {
     compileOnly fg.deobf("curse.maven:create-industry-693815:5558101")
 
     // CBC
-    compileOnly fg.deobf("com.rbasamoyai:ritchiesprojectilelib:1.0.0-369e88d+1.20.1-forge")
+    compileOnly fg.deobf("com.rbasamoyai:ritchiesprojectilelib:${rpl_version}")
     compileOnly fg.deobf("com.rbasamoyai:createbigcannons:${cbc_version}")
 
     // Embeddium

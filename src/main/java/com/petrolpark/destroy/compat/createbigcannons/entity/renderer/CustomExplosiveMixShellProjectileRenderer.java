@@ -3,7 +3,7 @@ package com.petrolpark.destroy.compat.createbigcannons.entity.renderer;
 import net.createmod.catnip.render.CachedBuffers;
 import org.joml.Quaternionf;
 
-/*import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.petrolpark.destroy.client.DestroyPartials;
@@ -46,4 +46,4 @@ public class CustomExplosiveMixShellProjectileRenderer extends BigCannonProjecti
         poseStack.popPose();
     };
     
-};*/ // TODO: CBC
+};
