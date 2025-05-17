@@ -20,7 +20,7 @@ public class GasNetwork {
         return 16;
     };
     
-    protected final SimpleDirectedGraph<GasNetwork.Section, Holder<IGasValve>> network = new SimpleDirectedGraph<>(Holder.class);
+    protected final SimpleDirectedGraph<GasNetwork.Section, Holder<IGasValve>> network = new SimpleDirectedGraph<Section, Holder<IGasValve>>((Class<? extends Holder<IGasValve>>) (new Holder<IGasValve>()).getClass());
     protected final Map<GasNetwork.Section, Map<GasNetwork.Section, GraphPath<GasNetwork.Section, IGasValve>>> paths = new HashMap<>();
 
     protected int connectedVesselsNo = 0;

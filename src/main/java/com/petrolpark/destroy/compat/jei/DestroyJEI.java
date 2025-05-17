@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.DestroyArmorMaterials;
 import com.petrolpark.destroy.DestroyBlocks;

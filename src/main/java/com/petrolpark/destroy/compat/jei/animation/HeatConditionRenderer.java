@@ -22,6 +22,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import static com.simibubi.create.compat.jei.category.CreateRecipeCategory.addFluidSlot;
+
 public class HeatConditionRenderer {
 
     private static RefrigerantDummyFluidIngredient refrigerantIngredient = new RefrigerantDummyFluidIngredient();
@@ -49,10 +51,7 @@ public class HeatConditionRenderer {
             builder
                 .addSlot(RecipeIngredientRole.CATALYST, x, y)
                 .addItemStack(DestroyBlocks.COOLER.asStack());
-            builder
-                .addSlot(RecipeIngredientRole.CATALYST, x + 19, y)
-                .addIngredients(ForgeTypes.FLUID_STACK, refrigerantIngredient.getMatchingFluidStacks())
-                .addRichTooltipCallback(CreateRecipeCategory.addFluidTooltip());
+            addFluidSlot(builder, x + 19, y, refrigerantIngredient);
         } else if (requiredHeat != HeatCondition.NONE) { // This one is copied right from Create; it renders the Blaze Burner
             builder
                 .addSlot(RecipeIngredientRole.RENDER_ONLY, x, y)

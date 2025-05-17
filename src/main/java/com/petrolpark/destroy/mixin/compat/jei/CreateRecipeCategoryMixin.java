@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import com.simibubi.create.foundation.utility.CreateLang;
 import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
+import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,6 +40,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(value = CreateRecipeCategory.class, remap = false)
 public abstract class CreateRecipeCategoryMixin<T extends Recipe<?>> {
@@ -85,53 +87,34 @@ public abstract class CreateRecipeCategoryMixin<T extends Recipe<?>> {
      * Copied from the {@link com.simibubi.create.compat.jei.category.CreateRecipeCategory#addFluidTooltip Create source code} because I can't be bothered to deal with Injection.
      * Modifies the tooltip for Fluid Stacks which are {@link com.petrolpark.destroy.chemistry.legacy.LegacyMixture Mixtures}.
      */
-    @Overwrite(remap = false)
-    @SuppressWarnings("removal")
-    public static IRecipeSlotRichTooltipCallback addFluidTooltip(int mbAmount) {
-        return (view, tooltip) -> {
-            Optional<FluidStack> displayed = view.getDisplayedIngredient(ForgeTypes.FLUID_STACK);
-			if (displayed.isEmpty()) return;
 
-			FluidStack fluidStack = displayed.get();
-            Fluid fluid = fluidStack.getFluid();
+    @Inject(
+            method = "Lcom/simibubi/create/compat/jei/category/CreateRecipeCategory;addPotionTooltip(Lmezz/jei/api/gui/ingredient/IRecipeSlotView;Ljava/util/List;)V",
+            at = @At(value = "INVOKE_ASSIGN", target = "Ljava/util/Optional;get()Ljava/lang/Object;"),
+            remap = false,
+            locals = LocalCapture.CAPTURE_FAILHARD)
+    private static void inAddPotionTooltip(IRecipeSlotView view, List<Component> tooltip, CallbackInfo ci, Optional displayed) {
+        if (DestroyFluids.isMixture((FluidStack) displayed.get())) {
+            Component name = DestroyLang.translate("mixture.mixture").component();
+            boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
 
-            // All this potion stuff is copied from the Create source code
-			if (fluid.isSame(AllFluids.POTION.get())) {
-				Component name = fluidStack.getDisplayName();
-                tooltip.add(name);
+            CompoundTag fluidTag = ((FluidStack) displayed.get()).getOrCreateTag();
+            List<Component> mixtureTooltip = new ArrayList<>();
 
-				ArrayList<Component> potionTooltip = new ArrayList<>();
-				PotionFluidHandler.addPotionTooltip(fluidStack, potionTooltip, 1);
-				tooltip.addAll(potionTooltip.stream().toList());
-            //
-
-			} else if (DestroyFluids.isMixture(fluid)) {
-                Component name = DestroyLang.translate("mixture.mixture").component();
-                boolean iupac = DestroyAllConfigs.CLIENT.chemistry.iupacNames.get();
-
-                CompoundTag fluidTag = fluidStack.getOrCreateTag();
-                List<Component> mixtureTooltip = new ArrayList<>();
-
-                if (view.getRole() == RecipeIngredientRole.INPUT || view.getRole() == RecipeIngredientRole.CATALYST) {
-                    mixtureTooltip = DestroyLang.mixtureIngredientTooltip(fluidTag);
-                } else if (view.getRole() == RecipeIngredientRole.OUTPUT) {
-                    CompoundTag mixtureTag = fluidTag.getCompound("Mixture");
-                    if (!mixtureTag.isEmpty()) {
-                        ClientMixture mixture = ClientMixture.readNBT(ClientMixture::new, mixtureTag);
-                        name = mixture.getName();
-                        mixtureTooltip = mixture.getContentsTooltip(iupac, false, false, mbAmount, df);
-                    } else {
-                        mixtureTooltip = List.of(DestroyLang.translate("mixture.empty").component());
-                    };
+            if (view.getRole() == RecipeIngredientRole.INPUT || view.getRole() == RecipeIngredientRole.CATALYST) {
+                mixtureTooltip = DestroyLang.mixtureIngredientTooltip(fluidTag);
+            } else if (view.getRole() == RecipeIngredientRole.OUTPUT) {
+                CompoundTag mixtureTag = fluidTag.getCompound("Mixture");
+                if (!mixtureTag.isEmpty()) {
+                    ClientMixture mixture = ClientMixture.readNBT(ClientMixture::new, mixtureTag);
+                    name = mixture.getName();
+                    mixtureTooltip = mixture.getContentsTooltip(iupac, false, false, ((FluidStack) displayed.get()).getAmount(), df);
+                } else {
+                    mixtureTooltip = List.of(DestroyLang.translate("mixture.empty").component());
                 };
-                tooltip.add(name);
-                tooltip.addAll(mixtureTooltip);
             };
-
-            // Generic for all Fluids - here onwards is copied from the Create source code
-			int amount = mbAmount == -1 ? fluidStack.getAmount() : mbAmount;
-			Component text = Component.literal(String.valueOf(amount)).append(CreateLang.translateDirect("generic.unit.millibuckets")).withStyle(ChatFormatting.GOLD);
-            tooltip.add(text);
+            tooltip.add(name);
+            tooltip.addAll(mixtureTooltip);
         };
     };
 };

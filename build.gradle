@@ -2,7 +2,6 @@ buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
-        jcenter()
         maven { url = 'https://repo.spongepowered.org/repository/maven-public' } // Mixins
         maven { url = 'https://maven.parchmentmc.org' } // Parchment
         maven { url = 'https://api.modrinth.com/maven' } // Modrinth
@@ -21,6 +20,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'org.spongepowered.mixin'
 
 jarJar.enable()
@@ -151,7 +151,7 @@ repositories {
         url "https://maven.realrobotix.me/master"
     }
     maven { // Blueprint
-        url = "https://maven.jaackson.me"
+        url = "https://maven.teamabnormals.com"
     }
 }
 
@@ -164,6 +164,9 @@ configurations {
 
 // Configure all runs with the following
 minecraft.runs.all {
+    property("mixin.env.remapRefMap", "true")
+    property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
+
 	// Set the minecraft_classpath token to the paths of all jars in the library configuration
 	// This is added with the actual Minecraft classpath to get the real classpath information later on
 	lazyToken('minecraft_classpath') {
@@ -194,7 +197,12 @@ dependencies {
     implementation "com.petrolpark:petrolpark:${minecraft_version}-${petrolpark_library_version}"
 
     // JGraphT
-    jarJar(implementation("org.jgrapht:jgrapht-core:1.5.1"))
+    jarJar(implementation("org.jgrapht:jgrapht-core:${jgrapht_version}")) {
+        version {
+            strictly "[1.5, 2.0)"
+            prefer jgrapht_version
+        }
+    }
 
     // CDK
     //implementation "org.openscience.cdk:cdk-bundle:2.9"

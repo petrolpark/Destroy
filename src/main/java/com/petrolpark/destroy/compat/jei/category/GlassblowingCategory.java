@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.compat.jei.category.PetrolparkRecipeCategory;
 import com.petrolpark.destroy.compat.jei.animation.AnimatedBlowpipe;
 import com.petrolpark.destroy.content.processing.glassblowing.GlassblowingRecipe;
+import com.petrolpark.destroy.mixin.compat.jei.CreateRecipeCategoryAccessor;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
 import mezz.jei.api.forge.ForgeTypes;
@@ -13,6 +14,7 @@ import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.GuiGraphics;
+
 
 public class GlassblowingCategory extends PetrolparkRecipeCategory<GlassblowingRecipe> {
 
@@ -28,8 +30,8 @@ public class GlassblowingCategory extends PetrolparkRecipeCategory<GlassblowingR
         builder.addSlot(RecipeIngredientRole.INPUT, 2, 32)
             .setSlotName("input")
             .setBackground(getRenderedSlot(), -1, -1)
-            .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(recipe.getFluidIngredients().get(0).getMatchingFluidStacks()))
-            .addRichTooltipCallback(addFluidTooltip(recipe.getFluidIngredients().get(0).getRequiredAmount()));
+            .addIngredients(ForgeTypes.FLUID_STACK, recipe.getFluidIngredients().get(0).getMatchingFluidStacks())
+            .addTooltipCallback(CreateRecipeCategoryAccessor::invokeAddPotionTooltip);
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 107, 32)
             .setBackground(getRenderedSlot(), -1, -1)

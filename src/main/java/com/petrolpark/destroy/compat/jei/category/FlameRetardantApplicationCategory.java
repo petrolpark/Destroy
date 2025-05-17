@@ -7,6 +7,7 @@ import com.petrolpark.compat.jei.category.PetrolparkRecipeCategory;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.content.product.fireretardant.FireproofingHelper;
 import com.petrolpark.destroy.content.product.fireretardant.FlameRetardantApplicationRecipe;
+import com.petrolpark.destroy.mixin.compat.jei.CreateRecipeCategoryAccessor;
 import com.simibubi.create.compat.jei.category.animations.AnimatedSpout;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
@@ -24,6 +25,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+
 
 public class FlameRetardantApplicationCategory extends PetrolparkRecipeCategory<FlameRetardantApplicationRecipe> {
 
@@ -47,8 +49,8 @@ public class FlameRetardantApplicationCategory extends PetrolparkRecipeCategory<
             .addRichTooltipCallback((v, t) -> { if (example) t.add(DestroyLang.translate("recipe.fireproofing.info").style(ChatFormatting.GOLD).component()); });
 		builder.addSlot(RecipeIngredientRole.INPUT, 27, 32)
             .setBackground(getRenderedSlot(), -1, -1)
-            .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(recipe.getRequiredFluid().getMatchingFluidStacks()))
-            .addRichTooltipCallback(addFluidTooltip(recipe.getRequiredFluid().getRequiredAmount()));
+            .addIngredients(ForgeTypes.FLUID_STACK, recipe.getRequiredFluid().getMatchingFluidStacks())
+            .addTooltipCallback(CreateRecipeCategoryAccessor::invokeAddPotionTooltip);
 		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 132, 51)
             .setBackground(getRenderedSlot(), -1, -1)
             .addItemStacks(items.stream().map(i -> {
