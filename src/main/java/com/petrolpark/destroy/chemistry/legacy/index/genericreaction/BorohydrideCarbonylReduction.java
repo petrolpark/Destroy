@@ -28,25 +28,19 @@ public class BorohydrideCarbonylReduction extends SingleGroupGenericReaction<Car
     public LegacyReaction generateReaction(GenericReactant<CarbonylGroup> reactant) {
         CarbonylGroup carbonyl = reactant.getGroup();
 
-        LegacyMolecularStructure alkoxideStructure = reactant.getMolecule().shallowCopyStructure();
-        alkoxideStructure.moveTo(carbonyl.carbon)
+        LegacyMolecularStructure structure = reactant.getMolecule().shallowCopyStructure();
+        structure.moveTo(carbonyl.carbon)
             .addAtom(LegacyElement.HYDROGEN)
             .replaceBondTo(carbonyl.oxygen, BondType.SINGLE)
             .remove(carbonyl.oxygen)
-            .addAtom(new LegacyAtom(LegacyElement.OXYGEN, -1d));
-
-        LegacyMolecularStructure borateEsterStructure = reactant.getMolecule().shallowCopyStructure();
-        borateEsterStructure.moveTo(carbonyl.carbon)
-            .addAtom(LegacyElement.HYDROGEN)
-            .replaceBondTo(carbonyl.oxygen, BondType.SINGLE)
-            .moveTo(carbonyl.oxygen)
-            .addGroup(LegacyMolecularStructure.borane());
+            .addGroup(LegacyMolecularStructure.alcohol());
 
         return reactionBuilder()
-            .addReactant(reactant.getMolecule(), 2)
+            .addReactant(reactant.getMolecule(), 4)
+            .addReactant(DestroyMolecules.WATER, 4) // workup included in reaction
             .addReactant(DestroyMolecules.BOROHYDRIDE)
-            .addProduct(moleculeBuilder().structure(alkoxideStructure).build())
-            .addProduct(moleculeBuilder().structure(borateEsterStructure).build())
+            .addProduct(moleculeBuilder().structure(structure).build(), 4)
+            .addProduct(DestroyMolecules.TETRAHYDROXYBORATE)
             .activationEnergy(50f)
             .build();
     };
