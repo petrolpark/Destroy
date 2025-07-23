@@ -6,117 +6,129 @@ import com.petrolpark.destroy.DestroyItems;
 import com.petrolpark.destroy.core.chemistry.vat.material.VatMaterial;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
-
+import com.tterrag.registrate.util.entry.RegistryEntry;
+import net.createmod.catnip.platform.CatnipServices;
+import net.createmod.ponder.api.registration.MultiTagBuilder;
 import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
-import net.createmod.ponder.api.registration.TagBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
 
 public class DestroyPonderTags {
 
     public static final ResourceLocation
-    CHEMISTRY = Destroy.asResource("chemistry"),
+        CHEMISTRY = Destroy.asResource("chemistry"),
+        DESTROY = Destroy.asResource("destroy"),
+        VAT_SIDE_BLOCKS = Destroy.asResource("vat_side_blocks");
 
-    DESTROY = Destroy.asResource("destroy"),
+    private static PonderTagRegistrationHelper<RegistryEntry<?>> HELPER = null;
+    private static PonderTagRegistrationHelper<ItemLike> ITEM_HELPER = null;
 
-    VAT_SIDE_BLOCKS = Destroy.asResource("vat_side_blocks");
-
-    private static PonderTagRegistrationHelper<ResourceLocation> helper = null;
     public static void register(PonderTagRegistrationHelper<ResourceLocation> helper) {
-        DestroyPonderTags.helper = helper;
+        HELPER = helper.withKeyFunction(RegistryEntry::getId);
+        ITEM_HELPER = helper.withKeyFunction(CatnipServices.REGISTRIES::getKeyOrThrow);
 
-        helper.registerTag(DestroyPonderTags.CHEMISTRY)
-                .addToIndex()
-                .item(AllBlocks.BASIN)
-            .item(DestroyBlocks.BLACKLIGHT)
-            .item(AllBlocks.BLAZE_BURNER)
-            .item(DestroyBlocks.BUBBLE_CAP)
-            .item(DestroyBlocks.CENTRIFUGE)
-            .item(DestroyBlocks.COOLER)
-            .item(AllBlocks.MECHANICAL_MIXER)
-            .item(DestroyBlocks.VAT_CONTROLLER)
-                .icon(DestroyItems.TEST_TUBE.getId())
-                .register();
-        ;
-        
-        helper.registerTag(DestroyPonderTags.DESTROY)
-                .addToIndex()
-            .item(DestroyBlocks.AGING_BARREL)
-            .item(DestroyBlocks.BLACKLIGHT)
-            .item(DestroyBlocks.BUBBLE_CAP)
-            .item(DestroyBlocks.CATALYTIC_CONVERTER)
-            .item(DestroyBlocks.CENTRIFUGE)
-            .item(DestroyBlocks.COOLER)
-            .item(DestroyBlocks.CREATIVE_PUMP)
-            .item(DestroyBlocks.CUSTOM_EXPLOSIVE_MIX)
-            .item(DestroyBlocks.DYNAMO)
-            .item(DestroyBlocks.EXTRUSION_DIE)
-            .item(DestroyItems.HYPERACCUMULATING_FERTILIZER)
-            .item(DestroyBlocks.KEYPUNCH)
-            .item(DestroyItems.POLLUTION_SYMBOL)
-            .item(DestroyBlocks.PUMPJACK)
-            .item(DestroyBlocks.REDSTONE_PROGRAMMER)
-            .item(DestroyItems.SEISMOMETER)
-            .item(DestroyItems.SEISMOGRAPH)
-            .item(DestroyBlocks.SIPHON)
-            .item(DestroyBlocks.TREE_TAP)
-            .item(DestroyBlocks.VAT_CONTROLLER)
-                .icon(DestroyItems.LOGO.getId())
-                .register();
+        helper.registerTag(CHEMISTRY)
+            .addToIndex()
+            .item(DestroyItems.TEST_TUBE, true, false)
+            .register();
+
+        helper.registerTag(DESTROY)
+            .addToIndex()
+            .item(DestroyItems.LOGO)
+            .register();
+
+        helper.registerTag(VAT_SIDE_BLOCKS)
+            .addToIndex()
+            .item(DestroyBlocks.VAT_CONTROLLER, true, false)
+            .register();
+
+        HELPER.addToTag(CHEMISTRY)
+            .add(AllBlocks.BASIN)
+            .add(DestroyBlocks.BLACKLIGHT)
+            .add(AllBlocks.BLAZE_BURNER)
+            .add(DestroyBlocks.BUBBLE_CAP)
+            .add(DestroyBlocks.CENTRIFUGE)
+            .add(DestroyBlocks.COOLER)
+            .add(AllBlocks.MECHANICAL_MIXER)
+            .add(DestroyBlocks.VAT_CONTROLLER)
         ;
 
-        TagBuilder vatSideBlocksTagBuilder = helper.registerTag(DestroyPonderTags.VAT_SIDE_BLOCKS);
-        VatMaterial.BLOCK_MATERIALS.forEach((blockIngredient, material) -> blockIngredient.getDisplayedItemStacks().forEach(stack -> vatSideBlocksTagBuilder.item(stack.getItem())));
-        vatSideBlocksTagBuilder.icon(DestroyBlocks.VAT_CONTROLLER.getId()).register();
-
-        helper.registerTag(AllCreatePonderTags.FLUIDS)
-            .item(DestroyBlocks.BUBBLE_CAP)
-            .item(DestroyBlocks.CATALYTIC_CONVERTER)
-            .item(DestroyBlocks.CENTRIFUGE)
-            .item(DestroyBlocks.CREATIVE_PUMP)
-            .item(DestroyBlocks.PUMPJACK)
-            .item(DestroyBlocks.SIPHON)
-            .item(DestroyBlocks.TREE_TAP)
-            .item(DestroyBlocks.VAT_CONTROLLER)
+        HELPER.addToTag(DESTROY)
+            .add(DestroyBlocks.AGING_BARREL)
+            .add(DestroyBlocks.BLACKLIGHT)
+            .add(DestroyBlocks.BUBBLE_CAP)
+            .add(DestroyBlocks.CATALYTIC_CONVERTER)
+            .add(DestroyBlocks.CENTRIFUGE)
+            .add(DestroyBlocks.COOLER)
+            .add(DestroyBlocks.CREATIVE_PUMP)
+            .add(DestroyBlocks.CUSTOM_EXPLOSIVE_MIX)
+            .add(DestroyBlocks.DYNAMO)
+            .add(DestroyBlocks.EXTRUSION_DIE)
+            .add(DestroyItems.HYPERACCUMULATING_FERTILIZER)
+            .add(DestroyBlocks.KEYPUNCH)
+            .add(DestroyItems.POLLUTION_SYMBOL)
+            .add(DestroyBlocks.PUMPJACK)
+            .add(DestroyBlocks.REDSTONE_PROGRAMMER)
+            .add(DestroyItems.SEISMOMETER)
+            .add(DestroyItems.SEISMOGRAPH)
+            .add(DestroyBlocks.SIPHON)
+            .add(DestroyBlocks.TREE_TAP)
+            .add(DestroyBlocks.VAT_CONTROLLER)
         ;
 
-        helper.registerTag(AllCreatePonderTags.KINETIC_APPLIANCES)
-            .item(DestroyBlocks.CENTRIFUGE)
-            .item(DestroyBlocks.DYNAMO)
-            .item(DestroyBlocks.KEYPUNCH)
-            .item(DestroyBlocks.MECHANICAL_SIEVE)
-            .item(DestroyBlocks.PUMPJACK)
-            .item(DestroyBlocks.TREE_TAP)
+        MultiTagBuilder.Tag<ItemLike> vatSideBlocksTagBuilder = ITEM_HELPER.addToTag(VAT_SIDE_BLOCKS);
+        VatMaterial.BLOCK_MATERIALS.forEach((blockIngredient, material) -> blockIngredient.getDisplayedItemStacks().forEach(stack -> vatSideBlocksTagBuilder.add(stack.getItem())));
+
+        HELPER.addToTag(AllCreatePonderTags.FLUIDS)
+            .add(DestroyBlocks.BUBBLE_CAP)
+            .add(DestroyBlocks.CATALYTIC_CONVERTER)
+            .add(DestroyBlocks.CENTRIFUGE)
+            .add(DestroyBlocks.CREATIVE_PUMP)
+            .add(DestroyBlocks.PUMPJACK)
+            .add(DestroyBlocks.SIPHON)
+            .add(DestroyBlocks.TREE_TAP)
+            .add(DestroyBlocks.VAT_CONTROLLER)
         ;
 
-        helper.registerTag(AllCreatePonderTags.ARM_TARGETS)
-            .item(DestroyBlocks.AGING_BARREL)
+        HELPER.addToTag(AllCreatePonderTags.KINETIC_APPLIANCES)
+            .add(DestroyBlocks.CENTRIFUGE)
+            .add(DestroyBlocks.DYNAMO)
+            .add(DestroyBlocks.KEYPUNCH)
+            .add(DestroyBlocks.MECHANICAL_SIEVE)
+            .add(DestroyBlocks.PUMPJACK)
+            .add(DestroyBlocks.TREE_TAP)
         ;
 
-        helper.registerTag(AllCreatePonderTags.REDSTONE)
-            .item(DestroyBlocks.DYNAMO)
-            .item(DestroyBlocks.REDSTONE_PROGRAMMER)
-            .item(DestroyBlocks.SIPHON)
+        HELPER.addToTag(AllCreatePonderTags.ARM_TARGETS)
+            .add(DestroyBlocks.AGING_BARREL)
         ;
 
-        helper.registerTag(AllCreatePonderTags.DISPLAY_SOURCES)
-            .item(DestroyBlocks.BUBBLE_CAP)
-            .item(DestroyBlocks.CENTRIFUGE)
-            .item(DestroyBlocks.COLORIMETER)
-            .item(DestroyBlocks.POLLUTOMETER)
-            .item(DestroyBlocks.VAT_CONTROLLER)
+        HELPER.addToTag(AllCreatePonderTags.REDSTONE)
+            .add(DestroyBlocks.DYNAMO)
+            .add(DestroyBlocks.REDSTONE_PROGRAMMER)
+            .add(DestroyBlocks.SIPHON)
         ;
 
-        helper.registerTag(AllCreatePonderTags.CONTRAPTION_ACTOR)
-            .item(DestroyBlocks.EXTRUSION_DIE)
+        HELPER.addToTag(AllCreatePonderTags.DISPLAY_SOURCES)
+            .add(DestroyBlocks.BUBBLE_CAP)
+            .add(DestroyBlocks.CENTRIFUGE)
+            .add(DestroyBlocks.COLORIMETER)
+            .add(DestroyBlocks.POLLUTOMETER)
+            .add(DestroyBlocks.VAT_CONTROLLER)
         ;
 
-        helper.registerTag(AllCreatePonderTags.CREATIVE)
-            .item(DestroyBlocks.CREATIVE_PUMP)
+        HELPER.addToTag(AllCreatePonderTags.CONTRAPTION_ACTOR)
+            .add(DestroyBlocks.EXTRUSION_DIE)
         ;
-    };
+
+        HELPER.addToTag(AllCreatePonderTags.CREATIVE)
+            .add(DestroyBlocks.CREATIVE_PUMP)
+        ;
+    }
 
     public static final void refreshVatMaterialsTag() {
-        VatMaterial.BLOCK_MATERIALS.keySet().forEach(blockIngredient -> blockIngredient.getDisplayedItemStacks().forEach(stack -> helper.registerTag(VAT_SIDE_BLOCKS).item(stack.getItem())));
-    };
-    
-};
+        MultiTagBuilder.Tag<ItemLike> vatSideBlocksTagBuilder = ITEM_HELPER.addToTag(VAT_SIDE_BLOCKS);
+        VatMaterial.BLOCK_MATERIALS.keySet().forEach(blockIngredient -> blockIngredient.getDisplayedItemStacks().forEach(stack -> vatSideBlocksTagBuilder.add(stack.getItem())));
+    }
+
+}

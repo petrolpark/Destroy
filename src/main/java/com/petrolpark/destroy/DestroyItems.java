@@ -462,9 +462,10 @@ public class DestroyItems {
         .tag(DestroyTags.Items.LIABLE_TO_CHANGE.tag)
         .register();
 
-    public static final ItemEntry<Item>
-
     // FOOD AND DRINK
+
+    @MoveToPetrolparkLibrary //TODO also remove models, lang entries and textures
+    public static final ItemEntry<Item>
 
     BUTTER = REGISTRATE.item("butter", Item::new)
         .properties(p -> p
@@ -481,7 +482,10 @@ public class DestroyItems {
     MASHED_POTATO = REGISTRATE.item("mashed_potato", Item::new)
         .properties(p -> p
             .food(DestroyFoods.MASHED_POTATO)
-        ).register(),
+        ).register();
+
+    public static final ItemEntry<Item>
+
     EMPTY_CARTON = REGISTRATE.item("empty_carton", Item::new)
         .tag(AllItemTags.UPRIGHT_ON_BELT.tag)
         .register();

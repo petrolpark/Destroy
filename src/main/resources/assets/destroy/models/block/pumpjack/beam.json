@@ -1,6 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"parent": "create:block/large_wheels",
+	"render_type": "minecraft:cutout",
 	"textures": {
 		"2": "destroy:block/pumpjack",
 		"particle": "destroy:block/pumpjack"

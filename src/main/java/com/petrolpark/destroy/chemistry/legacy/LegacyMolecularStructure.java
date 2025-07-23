@@ -606,7 +606,9 @@ public class LegacyMolecularStructure implements Cloneable {
                 LegacyAtom atom = sideChains.get(i).getFirst().atom();
                 double totalBonds = getTotalBonds(newStructure.get(atom));
                 if (atom.getElement().getNextLowestValency(totalBonds) - totalBonds > 0) {
-                    sideChains.get(i).setSecond(LegacyMolecularStructure.atom(LegacyElement.HYDROGEN));
+                    LegacyAtom hydrogen = new LegacyAtom(LegacyElement.HYDROGEN);
+                    sideChains.get(i).setSecond(new LegacyMolecularStructure(hydrogen));
+                    addAtomToStructure(newStructure, atom, hydrogen, BondType.SINGLE);
                 };
             };
         };
@@ -633,25 +635,50 @@ public class LegacyMolecularStructure implements Cloneable {
      */
     public void updateSideChainStructures() {
         if (topology == Topology.LINEAR) return;
-        List<Pair<SideChainInformation, LegacyMolecularStructure>> newSideChains = new ArrayList<>();
+
         for (Pair<SideChainInformation, LegacyMolecularStructure> sideChain : sideChains) {
             LegacyMolecularStructure sideChainFormula = sideChain.getSecond();
             SideChainInformation info = sideChain.getFirst();
-            LegacyMolecularStructure newSideChainFormula = sideChainFormula.shallowCopy();
-            checkAllAtomsInSideChain: for (LegacyAtom atom : sideChainFormula.structure.keySet()) { // For every Atom in the side chain Formula, update it so it has all the same Bonds it has in the main structure
-                List<LegacyBond> bonds = new ArrayList<>();
-                if (structure.get(atom) == null) continue checkAllAtomsInSideChain; // If this Atom has no Bonds, don't do anything
-                addAllBondsForAtom: for (LegacyBond bond : structure.get(atom)) {
-                    LegacyAtom potentialNewAtom = bond.getDestinationAtom();
-                    if (topology.formula.structure.keySet().contains(potentialNewAtom)) continue addAllBondsForAtom; // Don't add Bonds to Atoms which are part of the Topology (and therefore not part of the side branch)
-                    if (!sideChainFormula.structure.keySet().contains(potentialNewAtom)) newSideChainFormula.structure.put(potentialNewAtom, structure.get(potentialNewAtom)); // Add any as-of-yet unknown Atoms to the side branch's structure
-                    bonds.add(bond);
-                };
-                newSideChainFormula.structure.put(atom, bonds);
-            };
-            newSideChains.add(Pair.of(info, newSideChainFormula));
-        };
-        sideChains = newSideChains;
+
+            if(sideChainFormula.startingAtom == null) continue;
+
+            LegacyMolecularStructure newSideChainFormula = new LegacyMolecularStructure(sideChainFormula.startingAtom);
+            Stack<LegacyAtom> frontier = new Stack<>();
+
+            // First add the starting Atom and its associated Bonds, excluding any Bond to Atoms which are part of the Topology (and therefore not part of the side branch)
+            List<LegacyBond> startingBonds = new ArrayList<>();
+            for(LegacyBond bond : structure.get(sideChainFormula.startingAtom)) {
+                LegacyAtom potentialNewAtom = bond.getDestinationAtom();
+
+                if (topology.formula.structure.keySet().contains(potentialNewAtom)) continue;
+
+                if (!newSideChainFormula.structure.keySet().contains(potentialNewAtom)) {
+                    // Assume side branches will never loop back to the main Topology
+                    // This means any Atom encountered can be directly added to the side branch without having to perform a full copy of its Bonds
+                    newSideChainFormula.structure.put(potentialNewAtom, structure.get(potentialNewAtom));
+                    frontier.push(potentialNewAtom);
+                }
+
+                startingBonds.add(bond);
+            }
+            newSideChainFormula.structure.put(sideChainFormula.startingAtom, startingBonds);
+
+            // Now walk through the rest of the side branch and copy any Atom encountered
+            while(!frontier.isEmpty()) {
+                LegacyAtom currentAtom = frontier.pop();
+
+                for(LegacyBond bond : structure.get(currentAtom)) {
+                    LegacyAtom newAtom = bond.getDestinationAtom();
+
+                    if (!newSideChainFormula.structure.keySet().contains(newAtom)) {
+                        newSideChainFormula.structure.put(newAtom, structure.get(newAtom));
+                        frontier.push(newAtom);
+                    }
+                }
+            }
+
+            sideChain.setSecond(newSideChainFormula);
+        }
     };
  
     /**
@@ -826,7 +853,7 @@ public class LegacyMolecularStructure implements Cloneable {
                 formula = topology.formula.shallowCopy(); // Gives a null warning which has been accounted for
                 if (topology.getConnections() == 0) return formula.refreshFunctionalGroups();
                 int i = 0;
-                for (String group : formulaString.split(",")) {
+                for (String group : formulaString.split(",", -1)) {
                     if (i > formula.topology.connections.size()) throw new MoleculeDeserializationException("Formula '" + FROWNSstring + "' has too many groups for its Topology. There should be " + formula.topology.connections.size() + ".");
                     LegacyMolecularStructure sideChain;
                     if (group.isBlank()) {

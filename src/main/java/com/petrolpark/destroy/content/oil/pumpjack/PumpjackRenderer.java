@@ -69,7 +69,7 @@ public class PumpjackRenderer extends SafeBlockEntityRenderer<PumpjackBlockEntit
 			.renderInto(ms, vbCutout);
 
         transformed(DestroyPartials.PUMPJACK_PUMP, blockState, facing)
-            .translate(0d, (3 / 16d) - (Mth.sin(angle) * 3 / 16d), 0d)
+            .translate(0d, -Mth.sin(angle) * 3 / 16d, 0d)
             .light(light)
 			.renderInto(ms, vbSolid);
         

@@ -21,31 +21,20 @@ public class AnimatedSieve extends AnimatedKinetics {
 		ms.mulPose(Axis.YP.rotationDegrees(112.5f));
 		ms.scale(23, 23, 23);
 
-        ms.pushPose();
-        TransformStack.of(ms)
-            .translate(0d, -0.5d, 0.5d)
-            .rotateYDegrees(90)
-            .rotateZDegrees(getCurrentAngle())
-            .translateBack(0.5d, -0.5d, 0d);
 		blockElement(DestroyPartials.MECHANICAL_SIEVE_SHAFT)
+            .rotateBlock(0, getCurrentAngle(), 90)
 			.render(graphics);
-        ms.popPose();
 
-        ms.pushPose();
-        TransformStack.of(ms)
-            .rotateYDegrees(90);
-        ms.translate(-1f + Mth.sin(getCurrentAngle() * Mth.PI / 180f) * 2 / 16d, 0d, 0d);
+        float offset = Mth.sin(getCurrentAngle() * Mth.PI / 180f) * 2 / 16f;
         blockElement(DestroyPartials.MECHANICAL_SIEVE)
+            .rotateBlock(0, 90, 0)
+            .atLocal(0f, 0f, offset)
             .render(graphics);
-        ms.pushPose();
-        TransformStack.of(ms)
-            .translate(0.5d, -0.5d, 0d)
-            .rotateZDegrees(getCurrentAngle())
-            .translateBack(0.5d, -0.5d, 0d);
+
         blockElement(DestroyPartials.MECHANICAL_SIEVE_LINKAGES)
+            .atLocal(0f, 0f, offset)
+            .rotateBlock(getCurrentAngle(), 90, 0)
             .render(graphics);
-        ms.popPose();
-        ms.popPose();
 
 		blockElement(DestroyBlocks.MECHANICAL_SIEVE.getDefaultState())
 			.atLocal(0, 0, 0)

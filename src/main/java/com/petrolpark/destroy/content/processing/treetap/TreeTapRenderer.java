@@ -29,7 +29,7 @@ public class TreeTapRenderer extends KineticBlockEntityRenderer<TreeTapBlockEnti
 		SuperByteBuffer armRenderer = CachedBuffers.partial(DestroyPartials.TREE_TAP_ARM, state);
         armRenderer
             .center()
-            .rotate(9f * Mth.sin(getAngleForBe(be, be.getBlockPos(), facing.getClockWise().getAxis())), facing.getClockWise().getAxis())
+            .rotateDegrees(9f * Mth.sin(getAngleForBe(be, be.getBlockPos(), facing.getClockWise().getAxis())), facing.getClockWise().getAxis())
             .rotateToFace(facing.getOpposite())
             .uncenter()
             .light(light)

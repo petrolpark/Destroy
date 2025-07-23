@@ -40,12 +40,14 @@ public class RedstoneProgrammerBlockEntityRenderer extends SafeBlockEntityRender
         cylinder
             .translate(0, 6 / 16d, 10 / 16d)
             .rotateXDegrees(rotation)
-            .translateBack(0, 6 / 16d, 10 / 16d);
+            .translateBack(0, 6 / 16d, 10 / 16d)
+            .light(light);
 
         needle
             .translate(0d, 8.5 / 16d, 5.5 / 16d)
             .rotateXDegrees(-2 + 8 * -Mth.sin(4 * AngleHelper.rad(rotation)))
-            .translateBack(0d, 8.5 / 16d, 5.5 / 16d);
+            .translateBack(0d, 8.5 / 16d, 5.5 / 16d)
+            .light(light);
 
         cylinder.renderInto(ms, vc);
         needle.renderInto(ms, vc);
@@ -59,6 +61,7 @@ public class RedstoneProgrammerBlockEntityRenderer extends SafeBlockEntityRender
                 .rotateYDegrees(AngleHelper.horizontalAngle(direction))
                 .translate(i % 2 == 0 ? 0f : 15 / 16f, 1 / 16f, (3 + 4.5F * (i / 2)) / 16f)
                 .uncenter()
+                .light(light)
                 .renderInto(ms, vc);
         };
     };

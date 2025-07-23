@@ -30,7 +30,8 @@ public class MechanicalSieveRenderer extends KineticBlockEntityRenderer<Mechanic
 
         BlockState state = be.getBlockState();
         boolean x = state.getValue(MechanicalSieveBlock.X);
-        VertexConsumer vc = buffer.getBuffer(RenderType.cutoutMipped());
+        VertexConsumer vbSolid = buffer.getBuffer(RenderType.solid());
+        VertexConsumer vbCutout = buffer.getBuffer(RenderType.cutout());
         float angle = getAngleForBe(be, be.getBlockPos(), x ? Axis.X : Axis.Z);
 
         ms.pushPose();
@@ -40,7 +41,8 @@ public class MechanicalSieveRenderer extends KineticBlockEntityRenderer<Mechanic
 
         ms.translate(Mth.sin(angle) * 2 / 16d + (x ? -1d : 0d), 0d , 0d);
         CachedBuffers.partial(DestroyPartials.MECHANICAL_SIEVE, state)
-            .renderInto(ms, vc);
+            .light(light)
+            .renderInto(ms, vbCutout);
 
         ms.pushPose();
         TransformStack.of(ms)
@@ -48,7 +50,8 @@ public class MechanicalSieveRenderer extends KineticBlockEntityRenderer<Mechanic
             .rotateZ(-angle)
             .uncenter();
         CachedBuffers.partial(DestroyPartials.MECHANICAL_SIEVE_LINKAGES, state)
-            .renderInto(ms, vc);
+            .light(light)
+            .renderInto(ms, vbSolid);
         ms.popPose();
 
 
@@ -59,7 +62,7 @@ public class MechanicalSieveRenderer extends KineticBlockEntityRenderer<Mechanic
 
     @Override
     protected SuperByteBuffer getRotatedModel(MechanicalSieveBlockEntity be, BlockState state) {
-        return CachedBuffers.partialFacing(DestroyPartials.MECHANICAL_SIEVE_SHAFT, state, state.getValue(MechanicalSieveBlock.X) ? Direction.EAST : Direction.SOUTH);
+        return CachedBuffers.partialFacingVertical(DestroyPartials.MECHANICAL_SIEVE_SHAFT, state, state.getValue(MechanicalSieveBlock.X) ? Direction.WEST : Direction.NORTH);
     };
     
 };

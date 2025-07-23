@@ -1,9 +1,5 @@
 package com.petrolpark.destroy.content.oil.pumpjack;
 
-import java.util.function.Consumer;
-
-import org.jetbrains.annotations.Nullable;
-
 import com.petrolpark.destroy.client.DestroyPartials;
 
 import dev.engine_room.flywheel.api.instance.Instance;
@@ -16,8 +12,11 @@ import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
 import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.Nullable;
 
-public class PumpjackInstance extends AbstractBlockEntityVisual<PumpjackBlockEntity> implements SimpleDynamicVisual {
+import java.util.function.Consumer;
+
+public class PumpjackVisual extends AbstractBlockEntityVisual<PumpjackBlockEntity> implements SimpleDynamicVisual {
 
     protected final TransformedInstance cam;
     protected final TransformedInstance linkage;
@@ -26,21 +25,24 @@ public class PumpjackInstance extends AbstractBlockEntityVisual<PumpjackBlockEnt
 
     private static final double beamRotation = Math.asin(5 / 17d);
 
-    public PumpjackInstance(VisualizationContext ctx, PumpjackBlockEntity blockEntity, float partialTick) {
+    public PumpjackVisual(VisualizationContext ctx, PumpjackBlockEntity blockEntity, float partialTick) {
         super(ctx, blockEntity, partialTick);
 
         cam = ctx.instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(DestroyPartials.PUMPJACK_CAM)).createInstance();
-
         linkage = ctx.instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(DestroyPartials.PUMPJACK_LINKAGE)).createInstance();
-
         beam = ctx.instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(DestroyPartials.PUMPJACK_BEAM)).createInstance();
-
         pump = ctx.instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(DestroyPartials.PUMPJACK_PUMP)).createInstance();
-    };
+
+        animate(partialTick);
+    }
 
     @Override
     public void beginFrame(Context ctx) {
-        Float angle = blockEntity.getRenderAngle();
+        animate(ctx.partialTick());
+    }
+
+    private void animate(float pt) {
+        float angle = blockEntity.getRenderAngle();
 
         Direction facing = PumpjackBlock.getFacing(blockState);
 
@@ -51,7 +53,8 @@ public class PumpjackInstance extends AbstractBlockEntityVisual<PumpjackBlockEnt
             .center()
             .translate(0d, 0d, -1d)
             .uncenter()
-            .uncenter();
+            .uncenter()
+            .setChanged();
 
         transformed(linkage, facing)
             .translate(0d, -4.5 / 16d, 1d)
@@ -61,7 +64,8 @@ public class PumpjackInstance extends AbstractBlockEntityVisual<PumpjackBlockEnt
             .center()
             .translate(0d, 0d, -1d)
             .uncenter()
-            .uncenter();
+            .uncenter()
+            .setChanged();
 
         transformed(beam, facing)
             .translate(0d, 1d, 0d)
@@ -70,24 +74,29 @@ public class PumpjackInstance extends AbstractBlockEntityVisual<PumpjackBlockEnt
             .center()
             .translate(0d, -1d, 0d)
             .uncenter()
-            .uncenter();
+            .uncenter()
+            .setChanged();
 
         transformed(pump, facing)
-            .translate(0d, (3 / 16) - (Mth.sin(angle) * 3 / 16d), 0d);
-    };
+            .translate(0d, -Mth.sin(angle) * 3 / 16d, 0d)
+            .setChanged();
+    }
 
     protected TransformedInstance transformed(TransformedInstance modelData, Direction facing) {
-		return modelData.setIdentityTransform()
-			.translate(pos)
-			.center()
-			.rotateYDegrees(AngleHelper.horizontalAngle(facing))
-			.uncenter();
-	};
+        return modelData.setIdentityTransform()
+            .translate(pos)
+            .center()
+            .rotateYDegrees(AngleHelper.horizontalAngle(facing))
+            .uncenter();
+    };
 
 
     @Override
     public void collectCrumblingInstances(Consumer<@Nullable Instance> consumer) {
-
+        consumer.accept(cam);
+        consumer.accept(linkage);
+        consumer.accept(beam);
+        consumer.accept(pump);
     }
 
     @Override

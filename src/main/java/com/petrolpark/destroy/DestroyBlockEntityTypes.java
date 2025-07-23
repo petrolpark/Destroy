@@ -7,7 +7,7 @@ import com.petrolpark.destroy.content.logistics.siphon.SiphonBlockEntity;
 import com.petrolpark.destroy.content.logistics.siphon.SiphonRenderer;
 import com.petrolpark.destroy.content.oil.pumpjack.PumpjackBlockEntity;
 import com.petrolpark.destroy.content.oil.pumpjack.PumpjackCamBlockEntity;
-import com.petrolpark.destroy.content.oil.pumpjack.PumpjackInstance;
+import com.petrolpark.destroy.content.oil.pumpjack.PumpjackVisual;
 import com.petrolpark.destroy.content.oil.pumpjack.PumpjackRenderer;
 import com.petrolpark.destroy.content.processing.ageing.AgeingBarrelBlockEntity;
 import com.petrolpark.destroy.content.processing.ageing.AgeingBarrelRenderer;
@@ -28,7 +28,7 @@ import com.petrolpark.destroy.content.processing.sieve.MechanicalSieveBlockEntit
 import com.petrolpark.destroy.content.processing.sieve.MechanicalSieveVisual;
 import com.petrolpark.destroy.content.processing.sieve.MechanicalSieveRenderer;
 import com.petrolpark.destroy.content.processing.treetap.TreeTapBlockEntity;
-import com.petrolpark.destroy.content.processing.treetap.TreeTapInstance;
+import com.petrolpark.destroy.content.processing.treetap.TreeTapVisual;
 import com.petrolpark.destroy.content.processing.treetap.TreeTapRenderer;
 import com.petrolpark.destroy.content.processing.trypolithography.keypunch.KeypunchBlockEntity;
 import com.petrolpark.destroy.content.processing.trypolithography.keypunch.KeypunchVisual;
@@ -167,7 +167,7 @@ public class DestroyBlockEntityTypes {
 
     public static final BlockEntityEntry<PumpjackBlockEntity> PUMPJACK = REGISTRATE
         .blockEntity("pumpjack", PumpjackBlockEntity::new)
-		.visual(() -> PumpjackInstance::new)
+		.visual(() -> PumpjackVisual::new)
 		.validBlocks(DestroyBlocks.PUMPJACK)
 		.renderer(() -> PumpjackRenderer::new)
 		.register();
@@ -202,7 +202,7 @@ public class DestroyBlockEntityTypes {
 
     public static final BlockEntityEntry<TreeTapBlockEntity> TREE_TAP = REGISTRATE
         .blockEntity("tree_tap", TreeTapBlockEntity::new)
-        .visual(() -> TreeTapInstance::new)
+        .visual(() -> TreeTapVisual::new)
         .validBlock(DestroyBlocks.TREE_TAP)
         .renderer(() -> TreeTapRenderer::new)
         .register();
