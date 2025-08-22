@@ -642,6 +642,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveL
         return cachedMixture.getTemperature();
     };
 
+    public float getUVPower() { return  UVPower; }
+
     /**
      * Get the pressure above room pressure of the gas in this Vat (in Pa).
      */

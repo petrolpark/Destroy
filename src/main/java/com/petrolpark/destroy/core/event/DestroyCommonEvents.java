@@ -17,10 +17,16 @@ import com.petrolpark.destroy.DestroyTags;
 import com.petrolpark.destroy.DestroyTags.MobEffects;
 import com.petrolpark.destroy.DestroyTrades;
 import com.petrolpark.destroy.DestroyVillagers;
+import com.petrolpark.destroy.compat.computercraft.DestroyPeripheralProvider;
+import com.petrolpark.destroy.compat.computercraft.peripherals.BubbleCapPeripheral;
+import com.petrolpark.destroy.compat.computercraft.peripherals.SiphonPeripheral;
+import com.petrolpark.destroy.compat.computercraft.peripherals.VatControllerPeripheral;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
+import com.petrolpark.destroy.content.logistics.siphon.SiphonBlockEntity;
 import com.petrolpark.destroy.content.oil.ChunkCrudeOil;
 import com.petrolpark.destroy.content.oil.CrudeOilCommand;
+import com.petrolpark.destroy.content.processing.distillation.BubbleCapBlockEntity;
 import com.petrolpark.destroy.content.processing.glassblowing.BlowpipeItem;
 import com.petrolpark.destroy.content.processing.trypolithography.CircuitPatternsS2CPacket;
 import com.petrolpark.destroy.content.processing.trypolithography.RegenerateCircuitPatternCommand;
@@ -39,9 +45,11 @@ import com.petrolpark.destroy.core.chemistry.novelcompounds.PlayerNovelCompounds
 import com.petrolpark.destroy.core.chemistry.storage.IMixtureStorageItem;
 import com.petrolpark.destroy.core.chemistry.storage.measuringcylinder.MeasuringCylinderBlock;
 import com.petrolpark.destroy.core.chemistry.storage.measuringcylinder.MeasuringCylinderBlockItem;
+import com.petrolpark.destroy.core.chemistry.vat.VatControllerBlockEntity;
 import com.petrolpark.destroy.core.chemistry.vat.material.SyncVatMaterialsS2CPacket;
 import com.petrolpark.destroy.core.chemistry.vat.material.VatMaterial;
 import com.petrolpark.destroy.core.chemistry.vat.material.VatMaterialResourceListener;
+import com.petrolpark.destroy.core.chemistry.vat.observation.colorimeter.ColorimeterBlockEntity;
 import com.petrolpark.destroy.core.debug.AttachedCheckCommand;
 import com.petrolpark.destroy.core.explosion.mixedexplosive.ExplosiveProperties;
 import com.petrolpark.destroy.core.extendedinventory.ExtendedInventory;
@@ -93,6 +101,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
@@ -160,6 +169,19 @@ public class DestroyCommonEvents {
                 event.addCapability(Destroy.asResource("novel_compounds_synthesized"), new PlayerNovelCompoundsSynthesizedCapability.Provider());
             };
         };
+    };
+
+    @SubscribeEvent
+    public static final void onAttachCapabilitiesBlockEntity(AttachCapabilitiesEvent<BlockEntity> event) {
+        if ( event.getObject() instanceof VatControllerBlockEntity vcbe ) {
+            DestroyPeripheralProvider.attach(event, vcbe, VatControllerPeripheral::new);
+        }
+        if ( event.getObject() instanceof SiphonBlockEntity sbe ) {
+            DestroyPeripheralProvider.attach(event, sbe, SiphonPeripheral::new);
+        }
+        if ( event.getObject() instanceof BubbleCapBlockEntity bcbe ) {
+            DestroyPeripheralProvider.attach(event, bcbe, BubbleCapPeripheral::new);
+        }
     };
 
     @SubscribeEvent

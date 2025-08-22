@@ -26,6 +26,7 @@
         "compat.jei.DeployingCategoryMixin",
         "compat.jei.MixingCategoryMixin",
         "compat.jei.PackingCategoryMixin",
+        "compat.cct.FluidMethodsMixin",
         "AbstractContainerMenuMixin",
         "AirCurrentMixin",
         "BasinBlockEntityMixin",

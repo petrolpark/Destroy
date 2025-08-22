@@ -1,5 +1,8 @@
 package com.petrolpark.destroy;
 
+import com.petrolpark.destroy.compat.computercraft.apis.ChemistryApi;
+import com.simibubi.create.compat.Mods;
+import dan200.computercraft.api.ComputerCraftAPI;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -125,6 +128,11 @@ public class Destroy {
         // Optional compatibility mods. According to the Create main class doing the same thing, this isn't thread safe
         CompatMods.BIG_CANNONS.executeIfInstalled(() -> () -> CreateBigCannons.init(modEventBus, forgeEventBus));
         CompatMods.CURIOS.executeIfInstalled(() -> () -> DestroyCurios.init(modEventBus, forgeEventBus));
+        Mods.COMPUTERCRAFT.executeIfInstalled(() -> () -> {
+            ComputerCraftAPI.registerAPIFactory(computer -> {
+                return new ChemistryApi();
+            });
+        });
     };
 
     // Initiation Events

@@ -8,7 +8,7 @@ import java.util.Optional;
  */
 public final class Holder<V> {
     
-    protected V held;
+    private V held;
 
     public static <V> Holder<V> hold(V object) {
         return new Holder<>(object);
