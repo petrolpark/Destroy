@@ -70,10 +70,13 @@ public class ExtendedInventory extends Inventory {
     };
 
     public static void refreshPlayerInventoryMenu(Player player, int columns, int invX, int invY, int leftHotbarSlots, int leftHotbarX, int leftHotbarY, int rightHotbarX, int rightHotbarY) {
-        player.inventoryMenu = new InventoryMenu(player.getInventory(), !player.level().isClientSide(), player); // Usually this field would be final; don't tell anybody I did this
+        InventoryMenu oldMenu = player.inventoryMenu;
+        InventoryMenu newMenu = new InventoryMenu(player.getInventory(), !player.level().isClientSide(), player); // Usually this field would be final; don't tell anybody I did this
+        player.inventoryMenu = newMenu;
         get(player).addExtraInventorySlotsToMenu(player.inventoryMenu, columns, invX, invY, leftHotbarSlots, leftHotbarX, leftHotbarY, rightHotbarX, rightHotbarY);
         player.containerMenu = player.inventoryMenu;
         if (player instanceof ServerPlayer sp && sp.containerSynchronizer != null && sp.containerListener != null) sp.initInventoryMenu();
+        newMenu.containerListeners.addAll(oldMenu.containerListeners);
     };
 
     public static void refreshPlayerInventoryMenu(Player player) {
