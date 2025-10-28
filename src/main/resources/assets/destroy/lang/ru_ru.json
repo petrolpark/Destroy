@@ -1123,7 +1123,6 @@
   "item.destroy.palladium_ingot": "Палладиевый слиток",
   "item.destroy.palladium_on_carbon": "Углеродистый палладий",
   "item.destroy.palladium_powder": "Палладиевая пыль",
-  "item.destroy.paper_pulp": "Бумажная масса",
   "item.destroy.perfume_bottle": "Флакон духов",
   "item.destroy.perfume_bottle.tooltip": "BOTTLE_OF_PERFUME",
   "item.destroy.perfume_bottle.tooltip.behaviour1": "Убирает эффект _пахучих_ химикатов.",

@@ -5,7 +5,7 @@ import com.mojang.math.Axis;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import net.createmod.catnip.animation.AnimationTickHolder;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -44,13 +44,13 @@ public class SyringeItemRenderer extends CustomRenderedItemModelRenderer {
             float time = (float) player.getUseItemRemainingTicks() - partialTicks + 1.0F;
             float progress = (stack.getUseDuration() - time) / stack.getUseDuration();
             
-            if (progress < MOVE_TO_CENTRE_TIME) { //gradually move to centre of screen
+            if (progress < MOVE_TO_CENTRE_TIME) { //gradually move to center of screen
 
                 ms.translate(X * modifier * progress / MOVE_TO_CENTRE_TIME, Y * progress / MOVE_TO_CENTRE_TIME, Z * progress / MOVE_TO_CENTRE_TIME);
                 ms.mulPose(Axis.YP.rotationDegrees(120 * modifier * progress / MOVE_TO_CENTRE_TIME));
                 ms.mulPose(Axis.ZP.rotationDegrees(-70 * modifier * progress / MOVE_TO_CENTRE_TIME));
 
-            } else { //hold at centre of screen
+            } else { //hold at center of screen
 
                 ms.translate(X * modifier, Y, Z);
                 ms.mulPose(Axis.YP.rotationDegrees(120 * modifier));

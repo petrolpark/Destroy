@@ -4,9 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.client.DestroyPartials;
 import com.petrolpark.destroy.core.explosion.PrimedBombEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
 
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
@@ -23,13 +23,13 @@ public class MixedExplosiveEntityRenderer extends PrimedBombEntityRenderer<Mixed
     public void renderBlock(MixedExplosiveEntity entity, PoseStack ms, MultiBufferSource buffer, int light, int fuse) {
         BlockState state = entity.getBlockStateToRender();
         VertexConsumer vc = buffer.getBuffer(Sheets.cutoutBlockSheet());
-        SuperByteBuffer base = CachedBufferer.partial(DestroyPartials.CUSTOM_EXPLOSIVE_MIX_BASE, state)
-            .forEntityRender()
+        SuperByteBuffer base = CachedBuffers.partial(DestroyPartials.CUSTOM_EXPLOSIVE_MIX_BASE, state)
+            .disableDiffuse()
             .light(light)
             .color(entity.color);
 
-        SuperByteBuffer label = CachedBufferer.partial(DestroyPartials.CUSTOM_EXPLOSIVE_MIX_OVERLAY, state)
-            .forEntityRender()
+        SuperByteBuffer label = CachedBuffers.partial(DestroyPartials.CUSTOM_EXPLOSIVE_MIX_OVERLAY, state)
+            .center()
             .light(light);
 
         if (fuse / 5 % 2 == 0) {

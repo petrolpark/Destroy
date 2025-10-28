@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.mixin.client;
 
+import net.createmod.catnip.theme.Color;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -7,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import com.jozufozu.flywheel.util.Color;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.core.fluid.TintedSplashParticle;
@@ -41,7 +41,7 @@ public class LevelRendererMixin {
         method = "renderSnowAndRain(Lnet/minecraft/client/renderer/LightTexture;FDDD)V",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture*(ILnet/minecraft/resources/ResourceLocation;)V",
+            target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/resources/ResourceLocation;)V",
             ordinal = 0
         )
     )
@@ -56,7 +56,7 @@ public class LevelRendererMixin {
         method = "renderSnowAndRain(Lnet/minecraft/client/renderer/LightTexture;FDDD)V",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture*(ILnet/minecraft/resources/ResourceLocation;)V",
+            target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/resources/ResourceLocation;)V",
             ordinal = 1
         )
     )

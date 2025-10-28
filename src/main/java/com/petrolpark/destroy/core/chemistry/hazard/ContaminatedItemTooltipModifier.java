@@ -3,7 +3,7 @@ package com.petrolpark.destroy.core.chemistry.hazard;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipModifier;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
+import net.createmod.catnip.lang.FontHelper.Palette;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;

@@ -28,31 +28,36 @@ public class DestroyFluids {
     };
     
     public static final FluidEntry<MixtureFluid> MIXTURE = REGISTRATE.virtualFluid("mixture",
-        new ResourceLocation("destroy", "fluid/mixture_still"),
-        new ResourceLocation("destroy", "fluid/mixture_flow"),
+        Destroy.asResource( "fluid/mixture_still"),
+        Destroy.asResource( "fluid/mixture_flow"),
         MixtureFluidType::new,
-        MixtureFluid::new
+        MixtureFluid::createSource,
+        MixtureFluid::createFlowing
         ).register();
 
     public static final FluidEntry<MixtureFluid> GAS_MIXTURE = REGISTRATE.virtualFluid("gas", // For display purposes only
-        new ResourceLocation("destroy", "fluid/gas"),
-        new ResourceLocation("destroy", "fluid/gas"),
+        Destroy.asResource("fluid/gas"),
+        Destroy.asResource("fluid/gas"),
         MixtureFluidType::new,
-        MixtureFluid::new
+        MixtureFluid::createSource,
+        MixtureFluid::createFlowing
         ).register();
 
     public static final FluidEntry<MoltenStainlessSteelFluid> MOLTEN_STAINLESS_STEEL = REGISTRATE.virtualFluid("molten_stainless_steel",
         Destroy.asResource("block/molten_stainless_steel"),
         Destroy.asResource("block/molten_stainless_steel"),
         CreateRegistrate::defaultFluidType,
-        MoltenStainlessSteelFluid::new
+        MoltenStainlessSteelFluid::createSource,
+            MoltenStainlessSteelFluid::createFlowing
+
         ).register();
 
     public static final FluidEntry<MoltenBorosilicateGlassFluid> MOLTEN_BOROSILICATE_GLASS = REGISTRATE.virtualFluid("molten_borosilicate_glass",
         Destroy.asResource("block/molten_borosilicate_glass"),
         Destroy.asResource("block/molten_borosilicate_glass"),
         CreateRegistrate::defaultFluidType,
-        MoltenBorosilicateGlassFluid::new
+        MoltenBorosilicateGlassFluid::createSource,
+            MoltenBorosilicateGlassFluid::createFlowing
         ).register();
 
     public static final FluidEntry<VirtualFluid>
@@ -107,7 +112,7 @@ public class DestroyFluids {
     };
 
     private static FluidBuilder<VirtualFluid, CreateRegistrate> coloredWaterFluid(String name, int color) {
-        return coloredFluid(name, color, new ResourceLocation("minecraft", "block/water_still"), new ResourceLocation("minecraft", "block/water_flow"));
+        return coloredFluid(name, color, ResourceLocation.fromNamespaceAndPath("minecraft", "block/water_still"), ResourceLocation.fromNamespaceAndPath("minecraft", "block/water_flow"));
     };
 
     private static FluidBuilder<VirtualFluid, CreateRegistrate> coloredSwirlingFluid(String name, int color) {
@@ -119,7 +124,7 @@ public class DestroyFluids {
     };
 
     private static FluidBuilder<VirtualFluid, CreateRegistrate> coloredFluid(String name, int color, ResourceLocation stillTexture, ResourceLocation flowingTexture) {
-        return REGISTRATE.virtualFluid(name, stillTexture, flowingTexture, (properties, st, ft) -> new ColoredFluidType(properties, st, ft, color), VirtualFluid::new);
+        return REGISTRATE.virtualFluid(name, stillTexture, flowingTexture, (properties, st, ft) -> new ColoredFluidType(properties, st, ft, color), VirtualFluid::createSource, VirtualFluid::createFlowing);
     };
 
     public static boolean isMixture(FluidStack stack) {

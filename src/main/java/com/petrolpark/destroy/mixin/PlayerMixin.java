@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.authlib.GameProfile;
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.core.extendedinventory.ExtendedInventory;
 
 import net.minecraft.core.BlockPos;
@@ -19,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 @Mixin(Player.class)
+@MoveToPetrolparkLibrary
 public abstract class PlayerMixin extends LivingEntity {
 
     protected PlayerMixin(EntityType<? extends LivingEntity> pEntityType, Level pLevel) {

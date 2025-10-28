@@ -6,7 +6,7 @@ import org.joml.Vector3f;
 
 import com.petrolpark.destroy.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.core.chemistry.storage.SimpleMixtureTankBlockEntity.SimplePlaceableMixtureTankBlockEntity;
-import com.simibubi.create.foundation.utility.Couple;
+import net.createmod.catnip.data.Couple;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 
 import net.minecraft.core.BlockPos;

@@ -22,9 +22,9 @@ import com.petrolpark.destroy.chemistry.legacy.genericreaction.SingleGroupGeneri
 import com.petrolpark.destroy.chemistry.legacy.index.DestroyMolecules;
 import com.petrolpark.destroy.chemistry.legacy.reactionresult.NovelCompoundSynthesizedReactionResult;
 import com.petrolpark.destroy.core.chemistry.basinreaction.ReactionInBasinRecipe.ReactionInBasinResult;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.Pair;
 
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -654,7 +654,7 @@ public class LegacyMixture extends ReadOnlyMixture {
         // Add Reaction Results to new Mixtures
         for (Entry<ReactionResult, Float> entry : reactionResults.entrySet()) {
             double resultMoles = entry.getValue() * initialVolume;
-            double newTotalVolume = newLiquidVolume * newGasVolume;
+            double newTotalVolume = newLiquidVolume + newGasVolume;
             liquidMixture.reactionResults.put(entry.getKey(), (float)(resultMoles / newTotalVolume)); // A cancelled-out expression for (resultMoles / liquidVolume)  * (liquidVolume / (liquidVolume + gasVolume)). Essentially we just divvy out the results based on the volumes of the two phases
             gasMixture.reactionResults.put(entry.getKey(), (float)(resultMoles / newTotalVolume));
         };
@@ -768,7 +768,6 @@ public class LegacyMixture extends ReadOnlyMixture {
 
             // Decrease the amount of Reaction that has happened
             reactionResults.replace(result, molesPerLiterOfReaction - numberOfResult * result.getRequiredMoles() / (float)volumeInLiters);
-
             results.put(result, numberOfResult);
         };
         // reactionResults.keySet().removeIf(result -> { // Remove any one-off Results and Results which have run out

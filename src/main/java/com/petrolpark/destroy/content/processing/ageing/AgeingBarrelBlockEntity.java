@@ -7,13 +7,13 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import org.jetbrains.annotations.NotNull;
 
 import com.petrolpark.destroy.DestroyRecipeTypes;
 import com.petrolpark.destroy.DestroySoundEvents;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.core.pollution.PollutingBehaviour;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -71,6 +71,7 @@ public class AgeingBarrelBlockEntity extends SmartBlockEntity implements IHaveGo
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         tank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.TYPE, this, 1, TANK_CAPACITY, true)
             .whenFluidUpdates(() -> {
+                checkRecipe();
                 sendData();
                 if (timer == 0) timer = -1;
                 onTimerChange();

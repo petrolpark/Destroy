@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.mixin;
 
+import net.createmod.catnip.gui.ScreenOpener;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -9,7 +10,6 @@ import com.petrolpark.destroy.core.bettervaluesettings.BetterValueSettingsScreen
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsClient;
-import com.simibubi.create.foundation.gui.ScreenOpener;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.phys.BlockHitResult;
@@ -28,7 +28,7 @@ public class ValueSettingsClientMixin {
         method = "Lcom/simibubi/create/foundation/blockEntity/behaviour/ValueSettingsClient;tick()V",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/simibubi/create/foundation/gui/ScreenOpener;open(Lnet/minecraft/client/gui/screens/Screen;)V"
+            target = "Lnet/createmod/catnip/gui/ScreenOpener;open(Lnet/minecraft/client/gui/screens/Screen;)V"
         ),
         cancellable = true,
         remap = false
@@ -49,7 +49,8 @@ public class ValueSettingsClientMixin {
             thisValueSettingsClient().interactHeldHand,
             valueSettingBehaviour.createBoard(mc.player, blockHitResult),
             valueSettingBehaviour.getValueSettings(),
-            valueSettingBehaviour::newSettingHovered)
+            valueSettingBehaviour::newSettingHovered,
+            valueSettingBehaviour.netId())
         );
         
         // Replace the cancelled code

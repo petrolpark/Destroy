@@ -13,7 +13,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsFormatter;
-import com.simibubi.create.foundation.utility.VecHelper;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -129,7 +128,7 @@ public class SidedScrollValueBehaviour extends BlockEntityBehaviour implements B
     public boolean testHit(Vec3 hit) {
         BlockState state = blockEntity.getBlockState();
 		Vec3 localHit = hit.subtract(Vec3.atLowerCornerOf(blockEntity.getBlockPos()));
-		return slotPositioning.testHit(state, localHit);
+		return slotPositioning.testHit(blockEntity.getLevel(), blockEntity.getBlockPos(), state, localHit);
     };
 
     @Override
@@ -168,10 +167,10 @@ public class SidedScrollValueBehaviour extends BlockEntityBehaviour implements B
 	};
 
     @Override
-    public void onShortInteract(Player player, InteractionHand hand, Direction side) {
+    public void onShortInteract(Player player, InteractionHand hand, Direction side, BlockHitResult hitResult) {
         lastSideAccessed = side;
         if (player instanceof FakePlayer)
-			blockEntity.getBlockState().use(getWorld(), player, hand, new BlockHitResult(VecHelper.getCenterOf(getPos()), side, getPos(), true));
+			blockEntity.getBlockState().use(getWorld(), player, hand, hitResult);
     };
 
     @Override

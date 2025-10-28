@@ -1,11 +1,11 @@
 package com.petrolpark.destroy.content.processing.glassblowing;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -72,8 +72,8 @@ public class BlowpipeItemRenderer extends CustomRenderedItemModelRenderer {
         } else if (!tank.isEmpty()) {
             ms.pushPose();
             ms.translate(0f, 0f, -8 / 16f);
-            TransformStack.cast(ms)
-                .rotateY(180d);
+            TransformStack.of(ms)
+                .rotateYDegrees(180);
             BlowpipeBlockEntityRenderer.render(recipe, tank.getFluid(), progressProportion, ms, buffer, light, overlay);
             ms.popPose();
         };

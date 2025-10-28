@@ -1,0 +1,10 @@
+{
+    "providers": [
+        {
+            "type": "bitmap",
+            "file": "destroy:font/charge.png",
+	        "ascent": 7,
+	        "chars": ["0123456789+-"]
+        }
+    ]
+}

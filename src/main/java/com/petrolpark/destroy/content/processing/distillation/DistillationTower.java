@@ -11,15 +11,14 @@ import com.petrolpark.destroy.chemistry.legacy.LegacyMixture;
 import com.petrolpark.destroy.chemistry.legacy.LegacySpecies;
 import com.petrolpark.destroy.chemistry.legacy.ReadOnlyMixture;
 import com.petrolpark.destroy.chemistry.minecraft.MixtureFluid;
-import com.petrolpark.destroy.compat.tfmg.SharedDistillationRecipes;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.core.pollution.Pollution;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -130,7 +129,6 @@ public class DistillationTower {
                 DistillationRecipe recipe = (DistillationRecipe) r;
                 return (recipe.getRequiredFluid().test(inputTank.getFluid())) && recipe.isValidAt(level, getControllerPos()); // If there is sufficient input Fluid and we're in the right biome
             }).collect(Collectors.toList());
-            possibleRecipes.addAll(SharedDistillationRecipes.getTFMGToDestroyRecipes(level));
             if (possibleRecipes.size() >= 1) {
                 lastRecipe = (DistillationRecipe)possibleRecipes.get(0);
             } else {

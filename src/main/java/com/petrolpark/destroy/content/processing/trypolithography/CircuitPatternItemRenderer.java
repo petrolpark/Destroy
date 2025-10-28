@@ -3,7 +3,6 @@ package com.petrolpark.destroy.content.processing.trypolithography;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
 import com.petrolpark.PetrolparkItemDisplayContexts;
@@ -14,6 +13,7 @@ import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.BlockModel;
@@ -58,7 +58,7 @@ public class CircuitPatternItemRenderer extends CustomRenderedItemModelRenderer 
         Minecraft mc = Minecraft.getInstance();
 
         if (transformType == PetrolparkItemDisplayContexts.BELT) {
-            if (stack.getOrCreateTag().contains("Flipped")) TransformStack.cast(ms).rotateY(180);
+            if (stack.getOrCreateTag().contains("Flipped")) TransformStack.of(ms).rotateYDegrees(180);
         };
 
         ItemRenderer itemRenderer = mc.getItemRenderer();

@@ -12,8 +12,8 @@ import com.google.gson.JsonSyntaxException;
 import com.petrolpark.destroy.DestroyRecipeTypes;
 import com.petrolpark.destroy.content.processing.trypolithography.CircuitPatternItem;
 import com.petrolpark.recipe.manualonly.ManualOnlyShapedRecipe;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;

@@ -89,7 +89,6 @@ public class DestroyItems {
     // PLASTICS
     
     POLYETHENE_TEREPHTHALATE = REGISTRATE.item("polyethene_terephthalate", Item::new)
-        .tag(DestroyTags.Items.PLASTICS.tag, DestroyTags.Items.TEXTILE_PLASTICS.tag)
         .register(),
     POLYVINYL_CHLORIDE = REGISTRATE.item("polyvinyl_chloride", Item::new)
         .tag(DestroyTags.Items.PLASTICS.tag, DestroyTags.Items.RIGID_PLASTICS.tag)
@@ -463,9 +462,10 @@ public class DestroyItems {
         .tag(DestroyTags.Items.LIABLE_TO_CHANGE.tag)
         .register();
 
-    public static final ItemEntry<Item>
-
     // FOOD AND DRINK
+
+    @MoveToPetrolparkLibrary //TODO also remove models, lang entries and textures
+    public static final ItemEntry<Item>
 
     BUTTER = REGISTRATE.item("butter", Item::new)
         .properties(p -> p
@@ -482,7 +482,10 @@ public class DestroyItems {
     MASHED_POTATO = REGISTRATE.item("mashed_potato", Item::new)
         .properties(p -> p
             .food(DestroyFoods.MASHED_POTATO)
-        ).register(),
+        ).register();
+
+    public static final ItemEntry<Item>
+
     EMPTY_CARTON = REGISTRATE.item("empty_carton", Item::new)
         .tag(AllItemTags.UPRIGHT_ON_BELT.tag)
         .register();
@@ -740,8 +743,6 @@ public class DestroyItems {
 
     DISCHARGED_VOLTAIC_PILE = REGISTRATE.item("discharged_voltaic_pile", Item::new)
         .tag(DestroyTags.Items.LIABLE_TO_CHANGE.tag)
-        .register(),
-    PAPER_PULP = REGISTRATE.item("paper_pulp", Item::new)
         .register(),
     MESH = REGISTRATE.item("mesh", Item::new)
         .register(),

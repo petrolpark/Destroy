@@ -7,10 +7,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.petrolpark.destroy.DestroyClient;
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.core.extendedinventory.ExtendedInventoryClientHandler;
 
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 
+@MoveToPetrolparkLibrary
 @Mixin(RecipeBookComponent.class)
 public abstract class RecipeBookComponentMixin {
 

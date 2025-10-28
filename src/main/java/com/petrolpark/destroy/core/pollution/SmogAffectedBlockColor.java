@@ -6,9 +6,9 @@ import java.util.function.IntSupplier;
 import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.core.pollution.Pollution.PollutionType;
-import com.simibubi.create.foundation.ponder.PonderWorld;
-import com.simibubi.create.foundation.utility.Color;
 
+import net.createmod.catnip.theme.Color;
+import net.createmod.ponder.api.level.PonderLevel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.core.BlockPos;
@@ -65,7 +65,7 @@ public class SmogAffectedBlockColor implements BlockColor {
 
     @Override
     public int getColor(BlockState state, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos, int tintIndex) {
-        if (level != null && level instanceof PonderWorld ponder) return getColor(fallback.getAsInt(), ponder.getCapability(Pollution.CAPABILITY));
+        if (level != null && level instanceof PonderLevel ponder) return getColor(fallback.getAsInt(), ponder.getCapability(Pollution.CAPABILITY));
         return wrapped.getColor(state, level, pos, tintIndex);
     };
 

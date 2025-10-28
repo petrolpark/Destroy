@@ -10,8 +10,8 @@ import com.petrolpark.destroy.DestroyTags;
 import com.petrolpark.destroy.content.processing.dynamo.arcfurnace.ArcFurnaceLidBlock;
 import com.petrolpark.recipe.ingredient.BlockIngredient;
 import com.petrolpark.recipe.ingredient.BlockIngredient.BlockTagIngredient;
-import com.simibubi.create.content.contraptions.BlockMovementChecks;
-import com.simibubi.create.content.contraptions.BlockMovementChecks.CheckResult;
+import com.simibubi.create.api.contraption.BlockMovementChecks;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 
@@ -114,13 +114,13 @@ public class DynamoBlock extends KineticBlock implements IBE<DynamoBlockEntity> 
         level.setBlock(context.getClickedPos(), state.cycle(AXIS), 3);
 
         if (level.getBlockState(context.getClickedPos()) != state)
-            playRotateSound(context.getLevel(), context.getClickedPos());
+            IWrenchable.playRotateSound(context.getLevel(), context.getClickedPos());
 
         return InteractionResult.SUCCESS;
     };
 
     public static BlockMovementChecks.CheckResult isMovementAllowed(BlockState state, Level world, BlockPos pos) {
-        if ((state.getBlock() instanceof DynamoBlock && state.getValue(ARC_FURNACE)) || state.getBlock() instanceof ArcFurnaceLidBlock) return CheckResult.FAIL;
+        if ((state.getBlock() instanceof DynamoBlock && state.getValue(ARC_FURNACE)) || state.getBlock() instanceof ArcFurnaceLidBlock) return BlockMovementChecks.CheckResult.FAIL;
         return BlockMovementChecks.CheckResult.PASS;
     };
 

@@ -5,11 +5,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.DestroyTags.Items;
 import com.simibubi.create.content.schematics.cannon.SchematicannonInventory;
 
 import net.minecraft.world.item.ItemStack;
 
+@MoveToPetrolparkLibrary
 @Mixin(SchematicannonInventory.class)
 public class SchematicannonInventoryMixin {
     

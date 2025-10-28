@@ -62,6 +62,7 @@ public class SeismometerItem extends Item {
                     .filter(DestroyItems.SEISMOGRAPH::isIn)
                     .filter(stack -> {
                         MapItemSavedData mapData = MapItem.getSavedData(stack, level);
+                        if (mapData == null) return false;
                         return (SeismographItem.mapChunkCenter(chunkX) * 16 == mapData.centerX && SeismographItem.mapChunkCenter(chunkZ) * 16 == mapData.centerZ);
                     })
                     .toList();

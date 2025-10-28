@@ -1,23 +1,24 @@
 {
     "parent": "destroy:urinate",
     "criteria": {
-      "hold": {
+      "hold_ingot": {
         "trigger": "minecraft:inventory_changed",
         "conditions": {
             "items": [
                 {
-                    "item": "destroy:nether_crocoite"
-                },
-                {
-                  "tag": "forge:raw_materials/chromium"
-                },
-                {
                   "tag": "forge:ingots/chromium"
-                },
-                {
-                  "item": "destroy:crushed_raw_chromium"
                 }
             ]
+        }
+      },
+      "hold_nugget": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "tag": "forge:nuggets/chromium"
+            }
+          ]
         }
       }
     },
@@ -35,7 +36,7 @@
     },
     "requirements": [
       [
-        "hold"
+        "hold_ingot", "hold_nugget"
       ]
     ]
   }

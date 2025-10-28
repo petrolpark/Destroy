@@ -33,7 +33,7 @@ public class SievingCategory extends PetrolparkRecipeCategory<SievingRecipe> {
             builder.addSlot(RecipeIngredientRole.OUTPUT, 75 + i * 19 - xOffset, 70)
                 .setBackground(getRenderedSlot(output), -1, -1)
                 .addItemStack(output.getStack())
-                .addTooltipCallback(addStochasticTooltip(output));
+                .addRichTooltipCallback(addStochasticTooltip(output));
             i++;
         };
 

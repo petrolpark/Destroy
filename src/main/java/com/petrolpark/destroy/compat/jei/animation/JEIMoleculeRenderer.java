@@ -13,16 +13,6 @@ public class JEIMoleculeRenderer extends MoleculeRenderer implements IDrawable {
     };
 
     @Override
-    public int getWidth() {
-        return width;
-    };
-
-    @Override
-    public int getHeight() {
-        return height;
-    };
-
-    @Override
     public void draw(GuiGraphics graphics, int xOffset, int yOffset) {
         render(xOffset, yOffset, graphics);
     };

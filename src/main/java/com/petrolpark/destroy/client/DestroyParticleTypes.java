@@ -10,7 +10,7 @@ import com.petrolpark.destroy.core.fluid.TintedSplashParticle;
 import com.petrolpark.destroy.core.fluid.gasparticle.BoilingFluidBubbleParticleData;
 import com.petrolpark.destroy.core.fluid.gasparticle.GasParticleData;
 import com.simibubi.create.foundation.particle.ICustomParticleData;
-import com.simibubi.create.foundation.utility.Lang;
+import net.createmod.catnip.lang.Lang;
 
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;

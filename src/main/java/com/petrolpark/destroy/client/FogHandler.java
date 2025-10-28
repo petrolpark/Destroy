@@ -5,12 +5,13 @@ import com.petrolpark.destroy.DestroyClient;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.core.pollution.Pollution.PollutionType;
 import com.petrolpark.destroy.core.pollution.PollutionHelper;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import com.simibubi.create.foundation.utility.Color;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.theme.Color;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.FogType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,8 +27,8 @@ public class FogHandler {
 
     private static final Color BROWN = new Color(0xFF4D2F19);
 
-    protected Color targetColor = new Color(0x00FFFFFF);
-    protected Color lastColor = new Color(0x00FFFFFF);
+    protected Color targetColor = Color.BLACK;
+    protected Color lastColor = Color.TRANSPARENT_BLACK;
     protected LerpedFloat colorMix = LerpedFloat.linear();
 
     public void tick() {
@@ -35,12 +36,16 @@ public class FogHandler {
         if (colorMix.getValue() >= 1d) lastColor = targetColor;
     };
 
-    public void setTargetColor(Color color) {
+    public void setTargetColor(Color color, float partialTicks) {
         if (color.equals(targetColor)) return;
-        lastColor = Color.mixColors(lastColor, targetColor, colorMix.getValue());
+        if (lastColor.equals(Color.TRANSPARENT_BLACK)) {
+            lastColor = color;
+        } else {
+            lastColor = getColor(partialTicks);
+        }
         targetColor = color;
         colorMix.setValue(0d);
-        colorMix.chase(1d, 0.2d, Chaser.EXP);
+        colorMix.chase(1d, 0.2d, LerpedFloat.Chaser.EXP);
     };
 
     public Color getColor(float partialTicks) {
@@ -57,12 +62,25 @@ public class FogHandler {
     };
 
     /**
+     * {@link Camera#getFluidInCamera()} doesn't account for modded fluids so we need a more general check.
+     */
+    private static FogType getFluidInCamera(Camera camera) {
+        Minecraft mc = Minecraft.getInstance();
+        FluidState state = mc.level.getFluidState(camera.getBlockPosition());
+        if (camera.getPosition().y < (double)((float)camera.getBlockPosition().getY() + state.getHeight(mc.level, camera.getBlockPosition()))) {
+            return FogType.WATER;
+        }
+        return camera.getFluidInCamera();
+    };
+
+    /**
      * Render fog according to the world's Smog Level.
      */
     @SubscribeEvent
     public static void renderFog(RenderFog event) {
         if (!smogEnabled()) return;
-        if (event.getType() == FogType.NONE) {
+
+        if (getFluidInCamera(event.getCamera()) == FogType.NONE) {
             Minecraft mc = Minecraft.getInstance();
             float smog = (float)PollutionHelper.getPollution(mc.level, mc.player.blockPosition(), PollutionType.SMOG);
             event.scaleNearPlaneDistance(1f - (0.8f * smog / (float)PollutionType.SMOG.max));
@@ -77,11 +95,12 @@ public class FogHandler {
     @SubscribeEvent
     public static void colorFog(ComputeFogColor event) {
         if (!smogEnabled()) return;
-        if (event.getCamera().getFluidInCamera() == FogType.NONE) {
+
+        if (getFluidInCamera(event.getCamera()) == FogType.NONE) {
             Minecraft mc = Minecraft.getInstance();
             float smog = (float)PollutionHelper.getPollution(mc.level, mc.player.blockPosition(), PollutionType.SMOG);
             Color existing = new Color(event.getRed(), event.getGreen(), event.getBlue(), 1f);
-            DestroyClient.FOG_HANDLER.setTargetColor(Color.mixColors(existing, BROWN, 0.8f * smog / (float)PollutionType.SMOG.max));
+            DestroyClient.FOG_HANDLER.setTargetColor(Color.mixColors(existing, BROWN, 0.8f * smog / (float)PollutionType.SMOG.max), AnimationTickHolder.getPartialTicks());
             Color color = DestroyClient.FOG_HANDLER.getColor(AnimationTickHolder.getPartialTicks());
             event.setRed(color.getRedAsFloat());
             event.setGreen(color.getGreenAsFloat());

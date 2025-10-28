@@ -11,51 +11,55 @@ import org.joml.Math;
 import org.joml.Quaternionf;
 
 import com.google.common.collect.ImmutableList;
-import com.jozufozu.flywheel.util.AnimationTickHolder;
-import com.jozufozu.flywheel.util.transform.TransformStack;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import com.petrolpark.destroy.chemistry.legacy.LegacyAtom;
-import com.petrolpark.destroy.chemistry.legacy.LegacySpecies;
 import com.petrolpark.destroy.chemistry.legacy.LegacyBond.BondType;
 import com.petrolpark.destroy.chemistry.legacy.LegacyMolecularStructure.Topology.SideChainInformation;
+import com.petrolpark.destroy.chemistry.legacy.LegacySpecies;
 import com.petrolpark.destroy.chemistry.serializer.Branch;
 import com.petrolpark.destroy.chemistry.serializer.Edge;
 import com.petrolpark.destroy.chemistry.serializer.Node;
 import com.petrolpark.util.MathsHelper;
-import com.simibubi.create.foundation.gui.ILightingSettings;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
-import com.simibubi.create.foundation.utility.Pair;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.gui.ILightingSettings;
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.gui.element.GuiGameElement;
+import net.createmod.ponder.render.VirtualRenderHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.RenderTypeGroup;
+import net.minecraftforge.client.model.IModelBuilder;
+import net.minecraftforge.client.model.pipeline.QuadBakingVertexConsumer;
+import net.minecraftforge.client.textures.UnitTextureAtlasSprite;
 
 public class MoleculeRenderer {
 
     protected String moleculeID;
 
-    /**
-     * The distance from 0 to the highest X value of any rendered object.
-     */
-    protected int width;
-    /**
-     * The distance from 0 to the highest Y value of any rendered object.
-     */
-    protected int height;
-    /**
-     * How far below X = 0 this rendered Molecule extends.
-     */
-    protected int xOffset;
-    /**
-     * How far above Y = 0 this rendered Molecule extends (remember positive Y is down).
-     */
-    protected int yOffset;
-    /**
-     * How far behind Z = 0 this rendered Molecule extends
-     */
-    protected int zOffset;
+    protected AABB bb;
 
     protected static final double SCALE = 23d;
     protected static final double BOND_LENGTH = SCALE / 2;
+
+    protected BakedModel model;
 
     /**
      * The list of Atoms and Bonds to render, and their locations.
@@ -65,11 +69,7 @@ public class MoleculeRenderer {
 
     public MoleculeRenderer(LegacySpecies molecule) {
         moleculeID = molecule.getFullID();
-        width = 0;
-        height = 0;
-        xOffset = 5;
-        yOffset = 0;
-        zOffset = 0;
+        bb = new AABB(Vec3.ZERO, Vec3.ZERO);
         RENDERED_OBJECTS = new ArrayList<>();
 
         // Monatomic Molecules
@@ -132,23 +132,26 @@ public class MoleculeRenderer {
 
         // Rescale the Renderer to fit every Atom
         for (Pair<Vec3, IRenderableMoleculePart> pair : RENDERED_OBJECTS) {
-            width = Math.max(width, (int)pair.getFirst().x);
-            height = Math.max(height, (int)pair.getFirst().y);
-            // Set the X and Y offsets to the positive of the most negative respective coordinate of any rendered object present
-            xOffset = -(int)Math.min(-xOffset, pair.getFirst().x);
-            yOffset = -(int)Math.min(-yOffset, pair.getFirst().y);
-            zOffset = -(int)Math.min(-zOffset, pair.getFirst().z);
+            bb = bb.minmax(new AABB(pair.getFirst(), pair.getFirst()));
         };
-        width += xOffset;
-        height += yOffset;
+
+        // Bake all rendered objects into a single model
+        IModelBuilder<?> builder = IModelBuilder.of(false, true, true, ItemTransforms.NO_TRANSFORMS, ItemOverrides.EMPTY,
+            UnitTextureAtlasSprite.INSTANCE, RenderTypeGroup.EMPTY);
+        QuadBakingVertexConsumer buffer = new QuadBakingVertexConsumer(builder::addUnculledFace);
+        buffer.setTintIndex(-1);
+        for (Pair<Vec3, IRenderableMoleculePart> pair : RENDERED_OBJECTS) {
+            pair.getSecond().renderInto(buffer, pair.getFirst());
+        };
+        model = builder.build();
     };
 
     public int getWidth() {
-        return width;
+        return (int)bb.getXsize();
     };
 
     public int getHeight() {
-        return height;
+        return (int)bb.getYsize();
     };
 
     /**
@@ -157,13 +160,39 @@ public class MoleculeRenderer {
     public void render(int xPosition, int yPosition, GuiGraphics graphics) {
         PoseStack poseStack = graphics.pose();
         poseStack.pushPose();
-        poseStack.translate(xPosition + ((float)width / 2f), yPosition + yOffset, -200);
-        TransformStack.cast(poseStack)
-            .rotateY(AnimationTickHolder.getRenderTime()); // Rotation
-        poseStack.translate(-((float)width) / 2f + xOffset, 0f, 0f);
-        for (Pair<Vec3, IRenderableMoleculePart> pair : RENDERED_OBJECTS) {
-            pair.getSecond().render(graphics, pair.getFirst());
-        };
+        Vec3 center = bb.getCenter();
+        poseStack.translate(center.x - bb.minX + xPosition, center.y - bb.minY + yPosition, -200);
+        poseStack.mulPose(Axis.YP.rotationDegrees(AnimationTickHolder.getRenderTime()));
+        poseStack.translate(-center.x, -center.y, -center.z);
+
+        UIRenderHelper.flipForGuiRender(poseStack);
+        Lighting.setupFor3DItems();
+        Minecraft.getInstance().getItemRenderer().renderModelLists(model, ItemStack.EMPTY, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY,
+            poseStack, graphics.bufferSource().getBuffer(Sheets.cutoutBlockSheet()));
+        graphics.flush();
+
+        poseStack.popPose();
+    };
+
+    /**
+     * Draw all Atoms and Bonds in this Molecule into the provided buffer. This is intended to be used when batch rendering molecules in JEI.
+     */
+    public void renderItem(int xPosition, int yPosition, int width, int height, PoseStack poseStack, MultiBufferSource.BufferSource buffer) {
+        float scale = java.lang.Math.min(0.5f, java.lang.Math.min((width+2)/(getWidth()+1f), (height+2)/(getHeight()+1f)));
+
+        poseStack.pushPose();
+        Vec3 center = bb.getCenter();
+        poseStack.translate(xPosition + width/2, yPosition + height/2, 50);
+        poseStack.mulPose(Axis.XP.rotationDegrees(-10));
+        poseStack.mulPose(Axis.YP.rotationDegrees(AnimationTickHolder.getRenderTime()));
+        poseStack.scale(scale, scale, scale);
+        poseStack.translate(-center.x, -center.y, -center.z);
+
+        UIRenderHelper.flipForGuiRender(poseStack);
+        Lighting.setupFor3DItems();
+        Minecraft.getInstance().getItemRenderer().renderModelLists(model, ItemStack.EMPTY, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY,
+            poseStack, buffer.getBuffer(Sheets.cutoutBlockSheet()));
+
         poseStack.popPose();
     };
 
@@ -214,7 +243,7 @@ public class MoleculeRenderer {
                 Branch sideBranch = sideBranchAndBondType.getKey();
                 Vec3 newPlane = confinedGeometry.getZig().cross(sideZag);
                 RENDERED_OBJECTS.add(Pair.of(location.add(sideZag.scale(0.5d * BOND_LENGTH)), BondRenderInstance.fromZig(sideBranchAndBondType.getValue(),  sideZag)));
-                generateBranch(sideBranch, location.add(sideZag.scale(BOND_LENGTH)), MathsHelper.rotate(sideZag, newPlane, 90d), newPlane, sideZag, false);
+                generateBranch(sideBranch, location.add(sideZag.scale(BOND_LENGTH)), MathsHelper.rotate(sideZag, newPlane, 90d), newPlane, sideZag, true);
                 j++;
             };
 
@@ -357,6 +386,7 @@ public class MoleculeRenderer {
 
     protected static interface IRenderableMoleculePart {
         public void render(GuiGraphics graphics, Vec3 location);
+        public void renderInto(VertexConsumer builder, Vec3 location);
     };
 
     protected static record BondRenderInstance(BondType type, Quaternionf rotation) implements IRenderableMoleculePart {
@@ -372,7 +402,10 @@ public class MoleculeRenderer {
             Vec3 z = zig.normalize();
             Vec3 axis = bond.cross(z);
             Quaternionf q = new Quaternionf(axis.x(), axis.y(), axis.z(), (float)bond.dot(z) + (float)Math.sqrt(bond.lengthSqr() * z.lengthSqr()));
-            return new BondRenderInstance(type, new Quaternionf(q.normalize()));
+            if(!q.normalize().isFinite())
+                q = new Quaternionf(0f, 0f, 0f, 1f); // identity
+
+            return new BondRenderInstance(type, q);
         };
 
         @Override
@@ -380,13 +413,31 @@ public class MoleculeRenderer {
             PoseStack poseStack = graphics.pose();
             poseStack.pushPose();
             poseStack.translate(location.x, location.y, location.z);
-            TransformStack.cast(poseStack)
+            TransformStack.of(poseStack)
                 .rotateCentered(rotation);
             GuiGameElement.of(type().getPartial())
                 .lighting(ILightingSettings.DEFAULT_FLAT)
                 .scale(SCALE)
                 .render(graphics, 0, 0);
             poseStack.popPose();
+        };
+
+        @Override
+        public void renderInto(VertexConsumer builder, Vec3 location) {
+            PoseStack poseStack = new PoseStack();
+
+            // Models need to be flipped on the Y axis when rendered in the GUI in order to appear upright
+            // Molecules were originally rendered piece by piece, with each piece being flipped individually
+            // Now that molecules are baked into a single model, the Y coordinates need to be flipped so each
+            // piece appears in the correct position once the entire model is flipped again
+            poseStack.translate(location.x, -location.y, location.z);
+            TransformStack.of(poseStack)
+                    .rotate(new Quaternionf(-rotation.x, rotation.y, -rotation.z, rotation.w)); // flip rotation around Y axis
+            poseStack.scale((float)SCALE, (float)SCALE, (float)SCALE);
+
+            Minecraft.getInstance().getBlockRenderer().getModelRenderer()
+                .renderModel(poseStack.last(), builder, Blocks.AIR.defaultBlockState(), type().getPartial().get(), 1, 1, 1,
+                    0, OverlayTexture.NO_OVERLAY, VirtualRenderHelper.VIRTUAL_DATA, RenderType.solid());
         };
     };
 
@@ -402,6 +453,18 @@ public class MoleculeRenderer {
                 //.rotate(15.5d, 22.5d, 0d)
                 .render(graphics, 0, 0);
             poseStack.popPose();
+        };
+
+        @Override
+        public void renderInto(VertexConsumer builder, Vec3 location) {
+            PoseStack poseStack = new PoseStack();
+
+            poseStack.translate(location.x, -location.y, location.z);
+            poseStack.scale((float)SCALE, (float)SCALE, (float)SCALE);
+
+            Minecraft.getInstance().getBlockRenderer().getModelRenderer()
+                .renderModel(poseStack.last(), builder, Blocks.AIR.defaultBlockState(), atom.getPartial().get(), 1, 1, 1,
+                    0, OverlayTexture.NO_OVERLAY, VirtualRenderHelper.VIRTUAL_DATA, RenderType.solid());
         };
     };
 };

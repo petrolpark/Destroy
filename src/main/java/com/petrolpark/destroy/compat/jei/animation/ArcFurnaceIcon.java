@@ -3,9 +3,9 @@ package com.petrolpark.destroy.compat.jei.animation;
 import java.util.function.Supplier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
 
 import mezz.jei.api.gui.drawable.IDrawable;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 

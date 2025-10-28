@@ -12,6 +12,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -86,6 +87,17 @@ public class GeniusFluidTankBehaviour extends SmartFluidTankBehaviour {
             };
             return filled;
         };
+
+        @Override
+        public FluidStack drain(int maxDrain, FluidAction action)
+        {
+            FluidStack stack = super.drain(maxDrain, action);
+            // Replace the held fluid with an empty fluid stack if we completely emptied this tank
+            // This clears mixture data and allows empty containers of the same type to stack
+            if(fluid.isEmpty() && fluid.getRawFluid() != Fluids.EMPTY)
+                setFluid(FluidStack.EMPTY);
+            return stack;
+        }
 
     };
     

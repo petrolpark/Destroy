@@ -6,7 +6,6 @@ import com.petrolpark.destroy.DestroyBlocks;
 import com.petrolpark.destroy.compat.jei.animation.HeatConditionRenderer;
 import com.petrolpark.destroy.content.processing.distillation.DistillationRecipe;
 
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IJeiHelpers;
@@ -37,18 +36,12 @@ public class DistillationCategory extends PetrolparkRecipeCategory<DistillationR
         addOptionalRequiredBiomeSlot(builder, recipe, 18, 49);
 
         // Fluid input
-        builder.addSlot(RecipeIngredientRole.INPUT, 18, 81)
-            .setBackground(getRenderedSlot(), -1, -1)
-            .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(recipe.getRequiredFluid().getMatchingFluidStacks()))
-            .addTooltipCallback(addFluidTooltip(recipe.getRequiredFluid().getRequiredAmount()));
+        addFluidSlot(builder, 18, 81, recipe.getRequiredFluid());
 
         // Fluid results
         for (int i = 0; i < fractions; i++) {
             FluidStack result = recipe.getFluidResults().get(i);
-            builder.addSlot(RecipeIngredientRole.OUTPUT, i % 2 == 0 ? 94 : 74, 74 - (12 * i))
-                .setBackground(getRenderedSlot(), -1, -1)
-                .addIngredient(ForgeTypes.FLUID_STACK, withImprovedVisibility(result))
-                .addTooltipCallback(addFluidTooltip(result.getAmount()));
+            addFluidSlot(builder,  i % 2 == 0 ? 94 : 74, 74 - (12 * i), result);
         };
 
         HeatConditionRenderer.addHeatConditionSlots(builder, 80, 103, recipe.getRequiredHeat());

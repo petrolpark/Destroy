@@ -4,7 +4,7 @@ import com.petrolpark.destroy.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.DestroyVoxelShapes;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Lang;
+import net.createmod.catnip.lang.Lang;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

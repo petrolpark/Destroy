@@ -22,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -40,20 +41,31 @@ public class MixedExplosiveBlock extends PrimeableBombBlock<MixedExplosiveEntity
         super(properties, new CustomExplosiveMixEntityFactory());
     };
 
-    @Override
-    public void onCaughtFire(BlockState state, Level level, BlockPos pos, Direction face, LivingEntity igniter) {
-        withBlockEntityDo(level, pos, be -> {
+    public boolean explodeInstantly(BlockState state, Level level, BlockPos pos, LivingEntity igniter) {
+        return getBlockEntityOptional(level, pos).map(be -> {
             MixedExplosiveInventory inv = be.getExplosiveInventory();
-            if (inv.isEmpty()) return;
+            if (inv.isEmpty()) return false;
             ExplosiveProperties properties = inv.getExplosiveProperties();
             if (properties.fulfils(ExplosiveProperties.NO_FUSE)) {
                 level.removeBlock(pos, false);
                 if (level instanceof ServerLevel serverLevel) SmartExplosion.explode(serverLevel, CustomExplosiveMixExplosion.create(level, inv, igniter, Vec3.atCenterOf(pos)));
-            } else if (properties.fulfils(ExplosiveProperties.CAN_EXPLODE)) {
-                super.onCaughtFire(state, level, pos, face, igniter);
-                level.removeBlock(pos, false);
+                return true;
             };
-        });
+            return false;
+        }).orElse(false);
+    };
+
+    @Override
+    public void onCaughtFire(BlockState state, Level level, BlockPos pos, Direction face, LivingEntity igniter) {
+        if (explodeInstantly(state, level, pos, igniter)) return;
+        super.onCaughtFire(state, level, pos, face, igniter);
+        level.removeBlock(pos, false);
+    };
+
+    @Override
+    public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
+        if (explodeInstantly(state, level, pos, explosion.getIndirectSourceEntity())) return;
+        super.onBlockExploded(state, level, pos, explosion);
     };
 
     @Override

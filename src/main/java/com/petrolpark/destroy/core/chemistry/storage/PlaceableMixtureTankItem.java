@@ -51,6 +51,12 @@ public abstract class PlaceableMixtureTankItem<T extends PlaceableMixtureTankBlo
 
     @Override
     public InteractionResult place(BlockPlaceContext context) {
+        if(context.getPlayer() != null && context.getPlayer().getAbilities().instabuild) {
+            context.getPlayer().getAbilities().instabuild = false;
+            InteractionResult res = super.place(context);
+            context.getPlayer().getAbilities().instabuild = true;
+            return res;
+        }
         return IPickUpPutDownBlock.removeItemFromInventory(context, super.place(context));
     };
 

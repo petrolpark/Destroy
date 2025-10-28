@@ -14,8 +14,9 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.gui.ScreenOpener;
 
+import net.createmod.catnip.gui.ScreenOpener;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -79,14 +80,15 @@ public class ColorimeterBlock extends HorizontalDirectionalBlock implements IBE<
                 if (DestroyFluids.isMixture(fluid)) species.addAll(ReadOnlyMixture.readNBT(ReadOnlyMixture::new, fluid.getOrCreateChildTag("Mixture")).getContents(false));
             };
 
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> openScreen(be, species));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> openScreen(be, species, player));
             return InteractionResult.SUCCESS;
         });
     };
 
     @OnlyIn(Dist.CLIENT)
-    public void openScreen(ColorimeterBlockEntity be, Set<LegacySpecies> species) {
-        ScreenOpener.open(new ColorimeterScreen(be, new ArrayList<>(species)));
+    public void openScreen(ColorimeterBlockEntity be, Set<LegacySpecies> species, Player player) {
+        if(player instanceof LocalPlayer)
+            ScreenOpener.open(new ColorimeterScreen(be, new ArrayList<>(species)));
     };
 
     @Override
@@ -101,8 +103,8 @@ public class ColorimeterBlock extends HorizontalDirectionalBlock implements IBE<
 	};
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
-        withBlockEntityDo(level, pos, ColorimeterBlockEntity::updateVat);
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos neighborPos, boolean isMoving) {
+        withBlockEntityDo(level, pos, cbe -> cbe.onNeighborChanged(neighborPos));
     };
 
     @Override

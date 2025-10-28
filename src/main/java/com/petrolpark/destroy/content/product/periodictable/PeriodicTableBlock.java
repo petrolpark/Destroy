@@ -13,8 +13,8 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.DestroyAdvancementTrigger;
 import com.petrolpark.destroy.DestroyMessages;
 import com.petrolpark.destroy.util.DestroyReloadListener;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;

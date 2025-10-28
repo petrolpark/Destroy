@@ -1,6 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
+	"render_type": "minecraft:cutout",
 	"textures": {
 		"2": "destroy:block/mechanical_sieve",
 		"particle": "create:block/axis"

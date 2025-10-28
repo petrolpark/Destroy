@@ -16,7 +16,7 @@ import com.google.gson.JsonObject;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.util.DestroyReloadListener;
-import com.simibubi.create.foundation.utility.Lang;
+import net.createmod.catnip.lang.Lang;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;

@@ -4,8 +4,8 @@ import java.util.function.Supplier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.jei.DoubleItemIcon;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
 
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 

@@ -3,19 +3,24 @@ package com.petrolpark.destroy.compat.jei.category;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.joml.Vector2i;
 
+import com.ibm.icu.text.DecimalFormat;
 import com.petrolpark.client.rendering.PetrolparkGuiTexture;
 import com.petrolpark.compat.jei.JEITextureDrawable;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.DestroyItems;
 import com.petrolpark.destroy.chemistry.legacy.IItemReactant;
-import com.petrolpark.destroy.chemistry.legacy.LegacySpecies;
+import com.petrolpark.destroy.chemistry.legacy.LegacyAtom;
+import com.petrolpark.destroy.chemistry.legacy.LegacyElement;
 import com.petrolpark.destroy.chemistry.legacy.LegacyReaction;
+import com.petrolpark.destroy.chemistry.legacy.LegacySpecies;
 import com.petrolpark.destroy.chemistry.legacy.reactionresult.PrecipitateReactionResult;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.client.stackedtextbox.AbstractStackedTextBox;
@@ -26,18 +31,22 @@ import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.core.chemistry.recipe.ReactionRecipe;
 import com.petrolpark.destroy.core.chemistry.recipe.ReactionRecipe.GenericReactionRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
+import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
+import net.createmod.catnip.lang.FontHelper.Palette;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 
 public class ReactionCategory<T extends ReactionRecipe> extends HoverableTextCategory<T> {
 
@@ -103,6 +112,16 @@ public class ReactionCategory<T extends ReactionRecipe> extends HoverableTextCat
         Destroy.LOGGER.warn("Reaction '"+reaction.getFullId()+"' has too many " + (reactants ? "reactants" : "products") + " to fit on JEI.");
     };
 
+    public static float getSpeciesWeightForSorting(LegacySpecies s) {
+        LegacyAtom atom = Collections.max(s.getAtoms(), Comparator.comparing(a -> a.getElement() == LegacyElement.R_GROUP ? a.rGroupNumber : -1));
+        float weight = -s.getMass();
+
+        if(atom.getElement() == LegacyElement.R_GROUP)
+            weight -= 1000f - 100f * atom.rGroupNumber;
+
+        return weight;
+    }
+
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup focuses) {
         super.setRecipe(builder, recipe, focuses);
@@ -112,12 +131,33 @@ public class ReactionCategory<T extends ReactionRecipe> extends HoverableTextCat
 
         int numberOfReactants = getNumberOfReactants(reaction);
         if (numberOfReactants >= 6) tooManyMoleculesWarning(true, reaction);
+        Collection<PrecipitateReactionResult> precipitates = reaction.hasResult() ? reaction.getResult().getAllPrecipitates() : Collections.emptyList();
 
-        for (LegacySpecies reactant : reaction.getReactants()) {
+        float molarRatioMultiplier = 1f;
+
+        Optional<IItemReactant> focusItemReactant = reaction.getItemReactants().stream().filter(reactant ->
+            focuses.getItemStackFocuses(RecipeIngredientRole.INPUT).anyMatch(focus -> reactant.isItemValid(focus.getTypedValue().getIngredient()))
+        ).findFirst();
+
+        Optional<PrecipitateReactionResult> focusPrecipitate = Optional.ofNullable(reaction.getResult()).map(reactionResult ->
+            reactionResult.getAllPrecipitates().stream().filter(result ->
+                focuses.getItemStackFocuses(RecipeIngredientRole.OUTPUT).anyMatch(focus -> result.getPrecipitate().is(focus.getTypedValue().getIngredient().getItem()))
+            ).findFirst().orElse(null)
+        );
+
+        if(focusItemReactant.isPresent()) {
+            // For now all item reactants are assumed to have the same molar ratio
+            molarRatioMultiplier = reaction.getMolesPerItem();
+        } else if(focusPrecipitate.isPresent()) {
+            molarRatioMultiplier = focusPrecipitate.get().getRequiredMoles();
+        };
+
+        for (LegacySpecies reactant : reaction.getReactants().stream().sorted(Comparator.comparing(ReactionCategory::getSpeciesWeightForSorting)).toList()) {
             if (i >= 6) continue;
             Vector2i pos = getReactantRenderPosition(i, numberOfReactants);
             builder.addSlot(RecipeIngredientRole.INPUT, pos.x, pos.y)
                 .addIngredient(MoleculeJEIIngredient.TYPE, reactant)
+                .setOverlay(createOverlay(reaction.getReactantMolarRatio(reactant) * molarRatioMultiplier), 0, 0)
                 .addRichTooltipCallback(ReactionTooltipHelper.reactantTooltip(reaction, reactant))
                 .setBackground(getRenderedSlot(), -1, -1);
             i++;
@@ -127,15 +167,17 @@ public class ReactionCategory<T extends ReactionRecipe> extends HoverableTextCat
             if (i >= 6) continue;
             if (!itemReactant.isCatalyst()) {
                 Vector2i pos = getReactantRenderPosition(i, numberOfReactants);
-                builder.addSlot(reaction.displayAsReversible() ? RecipeIngredientRole.CATALYST : RecipeIngredientRole.INPUT, pos.x, pos.y)
+                IRecipeSlotBuilder slotBuilder = builder.addSlot(reaction.displayAsReversible() ? RecipeIngredientRole.CATALYST : RecipeIngredientRole.INPUT, pos.x, pos.y)
                     .addItemStacks(itemReactant.getDisplayedItemStacks())
                     .addRichTooltipCallback(ReactionTooltipHelper.itemReactantTooltip(reaction, itemReactant))
                     .setBackground(getRenderedSlot(), -1, -1);
+
+                if(molarRatioMultiplier != reaction.getMolesPerItem())
+                    slotBuilder.setOverlay(createOverlay(molarRatioMultiplier / reaction.getMolesPerItem()), 0, 0);
+
                 i++;
             };
         };
-
-        Collection<PrecipitateReactionResult> precipitates = reaction.hasResult() ? reaction.getResult().getAllPrecipitates() : Collections.emptyList();
 
         int j = 0;
 
@@ -153,10 +195,11 @@ public class ReactionCategory<T extends ReactionRecipe> extends HoverableTextCat
 
         int l = numberOfProducts == 4 ? 2 : 3;
 
-        for (LegacySpecies product : reaction.getProducts()) {
+        for (LegacySpecies product : reaction.getProducts().stream().sorted(Comparator.comparing(ReactionCategory::getSpeciesWeightForSorting)).toList()) {
             if (j >= 6) continue;
             builder.addSlot(RecipeIngredientRole.OUTPUT, productsXOffset + (19 * (j % l)), productYOffset + (j / l) * 19)
                 .addIngredient(MoleculeJEIIngredient.TYPE, product)
+                .setOverlay(createOverlay(reaction.getProductMolarRatio(product) * molarRatioMultiplier), 0, 0)
                 .addRichTooltipCallback(ReactionTooltipHelper.productTooltip(reaction, product))
                 .setBackground(getRenderedSlot(), -1, -1);
             j++;
@@ -164,10 +207,14 @@ public class ReactionCategory<T extends ReactionRecipe> extends HoverableTextCat
 
         for (PrecipitateReactionResult precipitate : precipitates) {
             if (j >= 6) continue;
-            builder.addSlot(reaction.displayAsReversible() ? RecipeIngredientRole.CATALYST : RecipeIngredientRole.OUTPUT, productsXOffset + (19 * (j % l)), productYOffset+ (j / l) * 19)
+            IRecipeSlotBuilder slotBuilder = builder.addSlot(reaction.displayAsReversible() ? RecipeIngredientRole.CATALYST : RecipeIngredientRole.OUTPUT, productsXOffset + (19 * (j % l)), productYOffset+ (j / l) * 19)
                 .addItemStack(precipitate.getPrecipitate())
                 .addRichTooltipCallback(ReactionTooltipHelper.precipitateTooltip(reaction, precipitate))
                 .setBackground(getRenderedSlot(), -1, -1);
+
+            if(molarRatioMultiplier != precipitate.getRequiredMoles())
+                slotBuilder.setOverlay(createOverlay(molarRatioMultiplier / precipitate.getRequiredMoles()), 0, 0);
+
             j++;
         };
 
@@ -175,7 +222,7 @@ public class ReactionCategory<T extends ReactionRecipe> extends HoverableTextCat
         int m = 0;
         if (reaction.needsUV()) m++; // If there is UV catalyst, this is already drawn
 
-        for (LegacySpecies catalyst : reaction.getOrders().keySet()) {
+        for (LegacySpecies catalyst : reaction.getOrders().keySet().stream().sorted(Comparator.comparing(ReactionCategory::getSpeciesWeightForSorting)).toList()) {
             if (reaction.getReactants().contains(catalyst)) continue;
             Vector2i pos = getCatalystRenderPosition(m, numberOfCatalysts);
             builder.addSlot(RecipeIngredientRole.CATALYST, pos.x, pos.y)
@@ -253,5 +300,40 @@ public class ReactionCategory<T extends ReactionRecipe> extends HoverableTextCat
         PetrolparkGuiTexture.JEI_LINE.render(graphics, 2, 85);
         (recipe.getReaction().displayAsReversible() ? PetrolparkGuiTexture.JEI_EQUILIBRIUM_ARROW : AllGuiTextures.JEI_ARROW).render(graphics, yOffset + 37, 46);
     };
-    
+
+    private static DecimalFormat df = new DecimalFormat("#.##");
+
+    public IDrawable createOverlay(float molarRatio) {
+        return createOverlay(molarRatio == 1f ? "" : df.format(molarRatio));
+    }
+
+    public IDrawable createOverlay(String s) {
+        float scale = Mth.clamp(1.5f - 0.25f * s.length(), 0.5f, 1f);
+
+        return new IDrawable() {
+
+            @Override
+            public int getWidth() {return 16;}
+
+            @Override
+            public int getHeight() {return 16;}
+
+            @Override
+            public void draw(GuiGraphics graphics, int xOffset, int yOffset) {
+                if(s.isEmpty()) return;
+
+                graphics.pose().pushPose();
+                graphics.pose().translate(0, 0, 0);
+                graphics.pose().scale(scale, scale, 1);
+
+                Font fontRenderer = Minecraft.getInstance().font;
+                graphics.drawString(fontRenderer, s,
+                    (xOffset + getWidth()) / scale - fontRenderer.width(s) + 1,
+                    (yOffset + getHeight()) / scale - 7,
+                    0xFFFFFF, true);
+
+                graphics.pose().popPose();
+            }
+        };
+    }
 };

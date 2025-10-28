@@ -10,7 +10,8 @@ import net.minecraft.world.level.WorldDataConfiguration;
 public abstract class LevelSettingsMixin {
     
     /**
-     * Patch for https://github.com/MinecraftForge/MinecraftForge/issues/9938
+     * Patch for https://github.com/MinecraftForge/MinecraftForge/issues/9938.
+     * Probably worth removing
      */
     @Overwrite
     public LevelSettings withDataConfiguration(WorldDataConfiguration pDataConfiguration) {

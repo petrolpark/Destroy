@@ -23,7 +23,7 @@ public class BasinCategoryMixin {
      * Replaces the Blaze Burner icon with a Cooler if needs be, and replaces the Blaze Cake with the cycling {@link com.simibubi.create.AllTags.AllItemTags#BLAZE_BURNER_FUEL_SPECIAL Blaze Burner special fuel tag}.
      */
     @Inject(
-        method = "Lcom/simibubi/create/compat/jei/category/BasinCategory;setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;Lcom/simibubi/create/content/processing/basin/BasinRecipe;Lmezz/jei/api/recipe/IFocusGroup;)V",
+        method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;Lcom/simibubi/create/content/processing/basin/BasinRecipe;Lmezz/jei/api/recipe/IFocusGroup;)V",
         at = @At(
             value = "INVOKE",
             target = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;getRequiredHeat()Lcom/simibubi/create/content/processing/recipe/HeatCondition;"
@@ -42,8 +42,8 @@ public class BasinCategoryMixin {
      */
     @SuppressWarnings("resource")
     @Inject(
-        method = "Lcom/simibubi/create/compat/jei/category/BasinCategory;draw*(Lcom/simibubi/create/content/processing/basin/BasinRecipe;Lmezz/jei/api/gui/ingredient/IRecipeSlotsView;Lnet/minecraft/client/gui/GuiGraphics;DD)V",
-        at = @At(
+        method = "draw(Lcom/simibubi/create/content/processing/basin/BasinRecipe;Lmezz/jei/api/gui/ingredient/IRecipeSlotsView;Lnet/minecraft/client/gui/GuiGraphics;DD)V",
+            at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/Minecraft;getInstance()Lnet/minecraft/client/Minecraft;" // Injects when it is writing "Heated", "Superheated", etc at the bottom of the screen
         ),

@@ -40,7 +40,7 @@ public class AldehydeOxidation extends SingleGroupGenericReaction<CarbonylGroup>
             .addReactant(reactant.getMolecule(), 3, 1)
             .addReactant(DestroyMolecules.DICHROMATE)
             .addReactant(DestroyMolecules.PROTON, 8, 1)
-            .activationEnergy(200f)
+            .activationEnergy(10f)
             .addProduct(moleculeBuilder().structure(structure).build())
             .addProduct(DestroyMolecules.CHROMIUM_III, 2)
             .addProduct(DestroyMolecules.WATER, 4)

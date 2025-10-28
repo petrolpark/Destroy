@@ -2,6 +2,7 @@ package com.petrolpark.destroy.core.chemistry.storage;
 
 import java.util.List;
 
+import net.createmod.catnip.data.Couple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -12,7 +13,6 @@ import com.petrolpark.destroy.core.chemistry.storage.SimpleMixtureTankRenderer.I
 import com.petrolpark.destroy.core.fluid.GeniusFluidTankBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Couple;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

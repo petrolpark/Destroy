@@ -1,7 +1,7 @@
 package com.petrolpark.destroy.core.item.tooltip;
 
 import com.simibubi.create.foundation.item.ItemDescription;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
+import net.createmod.catnip.lang.FontHelper.Palette;
 
 import net.minecraft.world.item.Item;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;

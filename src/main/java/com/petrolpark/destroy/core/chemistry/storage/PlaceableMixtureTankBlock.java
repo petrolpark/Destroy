@@ -56,7 +56,7 @@ public abstract class PlaceableMixtureTankBlock<T extends BlockEntity> extends B
         if (be != null && asItem() instanceof IMixtureStorageItem mixtureItem) {
             ItemStack stack = new ItemStack(asItem());
             return be.getCapability(ForgeCapabilities.FLUID_HANDLER).map(fluidHandler -> {
-                mixtureItem.setContents(stack, fluidHandler.drain(mixtureItem.getCapacity(stack), FluidAction.EXECUTE));
+                mixtureItem.setContents(stack, fluidHandler.drain(mixtureItem.getCapacity(stack), FluidAction.SIMULATE));
                 return stack;
             }).orElse(ItemStack.EMPTY);
         };

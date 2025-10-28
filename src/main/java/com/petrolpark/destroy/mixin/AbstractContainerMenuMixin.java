@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.core.extendedinventory.ExtendedInventory.DelayedSlotPopulation;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
@@ -16,11 +17,14 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
+@MoveToPetrolparkLibrary
 @Mixin(AbstractContainerMenu.class)
 public abstract class AbstractContainerMenuMixin implements DelayedSlotPopulation {
 
     @Shadow
     public abstract Slot getSlot(int pSlotId);
+    @Shadow
+    public abstract boolean isValidSlotIndex(int pSlotIndex);
     @Shadow
     private ItemStack carried;
     @Shadow
@@ -38,7 +42,7 @@ public abstract class AbstractContainerMenuMixin implements DelayedSlotPopulatio
 
     @Overwrite
     public void setItem(int pSlotId, int pStateId, ItemStack pStack) {
-        if (pSlotId >= slots.size()) {
+        if (!isValidSlotIndex(pSlotId)) {
             delayedSlotStacks.put(pSlotId, pStack);
         } else {
             getSlot(pSlotId).set(pStack);
@@ -50,7 +54,7 @@ public abstract class AbstractContainerMenuMixin implements DelayedSlotPopulatio
     public void initializeContents(int pStateId, List<ItemStack> pItems, ItemStack pCarried) {
         for (int i = 0; i < pItems.size(); ++i) {
             ItemStack stack = pItems.get(i);
-            if (i >= slots.size()) {
+            if (!isValidSlotIndex(i)) {
                 delayedSlotStacks.put(i, stack);
             } else {
                 getSlot(i).set(stack);
@@ -59,7 +63,4 @@ public abstract class AbstractContainerMenuMixin implements DelayedSlotPopulatio
         carried = pCarried;
         stateId = pStateId;
     };
-
-
-    
 };

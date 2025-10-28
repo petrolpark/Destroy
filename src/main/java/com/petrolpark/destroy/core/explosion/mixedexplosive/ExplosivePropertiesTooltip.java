@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.client.DestroyGuiTextures;
 import com.petrolpark.destroy.core.explosion.mixedexplosive.ExplosiveProperties.ExplosivePropertiesEntry;
@@ -12,6 +11,7 @@ import com.petrolpark.destroy.core.explosion.mixedexplosive.ExplosiveProperties.
 import com.petrolpark.destroy.core.explosion.mixedexplosive.ExplosiveProperties.ExplosivePropertyCondition;
 import com.petrolpark.destroy.core.item.tooltip.DestroyTooltipComponent;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -96,7 +96,7 @@ public class ExplosivePropertiesTooltip extends DestroyTooltipComponent<Explosiv
                 };
                 ms.pushPose();
                 ms.translate(renderCenter, y + 5, 0f);
-                if (selected == condition) TransformStack.cast(ms).scale(1.2f);
+                if (selected == condition) TransformStack.of(ms).scale(1.2f);
                 ms.translate(-renderOffset, -6f, 0f);
                 conditionIcon.render(graphics, 0, 0);
                 ms.popPose();

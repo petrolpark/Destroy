@@ -7,8 +7,8 @@ import java.util.function.Supplier;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.DestroyItems;
 import com.petrolpark.destroy.DestroyTags;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;

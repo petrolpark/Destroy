@@ -1,24 +1,21 @@
 package com.petrolpark.destroy.compat.jei.category;
 
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 import com.petrolpark.compat.jei.category.PetrolparkRecipeCategory;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.core.chemistry.recipe.MixtureConversionRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.createmod.catnip.lang.FontHelper.Palette;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.fluids.FluidStack;
 
 public class MixtureConversionCategory extends PetrolparkRecipeCategory<MixtureConversionRecipe> {
 
@@ -28,15 +25,8 @@ public class MixtureConversionCategory extends PetrolparkRecipeCategory<MixtureC
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, MixtureConversionRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 2, 2)
-            .setBackground(getRenderedSlot(), -1, -1)
-            .addIngredients(ForgeTypes.FLUID_STACK, withFullVisibility(recipe.getFluidIngredients().get(0).getMatchingFluidStacks()))
-            .addTooltipCallback(addFluidTooltip(1));
-
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 107, 2)
-            .setBackground(getRenderedSlot(), -1, -1)
-            .addIngredients(ForgeTypes.FLUID_STACK, withFullVisibility(recipe.getFluidResults()))
-            .addTooltipCallback(addFluidTooltip(1));
+        addFluidSlot(builder, 2, 2, recipe.getFluidIngredients().get(0));
+        addFluidSlot(builder, 107, 2, recipe.getFluidResults().get(0));
     };
     
     @Override
@@ -52,12 +42,12 @@ public class MixtureConversionCategory extends PetrolparkRecipeCategory<MixtureC
         AllGuiTextures.JEI_LONG_ARROW.render(guiGraphics, 27, 6);
     };
 
-    public static List<FluidStack> withFullVisibility(List<FluidStack> stacks) {
+    /*public static List<FluidStack> withFullVisibility(List<FluidStack> stacks) {
         return stacks.stream().map(fs -> {
             FluidStack stack = fs.copy();
             stack.setAmount(1000);
             return stack;
         }).toList();
-    };
+    };*/
     
 };

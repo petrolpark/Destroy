@@ -1,7 +1,5 @@
 package com.petrolpark.destroy.content.oil.seismology;
 
-import com.jozufozu.flywheel.util.AnimationTickHolder;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -12,6 +10,8 @@ import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -163,8 +163,8 @@ public class SeismographItemRenderer extends CustomRenderedItemModelRenderer {
         // Columns
         ms.pushPose();;
         ms.translate(18f, 8f, 0.03f * zm);
-        TransformStack.cast(ms)
-            .rotateZ(90d);
+        TransformStack.of(ms)
+            .rotateZDegrees(90);
         for (int x = 0; x < 8; x++) {
             ms.pushPose();
             ms.translate(0f, x * -6f, 0f);

@@ -4,8 +4,8 @@ import java.util.function.Supplier;
 
 import com.petrolpark.destroy.client.DestroyParticleTypes;
 import com.petrolpark.network.packet.S2CPacket;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;

@@ -4,12 +4,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.simibubi.create.compat.jei.GhostIngredientHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.inventory.Slot;
 
 @Mixin(GhostIngredientHandler.class)
+@MoveToPetrolparkLibrary
 public class GhostIngredientHandlerMixin {
     
     @Redirect(

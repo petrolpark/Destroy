@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.simibubi.create.foundation.gui.menu.GhostItemMenu;
 import com.simibubi.create.foundation.gui.menu.MenuBase;
 
@@ -16,6 +17,7 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 
+@MoveToPetrolparkLibrary
 @Mixin(GhostItemMenu.class)
 public abstract class GhostItemMenuMixin extends MenuBase<Object> {
 

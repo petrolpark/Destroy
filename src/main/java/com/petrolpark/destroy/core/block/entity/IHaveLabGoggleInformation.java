@@ -1,8 +1,8 @@
 package com.petrolpark.destroy.core.block.entity;
 
 import com.petrolpark.destroy.DestroyItems;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import net.minecraft.world.item.ItemStack;
 
 public interface IHaveLabGoggleInformation extends IHaveGoggleInformation {
@@ -11,5 +11,5 @@ public interface IHaveLabGoggleInformation extends IHaveGoggleInformation {
     default ItemStack getIcon(boolean isPlayerSneaking) {
         return DestroyItems.LABORATORY_GOGGLES.asStack();
     };
-    
+
 };

@@ -8,8 +8,8 @@ import java.util.Queue;
 import java.util.Set;
 
 import com.petrolpark.destroy.config.DestroyAllConfigs;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;

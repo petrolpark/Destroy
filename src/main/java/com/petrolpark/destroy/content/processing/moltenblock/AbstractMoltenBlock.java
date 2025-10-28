@@ -3,8 +3,8 @@ package com.petrolpark.destroy.content.processing.moltenblock;
 import java.util.Optional;
 
 import com.petrolpark.destroy.DestroyVoxelShapes;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;

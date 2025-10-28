@@ -31,7 +31,7 @@ public class CreateBigCannonsBlocks {
         ).item(CustomExplosiveMixShellBlockItem::new)
         .onRegister(item -> DestroyJEISetup.CUSTOM_MIX_EXPLOSIVES.add(() -> new ItemStack(item)))
         .build()
-        .register();    
+        .register();
     
     public static void register() {};
 };

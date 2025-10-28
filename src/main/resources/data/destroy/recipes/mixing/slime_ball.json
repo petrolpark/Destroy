@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+      {
+        "tag": "forge:dusts"
+      },
+      {
+        "mixtureFluidWithTaggedMolecules": "destroy:mixture",
+        "tag": "destroy:adhesive",
+        "amount": 1,
+        "concentration": 0.2
+      }
+    ],
+    "results": [
+      {
+        "item": "minecraft:slime_ball"
+      }
+    ]
+  }

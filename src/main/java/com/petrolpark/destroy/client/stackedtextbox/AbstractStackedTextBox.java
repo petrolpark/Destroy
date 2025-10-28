@@ -5,12 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.petrolpark.destroy.MoveToPetrolparkLibrary;
-import com.simibubi.create.foundation.gui.widget.ElementWidget;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Pair;
 
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.gui.widget.ElementWidget;
+import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
@@ -46,7 +45,7 @@ public abstract class AbstractStackedTextBox extends ElementWidget {
 
     };
 
-    public static LinesAndActivationAreas getTextAndActivationAreas(String text, int startX, int startY, int maxWidthPerLine, Screen screen, Font font, Palette palette, boolean isTextBox) {
+    public static LinesAndActivationAreas getTextAndActivationAreas(String text, int startX, int startY, int maxWidthPerLine, Screen screen, Font font, FontHelper.Palette palette, boolean isTextBox) {
 
         if (screen == null) return new LinesAndActivationAreas(List.of(), List.of(), startX, startY, 0, 0);
 
@@ -177,7 +176,7 @@ public abstract class AbstractStackedTextBox extends ElementWidget {
             MutableComponent currentComponent = lineStart.plainCopy();
             String[] split = line.split("_");
 			for (String part : split) {
-				currentComponent.append(Components.literal(part).withStyle(styles.get(currentlyHighlighted)));
+				currentComponent.append(Component.literal(part).withStyle(styles.get(currentlyHighlighted)));
 				currentlyHighlighted = !currentlyHighlighted;
 			}
             formattedLines.add(currentComponent);

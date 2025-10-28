@@ -7,13 +7,14 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.petrolpark.client.rendering.IGuiTexture;
 import com.petrolpark.destroy.Destroy;
-import com.simibubi.create.foundation.gui.UIRenderHelper;
-import com.simibubi.create.foundation.utility.Color;
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderType;
@@ -119,7 +120,8 @@ public enum DestroyGuiTextures implements IGuiTexture {
 	// Ponder
 	THERMOMETER("ponder", 0, 0, 16, 32),
 
-	// Misc
+	// Misc - all moved to p library in 1.21.1
+	@MoveToPetrolparkLibrary
 	INVENTORY_BACKGROUND("inventory", 0, 0, 9, 9, 64, 64),
 	INVENTORY_SLOT("inventory", 0, 22, 18, 18, 64, 64),
 	HOTBAR_BACKGROUND("inventory", 9, 0, 22, 22, 64, 64),

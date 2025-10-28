@@ -43,7 +43,7 @@ public interface IReactionContextProvider {
      * @since Destroy 0.1.0
      * @author petrolpark
      */
-    public default boolean specifies(IReactionContextType<?> reactionContextType) {
+     public default <RC extends IReactionContext<? super RC>> boolean specifies(IReactionContextType<RC> reactionContextType) {
         return getOptionalReactionContext(reactionContextType).isPresent();
     };
 };

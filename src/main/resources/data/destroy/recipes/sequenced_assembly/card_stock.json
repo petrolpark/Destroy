@@ -1,7 +1,7 @@
 {
     "type": "create:sequenced_assembly",
     "ingredient": {
-      "item": "destroy:paper_pulp"
+      "item": "create:pulp"
     },
     "transitionalItem": {
       "item": "destroy:unfinished_card_stock"

@@ -10,9 +10,19 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class MoltenStainlessSteelFluid extends VirtualFluid implements ICustomBlockStateFluid {
 
-    public MoltenStainlessSteelFluid(Properties properties) {
-        super(properties);
+    public MoltenStainlessSteelFluid(Properties properties, boolean source) {
+        super(properties, source);
     };
+
+
+    public static MoltenStainlessSteelFluid createSource(Properties properties) {
+        return new MoltenStainlessSteelFluid(properties, true);
+    }
+
+    public static MoltenStainlessSteelFluid createFlowing(Properties properties) {
+        return new MoltenStainlessSteelFluid(properties, false);
+    }
+
 
     @Override
     public Item getBucket() {

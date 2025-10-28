@@ -1,17 +1,17 @@
 package com.petrolpark.destroy.content.oil.seismology;
 
-import com.jozufozu.flywheel.core.PartialModel;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.DestroyItems;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import dev.engine_room.flywheel.lib.transform.PoseTransformStack;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -22,12 +22,12 @@ import net.minecraft.world.item.ItemStack;
 
 public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer {
 
-    protected static final PartialModel UNANIMATED = new PartialModel(Destroy.asResource("item/seismometer/item"));
-    protected static final PartialModel BASE = new PartialModel(Destroy.asResource("item/seismometer/base"));
-    protected static final PartialModel NEEDLE = new PartialModel(Destroy.asResource("item/seismometer/needle"));
-    protected static final PartialModel PAGE_BLANK = new PartialModel(Destroy.asResource("item/seismometer/page_blank"));
-    protected static final PartialModel PAGE_LEVEL = new PartialModel(Destroy.asResource("item/seismometer/page_level"));
-    protected static final PartialModel PAGE_SPIKE = new PartialModel(Destroy.asResource("item/seismometer/page_spike"));
+    protected static final PartialModel UNANIMATED = PartialModel.of(Destroy.asResource("item/seismometer/item"));
+    protected static final PartialModel BASE = PartialModel.of(Destroy.asResource("item/seismometer/base"));
+    protected static final PartialModel NEEDLE = PartialModel.of(Destroy.asResource("item/seismometer/needle"));
+    protected static final PartialModel PAGE_BLANK = PartialModel.of(Destroy.asResource("item/seismometer/page_blank"));
+    protected static final PartialModel PAGE_LEVEL = PartialModel.of(Destroy.asResource("item/seismometer/page_level"));
+    protected static final PartialModel PAGE_SPIKE = PartialModel.of(Destroy.asResource("item/seismometer/page_spike"));
 
     private Boolean spike;
     private static int spikeNextPage; // Whether the next page to be shown should have a spike on it
@@ -35,7 +35,7 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer {
 
     static {
         angle = LerpedFloat.angular().startWithValue(0d);
-        angle.chase(0f, 0.2f, Chaser.EXP);
+        angle.chase(0f, 0.2f, LerpedFloat.Chaser.EXP);
     };
 
     public static void tick() {
@@ -51,7 +51,7 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer {
     protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer, ItemDisplayContext transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         float partialTicks = AnimationTickHolder.getPartialTicks();
         int ticksThroughAnimation = AnimationTickHolder.getTicks(true) % 32;
-        TransformStack msr = TransformStack.cast(ms);
+        PoseTransformStack msr = TransformStack.of(ms);
 
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
@@ -69,8 +69,8 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer {
 
         if (transformType == mainHand || (transformType == offHand && noControllerInMain)) {
             msr.translate(0d, 1d / 4d, 1d / 4d * handModifier);
-            msr.rotateY(-30 * handModifier);
-            msr.rotateZ(-30);
+            msr.rotateYDegrees(-30 * handModifier);
+            msr.rotateZDegrees(-30);
             animate = true;
         };
         
@@ -111,7 +111,7 @@ public class SeismometerItemRenderer extends CustomRenderedItemModelRenderer {
         ms.pushPose();
         ms.translate(0f, 0f, -5/16f);
         ms.pushPose();
-        msr.rotateY(angle.getValue(partialTicks));
+        msr.rotateYDegrees(angle.getValue(partialTicks));
         renderer.render(NEEDLE.get(), light);
         ms.popPose();
         ms.popPose();

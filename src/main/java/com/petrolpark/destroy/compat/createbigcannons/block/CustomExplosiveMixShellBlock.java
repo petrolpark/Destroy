@@ -113,13 +113,11 @@ public class CustomExplosiveMixShellBlock extends FuzedProjectileBlock<CustomExp
         return CreateBigCannonBlockEntityTypes.CUSTOM_EXPLOSIVE_MIX_SHELL.get();
     };
 
-    /**
-     * Copied from {@link rbasamoyai.createbigcannons.munitions.big_cannon.fluid_shell.FluidShellBlock#getProjectile(Level, List) CBC source code}.
-     */
+     // Copied from {@link rbasamoyai.createbigcannons.munitions.big_cannon.fluid_shell.FluidShellBlock#getProjectile(Level, List) CBC source code}.
     @Override
     public CustomExplosiveMixShellProjectile getProjectile(Level level, List<StructureBlockInfo> projectileBlocks) {
         CustomExplosiveMixShellProjectile projectile = CreateBigCannonsEntityTypes.CUSTOM_EXPLOSIVE_MIX_SHELL.create(level);
-		projectile.setFuze(getFuze(projectileBlocks));
+		projectile.setFuze(getFuzeFromBlocks(projectileBlocks));
 		if (!projectileBlocks.isEmpty()) {
 			StructureBlockInfo info = projectileBlocks.get(0);
 			if (info.nbt() != null) {

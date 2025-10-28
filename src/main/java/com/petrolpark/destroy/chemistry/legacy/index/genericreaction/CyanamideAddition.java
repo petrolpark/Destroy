@@ -31,6 +31,10 @@ public class CyanamideAddition extends SingleGroupGenericReaction<NonTertiaryAmi
             .addGroup(LegacyMolecularStructure.atom(LegacyElement.CARBON), false)
             .addAtom(LegacyElement.NITROGEN)
             .addAtom(LegacyElement.NITROGEN, BondType.DOUBLE);
+
+        if(reactant.molecule.isHypothetical())
+            structure.addAllHydrogens();
+
         return reactionBuilder()
             .addReactant(reactant.molecule)
             .addReactant(DestroyMolecules.CYANAMIDE)

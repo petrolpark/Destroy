@@ -4,7 +4,7 @@ import com.petrolpark.data.advancement.SimpleAdvancementTrigger;
 import com.petrolpark.destroy.chemistry.legacy.LegacyReaction;
 import com.petrolpark.destroy.chemistry.legacy.ReactionResult;
 import com.petrolpark.destroy.chemistry.legacy.reactionresult.DestroyAdvancementReactionResult;
-import com.simibubi.create.foundation.utility.Lang;
+import net.createmod.catnip.lang.Lang;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -34,9 +34,9 @@ public enum DestroyAdvancementTrigger {
     COLORIMETER,
     COMPLETE_SEISMOGRAPH,
     CUT_ONIONS,
-    DISTILL("distill", "distillations"),
+    DISTILL("distill", "distillation"),
     CHARGE_WITH_DYNAMO("charge_with_dynamo", "dynamo_charging"),
-    ELECTROLYZE_WITH_DYNAMO("electrolyze_with_dynamo", "electrolyze_with_dynamo"),
+    ELECTROLYZE_WITH_DYNAMO("electrolyze_with_dynamo", "dynamo_electrolysis"),
     ETHYLANTHRAQUINONE,
     EXTRUDE,
     FILL_SEISMOGRAPH,

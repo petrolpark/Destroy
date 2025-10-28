@@ -3,11 +3,11 @@ package com.petrolpark.destroy.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jozufozu.flywheel.core.PartialModel;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.chemistry.legacy.LegacyElement;
 import com.petrolpark.destroy.chemistry.legacy.LegacyBond.BondType;
-import com.simibubi.create.foundation.utility.Lang;
+import net.createmod.catnip.lang.Lang;
 
 import net.minecraft.resources.ResourceLocation;
 
@@ -15,7 +15,7 @@ public class DestroyPartials {
 
     public static final PartialModel
 
-    AIR = new PartialModel(new ResourceLocation("minecraft", "block/air")),
+    AIR = PartialModel.of(new ResourceLocation("minecraft", "block/air")),
     
     // Kinetics
     CENTRIFUGE_COG = block("centrifuge/inner"),
@@ -92,19 +92,19 @@ public class DestroyPartials {
     };
 
     private static PartialModel block(String path) { //copied from Create source code
-        return new PartialModel(Destroy.asResource("block/"+path));
+        return PartialModel.of(Destroy.asResource("block/"+path));
     };
 
     private static PartialModel atom(String path) {
-        return new PartialModel(Destroy.asResource("chemistry/atom/"+path));
+        return PartialModel.of(Destroy.asResource("chemistry/atom/"+path));
     };
 
     private static PartialModel bond(String path) {
-        return new PartialModel(Destroy.asResource("chemistry/bond/"+path));
+        return PartialModel.of(Destroy.asResource("chemistry/bond/"+path));
     };
 
     private static PartialModel rGroup(String path) {
-        return new PartialModel(Destroy.asResource("chemistry/r_group/"+path));
+        return PartialModel.of(Destroy.asResource("chemistry/r_group/"+path));
     };
 
     public static void init() {};

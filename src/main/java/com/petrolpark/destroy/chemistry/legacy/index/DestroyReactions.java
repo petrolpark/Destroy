@@ -35,7 +35,7 @@ public class DestroyReactions {
     ACETYLENE_TRIMERIZATION = builder()
         .id("acetylene_trimerization")
         .addReactant(DestroyMolecules.ACETYLENE, 3)
-        .addSimpleItemTagCatalyst(AllTags.forgeItemTag("dusts/nickel"), 5f)
+        .addSimpleItemTagCatalyst(AllTags.forgeItemTag("dusts/nickel"), 1f)
         .addProduct(DestroyMolecules.BENZENE)
         .build(),
 
@@ -125,7 +125,7 @@ public class DestroyReactions {
     BORAX_DISSOLUTION = builder()
         .id("borax_dissolution")
         .addReactant(DestroyMolecules.PROTON, 2, 1)
-        .addSimpleItemTagCatalyst(AllTags.forgeItemTag("raw_materials/borax"), 16f)
+        .addSimpleItemTagReactant(AllTags.forgeItemTag("raw_materials/borax"), 15f)
         .addCatalyst(DestroyMolecules.CHLORIDE, 1)
         .addProduct(DestroyMolecules.SODIUM_ION, 2)
         .addProduct(DestroyMolecules.WATER, 5)
@@ -212,7 +212,7 @@ public class DestroyReactions {
     CELLULOSE_NITRATION = builder()
         .id("cellulose_nitration")
         .addReactant(DestroyMolecules.NITRONIUM)
-        .addSimpleItemReactant(DestroyItems.PAPER_PULP, 2f)
+        .addSimpleItemReactant(AllItems.PULP, 2f)
         .addProduct(DestroyMolecules.PROTON)
         .addProduct(DestroyMolecules.WATER) //TODO in future add oxalic acid side product
         .withResult(2f, PrecipitateReactionResult.of(DestroyItems.NITROCELLULOSE::asStack))
@@ -342,7 +342,7 @@ public class DestroyReactions {
     CYANAMIDE_ION_HYDROLYSIS = builder()
         .id("cyanamide_ion_hydrolysis")
         .addReactant(DestroyMolecules.CYANAMIDE_ION)
-        .addReactant(DestroyMolecules.WATER, 3, 1)
+        .addReactant(DestroyMolecules.WATER, 2, 1)
         .addProduct(DestroyMolecules.CYANAMIDE)
         .addProduct(DestroyMolecules.HYDROXIDE, 2)
         .build(),
@@ -386,6 +386,7 @@ public class DestroyReactions {
     CREATINE_PRECIPITATION = builder()
         .id("creatine_precipitation")
         .addReactant(DestroyMolecules.CREATINE)
+        .addCatalyst(DestroyMolecules.WATER, 1)
         .withResult(10f, PrecipitateReactionResult.of(DestroyItems.CREATINE::asStack))
         .build(),
 
@@ -740,12 +741,12 @@ public class DestroyReactions {
     NITRONIUM_FORMATION = builder()
         .id("nitronium_formation")
         .addReactant(DestroyMolecules.NITRIC_ACID)
-        .addReactant(DestroyMolecules.SULFATE)
-        .addReactant(DestroyMolecules.PROTON)
+        .addReactant(DestroyMolecules.SULFURIC_ACID)
         .addProduct(DestroyMolecules.NITRONIUM)
-        .addProduct(DestroyMolecules.HYDROXIDE)
+        .addProduct(DestroyMolecules.WATER)
         .addProduct(DestroyMolecules.HYDROGENSULFATE)
-        .build(), //TODO make reversible
+        .reversible()
+        .build(),
 
     NYLON_POLYMERISATION = builder()
         .id("nylon_polymerisation")

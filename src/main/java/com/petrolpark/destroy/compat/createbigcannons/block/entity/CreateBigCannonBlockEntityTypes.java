@@ -6,7 +6,7 @@ import com.petrolpark.destroy.compat.createbigcannons.block.CreateBigCannonsBloc
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockEntityRenderer;
-import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockInstance;
+import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockVisual;
 
 public class CreateBigCannonBlockEntityTypes {
 
@@ -17,7 +17,7 @@ public class CreateBigCannonBlockEntityTypes {
 
     public static final BlockEntityEntry<CustomExplosiveMixShellBlockEntity> CUSTOM_EXPLOSIVE_MIX_SHELL = REGISTRATE
         .blockEntity("custom_explosive_mix_shell", CustomExplosiveMixShellBlockEntity::new)
-        .instance(() -> FuzedBlockInstance::new)
+        .visual(() -> FuzedBlockVisual::new)
 		.renderer(() -> FuzedBlockEntityRenderer::new)
         .validBlock(CreateBigCannonsBlocks.CUSTOM_EXPLOSIVE_MIX_SHELL)
         .register();

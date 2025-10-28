@@ -30,29 +30,22 @@ description='''A destructive chemistry-based add-on to Create.'''
     
 [[dependencies.destroy]]
 	modId="create"
-	mandatory=true
-	versionRange="[0.5.1.h,)"
+	mandatory=false
+	versionRange="[6.0.6,6.1.0)"
 	ordering="AFTER"
 	side="BOTH"
 
 [[dependencies.destroy]]
 	modId="petrolpark"
-	mandatory=true
-	versionRange="[1.4.2,1.5.0)"
-	ordering="AFTER"
-	side="BOTH"
-
-[[dependencies.destroy]]
-	modId="tfmg"
 	mandatory=false
-    versionRange="[0.9.0,)"
+	versionRange="[1.4.9,1.5.0)"
 	ordering="AFTER"
 	side="BOTH"
 
 [[dependencies.destroy]]
     modId="createbigcannons"
     mandatory=false
-    versionRange="[5.5.0,)"
+    versionRange="[5.9.1,)"
     ordering="AFTER"
     side="BOTH"
 

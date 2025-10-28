@@ -20,7 +20,7 @@ import com.petrolpark.destroy.config.DestroyClientConfigs.ExtraInventoryClientSe
 import com.petrolpark.destroy.core.extendedinventory.ExtendedInventory.DelayedSlotPopulation;
 import com.petrolpark.destroy.core.extendedinventory.ExtendedInventory.SlotFactory;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
-import com.simibubi.create.foundation.utility.Iterate;
+import net.createmod.catnip.data.Iterate;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.common.math.IntMath;
 import com.google.gson.JsonObject;
 import com.petrolpark.destroy.chemistry.legacy.LegacyMixture;
 import com.petrolpark.destroy.chemistry.legacy.LegacySpecies;
@@ -13,7 +14,7 @@ import com.petrolpark.destroy.chemistry.naming.NamedSalt;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
+import net.createmod.catnip.lang.FontHelper.Palette;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -41,7 +42,8 @@ public class SaltFluidIngredient extends ConcentrationRangeFluidIngredient<SaltF
 
     @Override
     protected boolean testMixture(LegacyMixture mixture) {
-        return mixture.hasUsableMolecule(cation, minConcentration * cation.getCharge(), maxConcentration * cation.getCharge(), (molecule) -> molecule == anion) && mixture.hasUsableMolecule(anion, minConcentration * -anion.getCharge(), maxConcentration * -anion.getCharge(), (molecule) -> molecule == cation);
+        int gcd = IntMath.gcd(cation.getCharge(), -anion.getCharge());
+        return mixture.hasUsableMolecule(cation, minConcentration * -anion.getCharge() / gcd, maxConcentration * -anion.getCharge() / gcd, (molecule) -> molecule == anion) && mixture.hasUsableMolecule(anion, minConcentration * cation.getCharge() / gcd, maxConcentration * cation.getCharge() / gcd, (molecule) -> molecule == cation);
     };
 
     @Override

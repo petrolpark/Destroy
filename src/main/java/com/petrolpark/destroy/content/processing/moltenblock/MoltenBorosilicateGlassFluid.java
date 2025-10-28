@@ -10,9 +10,18 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class MoltenBorosilicateGlassFluid extends VirtualFluid implements ICustomBlockStateFluid {
 
-    public MoltenBorosilicateGlassFluid(Properties properties) {
-        super(properties);
+    public MoltenBorosilicateGlassFluid(Properties properties, boolean source) {
+        super(properties, source);
     };
+
+
+    public static MoltenBorosilicateGlassFluid createSource(Properties properties) {
+        return new MoltenBorosilicateGlassFluid(properties, true);
+    }
+
+    public static MoltenBorosilicateGlassFluid createFlowing(Properties properties) {
+        return new MoltenBorosilicateGlassFluid(properties, false);
+    }
 
     @Override
     public Item getBucket() {

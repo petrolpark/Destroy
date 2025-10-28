@@ -2,6 +2,7 @@ package com.petrolpark.destroy.content.redstone.programmer;
 
 import java.util.WeakHashMap;
 
+import net.createmod.catnip.data.Couple;
 import org.jetbrains.annotations.NotNull;
 
 import com.petrolpark.destroy.DestroyMessages;
@@ -11,7 +12,6 @@ import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.content.redstone.programmer.RedstoneProgram.Channel;
 import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.gui.menu.GhostItemMenu;
-import com.simibubi.create.foundation.utility.Couple;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

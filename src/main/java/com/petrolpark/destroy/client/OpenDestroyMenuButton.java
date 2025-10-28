@@ -2,15 +2,15 @@ package com.petrolpark.destroy.client;
 
 import java.util.function.Supplier;
 
+import net.createmod.catnip.config.ui.BaseConfigScreen;
+import net.createmod.catnip.gui.ScreenOpener;
+import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.DestroyItems;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.mixin.accessor.MenuRowsAccessor;
-import com.simibubi.create.foundation.config.ui.BaseConfigScreen;
-import com.simibubi.create.foundation.gui.ScreenOpener;
-import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.infrastructure.gui.OpenCreateMenuButton.MenuRows;
 
 import net.minecraft.client.Minecraft;
@@ -38,7 +38,7 @@ public class OpenDestroyMenuButton extends Button {
     public static final Supplier<ItemStack> ICON = DestroyItems.LOGO::asStack;
 
 	public OpenDestroyMenuButton(int x, int y) {
-		super(x, y, 20, 20, Components.immutableEmpty(), OpenDestroyMenuButton::click, DEFAULT_NARRATION);
+		super(x, y, 20, 20, Component.empty(), OpenDestroyMenuButton::click, DEFAULT_NARRATION);
 	};
 
     @Override

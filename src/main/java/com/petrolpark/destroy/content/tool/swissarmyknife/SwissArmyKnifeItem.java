@@ -3,6 +3,7 @@ package com.petrolpark.destroy.content.tool.swissarmyknife;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -10,15 +11,12 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.DestroyMessages;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
+import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -53,20 +51,50 @@ public class SwissArmyKnifeItem extends DiggerItem {
 
     private static int timeUntilToolPutAway = 20;
 
-    @Nullable
-    public static Tool selectedTool = null;
-
     public SwissArmyKnifeItem(float attackDamageModifier, float attackSpeedModifier, Tier tier, Properties properties) {
         super(attackDamageModifier, attackSpeedModifier, tier, BlockTags.MINEABLE_WITH_PICKAXE, properties); // The tag supplied here is ignored
     };
 
+    @OnlyIn(Dist.CLIENT)
+    public static class ClientState {
+        private static Map<LivingEntity, ClientState> states = new WeakHashMap<>();
+
+        @Nullable
+        public Tool selectedTool = null;
+        public Tool lastSelectedTool = null;
+        public int animTimer = 0;
+
+        public Map<Tool, LerpedFloat> chasers;
+
+        public ClientState() {
+            chasers = new EnumMap<>(Tool.class);
+            for (Tool tool : Tool.values()) {
+                chasers.put(tool, LerpedFloat.angular().chase(0d, 0.4d, LerpedFloat.Chaser.EXP));
+            };
+        };
+
+        public void tick() {
+            chasers.values().forEach(chaser -> chaser.tickChaser());
+
+            if(selectedTool != lastSelectedTool) {
+                animTimer++;
+                if(animTimer >= 8) {
+                    animTimer = 0;
+                    lastSelectedTool = selectedTool;
+                    chasers.forEach((entry, value) -> value.chase(entry == selectedTool ? 1d : 0d, 0.4d, LerpedFloat.Chaser.EXP));
+                };
+            };
+        };
+    };
+
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        Map<Tool, LerpedFloat> chasers = getChasers(stack);
-        chasers.values().forEach(LerpedFloat::tickChaser);
-        putChasers(stack, chasers);
-        if (level.isClientSide()) {
-            if (getTool(stack) != selectedTool) DestroyMessages.sendToServer(new SwissArmyKnifeToolC2SPacket(selectedTool));
+        if (level.isClientSide() && entity == Minecraft.getInstance().player) {
+            ClientState clientState = getClientState(Minecraft.getInstance().player);
+            if (getTool(stack) != clientState.selectedTool) {
+                DestroyMessages.sendToServer(new SwissArmyKnifeToolC2SPacket(clientState.selectedTool));
+            };
         };
     };
 
@@ -125,16 +153,22 @@ public class SwissArmyKnifeItem extends DiggerItem {
     };
 
     @Override
-	@OnlyIn(Dist.CLIENT)
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(SimpleCustomRenderer.create(this, new SwissArmyKnifeItemRenderer()));
-	};
+    @OnlyIn(Dist.CLIENT)
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(SimpleCustomRenderer.create(this, new SwissArmyKnifeItemRenderer()));
+    };
 
     @OnlyIn(Dist.CLIENT)
     public static void clientPlayerTick() {
         Minecraft minecraft = Minecraft.getInstance();
+
+        ClientState.states.keySet().removeIf(entity -> !(entity.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof SwissArmyKnifeItem || entity.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof SwissArmyKnifeItem));
+        ClientState.states.forEach((entity, state) -> state.tick());
+
         LocalPlayer player = minecraft.player;
         if (player == null) return;
+
+        ClientState clientState = getClientState(player);
         Tool newTool;
         boolean switchTool = false;
         if (!(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof SwissArmyKnifeItem) && !(player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof SwissArmyKnifeItem)) {
@@ -149,10 +183,10 @@ public class SwissArmyKnifeItem extends DiggerItem {
                 timeUntilToolPutAway = 20;
             };
         };
-        switchTool |= newTool != null && newTool != selectedTool;
+        switchTool |= newTool != null && newTool != clientState.selectedTool;
         if (switchTool) {
             DestroyMessages.sendToServer(new SwissArmyKnifeToolC2SPacket(newTool));
-            selectedTool = newTool;
+            clientState.selectedTool = newTool;
         };
     };
 
@@ -197,36 +231,11 @@ public class SwissArmyKnifeItem extends DiggerItem {
     public static void putTool(ItemStack stack, @Nullable Tool tool) {
         stack.removeTagKey("ActiveTool");
         if (tool != null) stack.getOrCreateTag().putInt("ActiveTool", tool.ordinal());
-        Map<Tool, LerpedFloat> chasers = getChasers(stack);
-        chasers.entrySet().forEach(entry -> entry.getValue().chase(entry.getKey() == tool ? 1d : 0d, 0.4d, Chaser.EXP));
-        putChasers(stack, chasers);
     };
 
-    public static Map<Tool, LerpedFloat> getChasers(ItemStack stack) {
-        EnumMap<Tool, LerpedFloat> map = new EnumMap<>(Tool.class);
-        int ordinal = 0;
-        if (!stack.getOrCreateTag().contains("ToolAnimations", Tag.TAG_LIST)) return Tool.ALL_RETRACTED;
-        for (Tag t : stack.getOrCreateTag().getList("ToolAnimations", Tag.TAG_COMPOUND)) {
-            CompoundTag tag = (CompoundTag)t;
-            LerpedFloat toolAngle = LerpedFloat.angular().chase(tag.getFloat("Target"), 0.4d, Chaser.EXP);
-            toolAngle.setValue(tag.getFloat("Value"));
-            map.put(Tool.values()[ordinal], toolAngle);
-            ordinal++;
-        };
-        return map;
-    };
-
-    public static void putChasers(ItemStack stack, Map<Tool, LerpedFloat> chasers) {
-        ListTag list = new ListTag();
-        for (Tool tool : Tool.values()) {
-            CompoundTag tag = new CompoundTag();
-            LerpedFloat toolAngle = chasers.get(tool);
-            if (toolAngle == null) toolAngle = LerpedFloat.angular().chase(0d, 0.4d, Chaser.EXP);
-            tag.putFloat("Target", toolAngle.getChaseTarget());
-            tag.putFloat("Value", toolAngle.getValue());
-            list.add(tag);
-        };
-        stack.getOrCreateTag().put("ToolAnimations", list);
+    @OnlyIn(Dist.CLIENT)
+    public static ClientState getClientState(LivingEntity entity) {
+        return ClientState.states.computeIfAbsent(entity, e -> new ClientState());
     };
 
     public static enum Tool {
@@ -236,9 +245,9 @@ public class SwissArmyKnifeItem extends DiggerItem {
         HOE(ToolActions.DEFAULT_HOE_ACTIONS,() -> new ItemStack(Items.IRON_HOE)),
         SHEARS(ToolActions.DEFAULT_SHEARS_ACTIONS, () -> new ItemStack(Items.IRON_PICKAXE));
 
-        public static Map<Tool, LerpedFloat> ALL_RETRACTED = new EnumMap<>(Tool.class);
+        public static final Map<Tool, LerpedFloat> ALL_RETRACTED = new EnumMap<>(Tool.class);
         static {
-            for (Tool tool : values()) ALL_RETRACTED.put(tool, LerpedFloat.angular().chase(0d, 0.4d, Chaser.EXP));
+            for (Tool tool : values()) ALL_RETRACTED.put(tool, LerpedFloat.angular().chase(0d, 0.4d, LerpedFloat.Chaser.EXP));
         };
 
         public final Set<ToolAction> actions;
@@ -249,5 +258,5 @@ public class SwissArmyKnifeItem extends DiggerItem {
             this.exampleTool = exampleTool;
         };
     };
-    
+
 };

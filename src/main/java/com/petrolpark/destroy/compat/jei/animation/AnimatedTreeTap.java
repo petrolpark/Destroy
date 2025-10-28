@@ -5,8 +5,8 @@ import com.mojang.math.Axis;
 import com.petrolpark.destroy.DestroyBlocks;
 import com.petrolpark.destroy.client.DestroyPartials;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
+import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -25,8 +25,7 @@ public class AnimatedTreeTap extends AnimatedKinetics {
 
 		blockElement(DestroyPartials.TREE_TAP_ARM)
 			.rotateBlock(9f * Mth.sin(AnimationTickHolder.getRenderTime() / 4f), 0, 0)
-            .withRotationOffset(new Vec3(0, -4 / 16f, -1 / 16f))
-            .atLocal(0f, - 12 / 16f, 7 / 16f)
+            .withRotationOffset(new Vec3(0, 0.5, 0.5))
 			.scale(scale)
 			.render(graphics);
 

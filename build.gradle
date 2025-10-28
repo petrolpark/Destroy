@@ -2,7 +2,6 @@ buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
-        jcenter()
         maven { url = 'https://repo.spongepowered.org/repository/maven-public' } // Mixins
         maven { url = 'https://maven.parchmentmc.org' } // Parchment
         maven { url = 'https://api.modrinth.com/maven' } // Modrinth
@@ -21,6 +20,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'org.spongepowered.mixin'
 
 jarJar.enable()
@@ -59,11 +59,8 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
-            arg '-mixin.config=create.mixins.json'
-            arg '-mixin.config=petrolpark.mixins.json'
             arg '-mixin.config=destroy.mixins.json'
-            arg '-mixin.config=flywheel.mixins.json'
-            jvmArgs += ['-XX:+AllowEnhancedClassRedefinition']
+            //jvmArgs += ['-XX:+AllowEnhancedClassRedefinition']
             property 'forge.logging.console.level', 'info'
             mods {
                 destroy {
@@ -74,8 +71,6 @@ minecraft {
 
         server {
             workingDirectory project.file('run/server')
-            arg '-mixin.config=create.mixins.json'
-            arg '-mixin.config=petrolpark.mixins.json'
             arg '-mixin.config=destroy.mixins.json'
             jvmArgs += ['-XX:+AllowEnhancedClassRedefinition']
             property 'forge.logging.console.level', 'info'
@@ -108,6 +103,10 @@ repositories {
     maven { // JEI mirror
         name = "ModMaven"
         url = "https://modmaven.dev"
+    }
+    maven {
+        name = 'createmod maven'
+        url = "https://maven.createmod.net"
     }
     maven { // Create, Flywheel and Registrate
         name = 'tterag maven'
@@ -148,7 +147,11 @@ repositories {
         url "https://maven.realrobotix.me/master"
     }
     maven { // Blueprint
-        url = "https://maven.jaackson.me"
+        url = "https://maven.teamabnormals.com"
+    }
+
+    maven { // MixinSquared
+        url = "https://maven.bawnorton.com/releases"
     }
 }
 
@@ -161,6 +164,9 @@ configurations {
 
 // Configure all runs with the following
 minecraft.runs.all {
+    property("mixin.env.remapRefMap", "true")
+    property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
+
 	// Set the minecraft_classpath token to the paths of all jars in the library configuration
 	// This is added with the actual Minecraft classpath to get the real classpath information later on
 	lazyToken('minecraft_classpath') {
@@ -178,14 +184,20 @@ dependencies {
     // Create
     implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
 
+    implementation fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}")
+
     // Flywheel
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
+    //implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
+    implementation fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
 
     // Registrate
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 
     // Petrolpark Library (temporary)
     implementation "com.petrolpark:petrolpark:${minecraft_version}-${petrolpark_library_version}"
+
+    // JGraphT
+    //jarJar(implementation("org.jgrapht:jgrapht-core:[${jgrapht_version}]"))
 
     // CDK
     //implementation "org.openscience.cdk:cdk-bundle:2.9"
@@ -203,20 +215,23 @@ dependencies {
     // Curios
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}")
-    
-    // TFMG
-    compileOnly fg.deobf("curse.maven:create-industry-693815:5558101")
 
     // CBC
-    implementation fg.deobf("com.rbasamoyai:ritchiesprojectilelib:1.0.0-369e88d+1.20.1-forge")
-    implementation fg.deobf("com.rbasamoyai:createbigcannons:${cbc_version}")
+    compileOnly fg.deobf("com.rbasamoyai:ritchiesprojectilelib:${rpl_version}")
+    compileOnly fg.deobf("com.rbasamoyai:createbigcannons:${cbc_version}")
 
     // Embeddium
     compileOnly fg.deobf("maven.modrinth:embeddium:${embeddium_version}+mc${minecraft_version}")
-    
+
     // ANNOTATION PROCESSORS
 
+    // MixinSquared's annotationProcessor MUST be registered BEFORE Mixin's one.
+    compileOnly(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:${mixin_squared_version}"))
+    implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:${mixin_squared_version}")) {jarJar.ranged(it, "[${mixin_squared_version},)")}
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${mixin_extras_version}"))
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:${mixin_extras_version}")) {jarJar.ranged(it, "[${mixin_extras_version},)")}
 }
 
 jar {

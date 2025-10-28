@@ -17,7 +17,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.client.event.ScreenEvent.RenderInventoryMobEffects;
 import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 
-@MoveToPetrolparkLibrary
+@MoveToPetrolparkLibrary //native neoforge feature now
 @Mixin(EffectRenderingInventoryScreen.class)
 public class EffectRenderingInventoryScreenMixin {
     

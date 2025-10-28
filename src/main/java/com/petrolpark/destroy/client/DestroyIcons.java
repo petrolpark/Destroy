@@ -8,7 +8,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.content.redstone.programmer.RedstoneProgram;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.utility.Color;
+import net.createmod.catnip.theme.Color;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;

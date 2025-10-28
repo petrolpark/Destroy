@@ -6,14 +6,15 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import com.petrolpark.compat.create.item.directional.DirectionalTransportedItemStack;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.DestroyItems;
 import com.petrolpark.destroy.client.DestroyGuiTextures;
 import com.petrolpark.destroy.client.DestroyLang;
-import com.petrolpark.compat.create.item.directional.DirectionalTransportedItemStack;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
@@ -94,9 +95,14 @@ public class CircuitMaskItem extends CircuitPatternItem {
     };
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
         if (stack.getOrCreateTag().contains("HideContaminants")) return;
+
+        if(level == null) // Fixes a crash caused by Jade
+            level = Minecraft.getInstance().level;
+
         List<UUID> previousPunchers = getContaminants(stack);
         tooltipComponents.add(Component.literal(" "));
         tooltipComponents.add(DestroyLang.translate("tooltip.circuit_mask.punched_by", previousPunchers.size()).style(ChatFormatting.GRAY).component());

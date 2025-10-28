@@ -5,7 +5,7 @@ import com.petrolpark.destroy.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.DestroyBlocks;
 import com.petrolpark.destroy.DestroyVoxelShapes;
 import com.petrolpark.destroy.DestroySoundEvents;
-import com.simibubi.create.content.contraptions.ITransformableBlock;
+import com.simibubi.create.api.contraption.transformable.TransformableBlock;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
@@ -44,7 +44,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class AgingBarrelBlock extends HorizontalDirectionalBlock implements IBE<AgeingBarrelBlockEntity>, IWrenchable, ITransformableBlock {
+public class AgingBarrelBlock extends HorizontalDirectionalBlock implements IBE<AgeingBarrelBlockEntity>, IWrenchable, TransformableBlock {
 
     public static final BooleanProperty IS_OPEN = BooleanProperty.create("open");
     public static final IntegerProperty PROGRESS = IntegerProperty.create("progress", 0, 4); //0 = smallest balloon, ... 4 = done (biggest balloon)
@@ -103,7 +103,7 @@ public class AgingBarrelBlock extends HorizontalDirectionalBlock implements IBE<
     public InteractionResult onWrenched(BlockState state, UseOnContext context) {
         BlockState newState = IWrenchable.super.getRotatedBlockState(state, Direction.UP); // Always rotate around Y axis
         if (newState != state) {
-            playRotateSound(context.getLevel(), context.getClickedPos());
+            IWrenchable.playRotateSound(context.getLevel(), context.getClickedPos());
             updateAfterWrenched(state, context);
             return InteractionResult.SUCCESS;
         };

@@ -34,10 +34,6 @@
       },
       {
         "type": "single",
-        "resource": "destroy:fluid/perfume"
-      },
-      {
-        "type": "single",
         "resource": "destroy:fluid/urine"
       },
       {

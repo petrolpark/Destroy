@@ -9,6 +9,7 @@ public class DestroyWorldConfigs extends DestroyConfigBase {
     public final DestroySubstancesConfigs substances = nested(0, DestroySubstancesConfigs::new, "Destroy's drugs and medicines");
     public final DestroyEquipmentConfigs equipment = nested(0, DestroyEquipmentConfigs::new, "Destroy's armor and tools");
     public final DestroyCompatConfigs compat = nested(0, DestroyCompatConfigs::new, "Compatibility with other mods");
+    public final DestroyKineticsConfigs kinetics = nested(0, DestroyKineticsConfigs::new, "Parameters and abilities of Destroy's kinetic mechanisms");
     
     @Override
     public String getName() {

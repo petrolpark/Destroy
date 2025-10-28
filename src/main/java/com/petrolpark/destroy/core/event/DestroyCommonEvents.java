@@ -15,9 +15,9 @@ import com.petrolpark.destroy.DestroyMessages;
 import com.petrolpark.destroy.DestroyMobEffects;
 import com.petrolpark.destroy.DestroyTags;
 import com.petrolpark.destroy.DestroyTags.MobEffects;
-import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.DestroyTrades;
 import com.petrolpark.destroy.DestroyVillagers;
+import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.content.oil.ChunkCrudeOil;
 import com.petrolpark.destroy.content.oil.CrudeOilCommand;
@@ -54,19 +54,17 @@ import com.petrolpark.destroy.core.pollution.PollutionCommand;
 import com.petrolpark.destroy.core.pollution.PollutionHelper;
 import com.petrolpark.destroy.core.pollution.SyncChunkPollutionS2CPacket;
 import com.petrolpark.recipe.ingredient.BlockIngredient;
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.equipment.potatoCannon.PotatoProjectileEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlockItem;
 import com.simibubi.create.content.redstone.link.LinkBehaviour;
 import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.ponder.PonderWorld;
-import com.simibubi.create.foundation.utility.Couple;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.createmod.catnip.data.Couple;
+import net.createmod.ponder.api.level.PonderLevel;
 import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Registry;
@@ -79,6 +77,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -89,10 +88,8 @@ import net.minecraft.world.entity.monster.Stray;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -120,6 +117,7 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.level.SaplingGrowTreeEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -131,7 +129,7 @@ public class DestroyCommonEvents {
     public static final void onAttachCapabilitiesLevel(AttachCapabilitiesEvent<Level> event) {
         Level level = event.getObject();
         if (!level.getCapability(Pollution.CAPABILITY).isPresent()) {
-            event.addCapability(Destroy.asResource("pollution"), level instanceof PonderWorld ? new Pollution.PonderCapabilityProvider() : new Pollution.Level.Provider());
+            event.addCapability(Destroy.asResource("pollution"), level instanceof PonderLevel ? new Pollution.PonderCapabilityProvider() : new Pollution.Level.Provider());
         };
     };
 
@@ -334,6 +332,19 @@ public class DestroyCommonEvents {
     };
 
     /**
+     * Allow the Player to collect their own tears.
+     */
+    @SubscribeEvent
+    public static final void onPlayerRightClickItem(PlayerInteractEvent.RightClickItem event) {
+        Player player = event.getEntity();
+        ItemStack itemStack = player.getItemInHand(event.getHand());
+
+        if (itemStack.is(Items.GLASS_BOTTLE) && player.hasEffect(DestroyMobEffects.CRYING.get())) {
+            collectTears(event, player, event.getHand(), itemStack, player);
+        };
+    };
+
+    /**
      * Allow Strays to be captured and tears to be collected from crying Mobs.
      */
     @SubscribeEvent
@@ -367,24 +378,26 @@ public class DestroyCommonEvents {
 
         // Collecting Tears
         if (itemStack.is(Items.GLASS_BOTTLE) && event.getTarget() instanceof LivingEntity livingEntity && livingEntity.hasEffect(DestroyMobEffects.CRYING.get())) {
-
-            livingEntity.removeEffect(DestroyMobEffects.CRYING.get()); // Stop the crying
-
-            // Give the Tear Bottle to the Player
-            ItemStack filled = DestroyItems.TEAR_BOTTLE.asStack();
-            if (!player.isCreative())
-                itemStack.shrink(1);
-            if (itemStack.isEmpty()) {
-                player.setItemInHand(event.getHand(), filled);
-            } else {
-                player.getInventory().placeItemBackInInventory(filled);
-            };
-
-            DestroyAdvancementTrigger.COLLECT_TEARS.award(event.getLevel(), player);
-
-            event.setResult(Result.DENY);
-            return;
+            collectTears(event, player, event.getHand(), itemStack, livingEntity);
         };
+    };
+
+    public static void collectTears(Event event, Player player, InteractionHand hand, ItemStack bottleStack, LivingEntity cryingEntity) {
+        cryingEntity.removeEffect(DestroyMobEffects.CRYING.get()); // Stop the crying
+
+        // Give the Tear Bottle to the Player
+        ItemStack filled = DestroyItems.TEAR_BOTTLE.asStack();
+        if (!player.isCreative())
+            bottleStack.shrink(1);
+        if (bottleStack.isEmpty()) {
+            player.setItemInHand(hand, filled);
+        } else {
+            player.getInventory().placeItemBackInInventory(filled);
+        };
+
+        DestroyAdvancementTrigger.COLLECT_TEARS.award(player.level(), player);
+
+        event.setResult(Result.DENY);
     };
 
     /**
@@ -452,7 +465,6 @@ public class DestroyCommonEvents {
     public static final void onPlayerRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         BlockPos pos = event.getPos();
         Level level = event.getLevel();
-        BlockState state = level.getBlockState(pos);
         ItemStack stack = event.getItemStack();
         Player player = event.getEntity();
 
@@ -478,15 +490,6 @@ public class DestroyCommonEvents {
                 event.setCanceled(true);
                 return;
             };
-        };
-
-        // Consuming certain Items, even if in Creative
-        if (!AllBlocks.DEPLOYER.has(state) && event.getItemStack().getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof IPickUpPutDownBlock) {
-            InteractionResult result = stack.useOn(new UseOnContext(player, event.getHand(), event.getHitVec()));
-            if (result.consumesAction() && player instanceof ServerPlayer serverPlayer) CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(serverPlayer, pos, stack);
-            event.setCancellationResult(result);
-            if (result != InteractionResult.PASS) event.setCanceled(true);
-            return;
         };
 
         // Fireproof Flint and Steel

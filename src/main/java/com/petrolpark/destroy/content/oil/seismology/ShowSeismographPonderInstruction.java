@@ -8,16 +8,15 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.client.DestroyGuiTextures;
 import com.petrolpark.destroy.content.oil.seismology.SeismographItem.Seismograph;
-import com.simibubi.create.foundation.ponder.PonderPalette;
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.SceneBuilder;
-import com.simibubi.create.foundation.ponder.element.AnimatedOverlayElement;
-import com.simibubi.create.foundation.ponder.instruction.FadeInOutInstruction;
-import com.simibubi.create.foundation.ponder.ui.PonderUI;
-import com.simibubi.create.foundation.utility.Pointing;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.math.Pointing;
+import net.createmod.ponder.api.PonderPalette;
+import net.createmod.ponder.api.scene.SceneBuilder;
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.element.AnimatedOverlayElementBase;
+import net.createmod.ponder.foundation.instruction.FadeInOutInstruction;
+import net.createmod.ponder.foundation.ui.PonderUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.phys.Vec2;
@@ -67,8 +66,8 @@ public class ShowSeismographPonderInstruction extends FadeInOutInstruction {
             Outline outline = iterator.next();
             outline.ttl--;
             if (outline.ttl <= 0) iterator.remove();
-            if (outline.ttl <= 10) outline.fade.chase(0f, 0.2f, Chaser.LINEAR);
-            else if (outline.lifetime - outline.ttl <= 10) outline.fade.chase(1f, 0.2f, Chaser.LINEAR);
+            if (outline.ttl <= 10) outline.fade.chase(0f, 0.2f, LerpedFloat.Chaser.LINEAR);
+            else if (outline.lifetime - outline.ttl <= 10) outline.fade.chase(1f, 0.2f, LerpedFloat.Chaser.LINEAR);
             outline.fade.tickChaser();
         };
     };
@@ -111,7 +110,7 @@ public class ShowSeismographPonderInstruction extends FadeInOutInstruction {
         };
     };
 
-    public class SeismographElement extends AnimatedOverlayElement {
+    public class SeismographElement extends AnimatedOverlayElementBase {
 
         public void close() {
             remainingTicks = 10;
@@ -134,10 +133,10 @@ public class ShowSeismographPonderInstruction extends FadeInOutInstruction {
         };
 
         /**
-         * Largely copied from {@link com.simibubi.create.foundation.ponder.element.InputWindowElement Create source code}.
+         * Largely copied from {@link com.simibubi.create.foundation.ponder.element.InputWindowElement Create 0.5.1 source code}.
          */
         @Override
-        protected void render(PonderScene scene, PonderUI screen, GuiGraphics graphics, float partialTicks, float fade) {
+        public void render(PonderScene scene, PonderUI screen, GuiGraphics graphics, float partialTicks, float fade) {
 
             float xFade = direction == Pointing.RIGHT ? -1 : direction == Pointing.LEFT ? 1 : 0;
             float yFade = direction == Pointing.DOWN ? -1 : direction == Pointing.UP ? 1 : 0;

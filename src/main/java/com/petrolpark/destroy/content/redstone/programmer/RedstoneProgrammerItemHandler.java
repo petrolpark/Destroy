@@ -8,8 +8,8 @@ import java.util.Map.Entry;
 
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.content.redstone.programmer.RedstoneProgrammerBlockItem.ItemStackRedstoneProgram;
-import com.simibubi.create.foundation.utility.WorldAttached;
 
+import net.createmod.catnip.data.WorldAttached;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

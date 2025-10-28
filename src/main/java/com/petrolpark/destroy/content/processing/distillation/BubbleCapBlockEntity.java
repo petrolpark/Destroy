@@ -12,8 +12,8 @@ import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.DestroyAdvancementTrigger;
 import com.petrolpark.destroy.DestroySoundEvents;
 import com.petrolpark.destroy.client.DestroyLang;
-import com.petrolpark.destroy.client.DestroyParticleTypes;
 import com.petrolpark.destroy.client.DestroyLang.TemperatureUnit;
+import com.petrolpark.destroy.client.DestroyParticleTypes;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.petrolpark.destroy.core.block.entity.IDirectionalOutputFluidBlockEntity;
 import com.petrolpark.destroy.core.block.entity.IHaveLabGoggleInformation;
@@ -30,14 +30,15 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour.TankSegment;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -226,10 +227,26 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveLabGo
         return fluidStack.getRawFluid().getFluidType().getLightLevel(fluidStack);
     };
 
+
     @Override
-    public float getPercent() {
-        return 100f * (float)getTank().getFluidAmount() / (float)getTank().getCapacity();
-    };
+    public int getMaxValue() {
+        return getTank().getCapacity();
+    }
+
+    @Override
+    public int getMinValue() {
+        return 0;
+    }
+
+    @Override
+    public int getCurrentValue() {
+        return getTank().getFluidAmount();
+    }
+
+    @Override
+    public MutableComponent format(int value) {
+        return DestroyLang.translateDirect("gui.bubble_cap.bubble_cap_liquid_amount", value);
+    }
 
     /**
      * Set the amount of time before Fluid from the internal Tank will start being transferred to the actual Tank.
@@ -307,8 +324,8 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveLabGo
 
         };
         return super.getCapability(cap, side);
-    };           
-    
+    };
+
     @Override
     public void invalidate() {
         super.invalidate();
@@ -351,7 +368,11 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveLabGo
         return true;
     };
 
-    public static MixtureContentsDisplaySource DISPLAY_SOURCE = new MixtureContentsDisplaySource(false) {
+
+    public static class BubbleCapDisplaySource extends MixtureContentsDisplaySource {
+        public BubbleCapDisplaySource() {
+            super(false);
+        };
 
         @Override
         public FluidStack getFluidStack(DisplayLinkContext context) {
@@ -366,7 +387,5 @@ public class BubbleCapBlockEntity extends SmartBlockEntity implements IHaveLabGo
         public Component getName() {
             return DestroyLang.translate("display_source.bubble_cap").component();
         };
-
-    };
- 
+    }
 };

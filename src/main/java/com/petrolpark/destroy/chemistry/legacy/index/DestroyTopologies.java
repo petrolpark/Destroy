@@ -221,13 +221,13 @@ public class DestroyTopologies {
         .atom(LegacyElement.SULFUR, new Vec3(0d, 1.5d, 0d)) // 2
             .withBondTo(1, BondType.SINGLE)
             .attach()
-        .atom(LegacyElement.SULFUR, new Vec3(0.75d, 1.25d, 0.6124d)) // 3
+        .atom(LegacyElement.SULFUR, new Vec3(0.75d, 1.75d, 0.6124d)) // 3
             .withBondTo(2, BondType.SINGLE)
             .attach()
         .atom(LegacyElement.SULFUR, new Vec3(1.5d, 1.5d, 0d)) // 4
             .withBondTo(3, BondType.SINGLE)
             .attach()
-        .atom(LegacyElement.SULFUR, new Vec3(1.25d, 0.75d, 0.6124d)) // 5
+        .atom(LegacyElement.SULFUR, new Vec3(1.75d, 0.75d, 0.6124d)) // 5
             .withBondTo(4, BondType.SINGLE)
             .attach()
         .atom(LegacyElement.SULFUR, new Vec3(1.5d, 0d, 0d)) // 6

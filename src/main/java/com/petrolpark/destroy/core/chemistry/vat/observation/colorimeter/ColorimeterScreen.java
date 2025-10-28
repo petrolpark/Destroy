@@ -14,9 +14,9 @@ import com.petrolpark.destroy.core.chemistry.vat.observation.AbstractQuantityObs
 import com.petrolpark.destroy.core.chemistry.vat.observation.RedstoneQuantityMonitorThresholdChangeC2SPacket;
 import com.petrolpark.destroy.util.GuiHelper;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.gui.UIRenderHelper;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 
+import net.createmod.catnip.gui.UIRenderHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
@@ -42,8 +42,8 @@ public class ColorimeterScreen extends AbstractQuantityObservingScreen {
         species = colorimeter.getMolecule();
         speciesIndex = 0;
         this.availableSpecies = availableSpecies;
-        availableSpecies.remove(species);
-        availableSpecies.add(speciesIndex, species); // Put the selected species first
+
+        speciesIndex = availableSpecies.indexOf(species);
 
         observingGas = colorimeter.observingGas;
     };
@@ -99,13 +99,13 @@ public class ColorimeterScreen extends AbstractQuantityObservingScreen {
     };
 
     @Override
-    protected void onThresholdChange(boolean upper, float newValue) {
-        DestroyMessages.sendToServer(new RedstoneQuantityMonitorThresholdChangeC2SPacket(upper, newValue, colorimeter.getBlockPos()));
-    };
+    protected void updateThresholds(float lower, float upper) {
+        DestroyMessages.sendToServer(new RedstoneQuantityMonitorThresholdChangeC2SPacket(lower, upper, colorimeter.getBlockPos()));
+    }
 
     @Override
     public void onClose() {
-        if (species != colorimeter.getMolecule() || observingGas != colorimeter.observingGas) DestroyMessages.sendToServer(new ConfigureColorimeterC2SPacket(observingGas, species, colorimeter.getBlockPos()));
+        DestroyMessages.sendToServer(new ConfigureColorimeterC2SPacket(observingGas, species, colorimeter.getBlockPos()));
         super.onClose();
     };
 

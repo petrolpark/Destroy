@@ -2,12 +2,13 @@ package com.petrolpark.destroy.core.bettervaluesettings;
 
 import java.util.function.Consumer;
 
+import com.petrolpark.destroy.mixin.accessor.ValueSettingsScreenAccessor;
 import com.simibubi.create.AllKeys;
 import com.simibubi.create.AllPackets;
+import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBehaviour.ValueSettings;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsPacket;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsScreen;
-import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBehaviour.ValueSettings;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,8 +23,8 @@ public class BetterValueSettingsScreen extends ValueSettingsScreen {
     protected final InteractionHand hand;
     protected final BlockPos pos; // Double reference because it's private
 
-    public BetterValueSettingsScreen(BlockPos pos, Direction sideAccessed, InteractionHand hand, ValueSettingsBoard board, ValueSettings valueSettings, Consumer<ValueSettings> onHover) {
-        super(pos, board, valueSettings, onHover);
+    public BetterValueSettingsScreen(BlockPos pos, Direction sideAccessed, InteractionHand hand, ValueSettingsBoard board, ValueSettings valueSettings, Consumer<ValueSettings> onHover, int netId) {
+        super(pos, board, valueSettings, onHover, netId);
         this.pos = pos;
         this.sideAccessed = sideAccessed;
         this.hand = hand;
@@ -38,8 +39,8 @@ public class BetterValueSettingsScreen extends ValueSettingsScreen {
     protected void saveAndClose(double mouseX, double mouseY) {
 		ValueSettings closest = getClosestCoordinate((int) mouseX, (int) mouseY);
 		AllPackets.getChannel()
-			.sendToServer(new ValueSettingsPacket(pos, closest.row(), closest.value(), hand, sideAccessed,
-				AllKeys.ctrlDown()));
+			.sendToServer(new ValueSettingsPacket(pos, closest.row(), closest.value(), hand, null, sideAccessed,
+				AllKeys.ctrlDown(), ((ValueSettingsScreenAccessor) this).getNetId()));
 		onClose();
 	};
     

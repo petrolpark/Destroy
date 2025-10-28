@@ -14,9 +14,9 @@ import com.petrolpark.destroy.core.chemistry.vat.VatControllerBlockEntity;
 import com.petrolpark.destroy.core.chemistry.vat.VatControllerBlockEntity.VatTankWrapper;
 import com.petrolpark.destroy.core.fluid.GeniusFluidTankBehaviour.GeniusFluidTank;
 import com.simibubi.create.content.fluids.tank.CreativeFluidTankBlockEntity.CreativeSmartFluidTank;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -236,7 +236,7 @@ public interface IMixtureStorageItem {
                 tooltip.addAll(mixture.getContentsTooltip(iupac, false, false, fluidStack.getAmount(), df).stream().map(c -> c.copy()).toList());
             };
 
-            tooltip.add(2, Component.literal(" "+fluidStack.getAmount()).withStyle(ChatFormatting.GRAY).append(Lang.translateDirect("generic.unit.millibuckets")).append(" "+DestroyAllConfigs.CLIENT.chemistry.temperatureUnit.get().of(temperature, df)));
+            tooltip.add(2, Component.literal(" "+fluidStack.getAmount()).withStyle(ChatFormatting.GRAY).append(CreateLang.translateDirect("generic.unit.millibuckets")).append(" "+DestroyAllConfigs.CLIENT.chemistry.temperatureUnit.get().of(temperature, df)));
         });
     };
 

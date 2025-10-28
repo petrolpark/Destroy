@@ -1,10 +1,10 @@
 package com.petrolpark.destroy.core.explosion.mixedexplosive;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.Destroy;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.utility.Iterate;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.data.Iterate;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -53,8 +53,8 @@ public class MixedExplosiveBlockEntityRenderer extends SafeBlockEntityRenderer<M
         
         for (Direction face : Iterate.horizontalDirections) {
             ms.pushPose();
-            TransformStack.cast(ms)
-                .centre()
+            TransformStack.of(ms)
+                .center()
                 .scale(- 1 / 16f)
                 .rotateToFace(face);
             ms.translate(-8d, -5d, 8.02d);

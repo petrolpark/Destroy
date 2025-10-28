@@ -50,6 +50,7 @@ public class DestroyGroupFinder extends GroupFinder {
                 List<LegacyAtom> carbonylOxygens = bondedAtomsOfElementTo(structure, carbon, LegacyElement.OXYGEN, BondType.DOUBLE);
                 List<LegacyAtom> singleBondOxygens = bondedAtomsOfElementTo(structure, carbon, LegacyElement.OXYGEN, BondType.SINGLE);
                 List<LegacyAtom> chlorines = bondedAtomsOfElementTo(structure, carbon, LegacyElement.CHLORINE, BondType.SINGLE);
+                List<LegacyAtom> fluorines = bondedAtomsOfElementTo(structure, carbon, LegacyElement.FLUORINE, BondType.SINGLE);
                 List<LegacyAtom> halogens = new ArrayList<>(chlorines);
                 halogens.addAll(bondedAtomsOfElementTo(structure, carbon, LegacyElement.IODINE, BondType.SINGLE));
                 List<LegacyAtom> nitrogens = bondedAtomsOfElementTo(structure, carbon, LegacyElement.NITROGEN, BondType.SINGLE);
@@ -102,7 +103,9 @@ public class DestroyGroupFinder extends GroupFinder {
                     };
                 } else { // Alcohols, halides, nitriles, amines, isocyanates, nitros, boranes, borate esters
                     for (LegacyAtom halogen : halogens) {
-                        groups.add(new HalideGroup(carbon, halogen, carbons.size()));
+                        if (chlorines.size() < 3 && fluorines.size() == 0) { // Targeting the chlorines on Carbon Tetrachloride, Chloroform and the various CFCs to make them nonreactive
+                            groups.add(new HalideGroup(carbon, halogen, carbons.size()));
+                        }
                     };
                     for (LegacyAtom oxygen : singleBondOxygens) { // Alcohols
                         if (bondedAtomsOfElementTo(structure, oxygen, LegacyElement.HYDROGEN).size() == 1) {
@@ -123,7 +126,7 @@ public class DestroyGroupFinder extends GroupFinder {
                             if (isocyanateOxygens.size() == 1) groups.add(new IsocyanateGroup(carbon, nitrogen, isocyanateCarbon, isocyanateOxygens.get(0)));
                         } else if (aromaticBondedOxygens.size() == 2) { // Nitros
                             groups.add(new NitroGroup(carbon, nitrogen, aromaticBondedOxygens.get(0), aromaticBondedOxygens.get(1)));
-                        } else if (nitrileNitrogens.size() == 0) { // Don't allow amines that also have a nitrile on the same carbon
+                        } else if (nitrileNitrogens.size() == 0 && doubleBondedNitrogens.size() == 0) { // Don't allow amines that also have a nitrile or a double bonded nitrogen on the same carbon
                             List<LegacyAtom> amineHydrogens = bondedAtomsOfElementTo(structure, nitrogen, LegacyElement.HYDROGEN);
                             for (LegacyAtom hydrogen : amineHydrogens) {
                                 groups.add(new NonTertiaryAmineGroup(carbon, nitrogen, hydrogen));
@@ -134,7 +137,17 @@ public class DestroyGroupFinder extends GroupFinder {
                     };
                     // Nitriles
                     if (nitrileNitrogens.size() == 1 && carbons.size() == 1) {
-                        groups.add(new NitrileGroup(carbon, nitrileNitrogens.get(0)));
+                        LegacyAtom secondCarbon = carbons.get(0);
+                        LegacyAtom nitrogen = atom;
+
+                        if(bondedAtomsOfElementTo(structure, secondCarbon, LegacyElement.NITROGEN, BondType.SINGLE).size() == 1){ // all of this is purely to exclude AIBN from having nitriles
+                            LegacyAtom firstNitrogen = getNitrogenBondedToCarbonWhichIsntThisCarbonInThisStructure(secondCarbon, nitrogen, structure);
+                            if (bondedAtomsOfElementTo(structure, firstNitrogen, LegacyElement.NITROGEN, BondType.DOUBLE).size() == 0){
+                                groups.add(new NitrileGroup(carbon, nitrileNitrogens.get(0)));
+                            }
+                        } else if(bondedAtomsOfElementTo(structure, secondCarbon, LegacyElement.NITROGEN, BondType.SINGLE).size() == 0){
+                            groups.add(new NitrileGroup(carbon, nitrileNitrogens.get(0)));
+                        }
                     };
                     // Boranes
                     for (LegacyAtom boron : borons) { 
@@ -201,6 +214,12 @@ public class DestroyGroupFinder extends GroupFinder {
         carbonsBondedToOxygen.remove(carbon); //remove the carbonyl one
         return carbonsBondedToOxygen.get(0);
     };
+
+    private LegacyAtom getNitrogenBondedToCarbonWhichIsntThisCarbonInThisStructure(LegacyAtom carbon, LegacyAtom nitrogen, Map<LegacyAtom, List<LegacyBond>> structure) { //i can do you one better
+        List<LegacyAtom> nitrogensBondedToCarbon = bondedAtomsOfElementTo(structure, carbon, LegacyElement.NITROGEN); //get both carbons and the nitrogen
+        return nitrogensBondedToCarbon.get(0);
+    };
+
 
     public static void register() {
         new DestroyGroupFinder();

@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.function.Supplier;
 
+import net.createmod.catnip.lang.Lang;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +15,7 @@ import com.petrolpark.destroy.client.DestroyIcons;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIconOptions;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.utility.Lang;
+
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -227,7 +228,10 @@ public class Pollution {
      */
     public static float getLocalTemperature(net.minecraft.world.level.Level level, BlockPos pos) {
         return level.getCapability(CAPABILITY).map(pollution -> {
-            return ((Pollution.Level)pollution).getOutdoorTemperature() + (10f * level.getBiome(pos).get().getBaseTemperature());
+            if(pollution instanceof Pollution.Level levelPollution)
+                return levelPollution.getOutdoorTemperature() + (10f * level.getBiome(pos).get().getBaseTemperature());
+            else
+                return 289f;
         }).orElse(289f);
     };
 
@@ -268,7 +272,7 @@ public class Pollution {
 
         @Override
         public String getTranslationKey() {
-            return "destroy.pollution."+Lang.asId(name());
+            return "destroy.pollution."+ Lang.asId(name());
         };
 
     };

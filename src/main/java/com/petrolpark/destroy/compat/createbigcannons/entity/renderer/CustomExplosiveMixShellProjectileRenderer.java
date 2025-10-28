@@ -1,5 +1,6 @@
 package com.petrolpark.destroy.compat.createbigcannons.entity.renderer;
 
+import net.createmod.catnip.render.CachedBuffers;
 import org.joml.Quaternionf;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -7,7 +8,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.petrolpark.destroy.client.DestroyPartials;
 import com.petrolpark.destroy.compat.createbigcannons.entity.CustomExplosiveMixShellProjectile;
-import com.simibubi.create.foundation.render.CachedBufferer;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -35,11 +35,11 @@ public class CustomExplosiveMixShellProjectileRenderer extends BigCannonProjecti
         poseStack.translate(0.0d, 0.4d, 0.0d);
         poseStack.mulPose(q);
 
-        CachedBufferer.partialFacing(DestroyPartials.CUSTOM_EXPLOSIVE_MIX_SHELL_BASE, blockState)
+        CachedBuffers.partialFacing(DestroyPartials.CUSTOM_EXPLOSIVE_MIX_SHELL_BASE, blockState)
 			.light(packedLight)
             .color(entity.color)
             .renderInto(poseStack, vc);
-        CachedBufferer.partialFacing(DestroyPartials.CUSTOM_EXPLOSIVE_MIX_SHELL_OVERLAY, blockState)
+        CachedBuffers.partialFacing(DestroyPartials.CUSTOM_EXPLOSIVE_MIX_SHELL_OVERLAY, blockState)
 			.light(packedLight)
             .renderInto(poseStack, vc);
 

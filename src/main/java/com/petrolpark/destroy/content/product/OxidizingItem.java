@@ -4,8 +4,7 @@ import java.util.function.Supplier;
 
 import com.petrolpark.item.decay.ConfiguredDecayingItem;
 import com.petrolpark.item.decay.IDecayingItem;
-import com.simibubi.create.foundation.config.ConfigBase.ConfigInt;
-
+import net.createmod.catnip.config.ConfigBase;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -14,7 +13,7 @@ import net.minecraft.world.level.Level;
 
 public class OxidizingItem extends ConfiguredDecayingItem {
 
-    public OxidizingItem(Properties properties, Supplier<ItemStack> decayProduct, Supplier<ConfigInt> lifetime) {
+    public OxidizingItem(Properties properties, Supplier<ItemStack> decayProduct, Supplier<ConfigBase.ConfigInt> lifetime) {
         super(properties, decayProduct, lifetime);
     };
 

@@ -15,7 +15,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.extensions.IForgeBlockState;
 
-
 @Mixin(IForgeBlockState.class)
 public interface DestroyFrictionModifier extends IForgeBlockState {
 

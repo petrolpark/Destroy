@@ -2,12 +2,12 @@ package com.petrolpark.destroy.content.processing.trypolithography;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.client.DestroyGuiTextures;
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.element.AnimatedOverlayElement;
-import com.simibubi.create.foundation.ponder.instruction.FadeInOutInstruction;
-import com.simibubi.create.foundation.ponder.ui.PonderUI;
-import com.simibubi.create.foundation.utility.Pointing;
 
+import net.createmod.catnip.math.Pointing;
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.element.AnimatedOverlayElementBase;
+import net.createmod.ponder.foundation.instruction.FadeInOutInstruction;
+import net.createmod.ponder.foundation.ui.PonderUI;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -47,13 +47,13 @@ public class ShowCircuitPatternPonderInstruction extends FadeInOutInstruction {
 		element.setFade(fade);
 	};
 
-    public class CircuitMaskElement extends AnimatedOverlayElement {
+    public class CircuitMaskElement extends AnimatedOverlayElementBase {
 
         /**
          * Largely copied from {@link com.simibubi.create.foundation.ponder.element.InputWindowElement Create source code}.
          */
         @Override
-        protected void render(PonderScene scene, PonderUI screen, GuiGraphics graphics, float partialTicks, float fade) {
+        public void render(PonderScene scene, PonderUI screen, GuiGraphics graphics, float partialTicks, float fade) {
             float xFade = direction == Pointing.RIGHT ? -1 : direction == Pointing.LEFT ? 1 : 0;
             float yFade = direction == Pointing.DOWN ? -1 : direction == Pointing.UP ? 1 : 0;
             xFade *= 10 * (1 - fade);

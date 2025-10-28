@@ -7,12 +7,10 @@ import com.petrolpark.destroy.content.processing.centrifuge.CentrifugationRecipe
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -34,26 +32,11 @@ public class CentrifugationCategory extends PetrolparkRecipeCategory<Centrifugat
         FluidStack denseOutputFluid = recipe.getDenseOutputFluid();
         FluidStack lightOutputFluid = recipe.getLightOutputFluid();
 
-        builder
-            .addSlot(RecipeIngredientRole.INPUT, 3, 3)
-            .setBackground(getRenderedSlot(), -1, -1)
-            .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(inputFluid.getMatchingFluidStacks()))
-            .addTooltipCallback(addFluidTooltip(inputFluid.getRequiredAmount()));
-
+        addFluidSlot(builder, 3, 3, inputFluid);
         addOptionalRequiredBiomeSlot(builder, recipe, 3, 19);
 
-        builder
-            .addSlot(RecipeIngredientRole.OUTPUT, 99, 38)
-            .setBackground(getRenderedSlot(), -1, -1)
-            .addIngredient(ForgeTypes.FLUID_STACK, withImprovedVisibility(denseOutputFluid))
-            .addTooltipCallback(addFluidTooltip(denseOutputFluid.getAmount()));
-
-        builder
-            .addSlot(RecipeIngredientRole.OUTPUT, 33, 96)
-            .setBackground(getRenderedSlot(), -1, -1)
-            .addIngredient(ForgeTypes.FLUID_STACK, withImprovedVisibility(lightOutputFluid))
-            .addTooltipCallback(addFluidTooltip(lightOutputFluid.getAmount()));
-        
+        addFluidSlot(builder, 99, 38, denseOutputFluid);
+        addFluidSlot(builder, 33, 96, lightOutputFluid);
     };
 
     @Override

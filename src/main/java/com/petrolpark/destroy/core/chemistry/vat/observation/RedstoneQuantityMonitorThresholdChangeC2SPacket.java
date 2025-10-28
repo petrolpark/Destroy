@@ -12,26 +12,26 @@ import net.minecraftforge.network.NetworkEvent.Context;
 
 public class RedstoneQuantityMonitorThresholdChangeC2SPacket extends C2SPacket {
 
-    public final boolean upper;
-    public final float value;
+    public final float lower;
+    public final float upper;
     public final BlockPos pos;
 
-    public RedstoneQuantityMonitorThresholdChangeC2SPacket(boolean upper, float value, BlockPos pos) {
+    public RedstoneQuantityMonitorThresholdChangeC2SPacket(float lower, float upper, BlockPos pos) {
+        this.lower = lower;
         this.upper = upper;
-        this.value = value;
         this.pos = pos;
     };
 
     public RedstoneQuantityMonitorThresholdChangeC2SPacket(FriendlyByteBuf buffer) {
-        upper = buffer.readBoolean();
-        value = buffer.readFloat();
+        lower = buffer.readFloat();
+        upper = buffer.readFloat();
         pos = buffer.readBlockPos();
     };
 
     @Override
     public void toBytes(FriendlyByteBuf buffer) {
-        buffer.writeBoolean(upper);
-        buffer.writeFloat(value);
+        buffer.writeFloat(lower);
+        buffer.writeFloat(upper);
         buffer.writeBlockPos(pos);
     };
 
@@ -42,8 +42,8 @@ public class RedstoneQuantityMonitorThresholdChangeC2SPacket extends C2SPacket {
             ServerPlayer sender = context.getSender();
             RedstoneQuantityMonitorBehaviour behaviour = BlockEntityBehaviour.get(sender.level(), pos, RedstoneQuantityMonitorBehaviour.TYPE);
             if (behaviour != null) {
-                if (upper) behaviour.upperThreshold = value;
-                else behaviour.lowerThreshold = value;
+                behaviour.lowerThreshold = lower;
+                behaviour.upperThreshold = upper;
                 behaviour.notifyUpdate();
             };
         });

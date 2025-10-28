@@ -2,7 +2,7 @@ package com.petrolpark.destroy.compat.createbigcannons.entity;
 
 import static com.petrolpark.destroy.Destroy.REGISTRATE;
 
-import com.petrolpark.destroy.compat.createbigcannons.entity.renderer.CustomExplosiveMixShellProjectileRenderer;
+import com.petrolpark.destroy.compat.createbigcannons.entity.renderer.CustomExplosiveMixShellProjectileRenderer; // TODO: CBC
 import com.tterrag.registrate.util.entry.EntityEntry;
 
 import net.minecraft.world.entity.MobCategory;

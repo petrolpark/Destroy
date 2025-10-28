@@ -16,21 +16,19 @@ import com.petrolpark.destroy.content.processing.ageing.AgingBarrelBlock;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.utility.Pair;
 
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.fluids.FluidStack;
 
 public class AgingCategory extends PetrolparkRecipeCategory<AgeingRecipe> {
 
@@ -53,10 +51,7 @@ public class AgingCategory extends PetrolparkRecipeCategory<AgeingRecipe> {
 
         // Add the Fluid Ingredient
         FluidIngredient fluidIngredient = recipe.getRequiredFluid();
-        builder.addSlot(RecipeIngredientRole.INPUT, xOffset, 33)
-            .setBackground(getRenderedSlot(), -1, -1)
-            .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(fluidIngredient.getMatchingFluidStacks()))
-            .addTooltipCallback(addFluidTooltip(fluidIngredient.getRequiredAmount()));
+        addFluidSlot(builder, xOffset, 33, fluidIngredient);
 
         // Add the Item Ingredient(s)
         for (Pair<Ingredient, MutableInt> pair : condensedIngredients) {
@@ -76,11 +71,7 @@ public class AgingCategory extends PetrolparkRecipeCategory<AgeingRecipe> {
         };
 
         // Add the Fluid result
-        FluidStack resultantFluid = recipe.getFluidResults().get(0);
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 142, 35)
-            .setBackground(getRenderedSlot(), -1, -1)
-            .addIngredient(ForgeTypes.FLUID_STACK, withImprovedVisibility(resultantFluid))
-            .addTooltipCallback(addFluidTooltip(resultantFluid.getAmount()));
+        addFluidSlot(builder, 142, 35, recipe.getFluidResults().get(0));
     };
 
     @Override

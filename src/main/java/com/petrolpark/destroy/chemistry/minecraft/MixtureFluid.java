@@ -22,8 +22,8 @@ import static com.petrolpark.destroy.chemistry.legacy.LegacyReaction.GAS_CONSTAN
 
 public class MixtureFluid extends VirtualFluid {
 
-    public MixtureFluid(Properties properties) {
-        super(properties);
+    public MixtureFluid(Properties properties, boolean source) {
+        super(properties, source);
     };
 
     public static LegacyMixture airMixture(float temperature) {
@@ -65,6 +65,15 @@ public class MixtureFluid extends VirtualFluid {
         addMixtureToFluidStack(fluidStack, mixture);
         return fluidStack;
     };
+
+    public static MixtureFluid createSource(Properties properties) {
+        return new MixtureFluid(properties, true);
+    }
+
+    public static MixtureFluid createFlowing(Properties properties) {
+        return new MixtureFluid(properties, false);
+    }
+
 
     public static FluidStack addMixtureToFluidStack(FluidStack fluidStack, ReadOnlyMixture mixture) {
         if (mixture.isEmpty()) {

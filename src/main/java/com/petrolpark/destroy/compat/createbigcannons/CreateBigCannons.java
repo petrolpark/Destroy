@@ -4,8 +4,9 @@ import com.petrolpark.destroy.compat.createbigcannons.block.CreateBigCannonsBloc
 import com.petrolpark.destroy.compat.createbigcannons.block.entity.CreateBigCannonBlockEntityTypes;
 import com.petrolpark.destroy.compat.createbigcannons.entity.CreateBigCannonsEntityTypes;
 import com.petrolpark.destroy.compat.createbigcannons.event.CreateBigCannonsClientModEvents;
-import com.petrolpark.destroy.compat.createbigcannons.ponder.CreateBigCannonsPonderIndex;
+import com.petrolpark.destroy.compat.createbigcannons.ponder.CreateBigCannonsPonderPlugin;
 
+import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -33,7 +34,8 @@ public class CreateBigCannons {
     };
 
     public static void onClientSetup(FMLClientSetupEvent event) {
-        CreateBigCannonsPonderIndex.register();
-        CreateBigCannonsPonderIndex.registerTags();
+        //CreateBigCannonsPonderScenes.register();
+        //CreateBigCannonsPonderScenes.registerTags();
+        PonderIndex.addPlugin(new CreateBigCannonsPonderPlugin());
     };
 };

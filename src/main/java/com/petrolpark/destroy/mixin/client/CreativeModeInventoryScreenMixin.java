@@ -6,10 +6,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.petrolpark.destroy.DestroyClient;
+import com.petrolpark.destroy.MoveToPetrolparkLibrary;
 import com.petrolpark.destroy.core.extendedinventory.ExtendedInventory;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
@@ -26,6 +28,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
 @Mixin(CreativeModeInventoryScreen.class)
+@MoveToPetrolparkLibrary
 public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingInventoryScreen<ItemPickerMenu> {
 
     @Shadow
@@ -39,14 +42,14 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
     /**
      * Don't add Extended Inventory Slots to the Survival Inventory section of the Creative Inventory in the normal way.
      */
-    @Redirect(
-        method = "Lnet/minecraft/client/gui/screens/inventory/CreativeModeInventoryScreen;selectTab(Lnet/minecraft/world/item/CreativeModeTab;)V",
+    @WrapOperation(
+        method = "selectTab",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/core/NonNullList;size()I"
         )
     )
-    public int addLimitedSlots(NonNullList<Slot> slots) {
+    public int addLimitedSlots(NonNullList<Slot> slots, Operation<Integer> original) {
         return 46;
     };
 

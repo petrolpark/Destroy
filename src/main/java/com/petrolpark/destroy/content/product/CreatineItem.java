@@ -2,9 +2,13 @@ package com.petrolpark.destroy.content.product;
 
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+
 import com.petrolpark.destroy.DestroyAttributes;
 import com.petrolpark.destroy.config.DestroyAllConfigs;
 
+import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,27 +26,42 @@ public class CreatineItem extends Item {
     
     public CreatineItem(Properties properties) {
         super(properties);
-    };
+    }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if (!player.isCreative() && player.getFoodData().getFoodLevel() > 6f) return InteractionResultHolder.fail(player.getItemInHand(hand));
+    @Nonnull
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
+        if (!player.isCreative() && player.getFoodData().getFoodLevel() > 6f) {
+            return InteractionResultHolder.fail(player.getItemInHand(hand));
+        }
         return super.use(level, player, hand);
-    };
+    }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
-        if (livingEntity.getAttributes().hasAttribute(DestroyAttributes.EXTRA_INVENTORY_SIZE.get())) {
-            AttributeInstance extraInventory = livingEntity.getAttribute(DestroyAttributes.EXTRA_INVENTORY_SIZE.get());
-            extraInventory.removeModifier(EXTRA_INVENTORY_ATTRIBUTE_MODIFIER);
-            extraInventory.addPermanentModifier(new AttributeModifier(EXTRA_INVENTORY_ATTRIBUTE_MODIFIER, "Extra Inventory", DestroyAllConfigs.SERVER.substances.creatineExtraInventorySize.get(), AttributeModifier.Operation.ADDITION));
-        };
-        if (livingEntity.getAttributes().hasAttribute(DestroyAttributes.EXTRA_HOTBAR_SLOTS.get())) {
-            AttributeInstance extraHotbar = livingEntity.getAttribute(DestroyAttributes.EXTRA_HOTBAR_SLOTS.get());
-            extraHotbar.removeModifier(EXTRA_HOTBAR_ATTRIBUTE_MODIFIER);
-            extraHotbar.addPermanentModifier(new AttributeModifier(EXTRA_HOTBAR_ATTRIBUTE_MODIFIER, "Extra Hotbar", DestroyAllConfigs.SERVER.substances.creatineExtraHotbarSlots.get(), AttributeModifier.Operation.ADDITION));
-        };
+    @Nonnull
+    public ItemStack finishUsingItem(@Nonnull ItemStack stack, @Nonnull Level level, @Nonnull LivingEntity livingEntity) {
+        if (!level.isClientSide) { // Ensure this logic runs only on the server
+            if (livingEntity.getAttributes().hasAttribute(DestroyAttributes.EXTRA_INVENTORY_SIZE.get())) {
+                AttributeInstance extraInventory = livingEntity.getAttribute(DestroyAttributes.EXTRA_INVENTORY_SIZE.get());
+                if (extraInventory != null) {
+                    extraInventory.removeModifier(EXTRA_INVENTORY_ATTRIBUTE_MODIFIER);
+                    extraInventory.addPermanentModifier(new AttributeModifier(EXTRA_INVENTORY_ATTRIBUTE_MODIFIER, "Extra Inventory", DestroyAllConfigs.SERVER.substances.creatineExtraInventorySize.get(), AttributeModifier.Operation.ADDITION));
+                }
+            }
+            if (livingEntity.getAttributes().hasAttribute(DestroyAttributes.EXTRA_HOTBAR_SLOTS.get())) {
+                AttributeInstance extraHotbar = livingEntity.getAttribute(DestroyAttributes.EXTRA_HOTBAR_SLOTS.get());
+                if (extraHotbar != null) {
+                    extraHotbar.removeModifier(EXTRA_HOTBAR_ATTRIBUTE_MODIFIER);
+                    extraHotbar.addPermanentModifier(new AttributeModifier(EXTRA_HOTBAR_ATTRIBUTE_MODIFIER, "Extra Hotbar", DestroyAllConfigs.SERVER.substances.creatineExtraHotbarSlots.get(), AttributeModifier.Operation.ADDITION));
+                }
+            }
+
+            // Sync the updated attributes with the client
+            if (livingEntity instanceof ServerPlayer serverPlayer) {
+                serverPlayer.connection.send(new ClientboundUpdateAttributesPacket(serverPlayer.getId(), serverPlayer.getAttributes().getSyncableAttributes()));
+            }
+        }
         return super.finishUsingItem(stack, level, livingEntity);
-    };
-    
-};
+    }
+
+}

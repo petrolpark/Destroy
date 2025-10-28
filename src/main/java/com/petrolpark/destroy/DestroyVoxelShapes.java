@@ -3,8 +3,8 @@ package com.petrolpark.destroy;
 import com.petrolpark.destroy.content.oil.pumpjack.IPumpjackStructuralBlock;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.AllShapes.Builder;
-import com.simibubi.create.foundation.utility.VoxelShaper;
 
+import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.shapes.VoxelShape;

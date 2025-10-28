@@ -7,10 +7,10 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.destroy.DestroyBlocks;
 import com.petrolpark.destroy.DestroyVoxelShapes;
-import com.simibubi.create.content.equipment.goggles.IProxyHoveringInformation;
+import com.simibubi.create.api.equipment.goggles.IProxyHoveringInformation;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.render.MultiPosDestructionHandler;
-import com.simibubi.create.foundation.utility.Lang;
+import net.createmod.catnip.lang.Lang;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;

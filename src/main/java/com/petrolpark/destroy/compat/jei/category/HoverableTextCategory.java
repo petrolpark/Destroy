@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.compat.jei.category.ITickableCategory;
 import com.petrolpark.compat.jei.category.PetrolparkRecipeCategory;
@@ -12,8 +11,9 @@ import com.petrolpark.destroy.client.stackedtextbox.AbstractStackedTextBox;
 import com.petrolpark.destroy.client.stackedtextbox.StackedTextBox;
 import com.petrolpark.destroy.client.stackedtextbox.AbstractStackedTextBox.Area;
 import com.petrolpark.destroy.client.stackedtextbox.AbstractStackedTextBox.LinesAndActivationAreas;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
-import com.simibubi.create.foundation.utility.Pair;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.lang.FontHelper.Palette;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;

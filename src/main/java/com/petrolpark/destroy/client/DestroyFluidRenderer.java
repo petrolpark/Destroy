@@ -3,9 +3,10 @@ package com.petrolpark.destroy.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
-import com.simibubi.create.foundation.utility.Color;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.render.FluidRenderHelper;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -23,11 +24,11 @@ public class DestroyFluidRenderer {
     
 
     public static void renderFluidBoxWithAlpha(FluidStack fluidStack, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax, MultiBufferSource buffer, PoseStack ms, int light, float alpha) {
-        renderFluidBoxWithAlpha(fluidStack, xMin, yMin, zMin, xMax, yMax, zMax, FluidRenderer.getFluidBuilder(buffer), ms, light, alpha);
+        renderFluidBoxWithAlpha(fluidStack, xMin, yMin, zMin, xMax, yMax, zMax, FluidRenderHelper.getFluidBuilder(buffer), ms, light, alpha);
     };
 
     /**
-     * Copied from {@link FluidRenderer#renderFluidBox(FluidStack, float, float, float, float, float, float, VertexConsumer, PoseStack, int, boolean) Create source code}.
+     * Copied from {@link FluidRenderer#renderFluidBox(FluidStack, float, float, float, float, float, float, VertexConsumer, PoseStack, int, boolean) Create 0.5.1 source code}.
      * @param fluidStack
      * @param xMin
      * @param yMin
@@ -61,12 +62,12 @@ public class DestroyFluidRenderer {
 			boolean positive = side.getAxisDirection() == AxisDirection.POSITIVE;
 			if (side.getAxis().isHorizontal()) {
 				if (side.getAxis() == Axis.X) {
-					FluidRenderer.renderStillTiledFace(side, zMin, yMin, zMax, yMax, positive ? xMax : xMin, builder, ms, light, color, fluidTexture);
+					FluidRenderHelper.renderStillTiledFace(side, zMin, yMin, zMax, yMax, positive ? xMax : xMin, builder, ms, light, color, fluidTexture);
 				} else {
-					FluidRenderer.renderStillTiledFace(side, xMin, yMin, xMax, yMax, positive ? zMax : zMin, builder, ms, light, color, fluidTexture);
+					FluidRenderHelper.renderStillTiledFace(side, xMin, yMin, xMax, yMax, positive ? zMax : zMin, builder, ms, light, color, fluidTexture);
 				};
 			} else {
-				FluidRenderer.renderStillTiledFace(side, xMin, zMin, xMax, zMax, positive ? yMax : yMin, builder, ms, light, color, fluidTexture);
+				FluidRenderHelper.renderStillTiledFace(side, xMin, zMin, xMax, zMax, positive ? yMax : yMin, builder, ms, light, color, fluidTexture);
 			};
 		};
 

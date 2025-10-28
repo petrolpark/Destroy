@@ -2,6 +2,8 @@ package com.petrolpark.destroy.mixin;
 
 import java.util.List;
 
+import com.simibubi.create.api.equipment.goggles.IHaveHoveringInformation;
+import net.createmod.catnip.lang.FontHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.core.chemistry.basinreaction.ExtendedBasinBehaviour;
 import com.petrolpark.destroy.core.data.advancement.DestroyAdvancementBehaviour;
-import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
@@ -55,7 +56,7 @@ public abstract class BasinBlockEntityMixin implements IHaveHoveringInformation 
         ExtendedBasinBehaviour behaviour = ((BasinBlockEntity)(Object)this).getBehaviour(ExtendedBasinBehaviour.TYPE);
         if (behaviour != null && behaviour.tooFullToReact) {
             DestroyLang.translate("tooltip.basin.too_full.title").style(ChatFormatting.GOLD).forGoggles(tooltip);
-            TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.basin.too_full").component(), TooltipHelper.Palette.GRAY_AND_WHITE).forEach(component -> {
+            TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.basin.too_full").component(), FontHelper.Palette.GRAY_AND_WHITE).forEach(component -> {
                 DestroyLang.builder().add(component.copy()).forGoggles(tooltip);
             });
             return true;

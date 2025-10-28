@@ -6,7 +6,7 @@
         "conditions": {
             "items": [
                 {
-                    "tag": "destroy:plastic"
+                    "tag": "destroy:plastics"
                 }
             ]
         }

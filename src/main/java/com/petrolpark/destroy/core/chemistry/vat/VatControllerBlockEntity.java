@@ -1,5 +1,7 @@
 package com.petrolpark.destroy.core.chemistry.vat;
 
+import static com.petrolpark.compat.create.CreateClient.OUTLINER;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,8 +36,7 @@ import com.petrolpark.destroy.core.explosion.SmartExplosion;
 import com.petrolpark.destroy.core.fluid.gasparticle.BoilingFluidBubbleParticleData;
 import com.petrolpark.destroy.core.pollution.Pollution;
 import com.petrolpark.destroy.core.pollution.PollutionHelper;
-import com.simibubi.create.CreateClient;
-import com.simibubi.create.content.contraptions.ITransformableBlockEntity;
+import com.simibubi.create.api.contraption.transformable.TransformableBlockEntity;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.thresholdSwitch.ThresholdSwitchObservable;
@@ -46,11 +47,11 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
@@ -58,6 +59,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -78,7 +80,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveLabGoggleInformation, ISpecialWhenHoveredBlockEntity, ThresholdSwitchObservable, ITransformableBlockEntity {
+public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveLabGoggleInformation, ISpecialWhenHoveredBlockEntity, ThresholdSwitchObservable, TransformableBlockEntity {
 
     public static final float AIR_PRESSURE = 101000;
 
@@ -299,8 +301,8 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveL
 
         // Mixture
         if (clientPacket) {
-            pressure.chase(tag.getFloat("Pressure"), 0.125f, Chaser.EXP);
-            temperature.chase(tag.getFloat("Temperature"), 0.125f, Chaser.EXP);
+            pressure.chase(tag.getFloat("Pressure"), 0.125f, LerpedFloat.Chaser.EXP);
+            temperature.chase(tag.getFloat("Temperature"), 0.125f, LerpedFloat.Chaser.EXP);
             cachedMixtureBoiling = tag.getBoolean("AnythingBoiling");
             cachedMixtureReacting = tag.getBoolean("AnythingReacting");
         } else {
@@ -611,14 +613,27 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveL
         return pressure.getValue(partialTicks);
     };
 
-    /**
-     * Inherited from {@link ThresholdSwitchObservable}
-     */
     @Override
-    public float getPercent() {
-        if (getVatOptional().isEmpty()) return 0f;
-        return 100f * (float)getLiquidTankContents().getAmount() / getCapacity();
-    };
+    public int getMaxValue() {
+        if (getVatOptional().isEmpty()) return 0;
+        return getCapacity();
+    }
+
+    @Override
+    public int getMinValue() {
+        return 0;
+    }
+
+    @Override
+    public int getCurrentValue() {
+        if (getVatOptional().isEmpty()) return 0;
+        return getLiquidTankContents().getAmount();
+    }
+
+    @Override
+    public MutableComponent format(int value) {
+        return DestroyLang.translateDirect("gui.vat.vat_liquid_amount", value);
+    }
 
     @SuppressWarnings("null")
     public float getTemperature() { 
@@ -635,7 +650,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveL
         if (getLevel().isClientSide()) return pressure.getChaseTarget(); // It thinks getLevel() might be null (it's not)
         if (!getVatOptional().isPresent()) return 0f;
         if (getGasTank().isEmpty()) {
-            return getLiquidTank().getFluidAmount() == getLiquidTank().getCapacity() ? 0f : AIR_PRESSURE; // Return 0 for a vacuum, and normal air pressure for a full Vat
+            return getLiquidTank().getFluidAmount() == getLiquidTank().getCapacity() ? 0f : -AIR_PRESSURE; // Return 0 for a vacuum, and normal air pressure for a full Vat
         };
         return LegacyReaction.GAS_CONSTANT * 1000f * getTemperature() * ReadOnlyMixture.readNBT(ReadOnlyMixture::new, getGasTank().getFluid().getOrCreateChildTag("Mixture")).getTotalConcentration() - AIR_PRESSURE;
     };
@@ -655,7 +670,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveL
     };
 
     @Override
-    public void transform(StructureTransform transform) {
+    public void transform(BlockEntity blockEntity, StructureTransform transform) {
         getVatOptional().ifPresent(v -> v.transform(transform, getBlockPos()));
         if (transform.rotationAxis != Axis.Y && (transform.rotation == Rotation.CLOCKWISE_90 || transform.rotation == Rotation.COUNTERCLOCKWISE_90)) deleteVat(getBlockPos());
     };
@@ -683,7 +698,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveL
     @Override
     public void whenLookedAt(LocalPlayer player, BlockHitResult blockHitResult) {
         if (vat.isPresent()) {
-            CreateClient.OUTLINER.showAABB(Pair.of("vat", getBlockPos()), wholeVatAABB(), 20)
+            OUTLINER.showAABB(Pair.of("vat", getBlockPos()), wholeVatAABB(), 20)
                 .colored(0xFF_fffec2);
         };
     };
@@ -693,7 +708,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveL
         if (getVatOptional().isPresent()) {
             vatFluidTooltip(this, tooltip);
         } else if (initializationTicks == 0) {
-            TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.vat.not_initialized").component(), TooltipHelper.Palette.RED).forEach(component -> {
+            TooltipHelper.cutTextComponent(DestroyLang.translate("tooltip.vat.not_initialized").component(), FontHelper.Palette.RED).forEach(component -> {
                 DestroyLang.builder().add(component.copy()).forGoggles(tooltip);
             });
         };
@@ -701,7 +716,7 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveL
     };
 
     public static void vatFluidTooltip(VatControllerBlockEntity vatController, List<Component> tooltip) {
-        Lang.translate("gui.goggles.fluid_container")
+        CreateLang.translate("gui.goggles.fluid_container")
 			.forGoggles(tooltip);
         DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.vat.contents_liquid"), vatController.getLiquidTank().getFluid(), vatController.getCapacity());
         DestroyLang.tankInfoTooltip(tooltip, DestroyLang.translate("tooltip.vat.contents_gas"), vatController.getGasTank().getFluid(), vatController.getCapacity());
@@ -790,12 +805,18 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveL
         protected FluidStack drainGasTankWithMolarDensity(int amount, double molarDensity, FluidAction action) {
             if (vatControllerGetter.get() == null || vatControllerGetter.get().getGasTankContents().isEmpty()) return FluidStack.EMPTY;
             LegacyMixture mixture = LegacyMixture.readNBT(vatControllerGetter.get().getGasTankContents().getOrCreateChildTag("Mixture"));
+
             double scaleFactor = mixture.getTotalConcentration() / molarDensity;
-            FluidStack lostFluid = drainGasTank((int)Math.ceil(scaleFactor * amount), action); // Round up
-            mixture.scale((float)scaleFactor);
-            double drainedAmount = (double)lostFluid.getAmount() / scaleFactor;
-            FluidStack stack = MixtureFluid.of((int)Math.ceil(drainedAmount), mixture);
-            return stack;
+            int amountToDrain = Math.min((int)Math.ceil(scaleFactor * amount), amount); // Round up
+            FluidStack lostFluid = drainGasTank(amountToDrain, action);
+
+            int drainedAmount = amount;
+
+            // Don't bother scaling the mixture when simulating because this messes with Create's fluid networks
+            if(action.execute())
+                mixture.scale((float)drainedAmount / lostFluid.getAmount());
+
+            return MixtureFluid.of(drainedAmount, mixture);
         };
 
         protected void updateVatGasVolume(FluidStack drained, FluidAction action) {
@@ -830,6 +851,18 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveL
         private final Function<VatControllerBlockEntity, FluidStack> fluidGetter;
         private final String tankId;
 
+        public static VatDisplaySource createAllSource() {
+            return new VatDisplaySource(true, "all", v -> MixtureFluid.of(v.getCapacity(), v.cachedMixture)); //TODO swap out if we decide not to use the whole vat capacity
+        }
+
+        public static VatDisplaySource createGasSource() {
+            return new VatDisplaySource(false, "gas", v -> v.getGasTank().getFluid());
+        }
+
+        public static VatDisplaySource createSolutionSource() {
+            return new VatDisplaySource(false, "solution", v -> v.getLiquidTank().getFluid());
+        }
+
         private VatDisplaySource(boolean moles, String tankId, Function<VatControllerBlockEntity, FluidStack> fluidGetter) {
             super(moles);
             this.tankId = tankId;
@@ -851,9 +884,4 @@ public class VatControllerBlockEntity extends SmartBlockEntity implements IHaveL
             return DestroyLang.translate("display_source.vat."+tankId).component();
         };
     };
-
-    public static final VatDisplaySource GAS_DISPLAY_SOURCE = new VatDisplaySource(false, "gas", v -> v.getGasTank().getFluid());
-    public static final VatDisplaySource SOLUTION_DISPLAY_SOURCE = new VatDisplaySource(false, "solution", v -> v.getLiquidTank().getFluid());
-    public static final VatDisplaySource ALL_DISPLAY_SOURCE = new VatDisplaySource(true, "all", v -> MixtureFluid.of(v.getCapacity(), v.cachedMixture)); //TODO swap out if we decide not to use the whole vat capacity
-    
 };

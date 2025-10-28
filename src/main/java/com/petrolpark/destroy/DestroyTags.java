@@ -1,7 +1,7 @@
 package com.petrolpark.destroy;
 
-import com.simibubi.create.foundation.utility.Lang;
 
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -31,7 +31,6 @@ public class DestroyTags {
         FLUXES,
         HEFTY_BEETROOTS,
         LIABLE_TO_CHANGE,
-        PAPER_PULPABLE,
         SPRAY_BOTTLES,
         SYRINGES,
         TEST_TUBE_RACK_STORABLE,

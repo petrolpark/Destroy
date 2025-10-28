@@ -49,18 +49,6 @@
           ]
         }
       },
-      "pet": {
-        "trigger": "minecraft:inventory_changed",
-        "conditions": {
-          "items": [
-            {
-              "items": [
-                "destroy:polyethene_terephthalate"
-              ]
-            }
-          ]
-        }
-      },
       "polyisoprene": {
         "trigger": "minecraft:inventory_changed",
         "conditions": {
@@ -183,9 +171,6 @@
       ],
       [
         "polyethene"
-      ],
-      [
-        "pet"
       ],
       [
         "polyisoprene"

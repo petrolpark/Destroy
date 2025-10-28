@@ -3,15 +3,15 @@ package com.petrolpark.destroy.content.redstone.programmer;
 import java.util.Optional;
 
 import com.google.common.collect.ImmutableList;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.client.DestroyPartials;
 import com.petrolpark.destroy.content.redstone.programmer.RedstoneProgram.Channel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.Mth;
@@ -31,22 +31,22 @@ public class RedstoneProgrammerItemRenderer extends CustomRenderedItemModelRende
         float rotation = running ? AnimationTickHolder.getRenderTime() : 0f;
         
         ms.pushPose();
-        TransformStack.cast(ms)
-            .unCentre()
+        TransformStack.of(ms)
+            .uncenter()
             .translate(0, 6 / 16d, 10 / 16d)
-            .rotateX(rotation)
+            .rotateXDegrees(rotation)
             .translateBack(0, 6 / 16d, 10 / 16d)
-            .centre();
+            .center();
         renderer.render(DestroyPartials.REDSTONE_PROGRAMMER_CYLINDER.get(), light);
         ms.popPose();
 
         ms.pushPose();
-        TransformStack.cast(ms)
-            .unCentre()
+        TransformStack.of(ms)
+            .uncenter()
             .translate(0d, 8.5 / 16d, 5.5 / 16d)
-            .rotateX(-2 + 8 * -Mth.sin(4 * AngleHelper.rad(rotation)))
+            .rotateXDegrees(-2 + 8 * -Mth.sin(4 * AngleHelper.rad(rotation)))
             .translateBack(0d, 8.5 / 16d, 5.5 / 16d)
-            .centre();
+            .center();
         renderer.render(DestroyPartials.REDSTONE_PROGRAMMER_NEEDLE.get(), light);
         ms.popPose();
 

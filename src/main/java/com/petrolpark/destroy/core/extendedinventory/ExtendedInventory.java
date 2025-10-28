@@ -507,7 +507,7 @@ public class ExtendedInventory extends Inventory {
 
     @Override
     public boolean contains(ItemStack stack) {
-        return findSlot(s -> s == stack) != -1;
+        return findSlot(s -> ItemStack.isSameItemSameTags(s, stack)) != -1;
     };
 
     @Override

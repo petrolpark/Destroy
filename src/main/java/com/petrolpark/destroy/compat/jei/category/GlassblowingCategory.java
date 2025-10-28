@@ -25,11 +25,8 @@ public class GlassblowingCategory extends PetrolparkRecipeCategory<GlassblowingR
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, GlassblowingRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 2, 32)
-            .setSlotName("input")
-            .setBackground(getRenderedSlot(), -1, -1)
-            .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(recipe.getFluidIngredients().get(0).getMatchingFluidStacks()))
-            .addTooltipCallback(addFluidTooltip(recipe.getFluidIngredients().get(0).getRequiredAmount()));
+        addFluidSlot(builder, 2, 32, recipe.getFluidIngredients().get(0))
+            .setSlotName("input");
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 107, 32)
             .setBackground(getRenderedSlot(), -1, -1)

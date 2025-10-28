@@ -1,0 +1,22 @@
+{
+  "damage": 10,
+  "items": "destroy:bomb_bon",
+  "knockback": 0.5,
+  "reload_ticks": 100,
+  "render_mode": {
+    "type": "create:tumble"
+  },
+  "sound_pitch": 0.95,
+  "on_entity_hit": {
+    "type": "destroy:explode_entity",
+    "radius": 2,
+    "causesFire": false,
+    "mode": "TNT"
+  },
+  "on_block_hit": {
+    "type": "destroy:explode_block",
+    "radius": 2,
+    "causesFire": false,
+    "mode": "TNT"
+  }
+}

@@ -20,8 +20,8 @@ public class RedstoneMonitorVatSideScreen extends AbstractQuantityObservingScree
     };
 
     @Override
-    protected void onThresholdChange(boolean upper, float newValue) {
-        DestroyMessages.sendToServer(new RedstoneQuantityMonitorThresholdChangeC2SPacket(upper, newValue, vatSide.getBlockPos()));
-    };
+    protected void updateThresholds(float lower, float upper) {
+        DestroyMessages.sendToServer(new RedstoneQuantityMonitorThresholdChangeC2SPacket(lower, upper, vatSide.getBlockPos()));
+    }
 
 };

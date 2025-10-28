@@ -8,9 +8,9 @@ import java.util.UUID;
 import com.petrolpark.destroy.Destroy;
 import com.petrolpark.destroy.client.DestroyLang;
 import com.petrolpark.destroy.content.processing.trypolithography.keypunch.ICircuitPuncher;
-import com.simibubi.create.foundation.ponder.PonderWorld;
-import com.simibubi.create.foundation.utility.WorldHelper;
 
+import net.createmod.catnip.levelWrappers.WorldHelper;
+import net.createmod.ponder.api.level.PonderLevel;
 import net.minecraft.world.level.LevelAccessor;
 
 public class CircuitPuncherHandler {
@@ -59,7 +59,7 @@ public class CircuitPuncherHandler {
 
     public Map<UUID, ICircuitPuncher> punchersIn(LevelAccessor world) {
 		if (!connections.containsKey(world)) {
-			if (!(world instanceof PonderWorld)) Destroy.LOGGER.warn("Tried to Access unprepared circuit punching space of " + WorldHelper.getDimensionID(world));
+			if (!(world instanceof PonderLevel)) Destroy.LOGGER.warn("Tried to Access unprepared circuit punching space of " + WorldHelper.getDimensionID(world));
 			return new HashMap<>();
 		};
 		return connections.get(world);

@@ -48,7 +48,7 @@ public class DestroyGenericReactions {
     public static final ElectrophilicChlorination ALKENE_CHLORINATION = new ElectrophilicChlorination(false);
     public static final ElectrophilicChlorohydrination ALKENE_CHLOROHYDRINATION = new ElectrophilicChlorohydrination(false);
     public static final SaturatedCarbonHydrolysis ALKENE_HYDROLYSIS = new SaturatedCarbonHydrolysis(false);
-    public static final ElectrophilicHydroboration ALKENE_HYDROBORATION = new ElectrophilicHydroboration(false);
+    //public static final ElectrophilicHydroboration ALKENE_HYDROBORATION = new ElectrophilicHydroboration(false); // causes a game freeze whenever it occurs, my guess is excessive esterification, alkyne is the same
     public static final BoraneElectrophilicHydroboration ALKENE_HYDROBORATION_WITH_BORANE = new BoraneElectrophilicHydroboration(false);
     public static final ElectrophilicHydrochlorination ALKENE_HYDROCHLORINATION = new ElectrophilicHydrochlorination(false);
     public static final SaturatedCarbonHydrogenation ALKENE_HYDROGENATION = new SaturatedCarbonHydrogenation(false);
@@ -58,7 +58,7 @@ public class DestroyGenericReactions {
     public static final ElectrophilicChlorination ALKYNE_CHLORINATION = new ElectrophilicChlorination(true);
     public static final ElectrophilicChlorohydrination ALKYNE_CHLOROHYDRINATION = new ElectrophilicChlorohydrination(true);
     public static final SaturatedCarbonHydrolysis ALKYNE_HYDROLYSIS = new SaturatedCarbonHydrolysis(true);
-    public static final ElectrophilicHydroboration ALKYNE_HYDROBORATION = new ElectrophilicHydroboration(true);
+   //public static final ElectrophilicHydroboration ALKYNE_HYDROBORATION = new ElectrophilicHydroboration(true);
     public static final BoraneElectrophilicHydroboration ALKYNE_HYDROBORATION_WITH_BORANE = new BoraneElectrophilicHydroboration(true);
     public static final ElectrophilicHydrochlorination ALKYNE_HYDROCHLORINATION = new ElectrophilicHydrochlorination(true);
     public static final SaturatedCarbonHydrogenation ALKYNE_HYDROGENATION = new SaturatedCarbonHydrogenation(true);
@@ -68,7 +68,7 @@ public class DestroyGenericReactions {
     public static final AminePhosgenation AMINE_PHOSGENATION = new AminePhosgenation();
     public static final BoraneOxidation BORANE_OXIDATION = new BoraneOxidation();
     public static final BorateEsterHydrolysis BORATE_ESTER_HYDROLYSIS = new BorateEsterHydrolysis();
-    public static final BorateEsterification BORATE_ESTERIFICATION = new BorateEsterification();
+    //public static final BorateEsterification BORATE_ESTERIFICATION = new BorateEsterification(); // any solution containing boron compounds, even just boric acid or trace borate ions, becomes a disgusting mess of constantly esterifying generics
     //public static final BorohydrideCarbonylReduction BOROHYDRIDE_CARBONYL_REDUCTION = new BorohydrideCarbonylReduction();
     //public static final CarboxylicAcidReduction CARBOXYLIC_ACID_REDUCTION = new CarboxylicAcidReduction();
     public static final CyanamideAddition CYANAMIDE_ADDITION = new CyanamideAddition();

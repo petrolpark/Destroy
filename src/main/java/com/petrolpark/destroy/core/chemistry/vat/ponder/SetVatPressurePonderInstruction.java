@@ -1,10 +1,10 @@
 package com.petrolpark.destroy.core.chemistry.vat.ponder;
 
 import com.petrolpark.destroy.DestroyBlockEntityTypes;
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.instruction.PonderInstruction;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.instruction.PonderInstruction;
 import net.minecraft.core.BlockPos;
 
 public class SetVatPressurePonderInstruction extends PonderInstruction {
@@ -27,7 +27,7 @@ public class SetVatPressurePonderInstruction extends PonderInstruction {
     @Override
     public void tick(PonderScene scene) {
         scene.getWorld().getBlockEntity(vatControllerPos, DestroyBlockEntityTypes.VAT_CONTROLLER.get()).ifPresent(vc -> {
-            vc.pressure.chase(targetPressure, chaseSpeed, Chaser.EXP);
+            vc.pressure.chase(targetPressure, chaseSpeed, LerpedFloat.Chaser.EXP);
         });
     };
     

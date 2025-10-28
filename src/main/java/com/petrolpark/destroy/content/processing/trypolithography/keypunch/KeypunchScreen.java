@@ -8,14 +8,14 @@ import com.petrolpark.destroy.DestroyMessages;
 import com.petrolpark.destroy.client.DestroyGuiTextures;
 import com.petrolpark.destroy.util.GuiHelper;
 import com.simibubi.create.content.trains.station.NoShadowFontWrapper;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.widget.IconButton;
-import com.simibubi.create.foundation.utility.Components;
 
+import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.Component;
 
 public class KeypunchScreen extends AbstractSimiScreen {
 
@@ -55,7 +55,7 @@ public class KeypunchScreen extends AbstractSimiScreen {
             addRenderableWidget(button);
         };
 
-		nameBox = new EditBox(new NoShadowFontWrapper(font), guiLeft + 23, guiTop + 4, background.width - 20, 10, Components.literal(keypunch.name));
+		nameBox = new EditBox(new NoShadowFontWrapper(font), guiLeft + 23, guiTop + 4, background.width - 20, 10, Component.literal(keypunch.name));
 		nameBox.setBordered(false);
 		nameBox.setMaxLength(25);
 		nameBox.setTextColor(0x592424);

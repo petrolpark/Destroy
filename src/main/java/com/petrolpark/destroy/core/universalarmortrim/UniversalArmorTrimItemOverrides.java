@@ -85,12 +85,12 @@ public class UniversalArmorTrimItemOverrides extends ItemOverrides {
         return Optional.ofNullable(model);
     };
 
-    public static final ResourceLocation defaultItemModelRl = new ResourceLocation("generated");
+    public static final ResourceLocation defaultItemModelRl = ResourceLocation.withDefaultNamespace("generated");
 
     @Nullable
     @SuppressWarnings("deprecation")
     public static BakedModel getOverlayModel(ArmorItem.Type armorType, TrimMaterial trimMaterial) {
-        ResourceLocation trimTextureId = new ResourceLocation(armorType.getName() + "_trim_" + trimMaterial.assetName());
+        ResourceLocation trimTextureId = ResourceLocation.withDefaultNamespace(armorType.getName() + "_trim_" + trimMaterial.assetName());
         Material trimTexture = new Material(TextureAtlas.LOCATION_BLOCKS, trimTextureId.withPrefix("trims/items/"));
         if (trimTexture.sprite() == null) return null; // Check the texture exists (there's no reason why it shouldn't)
         return DummyBaker.bake(

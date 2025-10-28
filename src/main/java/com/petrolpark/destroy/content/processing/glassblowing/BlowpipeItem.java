@@ -3,6 +3,8 @@ package com.petrolpark.destroy.content.processing.glassblowing;
 import java.util.List;
 import java.util.function.Consumer;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.gui.ScreenOpener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,10 +14,8 @@ import com.petrolpark.destroy.core.block.IPickUpPutDownBlock;
 import com.petrolpark.destroy.core.chemistry.hazard.ChemistryHazardHelper;
 import com.simibubi.create.content.kinetics.deployer.DeployerFakePlayer;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
-import com.simibubi.create.foundation.gui.ScreenOpener;
 import com.simibubi.create.foundation.item.CustomArmPoseItem;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
-import com.simibubi.create.foundation.utility.Iterate;
 
 import net.minecraft.client.model.HumanoidModel.ArmPose;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -205,7 +205,12 @@ public class BlowpipeItem extends BlockItem implements CustomArmPoseItem {
             tag.putBoolean("Blowing", false);
         };
 
-        if (increaseProgress && progress < BlowpipeBlockEntity.BLOWING_DURATION) tag.putInt("Progress", progress + 1);
+        if (increaseProgress && progress < BlowpipeBlockEntity.BLOWING_DURATION) {
+            tag.putInt("Progress", progress + 1);
+            if(progress < BlowpipeBlockEntity.BLOWING_DURATION && progress + 1 >= BlowpipeBlockEntity.BLOWING_DURATION && entity instanceof Player player) {
+                DestroyAdvancementTrigger.BLOWPIPE.award(level, player);
+            }
+        }
     };
 
     @Override
@@ -227,9 +232,6 @@ public class BlowpipeItem extends BlockItem implements CustomArmPoseItem {
             tag.putInt("Progress", 0);
             tag.putInt("LastProgress", 0);
             tag.put("Tank", new FluidTank(BlowpipeBlockEntity.TANK_CAPACITY).writeToNBT(new CompoundTag())); // Empty the Tank
-            if (livingEntity instanceof Player player) {
-                DestroyAdvancementTrigger.BLOWPIPE.award(level, player);
-            };
         };
         return stack;
     };

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
 
+import net.createmod.catnip.platform.ForgeCatnipServices;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
@@ -13,7 +14,7 @@ public class ElementTankRenderer extends SafeBlockEntityRenderer<ElementTankBloc
 
     @Override
     protected void renderSafe(ElementTankBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        if (!be.getRenderedFluid().isEmpty()) FluidRenderer.renderFluidBox(be.getRenderedFluid(), 1 / 16f, 1 / 16f, 1 / 16f, 15 / 16f, (1f + 14f * be.getFluidLevel(partialTicks)) / 16f, 15 / 16f, bufferSource, ms, light, true);
+        if (!be.getRenderedFluid().isEmpty()) ForgeCatnipServices.FLUID_RENDERER.renderFluidBox(be.getRenderedFluid(), 1 / 16f, 1 / 16f, 1 / 16f, 15 / 16f, (1f + 14f * be.getFluidLevel(partialTicks)) / 16f, 15 / 16f, bufferSource, ms, light, true, true);
     };
     
 };

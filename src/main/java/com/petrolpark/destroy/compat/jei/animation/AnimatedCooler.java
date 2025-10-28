@@ -1,7 +1,6 @@
 package com.petrolpark.destroy.compat.jei.animation;
 
-import com.jozufozu.flywheel.core.PartialModel;
-import com.jozufozu.flywheel.util.AnimationTickHolder;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.petrolpark.destroy.client.DestroyPartials;
@@ -9,6 +8,7 @@ import com.petrolpark.destroy.content.processing.cooler.CoolerBlockEntity.Coldne
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 
+import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 

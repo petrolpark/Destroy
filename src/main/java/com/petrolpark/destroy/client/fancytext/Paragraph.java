@@ -11,12 +11,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.destroy.client.fancytext.component.FancyComponent;
 import com.petrolpark.destroy.client.fancytext.component.FancyComponent.Maker;
 import com.petrolpark.destroy.client.fancytext.component.FancyComponent.MakerMaker;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
-import com.simibubi.create.foundation.utility.Pair;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -198,7 +198,7 @@ public class Paragraph {
             delimitersAndMakers = new Char2ObjectOpenHashMap<>();
         };
 
-        public Builder palette(Palette palette) {
+        public Builder palette(FontHelper.Palette palette) {
             delimitersAndMakers.put('_', FancyComponent.Simple.with(c -> c.copy().withStyle(palette.highlight()), shadow));
             baseComponentTransform = c -> c.copy().withStyle(palette.primary());
             return this;
