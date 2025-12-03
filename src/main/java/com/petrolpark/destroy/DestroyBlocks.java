@@ -105,6 +105,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+
 import net.minecraftforge.common.Tags;
 
 public class DestroyBlocks {
@@ -468,7 +469,9 @@ public class DestroyBlocks {
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(DestroyTags.Blocks.ARC_FURNACE_TRANSFORMABLE.tag)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/carbon_fiber"))
+            .tag(AllTags.forgeBlockTag("storage_blocks/carbon_fiber"))
+            .item()
+            .tag(forgeItemTag("storage_blocks/carbon_fiber"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register(),
@@ -483,7 +486,9 @@ public class DestroyBlocks {
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/fluorite"))
+            .tag(AllTags.forgeBlockTag("storage_blocks/fluorite"))
+            .item()
+            .tag(forgeItemTag("storage_blocks/fluorite"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register(),
@@ -498,7 +503,9 @@ public class DestroyBlocks {
         .tag(BlockTags.NEEDS_STONE_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/raw_nickel"))
+            .tag(AllTags.forgeBlockTag("storage_blocks/raw_nickel"))
+            .item()
+            .tag(forgeItemTag("storage_blocks/raw_nickel"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register(),
@@ -512,7 +519,9 @@ public class DestroyBlocks {
         .tag(BlockTags.NEEDS_STONE_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/chromium"))
+            .tag(AllTags.forgeBlockTag("storage_blocks/chromium"))
+            .item()
+            .tag(forgeItemTag("storage_blocks/chromium"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register(),
@@ -524,7 +533,9 @@ public class DestroyBlocks {
             .strength(2f, 2f)
         ).transform(TagGen.pickaxeOnly())
         .tag(BlockTags.NEEDS_STONE_TOOL, Tags.Blocks.STORAGE_BLOCKS)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/iodine"))
+            .tag(AllTags.forgeBlockTag("storage_blocks/iodine"))
+            .item()
+            .tag(forgeItemTag("storage_blocks/iodine"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register(),
@@ -551,7 +562,9 @@ public class DestroyBlocks {
         .tag(BlockTags.NEEDS_STONE_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/nickel"))
+            .tag(AllTags.forgeBlockTag("storage_blocks/nickel"))
+            .item()
+            .tag(forgeItemTag("storage_blocks/nickel"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register(),
@@ -567,7 +580,9 @@ public class DestroyBlocks {
         .tag(BlockTags.NEEDS_DIAMOND_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/palladium"))
+            .tag(AllTags.forgeBlockTag("storage_blocks/palladium"))
+            .item()
+            .tag(forgeItemTag("storage_blocks/palladium"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register(),
@@ -582,7 +597,9 @@ public class DestroyBlocks {
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/platinum"))
+            .tag(AllTags.forgeBlockTag("storage_blocks/platinum"))
+            .item()
+            .tag(forgeItemTag("storage_blocks/platinum"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register(),
@@ -598,7 +615,9 @@ public class DestroyBlocks {
         .tag(BlockTags.NEEDS_DIAMOND_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/rhodium"))
+            .tag(AllTags.forgeBlockTag("storage_blocks/rhodium"))
+            .item()
+            .tag(forgeItemTag("storage_blocks/rhodium"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register(),
@@ -613,7 +632,9 @@ public class DestroyBlocks {
         .tag(BlockTags.NEEDS_STONE_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/lead"))
+            .tag(AllTags.forgeBlockTag("storage_blocks/lead"))
+            .item()
+            .tag(forgeItemTag("storage_blocks/lead"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register();
@@ -632,7 +653,9 @@ public class DestroyBlocks {
         .tag(BlockTags.NEEDS_STONE_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/stainless_steel"))
+            .tag(AllTags.forgeBlockTag("storage_blocks/stainless_steel"))
+            .item()
+            .tag(forgeItemTag("storage_blocks/stainless_steel"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register();
@@ -643,7 +666,9 @@ public class DestroyBlocks {
         .tag(BlockTags.NEEDS_DIAMOND_TOOL)
         .tag(Tags.Blocks.STORAGE_BLOCKS)
         .tag(BlockTags.BEACON_BASE_BLOCKS)
-        .transform(TagGen.tagBlockAndItem("storage_blocks/rhodium"))
+            .tag(AllTags.forgeBlockTag("storage_blocks/rhodium"))
+            .item()
+            .tag(forgeItemTag("storage_blocks/rhodium"))
         .tag(Tags.Items.STORAGE_BLOCKS)
         .build()
         .register();
@@ -661,7 +686,11 @@ public class DestroyBlocks {
         .loot((lt, b) -> lt.add(b, RegistrateBlockLootTables.createSilkTouchDispatchTable(b, lt.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.FLUORITE.get()).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))))))
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
-        .transform(TagGen.tagBlockAndItem("ores/fluorite", "ores_in_ground/stone"))
+            .tag(AllTags.forgeBlockTag("ores/fluorite"))
+            .tag(AllTags.forgeBlockTag("ores_in_ground/stone"))
+            .item()
+            .tag(forgeItemTag("ores/fluorite"))
+            .tag(forgeItemTag("ores_in_ground/stone"))
         .tag(Tags.Items.ORES)
         .build()
         .register();
@@ -678,7 +707,11 @@ public class DestroyBlocks {
         .loot((lt, b) -> lt.add(b, RegistrateBlockLootTables.createSilkTouchDispatchTable(b, lt.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.FLUORITE.get()).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))))))
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
-        .transform(TagGen.tagBlockAndItem("ores/fluorite", "ores_in_ground/deepslate"))
+            .tag(AllTags.forgeBlockTag("ores/fluorite"))
+            .tag(AllTags.forgeBlockTag("ores_in_ground/deepslate"))
+            .item()
+            .tag(forgeItemTag("ores/fluorite"))
+            .tag(forgeItemTag("ores_in_ground/deepslate"))
         .tag(Tags.Items.ORES)
         .build()
         .register();
@@ -694,7 +727,11 @@ public class DestroyBlocks {
         .loot((lt, b) -> lt.add(b, RegistrateBlockLootTables.createSilkTouchDispatchTable(b, lt.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.FLUORITE.get()).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))))))
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
-        .transform(TagGen.tagBlockAndItem("ores/fluorite", "ores_in_ground/end_stone"))
+            .tag(AllTags.forgeBlockTag("ores/fluorite"))
+            .tag(AllTags.forgeBlockTag("ores_in_ground/end_stone"))
+            .item()
+            .tag(forgeItemTag("ores/fluorite"))
+            .tag(forgeItemTag("ores_in_ground/end_stone"))
         .tag(Tags.Items.ORES)
         .build()
         .register();
@@ -710,7 +747,11 @@ public class DestroyBlocks {
         .loot((lt, b) -> lt.add(b, RegistrateBlockLootTables.createSilkTouchDispatchTable(b, lt.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.RAW_NICKEL.get()).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))))))
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
-        .transform(TagGen.tagBlockAndItem("ores/nickel", "ores_in_ground/stone"))
+        .tag(AllTags.forgeBlockTag("ores/nickel"))
+        .tag(AllTags.forgeBlockTag("ores_in_ground/stone"))
+        .item()
+        .tag(forgeItemTag("ores/nickel"))
+        .tag(forgeItemTag("ores_in_ground/stone"))
         .tag(Tags.Items.ORES)
         .build()
         .register();
@@ -727,7 +768,11 @@ public class DestroyBlocks {
         .loot((lt, b) -> lt.add(b, RegistrateBlockLootTables.createSilkTouchDispatchTable(b, lt.applyExplosionDecay(b, LootItem.lootTableItem(DestroyItems.RAW_NICKEL.get()).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))))))
         .tag(BlockTags.NEEDS_IRON_TOOL)
         .tag(Tags.Blocks.ORES)
-        .transform(TagGen.tagBlockAndItem("ores/nickel", "ores_in_ground/deepslate"))
+        .tag(AllTags.forgeBlockTag("ores/nickel"))
+        .tag(AllTags.forgeBlockTag("ores_in_ground/deepslate"))
+        .item()
+        .tag(forgeItemTag("ores/nickel"))
+        .tag(forgeItemTag("ores_in_ground/deepslate"))
         .tag(Tags.Items.ORES)
         .build()
         .register();
