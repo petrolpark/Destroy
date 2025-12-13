@@ -4,6 +4,12 @@ import static com.petrolpark.compat.create.CreateClient.OUTLINER;
 
 import java.util.List;
 
+import com.petrolpark.destroy.compat.vs2.DestroyVSUtil;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -79,11 +85,39 @@ public class TestTubeRackBlockEntity extends SmartBlockEntity implements ISpecia
     @OnlyIn(Dist.CLIENT)
     @Override
     public void whenLookedAt(LocalPlayer player, BlockHitResult result) {
-        int tube = TestTubeRackBlock.getTargetedTube(getBlockState(), getBlockPos(), player);
+
+        if (ModList.get().isLoaded("valkyrienskies") && level instanceof ClientLevel) {
+            HitResult pick = player.pick(player.getBlockReach(), 0.0f, false);
+            if (pick instanceof BlockHitResult bhr && bhr.getBlockPos().equals(getBlockPos())) {
+                result = bhr;
+            }
+        }
+
+        int tube = TestTubeRackBlock.getTargetedTube(player.level(), getBlockState(), getBlockPos(), result);
         if (tube == -1) return;
-        if (inv.isItemValid(tube, player.getItemInHand(InteractionHand.MAIN_HAND)) || !inv.getStackInSlot(tube).isEmpty()) OUTLINER.showAABB(Pair.of("test_tube_rack_" + tube, getBlockPos()), TestTubeRackBlock.getTubeBox(getBlockState(), getBlockPos(), tube), 1)
-            .lineWidth(1 / 64f)
-            .colored(0xFF7F7F7F);
+
+        if (inv.isItemValid(tube, player.getItemInHand(InteractionHand.MAIN_HAND)) || !inv.getStackInSlot(tube).isEmpty()) {
+
+            AABB box = TestTubeRackBlock.getTubeBox(getBlockState(), getBlockPos(), tube);
+
+            if (ModList.get().isLoaded("valkyrienskies")) {
+                Vec3 center = new Vec3(
+                        (box.minX + box.maxX) * 0.5,
+                        (box.minY + box.maxY) * 0.5,
+                        (box.minZ + box.maxZ) * 0.5
+                );
+                box = DestroyVSUtil.AABBtoWorld(level, center, box);
+            }
+
+
+            OUTLINER.showAABB(
+                    Pair.of("test_tube_rack_" + tube,
+                            getBlockPos()),
+                            box,
+                            1)
+                            .lineWidth(1 / 64f)
+                            .colored(0xFF7F7F7F);
+        }
     };
 
     public class TestTubeRackInventory extends ItemStackHandler {

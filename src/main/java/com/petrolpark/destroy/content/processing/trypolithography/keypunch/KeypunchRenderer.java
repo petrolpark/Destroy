@@ -27,7 +27,7 @@ public class KeypunchRenderer extends KineticBlockEntityRenderer<KeypunchBlockEn
     @Override
     protected void renderSafe(KeypunchBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
-        if (VisualizationManager.supportsVisualization(be.getLevel())) return;
+//        if (VisualizationManager.supportsVisualization(be.getLevel())) return;
 
         BlockState blockState = be.getBlockState();
         CircuitPunchingBehaviour behaviour = be.punchingBehaviour;

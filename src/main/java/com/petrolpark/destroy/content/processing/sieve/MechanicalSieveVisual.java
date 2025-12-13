@@ -7,6 +7,7 @@ import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
 import com.simibubi.create.foundation.render.AllInstanceTypes;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.instance.Instancer;
+import dev.engine_room.flywheel.api.visual.DynamicVisual;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.TransformedInstance;
@@ -36,7 +37,7 @@ public class MechanicalSieveVisual extends SingleAxisRotatingVisual<MechanicalSi
     }
 
     @Override
-    public void beginFrame(Context ctx) {
+    public void beginFrame(DynamicVisual.Context ctx) {
         updateAnimation();
     }
 

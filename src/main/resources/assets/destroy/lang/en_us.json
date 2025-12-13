@@ -275,11 +275,11 @@
 
     "block.minecraft.tnt": "\"TNT\"",
 
-    "create.destroy.pollution.acid_rain": "Rain Acidity",
-    "create.destroy.pollution.greenhouse": "Greenhouse Gas Level",
-    "create.destroy.pollution.ozone_depletion": "Ozone Depletion",
-    "create.destroy.pollution.radioactivity": "Radioactivity",
-    "create.destroy.pollution.smog": "Smog Level",
+    "destroy.pollution.acid_rain": "Rain Acidity",
+    "destroy.pollution.greenhouse": "Greenhouse Gas Level",
+    "destroy.pollution.ozone_depletion": "Ozone Depletion",
+    "destroy.pollution.radioactivity": "Radioactivity",
+    "destroy.pollution.smog": "Smog Level",
 
     "create.item_attributes.circuit_pattern_punched": "position %1$s East, %2$s South is punched",
     "create.item_attributes.circuit_pattern_punched.inverted": "position %1$s East, %2$s South is not punched",
@@ -1983,4 +1983,5 @@
     "tag.item.destroy.explosives/primary": "Primary Explosives",
     "tag.item.destroy.explosives/secondary": "Secondary Explosives",
     "tag.item.destroy.schematicannon_fuels": "Schematicannon Fuels"
+
 }

@@ -63,7 +63,7 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
     public DynamoBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
         soundDuration = 0;
-    };
+    }
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
@@ -73,18 +73,19 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
 
         advancementBehaviour = new DestroyAdvancementBehaviour(this, DestroyAdvancementTrigger.ARC_FURNACE, DestroyAdvancementTrigger.CHARGE_WITH_DYNAMO, DestroyAdvancementTrigger.ELECTROLYZE_WITH_DYNAMO);
         behaviours.add(advancementBehaviour);
-    };
+    }
 
-    public void onItemCharged(ItemStack stack) {
+    public void onItemCharged() {
         advancementBehaviour.awardDestroyAdvancement(DestroyAdvancementTrigger.CHARGE_WITH_DYNAMO);
-    };
+    }
 
     @Override
     public float calculateStressApplied() {
         lastStressApplied = super.calculateAddedStressCapacity();
-        if (getBlockState().getValue(DynamoBlock.ARC_FURNACE)) lastStressApplied *= DestroyAllConfigs.SERVER.blocks.arcFurnaceStressMultiplier.getF();
+        if (getBlockState().getValue(DynamoBlock.ARC_FURNACE))
+            lastStressApplied *= DestroyAllConfigs.SERVER.blocks.arcFurnaceStressMultiplier.getF();
         return lastStressApplied;
-    };
+    }
 
     @Override
     public void tick() {
@@ -94,56 +95,67 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
         } else if (isRunning()) {
             DestroySoundEvents.DYNAMO_CRACKLE.playOnServer(level, getBlockPos());
             soundDuration = 80;
-        };
-    };
+        }
+    }
 
     @Override
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         soundDuration = compound.getInt("SoundDuration");
         CompoundTag stateTag = compound.getCompound("ArcFurnaceBlock");
-        if (compound.contains("ArcFurnaceBlock", Tag.TAG_COMPOUND)) arcFurnaceBlock = Lazy.of(() -> NbtUtils.readBlockState(getLevel().holderLookup(Registries.BLOCK), stateTag));
-    };
+        if (compound.contains("ArcFurnaceBlock", Tag.TAG_COMPOUND))
+            arcFurnaceBlock = Lazy.of(() -> {
+                assert getLevel() != null;
+                return NbtUtils.readBlockState(getLevel().holderLookup(Registries.BLOCK), stateTag);
+            });
+    }
 
     @Override
     protected void write(CompoundTag compound, boolean clientPacket) {
         super.write(compound, clientPacket);
         compound.putInt("SoundDuration", soundDuration);
-        if (!arcFurnaceBlock.get().isAir()) compound.put("ArcFurnaceBlock", NbtUtils.writeBlockState(arcFurnaceBlock.get()));
-    };
+        if (!arcFurnaceBlock.get().isAir())
+            compound.put("ArcFurnaceBlock", NbtUtils.writeBlockState(arcFurnaceBlock.get()));
+    }
 
     @Override
     @SuppressWarnings("null")
     public void onSpeedChanged(float prevSpeed) {
         if (hasLevel()) {
+            assert getLevel() != null;
             getLevel().updateNeighborsAt(getBlockPos(), DestroyBlocks.DYNAMO.get()); // It thinks getLevel() can be null (it can't at this point)
-        };
+        }
         super.onSpeedChanged(prevSpeed);
-    };
+    }
 
     @Override
     public Optional<Recipe<?>> tryProcessInBasin(boolean simulate) {
         applyBasinRecipe();
         return Optional.ofNullable(currentRecipe);
-    };
+    }
 
     @Override
     public Optional<ChargingRecipe> tryProcessOnBelt(TransportedItemStack input, List<ItemStack> outputList, boolean simulate) {
         if (getBlockState().getValue(DynamoBlock.ARC_FURNACE)) return Optional.empty();
         Optional<ChargingRecipe> recipe = getChargingRecipe(input.stack);
-		if (!recipe.isPresent() || simulate) return recipe;
-		List<ItemStack> outputs = RecipeApplier.applyRecipeOn(getLevel(), canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), recipe.get());
+        if (recipe.isEmpty() || simulate) return recipe;
+        List<ItemStack> outputs = RecipeApplier.applyRecipeOn(
+                getLevel(),
+                canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1),
+                recipe.get(),
+                false
+        );
 
-		for (ItemStack createdItemStack : outputs) {
-			if (!createdItemStack.isEmpty()) {
-				onItemCharged(createdItemStack);
-				break;
-			};
-		};
+        for (ItemStack createdItemStack : outputs) {
+            if (!createdItemStack.isEmpty()) {
+                onItemCharged();
+                break;
+            }
+        }
 
-		outputList.addAll(outputs);
-		return recipe;
-    };
+        outputList.addAll(outputs);
+        return recipe;
+    }
 
     @Override
     protected void applyBasinRecipe() {
@@ -154,78 +166,86 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
                 advancementBehaviour.awardDestroyAdvancement(DestroyAdvancementTrigger.ELECTROLYZE_WITH_DYNAMO);
             } else if (currentRecipe.getType() == DestroyRecipeTypes.ARC_FURNACE.getType() || currentRecipe instanceof AbstractCookingRecipe) {
                 advancementBehaviour.awardDestroyAdvancement(DestroyAdvancementTrigger.ARC_FURNACE);
-            };
-        };
+            }
+        }
         super.applyBasinRecipe();
-    };
+    }
 
     @Override
-    @SuppressWarnings({"null", "resource"})
+    @SuppressWarnings({"null"})
     public Optional<ChargingRecipe> tryProcessInWorld(ItemEntity itemEntity, boolean simulate) {
         if (!hasLevel() || getBlockState().getValue(DynamoBlock.ARC_FURNACE)) return Optional.empty();
         ItemStack itemStack = itemEntity.getItem();
-		Optional<ChargingRecipe> recipe = getChargingRecipe(itemStack);
-		if (!recipe.isPresent() || simulate) return recipe; // If we're simulating, we only need to check that the Recipe exists
-        
-        ItemStack itemStackCreated = ItemStack.EMPTY;
-		if (canProcessInBulk() || itemStack.getCount() == 1) { // If this is the last or all Items in the Stack
-			RecipeApplier.applyRecipeOn(itemEntity, recipe.get()); // Apply the charging Recipe
-			itemStackCreated = itemEntity.getItem().copy();
-		} else {
-			for (ItemStack result : RecipeApplier.applyRecipeOn(getLevel(), ItemHandlerHelper.copyStackWithSize(itemStack, 1), recipe.get())) { // Apply the Charging Recipe
-				if (itemStackCreated.isEmpty()) {
-					itemStackCreated = result.copy();
-                };
-				ItemEntity createdItemEntity = new ItemEntity(level, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), result);
-				createdItemEntity.setDefaultPickUpDelay();
-				createdItemEntity.setDeltaMovement(VecHelper.offsetRandomly(Vec3.ZERO, getLevel().random, .05f)); // It thinks getLevel() might be null (it can't be at this point)
-				getLevel().addFreshEntity(createdItemEntity); // It thinks getLevel() might be null (it can't be at this point)
-			};
-			itemStack.shrink(1);
-		};
+        Optional<ChargingRecipe> recipe = getChargingRecipe(itemStack);
+        if (recipe.isEmpty() || simulate)
+            return recipe; // If we're simulating, we only need to check that the Recipe exists
 
-		if (!itemStackCreated.isEmpty()) onItemCharged(itemStackCreated);
-		return recipe;
-    };
+        ItemStack itemStackCreated = ItemStack.EMPTY;
+        if (canProcessInBulk() || itemStack.getCount() == 1) { // If this is the last or all Items in the Stack
+            RecipeApplier.applyRecipeOn(itemEntity, recipe.get(), false); // Apply the charging Recipe
+            itemStackCreated = itemEntity.getItem().copy();
+        } else {
+            for (ItemStack result : RecipeApplier.applyRecipeOn(
+                    getLevel(),
+                    ItemHandlerHelper.copyStackWithSize(itemStack, 1),
+                    recipe.get(),
+                    false)) { // Apply the Charging Recipe
+                if (itemStackCreated.isEmpty()) {
+                    itemStackCreated = result.copy();
+                }
+                assert level != null;
+                ItemEntity createdItemEntity = new ItemEntity(level, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), result);
+                createdItemEntity.setDefaultPickUpDelay();
+                assert getLevel() != null;
+                createdItemEntity.setDeltaMovement(VecHelper.offsetRandomly(Vec3.ZERO, getLevel().random, .05f)); // It thinks getLevel() might be null (it can't be at this point)
+                getLevel().addFreshEntity(createdItemEntity); // It thinks getLevel() might be null (it can't be at this point)
+            }
+            itemStack.shrink(1);
+        }
+
+        if (!itemStackCreated.isEmpty()) onItemCharged();
+        return recipe;
+    }
 
     @Override
     public boolean canProcessInBulk() {
         return DestroyAllConfigs.SERVER.blocks.dynamoBulkCharging.get();
-    };
+    }
 
     @Override
     public void onChargingCompleted() {
         if (chargingBehaviour.mode == ChargingBehaviour.Mode.BASIN && matchBasinRecipe(currentRecipe) && getBasin().filter(BasinBlockEntity::canContinueProcessing).isPresent()) {
-			startProcessingBasin();
-		} else {
-			basinChecker.scheduleUpdate();
+            startProcessingBasin();
+        } else {
+            basinChecker.scheduleUpdate();
         }
-    };
+    }
 
     @Override
-	public void startProcessingBasin() {
-		if (chargingBehaviour.running && chargingBehaviour.ticksRemaining > 0) return; // If this isn't the right time to process
-		super.startProcessingBasin();
+    public void startProcessingBasin() {
+        if (chargingBehaviour.running && chargingBehaviour.ticksRemaining > 0)
+            return; // If this isn't the right time to process
+        super.startProcessingBasin();
 
-		chargingBehaviour.start(ChargingBehaviour.Mode.BASIN, Vec3.atBottomCenterOf(getBlockPos().below(2)).add(0f, (2 / 16f) + getBasin().map(basin -> {
+        chargingBehaviour.start(ChargingBehaviour.Mode.BASIN, Vec3.atBottomCenterOf(getBlockPos().below(2)).add(0f, (2 / 16f) + getBasin().map(basin -> {
             IFluidHandler fluidHandler = basin.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
-            if (fluidHandler == null) return 0f;
             int totalFluid = 0;
             for (int i = 0; i < fluidHandler.getTanks(); i++) {
                 totalFluid += fluidHandler.getFluidInTank(i).getAmount();
-            };
+            }
             return (12 / 16f) * Mth.clamp(totalFluid / 2000f, 0, 1);
         }).orElse(0f), 0f), getRecipeDuration(currentRecipe)); // Get the Fluid level of the basin
-	};
+    }
 
     private static final RecipeWrapper recipeInventory = new RecipeWrapper(new ItemStackHandler(1));
 
     public Optional<ChargingRecipe> getChargingRecipe(ItemStack itemStack) {
-		Optional<ChargingRecipe> assemblyRecipe = SequencedAssemblyRecipe.getRecipe(getLevel(), itemStack, DestroyRecipeTypes.CHARGING.getType(), ChargingRecipe.class);
-		if (assemblyRecipe.isPresent()) return assemblyRecipe;
-		recipeInventory.setItem(0, itemStack);
-		return DestroyRecipeTypes.CHARGING.find(recipeInventory, getLevel());
-	};
+        assert getLevel() != null;
+        Optional<ChargingRecipe> assemblyRecipe = SequencedAssemblyRecipe.getRecipe(getLevel(), itemStack, DestroyRecipeTypes.CHARGING.getType(), ChargingRecipe.class);
+        if (assemblyRecipe.isPresent()) return assemblyRecipe;
+        recipeInventory.setItem(0, itemStack);
+        return DestroyRecipeTypes.CHARGING.find(recipeInventory, getLevel());
+    }
 
     @Override
     public int getRecipeDuration(Recipe<?> recipe) {
@@ -233,40 +253,49 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
             return processingRecipe.getProcessingDuration();
         } else if (recipe instanceof AbstractCookingRecipe cookingRecipe) {
             return cookingRecipe.getCookingTime();
-        };
+        }
         return ChargingBehaviour.CHARGING_TIME;
-    };
+    }
 
     public boolean shouldRenderArcs() {
         if (!chargingBehaviour.running) return false;
-        if (currentRecipe instanceof ArcFurnaceRecipe || currentRecipe instanceof AbstractCookingRecipe) return false;
-        return true;
-    };
+        return !(currentRecipe instanceof ArcFurnaceRecipe) && !(currentRecipe instanceof AbstractCookingRecipe);
+    }
+
+
 
     @Override
     public float getKineticSpeed() {
         return getSpeed();
-    };
+    }
+
+
 
     @Override
     public boolean isRunning() {
         return chargingBehaviour.running;
-    };
+    }
 
     public Vec3 getLightningTargetPosition() {
         return chargingBehaviour.targetPosition;
-    };
+    }
+
+
 
     @Override
     protected void onBasinRemoved() {
         chargingBehaviour.running = false;
         chargingBehaviour.ticksRemaining = 0;
         sendData();
-    };
+    }
+
+
 
     public int getRedstoneSignal() {
         return (int) Mth.lerp(Mth.clamp(Math.abs(getSpeed()) / 256f, 0, 1), 0, 15);
-    };
+    }
+
+
 
     @Override
     protected List<Recipe<?>> getMatchingRecipes() {
@@ -277,39 +306,51 @@ public class DynamoBlockEntity extends BasinOperatingBlockEntity implements Char
             if (availableItems != null) {
                 for (int slot = 0; slot < availableItems.getSlots(); slot++) {
                     ItemStack stack = availableItems.getStackInSlot(slot);
-                    if (stack.is(ItemTags.MUSIC_DISCS)) RecipeFinder.get(discElectroplatingRecipeKey, level, r -> r.getType() == DestroyRecipeTypes.DISC_ELECTROPLATING.getType() && r instanceof DiscElectroplatingRecipe recipe && recipe.original).forEach(r -> {
-                        if (r instanceof DiscElectroplatingRecipe recipe) recipes.add(recipe.copyWithDisc(stack)); // This cast check should never fail
-                    });
-                };
-            };
+                    if (stack.is(ItemTags.MUSIC_DISCS))
+                        RecipeFinder.get(discElectroplatingRecipeKey, level, r -> r.getType() == DestroyRecipeTypes.DISC_ELECTROPLATING.getType() && r instanceof DiscElectroplatingRecipe recipe && recipe.original).forEach(r -> {
+                            if (r instanceof DiscElectroplatingRecipe recipe)
+                                recipes.add(recipe.copyWithDisc(stack)); // This cast check should never fail
+                        });
+                }
+
+            }
+
         });
 
         return recipes;
-    };
+    }
+
+
 
     @Override
     protected <C extends Container> boolean matchStaticFilters(Recipe<C> recipe) {
-        return (recipe.getType() == DestroyRecipeTypes.ELECTROLYSIS.getType())
-        || (recipe.getType() == DestroyRecipeTypes.ARC_FURNACE.getType())
-        || (recipe.getType() == RecipeType.SMELTING && DestroyAllConfigs.SERVER.blocks.arcFurnaceAllowsSmelting.get())
-        || (recipe.getType() == RecipeType.BLASTING && DestroyAllConfigs.SERVER.blocks.arcFurnaceAllowsBlasting.get());
-    };
+        return (recipe.getType() == DestroyRecipeTypes.ELECTROLYSIS.getType()) || (recipe.getType() == DestroyRecipeTypes.ARC_FURNACE.getType()) || (recipe.getType() == RecipeType.SMELTING && DestroyAllConfigs.SERVER.blocks.arcFurnaceAllowsSmelting.get()) || (recipe.getType() == RecipeType.BLASTING && DestroyAllConfigs.SERVER.blocks.arcFurnaceAllowsBlasting.get());
+    }
+
+
 
     @Override
     protected <C extends Container> boolean matchBasinRecipe(Recipe<C> recipe) {
         if (recipe == null) return false;
-        if ((recipe.getType() == DestroyRecipeTypes.ELECTROLYSIS.getType()) == getBlockState().getValue(DynamoBlock.ARC_FURNACE)) return false;
+        if ((recipe.getType() == DestroyRecipeTypes.ELECTROLYSIS.getType()) == getBlockState().getValue(DynamoBlock.ARC_FURNACE))
+            return false;
         return super.matchBasinRecipe(recipe);
-    };
+    }
+
+
 
     @Override
     protected Object getRecipeCacheKey() {
         return recipeCacheKey;
-    };
+    }
+
+
 
     @Override
     protected AABB createRenderBoundingBox() {
         return new AABB(worldPosition).expandTowards(0d, -2d, 0d);
-    };
-    
-};
+    }
+
+
+
+}
