@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.petrolpark.destroy.DestroyBlockEntityTypes;
 import com.petrolpark.destroy.DestroyVoxelShapes;
+import com.petrolpark.destroy.compat.vs2.DestroyVSUtil;
 import com.petrolpark.destroy.core.chemistry.storage.IMixtureStorageItem;
 import com.petrolpark.destroy.core.chemistry.storage.ISpecialMixtureContainerBlock;
-import com.petrolpark.util.RayHelper;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.item.ItemHelper;
@@ -33,6 +33,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.ModList;
 
 public class TestTubeRackBlock extends Block implements IBE<TestTubeRackBlockEntity>, IWrenchable, ISpecialMixtureContainerBlock {
 
@@ -62,7 +63,7 @@ public class TestTubeRackBlock extends Block implements IBE<TestTubeRackBlockEnt
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide() || hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
-        int tube = getTargetedTube(state, pos, player);
+        int tube = getTargetedTube(level, state, pos, hit);
         if (tube == -1) return InteractionResult.PASS;
         ItemStack stack = player.getItemInHand(hand);
         return onBlockEntityUse(level, pos, be -> {
@@ -92,13 +93,44 @@ public class TestTubeRackBlock extends Block implements IBE<TestTubeRackBlockEnt
     /**
      * @param state
      * @param pos
-     * @param player
+     * @param result
      * @return {@code -1} if there is no collision or {@code 0} to {@code 3} depending on which tube is hit
      */
-    public static int getTargetedTube(BlockState state, BlockPos pos, Player player) {
-        Vec3 start = player.getEyePosition();
-        Vec3 end = player.getEyePosition().add(player.getLookAngle().scale(player.getBlockReach()));
-        return RayHelper.getHit(List.of(getTubeBox(state, pos, 0), getTubeBox(state, pos, 1), getTubeBox(state, pos, 2), getTubeBox(state, pos, 3)), start, end);
+    public static int getTargetedTube(Level level, BlockState state, BlockPos pos, BlockHitResult result) {
+        Vec3 hit = result.getLocation();
+
+        List<AABB> boxes = List.of(
+                getTubeSelectionBox(state, pos, 0),
+                getTubeSelectionBox(state, pos, 1),
+                getTubeSelectionBox(state, pos, 2),
+                getTubeSelectionBox(state, pos, 3)
+        );
+
+        int hitIndex = -1;
+        double minDist = Double.MAX_VALUE;
+
+        for (int i = 0; i < boxes.size(); i++) {
+            AABB box = boxes.get(i);
+
+            if (ModList.get().isLoaded("valkyrienskies")) {
+                // center of THIS box
+                Vec3 center = new Vec3(
+                        (box.minX + box.maxX) * 0.5,
+                        (box.minY + box.maxY) * 0.5,
+                        (box.minZ + box.maxZ) * 0.5
+                );
+                box = DestroyVSUtil.AABBtoWorld(level, center, box);
+            }
+            if (!box.contains(hit)) continue;
+
+            double d = hit.distanceToSqr(box.getCenter());
+            if (d < minDist) {
+                minDist = d;
+                hitIndex = i;
+            }
+        }
+
+        return hitIndex;
     };
 
     public static AABB getTubeBox(BlockState state, BlockPos pos, int tube) {
@@ -107,6 +139,29 @@ public class TestTubeRackBlock extends Block implements IBE<TestTubeRackBlockEnt
         double boxStart = tube * 4 /16d;
         return new AABB(Vec3.atLowerCornerOf(pos).add(x ? boxStart + 0.5 /16d: 6.5 / 16d, 2.1 / 16d, x ? 6.5 / 16d : boxStart + 0.5 / 16d), Vec3.atLowerCornerOf(pos).add(x ? boxStart + 3.5 / 16d: 9.5 / 16d, 10 / 16d, x ? 9.5 / 16d : boxStart + 3.5 / 16d));
     };
+
+    public static AABB getTubeSelectionBox(BlockState state, BlockPos pos, int tube) {
+        if (tube < 0 || tube >= 4) return new AABB(0d, 0d, 0d, 0d, 0d, 0d);
+        boolean x = state.getValue(X);
+        double boxStart = tube * 4 / 16d;
+
+        double alongMin = boxStart + 0.5 / 16d;
+        double alongMax = boxStart + 3.5 / 16d;
+
+        double perpMin = 1.0 / 16d;
+        double perpMax = 15.0 / 16d;
+
+        double minX = x ? alongMin : perpMin;
+        double maxX = x ? alongMax : perpMax;
+        double minZ = x ? perpMin : alongMin;
+        double maxZ = x ? perpMax : alongMax;
+
+        return new AABB(
+                Vec3.atLowerCornerOf(pos).add(minX, 2.1 / 16d, minZ),
+                Vec3.atLowerCornerOf(pos).add(maxX, 10   / 16d, maxZ)
+        );
+    }
+
 
     @Override
     public Class<TestTubeRackBlockEntity> getBlockEntityClass() {
@@ -120,12 +175,31 @@ public class TestTubeRackBlock extends Block implements IBE<TestTubeRackBlockEnt
 
     @Override
     public IFluidHandler getTankForMixtureStorageItems(IMixtureStorageItem item, Level level, BlockPos pos, BlockState state, Direction face, Player player, InteractionHand hand, ItemStack stack, boolean rightClick) {
+//        TestTubeRackBlockEntity be = getBlockEntity(level, pos);
+//        if (be == null) return null;
+//        int tube = getTargetedTube(state, pos, player);
+//        if (tube == -1) return null;
+//        ItemStack tubeStack = be.inv.getStackInSlot(tube);
+//        return tubeStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
         TestTubeRackBlockEntity be = getBlockEntity(level, pos);
         if (be == null) return null;
-        int tube = getTargetedTube(state, pos, player);
+
+        // Do a proper block pick to get a BlockHitResult
+        // 0f partialTicks is fine here since this is a discrete interaction
+        BlockHitResult hit = (BlockHitResult) player.pick(player.getBlockReach(), 0f, false);
+
+        // Make sure we're actually targeting this block
+        if (!hit.getBlockPos().equals(pos)) return null;
+
+        // Use the ship-safe hit-based tube selection
+        int tube = getTargetedTube(level, state, pos, hit);
         if (tube == -1) return null;
+
         ItemStack tubeStack = be.inv.getStackInSlot(tube);
-        return tubeStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+        if (tubeStack.isEmpty()) return null;
+
+        return tubeStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM)
+                .orElse(null);
     };
     
 };

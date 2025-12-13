@@ -35,10 +35,10 @@ mixin {
 }
 
 // Workaround for SpongePowered/MixinGradle#38, copied from Create source code
-afterEvaluate {
-    tasks.configureReobfTaskForReobfJar.mustRunAfter(tasks.compileJava)
-    tasks.configureReobfTaskForReobfJarJar.mustRunAfter(tasks.compileJava)
-}
+//afterEvaluate {
+//    tasks.configureReobfTaskForReobfJar.mustRunAfter(tasks.compileJava)
+//    tasks.configureReobfTaskForReobfJarJar.mustRunAfter(tasks.compileJava)
+//}
 
 // Mod Detailss
 version = "${mod_version}"
@@ -96,21 +96,25 @@ minecraft {
 }
 
 repositories {
+    mavenCentral()
+    maven {
+        url = uri("file:/C:/Users/Samuel/Documents/GitHub/petrolpark_local_maven")
+    }
     maven { // JEI and Embeddium
         name = "Jared's maven"
         url = "https://maven.blamejared.com/"
     }
-    maven { // JEI mirror
-        name = "ModMaven"
-        url = "https://modmaven.dev"
-    }
+//    maven { // JEI mirror
+//        name = "ModMaven"
+//        url = "https://modmaven.dev"
+//    }
     maven {
         name = 'createmod maven'
         url = "https://maven.createmod.net"
     }
     maven { // Create, Flywheel and Registrate
         name = 'tterag maven'
-        url = 'https://www.cursemaven.com'
+        url = 'https://maven.tterrag.com'
     }
 
     exclusiveContent {
@@ -125,10 +129,10 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
-
-    flatDir {
-        dirs "../petrolpark_local_maven/petrolpark/petrolpark-${minecraft_version}/${petrolpark_library_version}"
-    }
+//
+//    flatDir {
+//        dirs "../petrolpark_local_maven/petrolpark/petrolpark-${minecraft_version}/${petrolpark_library_version}"
+//    }
 
     maven {
         // Curios
@@ -152,6 +156,21 @@ repositories {
 
     maven { // MixinSquared
         url = "https://maven.bawnorton.com/releases"
+    }
+    maven {
+        name = "Kotlin for Forge"
+        url = "https://thedarkcolour.github.io/KotlinForForge/"
+        content {
+            includeModule("thedarkcolour", "kotlinforforge")
+        }
+    }
+
+    maven {
+        name = "Valkyrien Skies Internal"
+        url = "https://maven.valkyrienskies.org"
+        content {
+            excludeGroup("org.spongepowered")
+        }
     }
 }
 
@@ -194,7 +213,7 @@ dependencies {
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 
     // Petrolpark Library (temporary)
-    implementation "com.petrolpark:petrolpark:${minecraft_version}-${petrolpark_library_version}"
+    implementation fg.deobf("petrolpark:petrolpark-${minecraft_version}:${petrolpark_library_version}")
 
     // JGraphT
     //jarJar(implementation("org.jgrapht:jgrapht-core:[${jgrapht_version}]"))
@@ -207,7 +226,7 @@ dependencies {
     // JEI
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
     // Farmer's Delight
     compileOnly fg.deobf("curse.maven:farmers-delight-398521:${farmersdelight_version}")
@@ -223,6 +242,16 @@ dependencies {
     // Embeddium
     compileOnly fg.deobf("maven.modrinth:embeddium:${embeddium_version}+mc${minecraft_version}")
 
+    // Valkyrien Skies
+    compileOnly         ("org.valkyrienskies.core:api:${vs_core_version}")
+    compileOnly         ("org.valkyrienskies.core:impl:${vs_core_version}")
+    compileOnly         ("org.valkyrienskies.core:api-game:${vs_core_version}")
+    compileOnly         ("org.valkyrienskies.core:util:${vs_core_version}")
+
+    implementation fg.deobf("org.valkyrienskies:valkyrienskies-120-forge:${vs2_version}")
+
+
+    runtimeOnly "thedarkcolour:kotlinforforge:4.10.0"
     // ANNOTATION PROCESSORS
 
     // MixinSquared's annotationProcessor MUST be registered BEFORE Mixin's one.

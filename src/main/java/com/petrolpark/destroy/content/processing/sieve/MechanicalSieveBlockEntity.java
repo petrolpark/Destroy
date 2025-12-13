@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.petrolpark.destroy.DestroyAdvancementTrigger;
 import com.petrolpark.destroy.DestroyRecipeTypes;
 import com.petrolpark.destroy.core.data.advancement.DestroyAdvancementBehaviour;
@@ -99,7 +100,7 @@ public class MechanicalSieveBlockEntity extends KineticBlockEntity {
         while (iterator.hasNext()) {
             ProcessingItem item = iterator.next();        
 
-            if (item == null || !item.item.isAlive() || !item.item.blockPosition().equals(getBlockPos())) {
+            if (item == null || !item.item.isAlive()) {
                 iterator.remove();
                 continue;
             };
@@ -117,7 +118,7 @@ public class MechanicalSieveBlockEntity extends KineticBlockEntity {
                 ItemEntity entity = item.item;
                 entity.kill();
                 for (ItemStack stack : RecipeHelper.rollResults(item.getRecipe(), luckyBehaviour.getPlayer(), entity.getItem().getCount())) {
-                    getLevel().addFreshEntity(new ItemEntity(getLevel(), entity.getX() - 0.125d + level.random.nextDouble() * 0.25d, getBlockPos().getY(), entity.getZ() - 0.125d + level.random.nextDouble() * 0.25d, stack, 0d, 0d, 0d));
+                    getLevel().addFreshEntity(new ItemEntity(getLevel(), entity.getX() - 0.125d + level.random.nextDouble() * 0.25d, entity.getY() -0.25d, entity.getZ() - 0.125d + level.random.nextDouble() * 0.25d, stack, 0d, 0d, 0d));
                 };
                 iterator.remove();
                 advancementBehaviour.awardDestroyAdvancement(DestroyAdvancementTrigger.MECHANICAL_SIEVE);

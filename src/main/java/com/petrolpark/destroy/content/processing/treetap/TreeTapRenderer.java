@@ -22,7 +22,7 @@ public class TreeTapRenderer extends KineticBlockEntityRenderer<TreeTapBlockEnti
 
     @Override
 	protected void renderSafe(TreeTapBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
-		if (VisualizationManager.supportsVisualization(be.getLevel())) return;
+//		if (VisualizationManager.supportsVisualization(be.getLevel())) return;
 
         BlockState state = be.getBlockState();
         Direction facing = state.getValue(TreeTapBlock.HORIZONTAL_FACING);

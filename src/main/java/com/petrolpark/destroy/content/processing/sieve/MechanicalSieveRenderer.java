@@ -26,7 +26,7 @@ public class MechanicalSieveRenderer extends KineticBlockEntityRenderer<Mechanic
     @Override
     protected void renderSafe(MechanicalSieveBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
-        if (VisualizationManager.supportsVisualization(be.getLevel())) return;
+//        if (VisualizationManager.supportsVisualization(be.getLevel())) return;
 
         BlockState state = be.getBlockState();
         boolean x = state.getValue(MechanicalSieveBlock.X);

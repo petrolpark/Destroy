@@ -49,7 +49,8 @@ public class DestroyPonderScenes {
 
         // Blaze Burner
         HELPER.forComponents(AllBlocks.BLAZE_BURNER)
-            .addStoryBoard("vat/interaction", DestroyMiscPonderScenes::vatInteraction, DestroyPonderTags.CHEMISTRY);
+            .addStoryBoard("vat/interaction", ChemistryPonderScenes::vatTemperature, DestroyPonderTags.CHEMISTRY)
+            .addStoryBoard("vat/interaction", ChemistryPonderScenes::vatPressure, DestroyPonderTags.CHEMISTRY);
 
         // Blowpipe
         HELPER.forComponents(DestroyBlocks.BLOWPIPE)
@@ -115,9 +116,8 @@ public class DestroyPonderScenes {
 
         // Mechanical Mixer
         HELPER.forComponents(AllBlocks.MECHANICAL_MIXER)
-            .addStoryBoard("reactions", DestroyMiscPonderScenes::reactions, DestroyPonderTags.CHEMISTRY)
+            .addStoryBoard("reactions", ChemistryPonderScenes::reactions, DestroyPonderTags.CHEMISTRY)
             .addStoryBoard("pollution/basins_and_vats", PollutionPonderScenes::basinsAndVats);
-
         // Mechanical Sieve
         HELPER.forComponents(DestroyBlocks.MECHANICAL_SIEVE)
             .addStoryBoard("processing/mechanical_sieve", ProcessingPonderScenes::mechanicalSieve);

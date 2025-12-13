@@ -25,7 +25,7 @@ public class PumpjackRenderer extends SafeBlockEntityRenderer<PumpjackBlockEntit
 
     @Override
     protected void renderSafe(PumpjackBlockEntity pumpjack, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        if (VisualizationManager.supportsVisualization(pumpjack.getLevel())) return;
+//        if (VisualizationManager.supportsVisualization(pumpjack.getLevel())) return;
 
         float angle = pumpjack.getRenderAngle();
 

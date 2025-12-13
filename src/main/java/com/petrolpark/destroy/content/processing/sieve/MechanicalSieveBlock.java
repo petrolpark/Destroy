@@ -66,13 +66,20 @@ public class MechanicalSieveBlock extends KineticBlock implements IBE<Mechanical
         return getShape(pState, pLevel, pPos, context);
     };
 
+//    @Override
+//    public void updateEntityAfterFallOn(BlockGetter level, Entity entity) {
+//        super.updateEntityAfterFallOn(level, entity);
+//        BlockPos pos = entity.blockPosition();
+//		if (!DestroyBlocks.MECHANICAL_SIEVE.has(level.getBlockState(pos)) || !(entity instanceof ItemEntity item) || !entity.isAlive()) return;
+//        withBlockEntityDo(level, pos, be -> be.beginProcessing(item));
+//    };
+
     @Override
-    public void updateEntityAfterFallOn(BlockGetter level, Entity entity) {
-        super.updateEntityAfterFallOn(level, entity);
-        BlockPos pos = entity.blockPosition();
-		if (!DestroyBlocks.MECHANICAL_SIEVE.has(level.getBlockState(pos)) || !(entity instanceof ItemEntity item) || !entity.isAlive()) return;
-        withBlockEntityDo(level, pos, be -> be.beginProcessing(item));
-    };
+    public void stepOn(Level pLevel, BlockPos pPos, BlockState pState, Entity pEntity) {
+        super.stepOn(pLevel, pPos, pState, pEntity);
+        if (!DestroyBlocks.MECHANICAL_SIEVE.has(pState) || !(pEntity instanceof ItemEntity item) || !pEntity.isAlive()) return;
+        withBlockEntityDo(pLevel, pPos, be -> be.beginProcessing(item));
+    }
 
     @Override
     public BlockState getRotatedBlockState(BlockState originalState, Direction targetedFace) {
@@ -110,5 +117,4 @@ public class MechanicalSieveBlock extends KineticBlock implements IBE<Mechanical
         if (transform.rotationAxis == Axis.Y && (transform.rotation == Rotation.CLOCKWISE_90 || transform.rotation == Rotation.COUNTERCLOCKWISE_90)) return state.cycle(X);
         return state;
     };
-    
 };
