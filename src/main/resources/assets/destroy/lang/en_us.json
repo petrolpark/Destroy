@@ -525,7 +525,7 @@
     "destroy.chemical.toluene": "Toluene",
     "destroy.chemical.toluene.iupac": "Methylbenzene",
     "destroy.chemical.toluene_diisocyanate": "Toluene Diisocyanate",
-    "destroy.chemcial.toluene_diisocyanate.iupac": "2,4-Diisocyanato-1-methylbenzene",
+    "destroy.chemical.toluene_diisocyanate.iupac": "2,4-Diisocyanato-1-methylbenzene",
     "destroy.chemical.trichlorofluoromethane": "R-11",
     "destroy.chemical.trichlorofluoromethane.iupac": "Trichlorofluoromethane",
     "destroy.chemical.trimethylamine": "Trimethylamine",
