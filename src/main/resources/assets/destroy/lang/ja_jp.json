@@ -791,7 +791,7 @@
     "destroy.ponder.explosives.naming.text_4": "これはDestroyの「混合爆発物」にのみ機能し、Create: Big Cannonsなどの他のModとは連携していません",
     "destroy.ponder.extrusion_die.header": "押し出し金型によるブロックの押し出し加工",
     "destroy.ponder.extrusion_die.text_1": "押出し金型にブロックを押し込むと、ブロックを変形させることができます",
-    "destroy.ponder.extrusion_die.text_2": "押出し金型は静止していなければならなりません",
+    "destroy.ponder.extrusion_die.text_2": "押出し金型は静止している必要があります",
     "destroy.ponder.mechanical_sieve.header": "機械式ふるいの使用",
     "destroy.ponder.mechanical_sieve.text_1": "動力を持つ機械式ふるいの上にある一部のアイテムを分離することができます",
     "destroy.ponder.mechanical_sieve.text_2": "最初にいくつかのレシピを行うときに、望んでいるものを正確に得られることがあるかもしれません。ビギナーズラックと呼びましょう...",
@@ -1984,4 +1984,5 @@
     "tag.item.destroy.explosives/primary": "一次爆薬",
     "tag.item.destroy.explosives/secondary": "二次爆薬",
     "tag.item.destroy.schematicannon_fuels": "スキマティカノン燃料"
+
 }
