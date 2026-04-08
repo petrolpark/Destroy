@@ -1422,7 +1422,7 @@
     "block.petrolpark.redstone_programmer.mode.switch_on_pulse": "レッドストーン信号で再生/一時停止を切り替えます。繰り返し再生します",
     "block.petrolpark.redstone_programmer.mode.restart_on_pulse": "レッドストーン信号で先頭から再生します。繰り返し再生しません",
     "block.petrolpark.redstone_programmer.mode.resume_with_power": "レッドストーン信号がある間のみ再生します。信号がない場合は一時停止します。繰り返し再生します",
-    "block.petrolpark.redstone_programmer.mode.restart_with_power": "レッドストーン信号がある間のみ再生します。信号がない売位は一時停止して先頭に戻ります。繰り返し再生しません",
+    "block.petrolpark.redstone_programmer.mode.restart_with_power": "レッドストーン信号がある間のみ再生します。信号がない場合は一時停止して先頭に戻ります。繰り返し再生しません",
     "block.petrolpark.redstone_programmer.mode.loop_with_power": "レッドストーン信号がある間のみ再生します。信号がない場合は一時停止して先頭に戻ります。繰り返し再生します",
     "block.petrolpark.redstone_programmer.mode.loop": "常に繰り返し再生します",
     "block.petrolpark.redstone_programmer.playback": "再生",
