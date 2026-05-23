@@ -1,0 +1,35 @@
+{
+    "destroy:ammonium": {
+        "specifics": {
+            "destroy:chloride": "destroy.chemical.sal_ammoniac"
+        }
+    },
+    "destroy:potassium_ion": {
+        "specifics": {
+            "destroy:nitrate": "destroy.chemical.saltpeter"
+        }
+    },
+    "destroy:proton": {
+        "specifics": {
+            "destroy:acetate": "destroy.chemical.acetic_acid",
+            "destroy:chloride": "destroy.chemical.hydrochloric_acid",
+            "destroy:chloroaurate": "destroy.chemical.chloroauric_acid",
+            "destroy:chromate": "destroy.chemical.chromic_acid",
+            "destroy:cyanide": "destroy.chemical.hydrogen_cyanide",
+            "destroy:dichromate": "destroy.chemical.dichromic_acid",
+            "destroy:fluoride": "destroy.chemical.hydrofluoric_acid",
+            "destroy:hydrogensulfate": "destroy.chemical.sulfuric_acid",
+            "destroy:hypochlorite": "destroy.chemical.hydrochlorous_acid",
+            "destroy:iodide": "destroy.chemical.hydrogen_iodide",
+            "destroy:nitrate": "destroy.chemical.nitric_acid",
+            "destroy:sulfate": "destroy.chemical.sulfuric_acid"
+        }
+    },
+    "destroy:sodium_ion": {
+        "generic": "destroy.chemical.sodium",
+        "specifics": {
+            "destroy:chloride": "fluid.destroy.brine",
+            "destroy:tetrahydroxy_tetraborate": "destroy.chemical.borax"
+        }
+    } 
+}
