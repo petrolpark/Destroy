@@ -200,7 +200,7 @@
     "block.destroy.keypunch": "Perforateur",
     "block.destroy.lead_block": "Bloc de Plomb",
     "block.destroy.lead_periodic_table_block": "Bloc d'élément: Plomb",
-    "block.destroy.mashed_potato_block": "Bloc de purée de Patate",
+    "block.destroy.mashed_potato_block": "Bloc de Purée de Pomme de Terre",
     "block.destroy.measuring_cylinder": "Eprouvette Graduée",
     "block.destroy.measuring_cylinder.filled": "Eprouvette Graduée de %1$s",
     "block.destroy.measuring_cylinder.tooltip.summary": "Une verrerie qui peux transférer des quantités _exacte_ de Mixture.",
