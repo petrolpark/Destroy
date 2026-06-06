@@ -290,7 +290,7 @@
     "commands.destroy.babyblueaddiction.set.single": "Le niveau d'addiction a la Methamphétamine est maintenant de %s pour %s",
     "commands.destroy.babyblueaddiction.query": "%s a un niveau d'addiction a la Methamphétamine de %s",
     "commands.destroy.crudeoil": "%s mS de Pétrole ont été générés dans le chunk en [%s, %s, %s]",
-    "commands.destroy.pollution.query": "La polllution de type %s a un niveau de %s",
+    "commands.destroy.pollution.query": "La pollution de type %s a un niveau de %s",
     "commands.destroy.pollution.set": "Le niveau de pollution %s et maintenant de %s. Recharger le monde peut etre nécéssaire pour que certains changement ait effet",
     "commands.destroy.regeneratecircuitpattern": "Réinitialisé le modèle de circuit %s",
 
@@ -474,7 +474,7 @@
     "destroy.chemical.nitronium": "Nitronium",
     "destroy.chemical.non_tertiary_amine": "Amine",
     "destroy.chemical.non_tertiary_borane": "Borane",
-    "destroy.chemical.oleum": "Acide Sulfurique Fumant (Oléum)",
+    "destroy.chemical.oleum": "Oléum (H2SO4 Fumant)",
     "destroy.chemical.oleum.iupac": "Acide Disulfurique",
     "destroy.chemical.organic_chloride": "Organochlorure",
     "destroy.chemical.orthoxylene": "o-Xylène",
