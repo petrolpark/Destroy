@@ -267,6 +267,7 @@
     "block.destroy.test_tube_rack.tooltip.condition2": "When Left-Clicked with Glassware",
     "block.destroy.test_tube_rack.tooltip.behaviour2": "_Fills_ the item from the targeted Test Tube",
     "block.destroy.tree_tap": "Extracteur",
+    "block.destroy.urine_cauldron": "Chaudron d'Urine"
     "block.destroy.unvarnished_plywood": "Contre-Plaqué",
     "block.destroy.vat_controller": "Contrôleur de Cuve",
     "block.destroy.vat_side": "Cuve",
@@ -527,7 +528,7 @@
     "destroy.chemical.toluene": "Toluène",
     "destroy.chemical.toluene.iupac": "Methylbenzene",
     "destroy.chemical.toluene_diisocyanate": "TDI",
-    "destroy.chemcial.toluene_diisocyanate.iupac": "2,4-diisocyanato-1-méthylbenzène",
+    "destroy.chemical.toluene_diisocyanate.iupac": "2,4-diisocyanato-1-méthylbenzène",
     "destroy.chemical.trichlorofluoromethane": "R-11",
     "destroy.chemical.trichlorofluoromethane.iupac": "Trichlorofluorométhane",
     "destroy.chemical.trimethylamine": "Triméthylamine",
