@@ -935,7 +935,7 @@
     "destroy.ponder.vat.temperature.text_3": "この速度はフーリエの法則によって制御され、バットを作成するために使用されるブロックの伝導率によって異なります",
     "destroy.ponder.vat.temperature.text_4": "点火されたブレイズバーナーは一定の加熱力を供給し、より高い均衡温度をもたらします",
     "destroy.ponder.vat.temperature.text_5": "加熱力はブレイズバーナーによって増やすことができ、過熱することでさらに増加させることができます",
-    "destroy.ponder.vat.temperature.text_6": "冷却装置はバットから一定量の加熱力を取り除きます",
+    "destroy.ponder.vat.temperature.text_6": "ストレイクーラーはバットから一定量の加熱力を取り除きます",
     "destroy.ponder.vat.pressure.header": "バットの圧力",
     "destroy.ponder.vat.pressure.text_1": "バットの側面を2回レンチで操作すると気圧計が追加されます",
     "destroy.ponder.vat.pressure.text_2": "これはバット内部のガスによって外向きにかかる圧力を示します",
@@ -1318,7 +1318,7 @@
     "destroy.recipe.tapping": "タッピング",
     "destroy.recipe.vat_material": "バット構造",
 
-    "destroy.subtitle.aging_barrel_balloon": "バルーンが膨張する",
+    "destroy.subtitle.aging_barrel_balloon": "風船が膨張する",
     "destroy.subtitle.aging_barrel_open": "熟成樽が開く",
     "destroy.subtitle.aging_barrel_shut": "熟成樽が閉まる",
     "destroy.subtitle.cooler_break": "ブロックが破壊される",
