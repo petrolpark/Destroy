@@ -343,7 +343,7 @@
   "death.attack.destroy.headache": "%1$s died of a splitting migraine",
   "death.attack.destroy.needle": "%1$s felt a small pinch from %2$s",
   "death.attack.destroy.self_needle": "%1$s felt a small pinch",
-  "destroy.chemcial.toluene_diisocyanate.iupac": "2,4-Diisocyanato-1-methylbenzene",
+  "destroy.chemical.toluene_diisocyanate.iupac": "2,4-Diisocyanato-1-methylbenzene",
   "destroy.chemical.acetamide": "Acetamide",
   "destroy.chemical.acetamide.iupac": "Ethanamide",
   "destroy.chemical.acetate": "Acetate",
