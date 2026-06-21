@@ -601,7 +601,7 @@
     "destroy.chemistry.standard_half_cell_potential": "{Half reactions, destroy:half_reaction} cannot occur on their own. They must be paired with another. The {half reaction, destroy:half_reaction} with the higher {standard, destroy:standard} half-cell potential occurs as shown here (as a {reduction, destroy:reduction}), and the other in reverse (as an {oxidation, destroy:oxidation}).",
     "destroy.chemistry.substitution": "A substitution reaction is one in which one group on a {molecule, destroy:molecule} is quickly replaced by another.",
     "destroy.chemistry.subatomic": "'Subatomic' means 'smaller than an {atom, destroy:atom}'.",
-    "destroy.chemistry.syngas": "Synthesis gas, or 'syngas' is a mixture of [destroy:carbon_dioxide] and [destroy:hydrogen].",
+    "destroy.chemistry.syngas": "Synthesis gas, or 'syngas' is a mixture of [destroy:carbon_monoxide] and [destroy:hydrogen].",
     "destroy.chemistry.thermal_decomposition": "Thermal decomposition, or pyrolysis, is the spontaneous breakdown of a species when heated.",
     "destroy.chemistry.transalkylation": "Transalkylation is the transfer of {alkyl groups, destroy:alkane} between [destroy:benzene] rings.",
     "destroy.chemistry.ultraviolet_catalysed_reaction": "This reaction is {catalyzed, destroy:catalyst} by UV light, from the sun, Blacklights or similar blocks. Ponder the Vat Controller to learn more.",
